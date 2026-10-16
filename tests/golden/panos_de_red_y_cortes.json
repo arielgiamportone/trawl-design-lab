@@ -1,0 +1,1523 @@
+{
+  "sheet": "Paños de red y cortes",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "netting_80mm_twine_mm": {
+      "cell": "C5",
+      "value": 1.37,
+      "label": "Twine diameter, 80 mm mesh netting",
+      "unit": "mm"
+    },
+    "netting_80mm_mesh_mm": {
+      "cell": "C6",
+      "value": 80,
+      "label": "Stretched mesh size, wings",
+      "unit": "mm"
+    },
+    "netting_80mm_rtex": {
+      "cell": "C7",
+      "value": 1280,
+      "label": "Rtex, 80 mm netting",
+      "unit": "tex"
+    },
+    "netting_80mm_t_meshes": {
+      "cell": "C3",
+      "value": 500,
+      "label": "Meshes per unit length T (mallas en T)",
+      "unit": ""
+    },
+    "netting_80mm_n_meshes": {
+      "cell": "C4",
+      "value": 100,
+      "label": "Meshes per unit depth N",
+      "unit": ""
+    },
+    "netting_60mm_twine_mm": {
+      "cell": "C15",
+      "value": 1.16,
+      "label": "Twine diameter, 60 mm netting",
+      "unit": "mm"
+    },
+    "netting_60mm_mesh_mm": {
+      "cell": "C16",
+      "value": 60,
+      "label": "Stretched mesh size, square/body",
+      "unit": "mm"
+    },
+    "netting_60mm_rtex": {
+      "cell": "C17",
+      "value": 950,
+      "label": "Rtex, 60 mm netting",
+      "unit": "tex"
+    },
+    "netting_40mm_body_twine_mm": {
+      "cell": "O5",
+      "value": 1.16,
+      "label": "Twine diameter, 40 mm body netting",
+      "unit": "mm"
+    },
+    "netting_40mm_body_mesh_mm": {
+      "cell": "O6",
+      "value": 40,
+      "label": "Stretched mesh size, 40 mm body netting",
+      "unit": "mm"
+    },
+    "netting_40mm_body_rtex": {
+      "cell": "O7",
+      "value": 950,
+      "label": "Rtex, 40 mm body netting",
+      "unit": "tex"
+    },
+    "netting_40mm_bag_twine_mm": {
+      "cell": "O21",
+      "value": 1.37,
+      "label": "Twine diameter, 40 mm codend",
+      "unit": "mm"
+    },
+    "netting_40mm_bag_mesh_mm": {
+      "cell": "O22",
+      "value": 40,
+      "label": "Stretched mesh size, standard codend",
+      "unit": "mm"
+    },
+    "netting_40mm_bag_rtex": {
+      "cell": "O23",
+      "value": 1280,
+      "label": "Rtex, standard codend",
+      "unit": "tex"
+    },
+    "netting_30mm_twine_mm": {
+      "cell": "C26",
+      "value": 1.37,
+      "label": "Twine diameter, 30 mm crustacean codend",
+      "unit": "mm"
+    },
+    "netting_30mm_mesh_mm": {
+      "cell": "C27",
+      "value": 30,
+      "label": "Stretched mesh size, modified codend",
+      "unit": "mm"
+    },
+    "netting_30mm_rtex": {
+      "cell": "C28",
+      "value": 1280,
+      "label": "Rtex, modified codend",
+      "unit": "tex"
+    },
+    "panel_a_runnage_m_kg": {
+      "cell": "A55",
+      "value": 781.25,
+      "label": "Panel A: runnage 1e6/Rtex",
+      "unit": "m/kg"
+    },
+    "panel_a_twine_density_kg_m3": {
+      "cell": "L55",
+      "value": 1151.6541093750002,
+      "label": "panel_a: twine density (L55-style)",
+      "unit": "kg/m³"
+    },
+    "panel_a_stretched_t2_m": {
+      "cell": "I55",
+      "value": 0.12,
+      "label": "panel_a: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_a_stretched_t1_m": {
+      "cell": "I56",
+      "value": 2.28,
+      "label": "panel_a: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_a_stretched_n_m": {
+      "cell": "I57",
+      "value": 2.88,
+      "label": "panel_a: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_a_working_area_m2": {
+      "cell": "A61",
+      "value": 2.9929837954790197,
+      "label": "panel_a: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_a_mesh_count": {
+      "cell": "A64",
+      "value": 2095,
+      "label": "panel_a: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_a_cut_x1_meshes": {
+      "cell": "G63",
+      "value": 18,
+      "label": "panel_a: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_a_cut_x1_ratio": {
+      "cell": "H63",
+      "value": 0.5,
+      "label": "panel_a: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_a_cut_x1_code": {
+      "cell": "I63",
+      "value": "1N2B",
+      "label": "panel_a: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_a_cut_x2_meshes": {
+      "cell": "G64",
+      "value": 36,
+      "label": "panel_a: cut x2 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_a_cut_x2_ratio": {
+      "cell": "H64",
+      "value": 1,
+      "label": "panel_a: cut x2 ratio (RC)",
+      "unit": ""
+    },
+    "panel_a_cut_x2_code": {
+      "cell": "I64",
+      "value": "AB",
+      "label": "panel_a: cut x2 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_a_panel_count": {
+      "cell": "N62",
+      "value": 4,
+      "label": "panel_a: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_b_stretched_t2_m": {
+      "cell": "U54",
+      "value": 0.12,
+      "label": "panel_b: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_b_stretched_t1_m": {
+      "cell": "U55",
+      "value": 2.28,
+      "label": "panel_b: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_b_stretched_n_m": {
+      "cell": "U56",
+      "value": 2.88,
+      "label": "panel_b: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_b_working_area_m2": {
+      "cell": "M60",
+      "value": 2.9929837954790197,
+      "label": "panel_b: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_b_mesh_count": {
+      "cell": "M63",
+      "value": 2095,
+      "label": "panel_b: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_b_cut_x1_meshes": {
+      "cell": "R62",
+      "value": 18,
+      "label": "panel_b: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_b_cut_x1_ratio": {
+      "cell": "S62",
+      "value": 0.4861111111111111,
+      "label": "panel_b: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_b_cut_x1_code": {
+      "cell": "T62",
+      "value": "1N2B",
+      "label": "panel_b: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_b_cut_x2_meshes": {
+      "cell": "R63",
+      "value": 36,
+      "label": "panel_b: cut x2 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_b_cut_x2_ratio": {
+      "cell": "S63",
+      "value": 1,
+      "label": "panel_b: cut x2 ratio (RC)",
+      "unit": ""
+    },
+    "panel_b_cut_x2_code": {
+      "cell": "T63",
+      "value": "AB",
+      "label": "panel_b: cut x2 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_c_stretched_t2_m": {
+      "cell": "I90",
+      "value": 2.28,
+      "label": "panel_c: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_c_stretched_t1_m": {
+      "cell": "I91",
+      "value": 4.68,
+      "label": "panel_c: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_c_stretched_n_m": {
+      "cell": "I92",
+      "value": 9.6,
+      "label": "panel_c: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_c_working_area_m2": {
+      "cell": "A96",
+      "value": 28.932176689630527,
+      "label": "panel_c: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_c_mesh_count": {
+      "cell": "A99",
+      "value": 20674,
+      "label": "panel_c: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_c_cut_x1_meshes": {
+      "cell": "F97",
+      "value": 60,
+      "label": "panel_c: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_c_cut_x1_ratio": {
+      "cell": "G97",
+      "value": 0.5,
+      "label": "panel_c: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_c_cut_x1_code": {
+      "cell": "H97",
+      "value": "1N2B",
+      "label": "panel_c: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_c_cut_x2_meshes": {
+      "cell": "F98",
+      "value": 120,
+      "label": "panel_c: cut x2 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_c_cut_x2_ratio": {
+      "cell": "G98",
+      "value": 1,
+      "label": "panel_c: cut x2 ratio (RC)",
+      "unit": ""
+    },
+    "panel_c_cut_x2_code": {
+      "cell": "H98",
+      "value": "AB",
+      "label": "panel_c: cut x2 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_c_panel_count": {
+      "cell": "B97",
+      "value": 2,
+      "label": "panel_c: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_d_stretched_t2_m": {
+      "cell": "U89",
+      "value": 3.88,
+      "label": "panel_d: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_d_stretched_t1_m": {
+      "cell": "U90",
+      "value": 2.28,
+      "label": "panel_d: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_d_stretched_n_m": {
+      "cell": "U91",
+      "value": 9.6,
+      "label": "panel_d: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_d_working_area_m2": {
+      "cell": "M95",
+      "value": 25.60663913909828,
+      "label": "panel_d: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_d_mesh_count": {
+      "cell": "M98",
+      "value": 18284,
+      "label": "panel_d: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_d_cut_x1_meshes": {
+      "cell": "R97",
+      "value": 80,
+      "label": "panel_d: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_d_cut_x1_ratio": {
+      "cell": "S97",
+      "value": 0.6666666666666666,
+      "label": "panel_d: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_d_cut_x1_code": {
+      "cell": "T97",
+      "value": "1N4B",
+      "label": "panel_d: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_d_cut_x2_meshes": {
+      "cell": "R98",
+      "value": 120,
+      "label": "panel_d: cut x2 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_d_cut_x2_ratio": {
+      "cell": "S98",
+      "value": 1,
+      "label": "panel_d: cut x2 ratio (RC)",
+      "unit": ""
+    },
+    "panel_d_cut_x2_code": {
+      "cell": "T98",
+      "value": "AB",
+      "label": "panel_d: cut x2 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_d_panel_count": {
+      "cell": "N97",
+      "value": 2,
+      "label": "panel_d: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_e_stretched_t2_m": {
+      "cell": "I120",
+      "value": 12.36,
+      "label": "panel_e: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_e_stretched_t1_m": {
+      "cell": "I121",
+      "value": 11.16,
+      "label": "panel_e: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_e_stretched_n_m": {
+      "cell": "I122",
+      "value": 2.4,
+      "label": "panel_e: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_e_working_area_m2": {
+      "cell": "A126",
+      "value": 24.442700996411997,
+      "label": "panel_e: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_e_mesh_count": {
+      "cell": "A129",
+      "value": 30929,
+      "label": "panel_e: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_e_cut_x1_meshes": {
+      "cell": "F127",
+      "value": 20,
+      "label": "panel_e: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_e_cut_x1_ratio": {
+      "cell": "G127",
+      "value": 0.5,
+      "label": "panel_e: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_e_cut_x1_code": {
+      "cell": "H127",
+      "value": "1N2B",
+      "label": "panel_e: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_e_panel_count": {
+      "cell": "B127",
+      "value": 1,
+      "label": "panel_e: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_f_stretched_t2_m": {
+      "cell": "U114",
+      "value": 4.29,
+      "label": "panel_f: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_f_stretched_t1_m": {
+      "cell": "U115",
+      "value": 3.87,
+      "label": "panel_f: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_f_stretched_n_m": {
+      "cell": "U116",
+      "value": 2.4,
+      "label": "panel_f: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_f_working_area_m2": {
+      "cell": "M120",
+      "value": 8.480120753857223,
+      "label": "panel_f: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_f_mesh_count": {
+      "cell": "M123",
+      "value": 10705,
+      "label": "panel_f: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_f_cut_x1_meshes": {
+      "cell": "R122",
+      "value": 26,
+      "label": "panel_f: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_f_cut_x1_ratio": {
+      "cell": "S122",
+      "value": 0.2692307692307692,
+      "label": "panel_f: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_f_cut_x2_meshes": {
+      "cell": "R123",
+      "value": 40,
+      "label": "panel_f: cut x2 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_f_cut_x2_ratio": {
+      "cell": "S123",
+      "value": 1,
+      "label": "panel_f: cut x2 ratio (RC)",
+      "unit": ""
+    },
+    "panel_f_cut_x2_code": {
+      "cell": "T123",
+      "value": "AB",
+      "label": "panel_f: cut x2 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_f_panel_count": {
+      "cell": "N122",
+      "value": 2,
+      "label": "panel_f: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_g_back_stretched_t2_m": {
+      "cell": "I156",
+      "value": 11.16,
+      "label": "panel_g_back: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_g_back_stretched_t1_m": {
+      "cell": "I157",
+      "value": 4.86,
+      "label": "panel_g_back: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_g_back_stretched_n_m": {
+      "cell": "I158",
+      "value": 12.6,
+      "label": "panel_g_back: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_g_back_working_area_m2": {
+      "cell": "A162",
+      "value": 87.40447990234824,
+      "label": "panel_g_back: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_g_back_mesh_count": {
+      "cell": "A165",
+      "value": 111664,
+      "label": "panel_g_back: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_g_back_cut_x1_meshes": {
+      "cell": "F163",
+      "value": 105,
+      "label": "panel_g_back: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_g_back_cut_x1_ratio": {
+      "cell": "G163",
+      "value": 0.5,
+      "label": "panel_g_back: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_g_back_cut_x1_code": {
+      "cell": "H163",
+      "value": "1N2B",
+      "label": "panel_g_back: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_g_belly_stretched_t2_m": {
+      "cell": "U156",
+      "value": 11.16,
+      "label": "panel_g_belly: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_g_belly_stretched_t1_m": {
+      "cell": "U157",
+      "value": 4.86,
+      "label": "panel_g_belly: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_g_belly_stretched_n_m": {
+      "cell": "U158",
+      "value": 12.6,
+      "label": "panel_g_belly: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_g_belly_working_area_m2": {
+      "cell": "M162",
+      "value": 87.40447990234824,
+      "label": "panel_g_belly: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_g_belly_mesh_count": {
+      "cell": "M165",
+      "value": 111664,
+      "label": "panel_g_belly: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_g_belly_cut_x1_meshes": {
+      "cell": "R163",
+      "value": 105,
+      "label": "panel_g_belly: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_g_belly_cut_x1_ratio": {
+      "cell": "S163",
+      "value": 0.5,
+      "label": "panel_g_belly: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_g_belly_cut_x1_code": {
+      "cell": "T163",
+      "value": "1N2B",
+      "label": "panel_g_belly: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_g_belly_panel_count": {
+      "cell": "N163",
+      "value": 2,
+      "label": "panel_g_belly: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_h_back_stretched_t2_m": {
+      "cell": "I189",
+      "value": 4.86,
+      "label": "panel_h_back: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_h_back_stretched_t1_m": {
+      "cell": "I190",
+      "value": 2.26,
+      "label": "panel_h_back: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_h_back_stretched_n_m": {
+      "cell": "I191",
+      "value": 5.2,
+      "label": "panel_h_back: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_h_back_working_area_m2": {
+      "cell": "A195",
+      "value": 16.031862274857527,
+      "label": "panel_h_back: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_h_back_mesh_count": {
+      "cell": "A198",
+      "value": 45973,
+      "label": "panel_h_back: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_h_back_cut_x1_meshes": {
+      "cell": "F196",
+      "value": 65,
+      "label": "panel_h_back: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_h_back_cut_x1_ratio": {
+      "cell": "G196",
+      "value": 0.5,
+      "label": "panel_h_back: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_h_back_cut_x1_code": {
+      "cell": "H196",
+      "value": "1N2B",
+      "label": "panel_h_back: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_h_belly_stretched_t2_m": {
+      "cell": "U189",
+      "value": 4.86,
+      "label": "panel_h_belly: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_h_belly_stretched_t1_m": {
+      "cell": "U190",
+      "value": 2.26,
+      "label": "panel_h_belly: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_h_belly_stretched_n_m": {
+      "cell": "U191",
+      "value": 5.2,
+      "label": "panel_h_belly: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_h_belly_working_area_m2": {
+      "cell": "M195",
+      "value": 16.031862274857527,
+      "label": "panel_h_belly: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_h_belly_mesh_count": {
+      "cell": "M198",
+      "value": 45973,
+      "label": "panel_h_belly: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_h_belly_cut_x1_meshes": {
+      "cell": "R196",
+      "value": 65,
+      "label": "panel_h_belly: cut x1 meshes to add/remove",
+      "unit": ""
+    },
+    "panel_h_belly_cut_x1_ratio": {
+      "cell": "S196",
+      "value": 0.5,
+      "label": "panel_h_belly: cut x1 ratio (RC)",
+      "unit": ""
+    },
+    "panel_h_belly_cut_x1_code": {
+      "cell": "T196",
+      "value": "1N2B",
+      "label": "panel_h_belly: cut x1 code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_h_belly_panel_count": {
+      "cell": "N196",
+      "value": 2,
+      "label": "panel_h_belly: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_i_bag_top_stretched_t2_m": {
+      "cell": "I222",
+      "value": 2.26,
+      "label": "panel_i_bag_top: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_i_bag_top_stretched_t1_m": {
+      "cell": "I223",
+      "value": 2.26,
+      "label": "panel_i_bag_top: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_i_bag_top_stretched_n_m": {
+      "cell": "I224",
+      "value": 8,
+      "label": "panel_i_bag_top: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_i_bag_top_working_area_m2": {
+      "cell": "A228",
+      "value": 15.65773930042265,
+      "label": "panel_i_bag_top: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_i_bag_top_mesh_count": {
+      "cell": "A231",
+      "value": 44888,
+      "label": "panel_i_bag_top: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_n_meshes": {
+      "cell": "F229",
+      "value": 200,
+      "label": "panel_i_bag_top: cut n meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_n_ratio": {
+      "cell": "G229",
+      "value": 1,
+      "label": "panel_i_bag_top: cut n ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_n_code": {
+      "cell": "H229",
+      "value": "AB",
+      "label": "panel_i_bag_top: cut n code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_t_meshes": {
+      "cell": "F230",
+      "value": 113,
+      "label": "panel_i_bag_top: cut t meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_t_ratio": {
+      "cell": "G230",
+      "value": 1,
+      "label": "panel_i_bag_top: cut t ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_bag_top_cut_t_code": {
+      "cell": "H230",
+      "value": "AB",
+      "label": "panel_i_bag_top: cut t code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_bag_top_panel_count": {
+      "cell": "B229",
+      "value": 1,
+      "label": "panel_i_bag_top: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_stretched_t2_m": {
+      "cell": "U222",
+      "value": 2.26,
+      "label": "panel_j_bag_bottom: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_j_bag_bottom_stretched_t1_m": {
+      "cell": "U223",
+      "value": 2.26,
+      "label": "panel_j_bag_bottom: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_j_bag_bottom_stretched_n_m": {
+      "cell": "U224",
+      "value": 10,
+      "label": "panel_j_bag_bottom: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_j_bag_bottom_working_area_m2": {
+      "cell": "M228",
+      "value": 19.572174125528313,
+      "label": "panel_j_bag_bottom: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_j_bag_bottom_mesh_count": {
+      "cell": "M231",
+      "value": 56138,
+      "label": "panel_j_bag_bottom: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_n_meshes": {
+      "cell": "R229",
+      "value": 250,
+      "label": "panel_j_bag_bottom: cut n meshes to add/remove",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_n_ratio": {
+      "cell": "S229",
+      "value": 1,
+      "label": "panel_j_bag_bottom: cut n ratio (RC)",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_n_code": {
+      "cell": "T229",
+      "value": "AB",
+      "label": "panel_j_bag_bottom: cut n code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_t_meshes": {
+      "cell": "R230",
+      "value": 113,
+      "label": "panel_j_bag_bottom: cut t meshes to add/remove",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_t_ratio": {
+      "cell": "S230",
+      "value": 1,
+      "label": "panel_j_bag_bottom: cut t ratio (RC)",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_cut_t_code": {
+      "cell": "T230",
+      "value": "AB",
+      "label": "panel_j_bag_bottom: cut t code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_j_bag_bottom_panel_count": {
+      "cell": "N229",
+      "value": 1,
+      "label": "panel_j_bag_bottom: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_stretched_t2_m": {
+      "cell": "I255",
+      "value": 2.085,
+      "label": "panel_i_mod_bag_top: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_top_stretched_t1_m": {
+      "cell": "I256",
+      "value": 2.085,
+      "label": "panel_i_mod_bag_top: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_top_stretched_n_m": {
+      "cell": "I257",
+      "value": 9,
+      "label": "panel_i_mod_bag_top: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_top_working_area_m2": {
+      "cell": "A261",
+      "value": 16.250966702014992,
+      "label": "panel_i_mod_bag_top: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_i_mod_bag_top_mesh_count": {
+      "cell": "A264",
+      "value": 82962,
+      "label": "panel_i_mod_bag_top: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_n_meshes": {
+      "cell": "F262",
+      "value": 300,
+      "label": "panel_i_mod_bag_top: cut n meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_n_ratio": {
+      "cell": "G262",
+      "value": 1,
+      "label": "panel_i_mod_bag_top: cut n ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_n_code": {
+      "cell": "H262",
+      "value": "AB",
+      "label": "panel_i_mod_bag_top: cut n code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_t_meshes": {
+      "cell": "F263",
+      "value": 139,
+      "label": "panel_i_mod_bag_top: cut t meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_t_ratio": {
+      "cell": "G263",
+      "value": 1,
+      "label": "panel_i_mod_bag_top: cut t ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_top_cut_t_code": {
+      "cell": "H263",
+      "value": "AB",
+      "label": "panel_i_mod_bag_top: cut t code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_stretched_t2_m": {
+      "cell": "U255",
+      "value": 2.085,
+      "label": "panel_i_mod_bag_bottom: stretched length b (T2)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_bottom_stretched_t1_m": {
+      "cell": "U256",
+      "value": 2.085,
+      "label": "panel_i_mod_bag_bottom: stretched length a (T1)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_bottom_stretched_n_m": {
+      "cell": "U257",
+      "value": 9,
+      "label": "panel_i_mod_bag_bottom: stretched depth h (N)",
+      "unit": "m"
+    },
+    "panel_i_mod_bag_bottom_working_area_m2": {
+      "cell": "M261",
+      "value": 16.250966702014992,
+      "label": "panel_i_mod_bag_bottom: working area U1·U2·((T1+T2)/2)·N·mL²",
+      "unit": "m²"
+    },
+    "panel_i_mod_bag_bottom_mesh_count": {
+      "cell": "M264",
+      "value": 82962,
+      "label": "panel_i_mod_bag_bottom: number of meshes ((T1+T2−1)·(N−0.5))+0.5",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_n_meshes": {
+      "cell": "R262",
+      "value": 300,
+      "label": "panel_i_mod_bag_bottom: cut n meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_n_ratio": {
+      "cell": "S262",
+      "value": 1,
+      "label": "panel_i_mod_bag_bottom: cut n ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_n_code": {
+      "cell": "T262",
+      "value": "AB",
+      "label": "panel_i_mod_bag_bottom: cut n code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_t_meshes": {
+      "cell": "R263",
+      "value": 139,
+      "label": "panel_i_mod_bag_bottom: cut t meshes to add/remove",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_t_ratio": {
+      "cell": "S263",
+      "value": 1,
+      "label": "panel_i_mod_bag_bottom: cut t ratio (RC)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_cut_t_code": {
+      "cell": "T263",
+      "value": "AB",
+      "label": "panel_i_mod_bag_bottom: cut t code (VLOOKUP)",
+      "unit": ""
+    },
+    "panel_i_mod_bag_bottom_panel_count": {
+      "cell": "O262",
+      "value": 2,
+      "label": "panel_i_mod_bag_bottom: number of panels (COUNTIF)",
+      "unit": ""
+    },
+    "mod_bag_join_ratio": {
+      "cell": "J240",
+      "value": 0.922566371681416,
+      "label": "Join ratio modified bag / panel H (I256/I190)",
+      "unit": ""
+    },
+    "mod_bag_join_offset_m": {
+      "cell": "B243",
+      "value": 1.3875000000000002,
+      "label": "Half difference of widths at the join",
+      "unit": "m"
+    },
+    "cut_angle_average_deg": {
+      "cell": "K278",
+      "value": 10.633919691342186,
+      "label": "Average horizontal attack angle of the cuts",
+      "unit": "°"
+    },
+    "cut_ratio_first_panel": {
+      "cell": "G273",
+      "value": "1N2B",
+      "label": "Cut code of the first panel (used by all rows)",
+      "unit": ""
+    }
+  },
+  "series": {
+    "cut_u1_horizontal": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "E273:E277",
+      "values": [
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.23
+      ],
+      "label": "Horizontal opening coef. U1",
+      "unit": ""
+    },
+    "cut_u2_vertical": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "F273:F277",
+      "values": [
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9731906288081488
+      ],
+      "label": "Vertical opening coef. U2",
+      "unit": ""
+    },
+    "cut_codes": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "G273:G277",
+      "values": [
+        "1N2B",
+        "1N2B",
+        "1N2B",
+        "1N2B",
+        "1N2B"
+      ],
+      "label": "Cut code per panel",
+      "unit": ""
+    },
+    "cut_width_meshes": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "H273:H277",
+      "values": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "label": "Meshes (a) in width per cut (all rows use $G$273)",
+      "unit": ""
+    },
+    "cut_height_meshes": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "I273:I277",
+      "values": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "label": "Meshes (d) in height per cut (all rows use $G$273)",
+      "unit": ""
+    },
+    "cut_tan_theta": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "J273:J277",
+      "values": [
+        0.205408406280595,
+        0.205408406280595,
+        0.205408406280595,
+        0.205408406280595,
+        0.1181680100442795
+      ],
+      "label": "tan θ = (a·U1)/(d·U2)",
+      "unit": ""
+    },
+    "cut_angle_deg": {
+      "x": "panel",
+      "x_values": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "H"
+      ],
+      "cells": "K273:K277",
+      "values": [
+        11.607580652578216,
+        11.607580652578216,
+        11.607580652578216,
+        11.607580652578216,
+        6.739275846398069
+      ],
+      "label": "θ = DEGREES(ATAN(tan θ))",
+      "unit": "°"
+    },
+    "summary_top_mesh_mm": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "Q271:Q279",
+      "values": [
+        80,
+        80,
+        80,
+        80,
+        60,
+        60,
+        40,
+        40,
+        30
+      ],
+      "label": "Summary upper plan: mesh size",
+      "unit": "mm"
+    },
+    "summary_top_n_meshes": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "R271:R279",
+      "values": [
+        36,
+        120,
+        36,
+        120,
+        40,
+        210,
+        130,
+        200,
+        300
+      ],
+      "label": "Summary upper plan: N meshes",
+      "unit": ""
+    },
+    "summary_top_t_meshes": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "S271:S279",
+      "values": [
+        57,
+        117,
+        57,
+        117,
+        412,
+        372,
+        243,
+        113,
+        139
+      ],
+      "label": "Summary upper plan: T meshes",
+      "unit": ""
+    },
+    "summary_top_rtex": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "U271:U279",
+      "values": [
+        1280,
+        1280,
+        1280,
+        1280,
+        950,
+        950,
+        950,
+        1280,
+        1280
+      ],
+      "label": "Summary upper plan: Rtex",
+      "unit": "tex"
+    },
+    "summary_top_twine_mm": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "V271:V279",
+      "values": [
+        1.37,
+        1.37,
+        1.37,
+        1.37,
+        1.16,
+        1.16,
+        1.16,
+        1.37,
+        1.37
+      ],
+      "label": "Summary upper plan: twine Ø",
+      "unit": "mm"
+    },
+    "summary_top_u1": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala sup. derecha",
+        "Ala Superior Derecha",
+        "Punta de ala sup. izquierda",
+        "Ala Superior Izquierda",
+        "Square",
+        "Dorso D1",
+        "Dorso D2",
+        "Bolsa Superior (Estándar)",
+        "Bolsa Superior Modificada para Crustáceos"
+      ],
+      "cells": "W271:W279",
+      "values": [
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.23,
+        0.23,
+        0.23
+      ],
+      "label": "Summary upper plan: U1",
+      "unit": ""
+    },
+    "summary_bottom_mesh_mm": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "Q282:Q291",
+      "values": [
+        80,
+        80,
+        80,
+        80,
+        60,
+        60,
+        60,
+        40,
+        40,
+        30
+      ],
+      "label": "Summary lower plan: mesh size",
+      "unit": "mm"
+    },
+    "summary_bottom_n_meshes": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "R282:R291",
+      "values": [
+        36,
+        120,
+        36,
+        120,
+        40,
+        40,
+        210,
+        130,
+        250,
+        300
+      ],
+      "label": "Summary lower plan: N meshes",
+      "unit": ""
+    },
+    "summary_bottom_t_meshes": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "S282:S291",
+      "values": [
+        57,
+        97,
+        57,
+        97,
+        143,
+        143,
+        372,
+        243,
+        113,
+        139
+      ],
+      "label": "Summary lower plan: T meshes",
+      "unit": ""
+    },
+    "summary_bottom_rtex": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "U282:U291",
+      "values": [
+        1280,
+        1280,
+        1280,
+        1280,
+        950,
+        950,
+        950,
+        950,
+        1280,
+        1280
+      ],
+      "label": "Summary lower plan: Rtex",
+      "unit": "tex"
+    },
+    "summary_bottom_twine_mm": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "V282:V291",
+      "values": [
+        1.37,
+        1.37,
+        1.37,
+        1.37,
+        1.16,
+        1.16,
+        1.16,
+        1.16,
+        1.37,
+        1.37
+      ],
+      "label": "Summary lower plan: twine Ø",
+      "unit": "mm"
+    },
+    "summary_bottom_u1": {
+      "x": "panel",
+      "x_values": [
+        "Punta de ala inf. derecha",
+        "Ala Inferior Derecha",
+        "Punta de ala inf. Izquierda",
+        "Ala Inferior Izquierda",
+        "2° SECCIÓN ALA INFERIOR DERECHA",
+        "2° SECCIÓN ALA INFERIOR IZQUIERDA",
+        "Vientre V1",
+        "Vientre V2",
+        "Bolsa Inferior (Estándar)",
+        "Bolsa Inferior Modificada para Crustáceos"
+      ],
+      "cells": "W282:W291",
+      "values": [
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.23,
+        0.23,
+        0.23
+      ],
+      "label": "Summary lower plan: U1",
+      "unit": ""
+    }
+  }
+}

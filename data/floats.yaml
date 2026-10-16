@@ -1,0 +1,47 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+kind: floats
+source: Flotación y Lastre!D70:E82
+items:
+- diameter_mm: 100
+  buoyancy_kgf: 0.3
+  source: Flotación y Lastre!D72:E72
+- diameter_mm: 135
+  buoyancy_kgf: 0.76
+  source: Flotación y Lastre!D73:E73
+- diameter_mm: 200
+  buoyancy_kgf: 3.2
+  source: Flotación y Lastre!D74:E74
+  note: la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 280
+  buoyancy_kgf: 7.5
+  source: Flotación y Lastre!D75:E75
+- diameter_mm: 200
+  buoyancy_kgf: 3.2
+  source: Flotación y Lastre!D76:E76
+  note: la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 200
+  buoyancy_kgf: 3
+  source: Flotación y Lastre!D77:E77
+  note: la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 250
+  buoyancy_kgf: 6.54
+  source: Flotación y Lastre!D78:E78
+  note: la hoja lista 2 boyas de 250 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 250
+  buoyancy_kgf: 5.75
+  source: Flotación y Lastre!D79:E79
+  note: la hoja lista 2 boyas de 250 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 300
+  buoyancy_kgf: 10.01
+  source: Flotación y Lastre!D80:E80
+  note: la hoja lista 2 boyas de 300 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 300
+  buoyancy_kgf: 8.33
+  source: Flotación y Lastre!D81:E81
+  note: la hoja lista 2 boyas de 300 mm con distinta flotación (modelos distintos); se conservan todas
+- diameter_mm: 200
+  buoyancy_kgf: 3.1
+  source: Flotación y Lastre!D82:E82
+  note: la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas

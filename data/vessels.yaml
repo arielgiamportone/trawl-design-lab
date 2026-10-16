@@ -1,0 +1,53 @@
+# Generado por tools/extract/nets.py a partir de legacy/Calculos_Red_FAO_A3.xlsx
+# (hojas 'Paños de red y cortes', 'Dimensiones de la Red', 'Cables Y Cabulleria',
+# 'Flotación y Lastre', 'Especie Blanco', 'Tipo de buques', 'Potenc disponible para
+# arrastre'). No editar a mano: regenerar con `uv run python -m tools.extract.nets`.
+vessels:
+- id: fao_a3_150hp
+  name: Pesquero de rada/ría 150 BHP (el modelo cubre hélice PF y PV+T)
+  bhp: 150.0
+  length_m: 9.0
+  beam_m: 2.5
+  depth_m: 1.8
+  displacement_t: 10.0
+  propeller: fixed_pitch
+  high_rpm: true
+  nominal_hp: 199.5
+  trawl_pull_hp: 49.5
+  vessel_class: 'Tipo 1: Pesqueros de Rada o Ría con motores de mayores o iguales a 200 HP'
+  source_cells:
+    bhp: Potenc disponible para arrastre!C25
+    length_m: Tipo de buques!B4
+    beam_m: Tipo de buques!B5
+    depth_m: Tipo de buques!B6
+    displacement_t: Potenc disponible para arrastre!H27
+    nominal_hp: Potenc disponible para arrastre!C24
+    trawl_pull_hp: Potenc disponible para arrastre!C26
+    vessel_class: Tipo de buques!A3
+- id: fao_a3_180hp
+  name: Pesquero de rada/ría 180 BHP (el modelo cubre hélice PF y PV+T)
+  bhp: 180.0
+  length_m: 9.0
+  beam_m: 2.5
+  depth_m: 1.8
+  displacement_t: 12.0
+  propeller: fixed_pitch
+  high_rpm: true
+  nominal_hp: 239.4
+  trawl_pull_hp: 59.4
+  vessel_class: 'Tipo 1: Pesqueros de Rada o Ría con motores de mayores o iguales a 200 HP'
+  source_cells:
+    bhp: Potenc disponible para arrastre!C37
+    length_m: Tipo de buques!B4
+    beam_m: Tipo de buques!B5
+    depth_m: Tipo de buques!B6
+    displacement_t: Potenc disponible para arrastre!H38
+    nominal_hp: Potenc disponible para arrastre!C36
+    trawl_pull_hp: Potenc disponible para arrastre!C38
+    vessel_class: Tipo de buques!A3
+source: Calculos_Red_FAO_A3.xlsx
+notes:
+- 'Eslora: ''hasta 9 metros'' (Tipo de buques!B4), se registra el máximo.'
+- 'Desplazamiento tomado de la fórmula de velocidad de almirantazgo (''Potenc disponible para arrastre''!H27/H38).
+  El libro no distingue buques por tipo de hélice: el mismo preset vale para PF y PV+T.'
+- nominal_hp = BHP × 1.33 (C24/C36); trawl_pull_hp = BHP × 0.33 (C26/C38).

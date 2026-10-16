@@ -1,0 +1,104 @@
+{
+  "sheet": "Cables Y Cabulleria",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "headrope_rope": {
+      "cell": "D3",
+      "value": "COMBINADO 12 Acero6x24+7",
+      "label": "Headrope rope (combination 12 mm, steel 6x24+7)",
+      "unit": ""
+    },
+    "headrope_rope_kg_per_m": {
+      "cell": "G3",
+      "value": 0.438,
+      "label": "Headrope rope mass per metre",
+      "unit": "kg/m"
+    },
+    "headrope_rope_strength_t": {
+      "cell": "H3",
+      "value": 3.48,
+      "label": "Headrope rope breaking strength",
+      "unit": "t"
+    },
+    "headrope_rope_diameter_mm": {
+      "cell": "I3",
+      "value": 12,
+      "label": "Headrope rope diameter",
+      "unit": "mm"
+    },
+    "headrope_rope_length_m": {
+      "cell": "J3",
+      "value": 28.698,
+      "label": "Headrope rope length (=Lima)",
+      "unit": "m"
+    },
+    "footrope_rope": {
+      "cell": "D4",
+      "value": "COMBINADO 14 Acero6x24+7",
+      "label": "Footrope rope (combination 14 mm, steel 6x24+7)",
+      "unit": ""
+    },
+    "footrope_rope_kg_per_m": {
+      "cell": "G4",
+      "value": 0.624,
+      "label": "Footrope rope mass per metre",
+      "unit": "kg/m"
+    },
+    "footrope_rope_strength_t": {
+      "cell": "H4",
+      "value": 8.7,
+      "label": "Footrope rope breaking strength",
+      "unit": "t"
+    },
+    "footrope_rope_diameter_mm": {
+      "cell": "I4",
+      "value": 14,
+      "label": "Footrope rope diameter",
+      "unit": "mm"
+    },
+    "footrope_rope_length_m": {
+      "cell": "J4",
+      "value": 33.3,
+      "label": "Footrope rope length (=Burlon)",
+      "unit": "m"
+    },
+    "wingtip_reinforcement_m": {
+      "cell": "J5",
+      "value": 11.6,
+      "label": "Wing-tip reinforcement rope ROUNDUP(4·C155, 1)",
+      "unit": "m"
+    },
+    "warp_selected": {
+      "cell": "D11",
+      "value": "CA 6X19+1 AT Seale Compactado",
+      "label": "Selected towing warp construction",
+      "unit": ""
+    },
+    "warp_diameter_mm": {
+      "cell": "G11",
+      "value": 12,
+      "label": "Selected warp diameter",
+      "unit": "mm"
+    },
+    "warp_kg_per_m": {
+      "cell": "H11",
+      "value": 0.531,
+      "label": "Selected warp mass per metre",
+      "unit": "kg/m"
+    },
+    "warp_strength_t": {
+      "cell": "I11",
+      "value": 8.55,
+      "label": "Selected warp breaking strength",
+      "unit": "t"
+    },
+    "warp_quantity_m": {
+      "cell": "D12",
+      "value": 500,
+      "label": "Warp to buy = 2·Ls + 0.5·Ls",
+      "unit": "m"
+    }
+  },
+  "series": {}
+}

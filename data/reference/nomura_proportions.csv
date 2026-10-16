@@ -1,0 +1,11 @@
+net_type,l_m,l_b,m_b,a_b,c_b,d_b,e_b,f_b,d_minus_c_b,note,source
+"Red de Fondo, 2 caras",0.74,0.62,0.83,1.07,0.27,0.4,0.41,0.21,0.11,,Tablas de Referencias!A16:L16
+"Red de Fondo, 2 caras",0.71,0.6,0.83,1.12,0.25,0.41,0.31,0.28,0.14,,Tablas de Referencias!A17:L17
+"Red de Fondo, 4-8 caras",0.8,0.68,0.85,10.6,0.35,0.46,0.36,0.18,0.1,a/b = 10.6 en G18 parece un error de tipeo por 1.06,Tablas de Referencias!A18:L18
+"Red Pelagica, 2 caras",0.78,0.58,0.74,1.18,0.24,0.33,0.44,0.23,0.1,,Tablas de Referencias!A19:L19
+"Red Pelagica, 4-8 caras",0.79,0.69,0.87,1.02,0.35,0.47,0.33,0.21,0.12,,Tablas de Referencias!A20:L20
+Red de Fondo Pequeña,0.69,0.58,0.86,10.6,0.28,0.58,0.33,0.08,0.28,a/b = 10.6 en G21 parece un error de tipeo por 1.06,Tablas de Referencias!A21:L21
+Red de Pesca a la Pareja,0.87,0.93,1.19,0.61,0.54,0.65,0.27,0.1,0.11,,Tablas de Referencias!A22:L22
+Red Camaronera una sola,0.82,0.84,1.02,1.22,0.4,0.47,0.36,0.17,0.15,,Tablas de Referencias!A23:L23
+Red Camaronera 2 redes,0.87,0.72,0.82,1.56,0.2,0.26,0.39,0.27,0.1,,Tablas de Referencias!A24:L24
+Red pelagica a la pareja,1,0.39,0.39,2.49,0.13,0.13,0.53,0.34,,L25 = '-' en la hoja (sin dato),Tablas de Referencias!A25:L25

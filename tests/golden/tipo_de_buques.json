@@ -1,0 +1,38 @@
+{
+  "sheet": "Tipo de buques",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "vessel_class": {
+      "cell": "A1",
+      "value": "Pesqueros De 150 a 180 BHP",
+      "label": "Vessel class heading (150–180 BHP)",
+      "unit": ""
+    },
+    "vessel_type_description": {
+      "cell": "A3",
+      "value": "Tipo 1: Pesqueros de Rada o Ría con motores de mayores o iguales a 200 HP",
+      "label": "Vessel type 1 description",
+      "unit": ""
+    },
+    "vessel_loa_note": {
+      "cell": "B4",
+      "value": "hasta 9 metros",
+      "label": "Length overall note",
+      "unit": ""
+    },
+    "vessel_beam_m": {
+      "cell": "B5",
+      "value": 2.5,
+      "label": "Beam",
+      "unit": "m"
+    },
+    "vessel_depth_m": {
+      "cell": "B6",
+      "value": 1.8,
+      "label": "Moulded depth (puntal)",
+      "unit": "m"
+    }
+  },
+  "series": {}
+}

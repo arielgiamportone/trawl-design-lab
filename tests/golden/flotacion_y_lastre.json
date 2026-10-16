@@ -1,0 +1,1377 @@
+{
+  "sheet": "Flotación y Lastre",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "headrope_m": {
+      "cell": "H4",
+      "value": 28.698,
+      "label": "Headrope L",
+      "unit": "m"
+    },
+    "flotation_koyama_kgf": {
+      "cell": "F6",
+      "value": 25.044780000000003,
+      "label": "Koyama flotation = 1.11·L − 6.81",
+      "unit": "kgf"
+    },
+    "prado_k": {
+      "cell": "I14",
+      "value": 0.2,
+      "label": "Prado K (50–600 NHP)",
+      "unit": ""
+    },
+    "flotation_prado_150_kgf": {
+      "cell": "F17",
+      "value": 30,
+      "label": "Prado flotation = K·NHP, 150 HP",
+      "unit": "kgf"
+    },
+    "flotation_prado_180_kgf": {
+      "cell": "G17",
+      "value": 36,
+      "label": "Prado flotation = K·NHP, 180 HP",
+      "unit": "kgf"
+    },
+    "bridle_angle_deg": {
+      "cell": "F22",
+      "value": 4.8,
+      "label": "Bridle angle α (=Portones!F39)",
+      "unit": "°"
+    },
+    "beta_deg": {
+      "cell": "F23",
+      "value": 3.189813453675473,
+      "label": "β = atan((AV/2)/L_cuerpo)",
+      "unit": "°"
+    },
+    "vertical_opening_m": {
+      "cell": "F24",
+      "value": 1.9840000000000002,
+      "label": "AV",
+      "unit": "m"
+    },
+    "body_length_m": {
+      "cell": "F25",
+      "value": 17.8,
+      "label": "Body length",
+      "unit": "m"
+    },
+    "net_length_no_bag_m": {
+      "cell": "F26",
+      "value": 32.68,
+      "label": "Net length without codend",
+      "unit": "m"
+    },
+    "headrope_wing_m": {
+      "cell": "F27",
+      "value": 12.48,
+      "label": "Headrope wing piece",
+      "unit": "m"
+    },
+    "headrope_diameter_mm": {
+      "cell": "F32",
+      "value": 12,
+      "label": "Headrope rope diameter",
+      "unit": "mm"
+    },
+    "headrope_material": {
+      "cell": "F33",
+      "value": "COMBINADO 12 Acero6x24+7",
+      "label": "Headrope rope material",
+      "unit": ""
+    },
+    "headrope_kg_per_m": {
+      "cell": "F35",
+      "value": 0.438,
+      "label": "Headrope rope kg/m",
+      "unit": "kg/m"
+    },
+    "headrope_weight_air_kg": {
+      "cell": "F36",
+      "value": 12.569724,
+      "label": "Headrope weight in air",
+      "unit": "kg"
+    },
+    "headrope_weight_water_kgf": {
+      "cell": "F37",
+      "value": 1.093565988,
+      "label": "Headrope weight in water = 0.087·W_air",
+      "unit": "kgf"
+    },
+    "flotation_fridman_avg_150_kgf": {
+      "cell": "N43",
+      "value": 36.0156667883915,
+      "label": "Fridman flotation average 1–3 kn, 150 HP",
+      "unit": "kgf"
+    },
+    "flotation_fridman_avg_180_kgf": {
+      "cell": "N55",
+      "value": 39.9,
+      "label": "Fridman flotation average 1–3 kn, 180 HP",
+      "unit": "kgf"
+    },
+    "flotation_design_150_kgf": {
+      "cell": "F70",
+      "value": 36.0156667883915,
+      "label": "Total flotation used for float count, 150 HP",
+      "unit": "kgf"
+    },
+    "flotation_design_180_kgf": {
+      "cell": "G70",
+      "value": 39.9,
+      "label": "Total flotation used for float count, 180 HP",
+      "unit": "kgf"
+    },
+    "float_count": {
+      "cell": "F84",
+      "value": 12,
+      "label": "Number of floats chosen",
+      "unit": ""
+    },
+    "float_count_total": {
+      "cell": "F91",
+      "value": 12,
+      "label": "Total floats",
+      "unit": ""
+    },
+    "float_diameter_mm": {
+      "cell": "F92",
+      "value": 200,
+      "label": "Float diameter (LOOKUP by count)",
+      "unit": "mm"
+    },
+    "flotation_total_rounded_kgf": {
+      "cell": "F90",
+      "value": 36,
+      "label": "Total flotation rounded",
+      "unit": "kgf"
+    },
+    "headrope_wing_corrected_m": {
+      "cell": "F87",
+      "value": 13.104000000000001,
+      "label": "Headrope wing corrected",
+      "unit": "m"
+    },
+    "headrope_bosom_corrected_m": {
+      "cell": "F89",
+      "value": 2.4899999999999998,
+      "label": "Headrope bosom corrected",
+      "unit": "m"
+    },
+    "float_spacing_even_m": {
+      "cell": "F94",
+      "value": 2.3915,
+      "label": "Even spacing = L / n",
+      "unit": "m"
+    },
+    "floats_per_wing_even": {
+      "cell": "F95",
+      "value": 5,
+      "label": "Floats per wing (even)",
+      "unit": ""
+    },
+    "floats_bosom_even": {
+      "cell": "F96",
+      "value": 2,
+      "label": "Floats on bosom (even)",
+      "unit": ""
+    },
+    "float_wing_share": {
+      "cell": "F103",
+      "value": 0.7,
+      "label": "Share of flotation on wings",
+      "unit": ""
+    },
+    "floats_on_wings": {
+      "cell": "G103",
+      "value": 10,
+      "label": "Floats on wings = EVEN(n·share)",
+      "unit": ""
+    },
+    "floats_per_wing": {
+      "cell": "H103",
+      "value": 5,
+      "label": "Floats per wing",
+      "unit": ""
+    },
+    "floats_on_bosom": {
+      "cell": "G104",
+      "value": 2,
+      "label": "Floats on bosom",
+      "unit": ""
+    },
+    "wing_front_fifth_share": {
+      "cell": "G106",
+      "value": 0.6,
+      "label": "Share of wing floats on the first fifth",
+      "unit": ""
+    },
+    "floats_front_fifth": {
+      "cell": "G107",
+      "value": 3,
+      "label": "Floats on the first fifth of each wing",
+      "unit": ""
+    },
+    "float_spacing_front_fifth_m": {
+      "cell": "H110",
+      "value": 1.25,
+      "label": "Spacing on the first fifth",
+      "unit": "m"
+    },
+    "wing_remaining_length_m": {
+      "cell": "C111",
+      "value": 10.614,
+      "label": "Remaining wing length",
+      "unit": "m"
+    },
+    "floats_remaining": {
+      "cell": "F111",
+      "value": 3,
+      "label": "Floats on the remaining wing",
+      "unit": ""
+    },
+    "float_spacing_remaining_m": {
+      "cell": "H111",
+      "value": 3,
+      "label": "Spacing on the remaining wing",
+      "unit": "m"
+    },
+    "wing_free_end_m": {
+      "cell": "E112",
+      "value": 1.6140000000000008,
+      "label": "Free distance to the wing-tip eye",
+      "unit": "m"
+    },
+    "float_spacing_bosom_m": {
+      "cell": "K112",
+      "value": 0.83,
+      "label": "Spacing on the bosom = bosom/3",
+      "unit": "m"
+    },
+    "float_diameter_m": {
+      "cell": "H128",
+      "value": 0.2,
+      "label": "Float diameter",
+      "unit": "m"
+    },
+    "float_cd_hoerner": {
+      "cell": "H129",
+      "value": 0.47,
+      "label": "Float CD (Hoerner 1975)",
+      "unit": ""
+    },
+    "kinematic_viscosity_0c": {
+      "cell": "H130",
+      "value": 1.83e-06,
+      "label": "ν sea water 0 °C",
+      "unit": "m²/s"
+    },
+    "kinematic_viscosity_20c": {
+      "cell": "H131",
+      "value": 1.05e-06,
+      "label": "ν sea water 20 °C",
+      "unit": "m²/s"
+    },
+    "kinematic_viscosity_avg": {
+      "cell": "H132",
+      "value": 1.44e-06,
+      "label": "ν average",
+      "unit": "m²/s"
+    },
+    "ballast_koyama_kg": {
+      "cell": "G159",
+      "value": 47.403380000000006,
+      "label": "Koyama ballast = 1.81·L − 4.54",
+      "unit": "kg"
+    },
+    "ballast_prado_k_150": {
+      "cell": "G168",
+      "value": 0.28,
+      "label": "Prado K for ballast, 150 HP",
+      "unit": ""
+    },
+    "ballast_prado_150_kg": {
+      "cell": "I173",
+      "value": 42.00000000000001,
+      "label": "Prado ballast = K·NHP, 150 HP",
+      "unit": "kg"
+    },
+    "ballast_prado_k_180": {
+      "cell": "G176",
+      "value": 0.28,
+      "label": "Prado K for ballast, 180 HP",
+      "unit": ""
+    },
+    "ballast_prado_180_kg": {
+      "cell": "I180",
+      "value": 50.400000000000006,
+      "label": "Prado ballast = K·NHP, 180 HP",
+      "unit": "kg"
+    },
+    "footrope_m": {
+      "cell": "G184",
+      "value": 33.3,
+      "label": "Footrope length",
+      "unit": "m"
+    },
+    "footrope_diameter_mm": {
+      "cell": "G185",
+      "value": 14,
+      "label": "Footrope diameter",
+      "unit": "mm"
+    },
+    "footrope_kg_per_m": {
+      "cell": "G187",
+      "value": 0.624,
+      "label": "Footrope kg/m",
+      "unit": "kg/m"
+    },
+    "footrope_weight_air_kg": {
+      "cell": "G188",
+      "value": 20.7792,
+      "label": "Footrope weight in air",
+      "unit": "kg"
+    },
+    "coef_nylon": {
+      "cell": "G189",
+      "value": 0.1,
+      "label": "Coefficient nylon (in water)",
+      "unit": ""
+    },
+    "coef_steel": {
+      "cell": "G190",
+      "value": 0.87,
+      "label": "Coefficient steel (in water)",
+      "unit": ""
+    },
+    "footrope_weight_water_kgf": {
+      "cell": "G191",
+      "value": 1.8077904,
+      "label": "Footrope weight in water = W·0.87/10",
+      "unit": "kgf"
+    },
+    "ballast_min_150_kg": {
+      "cell": "F225",
+      "value": 27,
+      "label": "Minimum ballast = ROUNDDOWN(M197), 150 HP",
+      "unit": "kg"
+    },
+    "ballast_max_150_kg": {
+      "cell": "F226",
+      "value": 42,
+      "label": "Maximum ballast = ROUNDUP(L201), 150 HP",
+      "unit": "kg"
+    },
+    "bottom_type": {
+      "cell": "F227",
+      "value": "Intermedio",
+      "label": "Bottom type",
+      "unit": ""
+    },
+    "adjust_chain_m": {
+      "cell": "F224",
+      "value": 2,
+      "label": "Adjustment chain length",
+      "unit": "m"
+    },
+    "adjust_chain_weight_kg": {
+      "cell": "H224",
+      "value": 12,
+      "label": "Adjustment chain weight",
+      "unit": "kg"
+    },
+    "ballast_even_kg_m": {
+      "cell": "E233",
+      "value": 0.4504504504504505,
+      "label": "Even ballast distribution",
+      "unit": "kg/m"
+    },
+    "ballast_min_adjust_kg": {
+      "cell": "G236",
+      "value": 5,
+      "label": "Min ballast: adjustment chain share",
+      "unit": "kg"
+    },
+    "ballast_min_bosom_kg": {
+      "cell": "G237",
+      "value": 7,
+      "label": "Min ballast: bosom share",
+      "unit": "kg"
+    },
+    "ballast_min_wings_kg": {
+      "cell": "G238",
+      "value": 15,
+      "label": "Min ballast: wings share",
+      "unit": "kg"
+    },
+    "ballast_min_adjust_kg_m": {
+      "cell": "I236",
+      "value": 5,
+      "label": "Min ballast: adjustment chain kg/m",
+      "unit": "kg/m"
+    },
+    "ballast_min_bosom_kg_m": {
+      "cell": "I237",
+      "value": 2.8,
+      "label": "Min ballast: bosom kg/m",
+      "unit": "kg/m"
+    },
+    "ballast_min_wings_kg_m": {
+      "cell": "I238",
+      "value": 0.48701298701298706,
+      "label": "Min ballast: wings kg/m",
+      "unit": "kg/m"
+    },
+    "ballast_max_adjust_kg": {
+      "cell": "G243",
+      "value": 12,
+      "label": "Max ballast: adjustment chain share",
+      "unit": "kg"
+    },
+    "ballast_max_bosom_kg": {
+      "cell": "G244",
+      "value": 8,
+      "label": "Max ballast: bosom share",
+      "unit": "kg"
+    },
+    "ballast_max_wings_kg": {
+      "cell": "G245",
+      "value": 22,
+      "label": "Max ballast: wings share",
+      "unit": "kg"
+    },
+    "ballast_max_adjust_kg_m": {
+      "cell": "I243",
+      "value": 6,
+      "label": "Max ballast: adjustment chain kg/m",
+      "unit": "kg/m"
+    },
+    "ballast_max_bosom_kg_m": {
+      "cell": "I244",
+      "value": 3.2,
+      "label": "Max ballast: bosom kg/m",
+      "unit": "kg/m"
+    },
+    "ballast_max_wings_kg_m": {
+      "cell": "I245",
+      "value": 0.763888888888889,
+      "label": "Max ballast: wings kg/m",
+      "unit": "kg/m"
+    }
+  },
+  "series": {
+    "rn_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C42:C50",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN standard ×1000",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D42:D50",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN modified ×1000",
+      "unit": "kgf"
+    },
+    "fridman_ft_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E42:E50",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "Fridman FT (PF), 150 HP",
+      "unit": "kgf"
+    },
+    "float_f1_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F42:F50",
+      "values": [
+        279,
+        268.5,
+        258,
+        247.5,
+        237,
+        226.5,
+        216,
+        205.5,
+        195
+      ],
+      "label": "F1 = 0.8·FT/4, 150 HP",
+      "unit": "kgf"
+    },
+    "float_f2_std_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G42:G50",
+      "values": [
+        105.59080664411239,
+        157.88239021803585,
+        228.72525137386987,
+        316.5820444193062,
+        420.0807241046717,
+        537.9929101462,
+        669.2155631964342,
+        812.7553956595133,
+        967.7155527073078
+      ],
+      "label": "F2 = RN/4, standard, 150 HP",
+      "unit": "kgf"
+    },
+    "float_f2_mod_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H42:H50",
+      "values": [
+        103.36228747298185,
+        154.5502446973498,
+        223.8979503634107,
+        309.90050482654595,
+        411.21482017948506,
+        526.6384413974762,
+        655.0916090417065,
+        795.6019990880513,
+        947.291685043544
+      ],
+      "label": "F2 = RN/4, modified, 150 HP",
+      "unit": "kgf"
+    },
+    "float_f1_vertical_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I42:I50",
+      "values": [
+        23.34611828971602,
+        22.467500934726708,
+        21.588883579737395,
+        20.710266224748082,
+        19.83164886975877,
+        18.953031514769457,
+        18.074414159780144,
+        17.19579680479083,
+        16.317179449801518
+      ],
+      "label": "F1' = F1·sin(bridle α), 150 HP",
+      "unit": "kgf"
+    },
+    "float_f2_vertical_std_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J42:J50",
+      "values": [
+        5.875494058646791,
+        8.78520654565667,
+        12.727186184296462,
+        17.61588892231087,
+        23.374968684043697,
+        29.936073486131917,
+        37.23782581533918,
+        45.22495518407766,
+        53.84755700896917
+      ],
+      "label": "F2' = F2·sin β, standard, 150 HP",
+      "unit": "kgf"
+    },
+    "float_f2_vertical_mod_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K42:K50",
+      "values": [
+        5.75149035448257,
+        8.599792665115688,
+        12.458575882815884,
+        17.244101382963898,
+        22.881634392048575,
+        29.304265511626433,
+        36.45191261552436,
+        44.27047171298414,
+        52.71109146876844
+      ],
+      "label": "F2' = F2·sin β, modified, 150 HP",
+      "unit": "kgf"
+    },
+    "flotation_total_std_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L42:L50",
+      "values": [
+        30,
+        32,
+        35,
+        39,
+        44,
+        49,
+        56,
+        63,
+        71
+      ],
+      "label": "F total = F1'+F2'+W_lima, standard, 150 HP",
+      "unit": "kgf"
+    },
+    "flotation_total_mod_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M42:M50",
+      "values": [
+        30,
+        32.160859587842396,
+        35.14102545055328,
+        39.04793359571198,
+        43.80684924980735,
+        49.35086301439589,
+        55.6198927633045,
+        62.55983450577497,
+        70.12183690656995
+      ],
+      "label": "F total, modified, 150 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E55:E63",
+      "values": [
+        1674.0000000000002,
+        1610.9999999999998,
+        1548,
+        1485,
+        1422,
+        1359.0000000000002,
+        1296,
+        1233,
+        1170
+      ],
+      "label": "Fridman FT (PF), 180 HP",
+      "unit": "kgf"
+    },
+    "float_f1_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F55:F63",
+      "values": [
+        334.80000000000007,
+        322.2,
+        309.6,
+        297,
+        284.40000000000003,
+        271.80000000000007,
+        259.2,
+        246.60000000000002,
+        234
+      ],
+      "label": "F1 = 0.8·FT/4, 180 HP",
+      "unit": "kgf"
+    },
+    "float_f2_std_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G55:G63",
+      "values": [
+        105.59080664411239,
+        157.88239021803585,
+        228.72525137386987,
+        316.5820444193062,
+        420.0807241046717,
+        537.9929101462,
+        669.2155631964342,
+        812.7553956595133,
+        967.7155527073078
+      ],
+      "label": "F2 = RN/4, standard, 180 HP",
+      "unit": "kgf"
+    },
+    "float_f2_mod_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H55:H63",
+      "values": [
+        103.36228747298185,
+        154.5502446973498,
+        223.8979503634107,
+        309.90050482654595,
+        411.21482017948506,
+        526.6384413974762,
+        655.0916090417065,
+        795.6019990880513,
+        947.291685043544
+      ],
+      "label": "F2 = RN/4, modified, 180 HP",
+      "unit": "kgf"
+    },
+    "float_f1_vertical_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I55:I63",
+      "values": [
+        28.01534194765923,
+        26.961001121672048,
+        25.906660295684876,
+        24.852319469697697,
+        23.797978643710525,
+        22.743637817723354,
+        21.68929699173617,
+        20.634956165749,
+        19.580615339761824
+      ],
+      "label": "F1' = F1·sin(bridle α), 180 HP",
+      "unit": "kgf"
+    },
+    "float_f2_vertical_std_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J55:J63",
+      "values": [
+        5.875494058646791,
+        8.78520654565667,
+        12.727186184296462,
+        17.61588892231087,
+        23.374968684043697,
+        29.936073486131917,
+        37.23782581533918,
+        45.22495518407766,
+        53.84755700896917
+      ],
+      "label": "F2' = F2·sin β, standard, 180 HP",
+      "unit": "kgf"
+    },
+    "float_f2_vertical_mod_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K55:K63",
+      "values": [
+        5.75149035448257,
+        8.599792665115688,
+        12.458575882815884,
+        17.244101382963898,
+        22.881634392048575,
+        29.304265511626433,
+        36.45191261552436,
+        44.27047171298414,
+        52.71109146876844
+      ],
+      "label": "F2' = F2·sin β, modified, 180 HP",
+      "unit": "kgf"
+    },
+    "flotation_total_std_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L55:L63",
+      "values": [
+        34,
+        36,
+        39,
+        43,
+        48,
+        53,
+        60,
+        66,
+        74
+      ],
+      "label": "F total = F1'+F2'+W_lima, standard, 180 HP",
+      "unit": "kgf"
+    },
+    "flotation_total_mod_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M55:M63",
+      "values": [
+        34,
+        36,
+        39,
+        43,
+        47,
+        53,
+        59,
+        65,
+        73
+      ],
+      "label": "F total, modified, 180 HP",
+      "unit": "kgf"
+    },
+    "float_diameter_mm": {
+      "x": "float_index",
+      "x_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "cells": "D72:D82",
+      "values": [
+        100,
+        135,
+        200,
+        280,
+        200,
+        200,
+        250,
+        250,
+        300,
+        300,
+        200
+      ],
+      "label": "Float catalogue diameter",
+      "unit": "mm"
+    },
+    "float_unit_buoyancy_kgf": {
+      "x": "float_index",
+      "x_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "cells": "E72:E82",
+      "values": [
+        0.3,
+        0.76,
+        3.2,
+        7.5,
+        3.2,
+        3,
+        6.54,
+        5.75,
+        10.01,
+        8.33,
+        3.1
+      ],
+      "label": "Float unit buoyancy",
+      "unit": "kgf"
+    },
+    "float_count_150": {
+      "x": "float_index",
+      "x_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "cells": "F72:F82",
+      "values": [
+        120,
+        47,
+        11,
+        5,
+        11,
+        12,
+        6,
+        6,
+        4,
+        4,
+        12
+      ],
+      "label": "Floats needed = ROUND(F/unit), 150 HP",
+      "unit": ""
+    },
+    "float_count_180": {
+      "x": "float_index",
+      "x_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "cells": "G72:G82",
+      "values": [
+        133,
+        53,
+        12,
+        5,
+        12,
+        13,
+        6,
+        7,
+        4,
+        5,
+        13
+      ],
+      "label": "Floats needed, 180 HP",
+      "unit": ""
+    },
+    "speed_ms": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E138:E146",
+      "values": [
+        0.5144,
+        0.7716,
+        1.0288,
+        1.286,
+        1.5432000000000001,
+        1.8004,
+        2.0576,
+        2.3148,
+        2.572
+      ],
+      "label": "Speed in m/s",
+      "unit": "m/s"
+    },
+    "float_reynolds": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H138:H146",
+      "values": [
+        44889.86836129416,
+        67334.80254194123,
+        89779.73672258832,
+        112224.6709032354,
+        134669.6050838825,
+        157114.53926452957,
+        179559.47344517664,
+        202004.40762582372,
+        224449.3418064708
+      ],
+      "label": "Re = π·D²·v/ν — errata float_reynolds",
+      "unit": ""
+    },
+    "float_cd": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I138:I146",
+      "values": [
+        0.47,
+        0.47,
+        0.47,
+        0.47,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "label": "Float CD",
+      "unit": ""
+    },
+    "float_drag_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J138:J146",
+      "values": [
+        2.446988059294398,
+        5.505723133412395,
+        9.787952237177592,
+        15.29367537058999,
+        23.42860907835063,
+        31.88894013442168,
+        41.650860583734435,
+        52.714370426288895,
+        65.07946966208507
+      ],
+      "label": "Float drag RB = ½·ρ·CD·(ρ/g)·πD²/4·v²·n",
+      "unit": "kgf"
+    },
+    "ballast_std_150_kg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L197:L205",
+      "values": [
+        27.41382194836281,
+        29.444917080383377,
+        32.508279364033854,
+        36.51836474705895,
+        41.398827153802465,
+        47.08131460090137,
+        53.504449575119324,
+        60.61296158886849,
+        68.35694605877069
+      ],
+      "label": "Ballast = F1'+F2' − W_burlon, standard, 150 HP",
+      "unit": "kg"
+    },
+    "ballast_mod_150_kg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M197:M205",
+      "values": [
+        27.289818244198592,
+        29.259503199842392,
+        32.239669062553276,
+        36.14657720771198,
+        40.905492861807346,
+        46.44950662639589,
+        52.718536375304495,
+        59.65847811777497,
+        67.22048051856996
+      ],
+      "label": "Ballast, modified, 150 HP",
+      "unit": "kg"
+    },
+    "ballast_std_180_kg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L210:L218",
+      "values": [
+        32.08304560630602,
+        33.93841726732872,
+        36.826056079981335,
+        40.66041799200856,
+        45.36515692775422,
+        50.87192090385527,
+        57.11933240707535,
+        64.05212094982666,
+        71.620381948731
+      ],
+      "label": "Ballast, standard, 180 HP",
+      "unit": "kg"
+    },
+    "ballast_mod_180_kg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M210:M218",
+      "values": [
+        31.9590419021418,
+        33.75300338678773,
+        36.55744577850076,
+        40.28863045266159,
+        44.8718226357591,
+        50.240112929349785,
+        56.333419207260526,
+        63.097637478733134,
+        70.48391640853026
+      ],
+      "label": "Ballast, modified, 180 HP",
+      "unit": "kg"
+    }
+  }
+}

@@ -1,24 +1,32 @@
-"""Extrae datos de entrada, tablas de referencia y valores de referencia del Excel original.
+"""Extracción reproducible del Excel original a datos abiertos y valores de referencia.
 
-Uso: ``uv run python tools/extract_excel.py [--xlsx legacy/Calculos_Red_FAO_A3.xlsx]``
+Uso::
 
-Fase 1 del plan. Por ahora sólo inventaría hojas y cuenta fórmulas; la extracción
-estructurada (paneles, buques, portones, tablas, golden values) se agrega en la Fase 1.
+    uv run python tools/extract_excel.py            # todo
+    uv run python tools/extract_excel.py nets       # sólo un bloque (nets | reference | golden)
+
+Cada bloque vive en ``tools/extract/<bloque>.py`` y expone ``run() -> list[Path]``.
+El inventario de hojas (celdas y fórmulas por hoja) se escribe en ``legacy/inventory.json``.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
+import sys
 from pathlib import Path
 
-import openpyxl
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from tools.extract.common import XLSX, workbook  # noqa: E402
+
+BLOCKS = ("nets", "reference", "golden")
 
 
-def inventory(xlsx: Path) -> dict[str, dict[str, int]]:
-    wb = openpyxl.load_workbook(xlsx, data_only=False)
+def inventory() -> dict[str, dict[str, int]]:
+    wb = workbook(data_only=False)
     out: dict[str, dict[str, int]] = {}
     for ws in wb.worksheets:
         cells = formulas = 0
@@ -33,15 +41,28 @@ def inventory(xlsx: Path) -> dict[str, dict[str, int]]:
     return out
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--xlsx", type=Path, default=ROOT / "legacy" / "Calculos_Red_FAO_A3.xlsx")
-    ap.add_argument("--out", type=Path, default=ROOT / "legacy" / "inventory.json")
-    args = ap.parse_args()
-    inv = inventory(args.xlsx)
-    args.out.write_text(json.dumps(inv, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"{len(inv)} hojas → {args.out}")
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("blocks", nargs="*", choices=BLOCKS, help="bloques a extraer (default: todos)")
+    args = ap.parse_args(argv)
+    if not XLSX.exists():
+        print(f"No se encuentra {XLSX}", file=sys.stderr)
+        return 1
+
+    inv_path = ROOT / "legacy" / "inventory.json"
+    inv_path.write_text(json.dumps(inventory(), indent=2, ensure_ascii=False) + "\n", "utf-8")
+    print(f"inventario: {inv_path.relative_to(ROOT)}")
+
+    written: list[Path] = []
+    for block in args.blocks or BLOCKS:
+        mod = importlib.import_module(f"tools.extract.{block}")
+        files = mod.run()
+        written.extend(files)
+        print(f"{block}: {len(files)} archivos")
+    for f in written:
+        print("  ", f.relative_to(ROOT))
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

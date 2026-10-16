@@ -1,0 +1,24 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+kind: chains
+source: Tablas de Referencias!A314:C317
+items:
+- id: trawlex_short_link_7mm
+  brand: Trawlex
+  description: CORTO 7 GRADO80 6
+  link: short
+  link_diameter_mm: 7
+  grade: 80
+  breaking_load_t: 6
+  weight_kg_per_m: 1.05
+  source: Tablas de Referencias!A316:C316
+- id: trawlex_long_link_19mm
+  brand: Trawlex
+  description: LARGO 19 GRADO80 45
+  link: long
+  link_diameter_mm: 19
+  grade: 80
+  breaking_load_t: 45
+  weight_kg_per_m: 6.31
+  source: Tablas de Referencias!A317:C317

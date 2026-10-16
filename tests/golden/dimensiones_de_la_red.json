@@ -1,0 +1,401 @@
+{
+  "sheet": "Dimensiones de la Red",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "headrope_m": {
+      "cell": "F45",
+      "value": 28.698,
+      "label": "Headrope (Lima) = 2·L_ala_corr + L_bocana_corr",
+      "unit": "m"
+    },
+    "footrope_m": {
+      "cell": "F46",
+      "value": 33.3,
+      "label": "Footrope (Burlon) = 2·m_ala_corr + m_bocana_corr",
+      "unit": "m"
+    },
+    "total_length_belly_std_m": {
+      "cell": "F47",
+      "value": 42.68,
+      "label": "Total length (belly) incl. codend, standard",
+      "unit": "m"
+    },
+    "total_length_belly_mod_m": {
+      "cell": "G47",
+      "value": 41.68,
+      "label": "Total length (belly) incl. codend, modified",
+      "unit": "m"
+    },
+    "total_length_back_no_bag_std_m": {
+      "cell": "F48",
+      "value": 32.68,
+      "label": "Total length (back) without codend",
+      "unit": "m"
+    },
+    "total_length_back_no_bag_mod_m": {
+      "cell": "G48",
+      "value": 32.68,
+      "label": "Total length without codend, modified",
+      "unit": "m"
+    },
+    "circumference_m": {
+      "cell": "F49",
+      "value": 44.64,
+      "label": "Maximum stretched circumference a",
+      "unit": "m"
+    },
+    "upper_wing_m": {
+      "cell": "F50",
+      "value": 12.48,
+      "label": "Upper wing c",
+      "unit": "m"
+    },
+    "lower_wing_m": {
+      "cell": "F51",
+      "value": 14.88,
+      "label": "Lower wing d",
+      "unit": "m"
+    },
+    "back_belly_m": {
+      "cell": "F52",
+      "value": 12.6,
+      "label": "Back or belly e",
+      "unit": "m"
+    },
+    "bag_m": {
+      "cell": "F53",
+      "value": 8,
+      "label": "Codend f",
+      "unit": "m"
+    },
+    "square_m": {
+      "cell": "F54",
+      "value": 2.4000000000000004,
+      "label": "Square d − c",
+      "unit": "m"
+    },
+    "cut_angle_deg": {
+      "cell": "F55",
+      "value": 10.633919691342186,
+      "label": "Horizontal attack angle α",
+      "unit": "°"
+    },
+    "filtration_index_std": {
+      "cell": "F56",
+      "value": 0.02127777777777778,
+      "label": "Filtration index d/l, standard",
+      "unit": ""
+    },
+    "filtration_index_mod": {
+      "cell": "G56",
+      "value": 0.019461538461538464,
+      "label": "Filtration index d/l, modified",
+      "unit": ""
+    },
+    "solid_surface_std_m2": {
+      "cell": "F57",
+      "value": 40.89506,
+      "label": "Solid surface Ss, standard",
+      "unit": "m²"
+    },
+    "solid_surface_mod_m2": {
+      "cell": "G57",
+      "value": 40.03196,
+      "label": "Solid surface Ss, modified",
+      "unit": "m²"
+    },
+    "working_surface_std_m2": {
+      "cell": "F58",
+      "value": 315.5655544971113,
+      "label": "Working surface St, standard",
+      "unit": "m²"
+    },
+    "working_surface_mod_m2": {
+      "cell": "G58",
+      "value": 307.1449252622859,
+      "label": "Working surface St, modified",
+      "unit": "m²"
+    },
+    "net_weight_std_kg": {
+      "cell": "F59",
+      "value": 28.270220175565935,
+      "label": "Net weight unrigged, standard",
+      "unit": "kg"
+    },
+    "net_weight_mod_kg": {
+      "cell": "G59",
+      "value": 22.953107712603376,
+      "label": "Net weight unrigged, modified",
+      "unit": "kg"
+    },
+    "vertical_opening_m": {
+      "cell": "F60",
+      "value": 1.9840000000000002,
+      "label": "Vertical opening AV",
+      "unit": "m"
+    },
+    "horizontal_opening_m": {
+      "cell": "F61",
+      "value": 13.00861502295097,
+      "label": "Horizontal opening AH (average of 4 DPA estimates)",
+      "unit": "m"
+    },
+    "working_depth_m": {
+      "cell": "F62",
+      "value": 40,
+      "label": "Working depth",
+      "unit": "m"
+    },
+    "flotation_total_kgf": {
+      "cell": "F63",
+      "value": 36,
+      "label": "Total flotation Ft",
+      "unit": "kgf"
+    },
+    "dan_leno_m": {
+      "cell": "F64",
+      "value": 0.6,
+      "label": "Dan leno / triangle height",
+      "unit": "m"
+    },
+    "sweeps_m": {
+      "cell": "F65",
+      "value": 25,
+      "label": "Sweeps (patentes)",
+      "unit": "m"
+    },
+    "sweeps_range_note": {
+      "cell": "H65",
+      "value": "20 a 70",
+      "label": "Sweeps allowed range note",
+      "unit": ""
+    },
+    "crowfoot_m": {
+      "cell": "F66",
+      "value": 2.3,
+      "label": "Crowfoot (pie de gallo)",
+      "unit": "m"
+    },
+    "crowfoot_extension_m": {
+      "cell": "F67",
+      "value": 0,
+      "label": "Crowfoot extension",
+      "unit": "m"
+    },
+    "upper_bridle_std_m": {
+      "cell": "F68",
+      "value": 18,
+      "label": "Upper bridle Vs, standard",
+      "unit": "m"
+    },
+    "upper_bridle_mod_m": {
+      "cell": "G68",
+      "value": 18,
+      "label": "Upper bridle Vs, modified",
+      "unit": "m"
+    },
+    "lower_bridle_std_m": {
+      "cell": "F69",
+      "value": 17,
+      "label": "Lower bridle Vi, standard",
+      "unit": "m"
+    },
+    "lower_bridle_mod_m": {
+      "cell": "G69",
+      "value": 17,
+      "label": "Lower bridle Vi, modified",
+      "unit": "m"
+    },
+    "warp_diameter_mm": {
+      "cell": "F70",
+      "value": 12,
+      "label": "Towing warp diameter",
+      "unit": "mm"
+    },
+    "warp_length_m": {
+      "cell": "F71",
+      "value": 200,
+      "label": "Warp paid out per side",
+      "unit": "m"
+    },
+    "square_depth_meshes": {
+      "cell": "F85",
+      "value": 40,
+      "label": "Meshes in depth of the square",
+      "unit": ""
+    },
+    "square_mesh_mm": {
+      "cell": "F86",
+      "value": 60,
+      "label": "Square mesh size",
+      "unit": "mm"
+    },
+    "length_factor": {
+      "cell": "D89",
+      "value": 1.0059459459459459,
+      "label": "Fujiishi length factor FL = (L + 2·square)/m",
+      "unit": ""
+    },
+    "fishing_circle_m": {
+      "cell": "D97",
+      "value": 44.64,
+      "label": "Fishing circle FC",
+      "unit": "m"
+    },
+    "body_length_m": {
+      "cell": "D103",
+      "value": 17.8,
+      "label": "Body length L_cuerpo",
+      "unit": "m"
+    },
+    "fc_body_ratio": {
+      "cell": "D109",
+      "value": 2.507865168539326,
+      "label": "FC / L_cuerpo",
+      "unit": ""
+    },
+    "headrope_wing_m": {
+      "cell": "C140",
+      "value": 12.48,
+      "label": "Headrope wing piece L_ala",
+      "unit": "m"
+    },
+    "headrope_bosom_m": {
+      "cell": "F140",
+      "value": 3,
+      "label": "Headrope bosom piece L_bocana",
+      "unit": "m"
+    },
+    "headrope_wing_hanging": {
+      "cell": "C142",
+      "value": 1.05,
+      "label": "Hanging ratio (embando) wing",
+      "unit": ""
+    },
+    "headrope_bosom_hanging": {
+      "cell": "G142",
+      "value": 0.83,
+      "label": "Hanging ratio (embando) bosom",
+      "unit": ""
+    },
+    "headrope_wing_corrected_m": {
+      "cell": "C143",
+      "value": 13.104000000000001,
+      "label": "Headrope wing corrected",
+      "unit": "m"
+    },
+    "headrope_bosom_corrected_m": {
+      "cell": "G143",
+      "value": 2.4899999999999998,
+      "label": "Headrope bosom corrected",
+      "unit": "m"
+    },
+    "footrope_wing_m": {
+      "cell": "C148",
+      "value": 14.88,
+      "label": "Footrope wing piece m_ala",
+      "unit": "m"
+    },
+    "footrope_bosom_m": {
+      "cell": "F148",
+      "value": 2.58,
+      "label": "Footrope bosom piece m_bocana",
+      "unit": "m"
+    },
+    "footrope_wing_hanging": {
+      "cell": "C150",
+      "value": 1.05,
+      "label": "Hanging ratio wing (footrope)",
+      "unit": ""
+    },
+    "footrope_bosom_hanging": {
+      "cell": "G150",
+      "value": 0.83,
+      "label": "Hanging ratio bosom (footrope)",
+      "unit": ""
+    },
+    "footrope_wing_corrected_m": {
+      "cell": "C151",
+      "value": 15.624000000000002,
+      "label": "Footrope wing corrected",
+      "unit": "m"
+    },
+    "footrope_bosom_corrected_m": {
+      "cell": "G151",
+      "value": 2.1414,
+      "label": "Footrope bosom corrected",
+      "unit": "m"
+    },
+    "wingtip_reinforcement_m": {
+      "cell": "C155",
+      "value": 2.88,
+      "label": "Wing-tip reinforcement m_punta",
+      "unit": "m"
+    },
+    "wingtip_hanging": {
+      "cell": "C157",
+      "value": 1,
+      "label": "Hanging ratio wing tip",
+      "unit": ""
+    }
+  },
+  "series": {
+    "nomura_ratio_fao_a3": {
+      "x": "ratio",
+      "x_values": [
+        "l/m",
+        "l/b",
+        "m/b",
+        "a/b",
+        "c/b",
+        "d/b",
+        "e/b",
+        "f/b",
+        "(d-c)/b"
+      ],
+      "cells": "C124:C132",
+      "values": [
+        0.8618018018018019,
+        0.6723992502343018,
+        0.7802249297094658,
+        1.0459231490159326,
+        0.29240862230552955,
+        0.3486410496719775,
+        0.2952202436738519,
+        0.18744142455482662,
+        0.05623242736644799
+      ],
+      "label": "Nomura proportions of FAO A3",
+      "unit": ""
+    },
+    "nomura_ratio_reference": {
+      "x": "ratio",
+      "x_values": [
+        "l/m",
+        "l/b",
+        "m/b",
+        "a/b",
+        "c/b",
+        "d/b",
+        "e/b",
+        "f/b",
+        "(d-c)/b"
+      ],
+      "cells": "E124:E132",
+      "values": [
+        0.74,
+        0.62,
+        0.83,
+        1.07,
+        0.27,
+        0.4,
+        0.41,
+        0.21,
+        0.11
+      ],
+      "label": "Nomura reference proportions, bottom trawl 2 panels",
+      "unit": ""
+    }
+  }
+}

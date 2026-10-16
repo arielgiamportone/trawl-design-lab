@@ -1,0 +1,1497 @@
+{
+  "sheet": "Mecánica de la Red",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "filtration_sum_twine_mm_std": {
+      "cell": "I15",
+      "value": 11.490000000000002,
+      "label": "Σ twine Ø, standard net",
+      "unit": "mm"
+    },
+    "filtration_sum_mesh_mm_std": {
+      "cell": "J15",
+      "value": 540,
+      "label": "Σ mesh size, standard net",
+      "unit": "mm"
+    },
+    "filtration_sum_panels_std": {
+      "cell": "H15",
+      "value": 17,
+      "label": "Σ panel count, standard net",
+      "unit": ""
+    },
+    "filtration_index_std": {
+      "cell": "K15",
+      "value": 0.02127777777777778,
+      "label": "Filtration index d/l (Σd / Σl), standard net",
+      "unit": ""
+    },
+    "filtration_sum_twine_mm_mod": {
+      "cell": "I17",
+      "value": 10.120000000000001,
+      "label": "Σ twine Ø, modified net",
+      "unit": "mm"
+    },
+    "filtration_sum_mesh_mm_mod": {
+      "cell": "J17",
+      "value": 520,
+      "label": "Σ mesh size, modified net (J16 counted twice)",
+      "unit": "mm"
+    },
+    "filtration_sum_panels_mod": {
+      "cell": "H17",
+      "value": 17,
+      "label": "Σ panel count, modified net",
+      "unit": ""
+    },
+    "filtration_index_mod": {
+      "cell": "K17",
+      "value": 0.019461538461538464,
+      "label": "Filtration index d/l, modified net",
+      "unit": ""
+    },
+    "solid_surface_std_m2": {
+      "cell": "N38",
+      "value": 40.89506,
+      "label": "Solid surface Ss = Σ panels, standard net",
+      "unit": "m²"
+    },
+    "solid_surface_mod_bag_m2": {
+      "cell": "N39",
+      "value": 6.855480000000002,
+      "label": "Solid surface of the modified codend (I')",
+      "unit": "m²"
+    },
+    "solid_surface_mod_m2": {
+      "cell": "N40",
+      "value": 40.03196,
+      "label": "Solid surface Ss, modified net",
+      "unit": "m²"
+    },
+    "solid_surface_lower_mod_m2": {
+      "cell": "O30",
+      "value": 19.41886,
+      "label": "Ss lower plan, modified (includes N39)",
+      "unit": "m²"
+    },
+    "solid_surface_upper_mod_m2": {
+      "cell": "O32",
+      "value": 20.6131,
+      "label": "Ss upper plan, modified (includes N39)",
+      "unit": "m²"
+    },
+    "solid_surface_lower_std_m2": {
+      "cell": "O35",
+      "value": 20.27922,
+      "label": "Ss lower plan, standard (includes N37)",
+      "unit": "m²"
+    },
+    "solid_surface_upper_std_m2": {
+      "cell": "O37",
+      "value": 20.61584,
+      "label": "Ss upper plan, standard (includes N36)",
+      "unit": "m²"
+    },
+    "working_surface_std_m2": {
+      "cell": "M65",
+      "value": 315.5655544971113,
+      "label": "Working surface St = Σ panels, standard net",
+      "unit": "m²"
+    },
+    "working_surface_mod_bag_m2": {
+      "cell": "M66",
+      "value": 16.800968377618116,
+      "label": "Working surface of the modified codend",
+      "unit": "m²"
+    },
+    "working_surface_mod_m2": {
+      "cell": "M67",
+      "value": 307.1449252622859,
+      "label": "Working surface St, modified net",
+      "unit": "m²"
+    },
+    "solidity_std": {
+      "cell": "E75",
+      "value": 0.1295929147437236,
+      "label": "Solidity coefficient Ss/St, standard",
+      "unit": ""
+    },
+    "solidity_mod": {
+      "cell": "E76",
+      "value": 0.130335736349265,
+      "label": "Solidity coefficient Ss/St, modified",
+      "unit": ""
+    },
+    "filtering_coef_std": {
+      "cell": "M78",
+      "value": 0.8704070852562764,
+      "label": "Filtering coefficient 1 − solidity, standard",
+      "unit": ""
+    },
+    "filtering_coef_mod": {
+      "cell": "M79",
+      "value": 0.869664263650735,
+      "label": "Filtering coefficient 1 − solidity, modified",
+      "unit": ""
+    },
+    "net_weight_air_std_kg": {
+      "cell": "O107",
+      "value": 28.270220175565935,
+      "label": "Net weight in air, standard (sum of panels)",
+      "unit": "kg"
+    },
+    "net_weight_water_std_kg": {
+      "cell": "P107",
+      "value": 2.6992783916245338,
+      "label": "Net weight in water, standard",
+      "unit": "kg"
+    },
+    "net_weight_air_mod_kg": {
+      "cell": "O109",
+      "value": 22.953107712603376,
+      "label": "Net weight in air, modified",
+      "unit": "kg"
+    },
+    "net_weight_water_mod_kg": {
+      "cell": "P109",
+      "value": 2.1145245684399763,
+      "label": "Net weight in water, modified",
+      "unit": "kg"
+    },
+    "mod_bag_twine_weight_kg": {
+      "cell": "N108",
+      "value": 5.093019600538847,
+      "label": "Modified codend: twine weight SN",
+      "unit": "kg"
+    },
+    "mod_bag_weight_air_kg": {
+      "cell": "O108",
+      "value": 4.247578346849399,
+      "label": "Modified codend: weight in air",
+      "unit": "kg"
+    },
+    "mod_bag_weight_water_kg": {
+      "cell": "P108",
+      "value": 0.4671309277163975,
+      "label": "Modified codend: weight in water",
+      "unit": "kg"
+    },
+    "lower_plan_weight_std_kg": {
+      "cell": "I110",
+      "value": 13.781165691697872,
+      "label": "Weight lower plan, standard",
+      "unit": "kg"
+    },
+    "upper_plan_weight_std_kg": {
+      "cell": "I111",
+      "value": 14.489054483868067,
+      "label": "Weight upper plan, standard",
+      "unit": "kg"
+    },
+    "lower_plan_weight_mod_kg": {
+      "cell": "I112",
+      "value": 10.591237748560374,
+      "label": "Weight lower plan, modified",
+      "unit": "kg"
+    },
+    "upper_plan_weight_mod_kg": {
+      "cell": "I113",
+      "value": 12.361869964043008,
+      "label": "Weight upper plan, modified",
+      "unit": "kg"
+    },
+    "seawater_density_kg_m3": {
+      "cell": "O127",
+      "value": 1024,
+      "label": "Sea-water density",
+      "unit": "kg/m³"
+    },
+    "freshwater_density_kg_m3": {
+      "cell": "O128",
+      "value": 1000,
+      "label": "Fresh-water density",
+      "unit": "kg/m³"
+    },
+    "gravity_m_s2": {
+      "cell": "O129",
+      "value": 9.81,
+      "label": "Gravity",
+      "unit": "m/s²"
+    },
+    "door_attack_angle_deg": {
+      "cell": "D164",
+      "value": 32,
+      "label": "Door attack angle (=Portones!C134)",
+      "unit": "°"
+    },
+    "door_area_m2": {
+      "cell": "E164",
+      "value": 1.805,
+      "label": "Door projected area (=Portones!D122)",
+      "unit": "m²"
+    },
+    "door_cd": {
+      "cell": "F164",
+      "value": 0.71,
+      "label": "Door CD at the selected angle",
+      "unit": ""
+    },
+    "door_cl": {
+      "cell": "G164",
+      "value": 0.93,
+      "label": "Door CL at the selected angle",
+      "unit": ""
+    },
+    "depth_m": {
+      "cell": "E176",
+      "value": 40,
+      "label": "Working depth d",
+      "unit": "m"
+    },
+    "warp_length_m": {
+      "cell": "E177",
+      "value": 200,
+      "label": "Warp paid out Ls = d · ratio",
+      "unit": "m"
+    },
+    "warp_depth_ratio": {
+      "cell": "J178",
+      "value": 5,
+      "label": "Warp/depth ratio (LOOKUP in Tablas A354:C383)",
+      "unit": ""
+    },
+    "warp_horizontal_shallow_m": {
+      "cell": "F179",
+      "value": 190,
+      "label": "Lsh = 0.95·Ls (shallow)",
+      "unit": "m"
+    },
+    "warp_horizontal_deep_m": {
+      "cell": "F180",
+      "value": 170,
+      "label": "Lsh = 0.85·Ls (deep)",
+      "unit": "m"
+    },
+    "net_length_no_bag_m": {
+      "cell": "E182",
+      "value": 32.68,
+      "label": "Net length without codend LR",
+      "unit": "m"
+    },
+    "u1": {
+      "cell": "E183",
+      "value": 0.5,
+      "label": "Horizontal opening coefficient U1",
+      "unit": ""
+    },
+    "u2": {
+      "cell": "E184",
+      "value": 0.87,
+      "label": "Vertical opening coefficient U2",
+      "unit": ""
+    },
+    "net_length_working_m": {
+      "cell": "E185",
+      "value": 28.4316,
+      "label": "LR working = LR·U2",
+      "unit": "m"
+    },
+    "bridle_length_m": {
+      "cell": "E186",
+      "value": 18,
+      "label": "Bridle length Lnc (=Dimensiones!F68)",
+      "unit": "m"
+    },
+    "footrope_m": {
+      "cell": "E209",
+      "value": 33.3,
+      "label": "Footrope (Burlon)",
+      "unit": "m"
+    },
+    "door_spread_m": {
+      "cell": "E210",
+      "value": 32.499999999999986,
+      "label": "Door spread Ds (=Portones!E13)",
+      "unit": "m"
+    },
+    "sweeps_m": {
+      "cell": "E213",
+      "value": 25,
+      "label": "Sweeps (patentes)",
+      "unit": "m"
+    },
+    "crowfoot_m": {
+      "cell": "E211",
+      "value": 2.3,
+      "label": "Crowfoot (pie de gallo)",
+      "unit": "m"
+    },
+    "crowfoot_extension_m": {
+      "cell": "E212",
+      "value": 0,
+      "label": "Crowfoot extension",
+      "unit": "m"
+    },
+    "upper_bridle_m": {
+      "cell": "E214",
+      "value": 18,
+      "label": "Upper bridle",
+      "unit": "m"
+    },
+    "dpa_geometric_std_m": {
+      "cell": "L211",
+      "value": 13,
+      "label": "DPA geometric ROUNDDOWN(Burlon·Ds / Σ rigging)",
+      "unit": "m"
+    },
+    "dpa_geometric_working_m": {
+      "cell": "L225",
+      "value": 13,
+      "label": "DPA ROUNDUP(Ds·LR_working / (LR_working + rigging))",
+      "unit": "m"
+    },
+    "dpa_from_cut_angle_m": {
+      "cell": "L233",
+      "value": 13.943489526472986,
+      "label": "DPA = 2·b·U2·tan(α)",
+      "unit": "m"
+    },
+    "net_length_total_std_m": {
+      "cell": "E233",
+      "value": 42.68,
+      "label": "Total length incl. codend, standard",
+      "unit": "m"
+    },
+    "net_length_total_mod_m": {
+      "cell": "F233",
+      "value": 41.68,
+      "label": "Total length incl. codend, modified",
+      "unit": "m"
+    },
+    "cut_angle_deg": {
+      "cell": "E235",
+      "value": 10.633919691342186,
+      "label": "Average cut angle α",
+      "unit": "°"
+    },
+    "circumference_m": {
+      "cell": "F243",
+      "value": 44.64,
+      "label": "Maximum stretched circumference a",
+      "unit": "m"
+    },
+    "av_izzo_4_35pct_m": {
+      "cell": "K242",
+      "value": 1.9418399999999998,
+      "label": "AV Izzo 4.35 % of circumference",
+      "unit": "m"
+    },
+    "av_izzo_5pct_m": {
+      "cell": "K243",
+      "value": 2.232,
+      "label": "AV Izzo 5 %",
+      "unit": "m"
+    },
+    "av_izzo_6pct_m": {
+      "cell": "K244",
+      "value": 2.6784,
+      "label": "AV Izzo 6 %",
+      "unit": "m"
+    },
+    "av_izzo_7pct_m": {
+      "cell": "K245",
+      "value": 3.1248000000000005,
+      "label": "AV Izzo 7 %",
+      "unit": "m"
+    },
+    "av_prado_low_opening_m": {
+      "cell": "F245",
+      "value": 2.4552,
+      "label": "AV Prado/Dremiere bottom trawl low opening 5.5 %",
+      "unit": "m"
+    },
+    "av_prado_high_opening_m": {
+      "cell": "F246",
+      "value": 2.9016,
+      "label": "AV Prado/Dremiere bottom trawl high opening 6.5 %",
+      "unit": "m"
+    },
+    "av_prado_shellfish_m": {
+      "cell": "F247",
+      "value": 2.9016,
+      "label": "AV Prado/Dremiere shellfish trawl 6.5 %",
+      "unit": "m"
+    },
+    "vertical_opening_m": {
+      "cell": "D255",
+      "value": 1.9840000000000002,
+      "label": "AV Suzuki (JICA 1982) = 4/90 · a",
+      "unit": "m"
+    },
+    "av_martini_m": {
+      "cell": "E272",
+      "value": 2.196,
+      "label": "AV Martini level 2 = (DV − MR·mL)·0.05",
+      "unit": "m"
+    },
+    "av_martini_dv_m": {
+      "cell": "E269",
+      "value": 44.64,
+      "label": "DV: stretched circumference of first back/belly panel",
+      "unit": "m"
+    },
+    "av_martini_mr_meshes": {
+      "cell": "E270",
+      "value": 12,
+      "label": "MR: meshes on the rope edges (3·4)",
+      "unit": ""
+    },
+    "flotation_total_kgf": {
+      "cell": "O261",
+      "value": 35.47891669709787,
+      "label": "Total flotation Ffz (average of 4 methods)",
+      "unit": "kgf"
+    },
+    "dan_leno_m": {
+      "cell": "O262",
+      "value": 0.6,
+      "label": "Dan leno height",
+      "unit": "m"
+    },
+    "dpa_over_l": {
+      "cell": "O265",
+      "value": 0.4529932399470346,
+      "label": "DPA / L",
+      "unit": ""
+    },
+    "dpa_over_l_rounded": {
+      "cell": "P265",
+      "value": 0.45,
+      "label": "DPA / L rounded",
+      "unit": ""
+    },
+    "catenary_ratio": {
+      "cell": "O266",
+      "value": 0.216,
+      "label": "Catenary fL/L",
+      "unit": ""
+    },
+    "headrope_sag_m": {
+      "cell": "O267",
+      "value": 6.198768,
+      "label": "Headrope sag fL = 0.216·L",
+      "unit": "m"
+    },
+    "av_fridman_avg_std_m": {
+      "cell": "O282",
+      "value": 2.085274293439511,
+      "label": "AV Fridman average, standard",
+      "unit": "m"
+    },
+    "av_fridman_avg_mod_m": {
+      "cell": "P282",
+      "value": 2.116895043209821,
+      "label": "AV Fridman average, modified",
+      "unit": "m"
+    },
+    "av_summary_prado_low_m": {
+      "cell": "U246",
+      "value": 2.46,
+      "label": "AV summary: Prado low opening (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_prado_high_m": {
+      "cell": "W246",
+      "value": 2.9,
+      "label": "AV summary: Prado high opening (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_izzo_4_35_m": {
+      "cell": "U248",
+      "value": 1.94,
+      "label": "AV summary: Izzo 4.35 % (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_izzo_5_m": {
+      "cell": "V248",
+      "value": 2.23,
+      "label": "AV summary: Izzo 5 % (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_izzo_6_m": {
+      "cell": "W248",
+      "value": 2.68,
+      "label": "AV summary: Izzo 6 % (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_izzo_7_m": {
+      "cell": "X248",
+      "value": 3.12,
+      "label": "AV summary: Izzo 7 % (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_suzuki_m": {
+      "cell": "U250",
+      "value": 1.98,
+      "label": "AV summary: Suzuki (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_martini_m": {
+      "cell": "U252",
+      "value": 2.196,
+      "label": "AV summary: Martini (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_fridman_avg_std_m": {
+      "cell": "T266",
+      "value": 2.085274293439511,
+      "label": "AV summary: Fridman avg std (static)",
+      "unit": "m",
+      "static": true
+    },
+    "av_summary_fridman_avg_mod_m": {
+      "cell": "U266",
+      "value": 2.116895043209821,
+      "label": "AV summary: Fridman avg mod (static)",
+      "unit": "m",
+      "static": true
+    }
+  },
+  "series": {
+    "filtration_per_panel": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "K6:K14",
+      "values": [
+        0.0685,
+        0.03425,
+        0.01933333333333333,
+        0.03866666666666666,
+        0.057999999999999996,
+        0.03425,
+        0.03866666666666666,
+        0.03425,
+        0.03425
+      ],
+      "label": "d/l · panel count per panel group",
+      "unit": ""
+    },
+    "solid_surface_per_panel_m2": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "N29:N37",
+      "values": [
+        0.9469440000000001,
+        4.5768960000000005,
+        2.182656,
+        15.609887999999998,
+        4.294784,
+        4.050816,
+        1.5144959999999998,
+        3.4304800000000006,
+        4.2881
+      ],
+      "label": "Solid surface per panel group",
+      "unit": "m²"
+    },
+    "panel_length_m": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "M29:M37",
+      "values": [
+        2.88,
+        9.6,
+        2.4,
+        12.6,
+        5.2,
+        9.6,
+        2.4,
+        8,
+        10
+      ],
+      "label": "Panel length mL·N/1000",
+      "unit": "m"
+    },
+    "panel_u1": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "K56:K64",
+      "values": [
+        0.38,
+        0.38,
+        0.38,
+        0.38,
+        0.23,
+        0.38,
+        0.38,
+        0.23,
+        0.23
+      ],
+      "label": "U1 per panel group",
+      "unit": ""
+    },
+    "panel_u2": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "L56:L64",
+      "values": [
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9731906288081488,
+        0.9249864863877743,
+        0.9249864863877743,
+        0.9731906288081488,
+        0.9731906288081488
+      ],
+      "label": "U2 = sqrt(1 − U1²)",
+      "unit": ""
+    },
+    "working_surface_per_panel_m2": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "M56:M64",
+      "values": [
+        9.718130022746688,
+        46.970961776608995,
+        19.841182129774488,
+        141.8998829102622,
+        16.574448526856735,
+        41.57200065286084,
+        13.767350865557809,
+        11.209598938863781,
+        14.011998673579726
+      ],
+      "label": "Working surface per panel group",
+      "unit": "m²"
+    },
+    "twine_weight_per_panel_kg": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "N98:N106",
+      "values": [
+        13.581385601436928,
+        13.581385601436928,
+        7.054096489492911,
+        7.054096489492911,
+        4.702730992995273,
+        13.581385601436928,
+        7.054096489492911,
+        6.790692800718464,
+        6.790692800718464
+      ],
+      "label": "SN twine weight per panel group",
+      "unit": "kg"
+    },
+    "weight_air_per_panel_kg": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "O98:O106",
+      "values": [
+        0.29335792899103763,
+        2.83579331358003,
+        2.2121646591049773,
+        7.910463803317351,
+        2.1764239035582125,
+        2.509840059145544,
+        0.7674856980568288,
+        4.250973693249758,
+        5.313717116562198
+      ],
+      "label": "Weight in air per panel group",
+      "unit": "kg"
+    },
+    "weight_water_per_panel_kg": {
+      "x": "panel",
+      "x_values": [
+        "A+B",
+        "C",
+        "E",
+        "G",
+        "H",
+        "D",
+        "F",
+        "I",
+        "J"
+      ],
+      "cells": "P98:P106",
+      "values": [
+        0.03226227989983759,
+        0.31186870569843006,
+        0.17391187047137668,
+        0.6218902153909497,
+        0.17110206984301232,
+        0.27602172803194386,
+        0.06033677138802864,
+        0.4675043337337577,
+        0.5843804171671971
+      ],
+      "label": "Weight in water per panel group",
+      "unit": "kg"
+    },
+    "speed_ms": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C164:C172",
+      "values": [
+        0.5144,
+        0.7716,
+        1.0288,
+        1.286,
+        1.5432000000000001,
+        1.8004,
+        2.0576,
+        2.3148,
+        2.572
+      ],
+      "label": "Speed in m/s",
+      "unit": "m/s"
+    },
+    "door_drag_rd_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H164:H172",
+      "values": [
+        17.698580209020992,
+        39.821805470297235,
+        70.79432083608397,
+        110.61612630638123,
+        159.287221881189,
+        216.8076075605072,
+        283.1772833443359,
+        358.39624923267513,
+        442.46450522552493
+      ],
+      "label": "Door drag Rd = ½ρ/g·v²·S·CD",
+      "unit": "kgf"
+    },
+    "door_lift_fdy_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I164:I172",
+      "values": [
+        23.182647316041585,
+        52.16095646109357,
+        92.73058926416634,
+        144.89154572525993,
+        208.64382584437436,
+        283.9874296215094,
+        370.92235705666536,
+        469.4486081498421,
+        579.5661829010397
+      ],
+      "label": "Door spreading force Fdy = ½ρ/g·v²·S·CL",
+      "unit": "kgf"
+    },
+    "rn_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J164:J172",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN standard (Aberdeen demersal) ×1000",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K164:K172",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN modified (Aberdeen demersal) ×1000",
+      "unit": "kgf"
+    },
+    "edx_std": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L164:L172",
+      "values": [
+        0.08380739181524116,
+        0.12611224537234095,
+        0.15475842831267664,
+        0.1747037272901563,
+        0.18959120561968387,
+        0.2014967144284388,
+        0.21157404199610277,
+        0.22048223312122905,
+        0.2286128935241735
+      ],
+      "label": "Edx = Rd / (RN/2), standard",
+      "unit": ""
+    },
+    "edx_mod": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M164:M172",
+      "values": [
+        0.08561430209082434,
+        0.12883125985429156,
+        0.15809506232901438,
+        0.17847038740432844,
+        0.19367884383600775,
+        0.20584103866895026,
+        0.21613563617352588,
+        0.22523589033428917,
+        0.23354184999796881
+      ],
+      "label": "Edx = Rd / (RN/2), modified",
+      "unit": ""
+    },
+    "edy_std": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "N164:N172",
+      "values": [
+        0.10977587941996378,
+        0.16518927914968604,
+        0.20271174412787227,
+        0.2288372765913315,
+        0.24833777637507892,
+        0.26393231608232126,
+        0.27713219585405013,
+        0.2888006715531592,
+        0.2994506915175794
+      ],
+      "label": "Edy = Fdy / (RN/2), standard",
+      "unit": ""
+    },
+    "edy_mod": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "O164:O172",
+      "values": [
+        0.11214267738657274,
+        0.16875080516125515,
+        0.2070822647408217,
+        0.23377107082538798,
+        0.25369200671477077,
+        0.26962276896073767,
+        0.2831072417484213,
+        0.295027292973083,
+        0.3059069302790296
+      ],
+      "label": "Edy = Fdy / (RN/2), modified",
+      "unit": ""
+    },
+    "dpa_fridman_std_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "P164:P172",
+      "values": [
+        5.78301210920767,
+        8.670684700346484,
+        10.614187572880988,
+        11.961772722750663,
+        12.964647941710439,
+        13.764819077382977,
+        14.440852561888859,
+        15.037491532001072,
+        15.581266869808893
+      ],
+      "label": "DPA Fridman = 2·Lsh·LRw·Edy / (Lsh + Lnc·(1+Edx)), standard",
+      "unit": "m"
+    },
+    "dpa_fridman_mod_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "Q164:Q172",
+      "values": [
+        5.782114486019302,
+        8.668666989221277,
+        10.611164120972889,
+        11.957932955186775,
+        12.960137452891656,
+        13.759734746053356,
+        14.435256653205013,
+        15.031423766485,
+        15.5747524282392
+      ],
+      "label": "DPA Fridman, modified",
+      "unit": "m"
+    },
+    "yn_std_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I193:I201",
+      "values": [
+        2.891506054603835,
+        4.335342350173242,
+        5.307093786440494,
+        5.980886361375331,
+        6.482323970855219,
+        6.882409538691489,
+        7.220426280944429,
+        7.518745766000536,
+        7.790633434904446
+      ],
+      "label": "Yn = DPA/2, standard",
+      "unit": "m"
+    },
+    "yn_mod_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J193:J201",
+      "values": [
+        2.891057243009651,
+        4.334333494610639,
+        5.3055820604864445,
+        5.978966477593388,
+        6.480068726445828,
+        6.879867373026678,
+        7.217628326602506,
+        7.5157118832425,
+        7.7873762141196
+      ],
+      "label": "Yn = DPA/2, modified",
+      "unit": "m"
+    },
+    "dpa_fridman_2yn_std_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K193:K201",
+      "values": [
+        5.78301210920767,
+        8.670684700346484,
+        10.614187572880988,
+        11.961772722750663,
+        12.964647941710439,
+        13.764819077382977,
+        14.440852561888859,
+        15.037491532001072,
+        15.581266869808893
+      ],
+      "label": "2·Yn, standard",
+      "unit": "m"
+    },
+    "dpa_fridman_2yn_mod_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L193:L201",
+      "values": [
+        5.782114486019302,
+        8.668666989221277,
+        10.611164120972889,
+        11.957932955186775,
+        12.960137452891656,
+        13.759734746053356,
+        14.435256653205013,
+        15.031423766485,
+        15.5747524282392
+      ],
+      "label": "2·Yn, modified",
+      "unit": "m"
+    },
+    "door_spread_from_dpa_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M193:M201",
+      "values": [
+        13.647873831865379,
+        20.461177938522297,
+        25.046171168422497,
+        28.225030939269686,
+        30.59059470862715,
+        32.47793246365747,
+        34.07240759585328,
+        35.47957681818983,
+        36.76202825404208
+      ],
+      "label": "Door spread from DPA (modified)",
+      "unit": "m"
+    },
+    "rn_std_kgf_av": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K272:K280",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN standard ×1000 for AV Fridman",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf_av": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L272:L280",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN modified ×1000 for AV Fridman",
+      "unit": "kgf"
+    },
+    "alpha_fridman_std_deg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M272:M280",
+      "values": [
+        9.536742798397364,
+        6.410791260145498,
+        4.434864356632696,
+        3.2071759483263835,
+        2.418088987743721,
+        1.8885527259195842,
+        1.5184317105809784,
+        1.250357421268269,
+        1.050186974785416
+      ],
+      "label": "α = atan(2·Ffz / RN), standard",
+      "unit": "°"
+    },
+    "alpha_fridman_mod_deg": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "N272:N280",
+      "values": [
+        9.738460674906976,
+        6.547821869627087,
+        4.530087430417078,
+        3.2761744997175115,
+        2.4701597503022596,
+        1.929239993693596,
+        1.551153687891529,
+        1.277306632262561,
+        1.0728240569530803
+      ],
+      "label": "α = atan(2·Ffz / RN), modified",
+      "unit": "°"
+    },
+    "av_fridman_std_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "O272:O280",
+      "values": [
+        4.609253331272075,
+        3.3019400470820126,
+        2.4711871177448623,
+        1.9538376611766393,
+        1.6209723283539148,
+        1.397482376568031,
+        1.241231797905424,
+        1.1280442621851567,
+        1.0435197186674827
+      ],
+      "label": "AV Fridman = dan leno + (fL + Vs)·sin α, standard",
+      "unit": "m"
+    },
+    "av_fridman_mod_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "P272:P280",
+      "values": [
+        4.693246052743999,
+        3.35944499743735,
+        2.511281391436633,
+        1.982932442525554,
+        1.6429443127641679,
+        1.4146570332920156,
+        1.2550469071458878,
+        1.139423443332805,
+        1.0530788082099738
+      ],
+      "label": "AV Fridman, modified",
+      "unit": "m"
+    },
+    "av_fridman_summary_std_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "T256:T264",
+      "values": [
+        4.609253331272075,
+        3.3019400470820126,
+        2.4711871177448623,
+        1.9538376611766393,
+        1.6209723283539148,
+        1.397482376568031,
+        1.241231797905424,
+        1.1280442621851567,
+        1.0435197186674827
+      ],
+      "label": "AV Fridman summary (pasted static), standard",
+      "unit": "m",
+      "static": true
+    },
+    "av_fridman_summary_mod_m": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "U256:U264",
+      "values": [
+        4.693246052743999,
+        3.35944499743735,
+        2.511281391436633,
+        1.982932442525554,
+        1.6429443127641679,
+        1.4146570332920156,
+        1.2550469071458878,
+        1.139423443332805,
+        1.0530788082099738
+      ],
+      "label": "AV Fridman summary (pasted static), modified",
+      "unit": "m",
+      "static": true
+    }
+  }
+}

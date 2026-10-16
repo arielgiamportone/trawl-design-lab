@@ -1,0 +1,32 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+kind: materials
+source: Tablas de Referencias!A35:I37
+items:
+- id: pa_r1280tex
+  material: PA
+  density_kg_m3: 1140
+  runnage_m_per_kg: 780
+  rtex: 1280
+  diameter_mm: 1.37
+  weight_in_water_coefficient_seawater: 0.1
+  weight_in_water_coefficient_freshwater: 0.12
+  source: Tablas de Referencias!A36:I36
+- id: pa_r950tex
+  material: PA
+  density_kg_m3: 1140
+  runnage_m_per_kg: 1050
+  rtex: 950
+  diameter_mm: 1.16
+  weight_in_water_coefficient_seawater: 0.1
+  weight_in_water_coefficient_freshwater: 0.12
+  source: Tablas de Referencias!A37:I37
+constants:
+  seawater_density_kg_m3: 1024
+  freshwater_density_kg_m3: 1000
+  g_m_s2: 9.81
+  source: Mecánica de la Red!L127:P129
+notes:
+- Los coeficientes de peso en el agua (G36/I36) sólo figuran en la fila 36 de la hoja; se aplican a ambos
+  hilos de PA.

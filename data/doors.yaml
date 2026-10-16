@@ -1,0 +1,79 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+doors:
+- id: fao_flat_wood_a3
+  name: Porton plano de madera con bastidor de hierro FAO para A3,B3,C3
+  type: flat_wood_iron_frame
+  length_m: 1.9
+  height_m: 0.95
+  area_m2: 1.805
+  aspect_ratio: 0.5
+  weight_air_kg: 135.0
+  weight_water_kg: 80.595
+  coefficients:
+  - angle_deg: 25.0
+    cl: 0.8
+    cd: 0.53
+    source: Tablas de Referencias!B259:D259
+  - angle_deg: 30.0
+    cl: 0.92
+    cd: 0.67
+    source: Tablas de Referencias!B260:D260
+  - angle_deg: 32.0
+    cl: 0.93
+    cd: 0.71
+    source: Tablas de Referencias!B261:D261
+  - angle_deg: 35.0
+    cl: 0.86
+    cd: 0.74
+    source: Tablas de Referencias!B262:D262
+  - angle_deg: 40.0
+    cl: 0.78
+    cd: 0.79
+    source: Tablas de Referencias!B263:D263
+  - angle_deg: 45.0
+    cl: 0.76
+    cd: 0.89
+    source: Tablas de Referencias!B264:D264
+  area_ratio: 1
+  weight_water_coefficient: 0.597
+  source: Tablas de Referencias!A245:E264
+- id: morgere_polivalente_oval
+  name: Morgere Polivalente Oval
+  type: oval_polyvalent
+  length_m: 1.4
+  height_m: 0.952
+  area_m2: 1.0467786722
+  aspect_ratio: 0.68
+  weight_air_kg: 120.0
+  weight_water_kg: 104.4
+  coefficients:
+  - angle_deg: 25.0
+    cl: null
+    cd: null
+    note: CL = CD = 0 en la hoja (C281:D281); sin dato a este ángulo
+    source: Tablas de Referencias!B281:D281
+  - angle_deg: 27.0
+    cl: 1.22
+    cd: 0.75
+    source: Tablas de Referencias!B282:D282
+  - angle_deg: 30.0
+    cl: 1.2
+    cd: 0.77
+    source: Tablas de Referencias!B283:D283
+  - angle_deg: 35.0
+    cl: 1.04
+    cd: 0.79
+    source: Tablas de Referencias!B284:D284
+  - angle_deg: 40.0
+    cl: 0.95
+    cd: 0.84
+    source: Tablas de Referencias!B285:D285
+  - angle_deg: 45.0
+    cl: 0.88
+    cd: 0.92
+    source: Tablas de Referencias!B286:D286
+  area_ratio: 0.7853981634
+  weight_water_coefficient: 0.87
+  source: Tablas de Referencias!A267:E286

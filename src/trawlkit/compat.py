@@ -105,6 +105,42 @@ ERRATA: tuple[Erratum, ...] = (
         "G48",
         "Largo de la red modificada suma filas del plano inferior en vez de la bolsa.",
     ),
+    Erratum(
+        "footrope_mid_truncation",
+        "Dimensiones de la Red",
+        "F46",
+        "MID() sobre números trunca el burlón a 33.3 m (el valor completo es 33.389 m).",
+    ),
+    Erratum(
+        "dpa_std_uses_mod_edy",
+        "Mecánica de la Red",
+        "P164",
+        "La DPA de Fridman de la red estándar usa el coeficiente Edy de la modificada.",
+    ),
+    Erratum(
+        "nomura_column_links_hamuro",
+        "Potencia Disponible Arrastre OK",
+        "G319,G342,G362",
+        "La columna 'Nomura' de los resúmenes enlaza a los resultados de Hamuro.",
+    ),
+    Erratum(
+        "sweep_degrees_of_sine",
+        "Portones y aparejamiento",
+        "G71",
+        "DEGREES(SIN(20)) con el ángulo en grados y error de precedencia.",
+    ),
+    Erratum(
+        "nomura_ratio_typo",
+        "Tablas de Referencias",
+        "G18,G21",
+        "Proporción 10.6 donde el resto de la tabla sugiere 1.06.",
+    ),
+    Erratum(
+        "panel_f_cut_na",
+        "Paños de red y cortes",
+        "T122",
+        "VLOOKUP/MATCH de la razón de corte del panel F devuelve #N/A.",
+    ),
 )
 
 ERRATA_BY_KEY: dict[str, Erratum] = {e.key: e for e in ERRATA}

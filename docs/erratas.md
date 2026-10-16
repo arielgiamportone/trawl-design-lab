@@ -18,3 +18,13 @@ corrigen en modo `Compat.CORRECTED`. La lista canónica vive en `trawlkit.compat
 | warp_total_omits_doors | Cables de Remolque | H118 | Omite la resistencia de los portones |
 | warp_undersized | Cables de Remolque | E267:E272 | Cable 12 mm (8.55 t) < 8.8 t requeridos |
 | mod_length_wrong_rows | Dimensiones de la Red | G48 | Largo modificada suma filas equivocadas |
+| footrope_mid_truncation | Dimensiones de la Red | F46 | MID() trunca el burlón a 33.3 m (valor completo 33.389 m) |
+| dpa_std_uses_mod_edy | Mecánica de la Red | P164 | DPA Fridman estándar usa el Edy de la modificada |
+| nomura_column_links_hamuro | Potencia Disponible Arrastre OK | G319, G342, G362 | Columna "Nomura" enlaza a Hamuro |
+| sweep_degrees_of_sine | Portones y aparejamiento | G71 | DEGREES(SIN(20)) y error de precedencia |
+| nomura_ratio_typo | Tablas de Referencias | G18, G21 | 10.6 donde corresponde 1.06 |
+| panel_f_cut_na | Paños de red y cortes | T122 | Razón de corte del panel F devuelve #N/A |
+
+Además, varias tablas resumen contienen valores pegados a mano en lugar de fórmulas (marcados con
+`"static": true` en `tests/golden/*.json`), y los coeficientes leídos con `MID()` desde etiquetas de
+texto dependen del locale (marcados con `"coerced_from_text": true`).

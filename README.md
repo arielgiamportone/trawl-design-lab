@@ -12,8 +12,8 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 
 | Capa | Carpeta | Estado |
 |---|---|---|
-| Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 0: esqueleto + unidades + registro de erratas |
-| Datos y catálogos | `data/` | Fase 1 |
+| Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 1: esqueleto, unidades, registro de erratas, esquema de specs y loader |
+| Datos y catálogos | `data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
 | CLI | `src/trawlkit/cli.py` | Fase 0: `trawlkit version`, `trawlkit errata` |
 | API HTTP (FastAPI) | `api/` | Fase 0: `/health` |
 | Frontend (React + Vite) | `web/` | Fase 4 |
@@ -40,12 +40,20 @@ uv sync --all-extras --dev
 uv run pytest
 uv run trawlkit errata
 uv run uvicorn api.main:app --reload   # http://127.0.0.1:8000/health
+uv run python tools/extract_excel.py   # regenera data/ y tests/golden/ desde legacy/*.xlsx
+```
+
+```python
+from trawlkit.io import load_net, load_vessels
+
+net = load_net("fao_a3_standard")  # 10 paneles A..J con procedencia de celda
+v150 = load_vessels().vessels[0]  # 150 BHP
 ```
 
 ## Hoja de ruta
 
 0. Bootstrap del repo ✔
-1. Extracción del Excel a datos abiertos y valores de referencia
+1. Extracción del Excel a datos abiertos y valores de referencia ✔
 2. Motor de cálculo validado contra el Excel (tolerancia 1 %) y contra DynamiT
 3. CLI, informe y plano 2D SVG
 4. API FastAPI + frontend React

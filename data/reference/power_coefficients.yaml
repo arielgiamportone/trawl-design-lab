@@ -1,0 +1,242 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+description: Coeficientes empíricos de los métodos de potencia disponible para arrastre
+fridman:
+  formula: Ft ≈ HP * (KF - 0,7 * v)
+  kf:
+    fixed_pitch: 10
+    variable_pitch_nozzle: 15
+  kf_source:
+  - Tablas de Referencias!A6:B7
+  - Potencia Disponible Arrastre OK!E3:E4
+  energy_split:
+    nominal_over_bhp:
+      fraction: 0.33
+      label: HP nominales = BHP + BHP·0.33
+      source: Potenc disponible para arrastre!C24
+    towing:
+      fraction: 0.33
+      label: Para tiro de red
+      source: Potenc disponible para arrastre!C26
+    propeller_rotation:
+      fraction: 0.35
+      label: Pérdida giro de hélice
+      source: Potenc disponible para arrastre!C27
+    wave_making:
+      fraction: 0.27
+      label: Pérdida por oleaje
+      source: Potenc disponible para arrastre!C28
+    hull_friction:
+      fraction: 0.18
+      label: Rozamiento
+      source: Potenc disponible para arrastre!C29
+    wake_turbulence:
+      fraction: 0.17
+      label: Estela y turbulencia
+      source: Potenc disponible para arrastre!C30
+    air:
+      fraction: 0.03
+      label: Aire
+      source: Potenc disponible para arrastre!C31
+  hp_to_kw: 0.745
+  energy_split_source: Potenc disponible para arrastre!A24:E31
+bollard_pull_k:
+  by_propeller:
+    fixed_pitch:
+      label: Hélice Paso Fijo
+      k_150hp: 11.23
+      k_180hp: 11.21
+      source: Potencia Disponible Arrastre OK!H52:L52
+    fixed_pitch_nozzle:
+      label: Hélice Paso Fijo + tobera
+      k_150hp: 13.35
+      k_180hp: 13.32
+      source: Potencia Disponible Arrastre OK!H53:L53
+    variable_pitch:
+      label: Hélice Paso Variable
+      k_150hp: 11.73
+      k_180hp: 11.71
+      source: Potencia Disponible Arrastre OK!H54:L54
+    variable_pitch_nozzle:
+      label: Hélice Paso Variable + Tobera
+      k_150hp: 13.73
+      k_180hp: 13.71
+      source: Potencia Disponible Arrastre OK!H55:L55
+  source: Potencia Disponible Arrastre OK!H51:L55
+prado:
+  bollard_pull_percent:
+    fixed_pitch:
+      label: BP P.FIJO = BHP * 0,9 * 1,10/ 100
+      base_factor: 0.9
+      propeller_factor: 1.1
+      divisor: 100
+      source: Potencia Disponible Arrastre OK!A49
+    fixed_pitch_nozzle:
+      label: BP P.Fijo + Tobera = BHP * 0,9 * 1,20/100
+      base_factor: 0.9
+      propeller_factor: 1.2
+      divisor: 100
+      source: Potencia Disponible Arrastre OK!A51
+    variable_pitch:
+      label: BP P. Variable = BHP * 0,9 * 1,25/100
+      base_factor: 0.9
+      propeller_factor: 1.25
+      divisor: 100
+      source: Potencia Disponible Arrastre OK!A53
+    variable_pitch_nozzle:
+      label: BP P. Variable + Tobera = BHP * 0,9 * 1,40/ 100
+      base_factor: 0.9
+      propeller_factor: 1.4
+      divisor: 100
+      source: Potencia Disponible Arrastre OK!A55
+  available_fraction_of_apn: 0.75
+  apn_factor_of_bollard_pull: 0.09
+  k_by_propeller_rpm:
+  - label: P. Fijo  alta RPM
+    propeller: fixed_pitch
+    rpm: high
+    k: 0.2
+    source: Potencia Disponible Arrastre OK!I68:K68
+  - label: P. Fijo  Baja RPM K=0,25
+    propeller: fixed_pitch
+    rpm: low
+    k: 0.25
+    source: Potencia Disponible Arrastre OK!I69:K69
+  - label: P. Fijo  Baja RPM K=0,28
+    propeller: fixed_pitch
+    rpm: low
+    k: 0.28
+    source: Potencia Disponible Arrastre OK!I70:K70
+  - label: P.Fijo+Tobera alta RPM
+    propeller: fixed_pitch_nozzle
+    rpm: high
+    k: 0.2
+    source: Potencia Disponible Arrastre OK!I71:K71
+  - label: P.Fijo+Tob Baja RPM K=0,25
+    propeller: fixed_pitch_nozzle
+    rpm: low
+    k: 0.25
+    source: Potencia Disponible Arrastre OK!I72:K72
+  - label: P.Fijo+Tob Baja RPM K=0,28
+    propeller: fixed_pitch_nozzle
+    rpm: low
+    k: 0.28
+    source: Potencia Disponible Arrastre OK!I73:K73
+  - label: P. Var K= 0,28
+    propeller: variable_pitch
+    rpm: null
+    k: 0.28
+    source: Potencia Disponible Arrastre OK!I74:K74
+  - label: P. Var K= 0,30
+    propeller: variable_pitch
+    rpm: null
+    k: 0.3
+    source: Potencia Disponible Arrastre OK!I75:K75
+  - label: P.Var+Tobera K=0,28
+    propeller: variable_pitch_nozzle
+    rpm: null
+    k: 0.28
+    source: Potencia Disponible Arrastre OK!I76:K76
+  - label: P.Var+Tobera K=0,30
+    propeller: variable_pitch_nozzle
+    rpm: null
+    k: 0.3
+    source: Potencia Disponible Arrastre OK!I77:K77
+  source: Potencia Disponible Arrastre OK!A49:L77
+koyama:
+  bhp_fraction: 0.6
+  bhp_fraction_label: BHP F  = 60% * BHP
+  k_table:
+  - vessel_size_t:
+    - 15
+    - 55
+    bhp:
+      max: 600
+    propeller_diameter_mm: null
+    k: 0.15
+    source: Potencia Disponible Arrastre OK!J165:M165
+  - vessel_size_t: null
+    bhp: 1200
+    propeller_diameter_mm: 2400
+    k: 0.18
+    source: Potencia Disponible Arrastre OK!J166:M166
+  - vessel_size_t:
+    - 124
+    bhp: 1500
+    propeller_diameter_mm: null
+    k: 0.18
+    source: Potencia Disponible Arrastre OK!J167:M167
+  source: Potencia Disponible Arrastre OK!J164:M167
+nomura:
+  k1_engine_utilisation: 0.85
+  k2_sea_state: 0.85
+  k3_propulsion_efficiency:
+    small:
+      label: Arrastreros Pequeños
+      range:
+      - 0.17
+      - 0.2
+      source: Potencia Disponible Arrastre OK!I208:L208
+    medium:
+      label: Arrastreros Medianos
+      range:
+      - 0.2
+      source: Potencia Disponible Arrastre OK!I209:L209
+    large_300_1000_t:
+      label: Arrastreros Grandes 300-1000 Ton
+      range:
+      - 0.24
+      - 0.26
+      source: Potencia Disponible Arrastre OK!I210:L210
+    large_over_1000_t:
+      label: Arrastreros Grandes más de 1000 Ton
+      range:
+      - 0.28
+      - 0.29
+      source: Potencia Disponible Arrastre OK!I211:L211
+  k3_average: 0.2342857143
+  net_resistance_fraction: 0.8
+  hp_in_kgf_m_s: 75
+  source: Potencia Disponible Arrastre OK!I205:L214
+hamuro:
+  k1_fraction_of_nhp: 0.825
+  k2_sea_state: 0.85
+  k3_by_propeller_rpm:
+  - label: PF (RPM<300)
+    propeller: fixed_pitch
+    rpm: low
+    k3: 0.265
+    source: Potencia Disponible Arrastre OK!F255,F258,F265
+  - label: PF (RPM>300)
+    propeller: fixed_pitch
+    rpm: high
+    k3: 0.2
+    source: Potencia Disponible Arrastre OK!G255,G258,G265
+  - label: PF+T (RPM>300)
+    propeller: fixed_pitch_nozzle
+    rpm: high
+    k3: 0.24
+    source: Potencia Disponible Arrastre OK!H255,H258,H265
+  - label: PF+T (RPM<300)
+    propeller: fixed_pitch_nozzle
+    rpm: low
+    k3: 0.28
+    source: Potencia Disponible Arrastre OK!I255,I258,I265
+  - label: PV (RPM>300)
+    propeller: variable_pitch
+    rpm: high
+    k3: 0.25
+    source: Potencia Disponible Arrastre OK!J255,J258,J265
+  - label: PV+T (RPM<300)
+    propeller: variable_pitch_nozzle
+    rpm: low
+    k3: 0.27
+    source: Potencia Disponible Arrastre OK!K255,K258,K265
+  - label: PV+T (RPM>300)
+    propeller: variable_pitch_nozzle
+    rpm: high
+    k3: 0.3
+    source: Potencia Disponible Arrastre OK!L255,L258,L265
+  hp_in_kgf_m_s: 75
+  source: Potencia Disponible Arrastre OK!A253:L267

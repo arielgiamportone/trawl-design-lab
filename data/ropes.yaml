@@ -1,0 +1,42 @@
+# Archivo generado por tools/extract/reference.py a partir de
+# legacy/Calculos_Red_FAO_A3.xlsx. No editar a mano; regenerar con:
+#   uv run python -m tools.extract.reference
+kind: ropes
+source: Tablas de Referencias!A292:F296
+items:
+- id: pp_14_retorcido_3_cordones
+  brand: Moscuzza
+  description: PP 14 Retorcido 3 cordones
+  material: PP
+  construction: retorcido 3 cordones
+  diameter_mm: 14
+  weight_kg_per_m: 0.125
+  breaking_load_t: 4.3
+  source: Tablas de Referencias!A293:F293
+- id: combinado_12_acero6x24_7
+  brand: Moscuzza
+  description: COMBINADO 12 Acero6x24+7
+  material: combinado (PP + acero)
+  construction: acero 6x24+7
+  diameter_mm: 12
+  weight_kg_per_m: 0.438
+  breaking_load_t: 3.48
+  source: Tablas de Referencias!A294:F294
+- id: combinado_14_acero6x24_7
+  brand: Moscuzza
+  description: COMBINADO 14 Acero6x24+7
+  material: combinado (PP + acero)
+  construction: acero 6x24+7
+  diameter_mm: 14
+  weight_kg_per_m: 0.624
+  breaking_load_t: 8.7
+  source: Tablas de Referencias!A295:F295
+- id: pp_16_retorcido_3_cordones
+  brand: Moscuzza
+  description: PP 16 Retorcido 3 cordones
+  material: PP
+  construction: retorcido 3 cordones
+  diameter_mm: 16
+  weight_kg_per_m: 0.1636363636
+  breaking_load_t: 5.6
+  source: Tablas de Referencias!A296:F296

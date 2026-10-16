@@ -1,0 +1,2521 @@
+{
+  "sheet": "Potencia Disponible Arrastre OK",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "fridman_kf_fixed_pitch": {
+      "cell": "D10",
+      "value": 10.0,
+      "label": "Fridman empirical KF, fixed-pitch propeller (MID of E3)",
+      "unit": "",
+      "coerced_from_text": true
+    },
+    "fridman_kf_variable_pitch_nozzle": {
+      "cell": "F10",
+      "value": 15.0,
+      "label": "Fridman empirical KF, variable pitch + nozzle (MID of E4)",
+      "unit": "",
+      "coerced_from_text": true
+    },
+    "bhp_150": {
+      "cell": "C10",
+      "value": 150,
+      "label": "BHP of the 150 HP vessel",
+      "unit": "hp"
+    },
+    "bhp_180": {
+      "cell": "C22",
+      "value": 180,
+      "label": "BHP of the 180 HP vessel",
+      "unit": "hp"
+    },
+    "prado_k_fixed_150": {
+      "cell": "K52",
+      "value": 11.23,
+      "label": "Prado K factor, fixed pitch, 150 HP",
+      "unit": ""
+    },
+    "prado_k_fixed_180": {
+      "cell": "L52",
+      "value": 11.21,
+      "label": "Prado K factor, fixed pitch, 180 HP",
+      "unit": ""
+    },
+    "prado_k_fixed_nozzle_150": {
+      "cell": "K53",
+      "value": 13.35,
+      "label": "Prado K factor, fixed pitch + nozzle, 150 HP",
+      "unit": ""
+    },
+    "prado_k_fixed_nozzle_180": {
+      "cell": "L53",
+      "value": 13.32,
+      "label": "Prado K factor, fixed pitch + nozzle, 180 HP",
+      "unit": ""
+    },
+    "prado_k_variable_150": {
+      "cell": "K54",
+      "value": 11.73,
+      "label": "Prado K factor, variable pitch, 150 HP",
+      "unit": ""
+    },
+    "prado_k_variable_180": {
+      "cell": "L54",
+      "value": 11.71,
+      "label": "Prado K factor, variable pitch, 180 HP",
+      "unit": ""
+    },
+    "prado_k_variable_nozzle_150": {
+      "cell": "K55",
+      "value": 13.73,
+      "label": "Prado K factor, variable pitch + nozzle, 150 HP",
+      "unit": ""
+    },
+    "prado_k_variable_nozzle_180": {
+      "cell": "L55",
+      "value": 13.71,
+      "label": "Prado K factor, variable pitch + nozzle, 180 HP",
+      "unit": ""
+    },
+    "bollard_pull_fixed_150_kgf": {
+      "cell": "B60",
+      "value": 1485,
+      "label": "Bollard pull BHP·0.9·1.10/100, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_fixed_nozzle_150_kgf": {
+      "cell": "B61",
+      "value": 1620,
+      "label": "Bollard pull ·1.20, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_variable_150_kgf": {
+      "cell": "B62",
+      "value": 1687.5,
+      "label": "Bollard pull ·1.25, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_variable_nozzle_150_kgf": {
+      "cell": "B63",
+      "value": 1890,
+      "label": "Bollard pull ·1.40, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_fixed_150_t": {
+      "cell": "C60",
+      "value": 1.485,
+      "label": "Bollard pull fixed pitch, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_fixed_nozzle_150_t": {
+      "cell": "C61",
+      "value": 1.62,
+      "label": "Bollard pull fixed + nozzle, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_variable_150_t": {
+      "cell": "C62",
+      "value": 1.6875,
+      "label": "Bollard pull variable pitch, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_variable_nozzle_150_t": {
+      "cell": "C63",
+      "value": 1.89,
+      "label": "Bollard pull variable + nozzle, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_fixed_180_kgf": {
+      "cell": "D60",
+      "value": 1782.0000000000002,
+      "label": "Bollard pull BHP·0.9·1.10/100, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_fixed_nozzle_180_kgf": {
+      "cell": "D61",
+      "value": 1944,
+      "label": "Bollard pull ·1.20, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_variable_180_kgf": {
+      "cell": "D62",
+      "value": 2025,
+      "label": "Bollard pull ·1.25, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_variable_nozzle_180_kgf": {
+      "cell": "D63",
+      "value": 2268,
+      "label": "Bollard pull ·1.40, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_fixed_180_t": {
+      "cell": "E60",
+      "value": 1.7820000000000003,
+      "label": "Bollard pull fixed pitch, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_fixed_nozzle_180_t": {
+      "cell": "E61",
+      "value": 1.944,
+      "label": "Bollard pull fixed + nozzle, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_variable_180_t": {
+      "cell": "E62",
+      "value": 2.025,
+      "label": "Bollard pull variable pitch, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_variable_nozzle_180_t": {
+      "cell": "E63",
+      "value": 2.268,
+      "label": "Bollard pull variable + nozzle, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_fixed_150_t": {
+      "cell": "I59",
+      "value": 1.6845,
+      "label": "Bollard pull via K factor, fixed, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_fixed_nozzle_150_t": {
+      "cell": "I60",
+      "value": 2.0025,
+      "label": "Via K factor, fixed + nozzle, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_variable_150_t": {
+      "cell": "I61",
+      "value": 1.7595,
+      "label": "Via K factor, variable, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_variable_nozzle_150_t": {
+      "cell": "I62",
+      "value": 2.0595,
+      "label": "Via K, variable + nozzle, 150 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_fixed_180_t": {
+      "cell": "K59",
+      "value": 2.0178000000000003,
+      "label": "Bollard pull via K factor, fixed, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_fixed_nozzle_180_t": {
+      "cell": "K60",
+      "value": 2.3976,
+      "label": "Via K factor, fixed + nozzle, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_variable_180_t": {
+      "cell": "K61",
+      "value": 2.1078,
+      "label": "Via K factor, variable, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_k_variable_nozzle_180_t": {
+      "cell": "K62",
+      "value": 2.4678,
+      "label": "Via K, variable + nozzle, 180 HP",
+      "unit": "t"
+    },
+    "bollard_pull_avg_fixed_150_kgf": {
+      "cell": "G58",
+      "value": 1584.75,
+      "label": "Average bollard pull, fixed, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_fixed_nozzle_150_kgf": {
+      "cell": "G59",
+      "value": 1811.25,
+      "label": "Average, fixed + nozzle, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_variable_150_kgf": {
+      "cell": "G60",
+      "value": 1723.5,
+      "label": "Average, variable, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_variable_nozzle_150_kgf": {
+      "cell": "G61",
+      "value": 1974.75,
+      "label": "Average, variable + nozzle, 150 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_fixed_180_kgf": {
+      "cell": "G65",
+      "value": 1899.9,
+      "label": "Average bollard pull, fixed, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_fixed_nozzle_180_kgf": {
+      "cell": "G66",
+      "value": 2170.7999999999997,
+      "label": "Average, fixed + nozzle, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_variable_180_kgf": {
+      "cell": "G67",
+      "value": 2066.3999999999996,
+      "label": "Average, variable, 180 HP",
+      "unit": "kgf"
+    },
+    "bollard_pull_avg_variable_nozzle_180_kgf": {
+      "cell": "G68",
+      "value": 2367.8999999999996,
+      "label": "Average, variable + nozzle, 180 HP",
+      "unit": "kgf"
+    },
+    "apn_fixed_150_hp": {
+      "cell": "B73",
+      "value": 142.6275,
+      "label": "Apparent nominal power = 0.09·BP, fixed, 150 HP",
+      "unit": "hp"
+    },
+    "apn_fixed_nozzle_150_hp": {
+      "cell": "B74",
+      "value": 163.0125,
+      "label": "APN, fixed + nozzle, 150 HP",
+      "unit": "hp"
+    },
+    "apn_variable_150_hp": {
+      "cell": "B75",
+      "value": 155.11499999999998,
+      "label": "APN, variable, 150 HP",
+      "unit": "hp"
+    },
+    "apn_variable_nozzle_150_hp": {
+      "cell": "B76",
+      "value": 177.7275,
+      "label": "APN, variable + nozzle, 150 HP",
+      "unit": "hp"
+    },
+    "apn_fixed_180_hp": {
+      "cell": "C73",
+      "value": 170.991,
+      "label": "Apparent nominal power = 0.09·BP, fixed, 180 HP",
+      "unit": "hp"
+    },
+    "apn_fixed_nozzle_180_hp": {
+      "cell": "C74",
+      "value": 195.37199999999996,
+      "label": "APN, fixed + nozzle, 180 HP",
+      "unit": "hp"
+    },
+    "apn_variable_180_hp": {
+      "cell": "C75",
+      "value": 185.97599999999997,
+      "label": "APN, variable, 180 HP",
+      "unit": "hp"
+    },
+    "apn_variable_nozzle_180_hp": {
+      "cell": "C76",
+      "value": 213.11099999999996,
+      "label": "APN, variable + nozzle, 180 HP",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_high_rpm_150_hp": {
+      "cell": "K68",
+      "value": 21.394125000000003,
+      "label": "0.75·0.20·APN, fixed high RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_low_rpm_k25_150_hp": {
+      "cell": "K69",
+      "value": 26.74265625,
+      "label": "0.75·0.25·APN, fixed low RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_low_rpm_k28_150_hp": {
+      "cell": "K70",
+      "value": 29.951775,
+      "label": "0.75·0.28·APN, fixed low RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_high_rpm_150_hp": {
+      "cell": "K71",
+      "value": 24.451875,
+      "label": "0.75·0.20·APN, fixed+nozzle",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_low_rpm_k25_150_hp": {
+      "cell": "K72",
+      "value": 30.564843749999998,
+      "label": "0.75·0.25·APN",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_low_rpm_k28_150_hp": {
+      "cell": "K73",
+      "value": 34.232625,
+      "label": "0.75·0.28·APN",
+      "unit": "hp"
+    },
+    "trawling_power_variable_k28_150_hp": {
+      "cell": "K74",
+      "value": 32.574149999999996,
+      "label": "0.75·0.28·APN, variable",
+      "unit": "hp"
+    },
+    "trawling_power_variable_k30_150_hp": {
+      "cell": "K75",
+      "value": 34.90087499999999,
+      "label": "0.75·0.30·APN, variable",
+      "unit": "hp"
+    },
+    "trawling_power_variable_nozzle_k28_150_hp": {
+      "cell": "K76",
+      "value": 37.322775,
+      "label": "0.75·0.28·APN, var+nozzle",
+      "unit": "hp"
+    },
+    "trawling_power_variable_nozzle_k30_150_hp": {
+      "cell": "K77",
+      "value": 39.9886875,
+      "label": "0.75·0.30·APN, var+nozzle",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_high_rpm_180_hp": {
+      "cell": "L68",
+      "value": 25.648650000000007,
+      "label": "0.75·0.20·APN, fixed high RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_low_rpm_k25_180_hp": {
+      "cell": "L69",
+      "value": 32.060812500000004,
+      "label": "0.75·0.25·APN, fixed low RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_low_rpm_k28_180_hp": {
+      "cell": "L70",
+      "value": 35.90811000000001,
+      "label": "0.75·0.28·APN, fixed low RPM",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_high_rpm_180_hp": {
+      "cell": "L71",
+      "value": 29.305799999999998,
+      "label": "0.75·0.20·APN, fixed+nozzle",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_low_rpm_k25_180_hp": {
+      "cell": "L72",
+      "value": 36.63224999999999,
+      "label": "0.75·0.25·APN",
+      "unit": "hp"
+    },
+    "trawling_power_fixed_nozzle_low_rpm_k28_180_hp": {
+      "cell": "L73",
+      "value": 41.028119999999994,
+      "label": "0.75·0.28·APN",
+      "unit": "hp"
+    },
+    "trawling_power_variable_k28_180_hp": {
+      "cell": "L74",
+      "value": 39.054959999999994,
+      "label": "0.75·0.28·APN, variable",
+      "unit": "hp"
+    },
+    "trawling_power_variable_k30_180_hp": {
+      "cell": "L75",
+      "value": 41.84459999999999,
+      "label": "0.75·0.30·APN, variable",
+      "unit": "hp"
+    },
+    "trawling_power_variable_nozzle_k28_180_hp": {
+      "cell": "L76",
+      "value": 44.75331,
+      "label": "0.75·0.28·APN, var+nozzle",
+      "unit": "hp"
+    },
+    "trawling_power_variable_nozzle_k30_180_hp": {
+      "cell": "L77",
+      "value": 47.94997499999999,
+      "label": "0.75·0.30·APN, var+nozzle",
+      "unit": "hp"
+    },
+    "koyama_bhp_f_150_hp": {
+      "cell": "C169",
+      "value": 90,
+      "label": "Koyama BHP_F = 60 % BHP, 150 HP",
+      "unit": "hp"
+    },
+    "koyama_bhp_f_180_hp": {
+      "cell": "D169",
+      "value": 108,
+      "label": "Koyama BHP_F = 60 % BHP, 180 HP",
+      "unit": "hp"
+    },
+    "koyama_k": {
+      "cell": "C170",
+      "value": 0.15,
+      "label": "Koyama K constant (15–55 t, <600 BHP)",
+      "unit": ""
+    },
+    "koyama_ehp_150_hp": {
+      "cell": "C171",
+      "value": 13.5,
+      "label": "Koyama EHP = K·BHP_F, 150 HP",
+      "unit": "hp"
+    },
+    "koyama_ehp_180_hp": {
+      "cell": "D171",
+      "value": 16.2,
+      "label": "Koyama EHP = K·BHP_F, 180 HP",
+      "unit": "hp"
+    },
+    "koyama_ehp_150_kgf_m_s": {
+      "cell": "C172",
+      "value": 1012.5,
+      "label": "Koyama EHP ·75, 150 HP",
+      "unit": "kgf·m/s"
+    },
+    "koyama_ehp_180_kgf_m_s": {
+      "cell": "D172",
+      "value": 1215,
+      "label": "Koyama EHP ·75, 180 HP",
+      "unit": "kgf·m/s"
+    },
+    "nomura_k1_engine_use": {
+      "cell": "L205",
+      "value": 0.85,
+      "label": "Nomura K1 main-engine utilisation",
+      "unit": ""
+    },
+    "nomura_k2_sea_state": {
+      "cell": "L206",
+      "value": 0.85,
+      "label": "Nomura K2 sea state",
+      "unit": ""
+    },
+    "nomura_k3_medium_trawlers": {
+      "cell": "L209",
+      "value": 0.2,
+      "label": "Nomura K3 propulsion efficiency, medium trawlers",
+      "unit": ""
+    },
+    "nomura_k3_average": {
+      "cell": "L212",
+      "value": 0.2342857142857143,
+      "label": "Nomura K3 average over vessel classes",
+      "unit": ""
+    },
+    "nomura_net_drag_share": {
+      "cell": "L213",
+      "value": 0.8,
+      "label": "Nomura net drag share of total (estimated)",
+      "unit": ""
+    },
+    "hamuro_k1": {
+      "cell": "C254",
+      "value": 0.825,
+      "label": "Hamuro K1 (82.5 % of NHP)",
+      "unit": ""
+    },
+    "hamuro_ps_fixed_low_rpm_150_hp": {
+      "cell": "F259",
+      "value": 27.8746875,
+      "label": "Hamuro Ps, PF RPM<300, 150 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_high_rpm_150_hp": {
+      "cell": "G259",
+      "value": 21.037499999999998,
+      "label": "Hamuro Ps, PF RPM>300, 150 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_nozzle_high_rpm_150_hp": {
+      "cell": "H259",
+      "value": 25.244999999999997,
+      "label": "Hamuro Ps, PF+T RPM>300, 150",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_nozzle_low_rpm_150_hp": {
+      "cell": "I259",
+      "value": 29.4525,
+      "label": "Hamuro Ps, PF+T RPM<300, 150",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_high_rpm_150_hp": {
+      "cell": "J259",
+      "value": 26.296874999999996,
+      "label": "Hamuro Ps, PV RPM>300, 150 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_nozzle_low_rpm_150_hp": {
+      "cell": "K259",
+      "value": 28.400624999999998,
+      "label": "Hamuro Ps, PV+T RPM<300, 150",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_nozzle_high_rpm_150_hp": {
+      "cell": "L259",
+      "value": 31.55625,
+      "label": "Hamuro Ps, PV+T RPM>300, 150",
+      "unit": "hp"
+    },
+    "hamuro_ps_worst_avg_150_hp": {
+      "cell": "G260",
+      "value": 25.902421874999998,
+      "label": "Hamuro Ps worst-case average, 150 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_best_avg_150_hp": {
+      "cell": "K260",
+      "value": 28.75125,
+      "label": "Hamuro Ps best-case average, 150 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_low_rpm_180_hp": {
+      "cell": "F266",
+      "value": 33.449625,
+      "label": "Hamuro Ps, PF RPM<300, 180 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_high_rpm_180_hp": {
+      "cell": "G266",
+      "value": 25.244999999999997,
+      "label": "Hamuro Ps, PF RPM>300, 180 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_nozzle_high_rpm_180_hp": {
+      "cell": "H266",
+      "value": 30.293999999999997,
+      "label": "Hamuro Ps, PF+T RPM>300, 180",
+      "unit": "hp"
+    },
+    "hamuro_ps_fixed_nozzle_low_rpm_180_hp": {
+      "cell": "I266",
+      "value": 35.342999999999996,
+      "label": "Hamuro Ps, PF+T RPM<300, 180",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_high_rpm_180_hp": {
+      "cell": "J266",
+      "value": 31.55625,
+      "label": "Hamuro Ps, PV RPM>300, 180 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_nozzle_low_rpm_180_hp": {
+      "cell": "K266",
+      "value": 34.08075,
+      "label": "Hamuro Ps, PV+T RPM<300, 180",
+      "unit": "hp"
+    },
+    "hamuro_ps_variable_nozzle_high_rpm_180_hp": {
+      "cell": "L266",
+      "value": 37.86749999999999,
+      "label": "Hamuro Ps, PV+T RPM>300, 180",
+      "unit": "hp"
+    },
+    "hamuro_ps_worst_avg_180_hp": {
+      "cell": "G267",
+      "value": 31.082906249999994,
+      "label": "Hamuro Ps worst-case average, 180 HP",
+      "unit": "hp"
+    },
+    "hamuro_ps_best_avg_180_hp": {
+      "cell": "K267",
+      "value": 34.5015,
+      "label": "Hamuro Ps best-case average, 180 HP",
+      "unit": "hp"
+    }
+  },
+  "series": {
+    "speed_ms": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H171:H179",
+      "values": [
+        0.514,
+        0.771,
+        1.028,
+        1.2850000000000001,
+        1.5420000000000003,
+        1.7990000000000004,
+        2.0560000000000005,
+        2.3130000000000006,
+        2.5700000000000007
+      ],
+      "label": "Speed in m/s (Koyama block)",
+      "unit": "m/s"
+    },
+    "fridman_ft_fixed_pitch_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E10:E18",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "Fridman FT = HP·(KF − 0.7·v), fixed pitch, 150 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_variable_pitch_nozzle_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G10:G18",
+      "values": [
+        2145,
+        2092.5,
+        2040,
+        1987.5,
+        1935,
+        1882.5,
+        1830,
+        1777.5,
+        1725
+      ],
+      "label": "Fridman FT, variable pitch + nozzle, 150 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_fixed_pitch_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E22:E30",
+      "values": [
+        1674.0000000000002,
+        1610.9999999999998,
+        1548,
+        1485,
+        1422,
+        1359.0000000000002,
+        1296,
+        1233,
+        1170
+      ],
+      "label": "Fridman FT = HP·(KF − 0.7·v), fixed pitch, 180 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_variable_pitch_nozzle_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G22:G30",
+      "values": [
+        2574,
+        2511,
+        2448,
+        2385,
+        2322,
+        2259,
+        2196,
+        2133,
+        2070
+      ],
+      "label": "Fridman FT, variable pitch + nozzle, 180 HP",
+      "unit": "kgf"
+    },
+    "rn_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J11:J19",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN FAO A3 standard net (Aberdeen demersal) ×1000",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K11:K19",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN FAO A3 modified net (Aberdeen demersal) ×1000",
+      "unit": "kgf"
+    },
+    "fridman_summary_fixed_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L11:L19",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "Summary FT(PF) 150 HP (=E10:E18)",
+      "unit": "kgf"
+    },
+    "fridman_summary_variable_nozzle_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "M11:M19",
+      "values": [
+        2145,
+        2092.5,
+        2040,
+        1987.5,
+        1935,
+        1882.5,
+        1830,
+        1777.5,
+        1725
+      ],
+      "label": "Summary FT(PV+T) 150 HP (=G10:G18)",
+      "unit": "kgf"
+    },
+    "fridman_summary_fixed_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "N11:N19",
+      "values": [
+        1674.0000000000002,
+        1610.9999999999998,
+        1548,
+        1485,
+        1422,
+        1359.0000000000002,
+        1296,
+        1233,
+        1170
+      ],
+      "label": "Summary FT(PF) 180 HP (=E22:E30)",
+      "unit": "kgf"
+    },
+    "fridman_summary_variable_nozzle_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "O11:O19",
+      "values": [
+        2574,
+        2511,
+        2448,
+        2385,
+        2322,
+        2259,
+        2196,
+        2133,
+        2070
+      ],
+      "label": "Summary FT(PV+T) 180 HP (=G22:G30)",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_high_rpm_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C88:C96",
+      "values": [
+        3209.1187500000005,
+        2139.4125000000004,
+        1604.5593750000003,
+        1283.6475000000003,
+        1069.7062500000002,
+        916.8910714285715,
+        802.2796875000001,
+        713.1375000000002,
+        641.8237500000001
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch high RPM (K=0.20), 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_high_rpm_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D88:D96",
+      "values": [
+        3847.297500000001,
+        2564.8650000000007,
+        1923.6487500000005,
+        1538.9190000000003,
+        1282.4325000000003,
+        1099.2278571428574,
+        961.8243750000003,
+        854.9550000000003,
+        769.4595000000002
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch high RPM (K=0.20), 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_low_rpm_k25_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E88:E96",
+      "values": [
+        4011.3984375,
+        2674.265625,
+        2005.69921875,
+        1604.559375,
+        1337.1328125,
+        1146.1138392857142,
+        1002.849609375,
+        891.421875,
+        802.2796875
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch low RPM K=0.25, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_low_rpm_k25_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F88:F96",
+      "values": [
+        4809.121875000001,
+        3206.0812500000006,
+        2404.5609375000004,
+        1923.6487500000003,
+        1603.0406250000003,
+        1374.0348214285716,
+        1202.2804687500002,
+        1068.6937500000001,
+        961.8243750000001
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch low RPM K=0.25, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_low_rpm_k28_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G88:G96",
+      "values": [
+        4492.766250000001,
+        2995.1775000000002,
+        2246.3831250000003,
+        1797.1065000000003,
+        1497.5887500000001,
+        1283.6475000000003,
+        1123.1915625000001,
+        998.3925000000002,
+        898.5532500000002
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch low RPM K=0.28, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_low_rpm_k28_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H88:H96",
+      "values": [
+        5386.216500000001,
+        3590.811000000001,
+        2693.1082500000007,
+        2154.4866000000006,
+        1795.4055000000005,
+        1538.9190000000003,
+        1346.5541250000003,
+        1196.9370000000004,
+        1077.2433000000003
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch low RPM K=0.28, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_high_rpm_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I88:I96",
+      "values": [
+        3667.78125,
+        2445.1875,
+        1833.890625,
+        1467.1125,
+        1222.59375,
+        1047.9375,
+        916.9453125,
+        815.0625,
+        733.55625
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch + nozzle high RPM, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_high_rpm_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J88:J96",
+      "values": [
+        4395.87,
+        2930.58,
+        2197.935,
+        1758.348,
+        1465.29,
+        1255.962857142857,
+        1098.9675,
+        976.86,
+        879.174
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed pitch + nozzle high RPM, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_low_rpm_k25_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K88:K96",
+      "values": [
+        4584.7265625,
+        3056.484375,
+        2292.36328125,
+        1833.890625,
+        1528.2421875,
+        1309.921875,
+        1146.181640625,
+        1018.828125,
+        916.9453125
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed + nozzle low RPM K=0.25, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_low_rpm_k25_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L88:L96",
+      "values": [
+        5494.837499999999,
+        3663.224999999999,
+        2747.4187499999994,
+        2197.9349999999995,
+        1831.6124999999995,
+        1569.953571428571,
+        1373.7093749999997,
+        1221.0749999999998,
+        1098.9674999999997
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed + nozzle low RPM K=0.25, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_low_rpm_k28_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C103:C111",
+      "values": [
+        5134.89375,
+        3423.2625000000003,
+        2567.446875,
+        2053.9575,
+        1711.6312500000001,
+        1467.1125,
+        1283.7234375,
+        1141.0875,
+        1026.97875
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed + nozzle low RPM K=0.28, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_fixed_nozzle_low_rpm_k28_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D103:D111",
+      "values": [
+        6154.217999999999,
+        4102.811999999999,
+        3077.1089999999995,
+        2461.6871999999994,
+        2051.4059999999995,
+        1758.3479999999997,
+        1538.5544999999997,
+        1367.6039999999998,
+        1230.8435999999997
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, fixed + nozzle low RPM K=0.28, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_k28_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E103:E111",
+      "values": [
+        4886.1224999999995,
+        3257.4149999999995,
+        2443.0612499999997,
+        1954.4489999999998,
+        1628.7074999999998,
+        1396.0349999999999,
+        1221.5306249999999,
+        1085.8049999999998,
+        977.2244999999999
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch K=0.28, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_k28_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F103:F111",
+      "values": [
+        5858.243999999999,
+        3905.495999999999,
+        2929.1219999999994,
+        2343.2975999999994,
+        1952.7479999999996,
+        1673.7839999999997,
+        1464.5609999999997,
+        1301.8319999999997,
+        1171.6487999999997
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch K=0.28, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_k30_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G103:G111",
+      "values": [
+        5235.1312499999985,
+        3490.087499999999,
+        2617.5656249999993,
+        2094.0524999999993,
+        1745.0437499999996,
+        1495.7517857142852,
+        1308.7828124999996,
+        1163.3624999999997,
+        1047.0262499999997
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch K=0.30, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_k30_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H103:H111",
+      "values": [
+        6276.689999999999,
+        4184.459999999999,
+        3138.3449999999993,
+        2510.6759999999995,
+        2092.2299999999996,
+        1793.3399999999997,
+        1569.1724999999997,
+        1394.8199999999997,
+        1255.3379999999997
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch K=0.30, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_nozzle_k28_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I103:I111",
+      "values": [
+        5598.41625,
+        3732.2775,
+        2799.208125,
+        2239.3665,
+        1866.13875,
+        1599.5475000000001,
+        1399.6040625,
+        1244.0925,
+        1119.68325
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch + nozzle K=0.28, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_nozzle_k28_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "J103:J111",
+      "values": [
+        6712.9965,
+        4475.331,
+        3356.49825,
+        2685.1986,
+        2237.6655,
+        1917.999,
+        1678.249125,
+        1491.777,
+        1342.5993
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch + nozzle K=0.28, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_nozzle_k30_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K103:K111",
+      "values": [
+        5998.303124999999,
+        3998.8687499999996,
+        2999.1515624999997,
+        2399.32125,
+        1999.4343749999998,
+        1713.8008928571428,
+        1499.5757812499999,
+        1332.95625,
+        1199.660625
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch + nozzle K=0.30, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_variable_nozzle_k30_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L103:L111",
+      "values": [
+        7192.496249999998,
+        4794.997499999999,
+        3596.248124999999,
+        2876.9984999999992,
+        2397.4987499999993,
+        2054.998928571428,
+        1798.1240624999996,
+        1598.3324999999995,
+        1438.4992499999996
+      ],
+      "label": "Prado/Dremiere bollard pull when fishing, variable pitch + nozzle K=0.30, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_avg_fixed_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C123:C131",
+      "values": [
+        4183.4475,
+        2788.965,
+        2091.72375,
+        1673.3790000000001,
+        1394.4825,
+        1195.2707142857143,
+        1045.861875,
+        929.6550000000001,
+        836.6895000000001
+      ],
+      "label": "Prado BPF average, fixed pitch variants, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_avg_fixed_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D123:D131",
+      "values": [
+        5014.593562499999,
+        3343.062375,
+        2507.2967812499996,
+        2005.8374250000004,
+        1671.5311875,
+        1432.7410178571429,
+        1253.6483906249998,
+        1114.354125,
+        1002.9187125000002
+      ],
+      "label": "Prado BPF average, fixed pitch variants, 180 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_avg_variable_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E123:E131",
+      "values": [
+        5429.493281249999,
+        3619.6621874999996,
+        2714.7466406249996,
+        2171.7973125,
+        1809.8310937499998,
+        1551.283794642857,
+        1357.3733203124998,
+        1206.5540624999999,
+        1085.89865625
+      ],
+      "label": "Prado BPF average, variable pitch variants, 150 HP",
+      "unit": "kgf"
+    },
+    "prado_bpf_avg_variable_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F123:F131",
+      "values": [
+        6510.1066875,
+        4340.0711249999995,
+        3255.05334375,
+        2604.0426749999997,
+        2170.0355624999997,
+        1860.030482142857,
+        1627.526671875,
+        1446.6903749999997,
+        1302.0213374999998
+      ],
+      "label": "Prado BPF average, variable pitch variants, 180 HP",
+      "unit": "kgf"
+    },
+    "koyama_pull_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "K171:K179",
+      "values": [
+        1969.8443579766536,
+        1313.2295719844358,
+        984.9221789883268,
+        787.9377431906614,
+        656.6147859922178,
+        562.8126737076152,
+        492.46108949416333,
+        437.7431906614785,
+        393.96887159533065
+      ],
+      "label": "Koyama pull = EHP[kgf·m/s] / v[m/s], 150 HP",
+      "unit": "kgf"
+    },
+    "koyama_pull_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "L171:L179",
+      "values": [
+        2363.8132295719843,
+        1575.8754863813228,
+        1181.9066147859921,
+        945.5252918287937,
+        787.9377431906613,
+        675.3752084491383,
+        590.953307392996,
+        525.2918287937741,
+        472.7626459143967
+      ],
+      "label": "Koyama pull = EHP[kgf·m/s] / v[m/s], 180 HP",
+      "unit": "kgf"
+    },
+    "nomura_pull_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E216:E224",
+      "values": [
+        2150.6322957198445,
+        1433.7548638132298,
+        1075.3161478599222,
+        860.2529182879377,
+        716.8774319066148,
+        614.4663702056698,
+        537.658073929961,
+        477.9182879377431,
+        430.1264591439688
+      ],
+      "label": "Nomura pull = 0.8·K1·K2·K3·75·NHP / v, 150 HP",
+      "unit": "kgf"
+    },
+    "nomura_pull_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F216:F224",
+      "values": [
+        2580.7587548638135,
+        1720.5058365758757,
+        1290.3793774319067,
+        1032.3035019455253,
+        860.2529182879377,
+        737.3596442468038,
+        645.1896887159533,
+        573.5019455252917,
+        516.1517509727626
+      ],
+      "label": "Nomura pull = 0.8·K1·K2·K3·75·NHP / v, 180 HP",
+      "unit": "kgf"
+    },
+    "hamuro_pull_fixed_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E272:E280",
+      "values": [
+        4064.155448094868,
+        2709.4369653965787,
+        2032.077724047434,
+        1625.6621792379472,
+        1354.718482698289,
+        1161.187270884248,
+        1016.038862023717,
+        903.1456551321928,
+        812.8310896189736
+      ],
+      "label": "Hamuro pull = 75·Ps / v, PF, 150 HP",
+      "unit": "kgf"
+    },
+    "hamuro_pull_variable_nozzle_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F272:F280",
+      "values": [
+        4600.930695956455,
+        3067.2871306376364,
+        2300.4653479782273,
+        1840.3722783825815,
+        1533.643565318818,
+        1314.5516274161298,
+        1150.2326739891137,
+        1022.4290435458787,
+        920.1861391912907
+      ],
+      "label": "Hamuro pull = 75·Ps / v, PV+T, 150 HP",
+      "unit": "kgf"
+    },
+    "hamuro_pull_fixed_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G272:G280",
+      "values": [
+        4876.986537713841,
+        3251.3243584758943,
+        2438.4932688569206,
+        1950.7946150855362,
+        1625.6621792379467,
+        1393.4247250610974,
+        1219.2466344284603,
+        1083.7747861586313,
+        975.3973075427681
+      ],
+      "label": "Hamuro pull = 75·Ps / v, PF, 180 HP",
+      "unit": "kgf"
+    },
+    "hamuro_pull_variable_nozzle_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H272:H280",
+      "values": [
+        5521.1168351477445,
+        3680.744556765163,
+        2760.5584175738722,
+        2208.4467340590977,
+        1840.3722783825813,
+        1577.4619528993555,
+        1380.2792087869361,
+        1226.9148522550543,
+        1104.2233670295489
+      ],
+      "label": "Hamuro pull = 75·Ps / v, PV+T, 180 HP",
+      "unit": "kgf"
+    },
+    "summary_worst_150_fridman_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D300:D308",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "Summary worst case 150 HP: Fridman FT (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_150_prado_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E300:E308",
+      "values": [
+        3824.9718750000006,
+        2549.9812500000003,
+        1912.4859375000003,
+        1529.9887499999998,
+        1274.9906250000001,
+        1092.8491071428573,
+        956.2429687500002,
+        849.99375,
+        764.9943749999999
+      ],
+      "label": "Summary worst case 150 HP: Prado/Dremiere BPF (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_150_koyama_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F300:F308",
+      "values": [
+        2382.3529411764707,
+        1577.922077922078,
+        1179.611650485437,
+        941.860465116279,
+        783.8709677419355,
+        671.2707182320441,
+        586.9565217391305,
+        521.4592274678112,
+        469.11196911196913
+      ],
+      "label": "Summary worst case 150 HP: Koyama (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_150_nomura_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G300:G308",
+      "values": [
+        2150.6322957198445,
+        1433.7548638132298,
+        1075.3161478599222,
+        860.2529182879377,
+        716.8774319066148,
+        614.4663702056698,
+        537.658073929961,
+        477.9182879377431,
+        430.1264591439688
+      ],
+      "label": "Summary worst case 150 HP: column headed Nomura (=E216 Nomura 150)",
+      "unit": "kgf"
+    },
+    "summary_worst_150_hamuro_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H300:H308",
+      "values": [
+        4064.155448094868,
+        2709.4369653965787,
+        2032.077724047434,
+        1625.6621792379472,
+        1354.718482698289,
+        1161.187270884248,
+        1016.038862023717,
+        903.1456551321928,
+        812.8310896189736
+      ],
+      "label": "Summary worst case 150 HP: Hamuro (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_150_average_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I300:I308",
+      "values": [
+        2763.4225119982366,
+        1922.7190314263776,
+        1497.8982919785587,
+        1239.0528625284328,
+        1063.0915014693678,
+        934.454693292964,
+        835.3792852885617,
+        756.0033841075494,
+        690.4127785749823
+      ],
+      "label": "Summary worst case 150 HP: average of the five methods",
+      "unit": "kgf"
+    },
+    "summary_best_150_fridman_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D319:D327",
+      "values": [
+        2145,
+        2092.5,
+        2040,
+        1987.5,
+        1935,
+        1882.5,
+        1830,
+        1777.5,
+        1725
+      ],
+      "label": "Summary best case 150 HP: Fridman FT (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_150_prado_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E319:E327",
+      "values": [
+        5252.2171875,
+        3501.478125,
+        2626.10859375,
+        2100.886875,
+        1750.7390625,
+        1500.6334821428572,
+        1313.054296875,
+        1167.159375,
+        1050.4434375
+      ],
+      "label": "Summary best case 150 HP: Prado/Dremiere BPF (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_150_koyama_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F319:F327",
+      "values": [
+        1985.2941176470588,
+        1314.935064935065,
+        983.009708737864,
+        784.8837209302326,
+        653.2258064516129,
+        559.3922651933701,
+        489.13043478260875,
+        434.54935622317595,
+        390.92664092664097
+      ],
+      "label": "Summary best case 150 HP: Koyama (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_150_nomura_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G319:G327",
+      "values": [
+        4600.930695956455,
+        3067.2871306376364,
+        2300.4653479782273,
+        1840.3722783825815,
+        1533.643565318818,
+        1314.5516274161298,
+        1150.2326739891137,
+        1022.4290435458787,
+        920.1861391912907
+      ],
+      "label": "Summary best case 150 HP: column headed Nomura (=F272 Hamuro PV+T 150, mislinked)",
+      "unit": "kgf"
+    },
+    "summary_best_150_hamuro_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H319:H327",
+      "values": [
+        4600.930695956455,
+        3067.2871306376364,
+        2300.4653479782273,
+        1840.3722783825815,
+        1533.643565318818,
+        1314.5516274161298,
+        1150.2326739891137,
+        1022.4290435458787,
+        920.1861391912907
+      ],
+      "label": "Summary best case 150 HP: Hamuro (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_150_average_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I319:I327",
+      "values": [
+        3716.8745394119933,
+        2608.6974902420675,
+        2050.009799688864,
+        1710.8030305390791,
+        1481.2503999178498,
+        1314.3258004336974,
+        1186.5300159271671,
+        1084.8133636629868,
+        1001.3484713618445
+      ],
+      "label": "Summary best case 150 HP: average of the five methods",
+      "unit": "kgf"
+    },
+    "summary_worst_180_fridman_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D342:D350",
+      "values": [
+        1674.0000000000002,
+        1610.9999999999998,
+        1548,
+        1485,
+        1422,
+        1359.0000000000002,
+        1296,
+        1233,
+        1170
+      ],
+      "label": "Summary worst case 180 HP: Fridman FT (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_180_prado_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E342:E350",
+      "values": [
+        4589.96625,
+        3059.9775000000004,
+        2294.983125,
+        1835.9865000000002,
+        1529.9887500000002,
+        1311.4189285714285,
+        1147.4915625,
+        1019.9925000000002,
+        917.9932500000001
+      ],
+      "label": "Summary worst case 180 HP: Prado/Dremiere BPF (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_180_koyama_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F342:F350",
+      "values": [
+        1985.2941176470588,
+        1314.935064935065,
+        983.009708737864,
+        784.8837209302326,
+        653.2258064516129,
+        559.3922651933701,
+        489.13043478260875,
+        434.54935622317595,
+        390.92664092664097
+      ],
+      "label": "Summary worst case 180 HP: Koyama (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_180_nomura_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G342:G350",
+      "values": [
+        4876.986537713841,
+        3251.3243584758943,
+        2438.4932688569206,
+        1950.7946150855362,
+        1625.6621792379467,
+        1393.4247250610974,
+        1219.2466344284603,
+        1083.7747861586313,
+        975.3973075427681
+      ],
+      "label": "Summary worst case 180 HP: column headed Nomura (=G272 Hamuro PF 180, mislinked)",
+      "unit": "kgf"
+    },
+    "summary_worst_180_hamuro_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H342:H350",
+      "values": [
+        4876.986537713841,
+        3251.3243584758943,
+        2438.4932688569206,
+        1950.7946150855362,
+        1625.6621792379467,
+        1393.4247250610974,
+        1219.2466344284603,
+        1083.7747861586313,
+        975.3973075427681
+      ],
+      "label": "Summary worst case 180 HP: Hamuro (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_worst_180_average_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I342:I350",
+      "values": [
+        3600.6466886149487,
+        2497.712256377371,
+        1940.595874290341,
+        1601.491890220261,
+        1371.3077829855013,
+        1203.3321287773986,
+        1074.223053227906,
+        971.0182857080878,
+        885.9429012024355
+      ],
+      "label": "Summary worst case 180 HP: average of the five methods",
+      "unit": "kgf"
+    },
+    "summary_best_180_fridman_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D362:D370",
+      "values": [
+        2574,
+        2511,
+        2448,
+        2385,
+        2322,
+        2259,
+        2196,
+        2133,
+        2070
+      ],
+      "label": "Summary best case 180 HP: Fridman FT (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_180_prado_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E362:E370",
+      "values": [
+        6302.6606249999995,
+        4201.77375,
+        3151.3303124999998,
+        2521.06425,
+        2100.886875,
+        1800.7601785714285,
+        1575.6651562499999,
+        1400.59125,
+        1260.532125
+      ],
+      "label": "Summary best case 180 HP: Prado/Dremiere BPF (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_180_koyama_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F362:F370",
+      "values": [
+        2382.3529411764707,
+        1577.922077922078,
+        1179.611650485437,
+        941.860465116279,
+        783.8709677419355,
+        671.2707182320441,
+        586.9565217391305,
+        521.4592274678112,
+        469.11196911196913
+      ],
+      "label": "Summary best case 180 HP: Koyama (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_180_nomura_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G362:G370",
+      "values": [
+        5521.1168351477445,
+        3680.744556765163,
+        2760.5584175738722,
+        2208.4467340590977,
+        1840.3722783825813,
+        1577.4619528993555,
+        1380.2792087869361,
+        1226.9148522550543,
+        1104.2233670295489
+      ],
+      "label": "Summary best case 180 HP: column headed Nomura (=H272 Hamuro PV+T 180, mislinked)",
+      "unit": "kgf"
+    },
+    "summary_best_180_hamuro_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H362:H370",
+      "values": [
+        5521.1168351477445,
+        3680.744556765163,
+        2760.5584175738722,
+        2208.4467340590977,
+        1840.3722783825813,
+        1577.4619528993555,
+        1380.2792087869361,
+        1226.9148522550543,
+        1104.2233670295489
+      ],
+      "label": "Summary best case 180 HP: Hamuro (pasted static)",
+      "unit": "kgf",
+      "static": true
+    },
+    "summary_best_180_average_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I362:I370",
+      "values": [
+        4460.249447294392,
+        3130.4369882904807,
+        2460.0117596266364,
+        2052.963636646895,
+        1777.5004799014198,
+        1577.1909605204369,
+        1423.8360191126008,
+        1301.7760363955838,
+        1201.6181656342135
+      ],
+      "label": "Summary best case 180 HP: average of the five methods",
+      "unit": "kgf"
+    }
+  }
+}

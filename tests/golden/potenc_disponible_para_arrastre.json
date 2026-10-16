@@ -1,0 +1,212 @@
+{
+  "sheet": "Potenc disponible para arrastre",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "nominal_hp_150": {
+      "cell": "C24",
+      "value": 199.5,
+      "label": "Nominal HP = BHP × 1.33, 150 BHP vessel",
+      "unit": "hp"
+    },
+    "nominal_kw_150": {
+      "cell": "E24",
+      "value": 148.6275,
+      "label": "Nominal HP = BHP × 1.33, 150 BHP vessel",
+      "unit": "kW"
+    },
+    "bhp_150": {
+      "cell": "C25",
+      "value": 150,
+      "label": "Brake horsepower at propeller, 150 BHP vessel",
+      "unit": "hp"
+    },
+    "bhp_kw_150": {
+      "cell": "E25",
+      "value": 111.75,
+      "label": "Brake horsepower at propeller, 150 BHP vessel",
+      "unit": "kW"
+    },
+    "towing_hp_150": {
+      "cell": "C26",
+      "value": 49.5,
+      "label": "HP available for towing the net (33 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "towing_kw_150": {
+      "cell": "E26",
+      "value": 36.8775,
+      "label": "HP available for towing the net (33 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "propeller_loss_hp_150": {
+      "cell": "C27",
+      "value": 52.5,
+      "label": "Loss turning the propeller (35 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "propeller_loss_kw_150": {
+      "cell": "E27",
+      "value": 39.1125,
+      "label": "Loss turning the propeller (35 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "wave_loss_hp_150": {
+      "cell": "C28",
+      "value": 40.5,
+      "label": "Wave-making loss (27 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "wave_loss_kw_150": {
+      "cell": "E28",
+      "value": 30.1725,
+      "label": "Wave-making loss (27 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "friction_loss_hp_150": {
+      "cell": "C29",
+      "value": 27,
+      "label": "Hull friction loss (18 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "friction_loss_kw_150": {
+      "cell": "E29",
+      "value": 20.115,
+      "label": "Hull friction loss (18 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "wake_loss_hp_150": {
+      "cell": "C30",
+      "value": 25.500000000000004,
+      "label": "Wake and turbulence loss (17 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "wake_loss_kw_150": {
+      "cell": "E30",
+      "value": 18.997500000000002,
+      "label": "Wake and turbulence loss (17 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "air_loss_hp_150": {
+      "cell": "C31",
+      "value": 4.5,
+      "label": "Air resistance loss (3 %), 150 BHP vessel",
+      "unit": "hp"
+    },
+    "air_loss_kw_150": {
+      "cell": "E31",
+      "value": 3.3525,
+      "label": "Air resistance loss (3 %), 150 BHP vessel",
+      "unit": "kW"
+    },
+    "admiralty_speed_150": {
+      "cell": "H27",
+      "value": 23.051916146294214,
+      "label": "Admiralty-formula speed, 150 BHP vessel",
+      "unit": "kn"
+    },
+    "nominal_hp_180": {
+      "cell": "C36",
+      "value": 239.4,
+      "label": "Nominal HP = BHP × 1.33, 180 BHP vessel",
+      "unit": "hp"
+    },
+    "nominal_kw_180": {
+      "cell": "E36",
+      "value": 178.353,
+      "label": "Nominal HP = BHP × 1.33, 180 BHP vessel",
+      "unit": "kW"
+    },
+    "bhp_180": {
+      "cell": "C37",
+      "value": 180,
+      "label": "Brake horsepower at propeller, 180 BHP vessel",
+      "unit": "hp"
+    },
+    "bhp_kw_180": {
+      "cell": "E37",
+      "value": 134.1,
+      "label": "Brake horsepower at propeller, 180 BHP vessel",
+      "unit": "kW"
+    },
+    "towing_hp_180": {
+      "cell": "C38",
+      "value": 59.400000000000006,
+      "label": "HP available for towing the net (33 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "towing_kw_180": {
+      "cell": "E38",
+      "value": 44.25300000000001,
+      "label": "HP available for towing the net (33 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "propeller_loss_hp_180": {
+      "cell": "C39",
+      "value": 62.99999999999999,
+      "label": "Loss turning the propeller (35 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "propeller_loss_kw_180": {
+      "cell": "E39",
+      "value": 46.934999999999995,
+      "label": "Loss turning the propeller (35 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "wave_loss_hp_180": {
+      "cell": "C40",
+      "value": 48.6,
+      "label": "Wave-making loss (27 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "wave_loss_kw_180": {
+      "cell": "E40",
+      "value": 36.207,
+      "label": "Wave-making loss (27 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "friction_loss_hp_180": {
+      "cell": "C41",
+      "value": 32.4,
+      "label": "Hull friction loss (18 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "friction_loss_kw_180": {
+      "cell": "E41",
+      "value": 24.137999999999998,
+      "label": "Hull friction loss (18 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "wake_loss_hp_180": {
+      "cell": "C42",
+      "value": 30.6,
+      "label": "Wake and turbulence loss (17 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "wake_loss_kw_180": {
+      "cell": "E42",
+      "value": 22.797,
+      "label": "Wake and turbulence loss (17 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "air_loss_hp_180": {
+      "cell": "C43",
+      "value": 5.3999999999999995,
+      "label": "Air resistance loss (3 %), 180 BHP vessel",
+      "unit": "hp"
+    },
+    "air_loss_kw_180": {
+      "cell": "E43",
+      "value": 4.023,
+      "label": "Air resistance loss (3 %), 180 BHP vessel",
+      "unit": "kW"
+    },
+    "admiralty_speed_180": {
+      "cell": "H38",
+      "value": 23.523662906689772,
+      "label": "Admiralty-formula speed, 180 BHP vessel",
+      "unit": "kn"
+    }
+  },
+  "series": {}
+}

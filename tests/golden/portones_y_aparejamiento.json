@@ -1,0 +1,1091 @@
+{
+  "sheet": "Portones y aparejamiento",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "gallows_spacing_m": {
+      "cell": "D6",
+      "value": 2.5,
+      "label": "Distance between gallows (=vessel beam)",
+      "unit": "m"
+    },
+    "spread_per_metre_m": {
+      "cell": "D7",
+      "value": 2.65,
+      "label": "Door spread at 1 m of warp",
+      "unit": "m"
+    },
+    "working_depth_m": {
+      "cell": "D8",
+      "value": 40,
+      "label": "Working depth",
+      "unit": "m"
+    },
+    "warp_length_m": {
+      "cell": "D9",
+      "value": 200,
+      "label": "Warp paid out",
+      "unit": "m"
+    },
+    "door_spread_m": {
+      "cell": "E13",
+      "value": 32.499999999999986,
+      "label": "Door spread Ds = (D7 − D6)·Ls + D6",
+      "unit": "m"
+    },
+    "warp_half_divergence_deg": {
+      "cell": "D21",
+      "value": 4.301222304670363,
+      "label": "½φ = asin(0.5·(Ds − gallows)/Ls)",
+      "unit": "°"
+    },
+    "spread_correction_factor": {
+      "cell": "D28",
+      "value": 1.15,
+      "label": "Correction factor for door spread",
+      "unit": ""
+    },
+    "door_spread_corrected_m": {
+      "cell": "F30",
+      "value": 34.499999999999986,
+      "label": "Corrected door spread = 1.15·2·Ls·sin(½φ)",
+      "unit": "m"
+    },
+    "vertical_opening_std_m": {
+      "cell": "F37",
+      "value": 1.9840000000000002,
+      "label": "AV standard (=Mecánica!D255)",
+      "unit": "m"
+    },
+    "headrope_sag_m": {
+      "cell": "F38",
+      "value": 6.198768,
+      "label": "Headrope sag fL",
+      "unit": "m"
+    },
+    "bridle_angle_deg": {
+      "cell": "F39",
+      "value": 4.8,
+      "label": "Angle between upper and lower bridle α",
+      "unit": "°"
+    },
+    "upper_bridle_std_m": {
+      "cell": "D44",
+      "value": 18,
+      "label": "Upper bridle Vs = ROUND(E52)",
+      "unit": "m"
+    },
+    "upper_bridle_mod_m": {
+      "cell": "E44",
+      "value": 18,
+      "label": "Upper bridle Vs, modified",
+      "unit": "m"
+    },
+    "lower_bridle_std_m": {
+      "cell": "D45",
+      "value": 17,
+      "label": "Lower bridle Vi = ROUNDUP(Vs − Cr)",
+      "unit": "m"
+    },
+    "lower_bridle_mod_m": {
+      "cell": "E45",
+      "value": 17,
+      "label": "Lower bridle Vi, modified",
+      "unit": "m"
+    },
+    "adjust_chain_std_m": {
+      "cell": "D46",
+      "value": 1.71,
+      "label": "Adjustment chain Cr = 0.095·Vs",
+      "unit": "m"
+    },
+    "adjust_chain_mod_m": {
+      "cell": "E46",
+      "value": 1.71,
+      "label": "Adjustment chain, modified",
+      "unit": "m"
+    },
+    "bridle_length_no_triangle_std_m": {
+      "cell": "E52",
+      "value": 18,
+      "label": "Bridle length = ROUND(AV/sin α − fL)",
+      "unit": "m"
+    },
+    "bridle_length_no_triangle_mod_m": {
+      "cell": "F52",
+      "value": 18,
+      "label": "Bridle length, modified",
+      "unit": "m"
+    },
+    "dan_leno_height_m": {
+      "cell": "F56",
+      "value": 0.6,
+      "label": "Dan leno / triangle height",
+      "unit": "m"
+    },
+    "bridle_length_triangle_std_m": {
+      "cell": "E60",
+      "value": 17,
+      "label": "Bridle length with triangle = ROUND((AV − h)/sin α)",
+      "unit": "m"
+    },
+    "bridle_length_triangle_mod_m": {
+      "cell": "F60",
+      "value": 17,
+      "label": "Bridle length with triangle, modified",
+      "unit": "m"
+    },
+    "dremiere_ratio": {
+      "cell": "B68",
+      "value": 6,
+      "label": "Dremiere ratio warp/sweep",
+      "unit": ""
+    },
+    "sweeps_dremiere_m": {
+      "cell": "C71",
+      "value": 33.333333333333336,
+      "label": "Sweep length Dremiere = Ls / ratio",
+      "unit": "m"
+    },
+    "sweeps_martini_delta_deg": {
+      "cell": "H65",
+      "value": 20,
+      "label": "δ for Martini sweeps",
+      "unit": "°"
+    },
+    "sweeps_martini_m": {
+      "cell": "G71",
+      "value": 16.12573581078469,
+      "label": "Sweep length Martini (Ds/2 − DPA/2 / DEGREES(SIN(δ)))",
+      "unit": "m"
+    },
+    "sweeps_dpa_m": {
+      "cell": "E78",
+      "value": 13,
+      "label": "DPA used for sweeps (=Mecánica!L211)",
+      "unit": "m"
+    },
+    "sweeps_bridle_m": {
+      "cell": "E79",
+      "value": 18,
+      "label": "Bridle used for sweeps",
+      "unit": "m"
+    },
+    "sweeps_net_length_m": {
+      "cell": "E80",
+      "value": 32.68,
+      "label": "Net length used for sweeps (=Largototal)",
+      "unit": "m"
+    },
+    "sweeps_bridle_triangle_m": {
+      "cell": "E81",
+      "value": 17,
+      "label": "Bridle with triangle used for sweeps",
+      "unit": "m"
+    },
+    "sweeps_no_triangle_m": {
+      "cell": "C83",
+      "value": 34.12199999999996,
+      "label": "LPST = ((Ds·LR/DPA) − (Vs + LR))·1.1",
+      "unit": "m"
+    },
+    "sweeps_triangle_m": {
+      "cell": "C87",
+      "value": 35.22199999999996,
+      "label": "LPCT with triangle",
+      "unit": "m"
+    },
+    "door_length_for_crowfoot_m": {
+      "cell": "D95",
+      "value": 1.9,
+      "label": "Door length (for crowfoot)",
+      "unit": "m"
+    },
+    "crowfoot_m": {
+      "cell": "E97",
+      "value": 2.3,
+      "label": "Crowfoot PG = ROUND(1.2·door length, 1)",
+      "unit": "m"
+    },
+    "crowfoot_upper_m": {
+      "cell": "G98",
+      "value": 2.25,
+      "label": "Upper crowfoot = PG − 0.05",
+      "unit": "m"
+    },
+    "crowfoot_extension_m": {
+      "cell": "E99",
+      "value": 0,
+      "label": "Crowfoot extension",
+      "unit": "m"
+    },
+    "bridle_attack_angle_deg": {
+      "cell": "D110",
+      "value": 10.320573277458193,
+      "label": "δ = asin(((Ds − DPA)/2)/(PG + LPST + bridle))",
+      "unit": "°"
+    },
+    "door_name": {
+      "cell": "B117",
+      "value": "Porton plano de madera con bastidor de hierro FAO para A3,B3,C3",
+      "label": "Selected door",
+      "unit": ""
+    },
+    "door_length_m": {
+      "cell": "D120",
+      "value": 1.9,
+      "label": "Door length",
+      "unit": "m"
+    },
+    "door_height_m": {
+      "cell": "D121",
+      "value": 0.95,
+      "label": "Door height",
+      "unit": "m"
+    },
+    "door_area_m2": {
+      "cell": "D122",
+      "value": 1.805,
+      "label": "Door projected area",
+      "unit": "m²"
+    },
+    "door_aspect_ratio": {
+      "cell": "D123",
+      "value": 0.5,
+      "label": "Door aspect ratio",
+      "unit": ""
+    },
+    "door_area_ratio": {
+      "cell": "D124",
+      "value": 1,
+      "label": "Door area ratio",
+      "unit": ""
+    },
+    "door_weight_air_kg": {
+      "cell": "D125",
+      "value": 135,
+      "label": "Door weight in air",
+      "unit": "kg"
+    },
+    "door_weight_coef": {
+      "cell": "D126",
+      "value": 0.597,
+      "label": "Door weight multiplier (in water)",
+      "unit": ""
+    },
+    "door_weight_water_kg": {
+      "cell": "D127",
+      "value": 80.595,
+      "label": "Door weight in water",
+      "unit": "kg"
+    },
+    "door_angle_selected_deg": {
+      "cell": "C134",
+      "value": 32,
+      "label": "Selected door attack angle",
+      "unit": "°"
+    },
+    "door_cl_selected": {
+      "cell": "D134",
+      "value": 0.93,
+      "label": "CL at selected angle",
+      "unit": ""
+    },
+    "door_cd_selected": {
+      "cell": "E134",
+      "value": 0.71,
+      "label": "CD at selected angle",
+      "unit": ""
+    },
+    "door_cl_cd_selected": {
+      "cell": "F134",
+      "value": 1.3098591549295775,
+      "label": "CL/CD at selected angle",
+      "unit": ""
+    },
+    "rob_cd": {
+      "cell": "D185",
+      "value": 0.71,
+      "label": "Door CD (ROB block)",
+      "unit": ""
+    },
+    "rob_cl": {
+      "cell": "D186",
+      "value": 0.93,
+      "label": "Door CL (ROB block)",
+      "unit": ""
+    },
+    "rob_area_m2": {
+      "cell": "D184",
+      "value": 1.805,
+      "label": "Door area (ROB block)",
+      "unit": "m²"
+    },
+    "required_door_area_avg_150_m2": {
+      "cell": "F212",
+      "value": 3.312963467542878,
+      "label": "Average required door area (2.0–4.0 kn), 150 HP",
+      "unit": "m²"
+    },
+    "required_door_area_each_150_m2": {
+      "cell": "F215",
+      "value": 1.656481733771439,
+      "label": "Required area per door, 150 HP",
+      "unit": "m²"
+    },
+    "required_door_area_avg_180_m2": {
+      "cell": "F225",
+      "value": 3.975556161051453,
+      "label": "Average required door area, 180 HP",
+      "unit": "m²"
+    },
+    "required_door_area_each_180_m2": {
+      "cell": "F229",
+      "value": 1.9877780805257266,
+      "label": "Required area per door, 180 HP",
+      "unit": "m²"
+    },
+    "required_door_area_overall_m2": {
+      "cell": "F220",
+      "value": 1.8221299071485828,
+      "label": "Overall average required area per door",
+      "unit": "m²"
+    },
+    "force_angle_deg": {
+      "cell": "E240",
+      "value": 32,
+      "label": "Optimum attack angle (force block)",
+      "unit": "°"
+    },
+    "centre_of_pressure_m": {
+      "cell": "C266",
+      "value": 0.2133297857976977,
+      "label": "Centre of pressure d = ¾·cos φ/(4 + π sin φ)·L",
+      "unit": "m"
+    },
+    "ha_m": {
+      "cell": "C269",
+      "value": 0.38,
+      "label": "hA = 0.8·L/4",
+      "unit": "m"
+    },
+    "hb_m": {
+      "cell": "C270",
+      "value": 0.475,
+      "label": "hB = L/4",
+      "unit": "m"
+    },
+    "sweep_lever_m": {
+      "cell": "E277",
+      "value": 3,
+      "label": "d_patente lever for moment balance",
+      "unit": "m"
+    }
+  },
+  "series": {
+    "door_polar_angle_deg": {
+      "x": "angle_deg",
+      "x_values": [
+        25,
+        30,
+        32,
+        35,
+        40,
+        45
+      ],
+      "cells": "C132:C137",
+      "values": [
+        25,
+        30,
+        32,
+        35,
+        40,
+        45
+      ],
+      "label": "Door polar: attack angle",
+      "unit": "°"
+    },
+    "door_polar_cl": {
+      "x": "angle_deg",
+      "x_values": [
+        25,
+        30,
+        32,
+        35,
+        40,
+        45
+      ],
+      "cells": "D132:D137",
+      "values": [
+        0.8,
+        0.92,
+        0.93,
+        0.86,
+        0.78,
+        0.76
+      ],
+      "label": "Door polar: CL",
+      "unit": ""
+    },
+    "door_polar_cd": {
+      "x": "angle_deg",
+      "x_values": [
+        25,
+        30,
+        32,
+        35,
+        40,
+        45
+      ],
+      "cells": "E132:E137",
+      "values": [
+        0.53,
+        0.67,
+        0.71,
+        0.74,
+        0.79,
+        0.89
+      ],
+      "label": "Door polar: CD",
+      "unit": ""
+    },
+    "door_polar_cl_cd": {
+      "x": "angle_deg",
+      "x_values": [
+        25,
+        30,
+        32,
+        35,
+        40,
+        45
+      ],
+      "cells": "F132:F137",
+      "values": [
+        1.509433962264151,
+        1.373134328358209,
+        1.3098591549295775,
+        1.162162162162162,
+        0.9873417721518988,
+        0.8539325842696629
+      ],
+      "label": "Door polar: CL/CD",
+      "unit": ""
+    },
+    "rn_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "B146:B154",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN standard ×1000",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C146:C154",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN modified ×1000",
+      "unit": "kgf"
+    },
+    "fridman_ft_fixed_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D146:D154",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "Fridman FT fixed pitch, 150 HP",
+      "unit": "kgf"
+    },
+    "rob_15pct_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E146:E154",
+      "values": [
+        209.25,
+        201.375,
+        193.5,
+        185.625,
+        177.75,
+        169.875,
+        162,
+        154.125,
+        146.25
+      ],
+      "label": "ROB = 15 % of FT, 150 HP",
+      "unit": "kgf"
+    },
+    "rob_20pct_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F146:F154",
+      "values": [
+        279,
+        268.5,
+        258,
+        247.5,
+        237,
+        226.5,
+        216,
+        205.5,
+        195
+      ],
+      "label": "ROB = 20 % of FT, 150 HP",
+      "unit": "kgf"
+    },
+    "rob_25pct_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G146:G154",
+      "values": [
+        348.75,
+        335.625,
+        322.5,
+        309.375,
+        296.25,
+        283.125,
+        270,
+        256.875,
+        243.75
+      ],
+      "label": "ROB = 25 % of FT, 150 HP",
+      "unit": "kgf"
+    },
+    "rob_30pct_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H146:H154",
+      "values": [
+        418.5,
+        402.75,
+        387,
+        371.25,
+        355.5,
+        339.75,
+        324,
+        308.25,
+        292.5
+      ],
+      "label": "ROB = 30 % of FT, 150 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_fixed_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D160:D168",
+      "values": [
+        1674.0000000000002,
+        1610.9999999999998,
+        1548,
+        1485,
+        1422,
+        1359.0000000000002,
+        1296,
+        1233,
+        1170
+      ],
+      "label": "Fridman FT fixed pitch, 180 HP",
+      "unit": "kgf"
+    },
+    "rob_15pct_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E160:E168",
+      "values": [
+        251.10000000000002,
+        241.64999999999995,
+        232.2,
+        222.75,
+        213.29999999999998,
+        203.85000000000002,
+        194.4,
+        184.95,
+        175.5
+      ],
+      "label": "ROB = 15 % of FT, 180 HP",
+      "unit": "kgf"
+    },
+    "rob_20pct_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F160:F168",
+      "values": [
+        334.80000000000007,
+        322.2,
+        309.6,
+        297,
+        284.40000000000003,
+        271.80000000000007,
+        259.2,
+        246.60000000000002,
+        234
+      ],
+      "label": "ROB = 20 % of FT, 180 HP",
+      "unit": "kgf"
+    },
+    "rob_25pct_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G160:G168",
+      "values": [
+        418.50000000000006,
+        402.74999999999994,
+        387,
+        371.25,
+        355.5,
+        339.75000000000006,
+        324,
+        308.25,
+        292.5
+      ],
+      "label": "ROB = 25 % of FT, 180 HP",
+      "unit": "kgf"
+    },
+    "rob_30pct_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H160:H168",
+      "values": [
+        502.20000000000005,
+        483.2999999999999,
+        464.4,
+        445.5,
+        426.59999999999997,
+        407.70000000000005,
+        388.8,
+        369.9,
+        351
+      ],
+      "label": "ROB = 30 % of FT, 180 HP",
+      "unit": "kgf"
+    },
+    "speed_ms": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C190:C198",
+      "values": [
+        0.5144,
+        0.7716,
+        1.0288,
+        1.286,
+        1.5432000000000001,
+        1.8004,
+        2.0576,
+        2.3148,
+        2.572
+      ],
+      "label": "Speed in m/s",
+      "unit": "m/s"
+    },
+    "rob_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D190:D198",
+      "values": [
+        17.698580209020992,
+        39.821805470297235,
+        70.79432083608397,
+        110.61612630638123,
+        159.287221881189,
+        216.8076075605072,
+        283.1772833443359,
+        358.39624923267513,
+        442.46450522552493
+      ],
+      "label": "ROB = ½ρ/g·CD·S·v² (both doors)",
+      "unit": "kgf"
+    },
+    "door_spreading_force_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E190:E198",
+      "values": [
+        23.182647316041585,
+        52.16095646109356,
+        92.73058926416634,
+        144.89154572525993,
+        208.64382584437433,
+        283.9874296215094,
+        370.92235705666536,
+        469.44860814984213,
+        579.5661829010397
+      ],
+      "label": "Fy = ½ρ/g·CL·S·v²",
+      "unit": "kgf"
+    },
+    "rob_20pct_input_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D210:D218",
+      "values": [
+        279,
+        268.5,
+        258,
+        247.5,
+        237,
+        226.5,
+        216,
+        205.5,
+        195
+      ],
+      "label": "ROB 20 % input, 150 HP",
+      "unit": "kgf"
+    },
+    "required_door_area_150_m2": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E210:E218",
+      "values": [
+        28.453977327702077,
+        12.170279430486671,
+        6.578070027371986,
+        4.038629040060939,
+        2.685620321252644,
+        1.8856925944625909,
+        1.3768053545662295,
+        1.03496479328161,
+        0.7954875381938212
+      ],
+      "label": "Required area S = 2·ROB/(ρ/g·CD·v²), 150 HP",
+      "unit": "m²"
+    },
+    "rob_20pct_input_180_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D223:D231",
+      "values": [
+        334.80000000000007,
+        322.2,
+        309.6,
+        297,
+        284.40000000000003,
+        271.80000000000007,
+        259.2,
+        246.60000000000002,
+        234
+      ],
+      "label": "ROB 20 % input, 180 HP",
+      "unit": "kgf"
+    },
+    "required_door_area_180_m2": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E223:E231",
+      "values": [
+        34.1447727932425,
+        14.604335316584004,
+        7.893684032846383,
+        4.846354848073126,
+        3.2227443855031734,
+        2.2628311133551096,
+        1.6521664254794755,
+        1.2419577519379321,
+        0.9545850458325855
+      ],
+      "label": "Required area S, 180 HP",
+      "unit": "m²"
+    },
+    "door_force_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D252:D260",
+      "values": [
+        14.383903690795911,
+        32.3637833042908,
+        57.535614763183645,
+        89.89939806747446,
+        129.45513321716322,
+        176.20282021224992,
+        230.14245905273458,
+        291.27404973861724,
+        359.59759226989786
+      ],
+      "label": "Pφ = ½·ρ_s·(ρ/g)·v²·S·2 sin(φ)/(1+sin²φ) — errata door_force_mixed_angles",
+      "unit": "kgf"
+    },
+    "door_moment_kgf_cm": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G281:G289",
+      "values": [
+        306.85150932922056,
+        690.4158959907462,
+        1227.4060373168822,
+        1917.8219333076288,
+        2761.6635839629853,
+        3758.930989282952,
+        4909.624149267529,
+        6213.743063916717,
+        7671.287733230515
+      ],
+      "label": "Moment Pφ · d·100",
+      "unit": "kgf·cm"
+    },
+    "sweep_moment_kgf_cm": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H281:H289",
+      "values": [
+        633.5448398646744,
+        947.294341308215,
+        1372.351508243219,
+        1899.4922665158374,
+        2520.48434462803,
+        3227.9574608772,
+        4015.2933791786054,
+        4876.5323739570795,
+        5806.293316243847
+      ],
+      "label": "½·RN·d_patente",
+      "unit": "kgf·m"
+    }
+  }
+}

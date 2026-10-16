@@ -1,0 +1,735 @@
+{
+  "sheet": "Cables de Remolque",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "footrope_m": {
+      "cell": "F6",
+      "value": 33.3,
+      "label": "Footrope",
+      "unit": "m"
+    },
+    "door_spread_m": {
+      "cell": "F7",
+      "value": 32.499999999999986,
+      "label": "Door spread Ds",
+      "unit": "m"
+    },
+    "sweeps_plus_bridle_m": {
+      "cell": "F8",
+      "value": 43,
+      "label": "Sweeps + upper bridle",
+      "unit": "m"
+    },
+    "warp_length_m": {
+      "cell": "F9",
+      "value": 200,
+      "label": "Warp paid out",
+      "unit": "m"
+    },
+    "net_length_no_bag_m": {
+      "cell": "F10",
+      "value": 32.68,
+      "label": "Net length without codend",
+      "unit": "m"
+    },
+    "gallows_spacing_m": {
+      "cell": "F11",
+      "value": 2.5,
+      "label": "Distance between gallows",
+      "unit": "m"
+    },
+    "dpa_a_m": {
+      "cell": "F17",
+      "value": 14.184141546526861,
+      "label": "DPA (A) = Ds·m / (sweeps+bridle + m)",
+      "unit": "m"
+    },
+    "dpa_b_m": {
+      "cell": "F19",
+      "value": 14.034090909090901,
+      "label": "DPA (B) = Ds·L / (L + sweeps+bridle)",
+      "unit": "m"
+    },
+    "warp_divergence_deg": {
+      "cell": "E25",
+      "value": 4.301222304670363,
+      "label": "δ2 = asin(0.5·(Ds − gallows)/Ls)",
+      "unit": "°"
+    },
+    "bridle_divergence_deg": {
+      "cell": "E29",
+      "value": 12.29675782953763,
+      "label": "δ3 = asin(0.5·(Ds − DPA)/(sweeps+bridle))",
+      "unit": "°"
+    },
+    "warp_declination_deg": {
+      "cell": "E33",
+      "value": 12.063756135484818,
+      "label": "δ1 = asin((depth + vessel depth)/Ls)",
+      "unit": "°"
+    },
+    "ehp_150_hp": {
+      "cell": "E70",
+      "value": 13.5,
+      "label": "EHP 150 HP (Koyama)",
+      "unit": "hp"
+    },
+    "ehp_180_hp": {
+      "cell": "E71",
+      "value": 16.2,
+      "label": "EHP 180 HP (Koyama)",
+      "unit": "hp"
+    },
+    "warp_diameter_ehp_150_mm": {
+      "cell": "F73",
+      "value": 18.0459,
+      "label": "Dw = 18 + 0.0034·EHP, 150 HP",
+      "unit": "mm"
+    },
+    "warp_diameter_ehp_180_mm": {
+      "cell": "F74",
+      "value": 18.05508,
+      "label": "Dw = 18 + 0.0034·EHP, 180 HP",
+      "unit": "mm"
+    },
+    "warp_diameter_aguila_150_mm": {
+      "cell": "E80",
+      "value": 11.246431868113742,
+      "label": "Dw = 5.6822·ln(NHP) − 17.225, 150 HP",
+      "unit": "mm"
+    },
+    "warp_diameter_aguila_180_mm": {
+      "cell": "E81",
+      "value": 12.282419418128352,
+      "label": "Dw = 5.6822·ln(NHP) − 17.225, 180 HP",
+      "unit": "mm"
+    },
+    "warp_attack_angle_deg": {
+      "cell": "E103",
+      "value": 4.301222304670363,
+      "label": "Warp attack angle (=δ2)",
+      "unit": "°"
+    },
+    "effective_depth_m": {
+      "cell": "E105",
+      "value": 40,
+      "label": "Effective depth",
+      "unit": "m"
+    },
+    "warp_cd": {
+      "cell": "E106",
+      "value": 0.02,
+      "label": "Warp CD (nearest α in Nomura–Yamazaki table)",
+      "unit": ""
+    },
+    "warp_diameter_mm": {
+      "cell": "E110",
+      "value": 12.282419418128352,
+      "label": "Warp diameter used (=E81)",
+      "unit": "mm"
+    },
+    "warp_diameter_m": {
+      "cell": "E111",
+      "value": 0.012282419418128352,
+      "label": "Warp diameter",
+      "unit": "m"
+    },
+    "warp_length_used_m": {
+      "cell": "E112",
+      "value": 200,
+      "label": "Warp length used",
+      "unit": "m"
+    },
+    "kinematic_viscosity_avg": {
+      "cell": "F161",
+      "value": 1.44e-06,
+      "label": "ν average",
+      "unit": "m²/s"
+    },
+    "warp_weight_air_kg_m": {
+      "cell": "E248",
+      "value": 0.5921169700440545,
+      "label": "Warp unit weight in air (avg 0.00368/0.00417·D²)",
+      "unit": "kg/m"
+    },
+    "warp_weight_water_a_kg_m": {
+      "cell": "F250",
+      "value": 0.4601163716265901,
+      "label": "Warp unit weight in water 0.00305·D²",
+      "unit": "kg/m"
+    },
+    "warp_weight_water_b_kg_m": {
+      "cell": "F252",
+      "value": 0.5151417639383274,
+      "label": "Warp unit weight in water 0.87·W_air",
+      "unit": "kg/m"
+    },
+    "effective_depth_used_m": {
+      "cell": "F254",
+      "value": 40,
+      "label": "Effective depth",
+      "unit": "m"
+    },
+    "warp_length_m_sel": {
+      "cell": "F255",
+      "value": 200,
+      "label": "Warp paid out (selection block)",
+      "unit": "m"
+    },
+    "warp_total_weight_air_kg": {
+      "cell": "F256",
+      "value": 118.4233940088109,
+      "label": "Total warp weight in air",
+      "unit": "kg"
+    },
+    "warp_total_weight_water_kg": {
+      "cell": "F257",
+      "value": 103.02835278766548,
+      "label": "Total warp weight in water",
+      "unit": "kg"
+    },
+    "warp_min_diameter_mm": {
+      "cell": "E264",
+      "value": 12.282419418128352,
+      "label": "Minimum warp diameter",
+      "unit": "mm"
+    },
+    "warp_min_weight_air_kg_m": {
+      "cell": "E265",
+      "value": 0.5921169700440545,
+      "label": "Minimum warp weight in air",
+      "unit": "kg/m"
+    },
+    "warp_min_weight_water_kg_m": {
+      "cell": "E266",
+      "value": 0.48762906778245874,
+      "label": "Minimum warp weight in water",
+      "unit": "kg/m"
+    },
+    "warp_working_load_kgf": {
+      "cell": "E267",
+      "value": 2200.483713451298,
+      "label": "Working load = total drag at 3.5 kn (H123)",
+      "unit": "kgf"
+    },
+    "warp_safety_factor": {
+      "cell": "D271",
+      "value": 4,
+      "label": "Safety factor",
+      "unit": ""
+    },
+    "warp_min_breaking_load_kgf": {
+      "cell": "E272",
+      "value": 8801.934853805193,
+      "label": "Minimum breaking load = 4·working load",
+      "unit": "kgf"
+    }
+  },
+  "series": {
+    "speed_ms": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C118:C126",
+      "values": [
+        0.5144,
+        0.7716,
+        1.0288,
+        1.286,
+        1.5432000000000001,
+        1.8004,
+        2.0576,
+        2.3148,
+        2.572
+      ],
+      "label": "Speed in m/s",
+      "unit": "m/s"
+    },
+    "rn_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D118:D126",
+      "values": [
+        422.36322657644956,
+        631.5295608721434,
+        914.9010054954795,
+        1266.3281776772249,
+        1680.3228964186867,
+        2151.9716405848,
+        2676.862252785737,
+        3251.021582638053,
+        3870.862210829231
+      ],
+      "label": "RN standard ×1000",
+      "unit": "kgf"
+    },
+    "rn_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E118:E126",
+      "values": [
+        413.4491498919274,
+        618.2009787893992,
+        895.5918014536428,
+        1239.6020193061838,
+        1644.8592807179402,
+        2106.5537655899047,
+        2620.366436166826,
+        3182.4079963522054,
+        3789.166740174176
+      ],
+      "label": "RN modified ×1000",
+      "unit": "kgf"
+    },
+    "float_drag_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F118:F126",
+      "values": [
+        2.446988059294398,
+        5.505723133412395,
+        9.787952237177592,
+        15.29367537058999,
+        23.42860907835063,
+        31.88894013442168,
+        41.650860583734435,
+        52.714370426288895,
+        65.07946966208507
+      ],
+      "label": "Float drag RB",
+      "unit": "kgf"
+    },
+    "warp_drag_2_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G118:G126",
+      "values": [
+        1.3569904271083084,
+        3.053228460993694,
+        5.427961708433234,
+        8.48119016942693,
+        12.21291384397478,
+        16.62313273207678,
+        21.711846833732935,
+        27.479056148943247,
+        33.92476067770772
+      ],
+      "label": "RW two warps = ½·CD·ρ/g·D·L·v²·2",
+      "unit": "kgf"
+    },
+    "total_drag_std_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H118:H126",
+      "values": [
+        426.16720506285225,
+        640.0885124665494,
+        930.1169194410903,
+        1290.1030432172417,
+        1715.9644193410122,
+        2200.483713451298,
+        2740.2249602032043,
+        3331.215009213285,
+        3969.866441169024
+      ],
+      "label": "Total = RW + RB + RN std — errata warp_total_omits_doors",
+      "unit": "kgf"
+    },
+    "total_drag_mod_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "I118:I126",
+      "values": [
+        417.2531283783301,
+        626.7599303838052,
+        910.8077153992537,
+        1263.3768848462007,
+        1680.5008036402655,
+        2155.065838456403,
+        2683.7291435842935,
+        3262.6014229274374,
+        3888.1709705139688
+      ],
+      "label": "Total = RW + RB + RN mod",
+      "unit": "kgf"
+    },
+    "warp_reynolds": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D167:D175",
+      "values": [
+        4387.5531588091835,
+        6581.329738213775,
+        8775.106317618367,
+        10968.88289702296,
+        13162.65947642755,
+        15356.436055832142,
+        17550.212635236734,
+        19743.989214641326,
+        21937.76579404592
+      ],
+      "label": "Re = D·v/ν",
+      "unit": ""
+    },
+    "warp_cd_cylinder": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E167:E175",
+      "values": [
+        1.1,
+        1.1,
+        1.1,
+        1.1,
+        1.2,
+        1.2,
+        1.2,
+        1.2,
+        1.2
+      ],
+      "label": "Cylinder CD (1.1 / 1.2)",
+      "unit": ""
+    },
+    "warp_drag_cylinder_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F167:F175",
+      "values": [
+        37.31723674547849,
+        83.96378267732659,
+        149.26894698191396,
+        233.2327296592406,
+        366.3874153192434,
+        498.6939819623034,
+        651.3554050119881,
+        824.3716844682974,
+        1017.7428203312315
+      ],
+      "label": "RW cylinder = ½·CD·ρ/g·D·L·v²",
+      "unit": "kgf"
+    },
+    "warp_drag_cylinder_2_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G167:G175",
+      "values": [
+        74.63447349095698,
+        167.92756535465318,
+        298.5378939638279,
+        466.4654593184812,
+        732.7748306384868,
+        997.3879639246068,
+        1302.7108100239761,
+        1648.7433689365948,
+        2035.485640662463
+      ],
+      "label": "RW cylinder, two warps",
+      "unit": "kgf"
+    },
+    "fridman_ft_fixed_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "C191:C199",
+      "values": [
+        1395,
+        1342.5,
+        1290,
+        1237.5,
+        1185,
+        1132.5,
+        1080,
+        1027.5,
+        975
+      ],
+      "label": "FT fixed pitch 150 HP",
+      "unit": "kgf"
+    },
+    "fridman_ft_variable_nozzle_150_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D191:D199",
+      "values": [
+        2145,
+        2092.5,
+        2040,
+        1987.5,
+        1935,
+        1882.5,
+        1830,
+        1777.5,
+        1725
+      ],
+      "label": "FT variable+nozzle 150 HP",
+      "unit": "kgf"
+    },
+    "warp_drag_5pct_fixed_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "E191:E199",
+      "values": [
+        69.75,
+        67.125,
+        64.5,
+        61.875,
+        59.25,
+        56.625,
+        54,
+        51.375,
+        48.75
+      ],
+      "label": "RW = 5 % FT (PF)",
+      "unit": "kgf"
+    },
+    "warp_drag_5pct_variable_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "F191:F199",
+      "values": [
+        107.25,
+        104.625,
+        102,
+        99.375,
+        96.75,
+        94.125,
+        91.5,
+        88.875,
+        86.25
+      ],
+      "label": "RW = 5 % FT (PV+T)",
+      "unit": "kgf"
+    },
+    "warp_drag_10pct_fixed_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "G191:G199",
+      "values": [
+        139.5,
+        134.25,
+        129,
+        123.75,
+        118.5,
+        113.25,
+        108,
+        102.75,
+        97.5
+      ],
+      "label": "RW = 10 % FT (PF)",
+      "unit": "kgf"
+    },
+    "warp_drag_10pct_variable_kgf": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "H191:H199",
+      "values": [
+        214.5,
+        209.25,
+        204,
+        198.75,
+        193.5,
+        188.25,
+        183,
+        177.75,
+        172.5
+      ],
+      "label": "RW = 10 % FT (PV+T)",
+      "unit": "kgf"
+    },
+    "warp_cd_maclennan": {
+      "x": "speed_kn",
+      "x_values": [
+        1.0,
+        1.5,
+        2.0,
+        2.5,
+        3.0,
+        3.5,
+        4.0,
+        4.5,
+        5.0
+      ],
+      "cells": "D227:D235",
+      "values": [
+        2.032666743044093,
+        1.9940001145661392,
+        1.9553334860881857,
+        1.916666857610232,
+        1.8780002291322784,
+        1.8393336006543248,
+        1.8006669721763713,
+        1.7620003436984177,
+        1.7233337152204642
+      ],
+      "label": "MacLennan CD = 2.11 − 12.24·v·Dw",
+      "unit": ""
+    }
+  }
+}

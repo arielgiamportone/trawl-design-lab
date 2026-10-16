@@ -1,0 +1,32 @@
+{
+  "sheet": "Especie Blanco",
+  "generated_by": "tools/extract/golden.py",
+  "source": "legacy/Calculos_Red_FAO_A3.xlsx",
+  "values": {
+    "species_common_name": {
+      "cell": "C3",
+      "value": "Langostilla",
+      "label": "Target species, common name",
+      "unit": ""
+    },
+    "species_scientific_name": {
+      "cell": "H3",
+      "value": "Munida gragaria/ Munida subrugosa",
+      "label": "Target species, scientific name",
+      "unit": ""
+    },
+    "species_depth_m": {
+      "cell": "E5",
+      "value": 40,
+      "label": "Working depth where the species is found",
+      "unit": "m"
+    },
+    "species_bottom_type": {
+      "cell": "E6",
+      "value": "Intermedio",
+      "label": "Bottom type",
+      "unit": ""
+    }
+  },
+  "series": {}
+}
