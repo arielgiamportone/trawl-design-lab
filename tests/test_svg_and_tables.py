@@ -39,4 +39,4 @@ def test_labels_moved_from_cli() -> None:
     assert label("headrope_m") == ("Lima", "m")
     assert label("rn_std_3_5kn_kgf")[0] == "RN estándar a 3.5kn"
     assert fmt(None) == "—" and fmt(12.0) == "12"
-    assert "| Lima | 28.7 | m |" in summary_markdown({"headrope_m": 28.698})
+    assert "| Lima | 28.698 | m |" in summary_markdown({"headrope_m": 28.698})
