@@ -1,0 +1,54 @@
+{
+  "Especie Blanco": {
+    "cells": 9,
+    "formulas": 0
+  },
+  "Tipo de buques": {
+    "cells": 12,
+    "formulas": 0
+  },
+  "Potenc disponible para arrastre": {
+    "cells": 77,
+    "formulas": 32
+  },
+  "Potencia Disponible Arrastre OK": {
+    "cells": 1540,
+    "formulas": 899
+  },
+  "Paños de red y cortes": {
+    "cells": 1127,
+    "formulas": 395
+  },
+  "Cables Y Cabulleria": {
+    "cells": 35,
+    "formulas": 17
+  },
+  "Mecánica de la Red": {
+    "cells": 1267,
+    "formulas": 877
+  },
+  "Dimensiones de la Red": {
+    "cells": 165,
+    "formulas": 74
+  },
+  "Resistencia de la RED": {
+    "cells": 1487,
+    "formulas": 1200
+  },
+  "Portones y aparejamiento": {
+    "cells": 665,
+    "formulas": 536
+  },
+  "Flotación y Lastre": {
+    "cells": 985,
+    "formulas": 714
+  },
+  "Cables de Remolque": {
+    "cells": 521,
+    "formulas": 304
+  },
+  "Tablas de Referencias": {
+    "cells": 1245,
+    "formulas": 143
+  }
+}

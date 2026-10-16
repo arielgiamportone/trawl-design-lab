@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "trawlkit"
+version = "0.1.0"
+description = "Motor de cálculo para el diseño y dimensionamiento de redes de arrastre (trawl net design engine)."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.11"
+authors = [{ name = "Ariel Luján Giamportone", email = "giamportone1@gmail.com" }]
+keywords = ["fisheries", "trawl", "fishing-gear", "naval-engineering", "FAO"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  "numpy>=1.26",
+  "pint>=0.24",
+  "pydantic>=2.7",
+  "pyyaml>=6.0",
+  "typer>=0.12",
+]
+
+[project.optional-dependencies]
+api = ["fastapi>=0.111", "uvicorn[standard]>=0.30"]
+docs = ["jupyter-book>=1.0", "matplotlib>=3.9", "plotly>=5.22"]
+optimize = ["scipy>=1.13"]
+excel = ["openpyxl>=3.1"]
+
+[project.scripts]
+trawlkit = "trawlkit.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/arielgiamportone/trawl-design-lab"
+Origin = "https://github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel"
+
+[dependency-groups]
+dev = [
+  "ruff>=0.5",
+  "mypy>=1.10",
+  "pytest>=8.2",
+  "pytest-cov>=5.0",
+  "openpyxl>=3.1",
+  "types-PyYAML",
+  "pre-commit>=3.7",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/trawlkit"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "tools", "api"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "N", "D"]
+ignore = ["D100", "D104", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]
+"tools/*" = ["D"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+files = ["src/trawlkit"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
