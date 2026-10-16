@@ -54,7 +54,7 @@ def door_drag_share_kgf(ft_kgf: FloatOrArray, share: float) -> FloatOrArray:
 
 @dataclass(frozen=True)
 class DoorForces:
-    """Resistencia (Rd/ROB) y fuerza de abertura (Fdy/Ry) de los dos portones [kgf]."""
+    """Resistencia (Rd/ROB) y fuerza de abertura (Fdy/Ry) de UN portón [kgf] (Port!D190:E198)."""
 
     drag_kgf: FloatOrArray
     lift_kgf: FloatOrArray

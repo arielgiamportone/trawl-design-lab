@@ -30,6 +30,8 @@ sphinx:
     numfig: true
     math_number_all: false
     suppress_warnings: ["mystnb.unknown_mime_type"]
+    nb_code_prompt_show: "Mostrar código"
+    nb_code_prompt_hide: "Ocultar código"
 
 repository:
   url: https://github.com/arielgiamportone/trawl-design-lab

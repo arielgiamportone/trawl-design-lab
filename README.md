@@ -71,7 +71,7 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 2. Motor de cálculo validado contra el Excel (rtol 1e-6 en modo `EXCEL`; DynamiT pendiente) ✔
 3. CLI, informe (HTML/PDF/XLSX) y plano 2D SVG (lámina y escala real) ✔
 4. API FastAPI + frontend React ✔
-5. Documentación científica (Jupyter Book)
+5. Documentación científica (Jupyter Book): teoría por etapa, caso Beagle, validación contra Excel y DynamiT ✔ — https://arielgiamportone.github.io/trawl-design-lab/
 6. Optimización (área barrida vs potencia)
 7. Simulación simplificada de la geometría de la red (experimental)
 8. Release en PyPI y DOI en Zenodo

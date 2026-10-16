@@ -8,9 +8,8 @@ quedan por debajo de 3:1 de contraste, por lo que las series llevan etiqueta dir
 
 from __future__ import annotations
 
-from collections.abc import Sequence
-
 import html
+from collections.abc import Sequence
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -82,8 +81,9 @@ def setup_style() -> None:
     )
 
 
-def end_label(ax: plt.Axes, x: float, y: float, text: str, color: str = INK_2, dy: float = 0.0,
-              **kw: object) -> None:
+def end_label(
+    ax: plt.Axes, x: float, y: float, text: str, color: str = INK_2, dy: float = 0.0, **kw: object
+) -> None:
     """Etiqueta directa al final de una línea (texto en tinta, no en el color de la serie)."""
     ax.annotate(
         text,
@@ -121,7 +121,9 @@ def md_table(headers: Sequence[str], rows: Sequence[Sequence[object]]) -> None:
 
     head = "".join(cell(h, "th") for h in headers)
     body = "".join("<tr>" + "".join(cell(c, "td") for c in r) + "</tr>" for r in rows)
-    display(HTML(f'<table class="table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>'))
+    display(
+        HTML(f'<table class="table"><thead><tr>{head}</tr></thead><tbody>{body}</tbody></table>')
+    )
 
 
 def _numeric(s: str) -> bool:

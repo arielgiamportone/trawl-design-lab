@@ -146,6 +146,10 @@ class Pair(Generic[T]):
 # ---------------------------------------------------------------------------------------------
 
 
+#: Portones por arte de arrastre simple (la hoja calcula fuerzas por portón).
+DOORS_PER_RIG = 2
+
+
 @dataclass(frozen=True)
 class DesignCase:
     """Entradas de un caso de diseño: red, buque, portón y los parámetros fijos del libro.
@@ -1175,7 +1179,8 @@ def _stage_warps(
     cd = rigging.warp_cd(angles.divergence_deg)  # E106 (α = E103 = E25)
     v_ms = case.speeds_ms
     rw = _arr(rigging.warp_drag_kgf(cd, d_m, warp_m, v_ms))  # G118:G126
-    rob = _arr(doors.forces.drag_kgf)
+    # Port!D190 es la resistencia de UN portón (área 1.805 m²); el arte lleva dos.
+    rob = DOORS_PER_RIG * _arr(doors.forces.drag_kgf)
     total = Pair(
         _arr(rigging.total_drag_kgf(drag.rn.std, floats.drag_kgf, rw, rob, case.compat)),  # H118
         _arr(rigging.total_drag_kgf(drag.rn.mod, floats.drag_kgf, rw, rob, case.compat)),  # I118
@@ -1267,7 +1272,10 @@ def run(case: DesignCase) -> DesignResult:
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
     performance = _stage_performance(case, power, warps)
     if case.compat is Compat.CORRECTED:
-        notes.append("warp_total_omits_doors: la resistencia total incluye ROB (Rem!H118 + D190)")
+        notes.append(
+            "warp_total_omits_doors: la resistencia total incluye ROB de los dos portones "
+            "(Rem!H118 + 2·D190)"
+        )
     if not warps.selection.satisfies_breaking_load:
         notes.append(
             f"warp_undersized: cable de {warps.selection.diameter_mm:g} mm "

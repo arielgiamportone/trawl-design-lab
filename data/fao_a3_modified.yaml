@@ -10,7 +10,7 @@ source: Calculos_Red_FAO_A3.xlsx
 variant_of: fao_a3_standard
 species:
   name: Langostilla
-  scientific_name: Munida gragaria/ Munida subrugosa
+  scientific_name: Munida gregaria/ Munida subrugosa
   depth_m: 40.0
   bottom_type: Intermedio
   source_cells:

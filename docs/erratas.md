@@ -1,3 +1,14 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
 # Erratas del modelo Excel original
 
 Durante la migración se auditaron las ~5 500 fórmulas del libro `Calculos_Red_FAO_A3.xlsx`.
@@ -42,3 +53,106 @@ Dos acoplamientos del libro que no son erratas pero condicionan un caso de dise�
 campos de `DesignCase`: la flotación total `Ffz` (`Mec!O261`) promedia los bloques de 150 y 180 HP
 (`class_vessels`) y el cable de remolque se dimensiona con el NHP de 180 HP (`Rem!E110 = E81`,
 `warp_nhp_hp`, por defecto el mayor BHP de la clase).
+
+## Impacto de las erratas
+
+¿Cuánto mueve cada errata el diseño? La tabla siguiente corre el caso completo del libro (red
+estándar y modificada, buque de 150 BHP con el de 180 BHP en la clase, portón FAO; ver
+{doc}`30_caso_beagle`) en los dos modos y compara el resultado afectado por cada errata conmutable.
+Como el modo es global, cada fila mezcla el efecto de su errata con el de las erratas aguas arriba;
+la columna *Arrastra* lo indica cuando corresponde (por ejemplo, toda resistencia basada en la
+superficie de la red estándar arrastra el −5,2 % de $S_s$ de la errata de la bolsa).
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path.cwd().parent))
+import numpy as np
+from tests.golden_utils import golden
+from trawlkit.compat import ERRATA_BY_KEY
+import _plots_v as V
+
+E, C = V.run_case(150, "excel"), V.run_case(150, "corrected")
+i = E.case.speed_index
+SS = "codend_minor_side_uses_depth"
+rows_def = [
+    # (errata, salida, función del resultado, decimales, unidad, arrastra)
+    (SS, "Sₛ estándar", lambda r: r.geometry.std.solid_surface_m2, 2, "m²", ""),
+    ("twine_density_units", "Peso estándar en aire",
+     lambda r: r.geometry.std.weight_air_kg, 1, "kg", SS),
+    ("filtration_double_count", "d/l red modificada", lambda r: r.geometry.mod.filtration_index, 4, "", ""),
+    ("footrope_mid_truncation", "Burlón", lambda r: r.dimensions.std.footrope_m, 3, "m", ""),
+    ("hamuro_sin_degrees", "Rₙ Hamuro a 3 kn",
+     lambda r: r.drag.table.std["hamuro"][i(3.0)] * 1000, 0, "kgf", SS),
+    ("hamuro_mod_uses_std_dl", "Rₙ Hamuro modificada a 3 kn",
+     lambda r: r.drag.table.mod["hamuro"][i(3.0)] * 1000, 0, "kgf", "hamuro_sin_degrees"),
+    ("reid_fixed_denominator", "Rₙ Reid a 5 kn",
+     lambda r: r.drag.table.std["reid"][i(5.0)] * 1000, 0, "kgf", SS),
+    ("drag_average_pollution", "Promedio de métodos a 3 kn",
+     lambda r: r.drag.average.std[i(3.0)] * 1000, 0, "kgf", "varias"),
+    ("dpa_std_uses_mod_edy", "DPA Fridman a 1 kn",
+     lambda r: r.spread.fridman.dpa_std_m[0], 2, "m", SS),
+    ("door_force_mixed_angles", "Fuerza del portón a 3 kn",
+     lambda r: r.doors.force_kgf[i(3.0)], 1, "kgf", ""),
+    ("float_reynolds", "Reynolds de la boya a 3 kn", lambda r: r.floats.reynolds[i(3.0)], 0, "", ""),
+    ("flotation_rounding_inconsistent", "Flotación de Fridman",
+     lambda r: r.floats.fridman_average_kgf, 2, "kgf", SS),
+    ("warp_total_omits_doors", "Rₜ a 3,5 kn",
+     lambda r: r.warps.total.std[i(3.5)], 0, "kgf", SS),
+    ("warp_total_omits_doors", "Rotura mínima del cable",
+     lambda r: r.warps.loads.min_breaking_load_kgf, 0, "kgf", SS),
+    ("warp_undersized", "Cable",
+     lambda r: r.warps.selection.diameter_mm, 0, "mm", "warp_total_omits_doors"),
+    ("sweep_degrees_of_sine", "Patentes de Martini", lambda r: r.bridles.sweeps_martini_m, 2, "m", ""),
+    ("warp_total_omits_doors", "v* (150 HP, PF)",
+     lambda r: r.performance.design.max_speed_kn, 2, "kn", "todas"),
+]
+CARRY = {SS: "Sₛ de la bolsa", "hamuro_sin_degrees": "seno de Hamuro",
+         "warp_total_omits_doors": "Rₜ con portón"}
+rows = []
+for key, label, f, nd, unit, carry in rows_def:
+    a, b = float(f(E)), float(f(C))
+    assert key in ERRATA_BY_KEY, key
+    rows.append([key.replace("_", "_\u200b"), label + (f" [{unit}]" if unit else ""),
+                 V.fmt(a, nd), V.fmt(b, nd), V.pct_s(b, a), CARRY.get(carry, carry)])
+V.md_table(["Errata", "Salida afectada", "Excel", "Corregido", "Cambio [%]", "Arrastra"], rows)
+assert E.dimensions.std.footrope_m == golden("dimensiones_de_la_red", "footrope_m")
+```
+
+Otras tres erratas conmutables **no cambian** este caso porque la red FAO A-3 no las activa:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+nulls = [
+    ("cut_ratio_first_panel", "Ángulo de corte medio [°]", lambda r: r.dimensions.std.cut_angle_deg,
+     "todos los paños del plan alto tienen corte 1N2B"),
+    ("mod_length_wrong_rows", "Largo de la modificada sin bolsa [m]",
+     lambda r: r.dimensions.mod.body_length_no_bag_m, "los dos planos miden 32,68 m sin la bolsa"),
+    ("float_lookup_unsorted", "Diámetro de boya [mm]", lambda r: r.floats.diameter_mm,
+     "el LOOKUP desordenado cae en la boya de 200 mm, la más cercana"),
+]
+rows = []
+for key, label, f, why in nulls:
+    a, b = f(E), f(C)
+    assert a == b, key
+    nd = 0 if float(a).is_integer() else 2
+    rows.append([key.replace("_", "_\u200b"), label, V.fmt(a, nd), V.fmt(b, nd), why])
+V.md_table(["Errata", "Salida", "Excel", "Corregido", "Por qué no cambia"], rows)
+```
+
+Tres órdenes de magnitud:
+
+* **Erratas que cambian una decisión.** `warp_total_omits_doors` y `warp_undersized` cambian el cable
+  de 12 a 13 mm: con los portones incluidos, el de 12 mm queda por debajo de la carga de rotura
+  mínima. `codend_minor_side_uses_depth` invierte la comparación entre la red estándar y la
+  modificada ({doc}`30_caso_beagle`) y es la de mayor alcance: el −5,2 % de $S_s$ se propaga a la
+  resistencia de diseño, a la DPA, a la flotación de Fridman y a la demanda total.
+* **Erratas que cambian mucho un número que no se usa para diseñar.** Reid (−59 % a 5 kn), las
+  patentes de Martini (+77 %), el Reynolds de la boya (+59 %) y el peso de la red (−29 %) cambian
+  fuerte, pero ninguno alimenta otra etapa: el coeficiente de arrastre de la boya no depende del
+  Reynolds calculado y el libro usa las patentes de diseño (25 m) en vez de las de Martini.
+* **Erratas menores.** El burlón (+0,27 %), la fuerza sobre el portón (+1,8 %) o el promedio de
+  métodos (+0,7 %) quedan por debajo de la incertidumbre de cualquier método empírico.
+
+La velocidad máxima, que resume el diseño, apenas se mueve (−2 %): las correcciones que aumentan
+la demanda (portones) y las que la reducen (superficie sólida) se compensan en parte.

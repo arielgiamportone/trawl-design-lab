@@ -10,7 +10,7 @@ from tests.golden_utils import RTOL_TRUNCATED, assert_close
 from tests.test_case_fao_a3 import fao_a3_case
 from trawlkit import drag
 from trawlkit.compat import Compat
-from trawlkit.model import DesignResult, run
+from trawlkit.model import DOORS_PER_RIG, DesignResult, run
 from trawlkit.rigging import dpa_fridman_m, kinematic_viscosity_m2_s
 
 
@@ -75,7 +75,7 @@ def test_dpa_std_uses_standard_edy(excel: DesignResult, corr: DesignResult) -> N
 def test_total_demand_includes_rob_and_selects_13mm(
     excel: DesignResult, corr: DesignResult
 ) -> None:
-    rob = corr.doors.forces.drag_kgf
+    rob = DOORS_PER_RIG * np.asarray(corr.doors.forces.drag_kgf)  # par de portones
     assert_close(
         corr.warps.total.std, corr.drag.rn.std + corr.floats.drag_kgf + corr.warps.drag_kgf + rob
     )

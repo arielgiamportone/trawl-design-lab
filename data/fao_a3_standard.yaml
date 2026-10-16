@@ -9,7 +9,7 @@ description: Red de dos caras para langostilla, pesqueros de 150-180 BHP. Panele
 source: Calculos_Red_FAO_A3.xlsx
 species:
   name: Langostilla
-  scientific_name: Munida gragaria/ Munida subrugosa
+  scientific_name: Munida gregaria/ Munida subrugosa
   depth_m: 40.0
   bottom_type: Intermedio
   source_cells:

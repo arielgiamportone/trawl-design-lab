@@ -96,9 +96,9 @@ demanda en el tramo y $v^*$ queda del lado seguro.
 - **Errata `warp_total_omits_doors`** (`Rem!H118`). La resistencia total del Excel es
   `G118+F118+D118` = $R_W + R_B + R_N$: omite los portones. En modo `CORRECTED` `trawlkit` suma
   $R_{OB}$, lo que baja la velocidad máxima ({doc}`erratas`).
-- **Un portón o dos.** El $R_{OB}$ que suma el modo corregido es el de la hoja (`Port!D190`), la
-  resistencia de **un** portón de 1,805 m² ({doc}`15_portones_aparejo`). El sistema tiene dos; la
-  tabla de sensibilidad muestra también el caso con ambos.
+- **Un portón o dos.** La hoja calcula la resistencia de **un** portón de 1,805 m² (`Port!D190`,
+  {doc}`15_portones_aparejo`). El modo corregido suma la de los **dos** portones del arte
+  (`trawlkit.model.DOORS_PER_RIG = 2`); la tabla de sensibilidad muestra ambos casos.
 - **Malla de velocidades.** $v^*$ se interpola sobre la malla de 0,5 kn del libro;
   `DesignCase.speeds_kn` admite una malla más fina.
 
@@ -222,8 +222,8 @@ rows = [
     ("Caso de diseño (Excel: $R_N+R_B+R_W$)", base),
     ("$R_N$ − 10 %", vmax(pf, 0.9 * rn, rb, rw)),
     ("$R_N$ + 10 %", vmax(pf, 1.1 * rn, rb, rw)),
-    ("+ $R_{OB}$ de un portón (modo corregido)", vmax(pf, rn, rb, rw, rob)),
-    ("+ $R_{OB}$ de los dos portones", vmax(pf, rn, rb, rw, 2 * rob)),
+    ("+ $R_{OB}$ de un portón", vmax(pf, rn, rb, rw, rob)),
+    ("+ $R_{OB}$ de los dos portones (modo corregido)", vmax(pf, rn, rb, rw, 2 * rob)),
     ("Red modificada", r.performance.windows["fixed_pitch_mod"].max_speed_kn),
     ("Hélice PV+T", vmax(pvt, rn, rb, rw)),
     ("Buque de 180 HP (PF)", r180.performance.design.max_speed_kn),
@@ -247,7 +247,7 @@ Tres lecturas:
    ventana optimista.
 3. **La incertidumbre de $R_N$ domina.** Un ±10 % en la resistencia de la red, que es menor que la
    dispersión entre métodos de {doc}`14_resistencia`, mueve $v^*$ ≈ ±0,15 kn, tanto como los
-   portones. Por eso el modo corregido completo apenas baja $v^*$ (−0,05 kn): las correcciones
+   portones. Por eso el modo corregido completo baja $v^*$ menos de lo que sugieren los portones: las correcciones
    de la red (superficie sólida, burlón) reducen $R_N$ ≈ 5 % y compensan buena parte del portón
    que se agrega. Las redes estándar y modificada son casi equivalentes (la bolsa de 30 mm resiste un
    poco menos en modo Excel).

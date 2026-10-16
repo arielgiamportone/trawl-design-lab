@@ -348,7 +348,8 @@ def _panel(block: Block) -> dict[str, Any]:
 def _species() -> dict[str, Any]:
     return {
         "name": _text(SPECIES, "C3"),
-        "scientific_name": _text(SPECIES, "H3"),
+        # Corrige el error de tipeo de la hoja ("gragaria" → "gregaria").
+        "scientific_name": _text(SPECIES, "H3").replace("gragaria", "gregaria"),
         "depth_m": num(SPECIES, "E5"),
         "bottom_type": _text(SPECIES, "E6"),
         "source_cells": {
