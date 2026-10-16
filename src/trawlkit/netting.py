@@ -32,17 +32,6 @@ Number = float | npt.NDArray[np.float64]
 #: Tolerancia para la búsqueda "exacta" (``VLOOKUP(...,FALSE)``) de una razón de corte real.
 CUT_RATIO_TOL: float = 1e-9
 
-#: Filas 69-72 de ``'Tablas de Referencias'!A49:F88`` que no están en ``cut_ratios.csv``
-#: (razones ``2/x``). La fila 71 (2/3 → ``1N4B``) es la que usa el paño D (P!T97).
-#: ``(cut_ratio, cut_code, mesh_increase_width, mesh_increase_height)``; las filas 69/70 tienen
-#: la razón como texto en la hoja (``'2/1'``, ``'2/2'``) y sin columnas E/F.
-EXTRA_CUT_ROWS: tuple[tuple[float, str, int | None, int | None], ...] = (
-    (2.0, "1T2B", None, None),
-    (1.0, "AB", None, None),
-    (2.0 / 3.0, "1N4B", None, None),
-    (0.5, "1N2B", None, None),
-)
-
 
 def _out(a: npt.NDArray[np.float64]) -> Number:
     """Devuelve un ``float`` para entradas escalares y un array en caso contrario."""
@@ -204,11 +193,10 @@ class CutRow:
 
 @cache
 def load_cut_table(path: Path | str | None = None) -> tuple[CutRow, ...]:
-    """Carga ``data/reference/cut_ratios.csv`` más las filas 69-72 de la hoja de referencia.
+    """Carga ``data/reference/cut_ratios.csv`` (``'Tablas de Referencias'!A49:C72``).
 
-    Las filas del CSV corresponden a ``'Tablas de Referencias'!A49:F68``; se añaden
-    :data:`EXTRA_CUT_ROWS` (A69:C72) porque ``VLOOKUP`` recorre hasta la fila 88 y el paño D
-    (RC = 2/3) sólo tiene correspondencia allí. El resultado se memoriza.
+    Las filas 69-72 (razones ``2/x``) no tienen aumento de mallas en la hoja y se cargan con
+    ``None``; el paño D (RC = 2/3 → ``1N4B``) sólo tiene correspondencia allí. Memorizado.
     """
     p = Path(path) if path is not None else DATA_DIR / "reference" / "cut_ratios.csv"
     rows: list[CutRow] = []
@@ -218,14 +206,19 @@ def load_cut_table(path: Path | str | None = None) -> tuple[CutRow, ...]:
                 CutRow(
                     cut_ratio=float(rec["cut_ratio"]),
                     cut_code=rec["cut_code"],
-                    mesh_increase_width=int(rec["mesh_increase_width"]),
-                    mesh_increase_height=int(rec["mesh_increase_height"]),
+                    mesh_increase_width=_opt_int(rec.get("mesh_increase_width")),
+                    mesh_increase_height=_opt_int(rec.get("mesh_increase_height")),
                     label=rec.get("cut_ratio_label") or None,
                 )
             )
-    for ratio, code, w, h in EXTRA_CUT_ROWS:
-        rows.append(CutRow(ratio, code, w, h))
     return tuple(rows)
+
+
+def _opt_int(text: str | None) -> int | None:
+    """Entero de una celda CSV vacía o numérica (``"1"``, ``"1.0"``, ``""`` → ``None``)."""
+    if text is None or text.strip() == "":
+        return None
+    return int(float(text))
 
 
 def cut_code(

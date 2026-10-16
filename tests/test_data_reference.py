@@ -99,7 +99,10 @@ def test_reference_tables_shape() -> None:
 
     cuts = read_csv("cut_ratios.csv")
     assert [r["cut_code"] for r in cuts[:4]] == ["AB", "1N2B", "1N1B", "3N2B"]
-    assert all(r["mesh_increase_width"] == "1" for r in cuts)
+    assert all(r["mesh_increase_width"] == "1" for r in cuts if r["mesh_increase_width"])
+    # Filas 69-72 (razones 2/x): código sin aumento de mallas; el paño D usa 2/3 → 1N4B.
+    assert len(cuts) == 24
+    assert any(r["cut_code"] == "1N4B" and abs(float(r["cut_ratio"]) - 2 / 3) < 1e-9 for r in cuts)
 
     knots = read_csv("knot_factor_k.csv")
     k = next(r for r in knots if float(r["mesh_mm"]) == 40 and float(r["twine_diameter_mm"]) == 1)

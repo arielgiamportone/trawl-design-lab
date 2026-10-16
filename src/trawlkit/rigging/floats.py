@@ -15,7 +15,7 @@ from typing import Any
 import numpy as np
 
 from trawlkit.compat import Compat
-from trawlkit.rigging._excel import (
+from trawlkit.excel import (
     FloatArray,
     FloatOrArray,
     as_array,

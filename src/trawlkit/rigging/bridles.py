@@ -13,7 +13,7 @@ from typing import Any
 import numpy as np
 
 from trawlkit.compat import Compat
-from trawlkit.rigging._excel import dataclass_to_dict, excel_round, excel_roundup
+from trawlkit.excel import dataclass_to_dict, excel_round, excel_roundup
 
 
 @dataclass(frozen=True)

@@ -15,8 +15,8 @@ from typing import Any
 import numpy as np
 
 from trawlkit.compat import Compat
+from trawlkit.excel import FloatOrArray, as_array, dataclass_to_dict, ret
 from trawlkit.io import Door, load_doors
-from trawlkit.rigging._excel import FloatOrArray, as_array, dataclass_to_dict, ret
 from trawlkit.units import RHO_SEAWATER, G
 
 #: Fracciones de FT que Fridman asigna a la resistencia de los portones (Port!E146:H146).

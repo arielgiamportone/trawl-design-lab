@@ -140,17 +140,22 @@ def cut_ratios() -> list[dict[str, Any]]:
     formulas = rows(TABLAS, "A49:F88", data_only=False)
     for i, (row, frow) in enumerate(zip(rows(TABLAS, "A49:F88"), formulas, strict=True), 49):
         ratio, _, code, inexact, width, height = row
-        if code is None or to_num(width) is None or to_num(height) is None:
-            continue  # fila sin terminar (sin código o sin aumento de mallas)
+        if code is None:
+            continue  # fila sin terminar (sin código de corte)
         raw = frow[0]
-        label = (
-            raw[1:]
-            if isinstance(raw, str) and raw.startswith("=")
-            else (raw if isinstance(raw, str) else f"{int(width)}/{int(height)}")
-        )
+        if isinstance(raw, str) and raw.startswith("="):
+            label = raw[1:]
+        elif isinstance(raw, str):
+            label = raw
+        else:
+            label = f"{int(width)}/{int(height)}" if width and height else ""
+        ratio_num = to_num(ratio)
+        if ratio_num is None and isinstance(ratio, str) and "/" in ratio:
+            num, den = ratio.split("/", 1)  # filas 69-72: razón escrita como texto '2/1'
+            ratio_num = float(num) / float(den)
         out.append(
             {
-                "cut_ratio": clean(to_num(ratio)),
+                "cut_ratio": clean(ratio_num),
                 "cut_ratio_label": label,
                 "cut_code": code,
                 "inexact_ratio": clean(to_num(inexact)),

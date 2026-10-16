@@ -9,8 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from trawlkit.excel import dataclass_to_dict, excel_roundup
 from trawlkit.io import load_catalogue
-from trawlkit.rigging._excel import dataclass_to_dict, excel_roundup
 
 #: Fracción del peso en aire que pesa en el agua un cabo combinado (Flot!F37 = 0.087·W;
 #: Flot!G191 = W·0.87/10, mismo valor).

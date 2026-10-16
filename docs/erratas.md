@@ -24,6 +24,13 @@ corrigen en modo `Compat.CORRECTED`. La lista canónica vive en `trawlkit.compat
 | sweep_degrees_of_sine | Portones y aparejamiento | G71 | DEGREES(SIN(20)) y error de precedencia |
 | nomura_ratio_typo | Tablas de Referencias | G18, G21 | 10.6 donde corresponde 1.06 |
 | panel_f_cut_na | Paños de red y cortes | T122 | Razón de corte del panel F devuelve #N/A |
+| codend_minor_side_uses_depth | Mecánica de la Red | K36:K37 | Bolsas I/J usan N (200) como lado menor en vez de T2 (113): Ss 40.90 en vez de 38.75 m² |
+| panel_b_cut_uses_plan_coef | Paños de red y cortes | S62 | Razón de corte del paño B con el coeficiente de plano en vez de N |
+| panel_b_cut_code_lookup_a | Paños de red y cortes | T62 | Código de corte del paño B buscado con la razón del paño A |
+| net_weight_ignores_panel_count | Mecánica de la Red | O107, O109 | Peso total sin multiplicar por cantidad de paneles |
+| catenary_ratio_hardcoded | Mecánica de la Red | O266 | fL/L = 0.216 fijo, fuera del rango de la tabla |
+| float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP sobre vector sin ordenar |
+| flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Redondeo aplicado sólo a parte de la columna |
 
 Además, varias tablas resumen contienen valores pegados a mano en lugar de fórmulas (marcados con
 `"static": true` en `tests/golden/*.json`), y los coeficientes leídos con `MID()` desde etiquetas de

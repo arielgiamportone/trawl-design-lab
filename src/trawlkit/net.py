@@ -18,7 +18,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
-from trawlkit.compat import Compat
+from trawlkit.compat import ERRATA_BY_KEY, Compat
 from trawlkit.io.loader import load_catalogue
 from trawlkit.io.schema import NetSpec, Panel, Plane, Section
 from trawlkit.materials import (
@@ -45,7 +45,7 @@ REFERENCE_N_MESHES: int = 100
 #: equivocada de ``'Mecánica de la Red'!K36`` (``='Paños de red y cortes'!H224``: el alto N de
 #: la bolsa en vez de su borde menor H223) que arrastra K37 (``=K36``) y, por tanto, N36:N37,
 #: M63:M64 y O105:P106 de la red estándar.
-ERRATUM_CODEND_MINOR_SIDE = "codend_minor_side_uses_depth"
+ERRATUM_CODEND_MINOR_SIDE = ERRATA_BY_KEY["codend_minor_side_uses_depth"].key
 
 
 def _out(a: npt.NDArray[np.float64]) -> Number:

@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from trawlkit.rigging._excel import (
+from trawlkit.excel import (
     FloatOrArray,
     as_array,
     dataclass_to_dict,

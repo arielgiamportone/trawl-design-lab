@@ -18,14 +18,14 @@ from typing import Any
 import numpy as np
 
 from trawlkit.compat import Compat
-from trawlkit.io import DATA_DIR, load_catalogue
-from trawlkit.rigging._excel import (
+from trawlkit.excel import (
     FloatOrArray,
     as_array,
     dataclass_to_dict,
     excel_lookup_index,
     ret,
 )
+from trawlkit.io import DATA_DIR, load_catalogue
 from trawlkit.units import RHO_SEAWATER, G
 
 #: CD del cable según el ángulo de ataque α (Nomura y Yamazaki; Rem!A90:B94).

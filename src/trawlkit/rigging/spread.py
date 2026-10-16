@@ -18,8 +18,7 @@ from typing import Any
 import numpy as np
 
 from trawlkit.compat import Compat
-from trawlkit.io import DATA_DIR
-from trawlkit.rigging._excel import (
+from trawlkit.excel import (
     FloatOrArray,
     as_array,
     dataclass_to_dict,
@@ -28,6 +27,7 @@ from trawlkit.rigging._excel import (
     excel_roundup,
     ret,
 )
+from trawlkit.io import DATA_DIR
 from trawlkit.rigging.doors import door_forces_kgf
 from trawlkit.rigging.warps import warp_depth_ratio
 from trawlkit.units import RHO_SEAWATER, G

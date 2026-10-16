@@ -141,6 +141,50 @@ ERRATA: tuple[Erratum, ...] = (
         "T122",
         "VLOOKUP/MATCH de la razón de corte del panel F devuelve #N/A.",
     ),
+    Erratum(
+        "codend_minor_side_uses_depth",
+        "Mecánica de la Red",
+        "K36:K37",
+        "Lado menor de las bolsas I/J = Paños!H224 (N = 200) en vez de H223 (T2 = 113); "
+        "infla Ss de 38.75 a 40.90 m² y St de 308.6 a 315.6 m².",
+    ),
+    Erratum(
+        "panel_b_cut_uses_plan_coef",
+        "Paños de red y cortes",
+        "S62",
+        "La razón de corte del paño B usa P55 (coeficiente de plano 0.5) en vez de T56 (N).",
+    ),
+    Erratum(
+        "panel_b_cut_code_lookup_a",
+        "Paños de red y cortes",
+        "T62",
+        "El código de corte del paño B se busca con la razón del paño A (H63).",
+    ),
+    Erratum(
+        "net_weight_ignores_panel_count",
+        "Mecánica de la Red",
+        "O107,O109",
+        "El peso total suma las filas sin multiplicar por la cantidad de paneles iguales.",
+    ),
+    Erratum(
+        "catenary_ratio_hardcoded",
+        "Mecánica de la Red",
+        "O266",
+        "fL/L = 0.216 fijo (corresponde a DPA/L = 0.87); el DPA/L del modelo (0.45) queda fuera "
+        "de la tabla de catenaria.",
+    ),
+    Erratum(
+        "float_lookup_unsorted",
+        "Flotación y Lastre",
+        "F92",
+        "LOOKUP del diámetro de boya sobre el vector 'cincuenta' sin ordenar.",
+    ),
+    Erratum(
+        "flotation_rounding_inconsistent",
+        "Flotación y Lastre",
+        "M43:M50",
+        "ROUNDDOWN sólo en M42 y en el bloque de 180 HP; el resto de la columna sin redondear.",
+    ),
 )
 
 ERRATA_BY_KEY: dict[str, Erratum] = {e.key: e for e in ERRATA}

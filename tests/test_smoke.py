@@ -18,7 +18,7 @@ def test_units_roundtrip() -> None:
 
 def test_compat_registry() -> None:
     assert Compat("excel") is Compat.EXCEL
-    assert len(ERRATA) >= 18
+    assert len(ERRATA) >= 25
     assert len({e.key for e in ERRATA}) == len(ERRATA)
     assert ERRATA_BY_KEY["hamuro_sin_degrees"].sheet == "Resistencia de la RED"
 
