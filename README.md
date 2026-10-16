@@ -12,12 +12,12 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 
 | Capa | Carpeta | Estado |
 |---|---|---|
-| Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 1: esqueleto, unidades, registro de erratas, esquema de specs y loader |
+| Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
 | Datos y catálogos | `data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
-| CLI | `src/trawlkit/cli.py` | Fase 0: `trawlkit version`, `trawlkit errata` |
+| CLI | `src/trawlkit/cli.py` | Fase 2: `trawlkit run NET [--vessel] [--door] [--modified] [--class-vessel] [--compat] [--json]`, `version`, `errata` |
 | API HTTP (FastAPI) | `api/` | Fase 0: `/health` |
 | Frontend (React + Vite) | `web/` | Fase 4 |
-| Documentación (Jupyter Book, es) | `docs/` | Fase 0: índice + erratas |
+| Documentación (Jupyter Book, es) | `docs/` | Fase 2: índice, arquitectura del motor (`docs/motor.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
 ## Cadena de cálculo (del modelo original)
@@ -31,7 +31,8 @@ vertical → flotación y lastre → cables de remolque → ventana de velocidad
 
 El Excel original contiene erratas de cálculo documentadas en [`docs/erratas.md`](docs/erratas.md).
 Cada función afectada acepta `compat=Compat.EXCEL` (reproduce el número original, para validar la
-migración) o `compat=Compat.CORRECTED` (fórmula correcta, por defecto).
+migración) o `compat=Compat.CORRECTED` (fórmula correcta, por defecto). La arquitectura del motor y
+el orden de las etapas están en [`docs/motor.md`](docs/motor.md).
 
 ## Instalación y uso (desarrollo)
 
@@ -39,23 +40,35 @@ migración) o `compat=Compat.CORRECTED` (fórmula correcta, por defecto).
 uv sync --all-extras --dev
 uv run pytest
 uv run trawlkit errata
+uv run trawlkit run fao_a3_standard --modified fao_a3_modified --class-vessel fao_a3_180hp --compat excel
 uv run uvicorn api.main:app --reload   # http://127.0.0.1:8000/health
 uv run python tools/extract_excel.py   # regenera data/ y tests/golden/ desde legacy/*.xlsx
 ```
 
 ```python
-from trawlkit.io import load_net, load_vessels
+from trawlkit import Compat, DesignCase, run
+from trawlkit.io import load_doors, load_net, load_vessels
 
-net = load_net("fao_a3_standard")  # 10 paneles A..J con procedencia de celda
-v150 = load_vessels().vessels[0]  # 150 BHP
+vessels = {v.id: v for v in load_vessels().vessels}
+case = DesignCase(
+    net=load_net("fao_a3_standard"),  # 10 paneles A..J con procedencia de celda
+    net_modified=load_net("fao_a3_modified"),  # columna G del libro (bolsa de 30 mm)
+    vessel=vessels["fao_a3_150hp"],
+    class_vessels=(vessels["fao_a3_180hp"],),  # el libro calcula 150 y 180 BHP lado a lado
+    door=load_doors().doors[0],  # portón plano FAO
+    compat=Compat.CORRECTED,  # o Compat.EXCEL para reproducir el libro
+)
+result = run(case)
+result.summary()["horizontal_opening_m"]  # 'Dimensiones de la Red'!F61
+result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 ```
 
 ## Hoja de ruta
 
 0. Bootstrap del repo ✔
 1. Extracción del Excel a datos abiertos y valores de referencia ✔
-2. Motor de cálculo validado contra el Excel (tolerancia 1 %) y contra DynamiT
-3. CLI, informe y plano 2D SVG
+2. Motor de cálculo validado contra el Excel (rtol 1e-6 en modo `EXCEL`; DynamiT pendiente) ✔
+3. CLI (`trawlkit run` ✔), informe y plano 2D SVG
 4. API FastAPI + frontend React
 5. Documentación científica (Jupyter Book)
 6. Optimización (área barrida vs potencia)
