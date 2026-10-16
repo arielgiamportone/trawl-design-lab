@@ -1,0 +1,1304 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "trawlkit API",
+  "description": "Diseño y dimensionamiento de redes de arrastre (motor trawlkit).",
+  "version": "0.1.0"
+ },
+ "paths": {
+  "/health": {
+   "get": {
+    "summary": "Health",
+    "description": "Comprobación de vida.",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Health"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/nets": {
+   "get": {
+    "summary": "List Nets",
+    "description": "Redes predefinidas.",
+    "operationId": "list_nets_catalog_nets_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/CatalogItem"
+         },
+         "type": "array",
+         "title": "Response List Nets Catalog Nets Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/nets/{net_id}": {
+   "get": {
+    "summary": "Get Net",
+    "description": "Especificación completa de una red predefinida (paneles, relingas, boyas).",
+    "operationId": "get_net_catalog_nets__net_id__get",
+    "parameters": [
+     {
+      "name": "net_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Net Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/NetSpec"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/vessels": {
+   "get": {
+    "summary": "List Vessels",
+    "description": "Buques del catálogo.",
+    "operationId": "list_vessels_catalog_vessels_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/Vessel"
+         },
+         "type": "array",
+         "title": "Response List Vessels Catalog Vessels Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/doors": {
+   "get": {
+    "summary": "List Doors",
+    "description": "Portones del catálogo con su polar CL/CD.",
+    "operationId": "list_doors_catalog_doors_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/Door"
+         },
+         "type": "array",
+         "title": "Response List Doors Catalog Doors Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/params": {
+   "get": {
+    "summary": "List Params",
+    "description": "Parámetros de diseño sobrescribibles en ``DesignRequest.params``.",
+    "operationId": "list_params_params_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/ParamInfo"
+         },
+         "type": "array",
+         "title": "Response List Params Params Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/errata": {
+   "get": {
+    "summary": "List Errata",
+    "description": "Erratas del libro Excel original.",
+    "operationId": "list_errata_errata_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/ErratumOut"
+         },
+         "type": "array",
+         "title": "Response List Errata Errata Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/design": {
+   "post": {
+    "summary": "Design",
+    "description": "Calcula un caso de diseño completo.",
+    "operationId": "design_design_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DesignResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/design/plan": {
+   "post": {
+    "summary": "Design Plan",
+    "description": "Plano SVG del caso: lámina técnica (``sheet``) o escala real (``scale``).",
+    "operationId": "design_plan_design_plan_post",
+    "parameters": [
+     {
+      "name": "view",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "sheet",
+        "scale"
+       ],
+       "type": "string",
+       "default": "sheet",
+       "title": "View"
+      }
+     },
+     {
+      "name": "variant",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "std",
+        "mod"
+       ],
+       "type": "string",
+       "default": "std",
+       "title": "Variant"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "image/svg+xml": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/design/report": {
+   "post": {
+    "summary": "Design Report",
+    "description": "Informe del caso en HTML, PDF o XLSX.",
+    "operationId": "design_report_design_report_post",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "html",
+        "pdf",
+        "xlsx"
+       ],
+       "type": "string",
+       "default": "html",
+       "title": "Format"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/html; charset=utf-8": {},
+       "application/pdf": {},
+       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "CatalogItem": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id"
+    ],
+    "title": "CatalogItem",
+    "description": "Entrada resumida de un catálogo."
+   },
+   "DesignRequest": {
+    "properties": {
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       }
+      ],
+      "title": "Net",
+      "default": "fao_a3_standard"
+     },
+     "net_modified": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Net Modified"
+     },
+     "vessel": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Vessel"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel"
+     },
+     "door": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Door"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Door"
+     },
+     "class_vessels": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Class Vessels"
+     },
+     "compat": {
+      "type": "string",
+      "enum": [
+       "excel",
+       "corrected"
+      ],
+      "title": "Compat",
+      "default": "corrected"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "DesignRequest",
+    "description": "Caso de diseño a calcular.\n\n``net``, ``net_modified``, ``vessel`` y ``door`` aceptan el id de un preset del catálogo\n(``GET /catalog/...``) o la especificación completa en línea (para redes editadas en el\nfrontend). ``class_vessels`` son ids del catálogo; si se omite, se usa el resto del catálogo\ncomo hace el Excel con 150 y 180 HP. ``params`` sobrescribe parámetros de ``DesignCase``\n(ver ``GET /params``)."
+   },
+   "DesignResponse": {
+    "properties": {
+     "case": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Case"
+     },
+     "summary": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Summary"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     },
+     "result": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Result"
+     }
+    },
+    "type": "object",
+    "required": [
+     "case",
+     "summary",
+     "notes",
+     "result"
+    ],
+    "title": "DesignResponse",
+    "description": "Resultado de ``POST /design``."
+   },
+   "Door": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Type"
+     },
+     "length_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Length M"
+     },
+     "height_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Height M"
+     },
+     "area_m2": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Area M2"
+     },
+     "aspect_ratio": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Aspect Ratio"
+     },
+     "weight_air_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Air Kg"
+     },
+     "weight_water_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Water Kg"
+     },
+     "coefficients": {
+      "items": {
+       "$ref": "#/components/schemas/DoorCoefficients"
+      },
+      "type": "array",
+      "title": "Coefficients"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "id",
+     "name"
+    ],
+    "title": "Door",
+    "description": "Portón (puerta) de arrastre."
+   },
+   "DoorCoefficients": {
+    "properties": {
+     "angle_deg": {
+      "type": "number",
+      "title": "Angle Deg"
+     },
+     "cl": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cl"
+     },
+     "cd": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cd"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "angle_deg"
+    ],
+    "title": "DoorCoefficients",
+    "description": "Coeficientes hidrodinámicos de un portón a un ángulo de ataque."
+   },
+   "ErratumOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "sheet": {
+      "type": "string",
+      "title": "Sheet"
+     },
+     "cell": {
+      "type": "string",
+      "title": "Cell"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "sheet",
+     "cell",
+     "description"
+    ],
+    "title": "ErratumOut",
+    "description": "Errata del modelo Excel original."
+   },
+   "FloatSpec": {
+    "properties": {
+     "count": {
+      "type": "integer",
+      "title": "Count"
+     },
+     "diameter_mm": {
+      "type": "number",
+      "title": "Diameter Mm"
+     },
+     "buoyancy_kgf_each": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Buoyancy Kgf Each"
+     },
+     "total_buoyancy_kgf": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Buoyancy Kgf"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "count",
+     "diameter_mm"
+    ],
+    "title": "FloatSpec",
+    "description": "Flotadores de la lima."
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "Health": {
+    "properties": {
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "version": {
+      "type": "string",
+      "title": "Version"
+     }
+    },
+    "type": "object",
+    "required": [
+     "status",
+     "version"
+    ],
+    "title": "Health",
+    "description": "Estado del servicio."
+   },
+   "NetSpec": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     },
+     "source": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source"
+     },
+     "variant_of": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Variant Of"
+     },
+     "species": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Species"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "panels": {
+      "items": {
+       "$ref": "#/components/schemas/Panel"
+      },
+      "type": "array",
+      "title": "Panels"
+     },
+     "headrope": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rope"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "footrope": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/Rope"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "floats": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/FloatSpec"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "ballast_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ballast Kg"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "panels"
+    ],
+    "title": "NetSpec",
+    "description": "Especificación completa de una red de arrastre."
+   },
+   "Panel": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "plane": {
+      "$ref": "#/components/schemas/Plane"
+     },
+     "section": {
+      "$ref": "#/components/schemas/Section"
+     },
+     "material": {
+      "type": "string",
+      "title": "Material",
+      "default": "PA"
+     },
+     "mesh_mm": {
+      "type": "number",
+      "exclusiveMinimum": 0.0,
+      "title": "Mesh Mm",
+      "description": "Tamaño de malla estirada [mm]"
+     },
+     "twine_diameter_mm": {
+      "type": "number",
+      "exclusiveMinimum": 0.0,
+      "title": "Twine Diameter Mm"
+     },
+     "rtex": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rtex"
+     },
+     "runnage_m_per_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Runnage M Per Kg"
+     },
+     "meshes_top": {
+      "type": "integer",
+      "minimum": 0.0,
+      "title": "Meshes Top"
+     },
+     "meshes_bottom": {
+      "type": "integer",
+      "minimum": 0.0,
+      "title": "Meshes Bottom"
+     },
+     "meshes_depth": {
+      "type": "integer",
+      "minimum": 1.0,
+      "title": "Meshes Depth"
+     },
+     "hanging_ratio": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 1.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hanging Ratio"
+     },
+     "count": {
+      "type": "integer",
+      "minimum": 1.0,
+      "title": "Count",
+      "description": "Cantidad de paneles iguales",
+      "default": 1
+     },
+     "cut_code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cut Code"
+     },
+     "source_cells": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "type": "string"
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Source Cells",
+      "description": "Procedencia en el Excel"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "id",
+     "plane",
+     "section",
+     "mesh_mm",
+     "twine_diameter_mm",
+     "meshes_top",
+     "meshes_bottom",
+     "meshes_depth"
+    ],
+    "title": "Panel",
+    "description": "Panel (paño) de red, definido por su compostura y sus mallas.\n\n``meshes_top`` es el número de mallas del borde del panel más cercano a la boca de la red (donde\nel panel empieza) y ``meshes_bottom`` el del borde más cercano a la bolsa, como se leen en el\nplano 2D; ``meshes_depth`` es el número de mallas de alto (N). El Excel usa en cambio T1/T2 =\nborde mayor/menor, que se conservan en los extras ``meshes_a``/``meshes_b``."
+   },
+   "ParamInfo": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "type": {
+      "type": "string",
+      "title": "Type"
+     },
+     "default": {
+      "title": "Default"
+     },
+     "comment": {
+      "type": "string",
+      "title": "Comment",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "name",
+     "type",
+     "default"
+    ],
+    "title": "ParamInfo",
+    "description": "Parámetro sobrescribible de ``DesignCase``."
+   },
+   "Plane": {
+    "type": "string",
+    "enum": [
+     "upper",
+     "lower",
+     "side"
+    ],
+    "title": "Plane",
+    "description": "Plano (cara) de la red al que pertenece un panel."
+   },
+   "PropellerType": {
+    "type": "string",
+    "enum": [
+     "fixed_pitch",
+     "fixed_pitch_nozzle",
+     "variable_pitch",
+     "variable_pitch_nozzle"
+    ],
+    "title": "PropellerType",
+    "description": "Tipo de hélice (nomenclatura del modelo original)."
+   },
+   "Rope": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "length_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Length M"
+     },
+     "diameter_mm": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Diameter Mm"
+     },
+     "weight_kg_per_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Kg Per M"
+     },
+     "breaking_load_t": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Breaking Load T"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "Rope",
+    "description": "Cabo o relinga."
+   },
+   "Section": {
+    "type": "string",
+    "enum": [
+     "wing_tip",
+     "wing",
+     "square",
+     "belly",
+     "body",
+     "extension",
+     "codend"
+    ],
+    "title": "Section",
+    "description": "Sección estructural de la red."
+   },
+   "Species": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "scientific_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scientific Name"
+     },
+     "depth_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Depth M"
+     },
+     "bottom_type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bottom Type"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "Species",
+    "description": "Especie objetivo."
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   },
+   "Vessel": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "bhp": {
+      "type": "number",
+      "exclusiveMinimum": 0.0,
+      "title": "Bhp"
+     },
+     "length_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Length M"
+     },
+     "beam_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Beam M"
+     },
+     "depth_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Depth M",
+      "description": "Puntal [m]"
+     },
+     "displacement_t": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Displacement T"
+     },
+     "propeller": {
+      "$ref": "#/components/schemas/PropellerType",
+      "default": "fixed_pitch"
+     },
+     "high_rpm": {
+      "type": "boolean",
+      "title": "High Rpm",
+      "default": true
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "id",
+     "bhp"
+    ],
+    "title": "Vessel",
+    "description": "Buque pesquero."
+   }
+  }
+ }
+}

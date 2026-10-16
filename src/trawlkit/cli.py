@@ -168,5 +168,19 @@ def plan(
     typer.echo(str(target))
 
 
+@app.command()
+def serve(
+    host: Annotated[str, typer.Option(help="Interfaz de escucha.")] = "127.0.0.1",
+    port: Annotated[int, typer.Option(help="Puerto.")] = 8000,
+    reload: Annotated[bool, typer.Option(help="Recarga al cambiar el código.")] = False,
+) -> None:
+    """Levanta la API HTTP (requiere el extra ``api``)."""
+    try:
+        import uvicorn
+    except ImportError as exc:  # pragma: no cover - depende del entorno
+        raise typer.BadParameter('instale el extra: pip install "trawlkit[api]"') from exc
+    uvicorn.run("trawlkit.api.app:app", host=host, port=port, reload=reload)
+
+
 if __name__ == "__main__":
     app()
