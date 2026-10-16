@@ -9,8 +9,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
+      - name: Librerías de sistema para WeasyPrint
+        run: sudo apt-get update && sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
       - run: uv sync --all-extras --dev
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy
       - run: uv run pytest --cov=trawlkit
+      - name: Informe del caso FAO A-3
+        run: |
+          uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+            --vessel fao_a3_150hp --out informe-corregido
+          uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+            --vessel fao_a3_150hp --compat excel --out informe-excel
+      - uses: actions/upload-artifact@v4
+        with:
+          name: informe-fao-a3
+          path: |
+            informe-corregido/
+            informe-excel/

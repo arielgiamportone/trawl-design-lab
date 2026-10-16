@@ -3,3 +3,4 @@ root: intro
 chapters:
   - file: motor
   - file: erratas
+  - file: informes

@@ -39,3 +39,8 @@ result.summary()  # headrope, footrope, Ss, St, AV, AH, floats, ballast, warp, m
 ```
 
 Code is MIT-licensed; documentation, data and legacy material are CC BY 4.0.
+
+Phase 3 adds reports and drawings: `trawlkit report NET --modified NET2 --vessel ID --out DIR`
+writes a self-contained Spanish HTML report, a PDF (WeasyPrint), an XLSX workbook and SVG drawings
+(an A3 technical sheet replicating the 2014 plans and a true-scale metric view);
+`trawlkit plan` writes a single drawing. Generated examples live in `examples/`.
