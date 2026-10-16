@@ -21,7 +21,7 @@ test('calcula el caso por defecto y muestra los KPI', async ({ page }) => {
   await expect(page).toHaveTitle(/trawl-design-lab/);
   await waitForResults(page);
   await expect(page.locator('[data-kpi="vertical_opening_m"] .kpi-value')).toContainText('1,98');
-  await expect(page.locator('[data-kpi="max_speed_kn"] .kpi-value')).toContainText('2,39');
+  await expect(page.locator('[data-kpi="max_speed_kn"] .kpi-value')).toContainText('2,28');
   await expect(page.locator('[data-kpi="warp_selected"]')).toContainText('Cumple la rotura');
   await expect(page.getByRole('row', { name: /Lima 28,698 m/ })).toBeVisible();
   await expect(page.getByText('API conectada')).toBeVisible();

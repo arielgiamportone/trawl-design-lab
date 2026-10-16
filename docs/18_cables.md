@@ -288,14 +288,14 @@ mystnb:
   figure:
     caption: |
       Composición de la resistencia total del sistema por velocidad (red estándar, modo Excel):
-      red $R_N$, boyas $R_B$ y cables $R_W$. El segmento superior es la resistencia de un portón
+      red $R_N$, boyas $R_B$ y cables $R_W$. El segmento superior es la resistencia del par de portones
       $R_{OB}$, que el Excel no suma y el modo corregido sí. $R_W$ (verde) es tan pequeña que apenas
       se ve sobre las boyas.
     name: fig-18-demanda
 ---
 fig, ax = P.plt.subplots(figsize=(7, 4.4))
 parts = ((r.drag.rn.std, 1, "Red $R_N$"), (r.floats.drag_kgf, 2, "Boyas $R_B$"),
-         (w.drag_kgf, 3, "Cables $R_W$"), (r.doors.forces.drag_kgf, 4, "Portón $R_{OB}$ (sólo corregido)"))
+         (w.drag_kgf, 3, "Cables $R_W$"), (r.doors.rig_drag_kgf, 4, "Portones $R_{OB}$ (par, sólo corregido)"))
 bottom = np.zeros_like(kn)
 width = 0.22
 for y, slot, lab in parts:
@@ -303,7 +303,7 @@ for y, slot, lab in parts:
     ax.bar(kn, y, width, bottom=bottom, color=P.color(slot), label=lab,
            edgecolor=P.SURFACE, linewidth=1.5, hatch="///" if slot == 4 else None)
     bottom = bottom + y
-for x, tot, rt, rob in zip(kn, bottom, w.total.std, r.doors.forces.drag_kgf):
+for x, tot, rt, rob in zip(kn, bottom, w.total.std, r.doors.rig_drag_kgf):
     if x in (2.0, 3.0, 4.0, 5.0):
         ax.annotate(f"{rt:,.0f} + {rob:.0f}".replace(",", " "), (x, tot), xytext=(0, 3),
                     textcoords="offset points", ha="center", fontsize=8.5, color=P.INK_2)
@@ -312,7 +312,7 @@ ax.set_ylim(0, 4800)
 P.speed_axis(ax)
 ax.grid(axis="x", visible=False)
 P.legend(ax)
-ax.text(0.02, 0.62, "etiquetas: $R_T$ del Excel ($R_N + R_B + R_W$)\n+ $R_{OB}$ de un portón [kgf]", transform=ax.transAxes,
+ax.text(0.02, 0.62, "etiquetas: $R_T$ del Excel ($R_N + R_B + R_W$)\n+ $R_{OB}$ del par de portones [kgf]", transform=ax.transAxes,
         color=P.INK_2, fontsize=8.5, va="top")
 P.finish(fig)
 ```

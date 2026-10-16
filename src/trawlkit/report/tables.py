@@ -350,7 +350,12 @@ def rigging_table(result: DesignResult) -> Table:
     for v in speeds:
         i = case.speed_index(v)
         rows.append(
-            _kv("Portones", f"ROB hidrodinámica a {v:g} kn", _at(d.forces.drag_kgf, i), "kgf")
+            _kv(
+                "Portones",
+                f"ROB hidrodinámica de un portón a {v:g} kn",
+                _at(d.forces.drag_kgf, i),
+                "kgf",
+            )
         )
     rows += [
         _kv(
@@ -527,7 +532,7 @@ def demand_table(result: DesignResult) -> Table:
             _f(result.drag.rn.mod[i]),
             _f(result.floats.drag_kgf[i]),
             _f(w.drag_kgf[i]),
-            _at(result.doors.forces.drag_kgf, i),
+            _at(result.doors.rig_drag_kgf, i),
             _f(w.total.std[i]),
             _f(w.total.mod[i]),
             _f(result.power.ft_kgf[i]),
@@ -548,7 +553,7 @@ def demand_table(result: DesignResult) -> Table:
             Column("rn_mod", "RN modificada", "kgf"),
             Column("rb", "RB boyas", "kgf"),
             Column("rw", "Rw cables", "kgf"),
-            Column("rob", "ROB portones", "kgf"),
+            Column("rob", "ROB par de portones", "kgf"),
             Column("total_std", "Total estándar", "kgf"),
             Column("total_mod", "Total modificada", "kgf"),
             Column("ft", "FT disponible", "kgf"),

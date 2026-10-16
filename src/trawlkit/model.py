@@ -406,6 +406,9 @@ class DoorStage:
     rob_share_kgf: FloatArray
     rob_shares_kgf: dict[str, FloatArray]
     forces: DoorForces
+    """Fuerzas de UN portón (Port!D190:E198)."""
+    rig_drag_kgf: FloatArray
+    """Resistencia de los dos portones del arte: ``DOORS_PER_RIG · forces.drag_kgf``."""
     required_area_m2: FloatArray
     required_area: RequiredArea
     required_area_class: dict[str, RequiredArea]
@@ -817,6 +820,7 @@ def _stage_doors(
         rob_share_kgf=rob_share,
         rob_shares_kgf=shares,
         forces=forces,
+        rig_drag_kgf=DOORS_PER_RIG * _arr(forces.drag_kgf),
         required_area_m2=areas,
         required_area=req,
         required_area_class=req_class,
@@ -1179,8 +1183,7 @@ def _stage_warps(
     cd = rigging.warp_cd(angles.divergence_deg)  # E106 (α = E103 = E25)
     v_ms = case.speeds_ms
     rw = _arr(rigging.warp_drag_kgf(cd, d_m, warp_m, v_ms))  # G118:G126
-    # Port!D190 es la resistencia de UN portón (área 1.805 m²); el arte lleva dos.
-    rob = DOORS_PER_RIG * _arr(doors.forces.drag_kgf)
+    rob = doors.rig_drag_kgf  # par de portones (Port!D190 es por portón)
     total = Pair(
         _arr(rigging.total_drag_kgf(drag.rn.std, floats.drag_kgf, rw, rob, case.compat)),  # H118
         _arr(rigging.total_drag_kgf(drag.rn.mod, floats.drag_kgf, rw, rob, case.compat)),  # I118

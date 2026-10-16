@@ -40,7 +40,7 @@ export interface DesignResult {
     design_method: string;
     rn: StdMod<Series>;
   };
-  doors: { forces: { drag_kgf: Series; lift_kgf: Series } };
+  doors: { forces: { drag_kgf: Series; lift_kgf: Series }; rig_drag_kgf: Series };
   floats: { drag_kgf: Series };
   warps: {
     drag_kgf: Series;

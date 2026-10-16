@@ -424,7 +424,7 @@ def breakdown_values(result: DesignResult, speed_kn: float = 3.5) -> dict[str, d
     i = result.case.speed_index(speed_kn)
     rb = float(_arr(result.floats.drag_kgf)[i])
     rw = float(_arr(result.warps.drag_kgf)[i])
-    rob = float(_arr(result.doors.forces.drag_kgf)[i])
+    rob = float(_arr(result.doors.rig_drag_kgf)[i])  # par de portones
     variants = ("std", "mod") if result.case.net_modified is not None else ("std",)
     return {
         var: {"RN": float(result.drag.rn.variant(var)[i]), "RB": rb, "Rw": rw, "ROB": rob}

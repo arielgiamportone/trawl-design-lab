@@ -106,7 +106,8 @@ export function composition(d: DesignData, i: number): CompositionRow[] {
   const r = d.result;
   const floats = at(r.floats.drag_kgf, i) ?? 0;
   const warps = at(r.warps.drag_kgf, i) ?? 0;
-  const doors = at(r.doors.forces.drag_kgf, i) ?? 0;
+  // Par de portones (el motor expone la resistencia de ambos en rig_drag_kgf).
+  const doors = at(r.doors.rig_drag_kgf, i) ?? 0;
   const mk = (variant: string, rn: number): CompositionRow => ({
     variant,
     rn,
