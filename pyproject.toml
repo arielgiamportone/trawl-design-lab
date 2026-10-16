@@ -28,7 +28,13 @@ dependencies = [
 
 [project.optional-dependencies]
 api = ["fastapi>=0.111", "uvicorn[standard]>=0.30"]
-docs = ["jupyter-book>=1.0", "matplotlib>=3.9", "plotly>=5.22"]
+docs = [
+  "jupyter-book>=1.0,<2",
+  "sphinxcontrib-bibtex>=2.6",
+  "matplotlib>=3.9",
+  "jupytext>=1.16",
+  "ipykernel>=6.29",
+]
 optimize = ["scipy>=1.13"]
 excel = ["openpyxl>=3.1"]
 report = ["weasyprint>=62", "openpyxl>=3.1"]
