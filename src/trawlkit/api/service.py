@@ -192,6 +192,44 @@ def run_case(case: DesignCase) -> DesignResult:
         raise BadRequestError(f"el caso no se puede calcular: {exc}") from exc
 
 
+def optimize_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    objective: str = "area",
+    margin: float = 0.1,
+    s_bounds: tuple[float, float] = (0.6, 1.4),
+    v_bounds: tuple[float, float] = (1.5, 4.0),
+    grid: tuple[int, int] = (13, 11),
+    refine: bool = True,
+    seed: int = 0,
+    propeller: str | None = None,
+    door_angle: float | None = None,
+) -> dict[str, Any]:
+    """Arma el caso (modo corregido), corre :func:`trawlkit.optimize.optimise` y lo serializa."""
+    from trawlkit.optimize import optimise
+
+    case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels)
+    try:
+        result = optimise(
+            case,
+            objective=objective,
+            bounds=(s_bounds, v_bounds),
+            margin=margin,
+            seed=seed,
+            grid=grid,
+            refine=refine,
+            propeller=propeller,
+            door_angle=door_angle,
+        )
+    except (ValueError, ZeroDivisionError, IndexError) as exc:
+        raise BadRequestError(f"no se puede optimizar el caso: {exc}") from exc
+    out: dict[str, Any] = to_jsonable(result.to_dict())
+    return out
+
+
 def to_jsonable(value: Any) -> Any:
     """Convierte a JSON estricto: NaN/inf → ``None``, tuplas → listas, recursivo."""
     if isinstance(value, float):

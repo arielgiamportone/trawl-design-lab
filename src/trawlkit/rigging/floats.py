@@ -9,6 +9,7 @@ Convenciones: fuerzas en kgf, longitudes en m, velocidades en m/s, ángulos en g
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Any
 
@@ -184,11 +185,21 @@ def distribute_floats(
     per_wing = on_wings // 2
     on_bosom = count - on_wings
     front_fifth = int(per_wing * front_fifth_share)
-    spacing_front = float(excel_round(bosom_corrected_m / (front_fifth - 1), 2))
+    # Con pocas boyas la regla del libro deja divisores nulos o negativos (H110, H111): esos
+    # espaciados no están definidos y se informan como NaN en lugar de abortar el cálculo.
+    spacing_front = (
+        float(excel_round(bosom_corrected_m / (front_fifth - 1), 2))
+        if front_fifth > 1
+        else math.nan
+    )
     remaining_m = wing_corrected_m - bosom_corrected_m
     remaining_per_wing = per_wing - on_bosom
-    spacing_remaining = float(excel_int(remaining_m / remaining_per_wing))
-    free_end = remaining_m - spacing_remaining * remaining_per_wing
+    if remaining_per_wing > 0:
+        spacing_remaining = float(excel_int(remaining_m / remaining_per_wing))
+        free_end = remaining_m - spacing_remaining * remaining_per_wing
+    else:
+        spacing_remaining = math.nan
+        free_end = math.nan
     return FloatDistribution(
         count=count,
         diameter_mm=diameter_mm,

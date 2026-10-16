@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import json
 from pathlib import Path
 from typing import Annotated
@@ -168,6 +169,66 @@ def plan(
     target = out or Path(f"plano_{'lamina' if view == 'sheet' else 'escala'}_{variant}.svg")
     target.write_text(svg, encoding="utf-8")
     typer.echo(str(target))
+
+
+@app.command()
+def optimize(
+    net: NetArg,
+    vessel: VesselOpt = None,
+    door: DoorOpt = None,
+    class_vessel: ClassOpt = None,
+    objective: Annotated[
+        str, typer.Option(help="area (área barrida/h) | energy (R_T/AH) | volume (volumen/h)")
+    ] = "area",
+    margin: Annotated[float, typer.Option(help="Reserva de tiro: F_T ≥ (1+margin)·R_T.")] = 0.1,
+    s_min: Annotated[float, typer.Option(help="Escala mínima de la red.")] = 0.6,
+    s_max: Annotated[float, typer.Option(help="Escala máxima de la red.")] = 1.4,
+    v_min: Annotated[float, typer.Option(help="Velocidad mínima [kn].")] = 1.5,
+    v_max: Annotated[float, typer.Option(help="Velocidad máxima [kn].")] = 4.0,
+    propeller: Annotated[
+        str | None,
+        typer.Option(help="Hélice para el tiro: fixed_pitch | variable_pitch_nozzle."),
+    ] = None,
+    door_area: Annotated[
+        float | None,
+        typer.Option(help="Usa un portón semejante al elegido con esta superficie [m²]."),
+    ] = None,
+    n_s: Annotated[int, typer.Option(help="Puntos de la malla en s.")] = 17,
+    n_v: Annotated[int, typer.Option(help="Puntos de la malla en v.")] = 11,
+    refine: Annotated[bool, typer.Option(help="Refina con evolución diferencial (scipy).")] = True,
+    seed: Annotated[int, typer.Option(help="Semilla del optimizador.")] = 0,
+    json_path: Annotated[
+        Path | None, typer.Option("--json", help="Escribe el resultado completo en JSON.")
+    ] = None,
+) -> None:
+    """Optimiza la escala de la red y la velocidad de arrastre (resumen Markdown)."""
+    from trawlkit.optimize import optimise, scale_door, summary_markdown
+
+    case = build_case(net, vessel, door, None, class_vessel, "corrected")
+    try:
+        if door_area is not None:
+            case = dataclasses.replace(case, door=scale_door(case.door, door_area))
+        result = optimise(
+            case,
+            objective=objective,
+            bounds=((s_min, s_max), (v_min, v_max)),
+            margin=margin,
+            seed=seed,
+            grid=(n_s, n_v),
+            refine=refine,
+            propeller=propeller,
+        )
+    except (ValueError, RuntimeError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    typer.echo(summary_markdown(result))
+    if json_path is not None:
+        from trawlkit.api.service import to_jsonable
+
+        json_path.write_text(
+            json.dumps(to_jsonable(result.to_dict()), ensure_ascii=False, indent=1),
+            encoding="utf-8",
+        )
+        typer.echo(f"JSON escrito en {json_path}")
 
 
 @app.command()

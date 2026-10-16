@@ -19,6 +19,8 @@ from trawlkit.api.schemas import (
     DesignResponse,
     ErratumOut,
     Health,
+    OptimizeRequest,
+    OptimizeResponse,
     ParamInfo,
     PlanView,
     ReportFormat,
@@ -140,6 +142,26 @@ def design_plan(req: DesignRequest, view: PlanView = "sheet", variant: Variant =
     result = _run(req)
     svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
     return Response(svg, media_type="image/svg+xml")
+
+
+@app.post("/optimize", response_model=OptimizeResponse)
+def optimize(req: OptimizeRequest) -> dict[str, Any]:
+    """Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial)."""
+    return service.optimize_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        objective=req.objective,
+        margin=req.margin,
+        s_bounds=req.s_bounds,
+        v_bounds=req.v_bounds,
+        grid=(req.grid.n_s, req.grid.n_v),
+        refine=req.refine,
+        seed=req.seed,
+        propeller=req.propeller,
+        door_angle=req.door_angle,
+    )
 
 
 _MEDIA = {

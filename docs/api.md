@@ -17,6 +17,7 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | GET | `/errata` | Erratas del libro Excel original. |
 | POST | `/design` | Calcula un caso de diseño completo. |
 | POST | `/design/plan` | Plano SVG del caso: lámina técnica (`sheet`) o escala real (`scale`). |
+| POST | `/optimize` | Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial). |
 | POST | `/design/report` | Informe del caso en HTML, PDF o XLSX. |
 
 ## Ejemplo

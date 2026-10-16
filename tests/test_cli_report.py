@@ -44,3 +44,33 @@ def test_report_html_xlsx_svg(tmp_path: Path) -> None:
 def test_report_rejects_unknown_format(tmp_path: Path) -> None:
     res = runner.invoke(app, ["report", *ARGS, "--out", str(tmp_path), "--format", "docx"])
     assert res.exit_code != 0
+
+
+def test_optimize_command(tmp_path: Path) -> None:
+    import json
+
+    out = tmp_path / "opt.json"
+    res = runner.invoke(
+        app,
+        [
+            "optimize",
+            "fao_a3_standard",
+            "--vessel",
+            "fao_a3_150hp",
+            "--objective",
+            "volume",
+            "--n-s",
+            "3",
+            "--n-v",
+            "3",
+            "--no-refine",
+            "--json",
+            str(out),
+        ],
+    )
+    assert res.exit_code == 0, res.output
+    assert "Mejor diseño" in res.output and "Frente de Pareto" in res.output
+    data = json.loads(out.read_text(encoding="utf-8"))
+    assert data["objective"] == "volume_rate"
+    bad = runner.invoke(app, ["optimize", "fao_a3_standard", "--objective", "nope"])
+    assert bad.exit_code != 0

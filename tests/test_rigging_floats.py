@@ -201,3 +201,15 @@ def test_distribution_to_dict() -> None:
     d = _distribution().to_dict()
     assert d["count"] == 12 and d["diameter_mm"] == 200
     assert d["on_wings"] == 10 and d["per_wing"] == 5 and d["on_bosom"] == 2
+
+
+def test_distribute_floats_small_counts_do_not_crash() -> None:
+    import math
+
+    from trawlkit.rigging.floats import distribute_floats
+
+    for n in range(1, 20):
+        d = distribute_floats(n, 200.0, 28.698, 13.1, 2.49)
+        assert d.count == n
+        if d.front_fifth <= 1:
+            assert math.isnan(d.spacing_front_fifth_m)

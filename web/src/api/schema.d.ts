@@ -184,6 +184,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/optimize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Optimize
+         * @description Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial).
+         */
+        post: operations["optimize_optimize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/report": {
         parameters: {
             query?: never;
@@ -219,6 +239,29 @@ export interface components {
             name?: string | null;
             /** Description */
             description?: string | null;
+        };
+        /**
+         * ConstraintOut
+         * @description Restricción evaluada (``lower ≤ value ≤ upper``).
+         */
+        ConstraintOut: {
+            /** Name */
+            name: string;
+            /** Value */
+            value: number | null;
+            /** Lower */
+            lower: number | null;
+            /** Upper */
+            upper: number | null;
+            /** Ok */
+            ok: boolean;
+            /** Violation */
+            violation: number | null;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
         };
         /**
          * DesignRequest
@@ -332,6 +375,64 @@ export interface components {
             description: string;
         };
         /**
+         * EvaluationOut
+         * @description Diseño ``(s, v)`` evaluado.
+         */
+        EvaluationOut: {
+            /** S */
+            s: number;
+            /** V Kn */
+            v_kn: number;
+            /** Net Id */
+            net_id: string;
+            /** Vessel Id */
+            vessel_id: string;
+            /** Door Id */
+            door_id: string;
+            /** Propeller */
+            propeller: string;
+            /** Ah M */
+            ah_m: number | null;
+            /** Dpa Fridman M */
+            dpa_fridman_m: number | null;
+            /** Av M */
+            av_m: number | null;
+            /** Av Fridman M */
+            av_fridman_m: number | null;
+            /** Area Rate M2 H */
+            area_rate_m2_h: number | null;
+            /** Volume Rate M3 H */
+            volume_rate_m3_h: number | null;
+            /** Demand Kgf */
+            demand_kgf: number | null;
+            /** Available Kgf */
+            available_kgf: number | null;
+            /** Thrust Margin */
+            thrust_margin: number | null;
+            /** Energy Kgf M Per M2 */
+            energy_kgf_m_per_m2: number | null;
+            /** Net Drag Kgf */
+            net_drag_kgf: number | null;
+            /** Dpa Geometric M */
+            dpa_geometric_m: number | null;
+            /** Headrope M */
+            headrope_m: number | null;
+            /** Footrope M */
+            footrope_m: number | null;
+            /** Door Area M2 */
+            door_area_m2: number | null;
+            /** Door Required M2 */
+            door_required_m2: number | null;
+            /** Warp Id */
+            warp_id: string | null;
+            /** Constraints */
+            constraints: components["schemas"]["ConstraintOut"][];
+            /** Feasible */
+            feasible: boolean;
+            /** Penalty */
+            penalty: number | null;
+        };
+        /**
          * FloatSpec
          * @description Flotadores de la lima.
          */
@@ -389,6 +490,125 @@ export interface components {
             notes?: string[];
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * OptimizeGrid
+         * @description Malla inicial de la optimización (una corrida del motor por escala).
+         */
+        OptimizeGrid: {
+            /**
+             * N S
+             * @description Puntos en la escala s
+             * @default 13
+             */
+            n_s: number;
+            /**
+             * N V
+             * @description Puntos en la velocidad v
+             * @default 11
+             */
+            n_v: number;
+        };
+        /**
+         * OptimizeRequest
+         * @description Optimización de la escala de la red ``s`` y la velocidad ``v`` (``POST /optimize``).
+         *
+         *     ``net``, ``vessel`` y ``door`` aceptan id del catálogo o especificación en línea, como en
+         *     ``DesignRequest``. ``objective``: ``area`` (máx. área barrida por hora), ``energy`` (mín.
+         *     R_T/AH) o ``volume`` (máx. volumen filtrado por hora). ``margin`` es la reserva de tiro
+         *     (F_T ≥ (1+margin)·R_T); ``s_bounds`` y ``v_bounds`` [kn] acotan la búsqueda; ``refine`` activa
+         *     la evolución diferencial (con ``seed``) después de la malla.
+         */
+        OptimizeRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Objective
+             * @default area
+             * @enum {string}
+             */
+            objective: "area" | "energy" | "volume";
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
+            /**
+             * S Bounds
+             * @default [
+             *       0.6,
+             *       1.4
+             *     ]
+             */
+            s_bounds: [
+                number,
+                number
+            ];
+            /**
+             * V Bounds
+             * @default [
+             *       1.5,
+             *       4
+             *     ]
+             */
+            v_bounds: [
+                number,
+                number
+            ];
+            grid?: components["schemas"]["OptimizeGrid"];
+            /**
+             * Refine
+             * @default true
+             */
+            refine: boolean;
+            /**
+             * Seed
+             * @default 0
+             */
+            seed: number;
+            /** Propeller */
+            propeller?: ("fixed_pitch" | "variable_pitch_nozzle") | null;
+            /** Door Angle */
+            door_angle?: number | null;
+        };
+        /**
+         * OptimizeResponse
+         * @description Resultado de ``POST /optimize`` (``OptimizationResult.to_dict()``).
+         */
+        OptimizeResponse: {
+            /** Objective */
+            objective: string;
+            /** Feasible */
+            feasible: boolean;
+            best: components["schemas"]["EvaluationOut"];
+            grid_best: components["schemas"]["EvaluationOut"] | null;
+            /** Pareto */
+            pareto: components["schemas"]["EvaluationOut"][];
+            /** Grid */
+            grid: {
+                [key: string]: unknown;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Refine */
+            refine: {
+                [key: string]: unknown;
+            } | null;
+            /** Runtime S */
+            runtime_s: number;
+            /** Engine Runs */
+            engine_runs: number;
         };
         /**
          * Panel
@@ -778,6 +998,39 @@ export interface operations {
                 };
                 content: {
                     "image/svg+xml": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    optimize_optimize_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OptimizeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OptimizeResponse"];
                 };
             };
             /** @description Validation Error */

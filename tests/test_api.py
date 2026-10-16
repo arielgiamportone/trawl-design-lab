@@ -143,3 +143,63 @@ def test_inline_net_edge_edit_changes_geometry() -> None:
     panel_c["meshes_bottom"] = 140  # sin tocar meshes_a/meshes_b (57/117)
     edited = client.post("/design", json={"net": spec}).json()["summary"]["solid_surface_m2"]
     assert edited > base
+
+
+def test_optimize_endpoint() -> None:
+    body = {
+        "net": "fao_a3_standard",
+        "vessel": "fao_a3_150hp",
+        "objective": "area",
+        "margin": 0.1,
+        "s_bounds": [0.8, 1.2],
+        "v_bounds": [1.5, 3.5],
+        "grid": {"n_s": 3, "n_v": 5},
+        "refine": False,
+    }
+    r = client.post("/optimize", json=body)
+    assert r.status_code == 200, r.text[:500]
+    json.loads(r.text, parse_constant=lambda c: pytest.fail(f"constante no JSON: {c}"))
+    out = r.json()
+    assert out["objective"] == "area_rate" and out["feasible"]
+    assert out["best"]["feasible"] and out["refine"] is None
+    assert {c["name"] for c in out["best"]["constraints"]} == {
+        "thrust",
+        "net_open",
+        "warp",
+        "door",
+        "speed",
+    }
+    assert len(out["grid"]["feasible"]) == 3 and len(out["grid"]["feasible"][0]) == 5
+    assert out["pareto"] and all(p["feasible"] for p in out["pareto"])
+    assert out["settings"]["limits"]["margin"] == 0.1
+
+
+@pytest.mark.slow
+def test_optimize_endpoint_refine_is_seeded() -> None:
+    body = {"grid": {"n_s": 3, "n_v": 3}, "objective": "volume", "seed": 1}
+    a = client.post("/optimize", json=body).json()
+    b = client.post("/optimize", json=body).json()
+    assert a["refine"]["nfev"] > 0
+    assert (a["best"]["s"], a["best"]["v_kn"]) == (b["best"]["s"], b["best"]["v_kn"])
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"objective": "speed"},
+        {"s_bounds": [1.2, 0.8]},
+        {"v_bounds": [0.1, 3.0]},
+        {"grid": {"n_s": 40, "n_v": 5}},
+        {"margin": -0.1},
+        {"door_angle": 33.3},
+        {"unknown": 1},
+    ],
+)
+def test_optimize_endpoint_validation(patch: dict[str, object]) -> None:
+    body = {"grid": {"n_s": 2, "n_v": 2}, "refine": False, **patch}
+    assert client.post("/optimize", json=body).status_code == 422
+
+
+def test_optimize_endpoint_unknown_vessel() -> None:
+    body = {"vessel": "nope", "grid": {"n_s": 2, "n_v": 2}, "refine": False}
+    assert client.post("/optimize", json=body).status_code == 404

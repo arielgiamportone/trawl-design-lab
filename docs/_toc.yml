@@ -17,6 +17,7 @@ parts:
       - file: 17_flotacion_lastre
       - file: 18_cables
       - file: 19_ventana_velocidad
+      - file: 20_optimizacion
   - caption: Caso de estudio y validación
     chapters:
       - file: 30_caso_beagle
