@@ -6,15 +6,15 @@
 
 ```bash
 # Informe completo: HTML, PDF, XLSX y láminas SVG
-uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
     --vessel fao_a3_150hp --out informe/
 
 # Sólo algunos formatos
-uv run trawlkit report data/fao_a3_standard.yaml --format html,xlsx --out informe/
+uv run trawlkit report fao_a3_standard --format html,xlsx --out informe/
 
 # Plano suelto: lámina técnica (sheet) o escala real (scale), red estándar o modificada
-uv run trawlkit plan data/fao_a3_standard.yaml --view sheet --out lamina.svg
-uv run trawlkit plan data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+uv run trawlkit plan fao_a3_standard --view sheet --out lamina.svg
+uv run trawlkit plan fao_a3_standard --modified fao_a3_modified \
     --view scale --variant mod --out escala_mod.svg
 ```
 

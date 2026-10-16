@@ -415,7 +415,12 @@ def split_by_plane(rows: Sequence[NettingRow], values: Sequence[float]) -> dict[
 
 @dataclass(frozen=True)
 class RowGeometry:
-    """Resultados de ``'Mecánica de la Red'`` para una fila de paño."""
+    """Resultados de ``'Mecánica de la Red'`` para una fila de paño.
+
+    ``solid_surface_m2`` y ``working_surface_m2`` incluyen la cantidad de paneles de la fila.
+    ``weight_air_kg``/``weight_water_kg`` son de un panel en :attr:`Compat.EXCEL` (O98, P98) y de
+    toda la fila en :attr:`Compat.CORRECTED` (errata ``net_weight_ignores_panel_count``).
+    """
 
     row: NettingRow
     u2: float
@@ -505,8 +510,13 @@ def analyse(
     * :data:`ERRATUM_CODEND_MINOR_SIDE` (Mec!K36, propuesta): lado menor de las bolsas I/J
       sustituido por el alto N de I. Afecta Ss, St y pesos de la red estándar.
 
-    Además, como la hoja, el peso total suma las filas sin multiplicar por la cantidad de
-    paneles (O107 = ΣO98:O106) y Σd/Σl no pondera por paneles.
+    * ``net_weight_ignores_panel_count`` (Mec!O107, O109): el libro suma el peso de un panel
+      por fila (O107 = ΣO98:O106) aunque la fila agrupe varios paneles iguales (alas izquierda y
+      derecha, planos alto y bajo). En modo corregido el peso de cada fila (en aire y en agua) se
+      multiplica por su cantidad de paneles ``count``, igual que Ss y St; de ahí salen los totales
+      ``weight_air_kg``/``weight_water_kg`` y el reparto por plano (I110:I113).
+
+    Además, como la hoja, Σd/Σl no pondera por paneles.
     """
     rows = group_rows(spec)
     notes: list[str] = []
@@ -525,6 +535,8 @@ def analyse(
         density = float(twine_density_kg_m3(r.twine_mm, r.mesh_mm, r.runnage_m_per_kg, compat))
         sn = float(reference_twine_weight_kg(r.mesh_mm, r.twine_mm, density, pi=pi))
         w_air = float(panel_weight_air_kg(r.t1, r.t2, r.n, sn))
+        if compat is Compat.CORRECTED:
+            w_air *= r.count  # errata net_weight_ignores_panel_count (O107 = ΣO98:O106)
         if compat is Compat.EXCEL:
             rho_buoyancy = density
         else:

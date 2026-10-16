@@ -1,7 +1,7 @@
 """Materiales de los paños: densidad del hilo y coeficientes de peso en el agua.
 
 Reproduce la columna *Densidad* de la hoja ``'Paños de red y cortes'`` (L55, X54, …) y expone el
-catálogo ``data/materials.yaml`` (``'Tablas de Referencias'!A35:I37``) como objetos
+catálogo ``trawlkit/data/materials.yaml`` (``'Tablas de Referencias'!A35:I37``) como objetos
 :class:`Material`.
 """
 
@@ -31,7 +31,7 @@ def _out(a: npt.NDArray[np.float64]) -> Number:
 
 @dataclass(frozen=True)
 class Material:
-    """Hilo de red del catálogo ``data/materials.yaml``.
+    """Hilo de red del catálogo ``trawlkit/data/materials.yaml``.
 
     ``density_kg_m3`` es la densidad del polímero (PA 1140 kg/m³) y los coeficientes
     ``weight_in_water_coefficient_*`` el cociente peso en agua / peso en aire

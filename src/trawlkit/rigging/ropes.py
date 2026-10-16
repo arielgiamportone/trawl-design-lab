@@ -19,7 +19,7 @@ ROPE_WATER_WEIGHT_COEF: float = 0.087
 
 @dataclass(frozen=True)
 class RopeSpec:
-    """Cabo del catálogo ``data/ropes.yaml`` (Tab!A292:F296; Cab!D3:I4)."""
+    """Cabo del catálogo ``trawlkit/data/ropes.yaml`` (Tab!A292:F296; Cab!D3:I4)."""
 
     id: str
     description: str

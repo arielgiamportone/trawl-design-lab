@@ -65,7 +65,7 @@ V.md_table(
         ["Profundidad de trabajo", f"{V.fmt(c.working_depth_m, 0)} m, fondo {std.species.bottom_type.lower()}", "Especie Blanco!E5:E6"],
         ["Red estándar: bolsa", codend(cod_std), "Paños!H222:T224"],
         ["Red modificada: bolsa", codend(cod_mod), "Paños!H255:H257"],
-        ["Paños del cuerpo y alas", "PA, 80/60/40 mm, Ø 1,13–1,37 mm (iguales en ambas)", "data/fao_a3_*.yaml"],
+        ["Paños del cuerpo y alas", "PA, 80/60/40 mm, Ø 1,13–1,37 mm (iguales en ambas)", "src/trawlkit/data/fao_a3_*.yaml"],
         ["Buque de diseño", f"{V.fmt(c.vessel.bhp, 0)} BHP, eslora ≤ {V.fmt(c.vessel.length_m, 0)} m, manga {V.fmt(c.vessel.beam_m, 1)} m", "Tipo de buques"],
         ["Buque de la clase", "180 BHP (flotación Ffz promediada, cable dimensionado con 180 HP)", "Mec!O261, Rem!E81"],
         ["Hélice para ROB y flotación", "paso fijo, K_F = 10 kgf/HP (Fridman)", "PotOK!L11"],
@@ -143,8 +143,10 @@ f"{len(checks)} comprobaciones contra el libro Excel: OK"
 Las diferencias entre columnas son las erratas del libro ({doc}`erratas`): el corregido mide el burlón
 completo (33,39 m en vez del truncado 33,3), no infla la superficie sólida de la bolsa estándar
 (38,75 m² en vez de 40,90), suma la resistencia de los portones a la demanda total y, con ella,
-pide un cable de 13 mm porque el de 12 mm (8,55 t) no alcanza la carga de rotura mínima. Lo demás
-(relingas, aberturas geométricas, flotación, boyas) coincide entre modos.
+pide un cable de 13 mm porque el de 12 mm (8,55 t) no alcanza la carga de rotura mínima. Además
+pesa la red contando todos sus paneles (33,5 kg en vez de 28,3) y toma el $C_D$ del cable con su
+ángulo de ataque real (0,054 en vez de 0,02; {doc}`18_cables`). Lo demás (relingas, aberturas
+geométricas, flotación, boyas) coincide entre modos.
 
 ## Láminas de la red
 
@@ -241,11 +243,11 @@ V.md_table(["Buque y hélice", "v* estándar, corregido [kn]", "v* modificada, c
 Tres lecturas:
 
 * **La hélice pesa más que los 30 HP.** Con paso fijo, el buque de 150 HP sólo remolca la red hasta
-  2,28 kn, y el de 180 HP hasta 2,54 kn. Cambiar a paso variable con tobera, sin tocar el motor,
-  lleva el límite a 2,99 kn (150 HP) y 3,29 kn (180 HP): +0,71 y +0,75 kn, frente a los +0,26 kn
+  2,27 kn, y el de 180 HP hasta 2,52 kn. Cambiar a paso variable con tobera, sin tocar el motor,
+  lleva el límite a 2,97 kn (150 HP) y 3,27 kn (180 HP): +0,70 y +0,75 kn, frente a los +0,25 kn
   que aportan 30 HP más con paso fijo.
 * **El margen es estrecho.** La red sola ya consume casi todo el tiro: a 2,5 kn la resistencia de la
-  red estándar es el 90 % de la demanda total y equivale al 97 % del tiro PF del buque de 150 HP.
+  red estándar es el 82 % de la demanda total y equivale al 97 % del tiro PF del buque de 150 HP.
 * **El modo corregido es más exigente**: suma a la demanda la resistencia de los dos portones y
   corrige la bolsa estándar, que en el Excel aparecía más pesada que la modificada (las diferencias
   de velocidad se calculan en la tabla de arriba).
@@ -303,7 +305,7 @@ plt.show()
 
 En modo corregido la bolsa de 30 mm agrega 1,28 m² de superficie sólida (+3,3 %) y, como la
 resistencia de diseño de Aberdeen es proporcional a $S_s$, el mismo +3,3 % de $R_N$: ≈ 40 kgf a
-2,5 kn y ≈ 68 kgf a 3,5 kn. Sobre la ventana el efecto es chico, entre −0,04 y −0,06 kn de
+2,5 kn y ≈ 68 kgf a 3,5 kn. Sobre la ventana el efecto es chico, entre −0,04 y −0,05 kn de
 velocidad máxima según buque y hélice. Es decir: **la retención de langostilla con la bolsa de 30 mm
 cuesta poco en tiro**; el factor limitante sigue siendo el buque y su hélice. El libro original
 llegaba a la conclusión contraria (la modificada "resiste menos") por la errata de la bolsa
@@ -354,12 +356,12 @@ En palabras:
 
 1. **Velocidad de arrastre.** Por debajo de ≈ 2,1 kn la red no termina de abrirse horizontalmente
    según Fridman (la DPA no llega al 85 % de la abertura geométrica); por encima de $v^*$ el buque no
-   la remolca. Con **150 HP y paso fijo la ventana de la red modificada es de apenas 2,1–2,25 kn**:
+   la remolca. Con **150 HP y paso fijo la ventana de la red modificada es de apenas 2,1–2,23 kn**:
    operable, pero sin reserva para corriente, mar o captura en la bolsa. Con **paso variable y
    tobera** el rango útil pasa a 2,1–2,9 kn (150 HP) o 2,1–3,2 kn (180 HP), y es la configuración
    recomendada para la red modificada.
 2. **Cable.** 13 mm de acero 6 × 19 Seale (10,3 t de rotura). El de 12 mm que eligió el libro queda
-   por debajo de la rotura mínima (8,55 t < 10,1 t) una vez que la demanda incluye los portones.
+   por debajo de la rotura mínima (8,55 t < 10,2 t) una vez que la demanda incluye los portones.
 3. **Flotación.** 12 boyas de 200 mm, cinco por ala y dos en el centro de la lima.
 4. **Lastre.** Entre 27 y 41 kg de cadena repartida en el burlón: 27 kg bastan para mantener el
    burlón en el fondo a 1 kn con la red modificada y 41 kg lo mantienen a 3 kn con la estándar; más

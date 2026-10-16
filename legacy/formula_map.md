@@ -28,14 +28,14 @@ Referencias. `{…}` marca fórmulas matriciales.
 | Especie Blanco, Tipo de buques | `trawlkit.io` (spec YAML: `species`, `vessel`) | `especie_blanco`, `tipo_de_buques` |
 | Potenc disponible para arrastre, Potencia Disponible Arrastre OK | `trawlkit.vessel`, `trawlkit.power` | `potenc_disponible_para_arrastre`, `potencia_disponible_arrastre_ok` |
 | Paños de red y cortes | `trawlkit.netting` | `panos_de_red_y_cortes` |
-| Cables Y Cabulleria | `data/ropes.yaml`, `trawlkit.rigging.warps` | `cables_y_cabulleria` |
+| Cables Y Cabulleria | `src/trawlkit/data/ropes.yaml`, `trawlkit.rigging.warps` | `cables_y_cabulleria` |
 | Mecánica de la Red | `trawlkit.net`, `trawlkit.rigging.spread` | `mecanica_de_la_red` |
 | Dimensiones de la Red | `trawlkit.dimensions` | `dimensiones_de_la_red` |
 | Resistencia de la RED | `trawlkit.drag` | `resistencia_de_la_red` |
 | Portones y aparejamiento | `trawlkit.rigging.doors`, `trawlkit.rigging.bridles` | `portones_y_aparejamiento` |
 | Flotación y Lastre | `trawlkit.rigging.floats`, `trawlkit.rigging.ballast` | `flotacion_y_lastre` |
 | Cables de Remolque | `trawlkit.rigging.warps` | `cables_de_remolque` |
-| Tablas de Referencias | `data/reference/*.csv`, `trawlkit.materials` | `tablas_de_referencias` |
+| Tablas de Referencias | `src/trawlkit/data/reference/*.csv`, `trawlkit.materials` | `tablas_de_referencias` |
 
 ## Grafo de dependencias entre hojas
 
@@ -89,13 +89,13 @@ Dos bloques idénticos (150 BHP en filas 23-31, 180 BHP en filas 35-43).
 
 | Bloque | Celdas | Fórmula representativa | Método | Destino | Errata |
 |---|---|---|---|---|---|
-| Constantes KF | D10, F10 | `=MID(E3,38,2)` → `"10"`; `=MID(E4,40,2)` → `"15"` (texto extraído de la nota; Excel lo coacciona a número) | Fridman | `data/reference` (`kf_fixed_pitch`, `kf_variable_pitch_nozzle`) | — |
+| Constantes KF | D10, F10 | `=MID(E3,38,2)` → `"10"`; `=MID(E4,40,2)` → `"15"` (texto extraído de la nota; Excel lo coacciona a número) | Fridman | `src/trawlkit/data/reference` (`kf_fixed_pitch`, `kf_variable_pitch_nozzle`) | — |
 | FT Fridman 150 HP | B10:G18 | `E10 =C10*(D10-(0.7*B10))` (PF), `G10 =C10*(F10-(0.7*B10))` (PV+T); `C10 =Pot!C25` | Fridman `Ft ≈ HP·(KF − 0.7·v)` | `power.fridman_towing_force(hp, speed_kn, kf)` | — |
 | FT Fridman 180 HP | B22:G30 | ídem con `C22 =Pot!C37` | Fridman | `power.fridman_towing_force` | — |
 | Resumen FT y RN | I8:O19 | `J11 =Res!N302*1000`, `K11 =Res!N317*1000`, `L11 =E10`, `M11 =G10`, `N11 =E22`, `O11 =G22` | — | `power.summary` (lo consumen Portones, Flotación, Remolque) | — |
 | Bollard pull Prado 150 HP | A58:C63 | `B60 =(C10*0.9*(1.1/100)*1000)`; factores 1.10/1.20/1.25/1.40 (PF, PF+T, PV, PV+T); `C60 =B60/1000` | Prado & Dremiere (FAO) | `power.bollard_pull(bhp, propeller)` | — |
 | Bollard pull Prado 180 HP | D60:E63 | `D60 =C22*0.9*(1.1/100)*1000` | Prado & Dremiere | `power.bollard_pull` | — |
-| Factor K según potencia | H51:L55 | tabla estática K52:L55 (11.23/13.35/11.73/13.73 …) | Prado & Dremiere | `data/reference/bollard_pull_k.csv` | — |
+| Factor K según potencia | H51:L55 | tabla estática K52:L55 (11.23/13.35/11.73/13.73 …) | Prado & Dremiere | `src/trawlkit/data/reference/bollard_pull_k.csv` | — |
 | BP vía factor K | H57:L62 | `I59 =K52*(C10/1000)` [t], `J59 =(I59*100)/1.36` [HP] | Prado & Dremiere | `power.bollard_pull_k` | — |
 | BP promedios | F56:G61, F63:G68 | `G58 =AVERAGE(B60,(I59*1000))` (150), `G65 =AVERAGE(E60,K59)*1000` (180) | — | `power.bollard_pull_avg` | — |
 | Potencia nominal aparente (APN) | A71:C76 | `B73 =0.09*G58` | Prado & Dremiere | `power.apparent_nominal_power` | — |
@@ -126,7 +126,7 @@ fórmulas, que se muestran con el paño A/B (filas 52-64).
 | Densidad del hilo | L55 | `=((3.1416*((J55/2)^2)*(B55/2)/1000))*(A55/((B55/2)/1000))` | — | `materials.twine_density` | `twine_density_units` |
 | Superficie de trabajo del paño | A61 | `=D55*(SQRT(1-(D55^2)))*(((H55+H56)/2)*H57)*(B55/1000)^2` (U1·U2·((T1+T2)/2)·N·mL²) | FAO (Prado) | `netting.panel_working_area` | — |
 | Nº de mallas | A64 | `=((H55+H56-1)*(H57-0.5))+0.5` | — | `netting.mesh_count` | — |
-| Cortes (faltante, RC, código) | F62:I64 | `G63 =((H56-(H55+H57))/H57)*H57`; `H63 =(ABS(G63-H57))/(2*G63)`; `I63 =VLOOKUP(H63,Tab!$A$49:$C$88,3,FALSE)` | FAO (tabla de cortes) | `netting.cut_ratio`, `netting.cut_code` (usa `data/reference/cuts.csv`) | — |
+| Cortes (faltante, RC, código) | F62:I64 | `G63 =((H56-(H55+H57))/H57)*H57`; `H63 =(ABS(G63-H57))/(2*G63)`; `I63 =VLOOKUP(H63,Tab!$A$49:$C$88,3,FALSE)` | FAO (tabla de cortes) | `netting.cut_ratio`, `netting.cut_code` (usa `src/trawlkit/data/reference/cuts.csv`) | — |
 | Corte paño F (X1) | T122 | `{=MATCH(MIN(ABS(Tab!A49:B88-U122)),…)}` → `#N/A` (omitida en golden) | — | `netting.cut_code` | — (celda rota) |
 | Cantidad de paneles | N62 (`=SUM(COUNTIF(37:37,"A"),COUNTIF(37:37,"B"))`), B97, N97, B127, N122, N163, N196, B229, N229, O262 | `COUNTIF` de letras | — | `netting.PanelSpec.count` | — |
 | Superficie sólida total | V61, J96, V96… | `=Mec!N29` (eco de Mecánica) | — | — | — |
@@ -138,11 +138,11 @@ fórmulas, que se muestran con el paño A/B (filas 52-64).
 Nota: en el bloque A (filas 55-57) las etiquetas `b (T2)` y `a (T1)` están invertidas respecto a
 los demás bloques; los golden conservan el orden de la hoja (`panel_a_stretched_t2_m` = I55).
 
-## 6. Cables Y Cabulleria → `data/ropes.yaml`, `trawlkit.rigging.warps`
+## 6. Cables Y Cabulleria → `src/trawlkit/data/ropes.yaml`, `trawlkit.rigging.warps`
 
 | Bloque | Celdas | Fórmula representativa | Método | Destino | Errata |
 |---|---|---|---|---|---|
-| Cabo de lima | A3:J3 | `A3 {=Dim!B45:E45}`; `D3 "COMBINADO 12 Acero6x24+7"` (= nombre `resulmat`); `G3 =LOOKUP(resulmat,cabl,Tab!E293:E296)` [kg/m]; `H3` [t]; `I3 =LOOKUP(resulmat,cabl,diamcab)`; `J3 =Lima` | catálogo Moscuzza | `data/ropes.yaml` + `rigging.ropes.select_rope(name)` | — |
+| Cabo de lima | A3:J3 | `A3 {=Dim!B45:E45}`; `D3 "COMBINADO 12 Acero6x24+7"` (= nombre `resulmat`); `G3 =LOOKUP(resulmat,cabl,Tab!E293:E296)` [kg/m]; `H3` [t]; `I3 =LOOKUP(resulmat,cabl,diamcab)`; `J3 =Lima` | catálogo Moscuzza | `src/trawlkit/data/ropes.yaml` + `rigging.ropes.select_rope(name)` | — |
 | Cabo de burlón | A4:J4 | `D4 "COMBINADO 14 Acero6x24+7"`; `G4 =LOOKUP(D4,cabl,…)`; `J4 =Burlon` | catálogo | `rigging.ropes.select_rope` | — |
 | Refuerzo punta de ala | A5, J5 | `=ROUNDUP(4*Dim!C155,1)` | — | `rigging.ropes.wingtip_reinforcement` | — |
 | Cable de remolque seleccionado | D11:I11 | `D11 =LOOKUP(Rem!E264,diamremolque,Tab!C338:C343)`; `G11 =LOOKUP(…,diamremolque,diamremolque)`; `H11 … pesoremolque`; `I11 … resisremolque` | catálogo acero 6x19+1 Seale | `rigging.warps.select_warp(min_diameter_mm)` | `warp_undersized` (ver §12) |
@@ -162,7 +162,7 @@ los demás bloques; los golden conservan el orden de la hoja (`panel_a_stretched
 | Solidez y filtrado | E75:M79 | `E75 =N38/M65`; `M78 =N$75-E75` | L. G. Pérez Águila (2010) | `net.solidity`, `net.filtering_coefficient` | — |
 | Peso de la red (A y B) | A95:P109 | `N98 =(((L98*(H98/1000))*(2*M98))*3.1416*(((G98/2)/1000)^2))*F98` (SN); `O98 =(((I98+J98)/2)/L98)*(K98/M98)*N98`; `P98 =O98*(1-(1025/F98))`; `O107 =SUM(O98:O106)`; `O109 =SUM(O98:O104,O108)` | Métodos A y B (FAO) | `net.panel_weight`, `net.net_weight` | — (densidad de agua 1025 incrustada; `F98 {=P!L55:L57}`) |
 | Peso por plan | F110:I113 | `I110 =SUM(O98/2,O101/2,O102/2,O103,O104,O106)` | — | `net.weight_by_plan` | — |
-| Constantes físicas | L127:P129 | ρmar 1024, ρdulce 1000, g 9.81 | — | `trawlkit.units` / `data/reference/constants.yaml` | — |
+| Constantes físicas | L127:P129 | ρmar 1024, ρdulce 1000, g 9.81 | — | `trawlkit.units` / `src/trawlkit/data/reference/constants.yaml` | — |
 | Fuerzas del portón y DPA Fridman | B162:Q172 | `H164 =0.5*($O$127/$O$129)*($C164^2)*E164*F164` (Rd), `I164 … *G164` (Fdy), `J164 =Res!N302*1000`, `L164 =H164/(0.5*J164)` (Edx), `N164 =I164/(0.5*J164)` (Edy), `P164 =2*($F$179*$E$185*$O164)/($F$179+$E$186*(1+$L164))` | Fridman (fuerza de expansión Ry y resistencia Tx) | `rigging.spread.door_forces`, `rigging.spread.dpa_fridman` | — (P164 usa `$O164` = Edy **modificada** en la columna estándar) |
 | Datos de maniobra | B175:F186 | `E176 =D193` (profundidad), `J178 =LOOKUP(E176,Tab!A354:A383,Tab!C354:C383)`, `E177 =E176*J178` (Ls), `F179 =0.95*E177` (Lsh), `E182 =Res!D86` (LR), `E185 =E182*E184` (LR·U2), `E186 =Dim!F68` | Fridman | `rigging.warps.warp_length_for_depth`, `rigging.spread.towing_geometry` | — |
 | Tabla DPA Fridman (2·Yn) | B191:M201 | `I193 =P164/2`, `K193 =2*I193`, `M193 =(L193*($E$211+$E$212+$E$213+$E$214+$E$209))/$E$209` | Fridman | `rigging.spread.dpa_fridman_table` | — |
@@ -190,7 +190,7 @@ los demás bloques; los golden conservan el orden de la hoja (`panel_a_stretched
 | Circunferencia de pesca | C97:E97 | `D97 =((P!S276+P!S288)*P!Q288)/1000` | — | `dimensions.fishing_circle` | — |
 | Largo del cuerpo | C103:E103 | `D103 =((P!R276*P!Q276)+(P!R277*P!Q277))/1000` | — | `dimensions.body_length` | — |
 | Relación FC/cuerpo | B109:E109 | `D109 =D97/D103` | — | `dimensions.fc_body_ratio` | — |
-| Proporciones Nomura | B124:E132 | `C124 =Lima/Burlon`, `C125 =Lima/F47` … `C132 =(F51-F50)/F47`; `E124 =Tab!D16` … | Nomura | `dimensions.nomura_ratios` + `data/reference/nomura_ratios.csv` | — |
+| Proporciones Nomura | B124:E132 | `C124 =Lima/Burlon`, `C125 =Lima/F47` … `C132 =(F51-F50)/F47`; `E124 =Tab!D16` … | Nomura | `dimensions.nomura_ratios` + `src/trawlkit/data/reference/nomura_ratios.csv` | — |
 | Relingas (lima) | B140:G143 | `C140 {=((P!H92+P!H57)*P!B55:B57)/1000}`; `F140 {=(((P!H120*P!B120:B122)-((P!H91*P!B90:B92)*2))/1000)*0.5}`; `C143 =C140*C142` (embando 1.05); `G143 =F140*G142` (0.83) | Martini nivel 2 | `dimensions.rope_pieces(hanging_ratio)` | — |
 | Relingas (burlón) | B148:G151 | `C148 {=((P!T56+P!T91)*P!N89:N91+P!T116*P!N114:N116)/1000}`; `F148 {=((P!T156*P!N156:N158)-((2*P!T114)*P!N114:N116))/1000*0.5}`; `C151 =C148*C150`; `G151 =F148*G150` | Martini | `dimensions.rope_pieces` | — |
 | Refuerzo punta de ala | B155:C157 | `C155 {=(P!H57*P!B55:B57)/1000}`; embando 1 | — | `dimensions.wingtip_reinforcement` | — |
@@ -235,7 +235,7 @@ salvo donde se indica `v_kn`. Resultados en toneladas (÷1000).
 | Patentes sin/con triángulo | A75:C87 | `C83 =(((E77*E80)/E78)-(E79+E80))*1.1` (LPST = (Ds·LR/DPA − (Vs + LR))·1.1); `C87 =(((E77*E80)/E78)-(E81+E80))*1.1` | Martini | `rigging.bridles.sweeps_length(ds, lr, dpa, bridle)` | — |
 | Pies de gallo | A90:G99 | `D95 =D120` (largo del portón); `E97 =ROUND(D95+(D95*0.2),1)`; `G98 =E97-0.05`; `E99 0` | Martini | `rigging.bridles.crowfoot(door_length)` | — |
 | Ángulo de ataque de bridas δ | A101:E110 | `D110 =DEGREES(ASIN(((E103-E104)/2)/(E105+E106+E107)))` | — | `rigging.bridles.attack_angle(ds, dpa, pg, sweeps, bridle)` | — |
-| Selección de portón | B116:F137 | `B117` lista (`listadelistas`); `D120 =IF($B$117=Porton_plano…,LOOKUP($B$117,Porton_plano…,Tab!C247),IF($B$117=porton_del_orto,LOOKUP(…,Morgere_Polivalente_Oval,Tab!C269),0))`; `D122` área 1.805 m²; `C132:F137` polar (ángulo, CL, CD, CL/CD); fila 134 = 32° seleccionada | catálogo FAO / Morgère | `rigging.doors.Door` + `data/reference/doors.csv` | — |
+| Selección de portón | B116:F137 | `B117` lista (`listadelistas`); `D120 =IF($B$117=Porton_plano…,LOOKUP($B$117,Porton_plano…,Tab!C247),IF($B$117=porton_del_orto,LOOKUP(…,Morgere_Polivalente_Oval,Tab!C269),0))`; `D122` área 1.805 m²; `C132:F137` polar (ángulo, CL, CD, CL/CD); fila 134 = 32° seleccionada | catálogo FAO / Morgère | `rigging.doors.Door` + `src/trawlkit/data/reference/doors.csv` | — |
 | ROB como % del tiro | A141:H168 | `D146 =PotOK!L11` (FT PF 150), `E146 =D146*0.15` … `H146 =D146*0.3`; 180 HP: `D160 =PotOK!N11` | Fridman (ROB = 15–30 % de FT) | `rigging.doors.door_drag_share(ft, pct)` | — |
 | ROB y fuerza de abertura | B184:E198 | `D190 =0.5*($E$203/$E$205)*$D$185*$D$184*($C190^2)` (½·ρ/g·CD·S·v²); `E190 … $D$186` (CL) | hidrodinámica básica | `rigging.doors.door_forces(area, cd, cl, v)` | — |
 | Superficie requerida del portón | B201:F231 | `E210 =(2*$D210)/(($E$203/$E$205)*$E$206*($C210^2))` con `D210 =F146` (ROB 20 %); `F212 =AVERAGE(E212:E216)` (2–4 kn); `F215 =F212/2`; `F220 =AVERAGE(F215,F229)` | — | `rigging.doors.required_area(rob, cd, v)` | — |
@@ -253,7 +253,7 @@ salvo donde se indica `v_kn`. Resultados en toneladas (÷1000).
 | Peso de la lima en el agua | C29:F37 | `F35 =Cab!G3`, `F36 =F31*F35`, `F37 =F36*0.087` | — | `rigging.ropes.rope_weight_in_water` (0.087) | — |
 | Flotación Fridman 150 HP | B40:N50 | `E42 =PotOK!L11` (FT), `F42 =(0.8*E42)/4` (F1), `G42 =C42/4` (F2 = RN/4), `I42 =F42*SIN(RADIANS($F$22))`, `J42 =G42*SIN(RADIANS($F$23))`, `L42 =ROUNDDOWN(I42+J42+$F$37,0)`, `M43 =I43+K43+$F$37` (sin redondeo salvo M42); `N43 =AVERAGE(L42:M46)` (1–3 kn) | Fridman | `rigging.floats.flotation_fridman(ft, rn, alpha, beta, rope_weight)` | — |
 | Flotación Fridman 180 HP | B53:N63 | ídem con `E55 =PotOK!N11`; `N55 =AVERAGE(L55:M59)` | Fridman | `rigging.floats.flotation_fridman` | — |
-| Número de boyas | D69:G82 | `F70 =N43`, `F72 =ROUND($F$70/E72,0)` por diámetro del catálogo D72:E82 | catálogo | `rigging.floats.float_count(flotation, unit_buoyancy)` + `data/reference/floats.csv` | — |
+| Número de boyas | D69:G82 | `F70 =N43`, `F72 =ROUND($F$70/E72,0)` por diámetro del catálogo D72:E82 | catálogo | `rigging.floats.float_count(flotation, unit_buoyancy)` + `src/trawlkit/data/reference/floats.csv` | — |
 | Distribución de boyas | C84:L112 | `F84 12` (elegido), `F92 =LOOKUP(F91,cincuenta,D72:D82)` (200 mm), `F94 =F86/F91`, `F95 =INT(F87/F94)`, `F96 =F91-2*F95`; selectiva: `G103 =EVEN(F91*F103)` (70 % en alas), `G107 =H103*G106`, `H110 =ROUND((F89)/(G107-1),2)`, `H111 =(INT(C111/F111))`, `K112 =F89/3` | — | `rigging.floats.distribute_floats` | — (texto A110:L112 generado con `&`) |
 | Resistencia de las boyas | A116:J146 | `H128 =H127/1000`, `H129 0.47` (CD Hoerner), `H132 =AVERAGE(H130:H131)` (ν); `H138 =(PI()*($H$128^2)*$E138)/$H$132` (Re); `I138 =$H$129` (1–2.5 kn) / `0.5` (3–5 kn); `J138 =0.5*$H$123*$I138*($H$124/$H$126)*((PI()*$H$128^2)/4)*$E138^2` (n·½·CD·ρ/g·A·v²) | Hoerner (1975) | `rigging.floats.float_drag(n, d, cd, v)` | `float_reynolds` |
 | Lastre Koyama | D153:H159 | `G159 =(1.81*G155)-4.54` | Koyama | `rigging.ballast.ballast_koyama(headrope)` | — |
@@ -271,7 +271,7 @@ salvo donde se indica `v_kn`. Resultados en toneladas (÷1000).
 | Ángulos δ1, δ2, δ3 | C23:F33 | `E25 =DEGREES(ASIN((0.5*((F7-F11)/F9))))` (δ2 divergencia del cable); `E29 =DEGREES(ASIN((0.5*((F7-F17)/F8))))` (δ3 bridas); `E33 =DEGREES(ASIN((Especie!E5+Buques!B6)/F9))` (δ1 declinación) | — | `rigging.warps.warp_angles` | — |
 | Diámetro del cable (EHP) | B65:G74 | `E70 =PotOK!C171`; `F73 =18+(0.0034*E70)` (fórmula para >500 HP) | regla práctica | `rigging.warps.warp_diameter_ehp(ehp)` | — |
 | Diámetro del cable (Águila) | B76:F81 | `E80 =5.6822*LN(MID(E77,1,3))-17.225` | L. G. Pérez Águila | `rigging.warps.warp_diameter_aguila(nhp)` | — |
-| CD del cable (α) | A89:B94, B103:E106 | tabla α→CD (0.02…0.30); `E106 {=INDEX(B90:B94,MATCH(MIN(ABS(alfaremolque-anguloremolque)),alfaremolque-anguloremolque,1))}` (α más cercano) | Nomura y Yamazaki | `rigging.warps.warp_cd(angle)` + `data/reference/warp_cd.csv` | — |
+| CD del cable (α) | A89:B94, B103:E106 | tabla α→CD (0.02…0.30); `E106 {=INDEX(B90:B94,MATCH(MIN(ABS(alfaremolque-anguloremolque)),alfaremolque-anguloremolque,1))}` (α más cercano) | Nomura y Yamazaki | `rigging.warps.warp_cd(angle)` + `src/trawlkit/data/reference/warp_cd.csv` | — |
 | Resistencia del cable (Rw) y total | B115:I126 | `G118 =(0.5*$E$106*($E$107/$E$109)*$E$111*$E$112*(C118^2))*2` (½·CD·ρ/g·D·L·v²·2 cables); `H118 =G118+F118+D118` (Rw + RB + RN std); `I118 … +E118` (mod) | Nomura y Yamazaki | `rigging.warps.warp_drag`, `rigging.warps.total_drag` | `warp_total_omits_doors` (H118 no suma ROB) |
 | Rw cilindro (Re, CD) | B153:G175 | `D167 =($E$154*$C167)/$F$161` (Re = D·v/ν); `E167 1.1` (1–2.5 kn) / `1.2` (3–5 kn); `F167 =0.5*E167*($E$156/$E$158)*$E$154*$E$155*(C167^2)`; `G167 =2*F167` | cilindro en flujo cruzado | `rigging.warps.warp_drag_cylinder` | — |
 | Rw como % del tiro | A178:H199 | tabla de autores (Craig 4 %, Podeur 5–8 %, Hansen 5 %, Gudnasson 5–10 %, Nomura 4–10 %); `E191 =C191*0.05` (5 % FT PF), `G191 =C191*0.1` | Craig, Podeur, Hansen, Gudnasson, Nomura | `rigging.warps.warp_drag_share(ft, pct)` | — |
@@ -280,24 +280,24 @@ salvo donde se indica `v_kn`. Resultados en toneladas (÷1000).
 | Peso del cable | B241:G257 | `E248 =AVERAGE((0.00368*(F246^2)),(0.00417*(F246^2)))` [kg/m aire]; `F250 =0.00305*(F246^2)`; `F252 =0.87*E248`; `F256 =F255*E248`; `F257 =F255*F252` | catálogo | `rigging.warps.warp_weight(diameter_mm)` | — |
 | Selección del cable | A261:F272 | `E264 =F246` (Ø mínimo 12.28 mm), `E267 =H123` (resistencia total a 3.5 kn, 2200 kgf), `D271 4`, `E272 =E267*D271` (8 802 kgf) | — | `rigging.warps.select_warp(min_breaking_load)` | `warp_undersized` (Cab!D11 selecciona 12 mm / 8.55 t por `LOOKUP` del Ø, no por la carga 8.8 t) |
 
-## 13. Tablas de Referencias → `data/reference/*.csv`, `trawlkit.materials`
+## 13. Tablas de Referencias → `src/trawlkit/data/reference/*.csv`, `trawlkit.materials`
 
 | Bloque | Celdas | Contenido | Fuente citada | Destino | Errata |
 |---|---|---|---|---|---|
-| Coeficientes KF | A5:B7 | KF(PF) = 10, KF(PV+T) = 15 | Fridman | `data/reference/fridman_kf.csv` | — |
-| Proporciones Nomura | A15:L25 | 10 tipos de red × 9 relaciones (l/m, l/b, m/b, a/b, c/b, d/b, e/b, f/b, (d−c)/b) | Nomura | `data/reference/nomura_ratios.csv` | — (G18 y G21 = 10.6, probable 1.06) |
-| Materiales | A33:I37 | PA: densidad 1140 kg/m³, rendimiento 780 / 1050 m/kg, Rtex 1280 / 950, Ø 1.37 / 1.16 mm, coef. agua salada 0.1, dulce 0.12 | — | `data/reference/materials.csv`, `materials.Material` | — |
-| Cortes de paños | A45:F88 | relación (`A51 =1/3`), código (`1N2B`, `AB`, `1T2B`…), relación no exacta, mallas (a) ancho, (d) alto | FAO | `data/reference/cuts.csv`, `netting.cut_code` | — |
-| Factor K nudos simples | A94:F113 | mallero × Ø hilo → factor de corrección | — | `data/reference/knot_factor.csv` | — |
-| Catenaria | A116:I171 | DPA/L (`A119 =B119/C119`), fL/L, fL/DPA, tg β, β, α, fL | — | `data/reference/catenary.csv`, `rigging.spread.catenary` | — |
-| Ángulos útiles | A175:H216 | δ patentes 10–30°, relación Dremiere 3–8, longitudes permitidas 20–70 m, porcentajes útiles, NHP posibles | Dremiere / Martini | `data/reference/sweeps.csv` | — |
-| Profundidades / brazos dan leno | A201:B221 | profundidad 10–200 m → altura 0.1–… m | — | `data/reference/dan_leno.csv` | — |
-| Portón FAO plano de madera | A245:E264 | largo 1.9, alto 0.95, `C249 =C247*C248` (1.805 m²), `C250 =C248/C247`, peso aire 135 kg, `C254 =C252*C253` (80.6 kg); polar 25–45° (CL, CD, `E259 =C259/D259`) | FAO (A3/B3/C3) | `data/reference/doors.csv` | — |
-| Portón Morgère Polivalente Oval | A267:E286 | `C270 =C272*C269`, `C271 =(C269/2)*(C270/2)*PI()`, polar 281:286 | Morgère | `data/reference/doors.csv` | — |
-| Cabos y cables | A290:F296 | Moscuzza: PP 14 / combinado 12 / combinado 14 / PP 16; Ø, kg/m (`E293 =27.5/220`), resistencia [t] | catálogos, Fisherman's Workbook | `data/ropes.yaml` | — |
-| Cadenas | A312:C317 | Trawlex corto 7 mm (1.05 kg/m), largo 19 mm (6.31 kg/m) | catálogo | `data/reference/chains.csv` | — |
-| Cables de acero para remolque | B337:G343 | 6x19+1 AT Seale compactado: Ø 9.5–18 mm, kg/m, resistencia 5.5–18.46 t, `G338 =C338&B338` | catálogo | `data/reference/warps.csv` | — |
-| Profundidad / cable filado | A353:C383 | profundidad 20–… m → cable filado (`C354 =B354/A354`, factor 6 → 3.4) | — | `data/reference/warp_by_depth.csv`, `rigging.warps.warp_length_for_depth` | — |
+| Coeficientes KF | A5:B7 | KF(PF) = 10, KF(PV+T) = 15 | Fridman | `src/trawlkit/data/reference/fridman_kf.csv` | — |
+| Proporciones Nomura | A15:L25 | 10 tipos de red × 9 relaciones (l/m, l/b, m/b, a/b, c/b, d/b, e/b, f/b, (d−c)/b) | Nomura | `src/trawlkit/data/reference/nomura_ratios.csv` | — (G18 y G21 = 10.6, probable 1.06) |
+| Materiales | A33:I37 | PA: densidad 1140 kg/m³, rendimiento 780 / 1050 m/kg, Rtex 1280 / 950, Ø 1.37 / 1.16 mm, coef. agua salada 0.1, dulce 0.12 | — | `src/trawlkit/data/reference/materials.csv`, `materials.Material` | — |
+| Cortes de paños | A45:F88 | relación (`A51 =1/3`), código (`1N2B`, `AB`, `1T2B`…), relación no exacta, mallas (a) ancho, (d) alto | FAO | `src/trawlkit/data/reference/cuts.csv`, `netting.cut_code` | — |
+| Factor K nudos simples | A94:F113 | mallero × Ø hilo → factor de corrección | — | `src/trawlkit/data/reference/knot_factor.csv` | — |
+| Catenaria | A116:I171 | DPA/L (`A119 =B119/C119`), fL/L, fL/DPA, tg β, β, α, fL | — | `src/trawlkit/data/reference/catenary.csv`, `rigging.spread.catenary` | — |
+| Ángulos útiles | A175:H216 | δ patentes 10–30°, relación Dremiere 3–8, longitudes permitidas 20–70 m, porcentajes útiles, NHP posibles | Dremiere / Martini | `src/trawlkit/data/reference/sweeps.csv` | — |
+| Profundidades / brazos dan leno | A201:B221 | profundidad 10–200 m → altura 0.1–… m | — | `src/trawlkit/data/reference/dan_leno.csv` | — |
+| Portón FAO plano de madera | A245:E264 | largo 1.9, alto 0.95, `C249 =C247*C248` (1.805 m²), `C250 =C248/C247`, peso aire 135 kg, `C254 =C252*C253` (80.6 kg); polar 25–45° (CL, CD, `E259 =C259/D259`) | FAO (A3/B3/C3) | `src/trawlkit/data/reference/doors.csv` | — |
+| Portón Morgère Polivalente Oval | A267:E286 | `C270 =C272*C269`, `C271 =(C269/2)*(C270/2)*PI()`, polar 281:286 | Morgère | `src/trawlkit/data/reference/doors.csv` | — |
+| Cabos y cables | A290:F296 | Moscuzza: PP 14 / combinado 12 / combinado 14 / PP 16; Ø, kg/m (`E293 =27.5/220`), resistencia [t] | catálogos, Fisherman's Workbook | `src/trawlkit/data/ropes.yaml` | — |
+| Cadenas | A312:C317 | Trawlex corto 7 mm (1.05 kg/m), largo 19 mm (6.31 kg/m) | catálogo | `src/trawlkit/data/reference/chains.csv` | — |
+| Cables de acero para remolque | B337:G343 | 6x19+1 AT Seale compactado: Ø 9.5–18 mm, kg/m, resistencia 5.5–18.46 t, `G338 =C338&B338` | catálogo | `src/trawlkit/data/reference/warps.csv` | — |
+| Profundidad / cable filado | A353:C383 | profundidad 20–… m → cable filado (`C354 =B354/A354`, factor 6 → 3.4) | — | `src/trawlkit/data/reference/warp_by_depth.csv`, `rigging.warps.warp_length_for_depth` | — |
 
 ---
 
@@ -356,7 +356,7 @@ Resumen: 4 nombres rotos (`NIM`, `Nombre`, `NUM`, `numero`), 4 de prueba (`prueb
 10 duplicados (`angulopatentes`/`δ_Patentes`; `cabl`/`matcab`; `diametrocable`/`materialcable`
 vs `diamcab`/`cabl`; `Longitudespatentes`/`longp`/`LP`/`Lpatent`; `Relacion_Dremiere_patentes`/
 `relaciondremiere`; `porton_del_orto`/`Morgere_Polivalente_Oval`). En trawlkit ninguno sobrevive:
-los rangos pasan a `data/reference/*.csv` y los escalares (`Lima`, `Burlon`, `Largototal`,
+los rangos pasan a `src/trawlkit/data/reference/*.csv` y los escalares (`Lima`, `Burlon`, `Largototal`,
 `resulmat`, `anguloremolque`) a campos de los dataclasses de salida.
 
 ## Erratas referenciadas (claves de `compat.ERRATA`)

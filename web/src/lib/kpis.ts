@@ -1,7 +1,7 @@
 /** Indicadores clave (KPI) del caso. */
 import type { DesignData } from '../api/result';
 import { fmt, fmtFixed } from './format';
-import { designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
+import { at, designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
 
 export interface Tile {
   key: string;
@@ -25,7 +25,7 @@ export function tiles(d: DesignData): Tile[] {
   const meets = warpMeetsBreakingLoad(d);
   const sel = d.result.warps?.selection;
   const req = num(d, 'warp_min_breaking_load_kgf');
-  const rnMod3 = mod ? d.result.drag.rn.mod[d.case.speeds_kn.indexOf(3)] : null;
+  const rnMod3 = mod ? at(d.result.drag.rn.mod, d.case.speeds_kn.indexOf(3)) : null;
   return [
     {
       key: 'vertical_opening_m',

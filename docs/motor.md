@@ -9,7 +9,7 @@ el libro resuelve sus dependencias y devuelve un `DesignResult` con una etapa po
 
 | Módulo | Hoja(s) del libro | Qué calcula |
 |---|---|---|
-| `trawlkit.io` | Especie Blanco, Tipo de buques, catálogos | Esquema pydantic (`NetSpec`, `Vessel`, `Door`, `Catalogue`) y carga de `data/*.yaml` |
+| `trawlkit.io` | Especie Blanco, Tipo de buques, catálogos | Esquema pydantic (`NetSpec`, `Vessel`, `Door`, `Catalogue`) y carga de `src/trawlkit/data/*.yaml` |
 | `trawlkit.vessel`, `trawlkit.power` | Potenc disponible para arrastre, Potencia Disponible Arrastre OK | Reparto de energía (Fridman); tiro disponible FT por Fridman, Prado-Dremière, Koyama, Nomura y Hamuro; resumen `PotOK!L11:O19` |
 | `trawlkit.netting`, `trawlkit.materials` | Paños de red y cortes, Tablas de Referencias | Largos estirados, superficies de paño, cortes (razón, código, ángulo), densidad del hilo |
 | `trawlkit.net` | Mecánica de la Red (filas 6-113) | Índice de filtración d/l, superficies sólida y de trabajo, solidez, pesos |

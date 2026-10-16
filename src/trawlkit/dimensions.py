@@ -32,7 +32,7 @@ WING_HANGING: float = 1.05
 BOSOM_HANGING: float = 0.83
 
 #: Etiquetas de las proporciones de Nomura en el orden de la hoja (B124:B132) y su columna en
-#: ``data/reference/nomura_proportions.csv``.
+#: ``trawlkit/data/reference/nomura_proportions.csv``.
 NOMURA_LABELS: tuple[tuple[str, str], ...] = (
     ("l/m", "l_m"),
     ("l/b", "l_b"),
@@ -346,7 +346,7 @@ def load_nomura_reference(
 ) -> dict[str, float]:
     """Proporciones de referencia de Nomura para un tipo de red.
 
-    Lee ``data/reference/nomura_proportions.csv`` (``'Tablas de Referencias'!A16:L25``) y
+    Lee ``trawlkit/data/reference/nomura_proportions.csv`` (``'Tablas de Referencias'!A16:L25``) y
     devuelve la primera fila de ``net_type`` con las claves de :func:`nomura_ratios`
     (``'Dimensiones de la Red'!E124:E132`` = fila 16, red de fondo de 2 caras).
     """

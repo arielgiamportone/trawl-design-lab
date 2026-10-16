@@ -56,8 +56,9 @@ paños con lado de malla 40, 30 y 20 mm (malla estirada 80, 60 y 40 mm) y bolsa 
 es decir, la bolsa estándar de 40 mm. Su superficie total es **38,76 m²**, que coincide con la
 superficie sólida **corregida** del motor (38,75 m²) y no con la del libro (40,90 m²): una
 confirmación independiente de la errata `codend_minor_side_uses_depth` ({doc}`erratas`). El peso
-que reporta (32,30 kg) es mayor que el del motor (20,0 kg corregido, 28,3 kg Excel); DynamiT usa
-títulos de hilo propios (780 y 1160 m/kg) que no son los del libro.
+que reporta (32,30 kg) está entre el del libro (28,3 kg, sin contar todos los paneles) y el del
+motor corregido (33,5 kg); DynamiT usa títulos de hilo propios (780 y 1160 m/kg) que no son los del
+libro.
 
 La tabla de resultados se transcribe de `legacy/dynamit_resultados_fao_a3.png` (red FAO A3,
 velocidades 1,0–5,0 kn). La fila de resistencia coincide con la columna pegada en el Excel, lo que

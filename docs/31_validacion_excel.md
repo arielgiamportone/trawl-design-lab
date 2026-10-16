@@ -140,7 +140,7 @@ definen el diseño. Los huecos se concentran en tres grupos que **no son resulta
 
 * **Entradas y catálogos.** *Tablas de Referencias*, las tablas de paños de *Paños de red y cortes*
   (`netting_80mm_*`, …), *Especie Blanco* y *Tipo de buques* son datos. Se validan por otra vía:
-  `tools/extract` los vuelca a `data/*.yaml` y `data/reference/*.csv`, y `tests/test_data_*.py`
+  `tools/extract` los vuelca a `src/trawlkit/data/*.yaml` y `src/trawlkit/data/reference/*.csv`, y `tests/test_data_*.py`
   comprueba esos archivos contra el libro, no contra el JSON golden.
 * **Conversiones y textos.** Las potencias en kW de *Potenc disponible* (`nominal_kw_150`, …), las
   etiquetas (`bottom_type`, `headrope_material`) y constantes físicas repetidas (`gravity_m_s2`).

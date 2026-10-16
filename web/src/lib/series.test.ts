@@ -22,7 +22,7 @@ describe('series', () => {
     const i = d.case.speeds_kn.indexOf(3);
     const [std, mod] = composition(d, i);
     expect(std!.total).toBeCloseTo(d.result.performance.demand.std[i]!, 6);
-    expect(mod!.total).toBeCloseTo(d.result.performance.demand.mod[i]!, 6);
+    expect(mod!.total).toBeCloseTo(d.result.performance.demand.mod![i]!, 6);
   });
   it('RN por método en kgf coincide con la RN de diseño', () => {
     const rows = dragRows(d, 'std');

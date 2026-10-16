@@ -1,8 +1,9 @@
 """Esquema de las especificaciones de entrada (pydantic v2).
 
-Los archivos YAML de ``data/`` se validan contra estos modelos. Las unidades van en el nombre del
-campo (``_m``, ``_mm``, ``_kg``, ``_kgf``) para que la spec sea legible sin consultar la doc.
-Se admiten campos extra (``extra="allow"``) para no bloquear la extracción mientras el motor crece.
+Los archivos YAML de ``trawlkit/data/`` se validan contra estos modelos. Las unidades van en el
+nombre del campo (``_m``, ``_mm``, ``_kg``, ``_kgf``) para que la spec sea legible sin consultar la
+doc. Se admiten campos extra (``extra="allow"``) para no bloquear la extracción mientras el motor
+crece.
 """
 
 from __future__ import annotations

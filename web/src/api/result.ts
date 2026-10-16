@@ -5,7 +5,8 @@
 import type { DesignResponseRaw } from './client';
 
 export type Series = (number | null)[];
-export type StdMod<T> = { std: T; mod: T };
+/** ``mod`` es ``null`` cuando el caso no trae red modificada (``case.net_modified``). */
+export type StdMod<T> = { std: T; mod: T | null };
 
 export interface PerformanceWindow {
   speeds_kn: number[];

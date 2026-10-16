@@ -50,7 +50,8 @@ _PVT = PropellerType.VARIABLE_PITCH_NOZZLE
 POWER_COEFFICIENTS_PATH = DATA_DIR / "reference" / "power_coefficients.yaml"
 
 # ----------------------------------------------------------------------------------------------
-# Constantes (copiadas de data/reference/power_coefficients.yaml; test_power verifica la igualdad)
+# Constantes (copiadas de trawlkit/data/reference/power_coefficients.yaml; test_power verifica
+# la igualdad)
 # ----------------------------------------------------------------------------------------------
 
 #: Factor nudos → m/s usado por Koyama (``H171 = 0.514``) y Nomura (``B216 = H171``).
@@ -184,7 +185,7 @@ HAMURO_BEST_KEYS: tuple[str, ...] = tuple(r.key for r in HAMURO_ROWS[4:])
 
 @cache
 def load_power_coefficients() -> dict[str, Any]:
-    """Lee ``data/reference/power_coefficients.yaml`` (coeficientes extraídos del Excel)."""
+    """Lee ``trawlkit/data/reference/power_coefficients.yaml`` (coeficientes del Excel)."""
     with POWER_COEFFICIENTS_PATH.open(encoding="utf-8") as fh:
         data = yaml.safe_load(fh)
     if not isinstance(data, dict):

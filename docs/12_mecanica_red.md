@@ -139,9 +139,11 @@ peso en agua es apenas el 10 % del peso en aire.
 * **Densidad del hilo** (`twine_density_units`). Los pesos usan la "densidad" de `P!L55`
   (≈1152 kg/m³), que no tiene unidades de densidad; el coeficiente de peso en agua resultante (0,11)
   es parecido por casualidad al 0,10 de la poliamida.
-* **Pesos sin cantidad de paneles** (`net_weight_ignores_panel_count`). El peso total suma las filas
-  sin multiplicar por los paneles de cada una: multiplicando cada fila por su cantidad, los 28,3 kg
-  del libro pasarían a 45,4 kg (+60 %). Se reproduce en ambos modos y se documenta en {doc}`erratas`.
+* **Pesos sin cantidad de paneles** (`net_weight_ignores_panel_count`, `Mec!O107`, `O109`). El peso
+  total suma las filas sin multiplicar por los paneles de cada una (alas izquierda y derecha, planos
+  alto y bajo): con la densidad del libro, multiplicar cada fila por su cantidad llevaría los 28,3 kg
+  a 45,4 kg (+60 %). El modo corregido multiplica cada fila por su cantidad (en aire, en agua y en el
+  reparto por plano), igual que ya hacen $S_s$ y $S_t$; el modo Excel lo reproduce.
 * $d/l$ global como cociente de sumas da el mismo peso a una fila de dos paneles pequeños que al
   cuerpo; una media ponderada por $S_t$ sería más representativa, pero los coeficientes de las
   fórmulas de resistencia se ajustaron con la definición del libro.
@@ -185,11 +187,14 @@ P.md_table(["Magnitud", "Estándar (Excel)", "Estándar (corregido)",
             for lab, attr, nd in show])
 ```
 
-Las dos erratas se ven en la tabla: entre "Excel" y "corregido", la red estándar cambia en $S_s$,
-$S_t$ y pesos (bolsas I/J) y la modificada sólo en $d/l$ (doble conteo). Los pesos corregidos son
-además un 20–30 % menores porque usan la densidad aparente correcta del hilo trenzado (≈868 kg/m³ en
-lugar de 1152): con ella el peso del paño de referencia es exactamente su largo de hilo dividido por
-el rendimiento.
+Las erratas se ven en la tabla: entre "Excel" y "corregido", la red estándar cambia en $S_s$ y
+$S_t$ (bolsas I/J) y la modificada en $d/l$ (doble conteo). Los pesos cambian en las dos por dos
+causas que van en sentido contrario: por panel son un 20–30 % menores porque usan la densidad
+aparente correcta del hilo trenzado (≈868 kg/m³ en lugar de 1152; con ella el peso del paño de
+referencia es exactamente su largo de hilo dividido por el rendimiento), pero el total cuenta todos
+los paneles de cada fila (`net_weight_ignores_panel_count`). El resultado neto es un peso corregido
+de unos 33 kg en aire para la red estándar y 35 kg para la modificada, frente a los 28 y 23 kg del
+libro.
 
 ```{code-cell} ipython3
 :tags: [hide-input]

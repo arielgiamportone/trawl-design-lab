@@ -133,10 +133,6 @@ ERRATA_FIXED_TREATMENT: dict[str, tuple[str, str]] = {
     "panel_f_cut_na": ("corregida", "El código de corte se calcula en ambos modos."),
     "panel_b_cut_uses_plan_coef": ("corregida", "La razón de corte usa N en ambos modos."),
     "panel_b_cut_code_lookup_a": ("corregida", "Cada paño busca con su propia razón."),
-    "net_weight_ignores_panel_count": (
-        "reproducida",
-        "Peso por fila del libro en ambos modos (documentado).",
-    ),
     "catenary_ratio_hardcoded": (
         "reproducida",
         "fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas.",

@@ -11,7 +11,7 @@ from openpyxl.workbook.workbook import Workbook
 
 ROOT = Path(__file__).resolve().parents[2]
 XLSX = ROOT / "legacy" / "Calculos_Red_FAO_A3.xlsx"
-DATA = ROOT / "data"
+DATA = ROOT / "src" / "trawlkit" / "data"
 GOLDEN = ROOT / "tests" / "golden"
 
 

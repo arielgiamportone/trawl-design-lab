@@ -350,7 +350,7 @@ def fridman_flotation_total_kgf(*flotations_kgf: float) -> float:
 
 @cache
 def _catenary_table() -> tuple[tuple[float, float], ...]:
-    """Pares ``(DPA/L, fL/L)`` de ``data/reference/catenary.csv`` (Tab!A119:D162)."""
+    """Pares ``(DPA/L, fL/L)`` de ``trawlkit/data/reference/catenary.csv`` (Tab!A119:D162)."""
     path = DATA_DIR / "reference" / "catenary.csv"
     with path.open(encoding="utf-8", newline="") as fh:
         rows = [(float(r["dpa_l"]), float(r["fl_l"])) for r in csv.DictReader(fh)]

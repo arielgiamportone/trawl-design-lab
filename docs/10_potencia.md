@@ -146,7 +146,7 @@ Fridman: es lineal, acotado y conservador a baja velocidad.
 | Nomura $K_1$, $K_2$, $K_3$, fracción red | 0,85 / 0,85 / 0,17 / 0,8 | — | Nomura | `PotOK!L205:L213` |
 | Hamuro $K_1$, $K_2$, $K_3$ | 0,825 / 0,85 / 0,20–0,30 | — | Hamuro | `PotOK!C254`, `F257:L258` |
 
-Los valores están en `data/reference/power_coefficients.yaml`, generado desde el libro.
+Los valores están en `src/trawlkit/data/reference/power_coefficients.yaml`, generado desde el libro.
 
 ## Equivalencia Excel ↔ `trawlkit`
 

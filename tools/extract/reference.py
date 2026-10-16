@@ -1,10 +1,10 @@
-"""Extrae las tablas de referencia y los catálogos del Excel original a ``data/``.
+"""Extrae las tablas de referencia y los catálogos del Excel original a ``src/trawlkit/data/``.
 
 Uso: ``uv run python -m tools.extract.reference``
 
 Salidas (todas regenerables, no editar a mano):
 
-``data/reference/*.csv`` (UTF-8, cabecera en inglés ``snake_case``):
+``src/trawlkit/data/reference/*.csv`` (UTF-8, cabecera en inglés ``snake_case``):
 
 - ``nomura_proportions.csv``  Tablas de Referencias!A16:L25 (proporciones del Dr. Nomura).
 - ``cut_ratios.csv``          Tablas de Referencias!A48:F88 (razón de corte → código de corte).
@@ -19,8 +19,8 @@ Salidas (todas regenerables, no editar a mano):
 - ``depth_to_warp.csv``       Tablas de Referencias!A353:C383 (profundidad → cable filado).
 - ``power_coefficients.yaml`` coeficientes empíricos de los métodos de potencia disponible.
 
-``data/*.yaml`` (validados con ``trawlkit.io.schema``): ``doors``, ``floats``, ``ropes``,
-``chains``, ``warps``, ``materials``.
+``src/trawlkit/data/*.yaml`` (validados con ``trawlkit.io.schema``): ``doors``, ``floats``,
+``ropes``, ``chains``, ``warps``, ``materials``.
 """
 
 from __future__ import annotations

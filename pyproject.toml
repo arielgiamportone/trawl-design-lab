@@ -61,6 +61,8 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
+# Incluye todo lo que hay bajo src/trawlkit, también los datos (data/*.yaml, data/reference/*.csv);
+# tests/test_packaging.py lo verifica instalando la rueda.
 packages = ["src/trawlkit"]
 
 [tool.ruff]
@@ -85,3 +87,6 @@ files = ["src/trawlkit"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = [
+  "slow: tests lentos (empaquetado; activar con TRAWLKIT_PACKAGING_TEST=1)",
+]

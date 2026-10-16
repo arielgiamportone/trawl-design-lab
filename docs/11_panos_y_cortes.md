@@ -97,7 +97,7 @@ RC = \frac{\Delta T}{\Delta N} = \frac{T + B/2}{N + B/2} = \frac12 .
 $$ (eq-razon-corte)
 
 El corte AB (todas barras) da 1/1; 1N1B, 1/3; 3N2B, 1/4; 1T2B, 2/1. La tabla de cortes del libro
-(`data/reference/cut_ratios.csv`) cubre las razones 1/1 a 1/20 y algunas $2/x$.
+(`src/trawlkit/data/reference/cut_ratios.csv`) cubre las razones 1/1 a 1/20 y algunas $2/x$.
 
 En las alas, el libro descompone el borde cortado en dos tramos: $X_2 = N$ mallas en AB y el resto,
 $X_1 = \lvert N - \lvert T_1 - T_2\rvert\rvert$, con razón
@@ -151,7 +151,7 @@ forma; ángulos de 5–15° son típicos en el cuerpo de una red de fondo.
 | `P!H273:K273` | Ángulo del corte | `trawlkit.netting.cut_angle_deg` |
 | `P!K278` | Ángulo medio | `trawlkit.netting.mean_cut_angle_deg` |
 | `P!J240`, `B243` | Pegadura de la bolsa modificada | `join_ratio`, `join_offset_m` |
-| `P!N269:W291` | Resumen de paños | spec YAML `data/fao_a3_standard.yaml` |
+| `P!N269:W291` | Resumen de paños | spec YAML `src/trawlkit/data/fao_a3_standard.yaml` |
 
 ## Supuestos y límites
 

@@ -31,6 +31,9 @@ flotación va antes que la de aberturas aunque en el libro figure después.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field, fields, is_dataclass
 from enum import Enum
 from typing import Any, Generic, TypeVar
@@ -95,6 +98,21 @@ DEFAULT_FLOAT_DIAMETER_MM = 200.0
 # ---------------------------------------------------------------------------------------------
 
 
+#: ``False`` mientras se serializa un resultado sin red modificada: cada :class:`Pair` escribe
+#: ``"mod": None`` en lugar de repetir la columna estándar (ver :meth:`DesignResult.to_dict`).
+_SERIALISE_MOD: ContextVar[bool] = ContextVar("_SERIALISE_MOD", default=True)
+
+
+@contextmanager
+def _serialising_mod(include_mod: bool) -> Iterator[None]:
+    """Fija, dentro del bloque, si los :class:`Pair` serializan su variante modificada."""
+    token = _SERIALISE_MOD.set(include_mod)
+    try:
+        yield
+    finally:
+        _SERIALISE_MOD.reset(token)
+
+
 def _serialise(value: Any) -> Any:
     """Convierte arrays, enums, dataclasses y modelos pydantic a tipos serializables en JSON."""
     if isinstance(value, np.ndarray):
@@ -136,9 +154,16 @@ class Pair(Generic[T]):
             return self.mod
         raise ValueError(f"variante desconocida: {name!r} (use 'std' o 'mod')")
 
-    def to_dict(self) -> dict[str, Any]:
-        """Representación serializable."""
-        return {"std": _serialise(self.std), "mod": _serialise(self.mod)}
+    def to_dict(self, include_mod: bool | None = None) -> dict[str, Any]:
+        """Representación serializable ``{"std": …, "mod": …}``.
+
+        Con ``include_mod=False`` (o, si se omite, dentro de :meth:`DesignResult.to_dict` de un
+        caso sin ``net_modified``) la variante modificada se escribe como ``None``: en ese caso
+        el motor la calcula con la misma red estándar y no es un resultado propio.
+        """
+        if include_mod is None:
+            include_mod = _SERIALISE_MOD.get()
+        return {"std": _serialise(self.std), "mod": _serialise(self.mod) if include_mod else None}
 
 
 # ---------------------------------------------------------------------------------------------
@@ -542,6 +567,7 @@ class WarpStage:
     diameter_aguila_mm: float
     sizing_nhp_hp: float
     diameter_mm: float
+    cd_angle_deg: float
     cd: float
     drag_kgf: FloatArray
     total: Pair[FloatArray]
@@ -596,8 +622,14 @@ class DesignResult:
     notes: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
-        """Representación serializable en JSON (arrays → listas)."""
-        return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
+        """Representación serializable en JSON (arrays → listas).
+
+        Si el caso no trae red modificada (``case.net_modified is None``) cada :class:`Pair`
+        se serializa como ``{"std": …, "mod": None}``: la columna modificada sería una copia
+        fantasma de la estándar. :meth:`summary` no cambia (sólo usa la estándar).
+        """
+        with _serialising_mod(self.case.net_modified is not None):
+            return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
 
     def summary(self) -> dict[str, float | str | None]:
         """Resumen 'Dimensiones de la Red'!F45:F71 más RN, ROB, boyas, lastre, cable y velocidad."""
@@ -1158,7 +1190,13 @@ def _stage_warps(
     bridles: BridleStage,
     floats: FloatStage,
 ) -> WarpStage:
-    """'Cables de Remolque' y Cab!D11:D12."""
+    """'Cables de Remolque' y Cab!D11:D12.
+
+    CD del cable (Rem!E103:E106), errata ``warp_cd_horizontal_angle``: en :attr:`Compat.EXCEL` el
+    ángulo de ataque es la divergencia en planta δ2 (E103 = E25) y el CD la fila más cercana de la
+    tabla Nomura–Yamazaki (4.3° → 0.02). En :attr:`Compat.CORRECTED` el ángulo es el del cable con
+    el flujo, acos(cos δ1 · cos δ2), y el CD se interpola linealmente en la tabla.
+    """
     dims = dimensions.std
     warp_m = rig.towing.warp_m  # F9 = Port!D9
     rigging_m = bridles.sweeps_plus_bridle_m  # F8 = Dim!F65 + Dim!F68
@@ -1180,7 +1218,13 @@ def _stage_warps(
     sizing = case.warp_sizing_nhp_hp
     diameter = rigging.warp_diameter_aguila_mm(sizing)  # E110 = E81 (180 HP)
     d_m = diameter / 1000.0  # E111
-    cd = rigging.warp_cd(angles.divergence_deg)  # E106 (α = E103 = E25)
+    if case.compat is Compat.EXCEL:
+        # Errata warp_cd_horizontal_angle: α = E103 = E25 (δ2) y fila más cercana (E106).
+        cd_angle = angles.divergence_deg
+        cd = rigging.warp_cd(cd_angle)
+    else:
+        cd_angle = rigging.warp_attack_angle_deg(angles.declination_deg, angles.divergence_deg)
+        cd = rigging.warp_cd(cd_angle, interpolate=True)
     v_ms = case.speeds_ms
     rw = _arr(rigging.warp_drag_kgf(cd, d_m, warp_m, v_ms))  # G118:G126
     rob = doors.rig_drag_kgf  # par de portones (Port!D190 es por portón)
@@ -1211,6 +1255,7 @@ def _stage_warps(
         diameter_aguila_mm=d_aguila,
         sizing_nhp_hp=sizing,
         diameter_mm=diameter,
+        cd_angle_deg=cd_angle,
         cd=cd,
         drag_kgf=rw,
         total=total,
@@ -1278,6 +1323,10 @@ def run(case: DesignCase) -> DesignResult:
         notes.append(
             "warp_total_omits_doors: la resistencia total incluye ROB de los dos portones "
             "(Rem!H118 + 2·D190)"
+        )
+        notes.append(
+            f"warp_cd_horizontal_angle: CD del cable {warps.cd:.4f} con α = acos(cos δ1·cos δ2) = "
+            f"{warps.cd_angle_deg:.2f}° interpolado (Rem!E106 usa δ2 → 0.02)"
         )
     if not warps.selection.satisfies_breaking_load:
         notes.append(

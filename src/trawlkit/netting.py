@@ -193,7 +193,7 @@ class CutRow:
 
 @cache
 def load_cut_table(path: Path | str | None = None) -> tuple[CutRow, ...]:
-    """Carga ``data/reference/cut_ratios.csv`` (``'Tablas de Referencias'!A49:C72``).
+    """Carga ``trawlkit/data/reference/cut_ratios.csv`` (``'Tablas de Referencias'!A49:C72``).
 
     Las filas 69-72 (razones ``2/x``) no tienen aumento de mallas en la hoja y se cargan con
     ``None``; el paño D (RC = 2/3 → ``1N4B``) sólo tiene correspondencia allí. Memorizado.

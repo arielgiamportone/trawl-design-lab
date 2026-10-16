@@ -73,7 +73,17 @@ $$ (eq-18-rw)
 
 y toda la física está en $C_D$. {cite:t}`nomurayamazaki` tabulan $C_D$ en función del ángulo de
 ataque $\alpha$ entre el cable y el flujo: 0,02 a 0°, 0,04 a 10°, 0,09 a 20°, 0,18 a 30° y 0,30 a
-40°. El libro toma $\alpha = \delta_2$ = 4,3° y el valor tabulado más cercano, 0,02.
+40°. El libro toma $\alpha = \delta_2$ = 4,3° y el valor tabulado más cercano, 0,02 (errata
+`warp_cd_horizontal_angle`). El ángulo entre el eje del cable y la dirección de arrastre combina la
+declinación $\delta_1$ y la divergencia $\delta_2$:
+
+$$
+\alpha = \arccos(\cos\delta_1\,\cos\delta_2)
+$$ (eq-18-alpha)
+
+y `Compat.CORRECTED` lo usa con interpolación lineal en la tabla (acotada a 0,02 y 0,30 en los
+extremos): para el caso FAO A-3, $\delta_1$ = 12,06° y $\delta_2$ = 4,30° dan $\alpha$ = 12,80° y
+$C_D$ = 0,054, 2,7 veces el valor del libro.
 
 Como referencias, la hoja calcula también el cable como **cilindro en flujo cruzado**
 ($C_D$ = 1,1–1,2 para $Re = v D_w/\nu \approx 10^4$) y el coeficiente de {cite:t}`maclennan1981`
@@ -87,7 +97,7 @@ Ambos suponen el cable perpendicular a la corriente y son, por lo tanto, cotas s
 holgadas. La experiencia práctica resume el problema en una fracción del tiro: la resistencia de
 los cables es del 4 al 10 % de $F_T$ (Craig 4 %, Podeur 5–8 %, Hansen 5 %, Gudnasson 5–10 %,
 Nomura 4–10 %; {cite:p}`warpshare`). {cite:t}`kowalskigianotti` proponen $C_D$ = 0,02 para
-cables casi alineados con el flujo, el mismo valor que resulta aquí.
+cables casi alineados con el flujo, el mismo valor que usa el libro.
 
 ### Resistencia total, peso y cargas
 
@@ -158,13 +168,16 @@ para recortar los extremos gastados).
 
 ## Supuestos y límites
 
-- **Ángulo de ataque.** El libro entra a la tabla de Nomura–Yamazaki con la divergencia en planta
-  $\delta_2$ (4,3°) e ignora la declinación $\delta_1$ (12,1°), que es el ángulo dominante entre
-  el cable y el flujo. Con 12° el valor tabulado más cercano sería 0,04 y $R_W$ se duplicaría.
-  Aun así $R_W$ quedaría en ≈ 2 % de $F_T$, por debajo del 4–10 % de la literatura: el método
-  del libro subestima la resistencia de los cables, aunque su peso en el total es pequeño.
+- **Ángulo de ataque** (errata `warp_cd_horizontal_angle`, `Rem!E103:E106`). El libro entra a la
+  tabla de Nomura–Yamazaki con la divergencia en planta $\delta_2$ (4,3°) e ignora la declinación
+  $\delta_1$ (12,1°), que es el ángulo dominante entre el cable y el flujo. El modo corregido usa
+  {eq}`eq-18-alpha` ($\alpha$ = 12,8°, $C_D$ = 0,054) y $R_W$ crece 2,7 veces. Aun así, entre 2 y
+  3,5 kn $R_W$ es el 1,1–4,0 % de $F_T$ (paso fijo, 150 HP), en el borde inferior o por debajo del
+  4–10 % de la literatura: la tabla de Nomura–Yamazaki da resistencias de cable bajas, aunque su
+  peso en el total es pequeño (≈ 1,8 % de $R_T$ a 3,5 kn). No se ajusta ningún coeficiente para
+  acercarlo a la banda.
 - **Tabla discreta.** `Rem!E106` toma el ángulo tabulado **más cercano** (sin interpolar), de modo
-  que $C_D$ salta en escalones de 10°.
+  que $C_D$ salta en escalones de 10°; el modo corregido interpola linealmente.
 - **Diámetro por potencia.** Ambas reglas de diámetro son correlaciones de flota; el criterio que
   manda es la carga de rotura.
 - **Errata `warp_undersized`** (`Cab!D11`). La hoja elige el cable con
@@ -243,8 +256,9 @@ for tag, sel in (("Excel", sx), ("corregido", sc)):
 ```
 
 Cuatro maneras de estimar $R_W$ dan resultados que difieren en dos órdenes de magnitud
-({numref}`fig-18-rw`): la de Nomura–Yamazaki con $C_D$ = 0,02 que usa el libro, la banda empírica
-del 5–10 % del tiro y las dos cotas de cable perpendicular al flujo.
+({numref}`fig-18-rw`): la de Nomura–Yamazaki, con $C_D$ = 0,02 como el libro o con el ángulo de
+ataque combinado del modo corregido, la banda empírica del 5–10 % del tiro y las dos cotas de cable
+perpendicular al flujo.
 
 ```{code-cell} ipython3
 ---
@@ -259,13 +273,15 @@ mystnb:
 ---
 P.setup()
 kn, v = r.case.speeds, r.case.speeds_ms
-rw_ny20 = rigging.warp_drag_kgf(rigging.warp_cd(a.declination_deg), w.diameter_mm / 1000, w.warp_m, v)
+alpha = rigging.warp_attack_angle_deg(a.declination_deg, a.divergence_deg)
+cd_c = rigging.warp_cd(alpha, interpolate=True)
+rw_corr = rigging.warp_drag_kgf(cd_c, w.diameter_mm / 1000, w.warp_m, v)
 rw_mcl = rigging.warp_drag_kgf(1.0, w.diameter_mm / 1000, w.warp_m, v) * np.asarray(w.cd_maclennan)
 fig, ax = P.plt.subplots(figsize=(7, 4.4))
 ax.fill_between(kn, w.shares_kgf["fixed_pitch_5pct"], w.shares_kgf["fixed_pitch_10pct"],
                 color=P.NEUTRAL_WASH, lw=0, label="5–10 % de $F_T$ (Craig … Nomura)")
 series = ((w.drag_kgf, 1, "Nomura–Yamazaki, α = δ2 → $C_D$ = 0,02 (libro)"),
-          (rw_ny20, 2, "Nomura–Yamazaki, α = δ1 → $C_D$ = 0,04"),
+          (rw_corr, 2, f"Nomura–Yamazaki, α = {alpha:.1f}° → $C_D$ = {cd_c:.3f} (corregido)".replace(".", ",")),
           (w.cylinder.drag_two_kgf, 3, "Cilindro, $C_D$ = 1,1–1,2"),
           (rw_mcl, 7, "MacLennan, $C_D$ = 2,11 − 12,24·v·D"))
 for y, slot, lab in series:
@@ -325,3 +341,5 @@ P.finish(fig)
 | $R_T$ Excel [kgf] | 426 | 930 | 1716 | 2200 | 2740 | 3970 |
 | $R_{OB}$ de un portón [kgf] | 17,7 | 70,8 | 159,3 | 216,8 | 283,2 | 442,5 |
 | $R_W$ como % de $F_T$ | 0,1 % | 0,4 % | 1,0 % | 1,5 % | 2,0 % | 3,5 % |
+| $R_W$ corregido ($C_D$ = 0,054) [kgf] | 3,7 | 14,7 | 33,0 | 44,9 | 58,6 | 91,6 |
+| $R_W$ corregido como % de $F_T$ | 0,3 % | 1,1 % | 2,8 % | 4,0 % | 5,4 % | 9,4 % |

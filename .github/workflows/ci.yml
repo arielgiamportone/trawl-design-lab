@@ -16,11 +16,15 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run mypy
       - run: uv run pytest --cov=trawlkit
+      - name: Rueda instalable (datos empaquetados, CLI fuera del checkout)
+        run: uv run pytest tests/test_packaging.py
+        env:
+          TRAWLKIT_PACKAGING_TEST: '1'
       - name: Informe del caso FAO A-3
         run: |
-          uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+          uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
             --vessel fao_a3_150hp --out informe-corregido
-          uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+          uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
             --vessel fao_a3_150hp --compat excel --out informe-excel
       - uses: actions/upload-artifact@v4
         with:

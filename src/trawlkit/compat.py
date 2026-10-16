@@ -94,6 +94,13 @@ ERRATA: tuple[Erratum, ...] = (
         "La resistencia total omite la de los portones (ROB).",
     ),
     Erratum(
+        "warp_cd_horizontal_angle",
+        "Cables de Remolque",
+        "E103:E106",
+        "El CD del cable se toma con la divergencia en planta δ2 = 4.3° (→ 0.02) en vez del ángulo "
+        "de ataque del cable al flujo, y por la fila más cercana de la tabla, sin interpolar.",
+    ),
+    Erratum(
         "warp_undersized",
         "Cables de Remolque",
         "E267:E272",

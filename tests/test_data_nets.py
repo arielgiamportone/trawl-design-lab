@@ -1,4 +1,5 @@
-"""Los YAML de data/ generados por tools/extract/nets.py cargan y tienen la estructura esperada."""
+"""Los YAML de src/trawlkit/data/ generados por tools/extract/nets.py cargan y tienen la
+estructura esperada."""
 
 import pytest
 

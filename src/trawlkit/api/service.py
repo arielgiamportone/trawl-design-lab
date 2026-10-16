@@ -31,7 +31,7 @@ class NotFoundError(KeyError):
 
 @cache
 def net_presets() -> dict[str, NetSpec]:
-    """Redes disponibles en ``data/*.yaml`` (sólo los archivos que validan como ``NetSpec``)."""
+    """Redes de ``trawlkit/data/*.yaml`` (sólo los archivos que validan como ``NetSpec``)."""
     out: dict[str, NetSpec] = {}
     for path in sorted(DATA_DIR.glob("*.yaml")):
         with path.open(encoding="utf-8") as fh:

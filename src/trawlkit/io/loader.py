@@ -1,7 +1,8 @@
-"""Carga de especificaciones YAML desde ``data/`` o desde rutas arbitrarias."""
+"""Carga de especificaciones YAML desde ``trawlkit/data/`` o desde rutas arbitrarias."""
 
 from __future__ import annotations
 
+from importlib.resources import files
 from pathlib import Path
 from typing import TypeVar
 
@@ -10,8 +11,18 @@ from pydantic import BaseModel
 
 from trawlkit.io.schema import Catalogue, DoorCatalogue, NetSpec, VesselCatalogue
 
-#: Carpeta ``data/`` del repositorio (cuando se trabaja desde el checkout).
-DATA_DIR = Path(__file__).resolve().parents[3] / "data"
+
+def _data_dir() -> Path:
+    """Carpeta de datos empaquetada ``trawlkit/data`` (``src/trawlkit/data`` en el checkout).
+
+    Se resuelve con :func:`importlib.resources.files`, de modo que funciona igual desde el
+    checkout (instalación editable) que desde una rueda instalada.
+    """
+    return Path(str(files("trawlkit") / "data"))
+
+
+#: Carpeta de datos del paquete: presets de red, buques, catálogos y ``reference/*.csv``.
+DATA_DIR: Path = _data_dir()
 
 T = TypeVar("T", bound=BaseModel)
 

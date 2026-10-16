@@ -21,7 +21,7 @@ describe('App', () => {
     const { calls } = mockApi();
     renderApp();
     expect(screen.getByRole('heading', { name: /trawl-design-lab/ })).toBeInTheDocument();
-    const kpi = await screen.findByText('2,28', {}, { timeout: 3000 });
+    const kpi = await screen.findByText('2,27', {}, { timeout: 3000 });
     expect(kpi.closest('[data-kpi]')).toHaveAttribute('data-kpi', 'max_speed_kn');
     expect(screen.getByText('✓ Cumple la rotura')).toBeInTheDocument();
     expect(screen.getByRole('row', { name: /Lima 28,698 m/ })).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe('App', () => {
   it('modo Excel muestra la advertencia del cable y envía compat', async () => {
     const { calls } = mockApi();
     renderApp();
-    await screen.findByText('2,28', {}, { timeout: 3000 });
+    await screen.findByText('2,27', {}, { timeout: 3000 });
     await userEvent.click(screen.getByLabelText('Reproducir Excel'));
     expect(
       await screen.findByText('⚠ No cumple la rotura', {}, { timeout: 3000 }),
@@ -75,7 +75,7 @@ describe('App', () => {
   it('una edición de panel inválida bloquea el cálculo; una válida envía la NetSpec en línea', async () => {
     const { calls } = mockApi();
     renderApp();
-    await screen.findByText('2,28', {}, { timeout: 3000 });
+    await screen.findByText('2,27', {}, { timeout: 3000 });
     await userEvent.click(screen.getByRole('tab', { name: 'Editor de paneles' }));
     const input = await screen.findByLabelText('Mallas de alto (N) del panel C');
     await userEvent.clear(input);

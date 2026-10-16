@@ -2,7 +2,7 @@
 
 Replica la hoja *Cables de Remolque* (D15:F33, B65:F81, A89:E112, B115:I126, B153:G175,
 A178:H199, B221:D235, B241:F272), *Cables Y Cabulleria* D11:D12 y la tabla profundidad → cable
-filado de *Tablas de Referencias* A353:C383 (``data/reference/depth_to_warp.csv``).
+filado de *Tablas de Referencias* A353:C383 (``trawlkit/data/reference/depth_to_warp.csv``).
 
 Convenciones: fuerzas en kgf, velocidades en m/s, longitudes en m, diámetros en mm salvo que el
 sufijo diga ``_m``, ángulos en grados.
@@ -167,12 +167,31 @@ def warp_diameter_aguila_mm(nhp_hp: float) -> float:
 # ---------------------------------------------------------------------------
 
 
-def warp_cd(angle_deg: float) -> float:
-    """CD del cable para el ángulo de ataque α más cercano de la tabla Nomura–Yamazaki (Rem!E106).
+def warp_attack_angle_deg(declination_deg: float, divergence_deg: float) -> float:
+    """Ángulo de ataque del cable al flujo α = acos(cos δ1 · cos δ2) [°].
 
-    ``E106 = INDEX(B90:B94, MATCH(MIN(ABS(α−x)), α−x, 1))`` → α más cercano (4.3° → 0° → 0.02).
+    El cable baja con la declinación δ1 en el plano vertical y abre con la divergencia δ2 en
+    planta; el ángulo entre su eje y la dirección de arrastre combina ambos. Es el α que pide la
+    tabla de Nomura–Yamazaki (:data:`WARP_CD_TABLE`). Errata ``warp_cd_horizontal_angle``: el
+    libro usa sólo δ2 (Rem!E103 = E25 = 4.3°); para el caso FAO A-3 (δ1 = 12.06°) α = 12.80°.
+    """
+    c = np.cos(np.radians(declination_deg)) * np.cos(np.radians(divergence_deg))
+    return float(np.degrees(np.arccos(np.clip(c, -1.0, 1.0))))
+
+
+def warp_cd(angle_deg: float, *, interpolate: bool = False) -> float:
+    """CD del cable para el ángulo de ataque α según la tabla Nomura–Yamazaki (Rem!E106).
+
+    * ``interpolate=False`` (libro): fila de α más cercano,
+      ``E106 = INDEX(B90:B94, MATCH(MIN(ABS(α−x)), α−x, 1))`` (4.3° → 0° → 0.02).
+    * ``interpolate=True`` (modo corregido, errata ``warp_cd_horizontal_angle``): interpolación
+      lineal en :data:`WARP_CD_TABLE`, acotada a los extremos (0.02 por debajo de 0°, 0.30 por
+      encima de 40°).
     """
     angles = np.array([a for a, _ in WARP_CD_TABLE])
+    cds = np.array([c for _, c in WARP_CD_TABLE])
+    if interpolate:
+        return float(np.interp(angle_deg, angles, cds))
     idx = int(np.argmin(np.abs(angles - angle_deg)))
     return WARP_CD_TABLE[idx][1]
 
@@ -361,7 +380,7 @@ def working_load_and_breaking_load(
 
 @dataclass(frozen=True)
 class WarpSelection:
-    """Cable seleccionado del catálogo ``data/warps.yaml`` (Cab!D11:I11)."""
+    """Cable seleccionado del catálogo ``trawlkit/data/warps.yaml`` (Cab!D11:I11)."""
 
     id: str
     construction: str

@@ -125,8 +125,6 @@ def test_unaffected_outputs_identical(excel: DesignResult, corr: DesignResult) -
         (excel.ballast.prado_kg, corr.ballast.prado_kg),
         (excel.warps.diameter_mm, corr.warps.diameter_mm),
         (excel.warps.angles.divergence_deg, corr.warps.angles.divergence_deg),
-        (excel.warps.cd, corr.warps.cd),
-        (excel.warps.drag_kgf, corr.warps.drag_kgf),
         (excel.warps.quantity_m, corr.warps.quantity_m),
     ]
     for e, c in pairs:
@@ -137,3 +135,74 @@ def test_unaffected_outputs_identical(excel: DesignResult, corr: DesignResult) -
     rebuilt = drag.drag_table(excel.drag.inputs, excel.case.speeds, Compat.CORRECTED)
     for col in unaffected:
         assert_close(rebuilt.std[col], excel.drag.table.std[col], where=col)
+
+
+# ---------------------------------------------------------------------------------------------
+# Erratas warp_cd_horizontal_angle y net_weight_ignores_panel_count; columna mod fantasma
+# ---------------------------------------------------------------------------------------------
+
+
+def test_warp_cd_interpolation() -> None:
+    from trawlkit.rigging import WARP_CD_TABLE, warp_attack_angle_deg, warp_cd
+
+    # Fila más cercana (libro) frente a interpolación lineal acotada.
+    assert warp_cd(4.3) == 0.02
+    assert warp_cd(12.8) == 0.04
+    assert warp_cd(15.0, interpolate=True) == pytest.approx(0.065)
+    assert warp_cd(25.0, interpolate=True) == pytest.approx(0.135)
+    for a, cd in WARP_CD_TABLE:
+        assert warp_cd(a, interpolate=True) == pytest.approx(cd)
+    assert warp_cd(-5.0, interpolate=True) == 0.02
+    assert warp_cd(60.0, interpolate=True) == 0.30
+    # α combina declinación y divergencia; con una de las dos nula queda la otra.
+    assert warp_attack_angle_deg(12.0, 0.0) == pytest.approx(12.0)
+    assert warp_attack_angle_deg(0.0, 4.3) == pytest.approx(4.3)
+    assert warp_attack_angle_deg(12.06375613548482, 4.301222304670363) == pytest.approx(
+        12.79689, abs=1e-5
+    )
+
+
+def test_warp_cd_uses_attack_angle(excel: DesignResult, corr: DesignResult) -> None:
+    assert excel.warps.cd == 0.02
+    assert_close(excel.warps.cd_angle_deg, excel.warps.angles.divergence_deg)
+    assert corr.warps.cd > 0.02
+    assert corr.warps.cd_angle_deg == pytest.approx(12.79689, abs=1e-5)
+    assert corr.warps.cd == pytest.approx(0.053984, abs=1e-6)
+    assert_close(corr.warps.drag_kgf / excel.warps.drag_kgf, np.full(9, corr.warps.cd / 0.02))
+    assert any(n.startswith("warp_cd_horizontal_angle") for n in corr.notes)
+
+
+def test_warp_drag_share_of_ft(corr: DesignResult) -> None:
+    """Rw / FT (paso fijo, 150 HP) entre 2 y 3.5 kn: ≈ 1.1–4 %, por debajo de la banda 4–10 %
+    de la bibliografía (Rem!D184:H184) aun con el CD corregido; se documenta, no se ajusta."""
+    speeds = list(corr.case.speeds_kn)
+    idx = [speeds.index(v) for v in (2.0, 2.5, 3.0, 3.5)]
+    share = 100 * corr.warps.drag_kgf[idx] / corr.power.fridman.ft_fixed_pitch_kgf[idx]
+    assert_close(share, [1.14, 1.85, 2.78, 3.96], rtol=5e-3)
+
+
+def test_net_weight_counts_panels(excel: DesignResult, corr: DesignResult) -> None:
+    g = corr.geometry.std
+    assert_close(excel.geometry.std.weight_air_kg, 28.27022, rtol=1e-6)
+    assert_close(g.weight_air_kg, 33.481784, rtol=1e-6)
+    assert_close(corr.geometry.mod.weight_air_kg, 34.679864, rtol=1e-6)
+    assert_close(g.weight_water_kg, sum(r.weight_water_kg for r in g.rows))
+    assert_close(sum(g.weight_by_plane.values()), g.weight_air_kg)
+    assert corr.summary()["net_weight_kg"] == pytest.approx(g.weight_air_kg)
+    # Con la densidad del libro y la cantidad de paneles el total sería ≈ 45 kg (1.6× el Excel).
+    with_counts = sum(r.weight_air_kg * r.row.count for r in excel.geometry.std.rows)
+    assert_close(with_counts, 45.3503, rtol=1e-5)
+
+
+def test_phantom_modified_serialises_null() -> None:
+    from dataclasses import replace
+
+    case = replace(fao_a3_case(150, Compat.CORRECTED), net_modified=None)
+    res = run(case)
+    d = res.to_dict()
+    assert d["drag"]["rn"] == {"std": d["drag"]["rn"]["std"], "mod": None}
+    assert d["geometry"]["mod"] is None and d["warps"]["total"]["mod"] is None
+    assert d["spread"]["vertical"]["fridman"]["mod"] is None
+    assert res.summary()["headrope_m"] == pytest.approx(28.698, rel=1e-6)
+    # Con red modificada la columna se serializa.
+    assert run(fao_a3_case(150, Compat.CORRECTED)).to_dict()["drag"]["rn"]["mod"] is not None

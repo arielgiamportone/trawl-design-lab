@@ -1,6 +1,7 @@
 """Extrae las redes FAO A-3 (estándar y modificada) y el catálogo de buques del Excel original.
 
-Escribe ``data/fao_a3_standard.yaml``, ``data/fao_a3_modified.yaml`` y ``data/vessels.yaml``.
+Escribe ``fao_a3_standard.yaml``, ``fao_a3_modified.yaml`` y ``vessels.yaml`` en
+``src/trawlkit/data/``.
 Todos los valores salen del libro (``openpyxl`` con valores cacheados); las celdas de origen
 quedan registradas en ``source_cells``. Uso::
 

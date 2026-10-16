@@ -2,7 +2,7 @@
 import type { DesignData, PerformanceWindow, Series } from '../api/result';
 import { DRAG_METHODS, PULL_METHODS } from './labels';
 
-export const at = (s: Series | undefined, i: number): number | null => {
+export const at = (s: Series | null | undefined, i: number): number | null => {
   const v = s?.[i];
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 };
@@ -137,7 +137,7 @@ export function spreadRows(d: DesignData): SpreadRow[] {
     dpaStd: at(s.fridman.dpa_std_m, i),
     dpaMod: mod ? at(s.fridman.dpa_mod_m, i) : null,
     avStd: at(s.vertical.fridman.std.av_m, i),
-    avMod: mod ? at(s.vertical.fridman.mod.av_m, i) : null,
+    avMod: mod ? at(s.vertical.fridman.mod?.av_m, i) : null,
   }));
 }
 

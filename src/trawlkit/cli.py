@@ -37,10 +37,12 @@ def errata() -> None:
 
 
 # Opciones comunes a run/report/plan.
-NetArg = Annotated[str, typer.Argument(help="Red (preset de data/ o ruta YAML).")]
+NetArg = Annotated[str, typer.Argument(help="Red (id de preset de trawlkit/data o ruta YAML).")]
 VesselOpt = Annotated[str | None, typer.Option(help="Id del buque del catálogo.")]
 DoorOpt = Annotated[str | None, typer.Option(help="Id del portón del catálogo.")]
-ModifiedOpt = Annotated[str | None, typer.Option(help="Red modificada (columna G).")]
+ModifiedOpt = Annotated[
+    str | None, typer.Option(help="Red modificada (columna G; id de preset o ruta YAML).")
+]
 ClassOpt = Annotated[
     list[str] | None,
     typer.Option(

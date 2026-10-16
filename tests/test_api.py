@@ -49,6 +49,38 @@ def test_design_corrected_and_params_override() -> None:
     assert over["summary"]["sweeps_m"] == 30.0
 
 
+def _pairs(node: object) -> list[dict[str, object]]:
+    """Todos los objetos ``{"std": …, "mod": …}`` (serialización de ``Pair``) del árbol."""
+    out: list[dict[str, object]] = []
+    if isinstance(node, dict):
+        if set(node) == {"std", "mod"}:
+            out.append(node)
+        for v in node.values():
+            out.extend(_pairs(v))
+    elif isinstance(node, list):
+        for v in node:
+            out.extend(_pairs(v))
+    return out
+
+
+def test_design_without_modified_returns_null_mod() -> None:
+    r = client.post("/design", json={"net": "fao_a3_standard", "vessel": "fao_a3_150hp"})
+    assert r.status_code == 200, r.text
+    body = r.json()
+    res = body["result"]
+    assert body["case"]["net_modified"] is None
+    assert res["drag"]["rn"]["mod"] is None and res["drag"]["rn"]["std"]
+    assert res["warps"]["total"]["mod"] is None
+    assert res["performance"]["demand"]["mod"] is None
+    assert res["geometry"]["mod"] is None and res["dimensions"]["mod"] is None
+    pairs = _pairs(res)
+    assert len(pairs) > 5 and all(p["mod"] is None for p in pairs)
+    # El resumen no cambia (sólo usa la columna estándar).
+    with_mod = client.post("/design", json=STD).json()
+    assert body["summary"]["headrope_m"] == with_mod["summary"]["headrope_m"]
+    assert with_mod["result"]["drag"]["rn"]["mod"] is not None
+
+
 def test_design_inline_net_spec() -> None:
     spec = client.get("/catalog/nets/fao_a3_standard").json()
     spec["id"] = "custom"

@@ -4,12 +4,13 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from trawlkit.cli import app
+from trawlkit.io import DATA_DIR
 
 runner = CliRunner()
 ARGS = [
-    "data/fao_a3_standard.yaml",
+    "fao_a3_standard",
     "--modified",
-    "data/fao_a3_modified.yaml",
+    "fao_a3_modified",
     "--vessel",
     "fao_a3_150hp",
 ]
@@ -26,7 +27,9 @@ def test_plan_sheet_and_scale(tmp_path: Path) -> None:
 
 
 def test_plan_rejects_mod_without_modified_net(tmp_path: Path) -> None:
-    res = runner.invoke(app, ["plan", "data/fao_a3_standard.yaml", "--variant", "mod"])
+    # Ruta explícita a un YAML (además del id de preset que usa ARGS).
+    path = str(DATA_DIR / "fao_a3_standard.yaml")
+    res = runner.invoke(app, ["plan", path, "--variant", "mod"])
     assert res.exit_code != 0
 
 

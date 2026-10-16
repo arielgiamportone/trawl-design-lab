@@ -4,6 +4,9 @@ Todo lo que hay aquí se genera con `uv run python tools/extract_excel.py` a par
 `legacy/Calculos_Red_FAO_A3.xlsx`; cada valor lleva la celda de origen (`source`/`source_cells`).
 No editar a mano: corregir el extractor y regenerar.
 
+La carpeta forma parte del paquete (`trawlkit/data`, `trawlkit.io.DATA_DIR`) y se instala con la
+rueda: los presets (`fao_a3_standard`, `fao_a3_modified`, …) funcionan fuera del checkout.
+
 | Archivo | Contenido | Modelo |
 |---|---|---|
 | `fao_a3_standard.yaml` | Red FAO A-3 estándar (bolsa 40 mm): especie, 10 paneles A..J, relingas, boyas, lastre | `NetSpec` |

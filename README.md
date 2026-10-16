@@ -13,7 +13,7 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Capa | Carpeta | Estado |
 |---|---|---|
 | Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
-| Datos y catálogos | `data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
+| Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
 | CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG), `plan` (lámina o escala real), `version`, `errata` |
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](docs/informes.md), ejemplos en [`examples/`](examples/)) |
 | API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](docs/web.md)) |
@@ -43,7 +43,7 @@ uv run trawlkit errata
 uv run trawlkit run fao_a3_standard --modified fao_a3_modified --class-vessel fao_a3_180hp --compat excel
 uv run trawlkit report fao_a3_standard --modified fao_a3_modified --vessel fao_a3_150hp --out informe/
 uv run uvicorn api.main:app --reload   # http://127.0.0.1:8000/health
-uv run python tools/extract_excel.py   # regenera data/ y tests/golden/ desde legacy/*.xlsx
+uv run python tools/extract_excel.py   # regenera src/trawlkit/data/ y tests/golden/ desde legacy/*.xlsx
 ```
 
 ```python

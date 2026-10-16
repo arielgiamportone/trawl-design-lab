@@ -2,7 +2,7 @@
 
 Replica la hoja *Portones y aparejamiento* del modelo original (bloques B6:F13, B26:G30,
 A141:H168, B184:E198, B201:F231, A235:D270, A273:H289) y la polar del portón del catálogo
-(``data/doors.yaml``, *Tablas de Referencias* A245:E286).
+(``trawlkit/data/doors.yaml``, *Tablas de Referencias* A245:E286).
 
 Convenciones: fuerzas en kgf, velocidades en m/s, longitudes en m, ángulos en grados.
 """
@@ -230,7 +230,7 @@ class DoorPolar:
 
 
 def select_door(door_id: str) -> Door:
-    """Portón del catálogo ``data/doors.yaml`` por ``id`` (p. ej. ``"fao_flat_wood_a3"``).
+    """Portón del catálogo ``trawlkit/data/doors.yaml`` por ``id`` (p. ej. ``"fao_flat_wood_a3"``).
 
     Equivale a la lista desplegable Port!B117 y a los ``LOOKUP`` de Port!D120:D127.
     """

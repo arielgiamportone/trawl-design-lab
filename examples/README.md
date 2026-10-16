@@ -14,8 +14,8 @@ Cada carpeta contiene `informe.html` (abre en cualquier navegador, sin conexión
 Para regenerarlos:
 
 ```bash
-uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
     --vessel fao_a3_150hp --out examples/fao_a3/corregido
-uv run trawlkit report data/fao_a3_standard.yaml --modified data/fao_a3_modified.yaml \
+uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
     --vessel fao_a3_150hp --compat excel --out examples/fao_a3/excel
 ```

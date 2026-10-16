@@ -1,8 +1,8 @@
-La documentación (carpeta docs/), los datos (carpeta data/) y el material heredado (carpeta legacy/)
+La documentación (carpeta docs/), los datos (carpeta src/trawlkit/data/) y el material heredado (carpeta legacy/)
 de este repositorio se distribuyen bajo la licencia Creative Commons Atribución 4.0 Internacional
 (CC BY 4.0). Texto completo: https://creativecommons.org/licenses/by/4.0/legalcode.es
 
-The documentation (docs/), data (data/) and legacy material (legacy/) in this repository are
+The documentation (docs/), data (src/trawlkit/data/) and legacy material (legacy/) in this repository are
 licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
 Full text: https://creativecommons.org/licenses/by/4.0/legalcode
 

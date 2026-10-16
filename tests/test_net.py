@@ -225,7 +225,11 @@ def test_twine_density_units_corrected_weights(
     """Con la densidad corregida SN = longitud de hilo / runnage y el peso en agua usa ρ(PA)."""
     ab = std_corrected.row("A+B")
     assert_close(ab.reference_twine_weight_kg, 500 * 0.08 * 200 / (1e6 / 1280))
-    assert std_corrected.weight_air_kg < std.weight_air_kg
+    # Por panel (el modo corregido multiplica cada fila por su cantidad de paneles, errata
+    # net_weight_ignores_panel_count) el peso con la densidad corregida es menor.
+    per_panel = sum(r.weight_air_kg / r.row.count for r in std_corrected.rows)
+    assert_close(per_panel, 20.016988, rtol=1e-6)
+    assert per_panel < std.weight_air_kg
     for r in std_corrected.rows:
         assert_close(r.weight_water_kg / r.weight_air_kg, 1 - 1025 / 1140)
     assert_close(
