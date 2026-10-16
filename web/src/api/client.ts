@@ -1,0 +1,120 @@
+/** Cliente HTTP tipado para la API trawlkit (contrato en ../../openapi.json). */
+import type { components } from './schema';
+
+type S = components['schemas'];
+export type CatalogItem = S['CatalogItem'];
+export type NetSpec = S['NetSpec'];
+export type Panel = S['Panel'];
+export type Vessel = S['Vessel'];
+export type Door = S['Door'];
+export type ParamInfo = S['ParamInfo'];
+export type Erratum = S['ErratumOut'];
+export type Health = S['Health'];
+export type DesignRequest = S['DesignRequest'];
+export type DesignResponseRaw = S['DesignResponse'];
+export type PlanView = 'sheet' | 'scale';
+export type Variant = 'std' | 'mod';
+export type ReportFormat = 'html' | 'pdf' | 'xlsx';
+
+const DEFAULT_BASE = 'http://127.0.0.1:8000';
+
+/** URL base de la API: ``VITE_API_URL`` o ``http://127.0.0.1:8000`` (sin barra final). */
+export function apiBase(): string {
+  const env = import.meta.env.VITE_API_URL as string | undefined;
+  return (env && env.trim() ? env.trim() : DEFAULT_BASE).replace(/\/+$/, '');
+}
+
+/** Error HTTP de la API con el ``detail`` ya convertido a texto legible. */
+export class ApiError extends Error {
+  readonly status: number;
+  readonly detail: unknown;
+  constructor(status: number, message: string, detail?: unknown) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.detail = detail;
+  }
+}
+
+interface ValidationItem {
+  loc?: (string | number)[];
+  msg?: string;
+}
+
+/** Convierte el ``detail`` de FastAPI (texto o lista de errores de validación) en un mensaje. */
+export function detailMessage(detail: unknown): string {
+  if (typeof detail === 'string') return detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((d: ValidationItem) => {
+        const loc = (d.loc ?? []).filter((p) => p !== 'body').join('.');
+        return loc ? `${loc}: ${d.msg ?? ''}` : (d.msg ?? '');
+      })
+      .join('; ');
+  }
+  if (detail == null) return '';
+  return JSON.stringify(detail);
+}
+
+async function request(path: string, init?: RequestInit): Promise<Response> {
+  let res: Response;
+  try {
+    res = await fetch(`${apiBase()}${path}`, init);
+  } catch (err) {
+    throw new ApiError(0, `No se pudo conectar con la API (${apiBase()}): ${String(err)}`);
+  }
+  if (!res.ok) {
+    let detail: unknown;
+    try {
+      const body = (await res.json()) as { detail?: unknown };
+      detail = body.detail;
+    } catch {
+      detail = undefined;
+    }
+    const msg = detailMessage(detail) || `${res.status} ${res.statusText}`;
+    throw new ApiError(res.status, msg, detail);
+  }
+  return res;
+}
+
+async function getJson<T>(path: string, signal?: AbortSignal): Promise<T> {
+  const res = await request(path, { signal });
+  return (await res.json()) as T;
+}
+
+function post(path: string, body: unknown, signal?: AbortSignal): Promise<Response> {
+  return request(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal,
+  });
+}
+
+export const api = {
+  health: (signal?: AbortSignal) => getJson<Health>('/health', signal),
+  nets: (signal?: AbortSignal) => getJson<CatalogItem[]>('/catalog/nets', signal),
+  net: (id: string, signal?: AbortSignal) =>
+    getJson<NetSpec>(`/catalog/nets/${encodeURIComponent(id)}`, signal),
+  vessels: (signal?: AbortSignal) => getJson<Vessel[]>('/catalog/vessels', signal),
+  doors: (signal?: AbortSignal) => getJson<Door[]>('/catalog/doors', signal),
+  params: (signal?: AbortSignal) => getJson<ParamInfo[]>('/params', signal),
+  errata: (signal?: AbortSignal) => getJson<Erratum[]>('/errata', signal),
+  async design(req: DesignRequest, signal?: AbortSignal): Promise<DesignResponseRaw> {
+    const res = await post('/design', req, signal);
+    return (await res.json()) as DesignResponseRaw;
+  },
+  async plan(
+    req: DesignRequest,
+    view: PlanView,
+    variant: Variant,
+    signal?: AbortSignal,
+  ): Promise<string> {
+    const res = await post(`/design/plan?view=${view}&variant=${variant}`, req, signal);
+    return res.text();
+  },
+  async report(req: DesignRequest, format: ReportFormat, signal?: AbortSignal): Promise<Blob> {
+    const res = await post(`/design/report?format=${format}`, req, signal);
+    return res.blob();
+  },
+};

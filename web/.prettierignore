@@ -1,0 +1,8 @@
+dist
+node_modules
+src/api/schema.d.ts
+openapi.json
+playwright-report
+test-results
+docs/screenshots
+src/test/fixtures

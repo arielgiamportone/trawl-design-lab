@@ -16,8 +16,7 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Datos y catálogos | `data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
 | CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG), `plan` (lámina o escala real), `version`, `errata` |
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](docs/informes.md), ejemplos en [`examples/`](examples/)) |
-| API HTTP (FastAPI) | `api/` | Fase 0: `/health` |
-| Frontend (React + Vite) | `web/` | Fase 4 |
+| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](docs/web.md)) |
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
@@ -71,7 +70,7 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 1. Extracción del Excel a datos abiertos y valores de referencia ✔
 2. Motor de cálculo validado contra el Excel (rtol 1e-6 en modo `EXCEL`; DynamiT pendiente) ✔
 3. CLI, informe (HTML/PDF/XLSX) y plano 2D SVG (lámina y escala real) ✔
-4. API FastAPI + frontend React
+4. API FastAPI + frontend React ✔
 5. Documentación científica (Jupyter Book)
 6. Optimización (área barrida vs potencia)
 7. Simulación simplificada de la geometría de la red (experimental)
