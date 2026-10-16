@@ -58,9 +58,35 @@ def door_presets() -> dict[str, Door]:
     return {d.id: d for d in load_doors().doors}
 
 
+def normalise_inline_net(spec: NetSpec) -> NetSpec:
+    """Sincroniza ``meshes_a``/``meshes_b`` (T1/T2 del Excel) con los bordes editados.
+
+    El motor usa los extras ``meshes_a`` (borde mayor) y ``meshes_b`` (borde menor) cuando están
+    presentes. Una red editada en el cliente suele cambiar sólo ``meshes_top``/``meshes_bottom``;
+    si esos bordes ya no coinciden con ``{meshes_a, meshes_b}``, se recalculan a partir de ellos.
+    """
+    panels = []
+    changed = False
+    for p in spec.panels:
+        extra = p.model_extra or {}
+        a, b = extra.get("meshes_a"), extra.get("meshes_b")
+        edges = {p.meshes_top, p.meshes_bottom}
+        if a is not None and b is not None and {a, b} != edges:
+            data = p.model_dump()
+            data["meshes_a"] = max(p.meshes_top, p.meshes_bottom)
+            data["meshes_b"] = min(p.meshes_top, p.meshes_bottom)
+            panels.append(type(p).model_validate(data))
+            changed = True
+        else:
+            panels.append(p)
+    return spec.model_copy(update={"panels": panels}) if changed else spec
+
+
 def _net(value: str | NetSpec | None) -> NetSpec | None:
-    if value is None or isinstance(value, NetSpec):
-        return value
+    if value is None:
+        return None
+    if isinstance(value, NetSpec):
+        return normalise_inline_net(value)
     presets = net_presets()
     if value not in presets:
         raise NotFoundError(f"red desconocida: {value!r}")
@@ -114,6 +140,12 @@ def _coerce_params(params: dict[str, Any]) -> dict[str, Any]:
         raise BadRequestError(f"parámetros desconocidos: {sorted(unknown)}")
     out: dict[str, Any] = {}
     for k, v in params.items():
+        values = v if isinstance(v, list) else [v]
+        for item in values:
+            if isinstance(item, bool) or not isinstance(item, (int, float, str)):
+                raise BadRequestError(f"{k}: valor no admitido {item!r}")
+            if isinstance(item, (int, float)) and (not math.isfinite(item) or item < 0):
+                raise BadRequestError(f"{k}: debe ser un número finito y no negativo ({item!r})")
         out[k] = tuple(v) if isinstance(v, list) else v
     return out
 

@@ -64,6 +64,9 @@ def test_design_inline_net_spec() -> None:
         ({"vessel": "nope"}, 404),
         ({"params": {"not_a_param": 1}}, 422),
         ({"params": {"speeds_kn": []}}, 422),
+        ({"params": {"sweeps_m": -5}}, 422),
+        ({"params": {"speeds_kn": [1.0, -2.0]}}, 422),
+        ({"params": {"sweeps_m": True}}, 422),
         ({"compat": "other"}, 422),
         ({"unexpected": 1}, 422),
     ],
@@ -99,3 +102,12 @@ def test_to_jsonable() -> None:
         "a": None,
         "b": [1.0, None],
     }
+
+
+def test_inline_net_edge_edit_changes_geometry() -> None:
+    spec = client.get("/catalog/nets/fao_a3_standard").json()
+    base = client.post("/design", json={"net": spec}).json()["summary"]["solid_surface_m2"]
+    panel_c = next(p for p in spec["panels"] if p["id"] == "C")
+    panel_c["meshes_bottom"] = 140  # sin tocar meshes_a/meshes_b (57/117)
+    edited = client.post("/design", json={"net": spec}).json()["summary"]["solid_surface_m2"]
+    assert edited > base
