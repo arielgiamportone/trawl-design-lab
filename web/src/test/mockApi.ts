@@ -6,7 +6,9 @@ import errata from './fixtures/errata.json';
 import netMod from './fixtures/net_mod.json';
 import netStd from './fixtures/net_std.json';
 import nets from './fixtures/nets.json';
+import optimize from './fixtures/optimize.json';
 import params from './fixtures/params.json';
+import simulate from './fixtures/simulate.json';
 import vessels from './fixtures/vessels.json';
 
 export const fixtures = {
@@ -17,7 +19,9 @@ export const fixtures = {
   netMod,
   netStd,
   nets,
+  optimize,
   params,
+  simulate,
   vessels,
 };
 
@@ -52,6 +56,13 @@ export function mockApi(overrides: { design?: (body: Record<string, unknown>) =>
       if (overrides.design) return overrides.design(body as Record<string, unknown>);
       return json((body as { compat?: string }).compat === 'excel' ? designExcel : design);
     }
+    if (path === '/optimize') return json(optimize);
+    if (path === '/optimize/scaled-net') {
+      const b = body as { net: unknown; s: number };
+      const base = b.net === 'fao_a3_modified' ? netMod : netStd;
+      return json({ ...base, id: `${base.id}_s${b.s.toFixed(2)}` });
+    }
+    if (path === '/simulate') return json(simulate);
     if (path === '/design/plan') {
       return new Response('<svg xmlns="http://www.w3.org/2000/svg"><title>plano</title></svg>', {
         headers: { 'Content-Type': 'image/svg+xml' },

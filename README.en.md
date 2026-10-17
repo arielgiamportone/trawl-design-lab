@@ -44,3 +44,13 @@ Phase 3 adds reports and drawings: `trawlkit report NET --modified NET2 --vessel
 writes a self-contained Spanish HTML report, a PDF (WeasyPrint), an XLSX workbook and SVG drawings
 (an A3 technical sheet replicating the 2014 plans and a true-scale metric view);
 `trawlkit plan` writes a single drawing. Generated examples live in `examples/`.
+
+Phase 6 adds design optimisation (`trawlkit optimize`, `POST /optimize`): net scale and towing
+speed maximising swept area or filtered volume, or minimising towing work per m² swept, under
+thrust, net-opening, warp and door constraints, with a feasibility map and Pareto front.
+Phase 7 adds an experimental quasi-static net-shape simulation (`trawlkit.sim`, `POST /simulate`):
+Priour triangular netting elements with Morison drag, ropes, floats, ballast, bridles, sweeps and
+seabed contact, solved by FIRE dynamic relaxation. Against DynamiT it matches the horizontal
+opening within 3 % (2–4 kn) but under-predicts net drag by ≈ 50 % (book chapter 21). Both are in
+the web app ("Optimizar" and "Simulación" tabs) and in the report
+(`trawlkit report ... --optimize area --simulate 2,3`).

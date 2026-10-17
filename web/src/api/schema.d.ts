@@ -204,6 +204,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/optimize/scaled-net": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Optimize Scaled Net
+         * @description Red escalada por ``s`` (mismas mallas y materiales), para usar el diseño optimizado.
+         */
+        post: operations["optimize_scaled_net_optimize_scaled_net_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate
+         * @description Simula la forma de equilibrio de la red a varias velocidades (experimental).
+         */
+        post: operations["simulate_simulate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/report": {
         parameters: {
             query?: never;
@@ -359,6 +399,34 @@ export interface components {
             cd?: number | null;
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * DynamitRow
+         * @description Comparación con DynamiT (red FAO A-3 estándar) a una velocidad de la tabla de DynamiT.
+         */
+        DynamitRow: {
+            /** Speed Kn */
+            speed_kn: number;
+            /** Dynamit */
+            dynamit: {
+                [key: string]: number;
+            };
+            /** Sim */
+            sim: {
+                [key: string]: number | null;
+            };
+            /** Engine */
+            engine: {
+                [key: string]: number | null;
+            };
+            /** Sim Pct */
+            sim_pct: {
+                [key: string]: number | null;
+            };
+            /** Engine Pct */
+            engine_pct: {
+                [key: string]: number | null;
+            };
         };
         /**
          * ErratumOut
@@ -716,11 +784,143 @@ export interface components {
             [key: string]: unknown;
         };
         /**
+         * ScaledNetRequest
+         * @description Red escalada geométricamente por ``s`` (``POST /optimize/scaled-net``).
+         *
+         *     ``net`` es el id de un preset o una especificación en línea; el resultado es la
+         *     ``NetSpec`` de :func:`trawlkit.optimize.scale_net` (mismo mallero e hilo, ``s`` veces más
+         *     mallas por borde), lista para usar como red en línea de ``POST /design``.
+         */
+        ScaledNetRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /**
+             * S
+             * @description Factor de escala de la red
+             */
+            s: number;
+        };
+        /**
          * Section
          * @description Sección estructural de la red.
          * @enum {string}
          */
         Section: "wing_tip" | "wing" | "square" | "belly" | "body" | "extension" | "codend";
+        /**
+         * SimEngineRow
+         * @description Magnitudes empíricas del motor a una velocidad (comparables con la simulación).
+         */
+        SimEngineRow: {
+            /** Speed Kn */
+            speed_kn: number;
+            /** Ah M */
+            ah_m: number | null;
+            /** Av M */
+            av_m: number | null;
+            /** Drag Kgf */
+            drag_kgf: number | null;
+            /** Door Spread M */
+            door_spread_m: number | null;
+        };
+        /**
+         * SimProjections
+         * @description Proyecciones SVG de la forma simulada a una velocidad.
+         */
+        SimProjections: {
+            /** Plan */
+            plan: string;
+            /** Profile */
+            profile: string;
+            /** Front */
+            front: string;
+        };
+        /**
+         * SimulateRequest
+         * @description Simulación cuasiestática de la forma de la red (``POST /simulate``).
+         *
+         *     ``net``, ``vessel``, ``door`` y ``class_vessels`` como en ``DesignRequest``: el motor corre
+         *     el caso para obtener el aparejo (bridas, patentes, relingas, boyas, lastre y separación de
+         *     portones) y :func:`trawlkit.sim.sweep` busca la forma de equilibrio a cada velocidad de
+         *     ``speeds_kn`` (1–9 valores entre 0,5 y 6 kn). ``resolution`` son las divisiones nominales por
+         *     panel (2–10; 4 por defecto, rápido). ``cn``/``ct`` son los coeficientes de Morison del hilo,
+         *     ``knot_factor`` el diámetro relativo de los nudos (0 = sin nudos) y ``door_spread_m`` impone la
+         *     separación de portones (si no, la del motor). ``include_geometry`` agrega nodos y conectividad
+         *     a cada resultado (pesado). Se rechazan los pedidos cuyo costo estimado supera ~30 s.
+         */
+        SimulateRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /** Speeds Kn */
+            speeds_kn?: number[];
+            /**
+             * Resolution
+             * @default 4
+             */
+            resolution: number;
+            /**
+             * Cn
+             * @description C_N del hilo
+             */
+            cn?: number | null;
+            /**
+             * Ct
+             * @description C_T del hilo
+             */
+            ct?: number | null;
+            /** Knot Factor */
+            knot_factor?: number | null;
+            /** Door Spread M */
+            door_spread_m?: number | null;
+            /**
+             * Include Geometry
+             * @default false
+             */
+            include_geometry: boolean;
+        };
+        /**
+         * SimulateResponse
+         * @description Resultado de ``POST /simulate``.
+         */
+        SimulateResponse: {
+            /** Results */
+            results: {
+                [key: string]: unknown;
+            }[];
+            /** Projections Svg */
+            projections_svg: {
+                [key: string]: components["schemas"]["SimProjections"];
+            };
+            /** Engine */
+            engine: components["schemas"]["SimEngineRow"][];
+            /** Dynamit Comparison */
+            dynamit_comparison: components["schemas"]["DynamitRow"][] | null;
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
+        };
         /**
          * Species
          * @description Especie objetivo.
@@ -1031,6 +1231,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OptimizeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    optimize_scaled_net_optimize_scaled_net_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScaledNetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NetSpec"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_simulate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimulateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimulateResponse"];
                 };
             };
             /** @description Validation Error */

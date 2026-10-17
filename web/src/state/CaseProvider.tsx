@@ -59,9 +59,13 @@ export function CaseProvider({ children }: { children: ReactNode }) {
   });
 
   const metas = useMemo(() => (params.data ?? []).map(paramMeta), [params.data]);
+  // Una red escalada desde «Optimizar» reemplaza a la del catálogo (también en el editor).
   const specs = useMemo(
-    () => ({ std: stdSpec.data, mod: state.netModified ? modSpec.data : undefined }),
-    [stdSpec.data, modSpec.data, state.netModified],
+    () => ({
+      std: state.scaled?.std ?? stdSpec.data,
+      mod: state.netModified ? (state.scaled?.mod ?? modSpec.data) : undefined,
+    }),
+    [stdSpec.data, modSpec.data, state.netModified, state.scaled],
   );
   const built = useMemo(() => buildRequest(state, metas, specs), [state, metas, specs]);
   const valid = Object.keys(built.errors).length === 0 && !built.pending && params.isSuccess;

@@ -129,14 +129,54 @@ def report(
     format_: Annotated[
         str, typer.Option("--format", help="Formatos separados por coma: html,pdf,xlsx,svg.")
     ] = "html,pdf,xlsx,svg",
+    optimize_: Annotated[
+        str | None,
+        typer.Option(
+            "--optimize",
+            help="Agrega la sección de optimización: area | volume | energy (malla 13 × 11, "
+            "sin refinado).",
+        ),
+    ] = None,
+    simulate_: Annotated[
+        str | None,
+        typer.Option(
+            "--simulate",
+            help="Agrega la simulación de forma a esas velocidades en kn, separadas por coma "
+            "(p. ej. 2,3).",
+        ),
+    ] = None,
+    sim_resolution: Annotated[
+        int, typer.Option(help="Resolución de la simulación (divisiones por panel, 2–10).")
+    ] = 6,
 ) -> None:
     """Genera el informe completo (HTML, PDF, XLSX y láminas SVG) de un caso de diseño."""
     from trawlkit.report.build import build_report
 
     formats = [f.strip() for f in format_.split(",") if f.strip()]
     case = build_case(net, vessel, door, modified, class_vessel, compat)
+    result = run_case(case)
+    optimization = None
+    simulation = None
     try:
-        paths = build_report(run_case(case), out, formats)
+        if optimize_ is not None:
+            from trawlkit.optimize import optimise
+
+            if optimize_ not in ("area", "volume", "energy"):
+                raise ValueError("--optimize debe ser area, volume o energy")
+            optimization = optimise(case, objective=optimize_, grid=(13, 11), refine=False)
+        if simulate_ is not None:
+            from trawlkit.sim import sweep
+
+            try:
+                speeds = [float(x) for x in simulate_.replace(";", ",").split(",") if x.strip()]
+            except ValueError as exc:
+                raise ValueError(f"--simulate: velocidades inválidas {simulate_!r}") from exc
+            if not speeds or any(not 0.5 <= v <= 6.0 for v in speeds):
+                raise ValueError("--simulate: velocidades entre 0,5 y 6 kn")
+            if not 2 <= sim_resolution <= 10:
+                raise ValueError("--sim-resolution debe estar entre 2 y 10")
+            simulation = sweep(result, sorted(set(speeds)), resolution=sim_resolution)
+        paths = build_report(result, out, formats, optimization=optimization, simulation=simulation)
     except (ValueError, RuntimeError) as exc:
         raise typer.BadParameter(str(exc)) from exc
     for p in paths:

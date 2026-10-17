@@ -109,3 +109,47 @@ test('parámetro inválido muestra error y bloquea Calcular', async ({ page }) =
   await input.fill('30');
   await expect(page.locator('tr[data-key="sweeps_m"] td.num')).toHaveText('30');
 });
+
+test('optimizar el caso por defecto da un mejor diseño factible y se puede aplicar', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await waitForResults(page);
+  await page.getByRole('tab', { name: 'Optimizar' }).click();
+  await page.getByRole('button', { name: 'Optimizar', exact: true }).click();
+  const best = page.getByTestId('opt-best');
+  await expect(best).toBeVisible({ timeout: 60_000 });
+  await expect(best.getByText('Factible', { exact: true })).toBeVisible();
+  await expect(page.getByTestId('opt-constraints').getByText('OK')).toHaveCount(5);
+  await expect(
+    page.locator('[data-testid="opt-heatmap"] rect[data-feasible="true"]').first(),
+  ).toBeVisible();
+  await expect(page.locator('[data-chart="opt-pareto"] svg.recharts-surface')).toBeVisible();
+  await best.getByRole('button', { name: 'Usar este diseño' }).click();
+  await expect(page.getByTestId('scaled-net')).toContainText('Red escalada s =');
+  await expect(page.getByRole('tab', { name: 'Resumen' })).toHaveAttribute('aria-selected', 'true');
+  await waitForResults(page);
+  await expect(page.locator('tr[data-key="headrope_m"] td.num')).not.toHaveText('28,698');
+  await page.getByRole('button', { name: 'Volver a la red del catálogo' }).click();
+  await expect(page.locator('tr[data-key="headrope_m"] td.num')).toHaveText('28,698');
+});
+
+test('simular 3 kn en resolución rápida muestra tres proyecciones', async ({ page }) => {
+  await page.goto('/');
+  await waitForResults(page);
+  await page.getByRole('tab', { name: 'Simulación' }).click();
+  await expect(page.getByRole('button', { name: '3,0' })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByText('Rápida (3)').click();
+  await page.getByRole('button', { name: 'Simular' }).click();
+  const svgs = page.getByTestId('sim-svg');
+  await expect(svgs).toHaveCount(3, { timeout: 60_000 });
+  for (const img of await svgs.all()) {
+    await expect(img).toHaveAttribute('src', /^data:image\/svg\+xml/);
+    expect(
+      await img.evaluate((el: HTMLImageElement) => el.decode().then(() => el.naturalWidth > 0)),
+    ).toBe(true);
+  }
+  const table = page.getByTestId('sim-table');
+  await expect(table.locator('tr[data-row="3-drag_kgf"]')).toContainText('1.331,3');
+  await expect(page.getByText(/Sobre la resistencia/)).toBeVisible();
+});

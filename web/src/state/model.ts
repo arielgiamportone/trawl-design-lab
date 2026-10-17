@@ -14,6 +14,19 @@ export interface CaseState {
   compat: Compat;
   params: ParamValues;
   edits: { std: PanelEdits; mod: PanelEdits };
+  /**
+   * Red escalada desde «Optimizar» (``POST /optimize/scaled-net``): reemplaza a la red del
+   * catálogo (y a la modificada, si hay) como red en línea. ``null`` = red del catálogo.
+   */
+  scaled: ScaledNet | null;
+}
+
+export interface ScaledNet {
+  s: number;
+  std: NetSpec;
+  mod: NetSpec | null;
+  /** Velocidad del diseño optimizado [kn] (informativa). */
+  speed: number | null;
 }
 
 export const DEFAULT_CASE: CaseState = {
@@ -24,6 +37,7 @@ export const DEFAULT_CASE: CaseState = {
   compat: 'corrected',
   params: {},
   edits: { std: {}, mod: {} },
+  scaled: null,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -44,6 +58,23 @@ export function sanitizeCase(raw: unknown): CaseState {
     compat: r.compat === 'excel' ? 'excel' : 'corrected',
     params: obj<ParamValues>(r.params, {}),
     edits: { std: obj<PanelEdits>(edits.std, {}), mod: obj<PanelEdits>(edits.mod, {}) },
+    scaled: sanitizeScaled(r.scaled),
+  };
+}
+
+function isSpec(v: unknown): v is NetSpec {
+  return !!v && typeof v === 'object' && Array.isArray((v as { panels?: unknown }).panels);
+}
+
+function sanitizeScaled(raw: unknown): ScaledNet | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Partial<ScaledNet>;
+  if (typeof r.s !== 'number' || !Number.isFinite(r.s) || !isSpec(r.std)) return null;
+  return {
+    s: r.s,
+    std: r.std,
+    mod: isSpec(r.mod) ? r.mod : null,
+    speed: typeof r.speed === 'number' && Number.isFinite(r.speed) ? r.speed : null,
   };
 }
 
@@ -68,14 +99,17 @@ export function buildRequest(
     for (const [k, v] of Object.entries(editErrors(state.edits.mod))) errors[`mod.${k}`] = v;
   }
   let pending = false;
-  let net: DesignRequest['net'] = state.net;
+  // Con una red escalada, ``specs`` ya trae la escalada (ver CaseProvider) y las ediciones se
+  // aplican sobre ella.
+  let net: DesignRequest['net'] = state.scaled ? state.scaled.std : state.net;
   if (Object.keys(state.edits.std).length) {
-    if (specs.std) net = editedSpec(specs.std, state.edits.std) ?? state.net;
+    if (specs.std) net = editedSpec(specs.std, state.edits.std) ?? net;
     else pending = true;
   }
-  let netModified: DesignRequest['net_modified'] = state.netModified;
+  let netModified: DesignRequest['net_modified'] =
+    state.netModified && state.scaled?.mod ? state.scaled.mod : state.netModified;
   if (state.netModified && Object.keys(state.edits.mod).length) {
-    if (specs.mod) netModified = editedSpec(specs.mod, state.edits.mod) ?? state.netModified;
+    if (specs.mod) netModified = editedSpec(specs.mod, state.edits.mod) ?? netModified;
     else pending = true;
   }
   const request: DesignRequest = {

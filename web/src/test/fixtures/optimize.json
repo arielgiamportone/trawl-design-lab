@@ -1,0 +1,953 @@
+{
+ "objective": "area_rate",
+ "feasible": true,
+ "best": {
+  "s": 0.6,
+  "v_kn": 3.0,
+  "net_id": "fao_a3_standard_s0.60",
+  "vessel_id": "fao_a3_150hp",
+  "door_id": "fao_flat_wood_a3",
+  "propeller": "fixed_pitch",
+  "ah_m": 11.375472894909722,
+  "dpa_fridman_m": 23.005447138141886,
+  "av_m": 1.7394,
+  "av_fridman_m": 2.0659670717384895,
+  "area_rate_m2_h": 63196.66717712886,
+  "volume_rate_m3_h": 109924.28288789792,
+  "demand_kgf": 938.1474626080808,
+  "available_kgf": 1185.0,
+  "thrust_margin": 0.2631276502157358,
+  "energy_kgf_m_per_m2": 82.47107362260795,
+  "net_drag_kgf": 572.9409549677094,
+  "dpa_geometric_m": 11.0,
+  "headrope_m": 17.2943,
+  "footrope_m": 20.085900000000002,
+  "door_area_m2": 1.805,
+  "door_required_m2": 1.656481733771439,
+  "warp_id": "steel_6x19_seale_13mm",
+  "constraints": [
+   {
+    "name": "thrust",
+    "value": 1185.0,
+    "lower": 1031.9622088688889,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "F_T ≥ (1 + 0.1)·R_T"
+   },
+   {
+    "name": "net_open",
+    "value": 23.005447138141886,
+    "lower": 9.35,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+   },
+   {
+    "name": "warp",
+    "value": 18460.0,
+    "lower": 3752.589850432323,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+   },
+   {
+    "name": "door",
+    "value": 1.656481733771439,
+    "lower": null,
+    "upper": 1.805,
+    "ok": true,
+    "violation": 0.0,
+    "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+   },
+   {
+    "name": "speed",
+    "value": 3.0,
+    "lower": 1.5,
+    "upper": 3.5,
+    "ok": true,
+    "violation": 0.0,
+    "description": "1.5 ≤ v ≤ 3.5 kn"
+   }
+  ],
+  "feasible": true,
+  "penalty": 0.0
+ },
+ "grid_best": {
+  "s": 0.6,
+  "v_kn": 3.0,
+  "net_id": "fao_a3_standard_s0.60",
+  "vessel_id": "fao_a3_150hp",
+  "door_id": "fao_flat_wood_a3",
+  "propeller": "fixed_pitch",
+  "ah_m": 11.375472894909722,
+  "dpa_fridman_m": 23.005447138141886,
+  "av_m": 1.7394,
+  "av_fridman_m": 2.0659670717384895,
+  "area_rate_m2_h": 63196.66717712886,
+  "volume_rate_m3_h": 109924.28288789792,
+  "demand_kgf": 938.1474626080808,
+  "available_kgf": 1185.0,
+  "thrust_margin": 0.2631276502157358,
+  "energy_kgf_m_per_m2": 82.47107362260795,
+  "net_drag_kgf": 572.9409549677094,
+  "dpa_geometric_m": 11.0,
+  "headrope_m": 17.2943,
+  "footrope_m": 20.085900000000002,
+  "door_area_m2": 1.805,
+  "door_required_m2": 1.656481733771439,
+  "warp_id": "steel_6x19_seale_13mm",
+  "constraints": [
+   {
+    "name": "thrust",
+    "value": 1185.0,
+    "lower": 1031.9622088688889,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "F_T ≥ (1 + 0.1)·R_T"
+   },
+   {
+    "name": "net_open",
+    "value": 23.005447138141886,
+    "lower": 9.35,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+   },
+   {
+    "name": "warp",
+    "value": 18460.0,
+    "lower": 3752.589850432323,
+    "upper": null,
+    "ok": true,
+    "violation": 0.0,
+    "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+   },
+   {
+    "name": "door",
+    "value": 1.656481733771439,
+    "lower": null,
+    "upper": 1.805,
+    "ok": true,
+    "violation": 0.0,
+    "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+   },
+   {
+    "name": "speed",
+    "value": 3.0,
+    "lower": 1.5,
+    "upper": 3.5,
+    "ok": true,
+    "violation": 0.0,
+    "description": "1.5 ≤ v ≤ 3.5 kn"
+   }
+  ],
+  "feasible": true,
+  "penalty": 0.0
+ },
+ "pareto": [
+  {
+   "s": 0.6,
+   "v_kn": 3.0,
+   "net_id": "fao_a3_standard_s0.60",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 11.375472894909722,
+   "dpa_fridman_m": 23.005447138141886,
+   "av_m": 1.7394,
+   "av_fridman_m": 2.0659670717384895,
+   "area_rate_m2_h": 63196.66717712886,
+   "volume_rate_m3_h": 109924.28288789792,
+   "demand_kgf": 938.1474626080808,
+   "available_kgf": 1185.0,
+   "thrust_margin": 0.2631276502157358,
+   "energy_kgf_m_per_m2": 82.47107362260795,
+   "net_drag_kgf": 572.9409549677094,
+   "dpa_geometric_m": 11.0,
+   "headrope_m": 17.2943,
+   "footrope_m": 20.085900000000002,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1185.0,
+     "lower": 1031.9622088688889,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 23.005447138141886,
+     "lower": 9.35,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 3752.589850432323,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 3.0,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  },
+  {
+   "s": 0.8,
+   "v_kn": 2.5,
+   "net_id": "fao_a3_standard_s0.80",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 12.782776349614391,
+   "dpa_fridman_m": 15.667704662061704,
+   "av_m": 2.2035265863634854,
+   "av_fridman_m": 2.2035265863634854,
+   "area_rate_m2_h": 59179.14138817478,
+   "volume_rate_m3_h": 130402.81140700684,
+   "demand_kgf": 1025.7989727904262,
+   "available_kgf": 1237.5,
+   "thrust_margin": 0.20637671983009964,
+   "energy_kgf_m_per_m2": 80.2485269814934,
+   "net_drag_kgf": 768.9293690015083,
+   "dpa_geometric_m": 12.0,
+   "headrope_m": 22.9754,
+   "footrope_m": 26.775,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1237.5,
+     "lower": 1128.378870069469,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 15.667704662061704,
+     "lower": 10.2,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 4103.195891161705,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 2.5,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  },
+  {
+   "s": 0.6,
+   "v_kn": 2.5,
+   "net_id": "fao_a3_standard_s0.60",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 11.375472894909722,
+   "dpa_fridman_m": 21.244088665134143,
+   "av_m": 1.7394,
+   "av_fridman_m": 2.5368551330168576,
+   "area_rate_m2_h": 52663.88931427405,
+   "volume_rate_m3_h": 91603.56907324828,
+   "demand_kgf": 684.8270509734195,
+   "available_kgf": 1237.5,
+   "thrust_margin": 0.8070255814822238,
+   "energy_kgf_m_per_m2": 60.20207311819668,
+   "net_drag_kgf": 431.78086602714933,
+   "dpa_geometric_m": 11.0,
+   "headrope_m": 17.2943,
+   "footrope_m": 20.085900000000002,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1237.5,
+     "lower": 753.3097560707615,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 21.244088665134143,
+     "lower": 9.35,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 2739.308203893678,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 2.5,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  },
+  {
+   "s": 0.8,
+   "v_kn": 2.0,
+   "net_id": "fao_a3_standard_s0.80",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 12.782776349614391,
+   "dpa_fridman_m": 13.90972751407404,
+   "av_m": 2.3244,
+   "av_fridman_m": 2.8122335800014535,
+   "area_rate_m2_h": 47343.31311053982,
+   "volume_rate_m3_h": 110044.79699413877,
+   "demand_kgf": 719.9352016137035,
+   "available_kgf": 1290.0,
+   "thrust_margin": 0.7918279271641684,
+   "energy_kgf_m_per_m2": 56.320722660177125,
+   "net_drag_kgf": 555.5386551887962,
+   "dpa_geometric_m": 12.0,
+   "headrope_m": 22.9754,
+   "footrope_m": 26.775,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1290.0,
+     "lower": 791.9287217750739,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 13.90972751407404,
+     "lower": 10.2,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 2879.740806454814,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 2.0,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  },
+  {
+   "s": 0.6,
+   "v_kn": 2.0,
+   "net_id": "fao_a3_standard_s0.60",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 11.375472894909722,
+   "dpa_fridman_m": 18.87254643293255,
+   "av_m": 1.7394,
+   "av_fridman_m": 3.256750734569879,
+   "area_rate_m2_h": 42131.11145141924,
+   "volume_rate_m3_h": 73282.85525859862,
+   "demand_kgf": 473.90403860670494,
+   "available_kgf": 1290.0,
+   "thrust_margin": 1.7220700709634102,
+   "energy_kgf_m_per_m2": 41.660161558537645,
+   "net_drag_kgf": 311.95448024109197,
+   "dpa_geometric_m": 11.0,
+   "headrope_m": 17.2943,
+   "footrope_m": 20.085900000000002,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1290.0,
+     "lower": 521.2944424673755,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 18.87254643293255,
+     "lower": 9.35,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 1895.6161544268198,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 2.0,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  },
+  {
+   "s": 0.6,
+   "v_kn": 1.5,
+   "net_id": "fao_a3_standard_s0.60",
+   "vessel_id": "fao_a3_150hp",
+   "door_id": "fao_flat_wood_a3",
+   "propeller": "fixed_pitch",
+   "ah_m": 11.375472894909722,
+   "dpa_fridman_m": 15.44261961118632,
+   "av_m": 1.7394,
+   "av_fridman_m": 4.37210446161245,
+   "area_rate_m2_h": 31598.33358856443,
+   "volume_rate_m3_h": 54962.14144394896,
+   "demand_kgf": 306.4297333707864,
+   "available_kgf": 1342.5,
+   "thrust_margin": 3.381102268478454,
+   "energy_kgf_m_per_m2": 26.937757770747893,
+   "net_drag_kgf": 215.33310679012908,
+   "dpa_geometric_m": 11.0,
+   "headrope_m": 17.2943,
+   "footrope_m": 20.085900000000002,
+   "door_area_m2": 1.805,
+   "door_required_m2": 1.656481733771439,
+   "warp_id": "steel_6x19_seale_13mm",
+   "constraints": [
+    {
+     "name": "thrust",
+     "value": 1342.5,
+     "lower": 337.07270670786505,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "F_T ≥ (1 + 0.1)·R_T"
+    },
+    {
+     "name": "net_open",
+     "value": 15.44261961118632,
+     "lower": 9.35,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "DPA de Fridman ≥ 0.85·DPA geométrica"
+    },
+    {
+     "name": "warp",
+     "value": 18460.0,
+     "lower": 1225.7189334831455,
+     "upper": null,
+     "ok": true,
+     "violation": 0.0,
+     "description": "rotura de algún cable del catálogo ≥ 4·R_T"
+    },
+    {
+     "name": "door",
+     "value": 1.656481733771439,
+     "lower": null,
+     "upper": 1.805,
+     "ok": true,
+     "violation": 0.0,
+     "description": "superficie requerida por portón (Port!F215) ≤ superficie del portón"
+    },
+    {
+     "name": "speed",
+     "value": 1.5,
+     "lower": 1.5,
+     "upper": 3.5,
+     "ok": true,
+     "violation": 0.0,
+     "description": "1.5 ≤ v ≤ 3.5 kn"
+    }
+   ],
+   "feasible": true,
+   "penalty": 0.0
+  }
+ ],
+ "grid": {
+  "s_values": [
+   0.6,
+   0.8,
+   1.0,
+   1.2
+  ],
+  "v_values": [
+   1.5,
+   2.0,
+   2.5,
+   3.0,
+   3.5
+  ],
+  "feasible": [
+   [
+    true,
+    true,
+    true,
+    true,
+    false
+   ],
+   [
+    true,
+    true,
+    true,
+    false,
+    false
+   ],
+   [
+    false,
+    false,
+    false,
+    false,
+    false
+   ],
+   [
+    false,
+    false,
+    false,
+    false,
+    false
+   ]
+  ],
+  "area_rate_m2_h": [
+   [
+    31598.33358856443,
+    42131.11145141924,
+    52663.88931427405,
+    63196.66717712886,
+    73729.44503998366
+   ],
+   [
+    31586.419448709636,
+    47343.31311053982,
+    59179.14138817478,
+    71014.96966580974,
+    82850.79794344469
+   ],
+   [
+    24867.251521906786,
+    40582.77510426896,
+    57163.68659476327,
+    74342.41386587366,
+    89381.4194023591
+   ],
+   [
+    20484.2247227456,
+    33446.932155366085,
+    47129.11632505493,
+    61308.50644560089,
+    75953.03746156415
+   ]
+  ],
+  "volume_rate_m3_h": [
+   [
+    54962.14144394896,
+    73282.85525859862,
+    91603.56907324828,
+    109924.28288789792,
+    128244.99670254758
+   ],
+   [
+    73419.47336658066,
+    110044.79699413877,
+    130402.81140700684,
+    128560.09678617452,
+    128071.49390496976
+   ],
+   [
+    72154.81701596474,
+    103472.4693173249,
+    114944.21393607989,
+    123704.61598465487,
+    127914.10591704867
+   ],
+   [
+    63377.920646660496,
+    77764.2411556472,
+    87065.58154568599,
+    94442.50970135265,
+    101358.23573664053
+   ]
+  ],
+  "energy_kgf_m_per_m2": [
+   [
+    26.937757770747893,
+    41.660161558537645,
+    60.20207311819668,
+    82.47107362260795,
+    108.20174482908145
+   ],
+   [
+    41.855381689442076,
+    56.320722660177125,
+    80.2485269814934,
+    108.84767558355605,
+    141.73457478794742
+   ],
+   [
+    77.27530096792623,
+    94.26779013581559,
+    118.1875502826352,
+    147.00194653036755,
+    184.87179893900998
+   ],
+   [
+    129.53739895762266,
+    156.67842077748074,
+    195.31722731000505,
+    241.90929051813862,
+    294.3554033668238
+   ]
+  ],
+  "ah_m": [
+   [
+    11.375472894909722,
+    11.375472894909722,
+    11.375472894909722,
+    11.375472894909722,
+    11.375472894909722
+   ],
+   [
+    11.371183777111643,
+    12.782776349614391,
+    12.782776349614391,
+    12.782776349614391,
+    12.782776349614391
+   ],
+   [
+    8.952267842400635,
+    10.957419405636816,
+    12.347435328054965,
+    13.381720138866148,
+    13.790364394696104
+   ],
+   [
+    7.374368096144231,
+    9.030729478617506,
+    10.179954277919244,
+    11.035601788059605,
+    11.71854363560631
+   ]
+  ],
+  "av_m": [
+   [
+    1.7394,
+    1.7394,
+    1.7394,
+    1.7394,
+    1.7394
+   ],
+   [
+    2.3244,
+    2.3244,
+    2.2035265863634854,
+    1.8103238991886799,
+    1.545808816378491
+   ],
+   [
+    2.9016,
+    2.549664705074357,
+    2.0107907796592297,
+    1.6639843872683366,
+    1.4311039897591127
+   ],
+   [
+    3.0939867876125144,
+    2.325003704208819,
+    1.8473841296998792,
+    1.5404470794791194,
+    1.3344856127436986
+   ]
+  ],
+  "demand_kgf": [
+   [
+    306.4297333707864,
+    473.90403860670494,
+    684.8270509734195,
+    938.1474626080808,
+    1230.846015485154
+   ],
+   [
+    475.9452372517994,
+    719.9352016137035,
+    1025.7989727904262,
+    1391.3754931599801,
+    1811.7613705220265
+   ],
+   [
+    691.7891918669967,
+    1032.9317129606845,
+    1459.3131336960826,
+    1967.138908337944,
+    2549.4494736719403
+   ],
+   [
+    955.2564621305994,
+    1414.9204331784329,
+    1988.3204437058112,
+    2669.614598990201,
+    3449.416638730621
+   ]
+  ],
+  "available_kgf": [
+   [
+    1342.5,
+    1290.0,
+    1237.5,
+    1185.0,
+    1132.5
+   ],
+   [
+    1342.5,
+    1290.0,
+    1237.5,
+    1185.0,
+    1132.5
+   ],
+   [
+    1342.5,
+    1290.0,
+    1237.5,
+    1185.0,
+    1132.5
+   ],
+   [
+    1342.5,
+    1290.0,
+    1237.5,
+    1185.0,
+    1132.5
+   ]
+  ],
+  "thrust_margin": [
+   [
+    3.381102268478454,
+    1.7220700709634102,
+    0.8070255814822238,
+    0.2631276502157358,
+    -0.07990115274199405
+   ],
+   [
+    1.820702666869526,
+    0.7918279271641684,
+    0.20637671983009964,
+    -0.14832480101491274,
+    -0.3749176804262636
+   ],
+   [
+    0.9406200845330768,
+    0.24887248964646713,
+    -0.15199831247614703,
+    -0.3976022765971221,
+    -0.5557864504885149
+   ],
+   [
+    0.4053817516247882,
+    -0.08828795616288865,
+    -0.3776154120844021,
+    -0.5561157028253314,
+    -0.6716836153440838
+   ]
+  ],
+  "penalty": [
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.163546502492722
+   ],
+   [
+    0.0,
+    0.0,
+    0.0,
+    0.22574981910446615,
+    0.43174334584205787
+   ],
+   [
+    0.18984001426238586,
+    0.008378334331509734,
+    0.22908937497831564,
+    0.4523657059973838,
+    0.5961695004441045
+   ],
+   [
+    0.3803052020046865,
+    0.4122860391030649,
+    0.578737486485349,
+    0.6691073259553766,
+    0.7167789933863756
+   ]
+  ]
+ },
+ "settings": {
+  "objective": "area_rate",
+  "bounds": {
+   "s": [
+    0.6,
+    1.2
+   ],
+   "v_kn": [
+    1.5,
+    3.5
+   ]
+  },
+  "grid": {
+   "n_s": 4,
+   "n_v": 5
+  },
+  "limits": {
+   "margin": 0.1,
+   "open_ratio": 0.85,
+   "v_min_kn": 1.5,
+   "v_max_kn": 3.5,
+   "door_tolerance": 0.0,
+   "warp_safety_factor": null
+  },
+  "refine": false,
+  "seed": 0,
+  "compat": "corrected",
+  "vessel_id": "fao_a3_150hp",
+  "door_id": "fao_flat_wood_a3",
+  "door_attack_angle_deg": 32.0,
+  "propeller": "fixed_pitch",
+  "net_id": "fao_a3_standard",
+  "pareto_objectives": [
+   "area_rate",
+   "energy"
+  ]
+ },
+ "refine": null,
+ "runtime_s": 0.08221882900033961,
+ "engine_runs": 4
+}

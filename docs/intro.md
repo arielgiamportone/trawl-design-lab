@@ -20,7 +20,9 @@ originalmente en un libro de Excel por Ariel Luján Giamportone (Ingeniería Pes
 
 1. **Fundamentos**: el problema y la nomenclatura.
 2. **Teoría y métodos**: un capítulo por etapa, en el mismo orden en que se resuelve el diseño. Cada
-   capítulo ejecuta el cálculo con `trawlkit` y lo verifica contra el libro Excel original.
+   capítulo ejecuta el cálculo con `trawlkit` y lo verifica contra el libro Excel original. Cierran
+   la parte la optimización del tamaño de la red y de la velocidad ({doc}`20_optimizacion`) y la
+   simulación de la forma de la red remolcada ({doc}`21_simulacion`).
 3. **Caso de estudio y validación**: la red FAO A-3 estándar y modificada, la validación contra el
    Excel y contra el simulador DynamiT, y las erratas encontradas en el modelo original.
 4. **Software**: motor, informes y planos, aplicación web y API.

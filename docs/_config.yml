@@ -7,7 +7,7 @@ exclude_patterns: [_build, "**.ipynb_checkpoints", README.md, CITAS.md, _templat
 
 execute:
   execute_notebooks: cache
-  timeout: 180
+  timeout: 300
   allow_errors: false
 
 parse:

@@ -203,3 +203,106 @@ def test_optimize_endpoint_validation(patch: dict[str, object]) -> None:
 def test_optimize_endpoint_unknown_vessel() -> None:
     body = {"vessel": "nope", "grid": {"n_s": 2, "n_v": 2}, "refine": False}
     assert client.post("/optimize", json=body).status_code == 404
+
+
+def test_scaled_net_endpoint() -> None:
+    r = client.post("/optimize/scaled-net", json={"net": "fao_a3_standard", "s": 0.8})
+    assert r.status_code == 200, r.text[:300]
+    spec = r.json()
+    assert spec["id"] == "fao_a3_standard_s0.80"
+    base = client.get("/catalog/nets/fao_a3_standard").json()
+    c0 = next(p for p in base["panels"] if p["id"] == "C")
+    c1 = next(p for p in spec["panels"] if p["id"] == "C")
+    assert c1["meshes_depth"] == round(0.8 * c0["meshes_depth"])
+    assert c1["mesh_mm"] == c0["mesh_mm"]
+    # la red escalada sirve como red en línea de /design
+    d = client.post("/design", json={"net": spec}).json()
+    assert d["summary"]["net_id"] == "fao_a3_standard_s0.80"
+    for body, status in (({"s": 0.1}, 422), ({"s": 1.0, "net": "nope"}, 404), ({}, 422)):
+        assert client.post("/optimize/scaled-net", json=body).status_code == status
+
+
+def test_simulate_endpoint() -> None:
+    body = {"speeds_kn": [3.0, 2.0], "resolution": 2}
+    r = client.post("/simulate", json=body)
+    assert r.status_code == 200, r.text[:500]
+    json.loads(r.text, parse_constant=lambda c: pytest.fail(f"constante no JSON: {c}"))
+    out = r.json()
+    assert [x["speed_kn"] for x in out["results"]] == [3.0, 2.0]  # orden pedido
+    assert "nodes" not in out["results"][0]
+    assert set(out["projections_svg"]) == {"3", "2"}
+    assert set(out["projections_svg"]["3"]) == {"plan", "profile", "front"}
+    assert out["projections_svg"]["3"]["plan"].lstrip().startswith(("<svg", "<?xml"))
+    r3 = out["results"][0]
+    assert r3["converged"] and 10.0 < r3["ah_m"] < 16.0 and 0.5 < r3["av_m"] < 4.0
+    assert out["results"][1]["drag_kgf"] < r3["drag_kgf"]  # más lento, menos arrastre
+    assert [e["speed_kn"] for e in out["engine"]] == [3.0, 2.0]
+    assert out["engine"][0]["drag_kgf"] > 0
+    dyn = out["dynamit_comparison"]
+    assert dyn and [d["speed_kn"] for d in dyn] == [3.0, 2.0]
+    assert dyn[0]["dynamit"]["drag_kgf"] == pytest.approx(1331.3)
+    assert dyn[0]["sim_pct"]["ah_m"] == pytest.approx((r3["ah_m"] - 13.3) / 13.3 * 100, rel=1e-9)
+    assert out["settings"]["resolution"] == 2 and out["runtime_s"] > 0
+
+
+def test_simulate_geometry_and_other_net() -> None:
+    body = {
+        "net": "fao_a3_modified",
+        "speeds_kn": [2.25],
+        "resolution": 2,
+        "include_geometry": True,
+        "cn": 1.2,
+        "ct": 0.05,
+    }
+    r = client.post("/simulate", json=body)
+    assert r.status_code == 200, r.text[:500]
+    out = r.json()
+    assert out["dynamit_comparison"] is None  # sólo para la red estándar
+    res = out["results"][0]
+    assert len(res["nodes"]) > 50 and len(res["triangles"][0]) == 3
+    assert res["params"]["cn"] == 1.2 and res["params"]["ct"] == 0.05
+    assert set(out["projections_svg"]) == {"2.25"}
+
+
+def test_simulate_projections_limited_to_three() -> None:
+    body = {"speeds_kn": [1.5, 2.0, 2.5, 3.0], "resolution": 2}
+    out = client.post("/simulate", json=body).json()
+    assert len(out["results"]) == 4
+    assert list(out["projections_svg"]) == ["1.5", "2", "2.5"]
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"speeds_kn": []},
+        {"speeds_kn": [0.2]},
+        {"speeds_kn": [7.0]},
+        {"speeds_kn": [3.0, 3.0]},
+        {"speeds_kn": [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5]},
+        {"resolution": 1},
+        {"resolution": 11},
+        {"cn": -1},
+        {"unknown": 1},
+        # costo estimado > 30 s
+        {"speeds_kn": [1, 2, 3, 4, 5], "resolution": 10},
+    ],
+)
+def test_simulate_validation(patch: dict[str, object]) -> None:
+    body = {"speeds_kn": [3.0], "resolution": 2, **patch}
+    r = client.post("/simulate", json=body)
+    assert r.status_code == 422, r.text[:300]
+
+
+def test_simulate_cost_message() -> None:
+    body = {"speeds_kn": [1, 2, 3], "resolution": 9}
+    r = client.post("/simulate", json=body)
+    assert r.status_code == 422
+    assert "demasiado costosa" in r.json()["detail"]
+
+
+@pytest.mark.slow
+def test_simulate_default_resolution() -> None:
+    out = client.post("/simulate", json={"speeds_kn": [2.0, 3.0, 4.0]}).json()
+    assert out["settings"]["resolution"] == 4
+    assert all(r["converged"] for r in out["results"])
+    assert len(out["projections_svg"]) == 3

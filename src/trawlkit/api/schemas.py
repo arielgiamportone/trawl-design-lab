@@ -176,6 +176,114 @@ class OptimizeResponse(BaseModel):
     engine_runs: int
 
 
+class ScaledNetRequest(BaseModel):
+    """Red escalada geométricamente por ``s`` (``POST /optimize/scaled-net``).
+
+    ``net`` es el id de un preset o una especificación en línea; el resultado es la
+    ``NetSpec`` de :func:`trawlkit.optimize.scale_net` (mismo mallero e hilo, ``s`` veces más
+    mallas por borde), lista para usar como red en línea de ``POST /design``.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    s: float = Field(ge=0.3, le=2.0, description="Factor de escala de la red")
+
+
+#: Límites de ``SimulateRequest``.
+SIM_MAX_SPEEDS = 9
+SIM_SPEED_RANGE = (0.5, 6.0)
+SIM_RESOLUTION_RANGE = (2, 10)
+
+
+class SimulateRequest(BaseModel):
+    """Simulación cuasiestática de la forma de la red (``POST /simulate``).
+
+    ``net``, ``vessel``, ``door`` y ``class_vessels`` como en ``DesignRequest``: el motor corre
+    el caso para obtener el aparejo (bridas, patentes, relingas, boyas, lastre y separación de
+    portones) y :func:`trawlkit.sim.sweep` busca la forma de equilibrio a cada velocidad de
+    ``speeds_kn`` (1–9 valores entre 0,5 y 6 kn). ``resolution`` son las divisiones nominales por
+    panel (2–10; 4 por defecto, rápido). ``cn``/``ct`` son los coeficientes de Morison del hilo,
+    ``knot_factor`` el diámetro relativo de los nudos (0 = sin nudos) y ``door_spread_m`` impone la
+    separación de portones (si no, la del motor). ``include_geometry`` agrega nodos y conectividad
+    a cada resultado (pesado). Se rechazan los pedidos cuyo costo estimado supera ~30 s.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    speeds_kn: list[float] = Field(
+        default_factory=lambda: [3.0], min_length=1, max_length=SIM_MAX_SPEEDS
+    )
+    resolution: int = Field(default=4, ge=SIM_RESOLUTION_RANGE[0], le=SIM_RESOLUTION_RANGE[1])
+    cn: float | None = Field(default=None, gt=0.0, le=3.0, description="C_N del hilo")
+    ct: float | None = Field(default=None, ge=0.0, le=0.5, description="C_T del hilo")
+    knot_factor: float | None = Field(default=None, ge=0.0, le=10.0)
+    door_spread_m: float | None = Field(default=None, gt=5.0, le=200.0)
+    include_geometry: bool = False
+
+    @model_validator(mode="after")
+    def _check_speeds(self) -> SimulateRequest:
+        lo, hi = SIM_SPEED_RANGE
+        for v in self.speeds_kn:
+            if not lo <= v <= hi:
+                raise ValueError(f"cada velocidad debe estar entre {lo:g} y {hi:g} kn ({v!r})")
+        if len(set(self.speeds_kn)) != len(self.speeds_kn):
+            raise ValueError("speeds_kn no puede repetir velocidades")
+        return self
+
+
+class SimProjections(BaseModel):
+    """Proyecciones SVG de la forma simulada a una velocidad."""
+
+    plan: str
+    profile: str
+    front: str
+
+
+class SimEngineRow(BaseModel):
+    """Magnitudes empíricas del motor a una velocidad (comparables con la simulación)."""
+
+    speed_kn: float
+    ah_m: float | None
+    """DPA de Fridman (red estándar) [m]."""
+    av_m: float | None
+    """AV de Fridman (red estándar) [m]."""
+    drag_kgf: float | None
+    """RN de diseño (Aberdeen) [kgf]."""
+    door_spread_m: float | None
+
+
+class DynamitRow(BaseModel):
+    """Comparación con DynamiT (red FAO A-3 estándar) a una velocidad de la tabla de DynamiT."""
+
+    speed_kn: float
+    dynamit: dict[str, float]
+    sim: dict[str, float | None]
+    engine: dict[str, float | None]
+    sim_pct: dict[str, float | None]
+    engine_pct: dict[str, float | None]
+
+
+class SimulateResponse(BaseModel):
+    """Resultado de ``POST /simulate``."""
+
+    results: list[dict[str, Any]]
+    """``SimResult.to_dict(geometry=include_geometry)`` por velocidad, en el orden pedido."""
+    projections_svg: dict[str, SimProjections]
+    """Planta, perfil y frente de las primeras 3 velocidades (clave: velocidad, ``f"{v:g}"``)."""
+    engine: list[SimEngineRow]
+    dynamit_comparison: list[DynamitRow] | None
+    """Sólo para la red ``fao_a3_standard`` y las velocidades de la tabla de DynamiT."""
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
+
+
 PlanView = Literal["sheet", "scale"]
 Variant = Literal["std", "mod"]
 ReportFormat = Literal["html", "pdf", "xlsx"]

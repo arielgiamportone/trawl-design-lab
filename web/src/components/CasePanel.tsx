@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { ApiError } from '../api/client';
+import { fmtFixed } from '../lib/format';
 import { countEdits } from '../lib/panels';
 import { useCase } from '../state/useCase';
 import type { Compat } from '../state/model';
@@ -51,7 +52,12 @@ export function CasePanel() {
           id={`${ids}-net`}
           value={state.net}
           onChange={(e) =>
-            update((s) => ({ ...s, net: e.target.value, edits: { ...s.edits, std: {} } }))
+            update((s) => ({
+              ...s,
+              net: e.target.value,
+              edits: { ...s.edits, std: {} },
+              scaled: null,
+            }))
           }
         >
           {catalogs.nets.length === 0 && <option value={state.net}>{state.net}</option>}
@@ -62,6 +68,23 @@ export function CasePanel() {
           ))}
         </select>
         {net?.description && <p className="help">{net.description}</p>}
+        {state.scaled && (
+          <div className="alert info" role="status" data-testid="scaled-net">
+            <span>
+              <strong>Red escalada s = {fmtFixed(state.scaled.s, 3)}</strong>
+              {state.scaled.speed !== null &&
+                ` · diseño optimizado a ${fmtFixed(state.scaled.speed, 2)} kn`}
+              {state.netModified && !state.scaled.mod && ' (la variante modificada no se escaló)'}.{' '}
+              <button
+                type="button"
+                className="btn small ghost"
+                onClick={() => update((s) => ({ ...s, scaled: null, edits: { std: {}, mod: {} } }))}
+              >
+                Volver a la red del catálogo
+              </button>
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="field">
@@ -74,6 +97,7 @@ export function CasePanel() {
               ...s,
               netModified: e.target.value || null,
               edits: { ...s.edits, mod: {} },
+              scaled: s.scaled ? { ...s.scaled, mod: null } : null,
             }))
           }
         >

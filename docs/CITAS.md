@@ -30,3 +30,10 @@ Todos los capítulos citan con `` {cite}`clave` `` (o `` {cite:p}`clave` ``) usa
 | faocatalogue | FAO — Catálogo de artes de pesca / redes de la serie A | introducción, paños |
 | dynamit | Ifremer — DynamiT, simulación de artes de arrastre | validación |
 | giamportone2024 | Giamportone, A. L. (2024) — informe en ResearchGate | caso |
+| priour1999 | Priour, D. (1999) — elemento triangular de paño (Commun. Numer. Meth. Engng.) | simulación |
+| priour2013 | Priour, D. (2013) — A Finite Element Method for Netting (Springer) | simulación |
+| morison1950 | Morison, O'Brien, Johnson y Schaaf (1950) — fuerza hidrodinámica sobre cilindros | simulación |
+| lee2005 | Lee, Lee, Cha, Kim y Lee (2005) — modelado de sistemas flexibles submarinos (Ocean Eng.) | simulación |
+| takagi2004 | Takagi, Shimizu, Suzuki, Hiraishi y Yamamoto (2004) — NaLA, forma y cargas de redes | simulación |
+| bitzek2006 | Bitzek et al. (2006) — FIRE, relajación estructural (Phys. Rev. Lett.) | simulación |
+| barnes1999 | Barnes, M. R. (1999) — relajación dinámica de estructuras tensadas | simulación |

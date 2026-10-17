@@ -12,6 +12,15 @@ export type Erratum = S['ErratumOut'];
 export type Health = S['Health'];
 export type DesignRequest = S['DesignRequest'];
 export type DesignResponseRaw = S['DesignResponse'];
+export type OptimizeRequest = S['OptimizeRequest'];
+export type OptimizeResponse = S['OptimizeResponse'];
+export type Evaluation = S['EvaluationOut'];
+export type ConstraintOut = S['ConstraintOut'];
+export type ScaledNetRequest = S['ScaledNetRequest'];
+export type SimulateRequest = S['SimulateRequest'];
+export type SimulateResponse = S['SimulateResponse'];
+export type DynamitRow = S['DynamitRow'];
+export type SimEngineRow = S['SimEngineRow'];
 export type PlanView = 'sheet' | 'scale';
 export type Variant = 'std' | 'mod';
 export type ReportFormat = 'html' | 'pdf' | 'xlsx';
@@ -116,5 +125,17 @@ export const api = {
   async report(req: DesignRequest, format: ReportFormat, signal?: AbortSignal): Promise<Blob> {
     const res = await post(`/design/report?format=${format}`, req, signal);
     return res.blob();
+  },
+  async optimize(req: OptimizeRequest, signal?: AbortSignal): Promise<OptimizeResponse> {
+    const res = await post('/optimize', req, signal);
+    return (await res.json()) as OptimizeResponse;
+  },
+  async scaledNet(req: ScaledNetRequest, signal?: AbortSignal): Promise<NetSpec> {
+    const res = await post('/optimize/scaled-net', req, signal);
+    return (await res.json()) as NetSpec;
+  },
+  async simulate(req: SimulateRequest, signal?: AbortSignal): Promise<SimulateResponse> {
+    const res = await post('/simulate', req, signal);
+    return (await res.json()) as SimulateResponse;
   },
 };

@@ -12,9 +12,22 @@ import { Tabs, type TabDef } from './Tabs';
 // Recharts sólo se descarga al abrir Gráficos o Comparar.
 const Charts = lazy(() => import('./charts/Charts').then((m) => ({ default: m.Charts })));
 const Compare = lazy(() => import('./Compare').then((m) => ({ default: m.Compare })));
+// Optimizar y Simulación también se cargan al abrirlas.
+const Optimize = lazy(() => import('./Optimize').then((m) => ({ default: m.Optimize })));
+const Simulate = lazy(() => import('./Simulate').then((m) => ({ default: m.Simulate })));
 
 const TAB_KEY = 'trawl-design-lab:tab';
-const TAB_IDS = ['resumen', 'graficos', 'paneles', 'plano', 'comparar', 'descargas', 'notas'];
+const TAB_IDS = [
+  'resumen',
+  'graficos',
+  'paneles',
+  'plano',
+  'comparar',
+  'optimizar',
+  'simulacion',
+  'descargas',
+  'notas',
+];
 
 export function Results() {
   const { design, pinned } = useCase();
@@ -37,6 +50,8 @@ export function Results() {
       id: 'comparar',
       label: <>Comparar {pinned && <span className="badge accent">A</span>}</>,
     },
+    { id: 'optimizar', label: 'Optimizar' },
+    { id: 'simulacion', label: 'Simulación' },
     { id: 'descargas', label: 'Descargas' },
     {
       id: 'notas',
@@ -50,9 +65,11 @@ export function Results() {
       <section className="card" aria-label="Detalle de resultados">
         <Tabs tabs={tabs} active={tab} onChange={setTab} label="Secciones de resultados">
           {tab === 'resumen' && <SummaryTable />}
-          <Suspense fallback={<p className="empty">Cargando gráficos…</p>}>
+          <Suspense fallback={<p className="empty">Cargando…</p>}>
             {tab === 'graficos' && <Charts />}
             {tab === 'comparar' && <Compare />}
+            {tab === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}
+            {tab === 'simulacion' && <Simulate />}
           </Suspense>
           {tab === 'paneles' && <PanelEditor />}
           {tab === 'plano' && <PlanViewer />}

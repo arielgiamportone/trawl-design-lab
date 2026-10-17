@@ -286,6 +286,15 @@ DPA, el ángulo de la brida para la AV) las dos herramientas coinciden dentro de
 de pesca; donde usa una regla práctica (separación de portones al metro de cable, AV como fracción
 de la circunferencia), la discrepancia llega al 35–47 %.
 
+**Una simulación de forma propia.** {doc}`21_simulacion` agrega a `trawlkit` un modelo físico
+simplificado de la red remolcada (paño de elementos triangulares con arrastre de Morison, relingas,
+boyas, lastre, bridas y contacto con el fondo) y lo compara con esta misma tabla de DynamiT. Con la
+separación de portones del motor, la abertura horizontal simulada queda dentro del 3 % de DynamiT
+entre 2 y 4 kn —con la misma meseta que la DPA de Fridman no tiene— y la vertical con un sesgo de
+≈ +10 %, pero la resistencia simulada es la mitad de la de DynamiT, una brecha que los coeficientes
+del hilo dentro de los rangos de la literatura no cierran. La simulación sirve, entonces, para la
+forma y las aberturas; la resistencia de diseño sigue siendo la del motor.
+
 **Limitaciones de esta comparación.** Una sola simulación, de autor y fecha no documentados en el
 repositorio, sin los parámetros de aparejo (cable filado, patentes, portón, ángulo de ataque, tipo
 de fondo) ni la versión de DynamiT; una sola red y una sola profundidad. Ninguno de los dos modelos

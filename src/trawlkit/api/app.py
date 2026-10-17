@@ -24,6 +24,9 @@ from trawlkit.api.schemas import (
     ParamInfo,
     PlanView,
     ReportFormat,
+    ScaledNetRequest,
+    SimulateRequest,
+    SimulateResponse,
     Variant,
 )
 from trawlkit.compat import ERRATA
@@ -161,6 +164,31 @@ def optimize(req: OptimizeRequest) -> dict[str, Any]:
         seed=req.seed,
         propeller=req.propeller,
         door_angle=req.door_angle,
+    )
+
+
+@app.post("/optimize/scaled-net", response_model=NetSpec)
+def optimize_scaled_net(req: ScaledNetRequest) -> NetSpec:
+    """Red escalada por ``s`` (mismas mallas y materiales), para usar el diseño optimizado."""
+    return service.scaled_net(req.net, req.s)
+
+
+@app.post("/simulate", response_model=SimulateResponse)
+def simulate(req: SimulateRequest) -> dict[str, Any]:
+    """Simula la forma de equilibrio de la red a varias velocidades (experimental)."""
+    return service.simulate_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speeds_kn=req.speeds_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        knot_factor=req.knot_factor,
+        door_spread_m=req.door_spread_m,
+        include_geometry=req.include_geometry,
     )
 
 

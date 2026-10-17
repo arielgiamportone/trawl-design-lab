@@ -18,6 +18,7 @@ parts:
       - file: 18_cables
       - file: 19_ventana_velocidad
       - file: 20_optimizacion
+      - file: 21_simulacion
   - caption: Caso de estudio y validación
     chapters:
       - file: 30_caso_beagle

@@ -1,0 +1,108 @@
+{
+ "results": [
+  {
+   "speed_kn": 3.0,
+   "ah_m": 12.978473206829984,
+   "ah_lower_m": 13.14522645120856,
+   "av_m": 1.9895892551991083,
+   "headrope_height_m": 1.9895892551991083,
+   "footrope_height_m": 0.0,
+   "mouth_area_m2": 22.16097481589293,
+   "hydro_drag_kgf": 611.4639766789998,
+   "friction_kgf": 11.245711451536934,
+   "drag_kgf": 623.3289142494544,
+   "drag_jitter_kgf": 0.6701001067206619,
+   "bridle_pull_kgf": 623.0856348312911,
+   "bridle_tension_kgf": {
+    "wing_end_right": 0.0,
+    "upper_bridle_right": 181.31778082987063,
+    "lower_bridle_right": 138.6213978966605,
+    "sweep_right": 321.0334281643482,
+    "wing_end_left": 0.0,
+    "upper_bridle_left": 181.31778082987063,
+    "lower_bridle_left": 138.6213978966605,
+    "sweep_left": 321.0334281643482
+   },
+   "door_spread_m": 32.499999999999986,
+   "net_length_m": 38.969113582873135,
+   "converged": true,
+   "iterations": 7000,
+   "residual": 0.0017826483962855395,
+   "force_balance": 0.0005061303123581265,
+   "runtime_s": 1.3511185309998837,
+   "params": {
+    "cn": 1.4,
+    "ct": 0.08,
+    "mu": 0.5,
+    "float_cd": 0.5,
+    "knot_factor": 0.0,
+    "resolution": 2.0,
+    "speed_ms": 1.5433333333333334
+   }
+  }
+ ],
+ "projections_svg": {
+  "3": {
+   "plan": "<svg xmlns=\"http://www.w3.org/2000/svg\"><title>plan 3</title></svg>",
+   "profile": "<svg xmlns=\"http://www.w3.org/2000/svg\"><title>profile 3</title></svg>",
+   "front": "<svg xmlns=\"http://www.w3.org/2000/svg\"><title>front 3</title></svg>"
+  }
+ },
+ "engine": [
+  {
+   "speed_kn": 3.0,
+   "ah_m": 13.381720138866148,
+   "av_m": 1.6689372710782497,
+   "drag_kgf": 1592.17048024826,
+   "door_spread_m": 32.499999999999986
+  }
+ ],
+ "dynamit_comparison": [
+  {
+   "speed_kn": 3.0,
+   "dynamit": {
+    "ah_m": 13.3,
+    "av_m": 1.4,
+    "door_spread_m": 51.4,
+    "drag_kgf": 1331.3
+   },
+   "sim": {
+    "ah_m": 12.978473206829984,
+    "av_m": 1.9895892551991083,
+    "door_spread_m": 32.499999999999986,
+    "drag_kgf": 623.3289142494544
+   },
+   "engine": {
+    "ah_m": 13.381720138866148,
+    "av_m": 1.6689372710782497,
+    "door_spread_m": 32.499999999999986,
+    "drag_kgf": 1592.17048024826
+   },
+   "sim_pct": {
+    "ah_m": -2.417494685488851,
+    "av_m": 42.11351822850774,
+    "door_spread_m": -36.77042801556423,
+    "drag_kgf": -53.178929298471076
+   },
+   "engine_pct": {
+    "ah_m": 0.6144371343319377,
+    "av_m": 19.209805077017847,
+    "door_spread_m": -36.77042801556423,
+    "drag_kgf": 19.595168650811992
+   }
+  }
+ ],
+ "settings": {
+  "net_id": "fao_a3_standard",
+  "vessel_id": "fao_a3_150hp",
+  "door_id": "fao_flat_wood_a3",
+  "compat": "corrected",
+  "resolution": 2,
+  "cn": 1.4,
+  "ct": 0.08,
+  "knot_factor": 0.0,
+  "door_spread_m": null
+ },
+ "estimated_s": 1.3,
+ "runtime_s": 1.4578192300004957
+}

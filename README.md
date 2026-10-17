@@ -14,9 +14,11 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 |---|---|---|
 | Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
 | Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
-| CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG), `plan` (lámina o escala real), `version`, `errata` |
+| CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG, con `--optimize` y `--simulate` opcionales), `plan` (lámina o escala real), `optimize`, `serve`, `version`, `errata` |
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](docs/informes.md), ejemplos en [`examples/`](examples/)) |
-| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](docs/web.md)) |
+| Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](docs/20_optimizacion.md)) |
+| Simulación de forma | `src/trawlkit/sim/` | Fase 7 (experimental): forma de equilibrio de la red remolcada (elementos triangulares de paño, Morison, boyas, lastre, bridas y fondo; relajación dinámica FIRE), validada contra DynamiT ([capítulo 21](docs/21_simulacion.md)) |
+| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`) |
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
@@ -72,8 +74,8 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 3. CLI, informe (HTML/PDF/XLSX) y plano 2D SVG (lámina y escala real) ✔
 4. API FastAPI + frontend React ✔
 5. Documentación científica (Jupyter Book): teoría por etapa, caso Beagle, validación contra Excel y DynamiT ✔ — https://arielgiamportone.github.io/trawl-design-lab/
-6. Optimización (área barrida vs potencia)
-7. Simulación simplificada de la geometría de la red (experimental)
+6. Optimización (área barrida vs potencia) ✔
+7. Simulación simplificada de la geometría de la red (experimental) ✔
 8. Release en PyPI y DOI en Zenodo
 
 ## Licencias

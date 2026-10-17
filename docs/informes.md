@@ -12,6 +12,10 @@ uv run trawlkit report fao_a3_standard --modified fao_a3_modified \
 # Sólo algunos formatos
 uv run trawlkit report fao_a3_standard --format html,xlsx --out informe/
 
+# Con las secciones de optimización (área, volumen o energía) y de simulación de forma
+uv run trawlkit report fao_a3_standard --vessel fao_a3_150hp --out informe/ \
+    --optimize area --simulate 2,3 --sim-resolution 6
+
 # Plano suelto: lámina técnica (sheet) o escala real (scale), red estándar o modificada
 uv run trawlkit plan fao_a3_standard --view sheet --out lamina.svg
 uv run trawlkit plan fao_a3_standard --modified fao_a3_modified \
@@ -31,7 +35,22 @@ from trawlkit.report.build import build_report
 result = run(case)  # ver docs/motor.md para armar el caso
 svg = net_sheet_svg(result, "std")  # lámina A3
 paths = build_report(result, "informe/", formats=("html", "pdf", "xlsx", "svg"))
+
+# Secciones opcionales: optimización (capítulo 20) y simulación de forma (capítulo 21)
+from trawlkit.optimize import optimise
+from trawlkit.sim import sweep
+
+build_report(
+    result,
+    "informe/",
+    optimization=optimise(case, objective="area", refine=False),
+    simulation=sweep(result, [2.0, 3.0], resolution=6),
+)
 ```
+
+`--optimize` corre `optimise` con una malla de 13 × 11 sin refinado (unos segundos) y
+`--simulate` corre `sweep` a las velocidades dadas (`--sim-resolution`, 6 por defecto: ≈ 4 s por
+velocidad).
 
 ## Qué contiene
 
@@ -40,6 +59,8 @@ paths = build_report(result, "informe/", formats=("html", "pdf", "xlsx", "svg"))
 | `informe.html` | Página autocontenida (sin conexión ni JavaScript), modo claro y oscuro: portada, resumen con indicadores, láminas, escala real, gráficos, tablas, erratas, notas, metodología y créditos. |
 | `informe.pdf` | El mismo HTML impreso: A4 vertical, tablas anchas en A4 apaisado y láminas en A3 apaisado. |
 | `informe.xlsx` | Una hoja por tabla (resumen, paneles, potencia, resistencia, demanda, aparejo, boyas y lastre, cable, ventana de velocidad, erratas) más "Caso" con todos los parámetros y "Notas". |
+| Optimización (opcional) | Sección «Optimización» del HTML/PDF: mejor diseño, restricciones (OK/NO), mapa de factibilidad escala × velocidad, frente de Pareto y su tabla; hojas `optimizacion`, `optimizacion_restricciones`, `optimizacion_pareto` y `optimizacion_malla` del XLSX. |
+| Simulación (opcional) | Sección «Simulación»: tabla simulación / motor / DynamiT (red FAO A-3 estándar) con diferencias porcentuales y planta, perfil y frente de las tres primeras velocidades; hojas `simulacion` y `simulacion_detalle`. |
 | `plano_estandar.svg`, `plano_modificada.svg` | Lámina técnica A3 como los planos de 2014: planos superior e inferior, mallas por borde, códigos de corte, tablas laterales, relingas, superficie y peso por plano, esquema del aparejo y rótulo. |
 | `plano_escala_*.svg` | Vista a escala real en metros con grilla de 1 m, cotas por panel, escala gráfica, largos estirados y armados y escalones donde cambia el coeficiente de armado. |
 

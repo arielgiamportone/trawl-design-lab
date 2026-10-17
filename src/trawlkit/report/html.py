@@ -18,6 +18,8 @@ from trawlkit.report.tables import Table, all_tables, errata_table, notes_table,
 
 if TYPE_CHECKING:
     from trawlkit.model import DesignResult
+    from trawlkit.optimize import OptimizationResult
+    from trawlkit.sim import SimResult
 
 #: Claves de ``sheet_svgs``: lámina técnica y vista a escala real de cada variante.
 SHEET_KEYS: tuple[str, ...] = ("std", "mod", "scale_std", "scale_mod")
@@ -139,6 +141,7 @@ figure { margin: 16px 0 24px; }
 figure svg { display: block; width: 100%; height: auto; max-width: 100%; }
 figcaption { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
 .sheet svg { display: block; width: 100%; height: auto; max-height: 80vh; }
+figure.sim svg { max-height: 70vh; }
 .status-reproducida { color: var(--bad); font-weight: 600; }
 .status-corregida { color: var(--good); font-weight: 600; }
 .status-documentada { color: var(--muted); font-weight: 600; }
@@ -410,17 +413,73 @@ def _sheet_section(sid: str, title: str, svg: str, note: str) -> str:
     )
 
 
+def _optimization_section(opt: OptimizationResult) -> str:
+    from trawlkit.report.extras import (
+        OPT_CHART_TITLES,
+        optimization_best_table,
+        optimization_charts,
+        optimization_constraints_table,
+        optimization_pareto_table,
+    )
+
+    figs = "".join(
+        f'<figure id="grafico-{_e(k)}" role="img" aria-label="{_e(OPT_CHART_TITLES[k])}">'
+        f"{inline_svg(svg)}<figcaption>{_e(OPT_CHART_TITLES[k])}</figcaption></figure>"
+        for k, svg in optimization_charts(opt).items()
+    )
+    return (
+        '<section id="optimizacion" class="major"><h2>Optimización</h2>'
+        '<p class="muted">Escala de la red (mismo mallero, s veces más mallas por borde) y '
+        "velocidad de arrastre que mejor cumplen el objetivo respetando tiro, apertura, cable y "
+        "portón (trawlkit.optimize).</p>"
+        + render_table(optimization_best_table(opt))
+        + render_table(optimization_constraints_table(opt))
+        + figs
+        + render_table(optimization_pareto_table(opt))
+        + "</section>"
+    )
+
+
+def _simulation_section(result: DesignResult, sims: Sequence[SimResult]) -> str:
+    from trawlkit.report.extras import simulation_projections, simulation_table
+
+    views = (("plan", "Planta"), ("profile", "Perfil"), ("front", "Frente"))
+    figs = []
+    for v, proj in simulation_projections(sims).items():
+        vtxt = f"{v:.1f}".replace(".", ",")
+        for key, name in views:
+            cap = f"{name} de la red simulada a {vtxt} kn"
+            figs.append(
+                f'<figure class="sim" role="img" aria-label="{_e(cap)}">'
+                f"{inline_svg(proj[key])}<figcaption>{_e(cap)}</figcaption></figure>"
+            )
+    return (
+        '<section id="simulacion" class="major"><h2>Simulación</h2>'
+        '<p class="muted">Forma de equilibrio de la red remolcada (trawlkit.sim, experimental): '
+        "paño de hilos con arrastre de Morison, relingas, boyas, lastre, bridas, patentes y "
+        "contacto con el fondo.</p>"
+        + render_table(simulation_table(result, sims))
+        + "".join(figs)
+        + "</section>"
+    )
+
+
 def render_html(
     result: DesignResult,
     *,
     sheet_svgs: dict[str, str] | None = None,
     charts: dict[str, str] | None = None,
     generated: _dt.date | None = None,
+    optimization: OptimizationResult | None = None,
+    simulation: Sequence[SimResult] | None = None,
 ) -> str:
     """Informe completo como una página HTML autocontenida.
 
     ``sheet_svgs`` (claves de :data:`SHEET_KEYS`) y ``charts`` (clave → SVG) se calculan si se
     omiten (:func:`default_sheet_svgs`, :func:`trawlkit.report.charts.all_charts`).
+    ``optimization`` agrega la sección «Optimización» (mejor diseño, restricciones, mapa de
+    factibilidad y frente de Pareto) y ``simulation`` la sección «Simulación» (proyecciones de
+    las tres primeras velocidades y comparación con el motor y DynamiT).
     """
     from trawlkit.report.charts import CHART_TITLES, all_charts
 
@@ -498,6 +557,13 @@ def render_html(
         "siguiente.</p>"
         f"{figs}</section>"
     )
+
+    if optimization is not None:
+        toc.append(("optimizacion", "Optimización"))
+        sections.append(_optimization_section(optimization))
+    if simulation:
+        toc.append(("simulacion", "Simulación"))
+        sections.append(_simulation_section(result, simulation))
 
     toc.append(("tablas", "Tablas"))
     skip = {"resumen", "erratas", "notas"}

@@ -7,7 +7,7 @@ inmovilizados; más una hoja "Caso" con ``DesignCase.to_dict()`` aplanado y una 
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -94,8 +94,12 @@ def _write_table(ws: Any, table: Table, font: Any) -> None:
     ws.freeze_panes = "B3"
 
 
-def write_xlsx(result: DesignResult, path: str | Path) -> Path:
-    """Escribe el libro XLSX del informe en ``path`` y devuelve la ruta."""
+def write_xlsx(result: DesignResult, path: str | Path, extra_tables: Sequence[Table] = ()) -> Path:
+    """Escribe el libro XLSX del informe en ``path`` y devuelve la ruta.
+
+    ``extra_tables`` (p. ej. las de optimización y simulación de :mod:`trawlkit.report.extras`)
+    van como hojas adicionales antes de "Caso" y "Notas".
+    """
     openpyxl = _openpyxl()
     from openpyxl.styles import Font
 
@@ -103,7 +107,8 @@ def write_xlsx(result: DesignResult, path: str | Path) -> Path:
     used: set[str] = set()
     first = True
     # La tabla de notas va en la hoja "Notas" (al final, junto a "Caso").
-    for table in (t for t in all_tables(result) if t.key != "notas"):
+    tables = [t for t in all_tables(result) if t.key != "notas"] + list(extra_tables)
+    for table in tables:
         if first:
             ws = wb.active
             ws.title = sheet_name(table.key, used)

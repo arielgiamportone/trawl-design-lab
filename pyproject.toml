@@ -35,6 +35,7 @@ docs = [
   "jupytext>=1.16",
   "ipykernel>=6.29",
   "nbconvert>=7.16",
+  "plotly>=5.22",
 ]
 optimize = ["scipy>=1.13"]
 excel = ["openpyxl>=3.1"]

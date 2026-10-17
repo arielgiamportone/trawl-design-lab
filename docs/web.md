@@ -42,7 +42,8 @@ npm run preview        # sirve dist/ en http://localhost:4173
 tiempo de compilación con `VITE_API_URL`.
 
 El JavaScript inicial pesa unos 95 kB comprimidos (React aparte en su propio chunk); Recharts
-(~110 kB comprimidos) se descarga sólo al abrir las pestañas «Gráficos» o «Comparar».
+(~110 kB comprimidos) se descarga sólo al abrir las pestañas «Gráficos», «Comparar» u
+«Optimizar», y las pestañas «Optimizar» y «Simulación» se cargan también al abrirlas.
 
 ## Variables de entorno
 
@@ -90,10 +91,27 @@ regenera ese archivo y luego `npm run gen:api` (la CI verifica que `schema.d.ts`
   desplazamiento (rueda, arrastre, pellizco o teclado) y descarga.
 - **Comparar**: fija el resultado actual como «A» y lo compara con el caso en vivo «B»
   (diferencia absoluta y porcentual, curvas superpuestas).
+- **Optimizar**: objetivo (área barrida, volumen o energía), reserva de tiro, rangos de escala y
+  velocidad, tamaño de la malla, portón y refinado opcional por evolución diferencial
+  (`POST /optimize`, ver {doc}`20_optimizacion`). Muestra el mejor diseño (escala, velocidad, AH,
+  AV, área barrida por hora, R_T, F_T, margen y cada restricción con OK/NO), el mapa de
+  factibilidad escala × velocidad (celdas factibles coloreadas por el objetivo, no factibles
+  rayadas) y el frente de Pareto. «Usar este diseño» pide la red escalada
+  (`POST /optimize/scaled-net`, también la modificada si hay), la aplica al caso como red en línea
+  y vuelve al Resumen; «Volver a la red del catálogo» la quita.
+- **Simulación** (experimental): hasta tres velocidades y resolución rápida (3) o normal (6);
+  `POST /simulate` devuelve la forma de equilibrio y se muestran planta, perfil y frente de cada
+  velocidad (con el mismo visor con zoom del plano), una tabla de AH, AV y resistencia simuladas
+  frente al motor empírico y, para la red FAO A-3 estándar, frente a DynamiT, con diferencias
+  porcentuales, y una nota sobre la brecha de resistencia (ver {doc}`21_simulacion`).
 - **Descargas**: informe HTML, PDF y XLSX (`POST /design/report`) y el JSON del resultado.
 - **Notas y erratas**: notas del cálculo y tratamiento de cada errata en el modo actual.
 
 ![Gráficos (tema oscuro)](../web/docs/screenshots/escritorio-oscuro-graficos.png)
+
+![Optimizar: mejor diseño, mapa de factibilidad y frente de Pareto](../web/docs/screenshots/escritorio-claro-optimizar.png)
+
+![Simulación: proyecciones a 2, 3 y 4 kn y comparación con el motor y DynamiT](../web/docs/screenshots/escritorio-claro-simulacion.png)
 
 ## Arquitectura
 
