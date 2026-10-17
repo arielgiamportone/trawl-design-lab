@@ -225,6 +225,39 @@ def _better(a: Evaluation, b: Evaluation | None, key: str) -> bool:
     return sense * a.objective(key) > sense * b.objective(key)
 
 
+def _local_search(
+    ev: Any,
+    seeds: tuple[Evaluation | None, ...],
+    key: str,
+    s_bounds: tuple[float, float],
+    v_bounds: tuple[float, float],
+    s_radius: float = 0.04,
+    v_radius: float = 0.3,
+    v_step: float = 0.01,
+) -> Evaluation | None:
+    """Mejor punto factible en una vecindad fina (paso S_STEP en s, 0.01 kn en v) de ``seeds``."""
+    best: Evaluation | None = None
+    for seed_e in seeds:
+        if seed_e is None:
+            continue
+        s_vals = np.arange(
+            max(s_bounds[0], seed_e.s - s_radius),
+            min(s_bounds[1], seed_e.s + s_radius) + 1e-9,
+            S_STEP,
+        )
+        v_vals = np.arange(
+            max(v_bounds[0], seed_e.v_kn - v_radius),
+            min(v_bounds[1], seed_e.v_kn + v_radius) + 1e-9,
+            v_step,
+        )
+        for s_i in np.round(s_vals, 6):
+            for v_i in np.round(v_vals, 6):
+                e = ev.at(float(s_i), float(v_i))
+                if e.feasible and _better(e, best, key):
+                    best = e
+    return best
+
+
 def optimise(
     base_case: DesignCase,
     objective: str = "area",
@@ -333,6 +366,14 @@ def optimise(
         }
         if _better(refined, best, key):
             best = refined
+        # Refinamiento local determinista: el óptimo suele quedar en una esquina de la región
+        # factible (p. ej. s mínima y la mayor velocidad remolcable), donde la penalización hace
+        # que la evolución diferencial no siempre llegue. Se barre una vecindad fina alrededor de
+        # los mejores puntos (malla y DE) y se conserva el mejor factible.
+        local = _local_search(ev, (best, grid_best, refined), key, (s_lo, s_hi), (v_lo, v_hi))
+        if local is not None and _better(local, best, key):
+            best = local
+        refine_info["local_search"] = None if local is None else [local.s, local.v_kn]
     pts = flat + ([refined] if refined is not None else [])
     pareto = tuple(pareto_front(pts, pareto_objectives))
     settings = {
