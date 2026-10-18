@@ -22,6 +22,19 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
+## Probar en línea
+
+| | URL |
+|---|---|
+| Libro (Jupyter Book) | https://arielgiamportone.github.io/trawl-design-lab/ |
+| Aplicación web | https://arielgiamportone.github.io/trawl-design-lab/app/ |
+| API (documentación interactiva) | https://trawl-design-lab-api.onrender.com/docs |
+
+La app y la API funcionan una vez completados los pasos de publicación (activar GitHub Pages con
+fuente «GitHub Actions» y crear el servicio en Render desde `render.yaml`); están descritos en
+[docs/despliegue.md](docs/despliegue.md). La API corre en el plan gratuito de Render: tras un rato
+sin uso se duerme y el primer cálculo puede tardar hasta un minuto.
+
 ## Cadena de cálculo (del modelo original)
 
 potencia disponible (Fridman, Prado-Dremière, Koyama, Nomura, Hamuro) → paños y cortes → mecánica

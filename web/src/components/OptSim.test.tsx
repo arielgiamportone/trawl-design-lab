@@ -32,7 +32,7 @@ describe('Optimizar', () => {
       renderApp();
       await screen.findByText('2,27', {}, { timeout: 3000 });
       await userEvent.click(screen.getByRole('tab', { name: 'Optimizar' }));
-      const btn = await screen.findByRole('button', { name: 'Optimizar' });
+      const btn = await screen.findByRole('button', { name: 'Optimizar' }, { timeout: 5000 });
       await userEvent.click(screen.getByLabelText('Volumen'));
       await userEvent.clear(screen.getByLabelText('Reserva de tiro [%]'));
       await userEvent.type(screen.getByLabelText('Reserva de tiro [%]'), '20');
@@ -91,7 +91,7 @@ describe('Simulación', () => {
       renderApp();
       await screen.findByText('2,27', {}, { timeout: 3000 });
       await userEvent.click(screen.getByRole('tab', { name: 'Simulación' }));
-      await screen.findByRole('button', { name: 'Simular' });
+      await screen.findByRole('button', { name: 'Simular' }, { timeout: 5000 });
       await userEvent.click(screen.getByRole('button', { name: '2,0' }));
       await userEvent.click(screen.getByRole('button', { name: '4,0' }));
       // máximo tres velocidades

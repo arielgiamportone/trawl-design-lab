@@ -219,6 +219,39 @@ textarea {
 .api-status.down .led {
   background: #d03b3b;
 }
+.api-status.wait .led {
+  background: #d9a400;
+  animation: api-pulse 1.2s ease-in-out infinite;
+}
+@keyframes api-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .api-status.wait .led {
+    animation: none;
+  }
+}
+.api-retry {
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border, currentColor);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.docs-link {
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.docs-link:hover {
+  color: inherit;
+}
 
 .layout {
   display: grid;

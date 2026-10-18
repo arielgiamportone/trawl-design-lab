@@ -1,7 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { api, apiBase } from '../api/client';
+import { apiBase } from '../api/client';
+import { docsUrl, statusLabel } from '../lib/connection';
 import { applyThemePref, initialThemePref, type ThemePref } from '../lib/theme';
+import { useConnection } from '../state/connectionContext';
+
+const DOCS_URL = docsUrl({
+  VITE_DOCS_URL: import.meta.env.VITE_DOCS_URL as string | undefined,
+  BASE_URL: import.meta.env.BASE_URL,
+});
 
 const THEMES: { value: ThemePref; label: string }[] = [
   { value: 'auto', label: 'Auto' },
@@ -12,18 +18,8 @@ const THEMES: { value: ThemePref; label: string }[] = [
 export function Header() {
   const [theme, setTheme] = useState<ThemePref>(initialThemePref);
   useEffect(() => applyThemePref(theme), [theme]);
-  const health = useQuery({
-    queryKey: ['health'],
-    queryFn: ({ signal }) => api.health(signal),
-    refetchInterval: 30_000,
-    retry: false,
-  });
-  const status = health.isSuccess ? 'ok' : health.isError ? 'down' : 'wait';
-  const statusText = health.isSuccess
-    ? `API conectada · v${health.data.version}`
-    : health.isError
-      ? 'API sin conexión'
-      : 'Conectando con la API…';
+  const conn = useConnection();
+  const status = conn.status === 'ok' ? 'ok' : conn.status === 'down' ? 'down' : 'wait';
 
   return (
     <header className="app-header">
@@ -33,10 +29,20 @@ export function Header() {
         </h1>
       </div>
       <div className="header-tools">
+        {DOCS_URL && (
+          <a className="docs-link" href={DOCS_URL}>
+            Documentación
+          </a>
+        )}
         <span className={`api-status ${status}`} title={apiBase()} role="status">
           <span className="led" aria-hidden="true" />
-          {statusText}
+          {statusLabel(conn.status, conn.version)}
         </span>
+        {conn.status === 'down' && (
+          <button type="button" className="api-retry" onClick={conn.retry}>
+            Reintentar
+          </button>
+        )}
         <div className="segmented" role="group" aria-label="Tema de color">
           {THEMES.map((t) => (
             <button

@@ -1,0 +1,10 @@
+# Imagen mínima: sólo lo que necesita la API en tiempo de ejecución (lista blanca).
+# Fuera quedan docs/, web/, tests/, tools/, legacy/ (el Excel), examples/ y los entornos locales.
+*
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+!src/
+**/__pycache__
+**/*.py[cod]

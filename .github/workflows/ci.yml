@@ -72,3 +72,58 @@ jobs:
         with:
           name: playwright-report
           path: web/playwright-report/
+  # Imagen de la API para Render (Dockerfile + render.yaml): construye, arranca y prueba.
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir la imagen
+        run: docker build -t trawlkit-api .
+      - name: Arrancar el contenedor (PORT como en Render)
+        run: |
+          docker run -d --name trawlkit-api -p 8000:10000 -e PORT=10000 \
+            -e TRAWLKIT_CORS_ORIGINS=https://arielgiamportone.github.io \
+            -e TRAWLKIT_MAX_SIM_SECONDS=20 -e TRAWLKIT_MAX_OPT_GRID=15 trawlkit-api
+      - name: Esperar /health
+        run: |
+          for i in $(seq 1 60); do
+            curl -fsS http://127.0.0.1:8000/health && exit 0
+            sleep 1
+          done
+          docker logs trawlkit-api
+          exit 1
+      - name: POST /design con el caso por defecto
+        run: |
+          code=$(curl -sS -o design.json -w '%{http_code}' -X POST http://127.0.0.1:8000/design \
+            -H 'Content-Type: application/json' -d '{}')
+          echo "HTTP $code"
+          test "$code" = 200
+          grep -q '"headrope_m"' design.json
+      - name: Informe PDF (WeasyPrint + Pango en la imagen)
+        run: |
+          code=$(curl -sS -o informe.pdf -w '%{http_code}' -X POST \
+            'http://127.0.0.1:8000/design/report?format=pdf' \
+            -H 'Content-Type: application/json' -d '{}')
+          echo "HTTP $code"
+          test "$code" = 200
+          head -c 5 informe.pdf | grep -q '%PDF-'
+      - name: CORS para GitHub Pages
+        run: |
+          curl -sSi -X OPTIONS http://127.0.0.1:8000/design \
+            -H 'Origin: https://arielgiamportone.github.io' \
+            -H 'Access-Control-Request-Method: POST' \
+            | grep -i '^access-control-allow-origin: https://arielgiamportone.github.io'
+      - name: Healthcheck de Docker
+        run: |
+          for i in $(seq 1 30); do
+            s=$(docker inspect --format '{{.State.Health.Status}}' trawlkit-api)
+            echo "$s"; [ "$s" = healthy ] && exit 0
+            sleep 2
+          done
+          exit 1
+      - name: Logs del contenedor
+        if: always()
+        run: docker logs trawlkit-api || true
+      - name: Detener el contenedor
+        if: always()
+        run: docker rm -f trawlkit-api || true

@@ -5,6 +5,7 @@ from __future__ import annotations
 import dataclasses
 import inspect
 import math
+import os
 import re
 from functools import cache
 from typing import Any
@@ -27,6 +28,42 @@ class BadRequestError(ValueError):
 
 class NotFoundError(KeyError):
     """Id desconocido en un catálogo (se traduce a HTTP 404)."""
+
+
+# --- Guardas de costo configurables por entorno -------------------------------------------------
+# Un servidor con CPU lenta (p. ej. el plan gratuito de Render) puede bajar estos límites sin tocar
+# el código; los valores por defecto son los de la API local.
+
+#: Lado máximo por defecto de la malla de ``POST /optimize`` (``OptimizeGrid`` admite hasta 25).
+OPT_MAX_GRID_DEFAULT = 25
+
+
+def _env_float(name: str, default: float) -> float:
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return default
+    try:
+        value = float(raw)
+    except ValueError:
+        return default
+    return value if math.isfinite(value) and value > 0 else default
+
+
+def sim_max_cost_s() -> float:
+    """Costo máximo estimado de ``POST /simulate`` [s] (``TRAWLKIT_MAX_SIM_SECONDS``)."""
+    return _env_float("TRAWLKIT_MAX_SIM_SECONDS", SIM_MAX_COST_S)
+
+
+def opt_max_grid() -> int:
+    """Lado máximo de la malla de ``POST /optimize`` (``TRAWLKIT_MAX_OPT_GRID``, 2–25)."""
+    value = int(_env_float("TRAWLKIT_MAX_OPT_GRID", OPT_MAX_GRID_DEFAULT))
+    return max(2, min(value, OPT_MAX_GRID_DEFAULT))
+
+
+def refine_allowed() -> bool:
+    """``POST /optimize`` acepta ``refine`` salvo ``TRAWLKIT_ALLOW_REFINE`` = 0/false/no/off."""
+    raw = os.environ.get("TRAWLKIT_ALLOW_REFINE", "").strip().lower()
+    return raw not in {"0", "false", "no", "off"}
 
 
 @cache
@@ -211,6 +248,17 @@ def optimize_case(
     """Arma el caso (modo corregido), corre :func:`trawlkit.optimize.optimise` y lo serializa."""
     from trawlkit.optimize import optimise
 
+    limit = opt_max_grid()
+    if max(grid) > limit:
+        raise BadRequestError(
+            f"malla de optimización demasiado grande: {grid[0]} × {grid[1]} "
+            f"(máximo {limit} × {limit} en este servidor)"
+        )
+    if refine and not refine_allowed():
+        raise BadRequestError(
+            "el refinado (evolución diferencial) está desactivado en este servidor; "
+            "optimice sólo con la malla (refine = false)"
+        )
     case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels)
     try:
         result = optimise(
@@ -272,7 +320,8 @@ SIM_COST_PER_SPEED_S: dict[int, float] = {
     9: 20.0,
     10: 24.0,
 }
-#: Costo máximo estimado que acepta ``POST /simulate`` [s].
+#: Costo máximo estimado que acepta ``POST /simulate`` [s] por defecto
+#: (``TRAWLKIT_MAX_SIM_SECONDS`` lo cambia; ver :func:`sim_max_cost_s`).
 SIM_MAX_COST_S = 30.0
 
 
@@ -341,11 +390,12 @@ def simulate_case(
     t0 = time.perf_counter()
     case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels, compat=compat)
     estimate = estimate_sim_cost(len(speeds_kn), resolution, case.net)
-    if estimate > SIM_MAX_COST_S:
+    max_cost = sim_max_cost_s()
+    if estimate > max_cost:
         raise BadRequestError(
             f"simulación demasiado costosa: ~{estimate:.0f} s estimados para "
             f"{len(speeds_kn)} velocidades a resolución {resolution} (máximo "
-            f"{SIM_MAX_COST_S:.0f} s); baje la resolución o la cantidad de velocidades"
+            f"{max_cost:.0f} s); baje la resolución o la cantidad de velocidades"
         )
     result = run_case(case)
     order = sorted(range(len(speeds_kn)), key=lambda i: speeds_kn[i])

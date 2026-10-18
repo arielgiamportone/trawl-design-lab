@@ -7,6 +7,16 @@ It evolves the FAO A-3 bottom-trawl model originally built in Excel for 150-180 
 Beagle Channel ([original repo](https://github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel))
 into reproducible, tested software that generalises to any panel-defined net.
 
+## Try it online
+
+- Book: https://arielgiamportone.github.io/trawl-design-lab/
+- Web app: https://arielgiamportone.github.io/trawl-design-lab/app/
+- API (interactive docs): https://trawl-design-lab-api.onrender.com/docs
+
+They work once GitHub Pages (source "GitHub Actions") is enabled and the Render service is created
+from `render.yaml` ([docs/despliegue.md](docs/despliegue.md), in Spanish). The API runs on Render's
+free plan, so the first request after a period of inactivity can take up to a minute.
+
 Calculation chain: available towing power (Fridman, Prado-Dremière, Koyama, Nomura, Hamuro) →
 netting panels and cuts → net mechanics (filtration index, twine and working areas, solidity, weight)
 → dimensions → net drag (13 empirical methods) → doors and bridles → wing-end spread and vertical

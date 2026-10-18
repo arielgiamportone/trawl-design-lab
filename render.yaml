@@ -1,0 +1,31 @@
+# Blueprint de Render para la API de vista previa (ver docs/despliegue.md).
+# Render → New → Blueprint → este repositorio → Apply.
+# Esquema: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: trawl-design-lab-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    # Despliega cada commit de main cuando pasan los checks de CI (reemplaza a autoDeploy: true).
+    autoDeployTrigger: checksPass
+    # Sólo reconstruye si cambia algo que entra en la imagen.
+    buildFilter:
+      paths:
+        - Dockerfile
+        - .dockerignore
+        - pyproject.toml
+        - uv.lock
+        - src/**
+    envVars:
+      # Origen del frontend publicado en GitHub Pages (sin ruta ni barra final).
+      - key: TRAWLKIT_CORS_ORIGINS
+        value: https://arielgiamportone.github.io
+      # Guardas de costo para la CPU lenta del plan gratuito.
+      - key: TRAWLKIT_MAX_SIM_SECONDS
+        value: '20'
+      - key: TRAWLKIT_MAX_OPT_GRID
+        value: '15'

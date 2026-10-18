@@ -6,6 +6,9 @@ de diseño, editar los paneles de la red, ver resultados, gráficos y planos, co
 descargar los informes. Toda la interfaz está en español y los números usan coma decimal
 (`Intl.NumberFormat('es-AR')`).
 
+**Probar en línea:** <https://arielgiamportone.github.io/trawl-design-lab/app/> (vista previa
+publicada con este libro; cómo se despliega y sus limitaciones en {doc}`despliegue`).
+
 ![Caso de diseño y KPI (escritorio, tema claro)](../web/docs/screenshots/escritorio-claro-caso.png)
 
 ## Puesta en marcha en desarrollo
@@ -39,7 +42,14 @@ npm run preview        # sirve dist/ en http://localhost:4173
 ```
 
 `dist/` es estático: puede servirse desde cualquier servidor web. La URL de la API se fija en
-tiempo de compilación con `VITE_API_URL`.
+tiempo de compilación con `VITE_API_URL`, y la ruta pública con `VITE_BASE` (por defecto `/`; para
+servirla bajo una sub-ruta, p. ej. `VITE_BASE=/trawl-design-lab/app/`).
+
+Al abrir, la app espera a que la API responda `GET /health` antes de pedir catálogos y calcular:
+reintenta con esperas crecientes durante ~90 s (arranque en frío del servidor gratuito) y el
+indicador de la cabecera pasa por «Conectando…», «Despertando la API (puede tardar hasta un
+minuto)…» y «API conectada», o «API no disponible» con un botón «Reintentar»
+(`src/lib/connection.ts`, `src/state/ConnectionProvider.tsx`).
 
 El JavaScript inicial pesa unos 95 kB comprimidos (React aparte en su propio chunk); Recharts
 (~110 kB comprimidos) se descarga sólo al abrir las pestañas «Gráficos», «Comparar» u
@@ -51,7 +61,10 @@ El JavaScript inicial pesa unos 95 kB comprimidos (React aparte en su propio chu
 |---|---|---|---|
 | `VITE_API_URL` | frontend (compilación) | `http://127.0.0.1:8000` | URL base de la API. `/api` usa el proxy de Vite. |
 | `TRAWLKIT_API_TARGET` | `vite.config.ts` (dev/preview) | `http://127.0.0.1:8000` | Destino del proxy `/api`. |
+| `VITE_BASE` | frontend (compilación) | `/` | Ruta pública de la app (`/trawl-design-lab/app/` en GitHub Pages). |
+| `VITE_DOCS_URL` | frontend (compilación) | sin enlace | Enlace «Documentación» de la cabecera (`../` junto al libro). |
 | `TRAWLKIT_CORS_ORIGINS` | API | `*` | Orígenes permitidos, separados por comas (p. ej. `https://redes.example.org,http://localhost:5173`). |
+| `TRAWLKIT_MAX_SIM_SECONDS`, `TRAWLKIT_MAX_OPT_GRID`, `TRAWLKIT_ALLOW_REFINE` | API | `30`, `25`, permitido | Guardas de costo de `/simulate` y `/optimize` (ver {doc}`despliegue`). |
 
 Hay un ejemplo en `web/.env.example`.
 
@@ -121,7 +134,7 @@ web/
 ├── src/
 │   ├── api/                  schema.d.ts (generado), client.ts (fetch tipado), result.ts
 │   ├── lib/                  formato es-AR, etiquetas, parámetros, paneles, series, diff, tema
-│   ├── state/                CaseProvider: estado del caso, catálogos, debounce y consulta /design
+│   ├── state/                ConnectionProvider (espera a /health); CaseProvider: caso, catálogos, /design
 │   ├── components/           panel del caso, KPI, pestañas, editor, plano, comparación…
 │   │   └── charts/           gráficos Recharts (carga diferida)
 │   └── test/                 fixtures grabados de la API y doble de fetch

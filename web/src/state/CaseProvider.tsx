@@ -4,6 +4,7 @@ import { api, type DesignRequest } from '../api/client';
 import { asDesignData } from '../api/result';
 import { paramMeta } from '../lib/params';
 import { loadJson, saveJson } from '../lib/storage';
+import { useConnection } from './connectionContext';
 import { CaseContext, type CaseContextValue, type Pinned } from './context';
 import { buildRequest, DEFAULT_CASE, sanitizeCase, STORAGE_KEY, type CaseState } from './model';
 
@@ -13,6 +14,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CaseState>(() => sanitizeCase(loadJson(STORAGE_KEY)));
   const [pinned, setPinned] = useState<Pinned | null>(null);
   const qc = useQueryClient();
+  // Nada se pide a la API hasta que responde /health (arranque en frío del despliegue gratuito).
+  const online = useConnection().status === 'ok';
 
   useEffect(() => saveJson(STORAGE_KEY, state), [state]);
 
@@ -25,36 +28,42 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     queryKey: ['nets'],
     queryFn: ({ signal }) => api.nets(signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const vessels = useQuery({
     queryKey: ['vessels'],
     queryFn: ({ signal }) => api.vessels(signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const doors = useQuery({
     queryKey: ['doors'],
     queryFn: ({ signal }) => api.doors(signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const params = useQuery({
     queryKey: ['params'],
     queryFn: ({ signal }) => api.params(signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const errata = useQuery({
     queryKey: ['errata'],
     queryFn: ({ signal }) => api.errata(signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const stdSpec = useQuery({
     queryKey: ['net', state.net],
     queryFn: ({ signal }) => api.net(state.net, signal),
     staleTime: Infinity,
+    enabled: online,
   });
   const modSpec = useQuery({
     queryKey: ['net', state.netModified],
     queryFn: ({ signal }) => api.net(state.netModified as string, signal),
-    enabled: !!state.netModified,
+    enabled: online && !!state.netModified,
     staleTime: Infinity,
   });
 
@@ -89,7 +98,7 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     queryKey: ['design', committedKey],
     queryFn: async ({ signal }) =>
       asDesignData(await api.design(committed as DesignRequest, signal)),
-    enabled: committed !== null,
+    enabled: online && committed !== null,
     placeholderData: keepPreviousData,
     staleTime: 5 * 60_000,
     retry: false,
@@ -130,7 +139,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
       doors: doors.data ?? [],
       params: metas,
       errata: errata.data ?? [],
-      loading: nets.isLoading || vessels.isLoading || doors.isLoading || params.isLoading,
+      loading:
+        !online || nets.isLoading || vessels.isLoading || doors.isLoading || params.isLoading,
       error: catalogError,
     },
     specs,

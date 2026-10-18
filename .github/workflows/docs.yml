@@ -22,6 +22,27 @@ jobs:
       - run: uv sync --all-extras --dev
       - name: Construir el libro (warnings como error)
         run: uv run jupyter-book build docs -W --keep-going
+      # La app web se publica junto al libro, bajo /trawl-design-lab/app/ (ver docs/despliegue.md).
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Construir la app web
+        working-directory: web
+        env:
+          VITE_BASE: /trawl-design-lab/app/
+          # URL de la API en Render; la variable del repo TRAWLKIT_API_URL la reemplaza.
+          VITE_API_URL: ${{ vars.TRAWLKIT_API_URL || 'https://trawl-design-lab-api.onrender.com' }}
+          VITE_DOCS_URL: ../
+        run: |
+          npm ci
+          npm run build
+      - name: Copiar la app al sitio (docs/_build/html/app/)
+        run: |
+          rm -rf docs/_build/html/app
+          cp -r web/dist docs/_build/html/app
+          test -f docs/_build/html/app/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/_build/html

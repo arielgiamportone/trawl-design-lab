@@ -31,6 +31,7 @@ parts:
       - file: informes
       - file: web
       - file: api
+      - file: despliegue
   - caption: Referencias
     chapters:
       - file: bibliografia

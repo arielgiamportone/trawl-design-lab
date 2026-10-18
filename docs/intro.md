@@ -16,6 +16,14 @@ originalmente en un libro de Excel por Ariel Luján Giamportone (Ingeniería Pes
 - **Desarrolladores**: la última parte describe la arquitectura del software, los informes, la API
   y la aplicación web.
 
+## Probar la aplicación
+
+La aplicación web está publicada junto a este libro:
+**<https://arielgiamportone.github.io/trawl-design-lab/app/>**. Calcula en el navegador el caso
+FAO A-3 (o el que se arme), con gráficos, plano, optimización y simulación, usando la API pública
+del motor. El primer cálculo puede tardar hasta un minuto si la API estaba dormida (plan gratuito;
+ver {doc}`despliegue`).
+
 ## Cómo leerlo
 
 1. **Fundamentos**: el problema y la nomenclatura.
@@ -25,7 +33,7 @@ originalmente en un libro de Excel por Ariel Luján Giamportone (Ingeniería Pes
    simulación de la forma de la red remolcada ({doc}`21_simulacion`).
 3. **Caso de estudio y validación**: la red FAO A-3 estándar y modificada, la validación contra el
    Excel y contra el simulador DynamiT, y las erratas encontradas en el modelo original.
-4. **Software**: motor, informes y planos, aplicación web y API.
+4. **Software**: motor, informes y planos, aplicación web, API y despliegue en línea.
 
 Los capítulos son notebooks ejecutables: el código y los números que muestran se recalculan cada vez
 que se construye el libro.

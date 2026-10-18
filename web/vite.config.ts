@@ -11,7 +11,11 @@ const proxy = {
   },
 };
 
+// Ruta pública de la app: '/' en desarrollo; '/trawl-design-lab/app/' en GitHub Pages (docs.yml).
+const base = (process.env.VITE_BASE ?? '/').replace(/\/?$/, '/');
+
 export default defineConfig({
+  base,
   plugins: [react()],
   server: { proxy },
   preview: { proxy },
