@@ -10,10 +10,10 @@ Cargas
 
   con ``u = v x̂`` la velocidad del agua relativa a la red (la red avanza hacia −x) y ``u_n``,
   ``u_t`` sus componentes normal y tangencial al hilo (Morison et al. 1950, *Petroleum Trans.
-  AIME* 189:149; para redes: Lee, Lee, Lee y Kim 2005, *Ocean Eng.* 32:331–347; Priour 2013,
+  AIME* 189:149; para redes: Lee, Lee, Cha, Kim y Lee 2005, *Ocean Eng.* 32:331–347; Priour 2013,
   *A Finite Element Method for Netting*, Springer). Rangos usuales del hilo de red:
   C_N ≈ 1,0–1,6 y C_T ≈ 0,01–0,1 (Takagi, Shimizu, Suzuki, Hiraishi y Yamamoto 2004,
-  *Ocean Eng.* 31:1281–1300; Lee et al. 2005; Priour 2013). El peso sumergido del hilo es
+  *Fish. Res.* 66:235–243; Lee et al. 2005; Priour 2013). El peso sumergido del hilo es
   ``(1 − ρ_agua/ρ_PA) g / runnage`` y se reparte 1/3 por vértice.
 * **Relingas**: barras sólo a tracción con su EA, Morison con su diámetro y peso sumergido
   (mitad a cada extremo); **bridas y patentes**: barras sólo a tracción sin carga hidrodinámica.

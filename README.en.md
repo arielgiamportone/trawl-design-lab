@@ -1,6 +1,6 @@
 # trawl-design-lab · `trawlkit`
 
-[Versión en español](README.md)
+[Versión en español](https://github.com/arielgiamportone/trawl-design-lab/blob/main/README.md)
 
 Calculation engine, HTTP API and scientific documentation for **trawl net design and sizing**.
 It evolves the FAO A-3 bottom-trawl model originally built in Excel for 150-180 HP vessels in the
@@ -14,7 +14,7 @@ into reproducible, tested software that generalises to any panel-defined net.
 - API (interactive docs): https://trawl-design-lab-api.onrender.com/docs
 
 They work once GitHub Pages (source "GitHub Actions") is enabled and the Render service is created
-from `render.yaml` ([docs/despliegue.md](docs/despliegue.md), in Spanish). The API runs on Render's
+from `render.yaml` ([docs/despliegue.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/despliegue.md), in Spanish). The API runs on Render's
 free plan, so the first request after a period of inactivity can take up to a minute.
 
 Calculation chain: available towing power (Fridman, Prado-Dremière, Koyama, Nomura, Hamuro) →

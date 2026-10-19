@@ -1,0 +1,33 @@
+{
+  "title": "Trawl Design Lab (trawlkit): diseño y dimensionamiento de redes de arrastre",
+  "description": "<p>Motor de cálculo en Python (<code>trawlkit</code>), API web, aplicación y libro reproducible para el diseño, dimensionamiento, optimización y simulación de redes de arrastre de fondo. Reproduce y corrige el modelo FAO A-3 en Excel para buques de 150-180 HP (Canal Beagle).</p><p>Código bajo licencia MIT; documentación y datos bajo CC BY 4.0.</p>",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Giamportone, Ariel Luján"
+    }
+  ],
+  "license": "MIT",
+  "language": "spa",
+  "keywords": [
+    "fisheries",
+    "trawl",
+    "fishing gear",
+    "naval engineering",
+    "FAO",
+    "optimization",
+    "simulation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel",
+      "relation": "isDerivedFrom",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://arielgiamportone.github.io/trawl-design-lab/",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    }
+  ]
+}

@@ -3932,7 +3932,6 @@ wheels = [
 
 [[package]]
 name = "trawlkit"
-version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -3999,27 +3998,38 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fastapi", marker = "extra == 'all'", specifier = ">=0.111" },
     { name = "fastapi", marker = "extra == 'api'", specifier = ">=0.111" },
+    { name = "ipykernel", marker = "extra == 'all'", specifier = ">=6.29" },
     { name = "ipykernel", marker = "extra == 'docs'", specifier = ">=6.29" },
+    { name = "jupyter-book", marker = "extra == 'all'", specifier = ">=1.0,<2" },
     { name = "jupyter-book", marker = "extra == 'docs'", specifier = ">=1.0,<2" },
+    { name = "jupytext", marker = "extra == 'all'", specifier = ">=1.16" },
     { name = "jupytext", marker = "extra == 'docs'", specifier = ">=1.16" },
+    { name = "matplotlib", marker = "extra == 'all'", specifier = ">=3.9" },
     { name = "matplotlib", marker = "extra == 'docs'", specifier = ">=3.9" },
+    { name = "nbconvert", marker = "extra == 'all'", specifier = ">=7.16" },
     { name = "nbconvert", marker = "extra == 'docs'", specifier = ">=7.16" },
     { name = "numpy", specifier = ">=1.26" },
+    { name = "openpyxl", marker = "extra == 'all'", specifier = ">=3.1" },
     { name = "openpyxl", marker = "extra == 'excel'", specifier = ">=3.1" },
     { name = "openpyxl", marker = "extra == 'report'", specifier = ">=3.1" },
     { name = "pint", specifier = ">=0.24" },
+    { name = "plotly", marker = "extra == 'all'", specifier = ">=5.22" },
     { name = "plotly", marker = "extra == 'docs'", specifier = ">=5.22" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pyyaml", specifier = ">=6.0" },
+    { name = "scipy", marker = "extra == 'all'", specifier = ">=1.13" },
     { name = "scipy", marker = "extra == 'optimize'", specifier = ">=1.13" },
+    { name = "sphinxcontrib-bibtex", marker = "extra == 'all'", specifier = ">=2.6" },
     { name = "sphinxcontrib-bibtex", marker = "extra == 'docs'", specifier = ">=2.6" },
-    { name = "trawlkit", extras = ["api", "docs", "optimize", "excel", "report"], marker = "extra == 'all'" },
     { name = "typer", specifier = ">=0.12" },
+    { name = "uvicorn", extras = ["standard"], marker = "extra == 'all'", specifier = ">=0.30" },
     { name = "uvicorn", extras = ["standard"], marker = "extra == 'api'", specifier = ">=0.30" },
+    { name = "weasyprint", marker = "extra == 'all'", specifier = ">=62" },
     { name = "weasyprint", marker = "extra == 'report'", specifier = ">=62" },
 ]
-provides-extras = ["api", "docs", "optimize", "excel", "report", "all"]
+provides-extras = ["all", "api", "docs", "excel", "optimize", "report"]
 
 [package.metadata.requires-dev]
 dev = [

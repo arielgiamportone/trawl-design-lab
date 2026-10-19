@@ -6,8 +6,26 @@ from trawlkit.compat import ERRATA, ERRATA_BY_KEY, Compat
 from trawlkit.units import kgf_to_n, knots_to_ms, ms_to_knots, n_to_kgf
 
 
-def test_version() -> None:
-    assert trawlkit.__version__ == "0.1.0"
+def test_version_is_single_sourced() -> None:
+    import tomllib
+    from pathlib import Path
+
+    pyproject = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text())
+    assert "version" in pyproject["project"]["dynamic"]
+    assert pyproject["tool"]["hatch"]["version"]["path"] == "src/trawlkit/__init__.py"
+    assert int(trawlkit.__version__.split(".")[0]) >= 1
+
+
+def test_version_matches_web_and_citation() -> None:
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).parents[1]
+    assert json.loads((root / "web/package.json").read_text())["version"] == trawlkit.__version__
+    openapi = json.loads((root / "web/openapi.json").read_text())
+    assert openapi["info"]["version"] == trawlkit.__version__
+    cff = (root / "CITATION.cff").read_text()
+    assert f"version: {trawlkit.__version__}\n" in cff
 
 
 def test_units_roundtrip() -> None:

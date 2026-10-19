@@ -1,0 +1,49 @@
+name: Release
+# Al publicar un release `vX.Y.Z` en GitHub: construye sdist + rueda, verifica que la versión
+# coincide con el tag y que la rueda se instala y calcula, y publica en PyPI con Trusted Publishing
+# (sin tokens: PyPI confía en este workflow y en el entorno `pypi`). Zenodo archiva el mismo
+# release y le asigna un DOI por su cuenta (integración GitHub-Zenodo).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: La versión del paquete coincide con el tag
+        if: github.event_name == 'release'
+        run: |
+          version=$(sed -n 's/^__version__ = "\(.*\)"/\1/p' src/trawlkit/__init__.py)
+          test "v$version" = "${{ github.event.release.tag_name }}" || {
+            echo "::error::tag ${{ github.event.release.tag_name }} != versión $version"; exit 1; }
+      - run: uv build
+      - run: uvx twine check --strict dist/*
+      - name: La rueda se instala y calcula fuera del checkout
+        run: |
+          uv venv /tmp/venv
+          uv pip install --python /tmp/venv/bin/python dist/*.whl
+          cd /tmp && /tmp/venv/bin/trawlkit run fao_a3_standard | grep -q Lima
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+  pypi:
+    needs: build
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/trawlkit/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

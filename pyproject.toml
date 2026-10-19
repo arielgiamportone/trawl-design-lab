@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "trawlkit"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Motor de cálculo para el diseño y dimensionamiento de redes de arrastre (trawl net design engine)."
 readme = "README.md"
 license = "MIT"
@@ -12,11 +12,18 @@ requires-python = ">=3.11"
 authors = [{ name = "Ariel Luján Giamportone", email = "giamportone1@gmail.com" }]
 keywords = ["fisheries", "trawl", "fishing-gear", "naval-engineering", "FAO"]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Science/Research",
   "License :: OSI Approved :: MIT License",
+  "Natural Language :: Spanish",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Typing :: Typed",
 ]
 dependencies = [
   "numpy>=1.26",
@@ -47,6 +54,10 @@ trawlkit = "trawlkit.cli:app"
 
 [project.urls]
 Homepage = "https://github.com/arielgiamportone/trawl-design-lab"
+Documentation = "https://arielgiamportone.github.io/trawl-design-lab/"
+Application = "https://arielgiamportone.github.io/trawl-design-lab/app/"
+Changelog = "https://github.com/arielgiamportone/trawl-design-lab/blob/main/CHANGELOG.md"
+Issues = "https://github.com/arielgiamportone/trawl-design-lab/issues"
 Origin = "https://github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel"
 
 [dependency-groups]
@@ -60,6 +71,13 @@ dev = [
   "types-PyYAML",
   "pre-commit>=3.7",
 ]
+
+[tool.hatch.version]
+# Fuente única de la versión: trawlkit.__version__ (la API y los informes la muestran).
+path = "src/trawlkit/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = ["/src/trawlkit", "/tests", "/README.md", "/LICENSE", "/LICENSE-docs", "/CHANGELOG.md", "/CITATION.cff"]
 
 [tool.hatch.build.targets.wheel]
 # Incluye todo lo que hay bajo src/trawlkit, también los datos (data/*.yaml, data/reference/*.csv);

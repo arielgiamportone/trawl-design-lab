@@ -1,6 +1,10 @@
 # trawl-design-lab · `trawlkit`
 
-[English version](README.en.md)
+[![PyPI](https://img.shields.io/pypi/v/trawlkit)](https://pypi.org/project/trawlkit/)
+[![CI](https://github.com/arielgiamportone/trawl-design-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/arielgiamportone/trawl-design-lab/actions/workflows/ci.yml)
+[![Libro](https://img.shields.io/badge/libro-Jupyter%20Book-blue)](https://arielgiamportone.github.io/trawl-design-lab/)
+
+[English version](https://github.com/arielgiamportone/trawl-design-lab/blob/main/README.en.md)
 
 Motor de cálculo, API y documentación científica para el **diseño y dimensionamiento de redes de
 arrastre**. Es la evolución del modelo FAO A-3 desarrollado en Excel para buques de 150-180 HP del
@@ -15,10 +19,10 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
 | Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
 | CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG, con `--optimize` y `--simulate` opcionales), `plan` (lámina o escala real), `optimize`, `serve`, `version`, `errata` |
-| Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](docs/informes.md), ejemplos en [`examples/`](examples/)) |
-| Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](docs/20_optimizacion.md)) |
-| Simulación de forma | `src/trawlkit/sim/` | Fase 7 (experimental): forma de equilibrio de la red remolcada (elementos triangulares de paño, Morison, boyas, lastre, bridas y fondo; relajación dinámica FIRE), validada contra DynamiT ([capítulo 21](docs/21_simulacion.md)) |
-| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`) |
+| Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/informes.md), ejemplos en [`examples/`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/examples/)) |
+| Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/20_optimizacion.md)) |
+| Simulación de forma | `src/trawlkit/sim/` | Fase 7 (experimental): forma de equilibrio de la red remolcada (elementos triangulares de paño, Morison, boyas, lastre, bridas y fondo; relajación dinámica FIRE), validada contra DynamiT ([capítulo 21](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/21_simulacion.md)) |
+| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`) |
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
@@ -32,7 +36,7 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 
 La app y la API funcionan una vez completados los pasos de publicación (activar GitHub Pages con
 fuente «GitHub Actions» y crear el servicio en Render desde `render.yaml`); están descritos en
-[docs/despliegue.md](docs/despliegue.md). La API corre en el plan gratuito de Render: tras un rato
+[docs/despliegue.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/despliegue.md). La API corre en el plan gratuito de Render: tras un rato
 sin uso se duerme y el primer cálculo puede tardar hasta un minuto.
 
 ## Cadena de cálculo (del modelo original)
@@ -44,12 +48,27 @@ vertical → flotación y lastre → cables de remolque → ventana de velocidad
 
 ## Modos de compatibilidad
 
-El Excel original contiene erratas de cálculo documentadas en [`docs/erratas.md`](docs/erratas.md).
+El Excel original contiene erratas de cálculo documentadas en [`docs/erratas.md`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/erratas.md).
 Cada función afectada acepta `compat=Compat.EXCEL` (reproduce el número original, para validar la
 migración) o `compat=Compat.CORRECTED` (fórmula correcta, por defecto). La arquitectura del motor y
-el orden de las etapas están en [`docs/motor.md`](docs/motor.md).
+el orden de las etapas están en [`docs/motor.md`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/motor.md).
 
-## Instalación y uso (desarrollo)
+## Instalación
+
+```bash
+pip install trawlkit                     # motor y CLI
+pip install "trawlkit[api,report,optimize]"   # + API web, informes PDF/XLSX y optimización
+trawlkit run fao_a3_standard
+```
+
+## Cómo citar
+
+Ver [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff)
+(GitHub ofrece «Cite this repository») y la página
+[Cómo citar](https://arielgiamportone.github.io/trawl-design-lab/citar.html) del libro, con el DOI de
+Zenodo de cada versión.
+
+## Desarrollo
 
 ```bash
 uv sync --all-extras --dev
@@ -89,11 +108,15 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 5. Documentación científica (Jupyter Book): teoría por etapa, caso Beagle, validación contra Excel y DynamiT ✔ — https://arielgiamportone.github.io/trawl-design-lab/
 6. Optimización (área barrida vs potencia) ✔
 7. Simulación simplificada de la geometría de la red (experimental) ✔
-8. Release en PyPI y DOI en Zenodo
+8. Versión 1.0: paquete en PyPI, DOI en Zenodo, `CITATION.cff` y registro de cambios ✔
+9. Interfaz con dos modos: asistente guiado (por defecto) y experto; proyectos, deshacer, ayuda contextual
+10. Diseño interactivo de la red sobre el plano, con recálculo en vivo y vista 3D
+11. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor
+12. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
 
 ## Licencias
 
-Código: [MIT](LICENSE). Documentación, datos y material heredado: [CC BY 4.0](LICENSE-docs).
+Código: [MIT](https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE). Documentación, datos y material heredado: [CC BY 4.0](https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE-docs).
 
 ## Autor
 

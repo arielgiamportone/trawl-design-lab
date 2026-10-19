@@ -32,6 +32,7 @@ parts:
       - file: web
       - file: api
       - file: despliegue
+      - file: citar
   - caption: Referencias
     chapters:
       - file: bibliografia
