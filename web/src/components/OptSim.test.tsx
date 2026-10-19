@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MODE_KEY } from '../lib/mode';
 import { App } from '../App';
 import { forgetAll } from '../lib/memo';
 import { mockApi } from '../test/mockApi';
@@ -24,6 +25,8 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 
+// Estas pruebas recorren el modo experto (el guiado tiene las suyas en Wizard.test.tsx).
+beforeEach(() => window.localStorage.setItem(MODE_KEY, JSON.stringify('expert')));
 describe('Optimizar', () => {
   it(
     'optimiza, muestra el mejor diseño y lo aplica al caso',

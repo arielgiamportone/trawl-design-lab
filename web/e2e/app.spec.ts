@@ -6,6 +6,8 @@ test.beforeEach(async ({ page }) => {
     // cada prueba arranca del caso por defecto
     if (!sessionStorage.getItem('e2e-init')) {
       localStorage.clear();
+      // estas pruebas recorren el modo experto (el guiado está en guided.spec.ts)
+      localStorage.setItem('trawl-design-lab:mode', JSON.stringify('expert'));
       sessionStorage.setItem('e2e-init', '1');
     }
   });

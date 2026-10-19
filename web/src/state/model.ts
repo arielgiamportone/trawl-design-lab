@@ -19,6 +19,8 @@ export interface CaseState {
    * catálogo (y a la modificada, si hay) como red en línea. ``null`` = red del catálogo.
    */
   scaled: ScaledNet | null;
+  /** Velocidad de arrastre prevista [kn] para el diagnóstico del modo guiado (no va a la API). */
+  targetSpeed: number;
 }
 
 export interface ScaledNet {
@@ -38,6 +40,7 @@ export const DEFAULT_CASE: CaseState = {
   params: {},
   edits: { std: {}, mod: {} },
   scaled: null,
+  targetSpeed: 2,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -59,6 +62,10 @@ export function sanitizeCase(raw: unknown): CaseState {
     params: obj<ParamValues>(r.params, {}),
     edits: { std: obj<PanelEdits>(edits.std, {}), mod: obj<PanelEdits>(edits.mod, {}) },
     scaled: sanitizeScaled(r.scaled),
+    targetSpeed:
+      typeof r.targetSpeed === 'number' && r.targetSpeed > 0 && r.targetSpeed <= 10
+        ? r.targetSpeed
+        : DEFAULT_CASE.targetSpeed,
   };
 }
 

@@ -83,6 +83,37 @@ Hay un ejemplo en `web/.env.example`.
 `web/openapi.json` es el contrato generado desde la API; no se edita a mano. Si la API cambia, se
 regenera ese archivo y luego `npm run gen:api` (la CI verifica que `schema.d.ts` esté al día).
 
+## Modos: guiado y experto
+
+La app abre en el **modo guiado**, pensado para quien quiere una respuesta rápida sin conocer
+todos los parámetros. Son cuatro pasos:
+
+1. **Buque**: el buque del catálogo (potencia, eslora) y el tipo de hélice.
+2. **Red**: la red, si se compara con otra y los portones.
+3. **Operación**: la velocidad de arrastre prevista (control deslizante) y la profundidad.
+4. **Resultado**: un diagnóstico con semáforos. Dice si alcanza la potencia a esa velocidad
+   (tiro disponible frente a la demanda de red, portones y cables, interpolados a la velocidad
+   elegida; avisa con menos de 10 % de margen), la velocidad máxima de arrastre, si el cable cumple
+   la carga de rotura, la boca de la red y el área barrida por hora (ancho de la boca × velocidad ×
+   1852 m). Cada punto tiene un «¿Por qué?» en lenguaje llano y un enlace al capítulo del libro. Si
+   la velocidad no se alcanza, ofrece probar con la máxima viable.
+
+El **modo experto** es la interfaz completa (panel del caso, parámetros avanzados y todas las
+pestañas). Los dos modos comparten el mismo caso: lo que se elige en uno aparece en el otro. El
+conmutador «Guiado / Experto» está en la cabecera y el navegador recuerda la elección.
+
+## Proyectos, deshacer y ayuda
+
+- **Deshacer / Rehacer** (botones o `Ctrl+Z` / `Ctrl+Shift+Z` fuera de los campos de texto): cada
+  cambio del caso entra al historial; los cambios seguidos al escribir un número se agrupan en un
+  paso.
+- **Proyectos**: guardar el caso con un nombre en este navegador (hasta 30), abrirlo o eliminarlo;
+  exportarlo a un archivo `.trawl.json` para compartirlo y volver a importarlo. El archivo lleva un
+  formato y una versión (`trawl-design-lab/project`, 1) y se valida al importarlo.
+- **Ayuda contextual**: el botón «?» junto a un dato explica qué es, su unidad, su rango habitual y
+  enlaza al capítulo del libro. Fuera del rango habitual se muestra un aviso, sin impedir el
+  cálculo.
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MODE_KEY } from './lib/mode';
 import { App } from './App';
 import { mockApi } from './test/mockApi';
 
@@ -16,6 +17,8 @@ function renderApp() {
 
 afterEach(() => vi.unstubAllGlobals());
 
+// Estas pruebas recorren el modo experto (el guiado tiene las suyas en Wizard.test.tsx).
+beforeEach(() => window.localStorage.setItem(MODE_KEY, JSON.stringify('expert')));
 describe('App', () => {
   it('calcula el caso por defecto y muestra KPI y resumen', async () => {
     const { calls } = mockApi();

@@ -16,6 +16,12 @@ export interface CaseContextValue {
   state: CaseState;
   update: (patch: Partial<CaseState> | ((s: CaseState) => CaseState)) => void;
   reset: () => void;
+  /** Reemplaza el caso entero (abrir un proyecto) como un paso del historial. */
+  replace: (next: CaseState) => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   catalogs: {
     nets: CatalogItem[];
     vessels: Vessel[];

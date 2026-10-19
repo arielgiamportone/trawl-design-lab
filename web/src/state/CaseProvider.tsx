@@ -2,6 +2,7 @@ import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-quer
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api, type DesignRequest } from '../api/client';
 import { asDesignData } from '../api/result';
+import { initHistory, record, redo as redoH, undo as undoH, type History } from '../lib/history';
 import { paramMeta } from '../lib/params';
 import { loadJson, saveJson } from '../lib/storage';
 import { useConnection } from './connectionContext';
@@ -11,7 +12,10 @@ import { buildRequest, DEFAULT_CASE, sanitizeCase, STORAGE_KEY, type CaseState }
 const DEBOUNCE_MS = 450;
 
 export function CaseProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<CaseState>(() => sanitizeCase(loadJson(STORAGE_KEY)));
+  const [hist, setHist] = useState<History<CaseState>>(() =>
+    initHistory(sanitizeCase(loadJson(STORAGE_KEY))),
+  );
+  const state = hist.present;
   const [pinned, setPinned] = useState<Pinned | null>(null);
   const qc = useQueryClient();
   // Nada se pide a la API hasta que responde /health (arranque en frío del despliegue gratuito).
@@ -19,10 +23,22 @@ export function CaseProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => saveJson(STORAGE_KEY, state), [state]);
 
+  // Cada cambio entra al historial; los cambios seguidos (escribir un número) se agrupan.
   const update = useCallback<CaseContextValue['update']>((patch) => {
-    setState((s) => (typeof patch === 'function' ? patch(s) : { ...s, ...patch }));
+    setHist((h) =>
+      record(
+        h,
+        typeof patch === 'function' ? patch(h.present) : { ...h.present, ...patch },
+        Date.now(),
+      ),
+    );
   }, []);
-  const reset = useCallback(() => setState(DEFAULT_CASE), []);
+  const replace = useCallback((next: CaseState) => {
+    setHist((h) => record(h, next, Date.now(), false));
+  }, []);
+  const reset = useCallback(() => replace(DEFAULT_CASE), [replace]);
+  const undo = useCallback(() => setHist(undoH), []);
+  const redo = useCallback(() => setHist(redoH), []);
 
   const nets = useQuery({
     queryKey: ['nets'],
@@ -133,6 +149,11 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     state,
     update,
     reset,
+    replace,
+    undo,
+    redo,
+    canUndo: hist.past.length > 0,
+    canRedo: hist.future.length > 0,
     catalogs: {
       nets: nets.data ?? [],
       vessels: vessels.data ?? [],

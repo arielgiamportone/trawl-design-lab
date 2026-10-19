@@ -1,6 +1,8 @@
 import { useId, useMemo, useState } from 'react';
+import { checkRange, HELP } from '../lib/help';
 import { defaultText, paramLabel, parseParam, type ParamMeta } from '../lib/params';
 import { useCase } from '../state/useCase';
+import { HelpTip } from './HelpTip';
 
 export function ParamsForm() {
   const { state, update, catalogs, errors } = useCase();
@@ -84,15 +86,21 @@ interface FieldProps {
 }
 
 export function ParamField({ meta, idBase, value, error, onChange, onReset }: FieldProps) {
-  const isChanged = value.trim() !== '' && parseParam(meta, value)?.ok === true;
+  const parsed = parseParam(meta, value);
+  const isChanged = value.trim() !== '' && parsed?.ok === true;
+  const range = parsed?.ok ? checkRange(meta.name, parsed.value) : { ok: true as const };
+  const warnId = `${idBase}-warn`;
   const helpId = `${idBase}-help`;
   const errId = `${idBase}-err`;
   const describedBy =
-    [meta.comment ? helpId : '', error ? errId : ''].filter(Boolean).join(' ') || undefined;
+    [meta.comment ? helpId : '', error ? errId : '', range.ok ? '' : warnId]
+      .filter(Boolean)
+      .join(' ') || undefined;
   return (
     <div className={`param${isChanged ? ' changed' : ''}`} data-param={meta.name}>
       <div className="param-head">
         <label htmlFor={idBase}>{paramLabel(meta.name)}</label>
+        {HELP[meta.name] && <HelpTip topic={meta.name} label={paramLabel(meta.name)} />}
       </div>
       <div className="param-row">
         {meta.kind === 'enum' ? (
@@ -137,6 +145,11 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
       {error && (
         <p className="field-error" id={errId}>
           {error}
+        </p>
+      )}
+      {!error && !range.ok && (
+        <p className="field-warn" id={warnId}>
+          {range.message}
         </p>
       )}
       {meta.comment && (

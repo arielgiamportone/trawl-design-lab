@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MODE_KEY } from '../lib/mode';
 import { App } from '../App';
 import { Header } from '../components/Header';
 import { mockApi } from '../test/mockApi';
@@ -9,6 +10,8 @@ import { ConnectionProvider } from './ConnectionProvider';
 
 afterEach(() => vi.unstubAllGlobals());
 
+// Estas pruebas recorren el modo experto (el guiado tiene las suyas en Wizard.test.tsx).
+beforeEach(() => window.localStorage.setItem(MODE_KEY, JSON.stringify('expert')));
 describe('ConnectionProvider + indicador', () => {
   it('sin respuesta: «despertando», luego «no disponible» y «Reintentar» recupera', async () => {
     let up = false;
@@ -21,7 +24,7 @@ describe('ConnectionProvider + indicador', () => {
     vi.stubGlobal('fetch', fetchFn);
     render(
       <ConnectionProvider options={{ budgetMs: 2_500, wakeAfterMs: 50 }}>
-        <Header />
+        <Header mode="expert" onModeChange={() => {}} />
       </ConnectionProvider>,
     );
     expect(await screen.findByText(/Despertando la API/)).toBeInTheDocument();

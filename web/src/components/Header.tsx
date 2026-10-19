@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { apiBase } from '../api/client';
-import { docsUrl, statusLabel } from '../lib/connection';
+import { statusLabel } from '../lib/connection';
+import { DOCS_URL } from '../lib/docs';
+import type { UiMode } from '../lib/mode';
 import { applyThemePref, initialThemePref, type ThemePref } from '../lib/theme';
 import { useConnection } from '../state/connectionContext';
-
-const DOCS_URL = docsUrl({
-  VITE_DOCS_URL: import.meta.env.VITE_DOCS_URL as string | undefined,
-  BASE_URL: import.meta.env.BASE_URL,
-});
 
 const THEMES: { value: ThemePref; label: string }[] = [
   { value: 'auto', label: 'Auto' },
@@ -15,7 +12,21 @@ const THEMES: { value: ThemePref; label: string }[] = [
   { value: 'dark', label: 'Oscuro' },
 ];
 
-export function Header() {
+const MODES: { value: UiMode; label: string; title: string }[] = [
+  {
+    value: 'simple',
+    label: 'Guiado',
+    title: 'Asistente paso a paso con diagnóstico en lenguaje llano',
+  },
+  { value: 'expert', label: 'Experto', title: 'Todos los parámetros, pestañas y herramientas' },
+];
+
+interface Props {
+  mode: UiMode;
+  onModeChange: (mode: UiMode) => void;
+}
+
+export function Header({ mode, onModeChange }: Props) {
   const [theme, setTheme] = useState<ThemePref>(initialThemePref);
   useEffect(() => applyThemePref(theme), [theme]);
   const conn = useConnection();
@@ -29,6 +40,19 @@ export function Header() {
         </h1>
       </div>
       <div className="header-tools">
+        <div className="segmented mode-switch" role="group" aria-label="Modo de la interfaz">
+          {MODES.map((m) => (
+            <button
+              key={m.value}
+              type="button"
+              aria-pressed={mode === m.value}
+              title={m.title}
+              onClick={() => onModeChange(m.value)}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
         {DOCS_URL && (
           <a className="docs-link" href={DOCS_URL}>
             Documentación

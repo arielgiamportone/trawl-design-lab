@@ -5,6 +5,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+### Agregado
+- App web, **modo guiado** (por defecto): asistente en 4 pasos (buque, red, operación, resultado)
+  con diagnóstico por semáforos en lenguaje llano a la velocidad elegida (potencia, velocidad
+  máxima, cable, boca y área barrida) y enlaces al libro. El **modo experto** es la interfaz
+  completa; el conmutador se recuerda.
+- Proyectos: guardar/abrir en el navegador, exportar/importar `.trawl.json`, caso nuevo.
+- Deshacer/rehacer del caso (botones y atajos de teclado).
+- Ayuda contextual «?» con unidad, rango habitual y capítulo del libro; avisos fuera de rango.
+
 ## [1.0.0] - 2026-10-19
 
 Primera versión pública: paquete en PyPI, DOI en Zenodo y metadatos de cita (`CITATION.cff`).
