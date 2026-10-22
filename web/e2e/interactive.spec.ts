@@ -22,7 +22,10 @@ test('arrastrar el alto de un panel recalcula y deshacer lo revierte', async ({ 
     .getByLabel('Mallas de alto (N)', { exact: true });
   await expect(depth).toHaveValue('120');
 
+  await page.setViewportSize({ width: 1280, height: 640 });
   const handle = page.locator('circle[data-panel="C"][data-side="right"][data-handle="depth"]');
+  // el plano puede quedar bajo el pliegue: el mouse sólo llega a lo visible
+  await handle.scrollIntoViewIfNeeded();
   const box = (await handle.boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
   await page.mouse.down();
