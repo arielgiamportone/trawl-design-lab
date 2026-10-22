@@ -3,6 +3,7 @@ import design from './fixtures/design.json';
 import designExcel from './fixtures/design_excel.json';
 import doors from './fixtures/doors.json';
 import errata from './fixtures/errata.json';
+import layout from './fixtures/layout.json';
 import netMod from './fixtures/net_mod.json';
 import netStd from './fixtures/net_std.json';
 import nets from './fixtures/nets.json';
@@ -16,6 +17,7 @@ export const fixtures = {
   designExcel,
   doors,
   errata,
+  layout,
   netMod,
   netStd,
   nets,
@@ -56,6 +58,7 @@ export function mockApi(overrides: { design?: (body: Record<string, unknown>) =>
       if (overrides.design) return overrides.design(body as Record<string, unknown>);
       return json((body as { compat?: string }).compat === 'excel' ? designExcel : design);
     }
+    if (path === '/design/layout') return json(layout);
     if (path === '/optimize') return json(optimize);
     if (path === '/optimize/scaled-net') {
       const b = body as { net: unknown; s: number };

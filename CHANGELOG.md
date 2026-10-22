@@ -13,6 +13,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 - Proyectos: guardar/abrir en el navegador, exportar/importar `.trawl.json`, caso nuevo.
 - Deshacer/rehacer del caso (botones y atajos de teclado).
 - Ayuda contextual «?» con unidad, rango habitual y capítulo del libro; avisos fuera de rango.
+- **Diseño interactivo**: plano editable (arrastre de alto y bordes, teclado, inspector del panel)
+  con recálculo en vivo, impacto frente a la red de base y contorno original superpuesto.
+- `POST /design/layout`: disposición 2D de la red por plano (la geometría de la lámina) en JSON.
+- **Vista 3D** de la forma simulada (three.js): paño coloreado por la tensión del hilo, aparejo,
+  boyas, vistas estándar y descarga PNG.
+- `tools/export_openapi.py` y un test que verifica que `web/openapi.json` esté al día.
 
 ## [1.0.0] - 2026-10-19
 

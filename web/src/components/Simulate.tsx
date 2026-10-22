@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useId, useState } from 'react';
+import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../api/client';
 import { fmt, fmtFixed, fmtPct } from '../lib/format';
 import { recall, remember } from '../lib/memo';
+import { isSimGeometry } from '../lib/sim3d';
 import {
   compareRows,
   MAX_SIM_SPEEDS,
@@ -18,10 +19,13 @@ import {
 import { useCase } from '../state/useCase';
 import { ZoomStage } from './ZoomStage';
 
+// three.js (≈ 600 kB) sólo se descarga al pedir la vista 3D.
+const Net3D = lazy(() => import('./sim3d/Net3D').then((m) => ({ default: m.Net3D })));
+
 // Último pedido y selección: sobreviven al cambio de pestaña, no a la recarga de la página.
 const REQ_KEY = 'simulate:request';
 const SEL_KEY = 'simulate:selection';
-type Sel = { speeds: number[]; quality: SimQuality };
+type Sel = { speeds: number[]; quality: SimQuality; view3d?: boolean };
 
 const VIEWS: { key: 'plan' | 'profile' | 'front'; label: string }[] = [
   { key: 'plan', label: 'Planta' },
@@ -124,10 +128,13 @@ export function Simulate() {
   const [quality, setQualityState] = useState<SimQuality>(
     () => recall<Sel>(SEL_KEY)?.quality ?? 'fast',
   );
-  const setSel = (s: number[], q: SimQuality) => {
-    remember<Sel>(SEL_KEY, { speeds: s, quality: q });
+  const [view3d, setView3dState] = useState<boolean>(() => recall<Sel>(SEL_KEY)?.view3d ?? true);
+  const [speed3d, setSpeed3d] = useState(0);
+  const setSel = (s: number[], q: SimQuality, v3 = view3d) => {
+    remember<Sel>(SEL_KEY, { speeds: s, quality: q, view3d: v3 });
     setSpeedsState(s);
     setQualityState(q);
+    setView3dState(v3);
   };
   const [submitted, setSubmitted] = useState<string | null>(() => recall<string>(REQ_KEY) ?? null);
   const [startedAt, setStartedAt] = useState<number>(() => Date.now());
@@ -159,7 +166,7 @@ export function Simulate() {
       ct: null,
       knot_factor: null,
       door_spread_m: null,
-      include_geometry: false,
+      include_geometry: view3d,
     };
     const key = JSON.stringify(req);
     remember(REQ_KEY, key);
@@ -226,6 +233,14 @@ export function Simulate() {
           </div>
           <span className="help">≈ {estimate} s en el servidor</span>
         </fieldset>
+        <label className="check small">
+          <input
+            type="checkbox"
+            checked={view3d}
+            onChange={(e) => setSel(speeds, quality, e.target.checked)}
+          />
+          Vista 3D
+        </label>
       </div>
       <div className="calc-row">
         <button
@@ -270,6 +285,33 @@ export function Simulate() {
 
       {r && (
         <div className={`row-gap${busy ? ' stale' : ''}`} style={{ marginTop: 16 }}>
+          {r.results.some(isSimGeometry) && (
+            <section className="sim-3d" aria-label="Vista 3D de la forma simulada">
+              <div className="net3d-head">
+                <h3 className="group-title">Vista 3D</h3>
+                {r.results.length > 1 && (
+                  <div className="segmented" role="group" aria-label="Velocidad de la vista 3D">
+                    {r.results.map((x, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        aria-pressed={i === Math.min(speed3d, r.results.length - 1)}
+                        onClick={() => setSpeed3d(i)}
+                      >
+                        {speedLabel(Number(x.speed_kn))} kn
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Suspense fallback={<p className="empty">Cargando el visor 3D…</p>}>
+                {(() => {
+                  const g = r.results[Math.min(speed3d, r.results.length - 1)];
+                  return isSimGeometry(g) ? <Net3D geometry={g} /> : null;
+                })()}
+              </Suspense>
+            </section>
+          )}
           {Object.entries(r.projections_svg).map(([k, p]) => (
             <section
               key={k}

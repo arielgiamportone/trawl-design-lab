@@ -114,6 +114,28 @@ conmutador «Guiado / Experto» está en la cabecera y el navegador recuerda la 
   enlaza al capítulo del libro. Fuera del rango habitual se muestra un aviso, sin impedir el
   cálculo.
 
+## Diseño interactivo y vista 3D
+
+- **Diseño interactivo** (pestaña del modo experto; también desde el resultado del modo guiado con
+  «Ajustar la red sobre el plano»): el plano de la red, dorso y vientre, dibujado desde
+  `POST /design/layout`, que es la misma geometría de la lámina. Se toca un panel para
+  seleccionarlo y aparecen tiradores: el borde inferior cambia el alto (mallas N) y las esquinas
+  exteriores cambian los bordes hacia la bolsa y hacia la boca. El plano está a malla estirada
+  (ancho = mallas × mallero; alto = N × mallero), así que el arrastre se convierte exactamente en
+  mallas. Los paneles centrales son simétricos y cambian de a dos mallas. Con el teclado: Tab
+  recorre los paneles, Enter selecciona, ↑/↓ cambian el alto, ←/→ el borde hacia la bolsa
+  (Mayúsculas ×10), +/− hacen zoom y Esc cancela el arrastre o deselecciona.
+- Al soltar, el caso se recalcula (el motor tarda unos 25 ms). La tira de indicadores muestra la
+  resistencia a la velocidad prevista, la velocidad máxima, las aberturas, la superficie sólida y
+  el peso, con la diferencia frente a la red de base (verde si mejora, rojo si empeora). La red
+  original queda dibujada con línea discontinua y los paneles editados, resaltados. El inspector
+  lateral permite escribir los valores o usar −/+, y cada cambio se deshace con Ctrl+Z.
+- **Vista 3D** (pestaña «Simulación», opción «Vista 3D»): la forma simulada en WebGL (three.js,
+  que se descarga sólo al abrirla). El paño se colorea por la tensión del hilo con una escala
+  secuencial azul hasta el percentil 95. Se ven la lima y el burlón, las bridas y patentes, las
+  boyas y el fondo. Se gira con el mouse o con el dedo, hay vistas de perspectiva, planta, perfil y
+  frente, y se puede descargar un PNG. Sin WebGL quedan las proyecciones SVG.
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

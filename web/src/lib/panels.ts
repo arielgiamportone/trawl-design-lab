@@ -132,6 +132,39 @@ export function isEdited(panel: Panel, field: PanelField, text: string | undefin
   return r.value !== (panel[field] ?? null);
 }
 
+/**
+ * Ediciones con ``field`` del panel ``pid`` puesto en ``text``. Si vuelve al valor original del
+ * preset (o queda vacío y el preset no tenía valor), la edición se quita.
+ */
+export function withEdit(
+  edits: PanelEdits,
+  pid: string,
+  field: PanelField,
+  text: string,
+  original: number | null | undefined,
+): PanelEdits {
+  const next: PanelEdits = { ...edits, [pid]: { ...edits[pid], [field]: text } };
+  const r = validateField(field, text);
+  if ((r.ok && r.value === (original ?? null)) || (text.trim() === '' && original == null)) {
+    const p = { ...next[pid] };
+    delete p[field];
+    if (Object.keys(p).length === 0) delete next[pid];
+    else next[pid] = p;
+  }
+  return next;
+}
+
+/** Valor vigente de un campo: el editado (si es válido) o el del preset. */
+export function currentValue(panel: Panel, edits: PanelEdits, field: PanelField): number | null {
+  const text = edits[panel.id]?.[field];
+  if (text !== undefined) {
+    const r = validateField(field, text);
+    if (r.ok) return r.value;
+  }
+  const v = panel[field];
+  return typeof v === 'number' ? v : null;
+}
+
 /** Cantidad de celdas efectivamente modificadas. */
 export function countEdits(spec: NetSpec | undefined, edits: PanelEdits): number {
   if (!spec) return 0;

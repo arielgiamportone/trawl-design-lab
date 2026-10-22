@@ -19,6 +19,8 @@ from trawlkit.api.schemas import (
     DesignResponse,
     ErratumOut,
     Health,
+    LayoutMode,
+    LayoutResponse,
     OptimizeRequest,
     OptimizeResponse,
     ParamInfo,
@@ -145,6 +147,22 @@ def design_plan(req: DesignRequest, view: PlanView = "sheet", variant: Variant =
     result = _run(req)
     svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
     return Response(svg, media_type="image/svg+xml")
+
+
+@app.post("/design/layout", response_model=LayoutResponse)
+def design_layout(
+    req: DesignRequest, variant: Variant = "std", mode: LayoutMode = "schematic"
+) -> dict[str, Any]:
+    """Disposición 2D de la red (polígonos por plano, en metros) para el editor interactivo.
+
+    Es la misma geometría que dibujan la lámina (``schematic``, malla estirada) y la escala real
+    (``true_scale``, relingada); no corre el caso completo.
+    """
+    if variant == "mod" and req.net_modified is None:
+        raise HTTPException(422, "variant 'mod' requiere net_modified")
+    net = req.net_modified if variant == "mod" else req.net
+    assert net is not None
+    return service.layout_of(net, mode)
 
 
 @app.post("/optimize", response_model=OptimizeResponse)

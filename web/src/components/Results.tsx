@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState } from 'react';
 import { loadJson, saveJson } from '../lib/storage';
+import { TAB_IDS, TAB_KEY } from '../lib/tabs';
 import { useCase } from '../state/useCase';
 import { Downloads } from './Downloads';
 import { Kpis } from './Kpis';
@@ -14,20 +15,10 @@ const Charts = lazy(() => import('./charts/Charts').then((m) => ({ default: m.Ch
 const Compare = lazy(() => import('./Compare').then((m) => ({ default: m.Compare })));
 // Optimizar y Simulación también se cargan al abrirlas.
 const Optimize = lazy(() => import('./Optimize').then((m) => ({ default: m.Optimize })));
+const InteractiveDesign = lazy(() =>
+  import('./interactive/InteractiveDesign').then((m) => ({ default: m.InteractiveDesign })),
+);
 const Simulate = lazy(() => import('./Simulate').then((m) => ({ default: m.Simulate })));
-
-const TAB_KEY = 'trawl-design-lab:tab';
-const TAB_IDS = [
-  'resumen',
-  'graficos',
-  'paneles',
-  'plano',
-  'comparar',
-  'optimizar',
-  'simulacion',
-  'descargas',
-  'notas',
-];
 
 export function Results() {
   const { design, pinned } = useCase();
@@ -44,6 +35,7 @@ export function Results() {
   const tabs: TabDef[] = [
     { id: 'resumen', label: 'Resumen' },
     { id: 'graficos', label: 'Gráficos' },
+    { id: 'diseno', label: 'Diseño interactivo' },
     { id: 'paneles', label: 'Editor de paneles' },
     { id: 'plano', label: 'Plano' },
     {
@@ -70,6 +62,7 @@ export function Results() {
             {tab === 'comparar' && <Compare />}
             {tab === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}
             {tab === 'simulacion' && <Simulate />}
+            {tab === 'diseno' && <InteractiveDesign />}
           </Suspense>
           {tab === 'paneles' && <PanelEditor />}
           {tab === 'plano' && <PlanViewer />}

@@ -306,3 +306,56 @@ def test_simulate_default_resolution() -> None:
     assert out["settings"]["resolution"] == 4
     assert all(r["converged"] for r in out["results"])
     assert len(out["projections_svg"]) == 3
+
+
+def test_layout_matches_engine_layout() -> None:
+    from trawlkit.drawing.layout import layout_net
+    from trawlkit.io import load_net
+
+    r = client.post("/design/layout", json=STD)
+    assert r.status_code == 200, r.text
+    body = r.json()
+    ref = layout_net(load_net("fao_a3_standard"))
+    assert body["mode"] == "schematic"
+    assert [p["plane"] for p in body["planes"]] == list(ref.planes)
+    upper = body["planes"][0]
+    shapes = ref.shapes[upper["plane"]]
+    assert len(upper["shapes"]) == len(shapes)
+    for got, exp in zip(upper["shapes"], shapes, strict=True):
+        assert (got["id"], got["side"], got["meshes_depth"]) == (exp.id, exp.side, exp.meshes_depth)
+        flat = [c for pt in got["points"] for c in pt]
+        assert flat == pytest.approx([c for pt in exp.points for c in pt])
+    assert upper["mouth_y"] == pytest.approx(ref.mouth_y(upper["plane"]))
+    mod = client.post("/design/layout?variant=mod&mode=true_scale", json=STD).json()
+    assert mod["net_id"] == "fao_a3_modified"
+    assert mod["mode"] == "true_scale"
+
+
+def test_layout_follows_inline_edits_and_validates() -> None:
+    spec = client.get("/catalog/nets/fao_a3_standard").json()
+    base = client.post("/design/layout", json={"net": spec}).json()
+    panel_c = next(p for p in spec["panels"] if p["id"] == "C")
+    panel_c["meshes_depth"] += 40
+    edited = client.post("/design/layout", json={"net": spec}).json()
+
+    def height(body: dict[str, object], pid: str) -> float:
+        plane = body["planes"][0]  # type: ignore[index]
+        s = next(s for s in plane["shapes"] if s["id"] == pid)
+        return float(s["y_bottom"] - s["y_top"])
+
+    assert height(edited, "C") > height(base, "C")
+    assert (
+        client.post("/design/layout?variant=mod", json={"net": "fao_a3_standard"}).status_code
+        == 422
+    )
+    assert client.post("/design/layout", json={"net": "nope"}).status_code == 404
+    assert client.post("/design/layout?mode=other", json=STD).status_code == 422
+
+
+def test_openapi_json_is_current() -> None:
+    from pathlib import Path
+
+    import tools.export_openapi as export
+
+    current = (Path(__file__).parents[1] / "web" / "openapi.json").read_text(encoding="utf-8")
+    assert current == export.render(), "regenerar con: uv run python tools/export_openapi.py"

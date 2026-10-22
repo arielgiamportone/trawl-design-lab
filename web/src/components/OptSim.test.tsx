@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MODE_KEY } from '../lib/mode';
@@ -110,4 +110,33 @@ describe('Simulación', () => {
     },
     SLOW,
   );
+});
+
+describe('Simulación 3D', () => {
+  it('pide la geometría y muestra la vista 3D (sin WebGL, el aviso)', async () => {
+    const { default: geo } = await import('../test/fixtures/simulate_geometry.json');
+    const { calls } = mockApi();
+    const original = globalThis.fetch;
+    vi.stubGlobal('fetch', async (input: RequestInfo | URL, init?: RequestInit) =>
+      String(input).endsWith('/simulate')
+        ? (calls.push({ url: String(input), method: 'POST', body: JSON.parse(String(init?.body)) }),
+          new Response(JSON.stringify(geo), { headers: { 'Content-Type': 'application/json' } }))
+        : original(input, init),
+    );
+    window.localStorage.setItem('trawl-design-lab:tab', JSON.stringify('simulacion'));
+    renderApp();
+    expect(await screen.findByRole('checkbox', { name: 'Vista 3D' })).toBeChecked();
+    const sim = await screen.findByRole('button', { name: 'Simular' });
+    await waitFor(() => expect(sim).toBeEnabled(), { timeout: 3000 });
+    await userEvent.click(sim);
+    expect(
+      await screen.findByText('Vista 3D', { selector: 'h3' }, { timeout: 3000 }),
+    ).toBeInTheDocument();
+    expect(await screen.findByText(/no tiene WebGL/, {}, { timeout: 3000 })).toBeInTheDocument();
+    expect(screen.getByText('Tensión del hilo [N]')).toBeInTheDocument();
+    const body = calls.find((c) => c.url.endsWith('/simulate'))?.body as {
+      include_geometry: boolean;
+    };
+    expect(body.include_geometry).toBe(true);
+  });
 });

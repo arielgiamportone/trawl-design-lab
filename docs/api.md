@@ -17,6 +17,7 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | GET | `/errata` | Erratas del libro Excel original. |
 | POST | `/design` | Calcula un caso de diseño completo. |
 | POST | `/design/plan` | Plano SVG del caso: lámina técnica (`sheet`) o escala real (`scale`). |
+| POST | `/design/layout` | Disposición 2D de la red (polígonos por plano, en metros; `variant`, `mode` = `schematic` o `true_scale`) para el editor interactivo. |
 | POST | `/optimize` | Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial). |
 | POST | `/optimize/scaled-net` | Red escalada por `s` (mismas mallas y materiales), para usar el diseño optimizado. |
 | POST | `/simulate` | Simula la forma de equilibrio de la red a varias velocidades (experimental). |

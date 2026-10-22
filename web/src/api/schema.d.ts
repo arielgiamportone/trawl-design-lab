@@ -184,6 +184,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/design/layout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Design Layout
+         * @description Disposición 2D de la red (polígonos por plano, en metros) para el editor interactivo.
+         *
+         *     Es la misma geometría que dibujan la lámina (``schematic``, malla estirada) y la escala real
+         *     (``true_scale``, relingada); no corre el caso completo.
+         */
+        post: operations["design_layout_design_layout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/optimize": {
         parameters: {
             query?: never;
@@ -530,6 +553,98 @@ export interface components {
             status: string;
             /** Version */
             version: string;
+        };
+        /**
+         * LayoutPlane
+         * @description Paneles de un plano (dorso, vientre o costado) y su recuadro ``(xmin, ymin, xmax, ymax)``.
+         */
+        LayoutPlane: {
+            /** Plane */
+            plane: string;
+            /** Bbox */
+            bbox: [
+                number,
+                number,
+                number,
+                number
+            ];
+            /** Mouth Y */
+            mouth_y: number;
+            /** Shapes */
+            shapes: components["schemas"]["LayoutShape"][];
+        };
+        /**
+         * LayoutResponse
+         * @description Resultado de ``POST /design/layout``: la disposición 2D de la red, por plano.
+         */
+        LayoutResponse: {
+            /** Net Id */
+            net_id: string;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "schematic" | "true_scale";
+            /** Bbox */
+            bbox: [
+                number,
+                number,
+                number,
+                number
+            ];
+            /** Planes */
+            planes: components["schemas"]["LayoutPlane"][];
+        };
+        /**
+         * LayoutShape
+         * @description Polígono de un panel en un plano (``trawlkit.drawing.layout.PanelShape``), en metros.
+         *
+         *     ``y`` crece desde la boca hacia la bolsa; ``x = 0`` es el eje de la red. ``points`` va en
+         *     sentido horario desde la esquina superior izquierda (un borde de 0 mallas da un triángulo).
+         */
+        LayoutShape: {
+            /** Id */
+            id: string;
+            /** Plane */
+            plane: string;
+            /** Section */
+            section: string;
+            /**
+             * Side
+             * @enum {string}
+             */
+            side: "left" | "right" | "center";
+            /** Points */
+            points: [
+                number,
+                number
+            ][];
+            /** Y Top */
+            y_top: number;
+            /** Y Bottom */
+            y_bottom: number;
+            /** X Top */
+            x_top: [
+                number,
+                number
+            ];
+            /** X Bottom */
+            x_bottom: [
+                number,
+                number
+            ];
+            /** Meshes Top */
+            meshes_top: number;
+            /** Meshes Bottom */
+            meshes_bottom: number;
+            /** Meshes Depth */
+            meshes_depth: number;
+            /** Mesh Mm */
+            mesh_mm: number;
+            /** Hanging Ratio */
+            hanging_ratio: number | null;
+            /** Cut Code */
+            cut_code: string | null;
         };
         /**
          * NetSpec
@@ -1198,6 +1313,42 @@ export interface operations {
                 };
                 content: {
                     "image/svg+xml": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    design_layout_design_layout_post: {
+        parameters: {
+            query?: {
+                variant?: "std" | "mod";
+                mode?: "schematic" | "true_scale";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesignRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LayoutResponse"];
                 };
             };
             /** @description Validation Error */

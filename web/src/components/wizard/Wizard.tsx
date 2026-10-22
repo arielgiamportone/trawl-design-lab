@@ -10,7 +10,7 @@ import { STEPS } from './steps';
 const STEP_KEY = 'trawl-design-lab:wizard-step';
 
 /** Modo guiado: el mismo caso de diseño, en cuatro pasos y con diagnóstico en lenguaje llano. */
-export function Wizard({ onExpert }: { onExpert: () => void }) {
+export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
   const { catalogs, errors } = useCase();
   const [step, setStepState] = useState<number>(() => {
     const s = loadJson<number>(STEP_KEY);

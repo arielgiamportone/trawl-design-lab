@@ -131,6 +131,46 @@ def _net(value: str | NetSpec | None) -> NetSpec | None:
     return load_net(value)
 
 
+def layout_of(net: str | NetSpec, mode: str = "schematic") -> dict[str, Any]:
+    """Disposición 2D de la red (``layout_net``) como datos serializables, por plano."""
+    from trawlkit.drawing.layout import layout_net
+
+    spec = _net(net)
+    assert spec is not None
+    lay = layout_net(spec, mode="true_scale" if mode == "true_scale" else "schematic")
+    planes = []
+    for plane in lay.planes:
+        shapes = [
+            {
+                "id": s.id,
+                "plane": s.plane,
+                "section": str(s.section),
+                "side": s.side,
+                "points": [list(p) for p in s.points],
+                "y_top": s.y_top,
+                "y_bottom": s.y_bottom,
+                "x_top": list(s.x_top),
+                "x_bottom": list(s.x_bottom),
+                "meshes_top": s.meshes_top,
+                "meshes_bottom": s.meshes_bottom,
+                "meshes_depth": s.meshes_depth,
+                "mesh_mm": s.mesh_mm,
+                "hanging_ratio": s.hanging_ratio,
+                "cut_code": s.cut_code,
+            }
+            for s in lay.shapes[plane]
+        ]
+        planes.append(
+            {
+                "plane": plane,
+                "bbox": list(lay.plane_bbox(plane)),
+                "mouth_y": lay.mouth_y(plane),
+                "shapes": shapes,
+            }
+        )
+    return {"net_id": lay.net_id, "mode": lay.mode, "bbox": list(lay.bbox), "planes": planes}
+
+
 def _pick(value: Any, presets: dict[str, Any], kind: str) -> Any:
     if value is None:
         return next(iter(presets.values()))

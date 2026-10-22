@@ -20,7 +20,7 @@ const OVERALL_TEXT: Record<Tone, string> = {
   info: '',
 };
 
-export function StepResult({ onExpert }: { onExpert: () => void }) {
+export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
   const { design, state, update } = useCase();
   const d = design.data;
   if (design.error && !d) {
@@ -82,8 +82,11 @@ export function StepResult({ onExpert }: { onExpert: () => void }) {
             Probar a {fmtFixed(reachable, 1)} kn (máxima viable)
           </button>
         )}
-        <button type="button" className="btn primary" onClick={onExpert}>
+        <button type="button" className="btn primary" onClick={() => onExpert()}>
           Ver el detalle técnico (modo experto)
+        </button>
+        <button type="button" className="btn" onClick={() => onExpert('diseno')}>
+          Ajustar la red sobre el plano
         </button>
       </div>
       <details className="accordion">

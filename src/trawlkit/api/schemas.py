@@ -284,6 +284,49 @@ class SimulateResponse(BaseModel):
     runtime_s: float
 
 
+class LayoutShape(BaseModel):
+    """Polígono de un panel en un plano (``trawlkit.drawing.layout.PanelShape``), en metros.
+
+    ``y`` crece desde la boca hacia la bolsa; ``x = 0`` es el eje de la red. ``points`` va en
+    sentido horario desde la esquina superior izquierda (un borde de 0 mallas da un triángulo).
+    """
+
+    id: str
+    plane: str
+    section: str
+    side: Literal["left", "right", "center"]
+    points: list[tuple[float, float]]
+    y_top: float
+    y_bottom: float
+    x_top: tuple[float, float]
+    x_bottom: tuple[float, float]
+    meshes_top: int
+    meshes_bottom: int
+    meshes_depth: int
+    mesh_mm: float
+    hanging_ratio: float | None
+    cut_code: str | None
+
+
+class LayoutPlane(BaseModel):
+    """Paneles de un plano (dorso, vientre o costado) y su recuadro ``(xmin, ymin, xmax, ymax)``."""
+
+    plane: str
+    bbox: tuple[float, float, float, float]
+    mouth_y: float
+    shapes: list[LayoutShape]
+
+
+class LayoutResponse(BaseModel):
+    """Resultado de ``POST /design/layout``: la disposición 2D de la red, por plano."""
+
+    net_id: str
+    mode: Literal["schematic", "true_scale"]
+    bbox: tuple[float, float, float, float]
+    planes: list[LayoutPlane]
+
+
+LayoutMode = Literal["schematic", "true_scale"]
 PlanView = Literal["sheet", "scale"]
 Variant = Literal["std", "mod"]
 ReportFormat = Literal["html", "pdf", "xlsx"]

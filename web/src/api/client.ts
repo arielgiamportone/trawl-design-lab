@@ -24,6 +24,8 @@ export type SimEngineRow = S['SimEngineRow'];
 export type PlanView = 'sheet' | 'scale';
 export type Variant = 'std' | 'mod';
 export type ReportFormat = 'html' | 'pdf' | 'xlsx';
+export type LayoutMode = 'schematic' | 'true_scale';
+export type LayoutResponse = S['LayoutResponse'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -121,6 +123,15 @@ export const api = {
   ): Promise<string> {
     const res = await post(`/design/plan?view=${view}&variant=${variant}`, req, signal);
     return res.text();
+  },
+  async layout(
+    req: DesignRequest,
+    variant: Variant = 'std',
+    mode: LayoutMode = 'schematic',
+    signal?: AbortSignal,
+  ): Promise<LayoutResponse> {
+    const res = await post(`/design/layout?variant=${variant}&mode=${mode}`, req, signal);
+    return (await res.json()) as LayoutResponse;
   },
   async report(req: DesignRequest, format: ReportFormat, signal?: AbortSignal): Promise<Blob> {
     const res = await post(`/design/report?format=${format}`, req, signal);

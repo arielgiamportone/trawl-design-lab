@@ -284,6 +284,75 @@
     }
    }
   },
+  "/design/layout": {
+   "post": {
+    "summary": "Design Layout",
+    "description": "Disposición 2D de la red (polígonos por plano, en metros) para el editor interactivo.\n\nEs la misma geometría que dibujan la lámina (``schematic``, malla estirada) y la escala real\n(``true_scale``, relingada); no corre el caso completo.",
+    "operationId": "design_layout_design_layout_post",
+    "parameters": [
+     {
+      "name": "variant",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "std",
+        "mod"
+       ],
+       "type": "string",
+       "default": "std",
+       "title": "Variant"
+      }
+     },
+     {
+      "name": "mode",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "schematic",
+        "true_scale"
+       ],
+       "type": "string",
+       "default": "schematic",
+       "title": "Mode"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LayoutResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/optimize": {
    "post": {
     "summary": "Optimize",
@@ -1284,6 +1353,242 @@
     ],
     "title": "Health",
     "description": "Estado del servicio."
+   },
+   "LayoutPlane": {
+    "properties": {
+     "plane": {
+      "type": "string",
+      "title": "Plane"
+     },
+     "bbox": {
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "type": "array",
+      "maxItems": 4,
+      "minItems": 4,
+      "title": "Bbox"
+     },
+     "mouth_y": {
+      "type": "number",
+      "title": "Mouth Y"
+     },
+     "shapes": {
+      "items": {
+       "$ref": "#/components/schemas/LayoutShape"
+      },
+      "type": "array",
+      "title": "Shapes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "plane",
+     "bbox",
+     "mouth_y",
+     "shapes"
+    ],
+    "title": "LayoutPlane",
+    "description": "Paneles de un plano (dorso, vientre o costado) y su recuadro ``(xmin, ymin, xmax, ymax)``."
+   },
+   "LayoutResponse": {
+    "properties": {
+     "net_id": {
+      "type": "string",
+      "title": "Net Id"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "schematic",
+       "true_scale"
+      ],
+      "title": "Mode"
+     },
+     "bbox": {
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "type": "array",
+      "maxItems": 4,
+      "minItems": 4,
+      "title": "Bbox"
+     },
+     "planes": {
+      "items": {
+       "$ref": "#/components/schemas/LayoutPlane"
+      },
+      "type": "array",
+      "title": "Planes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "net_id",
+     "mode",
+     "bbox",
+     "planes"
+    ],
+    "title": "LayoutResponse",
+    "description": "Resultado de ``POST /design/layout``: la disposición 2D de la red, por plano."
+   },
+   "LayoutShape": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "plane": {
+      "type": "string",
+      "title": "Plane"
+     },
+     "section": {
+      "type": "string",
+      "title": "Section"
+     },
+     "side": {
+      "type": "string",
+      "enum": [
+       "left",
+       "right",
+       "center"
+      ],
+      "title": "Side"
+     },
+     "points": {
+      "items": {
+       "prefixItems": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "number"
+        }
+       ],
+       "type": "array",
+       "maxItems": 2,
+       "minItems": 2
+      },
+      "type": "array",
+      "title": "Points"
+     },
+     "y_top": {
+      "type": "number",
+      "title": "Y Top"
+     },
+     "y_bottom": {
+      "type": "number",
+      "title": "Y Bottom"
+     },
+     "x_top": {
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "type": "array",
+      "maxItems": 2,
+      "minItems": 2,
+      "title": "X Top"
+     },
+     "x_bottom": {
+      "prefixItems": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "number"
+       }
+      ],
+      "type": "array",
+      "maxItems": 2,
+      "minItems": 2,
+      "title": "X Bottom"
+     },
+     "meshes_top": {
+      "type": "integer",
+      "title": "Meshes Top"
+     },
+     "meshes_bottom": {
+      "type": "integer",
+      "title": "Meshes Bottom"
+     },
+     "meshes_depth": {
+      "type": "integer",
+      "title": "Meshes Depth"
+     },
+     "mesh_mm": {
+      "type": "number",
+      "title": "Mesh Mm"
+     },
+     "hanging_ratio": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hanging Ratio"
+     },
+     "cut_code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cut Code"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "plane",
+     "section",
+     "side",
+     "points",
+     "y_top",
+     "y_bottom",
+     "x_top",
+     "x_bottom",
+     "meshes_top",
+     "meshes_bottom",
+     "meshes_depth",
+     "mesh_mm",
+     "hanging_ratio",
+     "cut_code"
+    ],
+    "title": "LayoutShape",
+    "description": "Polígono de un panel en un plano (``trawlkit.drawing.layout.PanelShape``), en metros.\n\n``y`` crece desde la boca hacia la bolsa; ``x = 0`` es el eje de la red. ``points`` va en\nsentido horario desde la esquina superior izquierda (un borde de 0 mallas da un triángulo)."
    },
    "NetSpec": {
     "properties": {

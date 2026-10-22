@@ -8,6 +8,7 @@ import {
   PANEL_FIELD_ORDER,
   PANEL_FIELDS,
   validateField,
+  withEdit,
   type PanelEdits,
   type PanelField,
 } from '../lib/panels';
@@ -77,19 +78,7 @@ export function PanelTable({ spec, edits, setEdits }: TableProps) {
     field: PanelField,
     text: string,
     original: number | null | undefined,
-  ) =>
-    setEdits((e) => {
-      const next: PanelEdits = { ...e, [pid]: { ...e[pid], [field]: text } };
-      // si vuelve al valor original y es válido, se quita la edición
-      const r = validateField(field, text);
-      if ((r.ok && r.value === (original ?? null)) || (text.trim() === '' && original == null)) {
-        const p = { ...next[pid] };
-        delete p[field];
-        if (Object.keys(p).length === 0) delete next[pid];
-        else next[pid] = p;
-      }
-      return next;
-    });
+  ) => setEdits((e) => withEdit(e, pid, field, text, original));
 
   return (
     <>

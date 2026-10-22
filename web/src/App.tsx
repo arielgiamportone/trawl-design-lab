@@ -5,6 +5,8 @@ import { ProjectBar } from './components/ProjectBar';
 import { Results } from './components/Results';
 import { Wizard } from './components/wizard/Wizard';
 import { initialMode, saveMode, type UiMode } from './lib/mode';
+import { saveJson } from './lib/storage';
+import { TAB_KEY } from './lib/tabs';
 import { CaseProvider } from './state/CaseProvider';
 import { ConnectionProvider } from './state/ConnectionProvider';
 
@@ -26,7 +28,12 @@ export function App() {
         </div>
         {mode === 'simple' ? (
           <main id="resultados" className="wizard-layout" tabIndex={-1} aria-label="Diseño guiado">
-            <Wizard onExpert={() => setMode('expert')} />
+            <Wizard
+              onExpert={(tab) => {
+                if (tab) saveJson(TAB_KEY, tab);
+                setMode('expert');
+              }}
+            />
           </main>
         ) : (
           <div className="layout">
