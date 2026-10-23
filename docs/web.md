@@ -155,6 +155,32 @@ En el modo guiado, el paso «Operación» pide el **tipo de fondo** (suma el roc
 la demanda del motor, y el diagnóstico lo explica) y la **captura esperada por lance** (valor
 inicial del lance progresivo).
 
+## Explorador animado: condiciones en funcionamiento
+
+La tercera vista de «Simulación», **«Explorador animado»** ({doc}`23_mar_real`,
+`POST /simulate/explore`), recorre una variable y anima cómo cambian la red, los portones y los
+cables:
+
+- **Variables**: captura en el copo, velocidad, cable filado, nivel de ensuciamiento, corriente a
+  lo largo del rumbo y rozamiento del tren con el fondo. Se eligen el rango y la cantidad de
+  estados (3–8), sobre un escenario base: velocidad, captura, fondo, ensuciamiento (red limpia,
+  algas en las alas, medusas en el copo, ensuciamiento general), corriente, cable y resolución.
+- **Animación 3D**: paño, relingas, bridas y patentes, portones (placas) y cables hasta el buque,
+  con flechas rojas proporcionales al tiro de cada cable. El paño se colorea por tensión, por
+  contacto con el fondo o por ensuciamiento. El encuadre es «red y portones» o «con cables hasta
+  el buque». Entre los estados calculados la forma se interpola: la animación muestra cómo cambia
+  el equilibrio, no una simulación dinámica en el tiempo.
+- **Línea de tiempo**: reproducir/pausa, velocidad 0,5×–2×, paso a paso y deslizador. Con «reducir
+  movimiento» del sistema no hay reproducción automática.
+- **Tablero** sincronizado con el estado que se ve: separación de portones, aberturas, tiro,
+  tensión y ángulo del cable, combustible (L/h y L/kg) y áreas barrida y en contacto con el
+  fondo. Cada indicador muestra la diferencia con el primer estado: verde si mejora, rojo si
+  empeora. Los gráficos contra la variable llevan un cursor en el estado actual.
+- **Exportar**: PNG del cuadro actual y video WebM de la animación completa.
+
+Se llega también desde el lance progresivo («Animar este lance en el explorador») y desde el
+resultado del modo guiado («Ver cómo trabaja la red»).
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

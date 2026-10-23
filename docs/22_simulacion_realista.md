@@ -106,18 +106,23 @@ penetración de BENTHIS {cite:p}`eigaard2016`:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
-from IPython.display import Markdown
+import _plots_v as PV
 
-rows = [
-    "| Fondo | μ tren y paño | μ portón | Penetración |",
-    "|---|---|---|---|",
-]
-for s in seabeds():
-    rows.append(
-        f"| {s.name} | {s.mu_gear.nominal:.2f} ({s.mu_gear.low:.2f}–{s.mu_gear.high:.2f}) "
-        f"| {s.mu_door.nominal:.2f} ({s.mu_door.low:.2f}–{s.mu_door.high:.2f}) | {s.penetration} |"
-    )
-Markdown("\n".join(rows).replace(".", ","))
+def es(x: float) -> str:
+    return f"{x:.2f}".replace(".", ",")
+
+PV.md_table(
+    ["Fondo", "μ tren y paño", "μ portón", "Penetración"],
+    [
+        [
+            s.name,
+            f"{es(s.mu_gear.nominal)} ({es(s.mu_gear.low)}–{es(s.mu_gear.high)})",
+            f"{es(s.mu_door.nominal)} ({es(s.mu_door.low)}–{es(s.mu_door.high)})",
+            s.penetration,
+        ]
+        for s in seabeds()
+    ],
+)
 ```
 
 No existe una tabla publicada de coeficientes de rozamiento por sedimento para artes de arrastre

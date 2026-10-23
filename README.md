@@ -112,7 +112,8 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 9. Interfaz con dos modos: asistente guiado (por defecto) y experto; proyectos, deshacer, ayuda contextual ✔
 10. Diseño interactivo de la red sobre el plano, con recálculo en vivo y vista 3D ✔
 11. Simulador realista: captura en el copo, tipo de fondo y portones acoplados (11.1 ✔);
-    ensuciamiento, corriente, energía y huella; zoom malla a malla y selectividad; incertidumbre
+    ensuciamiento, corriente, energía, huella y explorador animado (11.2 ✔); zoom malla a malla y
+    selectividad; incertidumbre
 12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor
 13. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
 

@@ -26,6 +26,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   `POST /simulate/haul`, `GET /catalog/seabeds`). La separación de portones de la FAO A-3 a 3 kn
   pasa de 32,5 m (regla del motor) a 46,8 m frente a 51,4 m de DynamiT.
 - Motor: parámetro `seabed` que suma el rozamiento del tren y de los portones a la demanda.
+- **Simulador realista (Fase 11.2), explorador animado**:
+  - ensuciamiento por zona (`data/fouling.yaml`, A VERIFICAR, a partir de Swift et al. 2006 y
+    Bi et al. 2015);
+  - corriente a lo largo del rumbo, largo de cable filado y duración del lance;
+  - salidas de energía (potencia de remolque, L/h, L/kg, L/km²) y huella (anchos y áreas barrida
+    y en contacto, penetración; BENTHIS);
+  - `trawlkit.sim.explore`, `POST /simulate/explore` y `GET /catalog/fouling`;
+  - en la web, el «Explorador animado»: animación 3D del aparejo completo, línea de tiempo,
+    tablero sincronizado, gráficos con cursor y exportación PNG/WebM;
+  - capítulo 23 «Mar real y condiciones en funcionamiento».
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
 - `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API
@@ -36,6 +46,8 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   simuladores del mercado; 7 referencias nuevas (6 verificadas en Crossref).
 
 ### Corregido
+- Libro: las tablas generadas desde código en los capítulos 22 y 23 salían como texto (MyST-NB
+  no renderiza tablas Markdown en las salidas); ahora son tablas HTML.
 - La API de Render quedaba sin redesplegar (404 en `/simulate/haul`, `/catalog/seabeds` y
   `/design/layout`): se quitó el `buildFilter` del Blueprint.
 

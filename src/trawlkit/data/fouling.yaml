@@ -6,9 +6,9 @@
 #   w·(1 + weight_gain·f).
 # A VERIFICAR: coeficientes estimados a partir de la literatura de redes de acuicultura (Swift et
 # al. 2006, la solidez de una red ensuciada puede duplicarse y su arrastre crecer 2–3 veces; Bi et
-# al. 2018, con hidroides el arrastre crece mucho más). En arrastre, algas o medusas tapan zonas
+# al. 2015, simulación de una jaula ensuciada a escala real). En arrastre, algas o medusas tapan zonas
 # puntuales del paño durante el lance; no hay mediciones publicadas para artes de arrastre.
-source: estimación a partir de Swift et al. 2006 y Bi et al. 2018 (A VERIFICAR)
+source: estimación a partir de Swift et al. 2006 y Bi et al. 2015 (A VERIFICAR)
 coefficients:
   diameter_gain: 1.5
   cn_gain: 0.3
