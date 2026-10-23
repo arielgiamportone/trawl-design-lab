@@ -370,13 +370,23 @@ def _net_length_m(spec: NetSpec) -> float:
     return sum(float(p.meshes_depth) * float(p.mesh_mm) for p in spec.panels) / 1000.0
 
 
-def estimate_sim_cost(n_speeds: int, resolution: int, net: NetSpec | None = None) -> float:
+#: Con portones acoplados (cables hasta el buque) cada equilibrio cuesta más: modos lentos de
+#: la catenaria y del portón.
+SIM_COUPLED_FACTOR = 2.5
+
+
+def estimate_sim_cost(
+    n_speeds: int, resolution: int, net: NetSpec | None = None, *, coupled: bool = False
+) -> float:
     """Tiempo estimado de una simulación [s]: costo por velocidad × velocidades × tamaño.
 
     La grilla tiene ``resolution`` filas cada 9 m de red, así que el costo crece con el largo de
-    la red; se escala con (largo / largo de la FAO A-3)^1,5, como mínimo 0,5.
+    la red; se escala con (largo / largo de la FAO A-3)^1,5, como mínimo 0,5. Con portones
+    acoplados se multiplica por :data:`SIM_COUPLED_FACTOR`.
     """
     per = SIM_COST_PER_SPEED_S[max(min(resolution, 10), 2)]
+    if coupled:
+        per *= SIM_COUPLED_FACTOR
     size = 1.0
     ref = net_presets().get("fao_a3_standard")
     if net is not None and ref is not None:
@@ -411,6 +421,8 @@ def simulate_case(
     door_spread_m: float | None = None,
     include_geometry: bool = False,
     max_projections: int = 3,
+    mu: float | None = None,
+    scenario: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Corre el motor y :func:`trawlkit.sim.sweep`, y arma la respuesta de ``POST /simulate``.
 
@@ -423,13 +435,15 @@ def simulate_case(
 
     import numpy as np
 
-    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT, sweep
+    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT, DEFAULT_MU, sweep
     from trawlkit.sim.render import projections_svg
     from trawlkit.sim.validation import DYNAMIT
 
     t0 = time.perf_counter()
     case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels, compat=compat)
-    estimate = estimate_sim_cost(len(speeds_kn), resolution, case.net)
+    sc = make_scenario(scenario)
+    coupled = bool(sc and sc.coupled_doors)
+    estimate = estimate_sim_cost(len(speeds_kn), resolution, case.net, coupled=coupled)
     max_cost = sim_max_cost_s()
     if estimate > max_cost:
         raise BadRequestError(
@@ -449,6 +463,8 @@ def simulate_case(
             ct=DEFAULT_CT if ct is None else ct,
             knot_factor=0.0 if knot_factor is None else knot_factor,
             door_spread_m=door_spread_m,
+            mu=DEFAULT_MU if mu is None else mu,
+            scenario=sc,
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
         raise BadRequestError(f"no se puede simular el caso: {exc}") from exc
@@ -532,6 +548,112 @@ def simulate_case(
             "ct": DEFAULT_CT if ct is None else ct,
             "knot_factor": 0.0 if knot_factor is None else knot_factor,
             "door_spread_m": door_spread_m,
+            "mu": DEFAULT_MU if mu is None else mu,
+            "scenario": None if sc is None else dataclasses.asdict(sc),
+        },
+        "estimated_s": estimate,
+        "runtime_s": time.perf_counter() - t0,
+    }
+    jsonable: dict[str, Any] = to_jsonable(out)
+    return jsonable
+
+
+def make_scenario(data: dict[str, Any] | None) -> Any:
+    """``trawlkit.sim.Scenario`` desde el cuerpo del pedido (``None`` = simulador básico)."""
+    from trawlkit.sim import Scenario
+
+    if data is None:
+        return None
+    try:
+        return Scenario(**data)
+    except (ValueError, KeyError) as exc:
+        raise BadRequestError(f"escenario inválido: {exc}") from exc
+
+
+def seabed_catalogue() -> list[dict[str, Any]]:
+    """Catálogo de tipos de fondo (``GET /catalog/seabeds``)."""
+    from trawlkit.rigging import seabeds
+
+    return [s.to_dict() for s in seabeds()]
+
+
+def haul_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    compat: str = "corrected",
+    speed_kn: float = 3.0,
+    catches_kg: list[float],
+    resolution: int = 4,
+    cn: float | None = None,
+    ct: float | None = None,
+    scenario: dict[str, Any] | None = None,
+    include_geometry: bool = False,
+) -> dict[str, Any]:
+    """Lance progresivo (``POST /simulate/haul``): :func:`trawlkit.sim.haul` y el motor."""
+    import time
+
+    import numpy as np
+
+    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT, haul
+
+    t0 = time.perf_counter()
+    sc = make_scenario({**(scenario or {}), "catch_kg": 0.0})
+    params = {"seabed": sc.seabed} if sc.seabed else {}
+    case = build_case(
+        net=net,
+        vessel=vessel,
+        door=door,
+        class_vessels=class_vessels,
+        compat=compat,
+        params=params,
+    )
+    estimate = estimate_sim_cost(len(catches_kg), resolution, case.net, coupled=sc.coupled_doors)
+    max_cost = sim_max_cost_s()
+    if estimate > max_cost:
+        raise BadRequestError(
+            f"lance demasiado costoso: ~{estimate:.0f} s estimados para {len(catches_kg)} pasos "
+            f"a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o los pasos"
+        )
+    result = run_case(case)
+    try:
+        sims = haul(
+            result,
+            speed_kn,
+            catches_kg,
+            scenario=sc,
+            resolution=resolution,
+            cn=DEFAULT_CN if cn is None else cn,
+            ct=DEFAULT_CT if ct is None else ct,
+        )
+    except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
+        raise BadRequestError(f"no se puede simular el lance: {exc}") from exc
+    ref = dataclasses.replace(case, speeds_kn=tuple(sorted({*case.speeds_kn, float(speed_kn)})))
+    try:
+        eng = run(ref)
+    except (ValueError, ZeroDivisionError, IndexError):
+        eng = result
+    ekn = np.asarray(eng.case.speeds_kn, dtype=float)
+    demand = float(np.interp(speed_kn, ekn, np.asarray(eng.performance.demand.std, dtype=float)))
+    out = {
+        "results": [r.to_dict(geometry=include_geometry) for r in sims],
+        "engine": {
+            "speed_kn": float(speed_kn),
+            "demand_kgf": demand,
+            "door_spread_m": float(eng.doors.spread_m),
+            "seabed_friction_kgf": float(eng.performance.seabed_friction_kgf),
+        },
+        "settings": {
+            "net_id": case.net.id,
+            "vessel_id": case.vessel.id,
+            "door_id": case.door.id,
+            "compat": case.compat.value,
+            "resolution": resolution,
+            "cn": DEFAULT_CN if cn is None else cn,
+            "ct": DEFAULT_CT if ct is None else ct,
+            "scenario": dataclasses.asdict(sc),
         },
         "estimated_s": estimate,
         "runtime_s": time.perf_counter() - t0,

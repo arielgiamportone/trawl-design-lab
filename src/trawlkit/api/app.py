@@ -18,6 +18,8 @@ from trawlkit.api.schemas import (
     DesignRequest,
     DesignResponse,
     ErratumOut,
+    HaulRequest,
+    HaulResponse,
     Health,
     LayoutMode,
     LayoutResponse,
@@ -27,6 +29,7 @@ from trawlkit.api.schemas import (
     PlanView,
     ReportFormat,
     ScaledNetRequest,
+    SeabedOut,
     SimulateRequest,
     SimulateResponse,
     Variant,
@@ -94,6 +97,12 @@ def list_vessels() -> list[Vessel]:
 def list_doors() -> list[Door]:
     """Portones del catálogo con su polar CL/CD."""
     return list(service.door_presets().values())
+
+
+@app.get("/catalog/seabeds", response_model=list[SeabedOut])
+def list_seabeds() -> list[dict[str, Any]]:
+    """Tipos de fondo con el rozamiento del tren y de los portones (nominal y rango)."""
+    return service.seabed_catalogue()
 
 
 @app.get("/params", response_model=list[ParamInfo])
@@ -206,6 +215,27 @@ def simulate(req: SimulateRequest) -> dict[str, Any]:
         ct=req.ct,
         knot_factor=req.knot_factor,
         door_spread_m=req.door_spread_m,
+        include_geometry=req.include_geometry,
+        mu=req.mu,
+        scenario=None if req.scenario is None else req.scenario.model_dump(),
+    )
+
+
+@app.post("/simulate/haul", response_model=HaulResponse)
+def simulate_haul(req: HaulRequest) -> dict[str, Any]:
+    """Lance progresivo: la forma, la separación de portones y el tiro mientras entra captura."""
+    return service.haul_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        catches_kg=req.catches_kg,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
         include_geometry=req.include_geometry,
     )
 

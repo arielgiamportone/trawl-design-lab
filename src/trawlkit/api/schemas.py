@@ -196,6 +196,40 @@ SIM_SPEED_RANGE = (0.5, 6.0)
 SIM_RESOLUTION_RANGE = (2, 10)
 
 
+class ScenarioIn(BaseModel):
+    """Condiciones del lance para la simulación (ver ``trawlkit.sim.scenario``).
+
+    ``catch_kg`` captura en el copo; ``catch_bulk_density`` densidad aparente (organismos y agua
+    intersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos
+    (peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo
+    de fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y
+    de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    catch_kg: float = Field(default=0.0, ge=0.0, le=20000.0)
+    catch_bulk_density: float = Field(default=750.0, ge=200.0, le=1300.0)
+    catch_body_density: float = Field(default=1070.0, ge=900.0, le=2000.0)
+    catch_cp: float = Field(default=1.0, ge=0.0, le=3.0)
+    seabed: str | None = None
+    mu_gear: float | None = Field(default=None, ge=0.0, le=1.5)
+    mu_door: float | None = Field(default=None, ge=0.0, le=1.5)
+    coupled_doors: bool = True
+
+
+class SeabedOut(BaseModel):
+    """Tipo de fondo del catálogo, con μ nominal y rango (A VERIFICAR)."""
+
+    id: str
+    name: str
+    aliases: list[str]
+    mu_gear: dict[str, Any]
+    mu_door: dict[str, Any]
+    penetration: str
+    notes: str
+
+
 class SimulateRequest(BaseModel):
     """Simulación cuasiestática de la forma de la red (``POST /simulate``).
 
@@ -225,6 +259,8 @@ class SimulateRequest(BaseModel):
     knot_factor: float | None = Field(default=None, ge=0.0, le=10.0)
     door_spread_m: float | None = Field(default=None, gt=5.0, le=200.0)
     include_geometry: bool = False
+    mu: float | None = Field(default=None, ge=0.0, le=1.5, description="μ red–fondo")
+    scenario: ScenarioIn | None = None
 
     @model_validator(mode="after")
     def _check_speeds(self) -> SimulateRequest:
@@ -235,6 +271,57 @@ class SimulateRequest(BaseModel):
         if len(set(self.speeds_kn)) != len(self.speeds_kn):
             raise ValueError("speeds_kn no puede repetir velocidades")
         return self
+
+
+HAUL_MAX_STEPS = 8
+
+
+class HaulRequest(BaseModel):
+    """Lance progresivo (``POST /simulate/haul``): la captura crece a velocidad constante.
+
+    Cada valor de ``catches_kg`` (no decreciente, 1–8 valores) es un equilibrio que parte del
+    anterior; el resto del escenario se toma de ``scenario`` (su ``catch_kg`` se ignora).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    speed_kn: float = Field(default=3.0, ge=SIM_SPEED_RANGE[0], le=SIM_SPEED_RANGE[1])
+    catches_kg: list[float] = Field(
+        default_factory=lambda: [0.0, 250.0, 500.0, 1000.0],
+        min_length=1,
+        max_length=HAUL_MAX_STEPS,
+    )
+    resolution: int = Field(default=4, ge=2, le=6)
+    cn: float | None = Field(default=None, gt=0.0, le=3.0)
+    ct: float | None = Field(default=None, ge=0.0, le=0.5)
+    scenario: ScenarioIn = Field(default_factory=ScenarioIn)
+    include_geometry: bool = False
+
+    @model_validator(mode="after")
+    def _check_catches(self) -> HaulRequest:
+        c = self.catches_kg
+        if any(v < 0 or v > 20000 for v in c):
+            raise ValueError("cada captura debe estar entre 0 y 20000 kg")
+        if any(b < a for a, b in zip(c, c[1:], strict=False)):
+            raise ValueError("catches_kg debe ser no decreciente (la captura entra de a poco)")
+        return self
+
+
+class HaulResponse(BaseModel):
+    """Resultado de ``POST /simulate/haul``."""
+
+    results: list[dict[str, Any]]
+    """``SimResult.to_dict`` por captura, en el orden pedido."""
+    engine: dict[str, Any]
+    """Motor empírico a la misma velocidad: demanda total, DP de la regla y rozamiento."""
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
 
 
 class SimProjections(BaseModel):

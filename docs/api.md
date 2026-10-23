@@ -13,6 +13,7 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | GET | `/catalog/nets/{net_id}` | Especificación completa de una red predefinida (paneles, relingas, boyas). |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
+| GET | `/catalog/seabeds` | Tipos de fondo con el rozamiento del tren y de los portones (nominal y rango). |
 | GET | `/params` | Parámetros de diseño sobrescribibles en `DesignRequest.params`. |
 | GET | `/errata` | Erratas del libro Excel original. |
 | POST | `/design` | Calcula un caso de diseño completo. |
@@ -21,6 +22,7 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/optimize` | Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial). |
 | POST | `/optimize/scaled-net` | Red escalada por `s` (mismas mallas y materiales), para usar el diseño optimizado. |
 | POST | `/simulate` | Simula la forma de equilibrio de la red a varias velocidades (experimental). |
+| POST | `/simulate/haul` | Lance progresivo: forma, separación de portones y tiro mientras entra captura (escenario con fondo y portones acoplados). |
 | POST | `/design/report` | Informe del caso en HTML, PDF o XLSX. |
 
 ## Ejemplo

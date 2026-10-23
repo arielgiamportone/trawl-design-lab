@@ -104,6 +104,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/catalog/seabeds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Seabeds
+         * @description Tipos de fondo con el rozamiento del tren y de los portones (nominal y rango).
+         */
+        get: operations["list_seabeds_catalog_seabeds_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/params": {
         parameters: {
             query?: never;
@@ -261,6 +281,26 @@ export interface paths {
          * @description Simula la forma de equilibrio de la red a varias velocidades (experimental).
          */
         post: operations["simulate_simulate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/simulate/haul": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Haul
+         * @description Lance progresivo: la forma, la separación de portones y el tiro mientras entra captura.
+         */
+        post: operations["simulate_haul_simulate_haul_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -543,6 +583,76 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /**
+         * HaulRequest
+         * @description Lance progresivo (``POST /simulate/haul``): la captura crece a velocidad constante.
+         *
+         *     Cada valor de ``catches_kg`` (no decreciente, 1–8 valores) es un equilibrio que parte del
+         *     anterior; el resto del escenario se toma de ``scenario`` (su ``catch_kg`` se ignora).
+         */
+        HaulRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /**
+             * Speed Kn
+             * @default 3
+             */
+            speed_kn: number;
+            /** Catches Kg */
+            catches_kg?: number[];
+            /**
+             * Resolution
+             * @default 4
+             */
+            resolution: number;
+            /** Cn */
+            cn?: number | null;
+            /** Ct */
+            ct?: number | null;
+            scenario?: components["schemas"]["ScenarioIn"];
+            /**
+             * Include Geometry
+             * @default false
+             */
+            include_geometry: boolean;
+        };
+        /**
+         * HaulResponse
+         * @description Resultado de ``POST /simulate/haul``.
+         */
+        HaulResponse: {
+            /** Results */
+            results: {
+                [key: string]: unknown;
+            }[];
+            /** Engine */
+            engine: {
+                [key: string]: unknown;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
         };
         /**
          * Health
@@ -919,6 +1029,73 @@ export interface components {
             s: number;
         };
         /**
+         * ScenarioIn
+         * @description Condiciones del lance para la simulación (ver ``trawlkit.sim.scenario``).
+         *
+         *     ``catch_kg`` captura en el copo; ``catch_bulk_density`` densidad aparente (organismos y agua
+         *     intersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos
+         *     (peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo
+         *     de fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y
+         *     de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio).
+         */
+        ScenarioIn: {
+            /**
+             * Catch Kg
+             * @default 0
+             */
+            catch_kg: number;
+            /**
+             * Catch Bulk Density
+             * @default 750
+             */
+            catch_bulk_density: number;
+            /**
+             * Catch Body Density
+             * @default 1070
+             */
+            catch_body_density: number;
+            /**
+             * Catch Cp
+             * @default 1
+             */
+            catch_cp: number;
+            /** Seabed */
+            seabed?: string | null;
+            /** Mu Gear */
+            mu_gear?: number | null;
+            /** Mu Door */
+            mu_door?: number | null;
+            /**
+             * Coupled Doors
+             * @default true
+             */
+            coupled_doors: boolean;
+        };
+        /**
+         * SeabedOut
+         * @description Tipo de fondo del catálogo, con μ nominal y rango (A VERIFICAR).
+         */
+        SeabedOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Aliases */
+            aliases: string[];
+            /** Mu Gear */
+            mu_gear: {
+                [key: string]: unknown;
+            };
+            /** Mu Door */
+            mu_door: {
+                [key: string]: unknown;
+            };
+            /** Penetration */
+            penetration: string;
+            /** Notes */
+            notes: string;
+        };
+        /**
          * Section
          * @description Sección estructural de la red.
          * @enum {string}
@@ -1009,6 +1186,12 @@ export interface components {
              * @default false
              */
             include_geometry: boolean;
+            /**
+             * Mu
+             * @description μ red–fondo
+             */
+            mu?: number | null;
+            scenario?: components["schemas"]["ScenarioIn"] | null;
         };
         /**
          * SimulateResponse
@@ -1213,6 +1396,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Door"][];
+                };
+            };
+        };
+    };
+    list_seabeds_catalog_seabeds_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SeabedOut"][];
                 };
             };
         };
@@ -1448,6 +1651,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimulateResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_haul_simulate_haul_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HaulRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HaulResponse"];
                 };
             };
             /** @description Validation Error */

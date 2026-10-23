@@ -359,3 +359,68 @@ def test_openapi_json_is_current() -> None:
 
     current = (Path(__file__).parents[1] / "web" / "openapi.json").read_text(encoding="utf-8")
     assert current == export.render(), "regenerar con: uv run python tools/export_openapi.py"
+
+
+def test_seabed_catalogue_endpoint() -> None:
+    r = client.get("/catalog/seabeds")
+    assert r.status_code == 200
+    body = r.json()
+    assert [s["id"] for s in body] == ["mud", "sand", "mixed", "gravel", "rock"]
+    assert body[0]["mu_gear"]["range"][0] <= body[0]["mu_gear"]["nominal"]
+
+
+def test_design_with_seabed_param() -> None:
+    r = client.post("/design", json={**STD, "params": {"seabed": "gravel"}})
+    assert r.status_code == 200, r.text
+    assert r.json()["summary"]["seabed_friction_kgf"] > 0
+    assert client.post("/design", json={**STD, "params": {"seabed": "lava"}}).status_code in (
+        400,
+        422,
+    )
+
+
+def test_simulate_with_scenario() -> None:
+    r = client.post(
+        "/simulate",
+        json={
+            "net": "fao_a3_standard",
+            "speeds_kn": [3.0],
+            "resolution": 3,
+            "scenario": {"catch_kg": 500, "seabed": "sand"},
+        },
+    )
+    assert r.status_code == 200, r.text
+    res = r.json()["results"][0]
+    assert res["scenario"]["seabed"] == "sand"
+    assert res["catch"]["volume_m3"] == pytest.approx(500 / 750, rel=0.02)
+    assert res["towing_pull_kgf"] > res["drag_kgf"] > 0
+    assert 30 < res["door_spread_m"] < 70
+    assert r.json()["settings"]["scenario"]["catch_kg"] == 500
+
+
+def test_haul_endpoint_and_validation() -> None:
+    r = client.post(
+        "/simulate/haul",
+        json={
+            "net": "fao_a3_standard",
+            "speed_kn": 3.0,
+            "catches_kg": [0, 600],
+            "resolution": 3,
+            "scenario": {"seabed": "mud"},
+        },
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    a, b = body["results"]
+    assert b["door_spread_m"] < a["door_spread_m"]
+    assert b["towing_pull_kgf"] > a["towing_pull_kgf"]
+    assert body["engine"]["seabed_friction_kgf"] > 0
+    assert body["engine"]["demand_kgf"] > 0
+    for bad in (
+        {"catches_kg": [500, 100]},
+        {"catches_kg": []},
+        {"scenario": {"seabed": "lava"}},
+        {"scenario": {"catch_cp": 9}},
+        {"resolution": 9},
+    ):
+        assert client.post("/simulate/haul", json=bad).status_code in (400, 422), bad

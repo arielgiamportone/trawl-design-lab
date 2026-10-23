@@ -535,6 +535,7 @@ def sweep(
     qoi_tol: float = 3e-3,
     max_iter: int = 40_000,
     coarse_resolution: int | None = 4,
+    scenario: Scenario | None = None,
 ) -> list[SimResult]:
     """:func:`simulate` a varias velocidades; cada una parte de la forma de la anterior.
 
@@ -557,7 +558,12 @@ def sweep(
     for v, dp in zip(speeds, dps, strict=True):
         if model is None:
             spec, rig, _ = _resolve(case, dp)
-            model = build_model(spec, rig, resolution=resolution)
+            model = build_model(
+                spec,
+                rig,
+                resolution=resolution,
+                coupled_doors=bool(scenario and scenario.coupled_doors),
+            )
         res = simulate(
             case,
             v,
@@ -574,6 +580,7 @@ def sweep(
             coarse_resolution=coarse_resolution,
             x_init=prev,
             model=model,
+            scenario=scenario,
         )
         prev = res.nodes
         out.append(res)
