@@ -59,6 +59,11 @@ export function haulRequest(base: DesignRequest, f: HaulForm, geometry = true): 
       mu_gear: null,
       mu_door: null,
       coupled_doors: f.coupledDoors,
+      fouling: null,
+      fouling_level: 1,
+      current_kn: 0,
+      warp_length_m: null,
+      haul_hours: 2,
     },
     include_geometry: geometry,
   };

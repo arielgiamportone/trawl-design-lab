@@ -29,6 +29,9 @@ export type ScenarioIn = S['ScenarioIn'];
 export type SeabedOut = S['SeabedOut'];
 export type HaulRequest = S['HaulRequest'];
 export type HaulResponse = S['HaulResponse'];
+export type ExploreRequest = S['ExploreRequest'];
+export type ExploreResponse = S['ExploreResponse'];
+export type FoulingOut = S['FoulingOut'];
 export type LayoutResponse = S['LayoutResponse'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
@@ -167,6 +170,11 @@ export const api = {
     return (await res.json()) as NetSpec;
   },
   seabeds: (signal?: AbortSignal) => getJson<SeabedOut[]>('/catalog/seabeds', signal),
+  fouling: (signal?: AbortSignal) => getJson<FoulingOut[]>('/catalog/fouling', signal),
+  async explore(req: ExploreRequest, signal?: AbortSignal): Promise<ExploreResponse> {
+    const res = await post('/simulate/explore', req, signal);
+    return (await res.json()) as ExploreResponse;
+  },
   async haul(req: HaulRequest, signal?: AbortSignal): Promise<HaulResponse> {
     const res = await post('/simulate/haul', req, signal);
     return (await res.json()) as HaulResponse;

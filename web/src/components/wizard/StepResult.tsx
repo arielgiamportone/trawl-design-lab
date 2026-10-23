@@ -1,5 +1,8 @@
 import { ApiError } from '../../api/client';
 import { chapterUrl } from '../../lib/docs';
+import { catchPreset, EXPLORE_FORM_KEY } from '../../lib/explore';
+import { remember } from '../../lib/memo';
+import { SIM_VIEW_KEY } from '../../lib/simulate';
 import { fmtFixed } from '../../lib/format';
 import { designPropeller, perfWindow } from '../../lib/series';
 import { assess, overall, type Tone } from '../../lib/verdict';
@@ -87,6 +90,24 @@ export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
         </button>
         <button type="button" className="btn" onClick={() => onExpert('diseno')}>
           Ajustar la red sobre el plano
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            remember(SIM_VIEW_KEY, 'explore');
+            remember(
+              EXPLORE_FORM_KEY,
+              catchPreset(
+                state.expectedCatchKg,
+                state.params.seabed || null,
+                Math.min(5, Math.max(1, Math.round(state.targetSpeed * 2) / 2)),
+              ),
+            );
+            onExpert('simulacion');
+          }}
+        >
+          Ver cómo trabaja la red (animación)
         </button>
       </div>
       <details className="accordion">

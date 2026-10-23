@@ -4,6 +4,8 @@ import design from './fixtures/design.json';
 import designExcel from './fixtures/design_excel.json';
 import doors from './fixtures/doors.json';
 import errata from './fixtures/errata.json';
+import explore from './fixtures/explore.json';
+import fouling from './fixtures/fouling.json';
 import haul from './fixtures/haul.json';
 import layout from './fixtures/layout.json';
 import netMod from './fixtures/net_mod.json';
@@ -20,6 +22,8 @@ export const fixtures = {
   designExcel,
   doors,
   errata,
+  explore,
+  fouling,
   haul,
   layout,
   netMod,
@@ -70,6 +74,8 @@ export function mockApi(
     if (path === '/params') return json(params);
     if (path === '/catalog/seabeds') return json(seabeds);
     if (path === '/simulate/haul') return json(haul);
+    if (path === '/simulate/explore') return json(explore);
+    if (path === '/catalog/fouling') return json(fouling);
     if (path === '/errata') return json(errata);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);

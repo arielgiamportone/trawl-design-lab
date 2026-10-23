@@ -96,3 +96,7 @@ export function unconverged(r: SimulateResponse): number[] {
 export function speedLabel(v: number): string {
   return v.toFixed(1).replace('.', ',');
 }
+
+/** Vista de la pestaña «Simulación» (memoria de la sesión). */
+export const SIM_VIEW_KEY = 'simulate:view';
+export type SimView = 'speeds' | 'haul' | 'explore';

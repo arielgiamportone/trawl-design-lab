@@ -11,6 +11,7 @@ import {
   haulSummary,
   type HaulForm,
 } from '../../lib/haul';
+import { catchPreset, EXPLORE_FORM_KEY } from '../../lib/explore';
 import { recall, remember } from '../../lib/memo';
 import { isSimGeometry } from '../../lib/sim3d';
 import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
@@ -24,7 +25,7 @@ const FORM_KEY = 'haul:form';
 const REQ_KEY = 'haul:request';
 
 /** Lance progresivo: la red con captura creciente, fondo elegido y portones acoplados. */
-export function Haul() {
+export function Haul({ onAnimate }: { onAnimate?: () => void }) {
   const { committed, state } = useCase();
   const ids = useId();
   const [form, setFormState] = useState<HaulForm>(() => ({
@@ -217,6 +218,21 @@ export function Haul() {
             <p className="haul-summary" data-testid="haul-summary">
               {summary}
             </p>
+          )}
+          {onAnimate && (
+            <button
+              type="button"
+              className="btn small"
+              onClick={() => {
+                remember(EXPLORE_FORM_KEY, {
+                  ...catchPreset(form.maxCatchKg, form.seabed, form.speed),
+                  resolution: form.resolution,
+                });
+                onAnimate();
+              }}
+            >
+              ▶ Animar este lance en el explorador
+            </button>
           )}
           <div className="haul-grid">
             <HaulChart

@@ -2167,3 +2167,70 @@ label.check.small {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------- Fase 11.2: explorador animado ---------- */
+.explore {
+  display: grid;
+  gap: 10px;
+}
+.explore-form .explore-var {
+  grid-column: span 2;
+}
+.explore-base {
+  grid-column: 1 / -1;
+}
+.explore-base-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px 14px;
+}
+.explore-base-grid label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.timeline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+.timeline input[type='range'] {
+  flex: 1 1 220px;
+}
+.timeline-value {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  min-width: 200px;
+}
+.timeline-play {
+  min-width: 118px;
+}
+.explore-dash {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 8px;
+}
+.explore-tools {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .explore-form .explore-var {
+    grid-column: 1 / -1;
+  }
+  .timeline-value {
+    min-width: 0;
+    flex-basis: 100%;
+  }
+}

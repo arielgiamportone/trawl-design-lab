@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../api/client';
 import { fmt, fmtFixed, fmtPct } from '../lib/format';
 import { recall, remember } from '../lib/memo';
+import { Explore } from './sim/Explore';
 import { Haul } from './sim/Haul';
 import { isSimGeometry } from '../lib/sim3d';
 import {
@@ -12,10 +13,12 @@ import {
   SIM_RESOLUTION,
   SIM_SECONDS_PER_SPEED,
   SIM_SPEEDS,
+  SIM_VIEW_KEY,
   speedLabel,
   toggleSpeed,
   unconverged,
   type SimQuality,
+  type SimView,
 } from '../lib/simulate';
 import { useCase } from '../state/useCase';
 import { ZoomStage } from './ZoomStage';
@@ -122,14 +125,11 @@ function CompareTable({ r }: { r: SimulateResponse }) {
 const roundOrNull = (v: number | null) => (v === null ? null : Math.round(v));
 const round2 = (v: number | null) => (v === null ? null : Math.round(v * 100) / 100);
 
-const VIEW_KEY = 'simulate:view';
-type SimView = 'speeds' | 'haul';
-
 /** Pestaña «Simulación»: barrido de velocidades o lance progresivo con escenario. */
 export function Simulate() {
-  const [view, setViewState] = useState<SimView>(() => recall<SimView>(VIEW_KEY) ?? 'speeds');
+  const [view, setViewState] = useState<SimView>(() => recall<SimView>(SIM_VIEW_KEY) ?? 'speeds');
   const setView = (v: SimView) => {
-    remember(VIEW_KEY, v);
+    remember(SIM_VIEW_KEY, v);
     setViewState(v);
   };
   return (
@@ -145,9 +145,22 @@ export function Simulate() {
           <button type="button" aria-pressed={view === 'haul'} onClick={() => setView('haul')}>
             Lance progresivo (captura y fondo)
           </button>
+          <button
+            type="button"
+            aria-pressed={view === 'explore'}
+            onClick={() => setView('explore')}
+          >
+            Explorador animado
+          </button>
         </div>
       </div>
-      {view === 'speeds' ? <SpeedSweep /> : <Haul />}
+      {view === 'speeds' ? (
+        <SpeedSweep />
+      ) : view === 'haul' ? (
+        <Haul onAnimate={() => setView('explore')} />
+      ) : (
+        <Explore />
+      )}
     </div>
   );
 }
