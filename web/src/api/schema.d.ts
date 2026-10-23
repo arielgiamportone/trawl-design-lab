@@ -104,6 +104,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/catalog/fouling": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Fouling
+         * @description Escenarios de ensuciamiento y colmatación de la red (nivel por zona).
+         */
+        get: operations["list_fouling_catalog_fouling_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/catalog/seabeds": {
         parameters: {
             query?: never;
@@ -281,6 +301,26 @@ export interface paths {
          * @description Simula la forma de equilibrio de la red a varias velocidades (experimental).
          */
         post: operations["simulate_simulate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/simulate/explore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Explore
+         * @description Explorador: estados de la red, los portones y los cables al recorrer una variable.
+         */
+        post: operations["simulate_explore_simulate_explore_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -564,6 +604,97 @@ export interface components {
             penalty: number | null;
         };
         /**
+         * ExploreRequest
+         * @description Explorador (``POST /simulate/explore``): estados al recorrer una variable.
+         *
+         *     ``values`` (2–10) son los valores de ``variable``; cada estado parte del anterior y todos
+         *     comparten la malla, así que la forma se puede animar interpolando entre estados. El resto
+         *     del escenario se toma de ``scenario`` y la velocidad de ``speed_kn`` (salvo que la variable
+         *     sea la velocidad). Con ``include_geometry`` la respuesta trae la conectividad una vez
+         *     (``geometry``) y las posiciones de cada estado (``frames``).
+         */
+        ExploreRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /**
+             * Variable
+             * @default catch_kg
+             * @enum {string}
+             */
+            variable: "catch_kg" | "speed_kn" | "warp_length_m" | "fouling_level" | "current_kn" | "mu_gear";
+            /** Values */
+            values: number[];
+            /**
+             * Speed Kn
+             * @default 3
+             */
+            speed_kn: number;
+            /**
+             * Resolution
+             * @default 3
+             */
+            resolution: number;
+            /** Cn */
+            cn?: number | null;
+            /** Ct */
+            ct?: number | null;
+            scenario?: components["schemas"]["ScenarioIn"];
+            /**
+             * Include Geometry
+             * @default true
+             */
+            include_geometry: boolean;
+        };
+        /**
+         * ExploreResponse
+         * @description Resultado de ``POST /simulate/explore``.
+         */
+        ExploreResponse: {
+            /** Variable */
+            variable: string;
+            /** Values */
+            values: number[];
+            /** Results */
+            results: {
+                [key: string]: unknown;
+            }[];
+            /** Geometry */
+            geometry: {
+                [key: string]: unknown;
+            } | null;
+            /** Frames */
+            frames: {
+                [key: string]: unknown;
+            }[] | null;
+            /** Engine */
+            engine: {
+                [key: string]: unknown;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
+        };
+        /**
          * FloatSpec
          * @description Flotadores de la lima.
          */
@@ -578,6 +709,22 @@ export interface components {
             total_buoyancy_kgf?: number | null;
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * FoulingOut
+         * @description Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo).
+         */
+        FoulingOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Zones */
+            zones: {
+                [key: string]: number;
+            };
+            /** Notes */
+            notes: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1078,6 +1225,25 @@ export interface components {
              * @default true
              */
             coupled_doors: boolean;
+            /** Fouling */
+            fouling?: string | null;
+            /**
+             * Fouling Level
+             * @default 1
+             */
+            fouling_level: number;
+            /**
+             * Current Kn
+             * @default 0
+             */
+            current_kn: number;
+            /** Warp Length M */
+            warp_length_m?: number | null;
+            /**
+             * Haul Hours
+             * @default 2
+             */
+            haul_hours: number;
         };
         /**
          * SeabedOut
@@ -1408,6 +1574,26 @@ export interface operations {
             };
         };
     };
+    list_fouling_catalog_fouling_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FoulingOut"][];
+                };
+            };
+        };
+    };
     list_seabeds_catalog_seabeds_get: {
         parameters: {
             query?: never;
@@ -1659,6 +1845,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimulateResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_explore_simulate_explore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExploreRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExploreResponse"];
                 };
             };
             /** @description Validation Error */

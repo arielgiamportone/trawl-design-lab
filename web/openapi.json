@@ -134,6 +134,29 @@
     }
    }
   },
+  "/catalog/fouling": {
+   "get": {
+    "summary": "List Fouling",
+    "description": "Escenarios de ensuciamiento y colmatación de la red (nivel por zona).",
+    "operationId": "list_fouling_catalog_fouling_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/FoulingOut"
+         },
+         "type": "array",
+         "title": "Response List Fouling Catalog Fouling Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/catalog/seabeds": {
    "get": {
     "summary": "List Seabeds",
@@ -476,6 +499,45 @@
        "application/json": {
         "schema": {
          "$ref": "#/components/schemas/SimulateResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/simulate/explore": {
+   "post": {
+    "summary": "Simulate Explore",
+    "description": "Explorador: estados de la red, los portones y los cables al recorrer una variable.",
+    "operationId": "simulate_explore_simulate_explore_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ExploreRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ExploreResponse"
         }
        }
       }
@@ -1342,6 +1404,232 @@
     "title": "EvaluationOut",
     "description": "Diseño ``(s, v)`` evaluado."
    },
+   "ExploreRequest": {
+    "properties": {
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       }
+      ],
+      "title": "Net",
+      "default": "fao_a3_standard"
+     },
+     "vessel": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Vessel"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel"
+     },
+     "door": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Door"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Door"
+     },
+     "class_vessels": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Class Vessels"
+     },
+     "compat": {
+      "type": "string",
+      "enum": [
+       "excel",
+       "corrected"
+      ],
+      "title": "Compat",
+      "default": "corrected"
+     },
+     "variable": {
+      "type": "string",
+      "enum": [
+       "catch_kg",
+       "speed_kn",
+       "warp_length_m",
+       "fouling_level",
+       "current_kn",
+       "mu_gear"
+      ],
+      "title": "Variable",
+      "default": "catch_kg"
+     },
+     "values": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "maxItems": 10,
+      "minItems": 2,
+      "title": "Values"
+     },
+     "speed_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "Speed Kn",
+      "default": 3.0
+     },
+     "resolution": {
+      "type": "integer",
+      "maximum": 5.0,
+      "minimum": 2.0,
+      "title": "Resolution",
+      "default": 3
+     },
+     "cn": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 3.0,
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cn"
+     },
+     "ct": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 0.5,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ct"
+     },
+     "scenario": {
+      "$ref": "#/components/schemas/ScenarioIn"
+     },
+     "include_geometry": {
+      "type": "boolean",
+      "title": "Include Geometry",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "values"
+    ],
+    "title": "ExploreRequest",
+    "description": "Explorador (``POST /simulate/explore``): estados al recorrer una variable.\n\n``values`` (2–10) son los valores de ``variable``; cada estado parte del anterior y todos\ncomparten la malla, así que la forma se puede animar interpolando entre estados. El resto\ndel escenario se toma de ``scenario`` y la velocidad de ``speed_kn`` (salvo que la variable\nsea la velocidad). Con ``include_geometry`` la respuesta trae la conectividad una vez\n(``geometry``) y las posiciones de cada estado (``frames``)."
+   },
+   "ExploreResponse": {
+    "properties": {
+     "variable": {
+      "type": "string",
+      "title": "Variable"
+     },
+     "values": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "title": "Values"
+     },
+     "results": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Results"
+     },
+     "geometry": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Geometry"
+     },
+     "frames": {
+      "anyOf": [
+       {
+        "items": {
+         "additionalProperties": true,
+         "type": "object"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Frames"
+     },
+     "engine": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Engine"
+     },
+     "settings": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Settings"
+     },
+     "estimated_s": {
+      "type": "number",
+      "title": "Estimated S"
+     },
+     "runtime_s": {
+      "type": "number",
+      "title": "Runtime S"
+     }
+    },
+    "type": "object",
+    "required": [
+     "variable",
+     "values",
+     "results",
+     "geometry",
+     "frames",
+     "engine",
+     "settings",
+     "estimated_s",
+     "runtime_s"
+    ],
+    "title": "ExploreResponse",
+    "description": "Resultado de ``POST /simulate/explore``."
+   },
    "FloatSpec": {
     "properties": {
      "count": {
@@ -1383,6 +1671,38 @@
     ],
     "title": "FloatSpec",
     "description": "Flotadores de la lima."
+   },
+   "FoulingOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "zones": {
+      "additionalProperties": {
+       "type": "number"
+      },
+      "type": "object",
+      "title": "Zones"
+     },
+     "notes": {
+      "type": "string",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "zones",
+     "notes"
+    ],
+    "title": "FoulingOut",
+    "description": "Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo)."
    },
    "HTTPValidationError": {
     "properties": {
@@ -2566,6 +2886,51 @@
       "type": "boolean",
       "title": "Coupled Doors",
       "default": true
+     },
+     "fouling": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fouling"
+     },
+     "fouling_level": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Fouling Level",
+      "default": 1.0
+     },
+     "current_kn": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": -2.0,
+      "title": "Current Kn",
+      "default": 0.0
+     },
+     "warp_length_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 3000.0,
+        "minimum": 20.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Warp Length M"
+     },
+     "haul_hours": {
+      "type": "number",
+      "maximum": 24.0,
+      "minimum": 0.1,
+      "title": "Haul Hours",
+      "default": 2.0
      }
     },
     "additionalProperties": false,

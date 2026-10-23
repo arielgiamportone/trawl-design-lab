@@ -440,3 +440,43 @@ def test_health_reports_contract_and_commit(monkeypatch: pytest.MonkeyPatch) -> 
     assert body["commit"] is None
     monkeypatch.setenv("RENDER_GIT_COMMIT", "abc123")
     assert client.get("/health").json()["commit"] == "abc123"
+
+
+def test_fouling_catalogue_endpoint() -> None:
+    body = client.get("/catalog/fouling").json()
+    assert [f["id"] for f in body] == ["clean", "algae_wings", "jellyfish_codend", "general"]
+    assert set(body[3]["zones"]) == {"wings", "body", "codend"}
+
+
+def test_explore_endpoint_frames_and_validation() -> None:
+    r = client.post(
+        "/simulate/explore",
+        json={
+            "net": "fao_a3_standard",
+            "variable": "catch_kg",
+            "values": [0, 800],
+            "resolution": 2,
+            "scenario": {"seabed": "mixed", "fouling": "algae_wings"},
+        },
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    a, b = body["results"]
+    assert b["door_spread_m"] < a["door_spread_m"]
+    assert "nodes" not in a  # la geometría va aparte, una sola vez
+    geo, frames = body["geometry"], body["frames"]
+    n = len(frames[0]["nodes"])
+    assert len(frames) == 2 and all(len(f["nodes"]) == n for f in frames)
+    assert len(frames[0]["twine_tension_n"]) == len(geo["triangles"])
+    assert len(frames[0]["fouling_tri"]) == len(geo["triangles"])
+    assert len(geo["doors"]) == 2 and len(geo["warps"]) == 2
+    assert a["operation"]["fuel_l_h"] > 0
+    assert body["engine"]["demand_kgf"] > 0
+    for bad in (
+        {"values": [1]},
+        {"variable": "colour", "values": [0, 1]},
+        {"values": [0, 1], "resolution": 9},
+        {"values": [0, 1], "scenario": {"fouling": "barnacles"}},
+        {"variable": "speed_kn", "values": [1.0, 1.5], "scenario": {"current_kn": 1.5}},
+    ):
+        assert client.post("/simulate/explore", json=bad).status_code in (400, 422), bad

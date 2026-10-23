@@ -20,6 +20,9 @@ from trawlkit.api.schemas import (
     DesignRequest,
     DesignResponse,
     ErratumOut,
+    ExploreRequest,
+    ExploreResponse,
+    FoulingOut,
     HaulRequest,
     HaulResponse,
     Health,
@@ -105,6 +108,12 @@ def list_vessels() -> list[Vessel]:
 def list_doors() -> list[Door]:
     """Portones del catálogo con su polar CL/CD."""
     return list(service.door_presets().values())
+
+
+@app.get("/catalog/fouling", response_model=list[FoulingOut])
+def list_fouling() -> list[dict[str, Any]]:
+    """Escenarios de ensuciamiento y colmatación de la red (nivel por zona)."""
+    return service.fouling_catalogue()
 
 
 @app.get("/catalog/seabeds", response_model=list[SeabedOut])
@@ -226,6 +235,26 @@ def simulate(req: SimulateRequest) -> dict[str, Any]:
         include_geometry=req.include_geometry,
         mu=req.mu,
         scenario=None if req.scenario is None else req.scenario.model_dump(),
+    )
+
+
+@app.post("/simulate/explore", response_model=ExploreResponse)
+def simulate_explore(req: ExploreRequest) -> dict[str, Any]:
+    """Explorador: estados de la red, los portones y los cables al recorrer una variable."""
+    return service.explore_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        variable=req.variable,
+        values=req.values,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        include_geometry=req.include_geometry,
     )
 
 

@@ -660,3 +660,145 @@ def haul_case(
     }
     jsonable: dict[str, Any] = to_jsonable(out)
     return jsonable
+
+
+def fouling_catalogue() -> list[dict[str, Any]]:
+    """Escenarios de ensuciamiento (``GET /catalog/fouling``)."""
+    from trawlkit.sim import fouling_catalogue as cat
+
+    return [f.to_dict() for f in cat()]
+
+
+def _frame(r: Any) -> dict[str, Any]:
+    """Posiciones (al cm), tensiones y ensuciamiento de un estado, para animarlo."""
+    import numpy as np
+
+    return {
+        "nodes": np.round(r.nodes, 2).tolist(),
+        "twine_tension_n": np.round(r.twine_tension_n, 1).tolist(),
+        "bar_tension_n": np.round(r.bar_tension_n, 1).tolist(),
+        "fouling_tri": np.round(r.fouling_tri, 3).tolist(),
+    }
+
+
+def _geometry(r: Any, model_warps: list[list[int]], doors: list[int]) -> dict[str, Any]:
+    return {
+        "triangles": r.triangles.tolist(),
+        "bars": r.bars.tolist(),
+        "bar_kind": list(r.bar_kind),
+        "headrope": r.headrope.tolist(),
+        "footrope": r.footrope.tolist(),
+        "float_nodes": r.float_nodes.tolist(),
+        "wing_tips_upper": list(r.wing_tips_upper),
+        "wing_tips_lower": list(r.wing_tips_lower),
+        "doors": doors,
+        "warps": model_warps,
+    }
+
+
+def explore_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    compat: str = "corrected",
+    variable: str,
+    values: list[float],
+    speed_kn: float = 3.0,
+    resolution: int = 3,
+    cn: float | None = None,
+    ct: float | None = None,
+    scenario: dict[str, Any] | None = None,
+    include_geometry: bool = True,
+) -> dict[str, Any]:
+    """Explorador (``POST /simulate/explore``): :func:`trawlkit.sim.explore` y el motor."""
+    import time
+
+    import numpy as np
+
+    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT, explore
+    from trawlkit.sim.core import rigging_from_result
+    from trawlkit.sim.mesh import build_model
+
+    t0 = time.perf_counter()
+    sc = make_scenario(scenario or {})
+    params = {"seabed": sc.seabed} if sc.seabed else {}
+    case = build_case(
+        net=net,
+        vessel=vessel,
+        door=door,
+        class_vessels=class_vessels,
+        compat=compat,
+        params=params,
+    )
+    estimate = estimate_sim_cost(len(values), resolution, case.net, coupled=sc.coupled_doors)
+    max_cost = sim_max_cost_s()
+    if estimate > max_cost:
+        raise BadRequestError(
+            f"exploración demasiado costosa: ~{estimate:.0f} s estimados para {len(values)} "
+            f"estados a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
+            "o la cantidad de estados"
+        )
+    result = run_case(case)
+    try:
+        sims = explore(
+            result,
+            variable,
+            values,
+            speed_kn=speed_kn,
+            scenario=sc,
+            resolution=resolution,
+            cn=DEFAULT_CN if cn is None else cn,
+            ct=DEFAULT_CT if ct is None else ct,
+        )
+    except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
+        raise BadRequestError(f"no se puede explorar: {exc}") from exc
+    geometry = frames = None
+    if include_geometry and sims:
+        model = build_model(
+            result.case.net,
+            rigging_from_result(result),
+            resolution=resolution,
+            coupled_doors=sc.coupled_doors,
+        )
+        geometry = _geometry(
+            sims[0], [w.tolist() for w in model.warp_nodes], [int(d) for d in model.doors]
+        )
+        frames = [_frame(r) for r in sims]
+    speeds = sorted({*case.speeds_kn, float(speed_kn)})
+    ref = dataclasses.replace(case, speeds_kn=tuple(speeds))
+    try:
+        eng = run(ref)
+    except (ValueError, ZeroDivisionError, IndexError):
+        eng = result
+    ekn = np.asarray(eng.case.speeds_kn, dtype=float)
+    demand = float(np.interp(speed_kn, ekn, np.asarray(eng.performance.demand.std, dtype=float)))
+    out = {
+        "variable": variable,
+        "values": [float(v) for v in values],
+        "results": [r.to_dict(geometry=False) for r in sims],
+        "geometry": geometry,
+        "frames": frames,
+        "engine": {
+            "speed_kn": float(speed_kn),
+            "demand_kgf": demand,
+            "door_spread_m": float(eng.doors.spread_m),
+            "seabed_friction_kgf": float(eng.performance.seabed_friction_kgf),
+        },
+        "settings": {
+            "net_id": case.net.id,
+            "vessel_id": case.vessel.id,
+            "door_id": case.door.id,
+            "compat": case.compat.value,
+            "resolution": resolution,
+            "speed_kn": float(speed_kn),
+            "cn": DEFAULT_CN if cn is None else cn,
+            "ct": DEFAULT_CT if ct is None else ct,
+            "scenario": dataclasses.asdict(sc),
+        },
+        "estimated_s": estimate,
+        "runtime_s": time.perf_counter() - t0,
+    }
+    jsonable: dict[str, Any] = to_jsonable(out)
+    return jsonable

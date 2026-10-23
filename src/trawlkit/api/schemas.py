@@ -223,6 +223,20 @@ class ScenarioIn(BaseModel):
     mu_gear: float | None = Field(default=None, ge=0.0, le=1.5)
     mu_door: float | None = Field(default=None, ge=0.0, le=1.5)
     coupled_doors: bool = True
+    fouling: str | None = None
+    fouling_level: float = Field(default=1.0, ge=0.0, le=2.0)
+    current_kn: float = Field(default=0.0, ge=-2.0, le=2.0)
+    warp_length_m: float | None = Field(default=None, ge=20.0, le=3000.0)
+    haul_hours: float = Field(default=2.0, ge=0.1, le=24.0)
+
+
+class FoulingOut(BaseModel):
+    """Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo)."""
+
+    id: str
+    name: str
+    zones: dict[str, float]
+    notes: str
 
 
 class SeabedOut(BaseModel):
@@ -317,6 +331,56 @@ class HaulRequest(BaseModel):
         if any(b < a for a, b in zip(c, c[1:], strict=False)):
             raise ValueError("catches_kg debe ser no decreciente (la captura entra de a poco)")
         return self
+
+
+EXPLORE_MAX_STEPS = 10
+ExploreVariable = Literal[
+    "catch_kg", "speed_kn", "warp_length_m", "fouling_level", "current_kn", "mu_gear"
+]
+
+
+class ExploreRequest(BaseModel):
+    """Explorador (``POST /simulate/explore``): estados al recorrer una variable.
+
+    ``values`` (2–10) son los valores de ``variable``; cada estado parte del anterior y todos
+    comparten la malla, así que la forma se puede animar interpolando entre estados. El resto
+    del escenario se toma de ``scenario`` y la velocidad de ``speed_kn`` (salvo que la variable
+    sea la velocidad). Con ``include_geometry`` la respuesta trae la conectividad una vez
+    (``geometry``) y las posiciones de cada estado (``frames``).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    variable: ExploreVariable = "catch_kg"
+    values: list[float] = Field(min_length=2, max_length=EXPLORE_MAX_STEPS)
+    speed_kn: float = Field(default=3.0, ge=SIM_SPEED_RANGE[0], le=SIM_SPEED_RANGE[1])
+    resolution: int = Field(default=3, ge=2, le=5)
+    cn: float | None = Field(default=None, gt=0.0, le=3.0)
+    ct: float | None = Field(default=None, ge=0.0, le=0.5)
+    scenario: ScenarioIn = Field(default_factory=ScenarioIn)
+    include_geometry: bool = True
+
+
+class ExploreResponse(BaseModel):
+    """Resultado de ``POST /simulate/explore``."""
+
+    variable: str
+    values: list[float]
+    results: list[dict[str, Any]]
+    """``SimResult.to_dict(geometry=False)`` por estado."""
+    geometry: dict[str, Any] | None
+    """Conectividad común: triángulos, barras, tipos, relingas, boyas, portones, cables."""
+    frames: list[dict[str, Any]] | None
+    """Por estado: posiciones de los nodos (redondeadas al cm), tensiones y ensuciamiento."""
+    engine: dict[str, Any]
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
 
 
 class HaulResponse(BaseModel):
