@@ -19,6 +19,7 @@ parts:
       - file: 19_ventana_velocidad
       - file: 20_optimizacion
       - file: 21_simulacion
+      - file: 22_simulacion_realista
   - caption: Caso de estudio y validación
     chapters:
       - file: 30_caso_beagle

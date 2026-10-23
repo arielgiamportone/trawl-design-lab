@@ -136,6 +136,25 @@ conmutador «Guiado / Experto» está en la cabecera y el navegador recuerda la 
   boyas y el fondo. Se gira con el mouse o con el dedo, hay vistas de perspectiva, planta, perfil y
   frente, y se puede descargar un PNG. Sin WebGL quedan las proyecciones SVG.
 
+## Lance progresivo: captura, fondo y portones acoplados
+
+En la pestaña «Simulación», la vista **«Lance progresivo (captura y fondo)»** simula el lance
+mientras entra la captura ({doc}`22_simulacion_realista`, `POST /simulate/haul`). Se eligen la
+velocidad, la captura final (se reparte en 4 pasos desde 0), el tipo de captura (fija las
+densidades), el tipo de fondo (con su rozamiento estimado) y si los portones quedan acoplados (su
+separación sale del equilibrio con el cable hasta el buque). El resultado incluye:
+
+- una frase con el efecto de la captura;
+- cuatro gráficos chicos contra la captura: separación de portones (con la regla del motor de
+  referencia), tiro en el buque (con la demanda del motor), aberturas horizontal y vertical;
+- la tabla del lance (resistencias de la red y de la captura, roce, largo de la captura y
+  diámetro del copo);
+- la forma 3D de cada paso, coloreada por tensión del hilo o por el paño apoyado en el fondo.
+
+En el modo guiado, el paso «Operación» pide el **tipo de fondo** (suma el roce de tren y portones a
+la demanda del motor, y el diagnóstico lo explica) y la **captura esperada por lance** (valor
+inicial del lance progresivo).
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

@@ -109,10 +109,12 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 6. Optimización (área barrida vs potencia) ✔
 7. Simulación simplificada de la geometría de la red (experimental) ✔
 8. Versión 1.0: paquete en PyPI, DOI en Zenodo, `CITATION.cff` y registro de cambios ✔
-9. Interfaz con dos modos: asistente guiado (por defecto) y experto; proyectos, deshacer, ayuda contextual
-10. Diseño interactivo de la red sobre el plano, con recálculo en vivo y vista 3D
-11. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor
-12. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
+9. Interfaz con dos modos: asistente guiado (por defecto) y experto; proyectos, deshacer, ayuda contextual ✔
+10. Diseño interactivo de la red sobre el plano, con recálculo en vivo y vista 3D ✔
+11. Simulador realista: captura en el copo, tipo de fondo y portones acoplados (11.1 ✔);
+    ensuciamiento, corriente, energía y huella; zoom malla a malla y selectividad; incertidumbre
+12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor
+13. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
 
 ## Licencias
 

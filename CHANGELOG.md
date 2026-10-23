@@ -19,6 +19,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 - **Vista 3D** de la forma simulada (three.js): paño coloreado por la tensión del hilo, aparejo,
   boyas, vistas estándar y descarga PNG.
 - `tools/export_openapi.py` y un test que verifica que `web/openapi.json` esté al día.
+- **Simulador realista (Fase 11.1)**: captura en el copo (volumen por densidad aparente, flujo
+  bloqueado y presión ½ρC_pv² sobre el copo, O'Neill y O'Donoghue 1997), catálogo de tipos de
+  fondo con rango de rozamiento (`data/seabed.yaml`, A VERIFICAR), portones acoplados (polar
+  C_L/C_D, peso y cable de remolque hasta el buque) y lance progresivo (`trawlkit.sim.haul`,
+  `POST /simulate/haul`, `GET /catalog/seabeds`). La separación de portones de la FAO A-3 a 3 kn
+  pasa de 32,5 m (regla del motor) a 46,8 m frente a 51,4 m de DynamiT.
+- Motor: parámetro `seabed` que suma el rozamiento del tren y de los portones a la demanda.
+- Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
+  con el fondo); tipo de fondo y captura esperada en el modo guiado.
+- Libro: capítulo 22 «Simulación con captura, fondo y portones acoplados», con el panorama de
+  simuladores del mercado; 7 referencias nuevas (6 verificadas en Crossref).
 
 ## [1.0.0] - 2026-10-19
 
