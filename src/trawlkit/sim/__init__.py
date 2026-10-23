@@ -13,7 +13,9 @@ from trawlkit.sim.core import (
     DEFAULT_CT,
     DEFAULT_MU,
     DEFAULT_RESOLUTION,
+    EXPLORE_VARIABLES,
     SimResult,
+    explore,
     haul,
     rigging_from_result,
     rigging_from_spec,
@@ -21,19 +23,32 @@ from trawlkit.sim.core import (
     sweep,
 )
 from trawlkit.sim.mesh import NetModel, Rigging, build_model
-from trawlkit.sim.scenario import Scenario, Seabed, seabed, seabeds
+from trawlkit.sim.scenario import (
+    Fouling,
+    Scenario,
+    Seabed,
+    fouling,
+    fouling_catalogue,
+    seabed,
+    seabeds,
+)
 
 __all__ = [
     "DEFAULT_CN",
     "DEFAULT_CT",
     "DEFAULT_MU",
     "DEFAULT_RESOLUTION",
+    "Fouling",
     "NetModel",
     "Rigging",
     "Scenario",
     "Seabed",
+    "EXPLORE_VARIABLES",
     "SimResult",
     "build_model",
+    "fouling",
+    "fouling_catalogue",
+    "explore",
     "haul",
     "rigging_from_result",
     "rigging_from_spec",

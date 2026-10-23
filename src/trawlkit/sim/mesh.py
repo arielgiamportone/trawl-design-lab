@@ -117,6 +117,8 @@ class Rigging:
     depth_m: float = 40.0
     gallows_m: float = 2.5
     warp_diameter_mm: float = 12.0
+    vessel_bhp: float = 150.0  # potencia del buque (tope de la potencia de remolque)
+    door_length_m: float = 1.9
 
 
 @dataclass(frozen=True)
@@ -173,6 +175,9 @@ class NetModel:
     grids: tuple[PanelGrid, ...]
     mirror: IntArray  # índice del nodo simétrico (y → −y)
     solid_surface_m2: float  # Σ d·L del paño discretizado
+    #: Sección de cada triángulo (``Panel.section``: wing_tip, wing, square, belly, body,
+    #: extension, codend).
+    tri_section: tuple[str, ...] = ()
     #: Anillos del copo y del cuerpo (dorso + vientre), del extremo cerrado hacia la boca.
     codend_rings: tuple[IntArray, ...] = ()
     #: Portones libres con cable hasta el buque (los puntos del buque son los nodos fijos).
@@ -186,6 +191,7 @@ class NetModel:
     door_cd: float = 0.0
     door_weight_n: float = 0.0
     door_floor_m: float = 0.0  # altura del nodo del portón sobre la zapata [m]
+    warp_length_m: float = 0.0  # largo de cable filado del modelo acoplado [m]
 
     @property
     def n_nodes(self) -> int:
@@ -320,6 +326,7 @@ def build_model(
     tris: list[tuple[int, int, int]] = []
     tri_mc: list[tuple[tuple[float, float], ...]] = []
     tri_panel: list[str] = []
+    tri_sect: list[str] = []
     tri_props: list[tuple[float, float, float, float]] = []  # a, d, EA, w
     grids: list[PanelGrid] = []
 
@@ -369,6 +376,7 @@ def build_model(
                     tris.append((i0, i1, i2))
                     tri_mc.append(tuple((float(t[k]), float(n[k])) for k in tri_q))
                     tri_panel.append(key)
+                    tri_sect.append(panel.section.value)
                     tri_props.append((a, d, ea, w))
         g = PanelGrid(
             key,
@@ -489,6 +497,7 @@ def build_model(
     tri, gi, gj, area = tri[keep], gi[keep], gj[keep], area[keep]
     tri_a, tri_d, tri_ea, tri_w = tri_a[keep], tri_d[keep], tri_ea[keep], tri_w[keep]
     tri_keys = tuple(k for k, kp in zip(tri_panel, keep.tolist(), strict=True) if kp)
+    tri_sections = tuple(k for k, kp in zip(tri_sect, keep.tolist(), strict=True) if kp)
     solid = float(np.sum(2.0 * area * tri_a * tri_d))
 
     # --- relingas ---------------------------------------------------------------------------
@@ -661,6 +670,7 @@ def build_model(
         tri_ea=tri_ea,
         tri_w=tri_w,
         tri_panel=tri_keys,
+        tri_section=tri_sections,
         bar=np.asarray(bars, dtype=np.int64),
         bar_l0=np.asarray(l0),
         bar_ea=np.asarray(ea),
@@ -697,6 +707,7 @@ def build_model(
         door_cd=rigging.door_cd,
         door_weight_n=rigging.door_weight_water_kgf * GRAVITY,
         door_floor_m=rigging.door_height_m / 2.0,
+        warp_length_m=rigging.warp_length_m if coupled_doors else 0.0,
     )
 
 

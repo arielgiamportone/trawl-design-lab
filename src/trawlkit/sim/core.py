@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import time
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -26,6 +27,13 @@ DEFAULT_CN = 1.4
 DEFAULT_CT = 0.08
 #: Coeficiente de rozamiento red–fondo (fondo intermedio).
 DEFAULT_MU = 0.5
+#: Energía (A VERIFICAR): rendimiento de remolque (tiro × velocidad / potencia al freno),
+#: consumo específico del motor diésel [kg/kWh] y densidad del gasoil [kg/L].
+TOWING_EFFICIENCY = 0.5
+SFC_KG_KWH = 0.22
+DIESEL_KG_L = 0.84
+KW_PER_HP = 0.7457
+
 #: Resolución por defecto (divisiones nominales por panel).
 DEFAULT_RESOLUTION = 8
 
@@ -83,6 +91,10 @@ class SimResult:
     towing_pull_kgf: float = 0.0
     warp_tension_kgf: float = 0.0  # tensión de cada cable en el portón [kgf]
     door_positions_m: tuple[tuple[float, float, float], ...] = ()
+    #: Operación: velocidades, cables, energía y huella (ver :func:`operation_outputs`).
+    operation: dict[str, Any] = field(default_factory=dict)
+    #: Ensuciamiento de cada triángulo (0–1; vacío = red limpia).
+    fouling_tri: FloatArray = field(default_factory=lambda: np.zeros(0))
 
     def to_dict(self, *, geometry: bool = True) -> dict[str, Any]:
         """Representación serializable (``geometry=False`` omite nodos y conectividad)."""
@@ -115,6 +127,7 @@ class SimResult:
             "towing_pull_kgf": self.towing_pull_kgf,
             "warp_tension_kgf": self.warp_tension_kgf,
             "door_positions_m": [list(d) for d in self.door_positions_m],
+            "operation": dict(self.operation),
         }
         if geometry:
             out.update(
@@ -130,6 +143,7 @@ class SimResult:
                 float_nodes=self.float_nodes.tolist(),
                 wing_tips_upper=list(self.wing_tips_upper),
                 wing_tips_lower=list(self.wing_tips_lower),
+                fouling_tri=self.fouling_tri.tolist(),
             )
         return out
 
@@ -228,6 +242,8 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         depth_m=float(r.summary()["working_depth_m"] or 40.0),
         gallows_m=float(r.case.gallows_spacing_m),
         warp_diameter_mm=float(r.warps.diameter_mm),
+        vessel_bhp=float(r.case.vessel.bhp),
+        door_length_m=float(r.doors.door.length_m or 1.9),
     )
 
 
@@ -335,6 +351,8 @@ def _result(
     runtime: float,
     resolution: int,
     scenario: Scenario | None = None,
+    ground_kn: float | None = None,
+    ff_fouling: FloatArray | None = None,
 ) -> SimResult:
     x = relaxed.x
     fr = relaxed.forces
@@ -420,7 +438,101 @@ def _result(
         towing_pull_kgf=towing / G,
         warp_tension_kgf=warp_t / G,
         door_positions_m=tuple((float(x[k, 0]), float(x[k, 1]), float(x[k, 2])) for k in doors),
+        operation=operation_outputs(
+            model,
+            rig,
+            x,
+            fr,
+            scenario,
+            ground_kn=speed_kn if ground_kn is None else ground_kn,
+            water_kn=p.speed_ms / KNOT_MS,
+            pull_kgf=towing / G if model.coupled_doors else relaxed.drag_mean / G,
+            spread_m=spread,
+        ),
+        fouling_tri=np.zeros(0) if ff_fouling is None else ff_fouling.copy(),
     )
+
+
+def operation_outputs(
+    model: NetModel,
+    rig: Rigging,
+    x: FloatArray,
+    fr: Any,
+    scenario: Scenario | None,
+    *,
+    ground_kn: float,
+    water_kn: float,
+    pull_kgf: float,
+    spread_m: float,
+) -> dict[str, Any]:
+    """Velocidades, cables, energía y huella del equilibrio.
+
+    * **Energía**: potencia de remolque ``P = T · v_agua / η`` (``η`` :data:`TOWING_EFFICIENCY`),
+      recortada a la del buque; combustible ``P · SFC / ρ_gasoil`` [L/h]; por kg de captura con
+      la duración del lance del escenario. Referencia: Parker y Tyedmers (2015).
+    * **Huella** (Eigaard et al. 2016): ancho barrido = separación de portones; ancho en contacto
+      con el fondo = burlón apoyado + zapatas de los dos portones; áreas por hora con la velocidad
+      sobre el fondo; clase de penetración del tipo de fondo.
+    * **Cables**: tensión en el portón y en el buque y ángulo con la horizontal en la pasteca.
+    """
+    from trawlkit.rigging import seabed as seabed_of
+
+    out: dict[str, Any] = {"ground_speed_kn": ground_kn, "water_speed_kn": water_kn}
+    power_kw = pull_kgf * G * water_kn * KNOT_MS / TOWING_EFFICIENCY / 1000.0
+    max_kw = rig.vessel_bhp * KW_PER_HP
+    limited = power_kw > max_kw
+    used_kw = min(power_kw, max_kw)
+    fuel = used_kw * SFC_KG_KWH / DIESEL_KG_L
+    catch = scenario.catch_kg if scenario else 0.0
+    hours = scenario.haul_hours if scenario else 2.0
+    out.update(
+        towing_power_kw=power_kw,
+        vessel_power_kw=max_kw,
+        power_limited=limited,
+        fuel_l_h=fuel,
+        fuel_l_per_kg=fuel * hours / catch if catch > 0 else None,
+    )
+    km_h = ground_kn * 1.852
+    contact = x[:, 2] <= 0.02
+    foot = model.footrope
+    on_bottom = foot[contact[foot]]
+    foot_width = float(np.ptp(x[on_bottom, 1])) if on_bottom.size > 1 else 0.0
+    door_width = 2.0 * rig.door_length_m if model.coupled_doors else 0.0
+    swept = spread_m / 1000.0 * km_h
+    out.update(
+        swept_width_m=spread_m,
+        contact_width_m=foot_width + door_width,
+        swept_area_km2_h=swept,
+        contact_area_km2_h=(foot_width + door_width) / 1000.0 * km_h,
+        fuel_l_per_km2=fuel / swept if swept > 0 else None,
+        penetration=(
+            seabed_of(scenario.seabed).penetration if scenario and scenario.seabed else None
+        ),
+    )
+    if model.coupled_doors:
+        at_door = 0.0
+        at_vessel = 0.0
+        angle = 0.0
+        fixed = set(model.fixed.tolist())
+        doors = set(model.doors)
+        for k, (b, kind) in enumerate(zip(model.bar, model.bar_kind, strict=True)):
+            if kind != "warp":
+                continue
+            t = float(fr.bar_tension[k]) / G
+            if int(b[0]) in doors:
+                at_door = max(at_door, t)
+            if int(b[1]) in fixed:
+                at_vessel = max(at_vessel, t)
+                d = x[b[1]] - x[b[0]]
+                angle = float(np.degrees(np.arctan2(d[2], np.hypot(d[0], d[1]))))
+        out.update(
+            warp_tension_door_kgf=at_door,
+            warp_tension_vessel_kgf=at_vessel,
+            warp_angle_deg=angle,
+            warp_length_m=rig.warp_length_m,
+            depth_m=rig.depth_m,
+        )
+    return out
 
 
 def _scenario_dict(sc: Scenario | None) -> dict[str, Any]:
@@ -478,7 +590,11 @@ def simulate(
     spec, rig, result = _resolve(case_or_spec, door_spread_m)
     t0 = time.perf_counter()
     coupled = bool(scenario and scenario.coupled_doors)
+    if scenario is not None and scenario.warp_length_m is not None:
+        rig = dataclasses.replace(rig, warp_length_m=float(scenario.warp_length_m))
     if model is not None and model.coupled_doors != coupled:
+        model = None
+    if model is not None and coupled and abs(model.warp_length_m - rig.warp_length_m) > 1e-9:
         model = None
     mdl = (
         model
@@ -488,13 +604,29 @@ def simulate(
     mu_door: float | None = None
     catch_v = catch_w = 0.0
     catch_cp = 1.0
+    current = 0.0
+    fouling_zones: tuple[tuple[str, float], ...] = ()
+    gains = (1.5, 0.3, 2.0)
     if scenario is not None:
         mu, mu_door = scenario.friction(mu)
         catch_v = scenario.catch_volume_m3
         catch_w = scenario.catch_weight_water_n()
         catch_cp = scenario.catch_cp
+        current = scenario.current_kn
+        if scenario.fouling is not None:
+            from trawlkit.sim.scenario import fouling_coefficients
+
+            fouling_zones = tuple(sorted(scenario.fouling_zones().items()))
+            c = fouling_coefficients()
+            gains = (c["diameter_gain"], c["cn_gain"], c["weight_gain"])
+    water_kn = speed_kn - current
+    if water_kn < 0.2:
+        raise ValueError(
+            f"velocidad relativa al agua muy baja ({water_kn:.2f} kn): la corriente a favor "
+            "no puede igualar a la velocidad de arrastre"
+        )
     p = Params(
-        speed_ms=speed_kn * KNOT_MS,
+        speed_ms=water_kn * KNOT_MS,
         cn=cn,
         ct=ct,
         mu=mu,
@@ -505,6 +637,8 @@ def simulate(
         catch_volume_m3=catch_v,
         catch_weight_n=catch_w,
         catch_cp=catch_cp,
+        fouling=fouling_zones,
+        fouling_gains=gains,
     )
     if x_init is not None and x_init.shape != mdl.x0.shape:
         x_init = None
@@ -516,8 +650,27 @@ def simulate(
     if not coupled:
         for k, sgn in zip(mdl.doors, (1.0, -1.0), strict=True):
             start[k] = [mdl.x0[k, 0], sgn * rig.door_spread_m / 2.0, mdl.x0[k, 2]]
+    else:
+        # Los puntos del buque son fijos: vienen del modelo (el largo de cable puede cambiar).
+        start[mdl.fixed] = mdl.x0[mdl.fixed]
     relaxed = relax(mdl, p, start, tol=tol, qoi_tol=qoi_tol, max_iter=max_iter)
-    return _result(mdl, rig, p, speed_kn, relaxed, time.perf_counter() - t0, resolution, scenario)
+    foul = None
+    if fouling_zones:
+        from trawlkit.sim.solver import ForceField
+
+        foul = ForceField(mdl, p).foul
+    return _result(
+        mdl,
+        rig,
+        p,
+        speed_kn,
+        relaxed,
+        time.perf_counter() - t0,
+        resolution,
+        scenario,
+        ground_kn=speed_kn,
+        ff_fouling=foul,
+    )
 
 
 def sweep(
@@ -587,6 +740,79 @@ def sweep(
     return out
 
 
+#: Variables que :func:`explore` puede recorrer.
+EXPLORE_VARIABLES = (
+    "catch_kg",
+    "speed_kn",
+    "warp_length_m",
+    "fouling_level",
+    "current_kn",
+    "mu_gear",
+)
+
+
+def explore(
+    case: CaseLike,
+    variable: str,
+    values: Sequence[float],
+    *,
+    speed_kn: float = 3.0,
+    scenario: Scenario | None = None,
+    resolution: int = 4,
+    cn: float = DEFAULT_CN,
+    ct: float = DEFAULT_CT,
+    mu: float = DEFAULT_MU,
+    tol: float = 1e-2,
+    qoi_tol: float = 3e-3,
+    max_iter: int = 40_000,
+) -> list[SimResult]:
+    """Estados de equilibrio al recorrer ``variable`` por ``values`` (arranque en caliente).
+
+    ``variable`` es una de :data:`EXPLORE_VARIABLES`: ``speed_kn`` cambia la velocidad de arrastre
+    y las demás el campo homónimo del escenario. Todos los estados comparten la malla (mismos
+    nodos), así que la forma puede interpolarse entre ellos para animarla.
+    """
+    if variable not in EXPLORE_VARIABLES:
+        raise ValueError(f"variable desconocida: {variable!r} (use {', '.join(EXPLORE_VARIABLES)})")
+    if isinstance(case, DesignCase):
+        case = run(case)
+    base = scenario or Scenario()
+    spec, rig, _ = _resolve(case, None)
+    model: NetModel | None = None
+    out: list[SimResult] = []
+    prev: FloatArray | None = None
+    for value in values:
+        v = float(value)
+        changes: dict[str, Any] = {} if variable == "speed_kn" else {variable: v}
+        sc = dataclasses.replace(base, **changes)
+        speed = v if variable == "speed_kn" else speed_kn
+        if model is None or (variable == "warp_length_m" and sc.coupled_doors):
+            rig_v = (
+                dataclasses.replace(rig, warp_length_m=sc.warp_length_m)
+                if sc.warp_length_m is not None
+                else rig
+            )
+            model = build_model(spec, rig_v, resolution=resolution, coupled_doors=sc.coupled_doors)
+        res = simulate(
+            case,
+            speed,
+            resolution=resolution,
+            cn=cn,
+            ct=ct,
+            mu=mu,
+            tol=tol,
+            qoi_tol=qoi_tol,
+            max_iter=max_iter,
+            coarse_resolution=None,
+            x_init=prev,
+            model=model,
+            scenario=sc,
+        )
+        prev = res.nodes
+        out.append(res)
+    return out
+
+
 def haul(
     case: CaseLike,
     speed_kn: float,
@@ -606,31 +832,17 @@ def haul(
     Cada paso parte de la forma del anterior (la captura entra de a poco, como en el lance). El
     resto del escenario (fondo, densidades, portones acoplados) se toma de ``scenario``.
     """
-    from dataclasses import replace
-
-    if isinstance(case, DesignCase):
-        case = run(case)
-    base = scenario or Scenario()
-    spec, rig, _ = _resolve(case, None)
-    model = build_model(spec, rig, resolution=resolution, coupled_doors=base.coupled_doors)
-    out: list[SimResult] = []
-    prev: FloatArray | None = None
-    for kg in catches_kg:
-        res = simulate(
-            case,
-            speed_kn,
-            resolution=resolution,
-            cn=cn,
-            ct=ct,
-            mu=mu,
-            tol=tol,
-            qoi_tol=qoi_tol,
-            max_iter=max_iter,
-            coarse_resolution=None,
-            x_init=prev,
-            model=model,
-            scenario=replace(base, catch_kg=float(kg)),
-        )
-        prev = res.nodes
-        out.append(res)
-    return out
+    return explore(
+        case,
+        "catch_kg",
+        catches_kg,
+        speed_kn=speed_kn,
+        scenario=scenario,
+        resolution=resolution,
+        cn=cn,
+        ct=ct,
+        mu=mu,
+        tol=tol,
+        qoi_tol=qoi_tol,
+        max_iter=max_iter,
+    )

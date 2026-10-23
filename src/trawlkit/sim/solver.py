@@ -89,6 +89,9 @@ class Params:
     catch_volume_m3: float = 0.0
     catch_weight_n: float = 0.0
     catch_cp: float = 1.0
+    #: Ensuciamiento por zona (alas, cuerpo, copo) y ganancias de diámetro, C_N y peso.
+    fouling: tuple[tuple[str, float], ...] = ()
+    fouling_gains: tuple[float, float, float] = (1.5, 0.3, 2.0)
 
 
 @dataclass(frozen=True)
@@ -130,6 +133,22 @@ class ForceField:
         self.w = np.concatenate(
             [model.tri_w * model.tri_area * model.tri_a] * 2 + [model.bar_w * model.bar_l0]
         )
+        # Ensuciamiento: diámetro efectivo, C_N y peso por triángulo según su zona.
+        self.kn = self.k.copy()
+        self.foul = np.zeros(nt)
+        if p.fouling and model.tri_section:
+            from trawlkit.sim.scenario import FOULING_ZONE
+
+            levels = dict(p.fouling)
+            f = np.array([levels.get(FOULING_ZONE.get(sec, ""), 0.0) for sec in model.tri_section])
+            self.foul = f
+            gd, gc, gw = p.fouling_gains
+            fd = np.concatenate([1.0 + gd * f, 1.0 + gd * f, np.ones(nb)])
+            fc = np.concatenate([1.0 + gc * f, 1.0 + gc * f, np.ones(nb)])
+            fw = np.concatenate([1.0 + gw * f, 1.0 + gw * f, np.ones(nb)])
+            self.k = self.k * fd
+            self.kn = self.k * fc
+            self.w = self.w * fw
         self.h = np.concatenate(
             [np.full((2 * nt, 3), 1.0 / 3.0), np.tile(np.array([0.5, 0.5, 0.0]), (nb, 1))]
         )
@@ -275,9 +294,9 @@ class ForceField:
         un = -ue[:, None] * e
         un[:, 0] += vel
         un_mag = np.sqrt(np.maximum(vel * vel - ue * ue, 0.0))
-        fh = (self.k * self.flow)[:, None] * (
-            p.cn * un_mag[:, None] * un + (p.ct * np.abs(ue) * ue)[:, None] * e
-        )
+        fh = (p.cn * self.kn * self.flow * un_mag)[:, None] * un + (
+            p.ct * self.k * self.flow * np.abs(ue) * ue
+        )[:, None] * e
         hx = fh[:, 0].copy() if full else None
         fh[:, 2] -= self.w
         fv = self.h[:, :, None] * fh[:, None, :] - (self.mult * t)[:, None, None] * (

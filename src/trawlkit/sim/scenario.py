@@ -23,10 +23,82 @@ rozamiento único con el fondo y los portones fijos a la separación del motor. 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cache
+from typing import Any
 
+import yaml
+
+from trawlkit.io.loader import DATA_DIR
 from trawlkit.rigging.seabed import Range, Seabed, seabed, seabeds
 
-__all__ = ["Range", "Scenario", "Seabed", "seabed", "seabeds"]
+__all__ = [
+    "Fouling",
+    "Range",
+    "Scenario",
+    "Seabed",
+    "fouling",
+    "fouling_catalogue",
+    "seabed",
+    "seabeds",
+]
+
+#: Zona de la red de cada sección de panel (para el ensuciamiento).
+FOULING_ZONE: dict[str, str] = {
+    "wing_tip": "wings",
+    "wing": "wings",
+    "square": "body",
+    "belly": "body",
+    "body": "body",
+    "extension": "codend",
+    "codend": "codend",
+}
+
+
+@dataclass(frozen=True)
+class Fouling:
+    """Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo)."""
+
+    id: str
+    name: str
+    zones: dict[str, float]
+    notes: str
+
+    def to_dict(self) -> dict[str, Any]:
+        """Representación serializable."""
+        return {"id": self.id, "name": self.name, "zones": dict(self.zones), "notes": self.notes}
+
+
+@cache
+def _fouling_raw() -> dict[str, Any]:
+    data: dict[str, Any] = yaml.safe_load((DATA_DIR / "fouling.yaml").read_text(encoding="utf-8"))
+    return data
+
+
+def fouling_catalogue() -> tuple[Fouling, ...]:
+    """Escenarios de ensuciamiento (``data/fouling.yaml``)."""
+    return tuple(
+        Fouling(
+            id=str(it["id"]),
+            name=str(it["name"]),
+            zones={str(k): float(v) for k, v in it["zones"].items()},
+            notes=str(it.get("notes", "")),
+        )
+        for it in _fouling_raw()["items"]
+    )
+
+
+def fouling(key: str) -> Fouling:
+    """Escenario de ensuciamiento por ``id``."""
+    for f in fouling_catalogue():
+        if f.id == key:
+            return f
+    raise KeyError(f"escenario de ensuciamiento desconocido: {key!r}")
+
+
+def fouling_coefficients() -> dict[str, float]:
+    """Ganancias de diámetro, C_N y peso por unidad de nivel de ensuciamiento."""
+    return {k: float(v) for k, v in _fouling_raw()["coefficients"].items()}
+
 
 #: Densidad aparente por defecto de la captura en el copo [kg/m³] (A VERIFICAR: peces y agua
 #: intersticial; ~0,6–0,75 del volumen ocupado por organismos de ~1070 kg/m³).
@@ -52,6 +124,15 @@ class Scenario:
     mu_gear: float | None = None
     mu_door: float | None = None
     coupled_doors: bool = True
+    #: Ensuciamiento: escenario del catálogo y factor sobre sus niveles (0 = limpio).
+    fouling: str | None = None
+    fouling_level: float = 1.0
+    #: Corriente a lo largo del rumbo [kn] (+ a favor: el agua relativa a la red es más lenta).
+    current_kn: float = 0.0
+    #: Largo de cable filado [m] (None = el del motor).
+    warp_length_m: float | None = None
+    #: Duración del lance [h] (para combustible por kg de captura).
+    haul_hours: float = 2.0
 
     def __post_init__(self) -> None:
         """Valida rangos físicos."""
@@ -69,6 +150,22 @@ class Scenario:
                 raise ValueError(f"{name} fuera de rango (0–1,5)")
         if self.seabed is not None:
             seabed(self.seabed)  # KeyError si no existe
+        if self.fouling is not None:
+            fouling(self.fouling)
+        if not 0.0 <= self.fouling_level <= 2.0:
+            raise ValueError("fouling_level fuera de rango (0–2)")
+        if not -2.0 <= self.current_kn <= 2.0:
+            raise ValueError("current_kn fuera de rango (−2 a 2 kn)")
+        if self.warp_length_m is not None and not 20.0 <= self.warp_length_m <= 3000.0:
+            raise ValueError("warp_length_m fuera de rango (20–3000 m)")
+        if not 0.1 <= self.haul_hours <= 24.0:
+            raise ValueError("haul_hours fuera de rango (0,1–24 h)")
+
+    def fouling_zones(self) -> dict[str, float]:
+        """Nivel de ensuciamiento efectivo por zona (alas, cuerpo, copo)."""
+        if self.fouling is None:
+            return {"wings": 0.0, "body": 0.0, "codend": 0.0}
+        return {k: v * self.fouling_level for k, v in fouling(self.fouling).zones.items()}
 
     @property
     def catch_volume_m3(self) -> float:
