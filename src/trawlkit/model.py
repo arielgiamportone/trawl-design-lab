@@ -256,6 +256,9 @@ class DesignCase:
     warp_spare_fraction: float = 0.5  # Cab!D12 = 2·Ls + 0.5·Ls
     warp_drag_shares: tuple[float, ...] = (0.05, 0.10)  # Rem!E191:H199
 
+    # --- fondo ----------------------------------------------------------------------------
+    seabed: str | None = None  # tipo de fondo (data/seabed.yaml); None = sin rozamiento extra
+
     # --- informe --------------------------------------------------------------------------
     report_speeds_kn: tuple[float, ...] = (2.0, 3.0, 3.5)  # velocidades de la RN en summary()
 
@@ -291,6 +294,11 @@ class DesignCase:
         for v in (self.ballast_min_speed_kn, self.ballast_max_speed_kn):
             if v not in speeds:
                 raise ValueError("ballast_min/max_speed_kn deben pertenecer a speeds_kn")
+        if self.seabed is not None:
+            try:
+                rigging.seabed(self.seabed)
+            except KeyError as exc:
+                raise ValueError(str(exc)) from exc
 
     # --- derivados ------------------------------------------------------------------------
 
@@ -591,6 +599,9 @@ class PerformanceStage:
     windows: dict[str, SpeedWindow]
     demand: Pair[FloatArray]
     design_key: str
+    #: Rozamiento con el fondo del tren (burlón + lastre) y de los dos portones [kgf], incluido
+    #: en ``demand`` cuando el caso indica ``seabed`` (0 si no).
+    seabed_friction_kgf: float = 0.0
 
     @property
     def design(self) -> SpeedWindow:
@@ -678,6 +689,9 @@ class DesignResult:
                 "max_speed_kn": self.performance.design.max_speed_kn,
             }
         )
+        if case.seabed is not None:
+            out["seabed"] = case.seabed
+            out["seabed_friction_kgf"] = self.performance.seabed_friction_kgf
         return out
 
 
@@ -1269,17 +1283,51 @@ def _stage_warps(
     )
 
 
-def _stage_performance(case: DesignCase, power: PowerStage, warps: WarpStage) -> PerformanceStage:
-    """FT de Fridman por propulsor frente a la resistencia total (con ROB en modo corregido)."""
+def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
+    """Rozamiento con el fondo [kgf] del tren de fondo y de los dos portones.
+
+    Es μ del tren por el peso en el agua de burlón y lastre (máximo, acero) más μ de las zapatas
+    por el peso en el agua de los dos portones; 0 si el caso no indica ``seabed``. Es una cota
+    simple (todo el peso apoyado): el simulador con portones acoplados reparte la reacción con la
+    sustentación de las boyas y los cables.
+    """
+    if case.seabed is None:
+        return 0.0
+    sb = rigging.seabed(case.seabed)
+    dist = ballast.distribution_max
+    steel = 1.0 - 1024.0 / 7850.0
+    ballast_water = (dist.wings_kg + dist.bosom_kg + dist.adjust_kg) * steel
+    gear = sb.mu_gear.nominal * (ballast.footrope_weight_water_kgf + ballast_water)
+    door = case.door
+    door_water = door.weight_water_kg or (door.weight_air_kg or 0.0) * 0.6
+    return float(gear + DOORS_PER_RIG * sb.mu_door.nominal * door_water)
+
+
+def _stage_performance(
+    case: DesignCase, power: PowerStage, warps: WarpStage, ballast: BallastStage
+) -> PerformanceStage:
+    """FT de Fridman por propulsor frente a la resistencia total (con ROB en modo corregido).
+
+    Con ``case.seabed`` la demanda suma el rozamiento con el fondo (:func:`seabed_friction_kgf`).
+    """
+    friction = seabed_friction_kgf(case, ballast)
+    demand = (
+        warps.total
+        if friction == 0.0
+        else Pair(warps.total.std + friction, warps.total.mod + friction)
+    )
     windows: dict[str, SpeedWindow] = {}
     for prop in (PropellerType.FIXED_PITCH, PropellerType.VARIABLE_PITCH_NOZZLE):
         ft = _ft_of(power.fridman, prop)
         for variant in ("std", "mod"):
             windows[f"{prop.value}_{variant}"] = speed_window(
-                case.speeds, ft, warps.total.variant(variant)
+                case.speeds, ft, demand.variant(variant)
             )
     return PerformanceStage(
-        windows=windows, demand=warps.total, design_key=f"{case.ft_propeller.value}_std"
+        windows=windows,
+        demand=demand,
+        design_key=f"{case.ft_propeller.value}_std",
+        seabed_friction_kgf=friction,
     )
 
 
@@ -1318,7 +1366,7 @@ def run(case: DesignCase) -> DesignResult:
     bridles = _stage_bridles(case, dimensions, rig, doors, spread)
     ballast = _stage_ballast(case, dimensions, floats)
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
-    performance = _stage_performance(case, power, warps)
+    performance = _stage_performance(case, power, warps, ballast)
     if case.compat is Compat.CORRECTED:
         notes.append(
             "warp_total_omits_doors: la resistencia total incluye ROB de los dos portones "

@@ -73,6 +73,7 @@ from trawlkit.rigging.ropes import (
     select_rope,
     wingtip_reinforcement_m,
 )
+from trawlkit.rigging.seabed import Range, Seabed, seabed, seabeds
 from trawlkit.rigging.spread import (
     AV_IZZO_SHARES,
     AV_PRADO_SHARES,
@@ -134,6 +135,10 @@ from trawlkit.rigging.warps import (
 )
 
 __all__ = [
+    "Range",
+    "Seabed",
+    "seabed",
+    "seabeds",
     "AV_IZZO_SHARES",
     "AV_PRADO_SHARES",
     "CATENARY_RATIO_EXCEL",

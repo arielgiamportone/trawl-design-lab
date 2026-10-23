@@ -1,0 +1,48 @@
+# Catálogo de tipos de fondo para la simulación (trawlkit.sim.scenario).
+#
+# mu_gear: rozamiento cinético burlón/tren de fondo y paño sobre el fondo; mu_door: zapata del
+# portón. Cada uno con valor nominal y rango [mín, máx] para el análisis de incertidumbre.
+# penetration: clase de penetración del aparejo en el sedimento (Eigaard et al. 2016, BENTHIS).
+#
+# A VERIFICAR: no hay una tabla publicada de coeficientes de rozamiento por sedimento para artes
+# de arrastre (ver docs/22_simulacion_realista.md). Los valores son estimaciones de ingeniería
+# coherentes con: la fricción de deslizamiento acero/cabo sobre sedimentos saturados (0,3–0,8),
+# el aumento del arrastre del tren de fondo de fango a grava medido en BENTHIS (O'Neill &
+# Ivanović 2016) y el valor de "fondo intermedio" (0,5) que el simulador usaba hasta ahora.
+source: estimación de ingeniería (A VERIFICAR); ver docs/22_simulacion_realista.md
+items:
+  - id: mud
+    name: Fango
+    aliases: [fango, barro, limo, fangoso]
+    mu_gear: {nominal: 0.40, range: [0.30, 0.50]}
+    mu_door: {nominal: 0.35, range: [0.25, 0.50]}
+    penetration: alta
+    notes: Sedimento blando; el tren y las zapatas se hunden y movilizan más sedimento.
+  - id: sand
+    name: Arena
+    aliases: [arena, arenoso]
+    mu_gear: {nominal: 0.55, range: [0.45, 0.65]}
+    mu_door: {nominal: 0.50, range: [0.40, 0.60]}
+    penetration: media
+    notes: Fondo firme; rozamiento intermedio.
+  - id: mixed
+    name: Intermedio (mixto)
+    aliases: [intermedio, mixto, fango arenoso, arena fangosa]
+    mu_gear: {nominal: 0.50, range: [0.40, 0.60]}
+    mu_door: {nominal: 0.45, range: [0.35, 0.55]}
+    penetration: media
+    notes: Valor por defecto del simulador (μ = 0,5).
+  - id: gravel
+    name: Grava y conchilla
+    aliases: [grava, cascajo, conchilla, canto rodado]
+    mu_gear: {nominal: 0.65, range: [0.55, 0.80]}
+    mu_door: {nominal: 0.60, range: [0.50, 0.75]}
+    penetration: baja
+    notes: Abrasivo; más arrastre del tren de fondo.
+  - id: rock
+    name: Roca o piedra
+    aliases: [roca, piedra, rocoso, pedregoso]
+    mu_gear: {nominal: 0.80, range: [0.60, 1.00]}
+    mu_door: {nominal: 0.70, range: [0.55, 0.90]}
+    penetration: baja
+    notes: Con tren de rodillos (rockhopper) el rozamiento efectivo baja; riesgo de enganche.

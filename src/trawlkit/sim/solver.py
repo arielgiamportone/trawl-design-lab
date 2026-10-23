@@ -23,7 +23,17 @@ Cargas
   (hilos de Morison); sirven para medir cuánto del arrastre de una red real se debe a los nudos.
 * **Fondo** (``z = 0``): restricción unilateral. Un nodo apoyado recibe la reacción
   ``R = max(0, −F_z)`` y el rozamiento cinético ``μ R`` en +x: en el arrastre estacionario todo
-  punto apoyado desliza sobre el fondo con velocidad −v x̂, así que la dirección es exacta.
+  punto apoyado desliza sobre el fondo con velocidad −v x̂, así que la dirección es exacta. El
+  rozamiento puede ser distinto para el paño y el tren (``mu``) y para los portones
+  (``mu_door``); el nodo del portón es su centro, a media altura sobre la zapata.
+* **Portones acoplados** (``NetModel.coupled_doors``): arrastre ``½ ρ C_D A v²`` en +x,
+  sustentación ``½ ρ C_L A v²`` hacia afuera, peso en el agua; el cable de remolque es una cadena
+  de barras con peso y Morison hasta el punto fijo del buque.
+* **Captura** (``catch_volume_m3 > 0``): ocupa los anillos del extremo del copo hasta llenar su
+  volumen (se recalcula cada control de convergencia con la forma actual). Los hilos de esa zona
+  no reciben Morison (flujo bloqueado); el paño recibe la presión ``½ ρ C_p v²`` normal hacia
+  afuera, cuya resultante axial es la presión por el área frontal de la captura (O'Neill y
+  O'Donoghue 1997), y el peso sumergido de la captura se reparte en los nodos inferiores.
 
 Twines y barras se evalúan juntos como "segmentos": un segmento tiene tres nodos, coeficientes
 ``g`` con los que su vector es ``Σ g_k x_k`` (un hilo del triángulo: ``∂x/∂i``; una barra:
@@ -49,7 +59,7 @@ que la relajación explícita converge de forma robusta.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import numpy.typing as npt
@@ -75,6 +85,10 @@ class Params:
     knot_factor: float = 0.0
     knot_cd: float = 1.0
     rho: float = RHO_SEAWATER
+    mu_door: float | None = None  # None = mu
+    catch_volume_m3: float = 0.0
+    catch_weight_n: float = 0.0
+    catch_cp: float = 1.0
 
 
 @dataclass(frozen=True)
@@ -87,6 +101,7 @@ class Forces:
     twine_tension: FloatArray  # (nt, 2) tensión de cada familia de hilos [N por hilo]
     bar_tension: FloatArray  # (nb,) tensión de cada barra [N]
     contact: npt.NDArray[np.bool_]
+    catch_x: float = 0.0  # resultante x de la presión de la captura [N]
 
 
 class ForceField:
@@ -132,12 +147,113 @@ class ForceField:
             fk = 0.5 * p.rho * p.knot_cd * area_k * model.tri_area * p.speed_ms**2 / 3.0
             np.add.at(drag_float, model.tri.ravel(), np.repeat(fk, 3))
         const = model.point_load.copy()
+        if model.coupled_doors:
+            q = 0.5 * p.rho * model.door_area_m2 * p.speed_ms**2
+            for k in model.doors:
+                out = 1.0 if model.x0[k, 1] > 0 else -1.0
+                drag_float[k] += model.door_cd * q
+                const[k, 1] += out * model.door_cl * q
+                const[k, 2] -= model.door_weight_n
         const[:, 0] += drag_float
         const[:, 2] += buoy
         self.const = const.ravel()
         self.point_drag = drag_float
         self.free = np.ones(n, dtype=bool)
         self.free[model.fixed] = False
+        # Rozamiento por nodo y altura del "fondo" de cada nodo (centro del portón).
+        self.mu_node = np.full(n, p.mu)
+        self.floor = np.zeros(n)
+        if model.coupled_doors:
+            self.mu_node[list(model.doors)] = p.mu if p.mu_door is None else p.mu_door
+            self.floor[list(model.doors)] = model.door_floor_m
+        # Captura: zona ocupada (triángulos y nodos), flujo por segmento.
+        self.flow = np.ones(2 * nt + nb)
+        self.catch_tri = np.zeros(0, dtype=np.int64)
+        self.catch_nodes = np.zeros(0, dtype=np.int64)
+        self.catch_low = np.zeros(0, dtype=np.int64)
+        self.catch_w = np.zeros(0)
+        self.catch_p = 0.5 * p.rho * p.catch_cp * p.speed_ms**2
+        self.catch_info: dict[str, float] = {}
+        ring_of = np.full(n, -1)
+        for r_k, ring in enumerate(model.codend_rings):
+            ring_of[ring] = np.where(ring_of[ring] < 0, r_k, ring_of[ring])
+        self._ring_of = ring_of
+        tri_ring = ring_of[model.tri]
+        self._tri_ring = np.where((tri_ring >= 0).all(axis=1), tri_ring.max(axis=1), -1)
+
+    @property
+    def has_catch(self) -> bool:
+        """Indica si hay captura en el copo."""
+        return self.p.catch_volume_m3 > 0.0 and len(self.model.codend_rings) > 1
+
+    def update_catch(self, x: FloatArray) -> None:
+        """Recalcula la zona del copo que ocupa la captura con la forma ``x``.
+
+        Integra el volumen anillo por anillo desde el extremo cerrado (troncos de cono entre
+        secciones; cada sección con el área del círculo de su perímetro en el plano y–z, porque
+        la captura infla el copo) hasta llegar a ``catch_volume_m3``; la zona son los
+        triángulos entre esos anillos.
+        """
+        if not self.has_catch:
+            return
+        rings = self.model.codend_rings
+        # La captura infla el copo hasta su circunferencia: el área de cada sección es la del
+        # círculo de igual perímetro (un copo vacío va aplastado y su área actual es casi nula).
+        areas = np.array([_ring_perimeter(x[r, 1], x[r, 2]) ** 2 / (4.0 * np.pi) for r in rings])
+        xs = np.array([float(x[r, 0].mean()) for r in rings])
+        vol = 0.0
+        last = len(rings) - 1
+        frac = 1.0
+        prev_vol = 0.0
+        for k in range(1, len(rings)):
+            seg = 0.5 * (areas[k] + areas[k - 1]) * abs(xs[k - 1] - xs[k])
+            prev_vol, vol = vol, vol + seg
+            if vol >= self.p.catch_volume_m3:
+                last = k
+                frac = (self.p.catch_volume_m3 - prev_vol) / seg if seg > 0 else 1.0
+                break
+        # Tramo k = entre los anillos k−1 y k; el último tramo queda lleno en la fracción frac.
+        sel = (self._tri_ring >= 1) & (self._tri_ring <= last)
+        self.catch_tri = np.flatnonzero(sel)
+        self.catch_w = np.where(self._tri_ring[self.catch_tri] == last, frac, 1.0)
+        nodes = np.unique(np.concatenate([rings[k] for k in range(last + 1)]))
+        self.catch_nodes = nodes
+        zc = float(x[nodes, 2].mean())
+        self.catch_low = nodes[x[nodes, 2] <= zc]
+        if self.catch_low.size == 0:
+            self.catch_low = nodes
+        self.flow[:] = 1.0
+        nt = self.nt
+        self.flow[self.catch_tri] = 1.0 - self.catch_w
+        self.flow[nt + self.catch_tri] = 1.0 - self.catch_w
+        length = abs(xs[0] - xs[last - 1]) + frac * abs(xs[last - 1] - xs[last])
+        front = areas[last - 1] + frac * (areas[last] - areas[last - 1])
+        self.catch_info = {
+            "length_m": float(length),
+            "volume_m3": float(min(vol, self.p.catch_volume_m3)),
+            "overflow": float(vol < self.p.catch_volume_m3),
+            "front_area_m2": float(front),
+            "max_diameter_m": float(2.0 * np.sqrt(max(areas[:last].max(), front) / np.pi)),
+            "rings": float(last - 1 + frac),
+        }
+
+    def _catch_forces(self, x: FloatArray) -> FloatArray:
+        """Presión de la captura (normal hacia afuera de la zona) y su peso, por nodo."""
+        out = np.zeros((self.n, 3))
+        t = self.model.tri[self.catch_tri]
+        if t.size == 0:
+            return out
+        a, b, c = x[t[:, 0]], x[t[:, 1]], x[t[:, 2]]
+        nrm = 0.5 * np.cross(b - a, c - a)  # vector área
+        cen = (a + b + c) / 3.0
+        ref = x[self.catch_nodes].mean(axis=0)
+        sgn = np.sign(np.einsum("ij,ij->i", nrm, cen - ref))
+        f = (self.catch_p * sgn * self.catch_w)[:, None] * nrm / 3.0
+        for k in range(3):
+            np.add.at(out, t[:, k], f)
+        if self.p.catch_weight_n and self.catch_low.size:
+            out[self.catch_low, 2] -= self.p.catch_weight_n / self.catch_low.size
+        return out
 
     def tensions(self, x: FloatArray) -> FloatArray:
         """Tensión de cada segmento [N] en la configuración ``x``."""
@@ -159,7 +275,9 @@ class ForceField:
         un = -ue[:, None] * e
         un[:, 0] += vel
         un_mag = np.sqrt(np.maximum(vel * vel - ue * ue, 0.0))
-        fh = self.k[:, None] * (p.cn * un_mag[:, None] * un + (p.ct * np.abs(ue) * ue)[:, None] * e)
+        fh = (self.k * self.flow)[:, None] * (
+            p.cn * un_mag[:, None] * un + (p.ct * np.abs(ue) * ue)[:, None] * e
+        )
         hx = fh[:, 0].copy() if full else None
         fh[:, 2] -= self.w
         fv = self.h[:, :, None] * fh[:, None, :] - (self.mult * t)[:, None, None] * (
@@ -167,10 +285,15 @@ class ForceField:
         )
         total = np.bincount(self.idx, weights=fv.ravel(), minlength=3 * self.n) + self.const
         total = total.reshape(-1, 3)
-        contact = x[:, 2] <= 1e-9
+        catch_x = 0.0
+        if self.catch_tri.size:
+            fc = self._catch_forces(x)
+            total += fc
+            catch_x = float(fc[:, 0].sum())
+        contact = x[:, 2] <= self.floor + 1e-9
         reaction = np.where(contact, np.maximum(-total[:, 2], 0.0), 0.0)
         total[:, 2] += reaction
-        total[:, 0] += p.mu * reaction
+        total[:, 0] += self.mu_node * reaction
         total[~self.free] = 0.0
         if not full:
             return total, None
@@ -183,12 +306,16 @@ class ForceField:
         )
         nt = self.nt
         tens = np.stack([t[:nt], t[nt : 2 * nt]], axis=1)
-        return total, Forces(total, hydro_x, reaction, tens, t[2 * nt :], contact)
+        return total, Forces(total, hydro_x, reaction, tens, t[2 * nt :], contact, catch_x)
 
     def drag(self, forces: Forces, nodes: npt.NDArray[np.bool_] | None = None) -> float:
-        """Arrastre [N]: fuerzas hidrodinámicas en x más rozamiento con el fondo."""
+        """Arrastre [N]: fuerzas hidrodinámicas en x (con la captura) más rozamiento."""
         sel = slice(None) if nodes is None else nodes
-        return float(forces.hydro_x[sel].sum() + self.p.mu * forces.reaction[sel].sum())
+        return float(
+            forces.hydro_x[sel].sum()
+            + (self.mu_node[sel] * forces.reaction[sel]).sum()
+            + forces.catch_x
+        )
 
 
 def compute_forces(model: NetModel, x: FloatArray, p: Params) -> Forces:
@@ -210,6 +337,7 @@ class RelaxResult:
     force_balance: float  # |Σ R_x| / |arrastre total|
     drag_mean: float  # arrastre medio en la última ventana [N]
     drag_std: float  # desvío del arrastre en la última ventana [N]
+    catch: dict[str, float] = field(default_factory=dict)  # zona de la captura (update_catch)
 
 
 def nodal_stiffness(model: NetModel) -> FloatArray:
@@ -241,10 +369,16 @@ def quantities(model: NetModel, x: FloatArray, ff: ForceField, forces: Forces) -
 
 
 def net_mask(model: NetModel) -> npt.NDArray[np.bool_]:
-    """Nodos de la red (sin los nodos de unión de bridas ni los portones)."""
+    """Nodos de la red (sin los nodos de unión de bridas, los portones ni los cables)."""
     mask = np.ones(model.x0.shape[0], dtype=bool)
     mask[[*model.junctions, *model.doors]] = False
+    for w in model.warp_nodes:
+        mask[w] = False
     return mask
+
+
+def _ring_perimeter(y: FloatArray, z: FloatArray) -> float:
+    return float(np.hypot(np.roll(y, -1) - y, np.roll(z, -1) - z).sum())
 
 
 def relax(
@@ -277,7 +411,8 @@ def relax(
     ff = ForceField(model, p)
     free = ff.free
     x = (model.x0 if x_init is None else x_init).copy()
-    x[:, 2] = np.maximum(x[:, 2], 0.0)
+    x[:, 2] = np.maximum(x[:, 2], ff.floor)
+    ff.update_catch(x)
     mirror = model.mirror
     flip = np.array([1.0, -1.0, 1.0])
     if symmetric:
@@ -293,6 +428,8 @@ def relax(
     converged = False
     for it in range(1, max_iter + 1):
         check = it % check_every == 0
+        if check:
+            ff.update_catch(x)
         f, full = ff.evaluate(x, full=check)
         if symmetric:
             f = 0.5 * (f + f[mirror] * flip)
@@ -331,9 +468,9 @@ def relax(
             n_pos = 0
         v += dt * acc
         x += dt * v
-        # Fondo: proyección z ≥ 0 sin velocidad entrante.
-        below = x[:, 2] < 0.0
-        x[below, 2] = 0.0
+        # Fondo: proyección z ≥ piso sin velocidad entrante.
+        below = x[:, 2] < ff.floor
+        x[below, 2] = ff.floor[below]
         v[below, 2] = np.maximum(v[below, 2], 0.0)
     f, final = ff.evaluate(x, full=True)
     assert final is not None
@@ -344,5 +481,13 @@ def relax(
     bal = abs(float(f[free, 0].sum())) / drag
     tail = np.array(samples[-span:]) if samples else np.zeros((1, 5))
     return RelaxResult(
-        x, final, converged, it, res, bal, float(tail[:, 4].mean()), float(tail[:, 4].std())
+        x,
+        final,
+        converged,
+        it,
+        res,
+        bal,
+        float(tail[:, 4].mean()),
+        float(tail[:, 4].std()),
+        dict(ff.catch_info),
     )

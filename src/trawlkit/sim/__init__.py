@@ -14,12 +14,14 @@ from trawlkit.sim.core import (
     DEFAULT_MU,
     DEFAULT_RESOLUTION,
     SimResult,
+    haul,
     rigging_from_result,
     rigging_from_spec,
     simulate,
     sweep,
 )
 from trawlkit.sim.mesh import NetModel, Rigging, build_model
+from trawlkit.sim.scenario import Scenario, Seabed, seabed, seabeds
 
 __all__ = [
     "DEFAULT_CN",
@@ -28,10 +30,15 @@ __all__ = [
     "DEFAULT_RESOLUTION",
     "NetModel",
     "Rigging",
+    "Scenario",
+    "Seabed",
     "SimResult",
     "build_model",
+    "haul",
     "rigging_from_result",
     "rigging_from_spec",
+    "seabed",
+    "seabeds",
     "simulate",
     "sweep",
 ]

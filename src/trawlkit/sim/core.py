@@ -13,7 +13,8 @@ import numpy.typing as npt
 from trawlkit.io.schema import NetSpec
 from trawlkit.model import DesignCase, DesignResult, run
 from trawlkit.sim.mesh import NetModel, Rigging, build_model, interpolate_shape
-from trawlkit.sim.solver import G, Params, RelaxResult, relax
+from trawlkit.sim.scenario import Scenario
+from trawlkit.sim.solver import G, Params, RelaxResult, net_mask, relax
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int64]
@@ -72,6 +73,16 @@ class SimResult:
     force_balance: float
     runtime_s: float
     params: dict[str, float] = field(default_factory=dict)
+    #: Escenario del lance (captura, fondo, portones acoplados); vacío = simulador básico.
+    scenario: dict[str, Any] = field(default_factory=dict)
+    #: Zona de la captura: largo, volumen, área frontal, diámetro máximo (vacío sin captura).
+    catch: dict[str, float] = field(default_factory=dict)
+    catch_drag_kgf: float = 0.0
+    door_friction_kgf: float = 0.0
+    #: Tiro total del arte en el buque (componente x de los dos cables) [kgf]; 0 = portones fijos.
+    towing_pull_kgf: float = 0.0
+    warp_tension_kgf: float = 0.0  # tensión de cada cable en el portón [kgf]
+    door_positions_m: tuple[tuple[float, float, float], ...] = ()
 
     def to_dict(self, *, geometry: bool = True) -> dict[str, Any]:
         """Representación serializable (``geometry=False`` omite nodos y conectividad)."""
@@ -97,6 +108,13 @@ class SimResult:
             "force_balance": self.force_balance,
             "runtime_s": self.runtime_s,
             "params": dict(self.params),
+            "scenario": dict(self.scenario),
+            "catch": dict(self.catch),
+            "catch_drag_kgf": self.catch_drag_kgf,
+            "door_friction_kgf": self.door_friction_kgf,
+            "towing_pull_kgf": self.towing_pull_kgf,
+            "warp_tension_kgf": self.warp_tension_kgf,
+            "door_positions_m": [list(d) for d in self.door_positions_m],
         }
         if geometry:
             out.update(
@@ -202,7 +220,23 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         ballast_tips_kg=float(bd.adjust_kg),
         door_height_m=float(r.doors.door.height_m or 0.95),
         wire_water_kgf_m=float(r.warps.weight.water_min_kg_m),
+        door_area_m2=float(r.doors.door.area_m2 or 1.8),
+        door_cl=float(r.doors.polar.cl),
+        door_cd=float(r.doors.polar.cd),
+        door_weight_water_kgf=_door_water_kgf(r),
+        warp_length_m=float(r.warps.warp_m),
+        depth_m=float(r.summary()["working_depth_m"] or 40.0),
+        gallows_m=float(r.case.gallows_spacing_m),
+        warp_diameter_mm=float(r.warps.diameter_mm),
     )
+
+
+def _door_water_kgf(r: DesignResult) -> float:
+    door = r.doors.door
+    if door.weight_water_kg:
+        return float(door.weight_water_kg)
+    coef = (door.model_extra or {}).get("weight_water_coefficient", 0.6)
+    return float(door.weight_air_kg or 100.0) * float(coef)
 
 
 def rigging_from_spec(spec: NetSpec, door_spread_m: float) -> Rigging:
@@ -300,14 +334,31 @@ def _result(
     relaxed: RelaxResult,
     runtime: float,
     resolution: int,
+    scenario: Scenario | None = None,
 ) -> SimResult:
     x = relaxed.x
     fr = relaxed.forces
     tu, tl = model.wing_tips_upper, model.wing_tips_lower
-    net_nodes = np.ones(x.shape[0], dtype=bool)
-    net_nodes[[*model.junctions, *model.doors]] = False
+    net_nodes = net_mask(model)
     hydro = float(fr.hydro_x[net_nodes].sum())
     friction = float(p.mu * fr.reaction[net_nodes].sum())
+    doors = list(model.doors)
+    mu_door = p.mu if p.mu_door is None else p.mu_door
+    door_friction = float(mu_door * fr.reaction[doors].sum()) if model.coupled_doors else 0.0
+    towing = 0.0
+    warp_t = 0.0
+    if model.coupled_doors:
+        for k, (b, kind) in enumerate(zip(model.bar, model.bar_kind, strict=True)):
+            if kind != "warp":
+                continue
+            if int(b[1]) in model.fixed.tolist():
+                d = x[b[1]] - x[b[0]]
+                towing += float(fr.bar_tension[k] * -d[0] / np.linalg.norm(d))
+            if int(b[0]) in doors:
+                warp_t = max(warp_t, float(fr.bar_tension[k]))
+    spread = (
+        float(abs(x[doors[0], 1] - x[doors[1], 1])) if model.coupled_doors else rig.door_spread_m
+    )
     pull = 0.0
     tension: dict[str, float] = {}
     for k, (b, kind) in enumerate(zip(model.bar, model.bar_kind, strict=True)):
@@ -345,7 +396,7 @@ def _result(
         drag_jitter_kgf=relaxed.drag_std / G,
         bridle_pull_kgf=-pull / G,
         bridle_tension_kgf=tension,
-        door_spread_m=rig.door_spread_m,
+        door_spread_m=spread,
         net_length_m=float(x[netting, 0].max() - x[[*tu, *tl], 0].mean()),
         converged=relaxed.converged,
         iterations=relaxed.iterations,
@@ -360,8 +411,26 @@ def _result(
             "knot_factor": p.knot_factor,
             "resolution": float(resolution),
             "speed_ms": p.speed_ms,
+            "mu_door": mu_door,
         },
+        scenario=_scenario_dict(scenario),
+        catch=dict(relaxed.catch),
+        catch_drag_kgf=fr.catch_x / G,
+        door_friction_kgf=door_friction / G,
+        towing_pull_kgf=towing / G,
+        warp_tension_kgf=warp_t / G,
+        door_positions_m=tuple((float(x[k, 0]), float(x[k, 1]), float(x[k, 2])) for k in doors),
     )
+
+
+def _scenario_dict(sc: Scenario | None) -> dict[str, Any]:
+    if sc is None:
+        return {}
+    from dataclasses import asdict
+
+    out = asdict(sc)
+    out["catch_volume_m3"] = sc.catch_volume_m3
+    return out
 
 
 # ---------------------------------------------------------------------------------------------
@@ -386,6 +455,7 @@ def simulate(
     coarse_resolution: int | None = 4,
     x_init: FloatArray | None = None,
     model: NetModel | None = None,
+    scenario: Scenario | None = None,
 ) -> SimResult:
     """Forma de equilibrio de la red remolcada a ``speed_kn`` nudos.
 
@@ -401,11 +471,28 @@ def simulate(
       0 = sin nudos, el modelo por defecto);
     * ``tol``/``qoi_tol``/``max_iter``: criterio de parada de :func:`~trawlkit.sim.solver.relax`;
     * ``coarse_resolution``: si no se da ``x_init``, se resuelve primero a esa resolución y se
-      interpola la forma como punto de partida (multinivel); ``None`` parte de la red relingada.
+      interpola la forma como punto de partida (multinivel); ``None`` parte de la red relingada;
+    * ``scenario``: captura en el copo, tipo de fondo y portones acoplados (ver
+      :mod:`trawlkit.sim.scenario`); ``None`` = simulador básico (red vacía, portones fijos).
     """
     spec, rig, result = _resolve(case_or_spec, door_spread_m)
     t0 = time.perf_counter()
-    mdl = model if model is not None else build_model(spec, rig, resolution=resolution)
+    coupled = bool(scenario and scenario.coupled_doors)
+    if model is not None and model.coupled_doors != coupled:
+        model = None
+    mdl = (
+        model
+        if model is not None
+        else build_model(spec, rig, resolution=resolution, coupled_doors=coupled)
+    )
+    mu_door: float | None = None
+    catch_v = catch_w = 0.0
+    catch_cp = 1.0
+    if scenario is not None:
+        mu, mu_door = scenario.friction(mu)
+        catch_v = scenario.catch_volume_m3
+        catch_w = scenario.catch_weight_water_n()
+        catch_cp = scenario.catch_cp
     p = Params(
         speed_ms=speed_kn * KNOT_MS,
         cn=cn,
@@ -414,18 +501,23 @@ def simulate(
         float_cd=_float_cd_at(result, rig, speed_kn),
         knot_factor=knot_factor,
         knot_cd=knot_cd,
+        mu_door=mu_door,
+        catch_volume_m3=catch_v,
+        catch_weight_n=catch_w,
+        catch_cp=catch_cp,
     )
     if x_init is not None and x_init.shape != mdl.x0.shape:
         x_init = None
     if x_init is None and coarse_resolution and coarse_resolution < resolution:
-        coarse = build_model(spec, rig, resolution=coarse_resolution)
+        coarse = build_model(spec, rig, resolution=coarse_resolution, coupled_doors=coupled)
         rc = relax(coarse, p, tol=tol, qoi_tol=qoi_tol, max_iter=max_iter)
         x_init = interpolate_shape(coarse, rc.x, mdl)
     start = (mdl.x0 if x_init is None else x_init).copy()
-    for k, sgn in zip(mdl.doors, (1.0, -1.0), strict=True):
-        start[k] = [mdl.x0[k, 0], sgn * rig.door_spread_m / 2.0, mdl.x0[k, 2]]
+    if not coupled:
+        for k, sgn in zip(mdl.doors, (1.0, -1.0), strict=True):
+            start[k] = [mdl.x0[k, 0], sgn * rig.door_spread_m / 2.0, mdl.x0[k, 2]]
     relaxed = relax(mdl, p, start, tol=tol, qoi_tol=qoi_tol, max_iter=max_iter)
-    return _result(mdl, rig, p, speed_kn, relaxed, time.perf_counter() - t0, resolution)
+    return _result(mdl, rig, p, speed_kn, relaxed, time.perf_counter() - t0, resolution, scenario)
 
 
 def sweep(
@@ -482,6 +574,55 @@ def sweep(
             coarse_resolution=coarse_resolution,
             x_init=prev,
             model=model,
+        )
+        prev = res.nodes
+        out.append(res)
+    return out
+
+
+def haul(
+    case: CaseLike,
+    speed_kn: float,
+    catches_kg: Sequence[float],
+    *,
+    scenario: Scenario | None = None,
+    resolution: int = 4,
+    cn: float = DEFAULT_CN,
+    ct: float = DEFAULT_CT,
+    mu: float = DEFAULT_MU,
+    tol: float = 1e-2,
+    qoi_tol: float = 3e-3,
+    max_iter: int = 40_000,
+) -> list[SimResult]:
+    """Lance progresivo: equilibrios sucesivos a ``speed_kn`` con la captura creciendo.
+
+    Cada paso parte de la forma del anterior (la captura entra de a poco, como en el lance). El
+    resto del escenario (fondo, densidades, portones acoplados) se toma de ``scenario``.
+    """
+    from dataclasses import replace
+
+    if isinstance(case, DesignCase):
+        case = run(case)
+    base = scenario or Scenario()
+    spec, rig, _ = _resolve(case, None)
+    model = build_model(spec, rig, resolution=resolution, coupled_doors=base.coupled_doors)
+    out: list[SimResult] = []
+    prev: FloatArray | None = None
+    for kg in catches_kg:
+        res = simulate(
+            case,
+            speed_kn,
+            resolution=resolution,
+            cn=cn,
+            ct=ct,
+            mu=mu,
+            tol=tol,
+            qoi_tol=qoi_tol,
+            max_iter=max_iter,
+            coarse_resolution=None,
+            x_init=prev,
+            model=model,
+            scenario=replace(base, catch_kg=float(kg)),
         )
         prev = res.nodes
         out.append(res)

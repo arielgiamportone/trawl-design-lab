@@ -107,6 +107,16 @@ class Rigging:
     ballast_tips_kg: float
     door_height_m: float = 0.95
     wire_water_kgf_m: float = 0.49  # peso sumergido de bridas y patentes (cable de acero)
+    # Portones acoplados (Scenario.coupled_doors): polar al ángulo de ataque del caso, peso en el
+    # agua y cable de remolque hasta el buque (valores por defecto: portón FAO A-3 a 32°).
+    door_area_m2: float = 1.805
+    door_cl: float = 0.93
+    door_cd: float = 0.71
+    door_weight_water_kgf: float = 80.6
+    warp_length_m: float = 200.0
+    depth_m: float = 40.0
+    gallows_m: float = 2.5
+    warp_diameter_mm: float = 12.0
 
 
 @dataclass(frozen=True)
@@ -163,6 +173,19 @@ class NetModel:
     grids: tuple[PanelGrid, ...]
     mirror: IntArray  # índice del nodo simétrico (y → −y)
     solid_surface_m2: float  # Σ d·L del paño discretizado
+    #: Anillos del copo y del cuerpo (dorso + vientre), del extremo cerrado hacia la boca.
+    codend_rings: tuple[IntArray, ...] = ()
+    #: Portones libres con cable hasta el buque (los puntos del buque son los nodos fijos).
+    coupled_doors: bool = False
+    warp_nodes: tuple[IntArray, IntArray] = (
+        np.zeros(0, dtype=np.int64),
+        np.zeros(0, dtype=np.int64),
+    )
+    door_area_m2: float = 0.0
+    door_cl: float = 0.0
+    door_cd: float = 0.0
+    door_weight_n: float = 0.0
+    door_floor_m: float = 0.0  # altura del nodo del portón sobre la zapata [m]
 
     @property
     def n_nodes(self) -> int:
@@ -269,12 +292,19 @@ def build_model(
     twine_modulus_pa: float = 2.0e9,
     rope_ea_n: float = 1.0e6,
     wire_ea_n: float = 4.0e6,
+    coupled_doors: bool = False,
+    warp_segments: int = 10,
 ) -> NetModel:
     """Discretiza ``spec`` con el aparejo ``rigging`` (ver el docstring del módulo).
 
     ``resolution`` es la cantidad nominal de divisiones por panel: el ancho de cada ala tiene
     ``resolution // 2`` columnas, la bocana ``2·⌈resolution/6⌉`` y las filas de cada franja son
     proporcionales a su largo relingado (``resolution`` filas cada 9 m, mínimo 2).
+
+    Con ``coupled_doors`` los portones son nodos libres y se agrega cada cable de remolque como
+    ``warp_segments`` barras (peso y Morison del cable) hasta el punto del buque, que queda fijo
+    a ``depth_m`` sobre el fondo, ``gallows_m/2`` del eje y a la distancia horizontal que permite
+    el largo filado.
     """
     if resolution < 2:
         raise ValueError("resolution debe ser ≥ 2")
@@ -557,10 +587,54 @@ def build_model(
             bd.append(0.0)
             bw.append(rigging.wire_water_kgf_m * GRAVITY)
             kinds.append(kind)
+    vessel_pts: list[int] = []
+    warp_nodes: list[IntArray] = []
+    if coupled_doors:
+        # Cable de remolque: del portón al buque (pasteca), en línea recta como forma inicial.
+        # EA de cable de acero (módulo efectivo ~100 GPa sobre el área nominal).
+        warp_ea = 1.0e11 * math.pi * (rigging.warp_diameter_mm / 1000.0) ** 2 / 4.0
+        for k, sgn in ((0, 1.0), (1, -1.0)):
+            door = np.asarray(x_list[doors[k]], dtype=float)
+            dz = rigging.depth_m - door[2]
+            dy = sgn * rigging.gallows_m / 2.0 - door[1]
+            dx = math.sqrt(max(rigging.warp_length_m**2 - dz**2 - dy**2, 1.0))
+            vessel = door + np.array([-dx, dy, dz])
+            wchain = [doors[k]]
+            for j in range(1, warp_segments + 1):
+                wchain.append(len(x_list))
+                x_list.append((door + (vessel - door) * j / warp_segments).tolist())
+            vessel_pts.append(wchain[-1])
+            warp_nodes.append(np.asarray(wchain, dtype=np.int64))
+            seg_l = rigging.warp_length_m / warp_segments
+            for a_, b_ in zip(wchain[:-1], wchain[1:], strict=True):
+                bars.append((a_, b_))
+                l0.append(seg_l)
+                ea.append(warp_ea)
+                bd.append(rigging.warp_diameter_mm / 1000.0)
+                bw.append(rigging.wire_water_kgf_m * GRAVITY)
+                kinds.append("warp")
     x_all = np.asarray(x_list, dtype=float)
     # Trasladar para que los portones queden en x = 0.
     x_all[:, 0] -= x_all[doors[0], 0]
     n_all = x_all.shape[0]
+
+    # Anillos del copo: filas de los paneles centrales de dorso y vientre, apareadas desde el
+    # extremo cerrado (donde las franjas de ambos planos coinciden).
+    def central_rows(plane: str) -> list[IntArray]:
+        rows: list[IntArray] = []
+        for grid in grids:
+            if grid.plane != plane or grid.side != "center":
+                continue
+            r_nodes = [m(r) for r in grid.nodes]
+            if rows and np.array_equal(rows[-1], r_nodes[0]):
+                r_nodes = r_nodes[1:]
+            rows.extend(r_nodes)
+        return rows[::-1]
+
+    rings = tuple(
+        np.concatenate([ru, rl[::-1]])
+        for ru, rl in zip(central_rows("upper"), central_rows("lower"), strict=False)
+    )
 
     # --- cargas puntuales: lastre y boyas ---------------------------------------------------
     point = np.zeros((n_all, 3))
@@ -598,7 +672,7 @@ def build_model(
         float_weights=float_w,
         float_buoyancy_n=rigging.float_buoyancy_kgf * GRAVITY,
         float_area_m2=math.pi * (rigging.float_diameter_mm / 1000.0) ** 2 / 4.0,
-        fixed=np.asarray(doors, dtype=np.int64),
+        fixed=np.asarray(vessel_pts if coupled_doors else doors, dtype=np.int64),
         headrope=head,
         footrope=foot,
         headrope_centre=int(head[head.size // 2]),
@@ -613,6 +687,16 @@ def build_model(
         ),
         mirror=mirror,
         solid_surface_m2=solid,
+        codend_rings=rings,
+        coupled_doors=coupled_doors,
+        warp_nodes=(warp_nodes[0], warp_nodes[1])
+        if coupled_doors
+        else (np.zeros(0, dtype=np.int64), np.zeros(0, dtype=np.int64)),
+        door_area_m2=rigging.door_area_m2,
+        door_cl=rigging.door_cl,
+        door_cd=rigging.door_cd,
+        door_weight_n=rigging.door_weight_water_kgf * GRAVITY,
+        door_floor_m=rigging.door_height_m / 2.0,
     )
 
 
