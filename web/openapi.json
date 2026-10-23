@@ -9,7 +9,7 @@
   "/health": {
    "get": {
     "summary": "Health",
-    "description": "Comprobación de vida.",
+    "description": "Comprobación de vida, con la versión, la huella de rutas y el commit desplegado.",
     "operationId": "health_health_get",
     "responses": {
      "200": {
@@ -1574,6 +1574,28 @@
      "version": {
       "type": "string",
       "title": "Version"
+     },
+     "contract": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Contract"
+     },
+     "commit": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Commit"
      }
     },
     "type": "object",
@@ -1582,7 +1604,7 @@
      "version"
     ],
     "title": "Health",
-    "description": "Estado del servicio."
+    "description": "Estado del servicio.\n\n``contract`` es la huella de las rutas de la API (ver ``trawlkit.api.contract``): la app la\ncompara con la de su build para avisar si la API en línea es de otra versión. ``commit`` es\nel commit desplegado (``RENDER_GIT_COMMIT`` en Render; ``None`` en local)."
    },
    "LayoutPlane": {
     "properties": {

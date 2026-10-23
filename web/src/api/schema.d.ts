@@ -13,7 +13,7 @@ export interface paths {
         };
         /**
          * Health
-         * @description Comprobación de vida.
+         * @description Comprobación de vida, con la versión, la huella de rutas y el commit desplegado.
          */
         get: operations["health_health_get"];
         put?: never;
@@ -657,12 +657,20 @@ export interface components {
         /**
          * Health
          * @description Estado del servicio.
+         *
+         *     ``contract`` es la huella de las rutas de la API (ver ``trawlkit.api.contract``): la app la
+         *     compara con la de su build para avisar si la API en línea es de otra versión. ``commit`` es
+         *     el commit desplegado (``RENDER_GIT_COMMIT`` en Render; ``None`` en local).
          */
         Health: {
             /** Status */
             status: string;
             /** Version */
             version: string;
+            /** Contract */
+            contract?: string | null;
+            /** Commit */
+            commit?: string | null;
         };
         /**
          * LayoutPlane

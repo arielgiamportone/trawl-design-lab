@@ -424,3 +424,19 @@ def test_haul_endpoint_and_validation() -> None:
         {"resolution": 9},
     ):
         assert client.post("/simulate/haul", json=bad).status_code in (400, 422), bad
+
+
+def test_health_reports_contract_and_commit(monkeypatch: pytest.MonkeyPatch) -> None:
+    from pathlib import Path
+
+    from trawlkit.api.contract import fingerprint, routes
+
+    body = client.get("/health").json()
+    web = json.loads((Path(__file__).parents[1] / "web" / "openapi.json").read_text())
+    # La app compara esta huella con la de su build (vite.config.ts, mismo algoritmo).
+    assert body["contract"] == fingerprint(web)
+    assert len(body["contract"]) == 12
+    assert "POST /simulate/haul" in routes(web)
+    assert body["commit"] is None
+    monkeypatch.setenv("RENDER_GIT_COMMIT", "abc123")
+    assert client.get("/health").json()["commit"] == "abc123"

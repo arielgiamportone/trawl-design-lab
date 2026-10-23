@@ -12,14 +12,9 @@ services:
     healthCheckPath: /health
     # Despliega cada commit de main cuando pasan los checks de CI (reemplaza a autoDeploy: true).
     autoDeployTrigger: checksPass
-    # Sólo reconstruye si cambia algo que entra en la imagen.
-    buildFilter:
-      paths:
-        - Dockerfile
-        - .dockerignore
-        - pyproject.toml
-        - uv.lock
-        - src/**
+    # Sin buildFilter a propósito: con un filtro de rutas, un push de varios commits cuyo último
+    # commit no toca src/ (o un arreglo de CI que sólo toca la web) dejaba la API sin redesplegar
+    # y desfasada de la app (404 en las rutas nuevas). Ver docs/despliegue.md.
     envVars:
       # Origen del frontend publicado en GitHub Pages (sin ruta ni barra final).
       - key: TRAWLKIT_CORS_ORIGINS

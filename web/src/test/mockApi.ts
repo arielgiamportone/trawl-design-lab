@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+import { APP_CONTRACT } from '../lib/connection';
 import design from './fixtures/design.json';
 import designExcel from './fixtures/design_excel.json';
 import doors from './fixtures/doors.json';
@@ -41,7 +42,12 @@ const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
 /** Reemplaza ``fetch`` por un doble que responde como la API con los fixtures grabados. */
-export function mockApi(overrides: { design?: (body: Record<string, unknown>) => Response } = {}) {
+export function mockApi(
+  overrides: {
+    design?: (body: Record<string, unknown>) => Response;
+    contract?: string | null;
+  } = {},
+) {
   const calls: Call[] = [];
   const fn = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = String(input);
@@ -49,7 +55,12 @@ export function mockApi(overrides: { design?: (body: Record<string, unknown>) =>
     const body = init?.body ? JSON.parse(String(init.body)) : undefined;
     calls.push({ url, method, body });
     const path = new URL(url, 'http://x').pathname.replace(/^\/api/, '');
-    if (path === '/health') return json({ status: 'ok', version: '0.1.0' });
+    if (path === '/health')
+      return json({
+        status: 'ok',
+        version: '0.1.0',
+        contract: overrides.contract === undefined ? APP_CONTRACT : overrides.contract,
+      });
     if (path === '/catalog/nets') return json(nets);
     if (path === '/catalog/nets/fao_a3_standard') return json(netStd);
     if (path === '/catalog/nets/fao_a3_modified') return json(netMod);

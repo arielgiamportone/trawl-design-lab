@@ -37,6 +37,12 @@ describe('App', () => {
     expect(await screen.findByText('API conectada · v0.1.0')).toBeInTheDocument();
   });
 
+  it('avisa si la API en línea es de otra versión que la app', async () => {
+    mockApi({ contract: '000000000000' });
+    renderApp();
+    expect(await screen.findByText('API desactualizada · v0.1.0')).toBeInTheDocument();
+  });
+
   it('pestañas accesibles con flechas', async () => {
     mockApi();
     renderApp();

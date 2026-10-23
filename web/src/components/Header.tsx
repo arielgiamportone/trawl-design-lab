@@ -30,7 +30,14 @@ export function Header({ mode, onModeChange }: Props) {
   const [theme, setTheme] = useState<ThemePref>(initialThemePref);
   useEffect(() => applyThemePref(theme), [theme]);
   const conn = useConnection();
-  const status = conn.status === 'ok' ? 'ok' : conn.status === 'down' ? 'down' : 'wait';
+  const status =
+    conn.status === 'ok'
+      ? conn.outdated
+        ? 'outdated'
+        : 'ok'
+      : conn.status === 'down'
+        ? 'down'
+        : 'wait';
 
   return (
     <header className="app-header">
@@ -58,9 +65,17 @@ export function Header({ mode, onModeChange }: Props) {
             Documentación
           </a>
         )}
-        <span className={`api-status ${status}`} title={apiBase()} role="status">
+        <span
+          className={`api-status ${status}`}
+          title={
+            conn.outdated
+              ? `${apiBase()}: la API es de otra versión que la app; algunas funciones pueden dar error hasta que se redespliegue`
+              : apiBase()
+          }
+          role="status"
+        >
           <span className="led" aria-hidden="true" />
-          {statusLabel(conn.status, conn.version)}
+          {statusLabel(conn.status, conn.version, conn.outdated)}
         </span>
         {conn.status === 'down' && (
           <button type="button" className="api-retry" onClick={conn.retry}>

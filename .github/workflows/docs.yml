@@ -56,3 +56,17 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+  # Después de publicar, comprueba que la API en Render sirva las mismas rutas que la app
+  # (Render despliega cuando pasa la CI, unos minutos después). Sólo avisa: no hace fallar el flujo.
+  api-check:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Contrato de la API en línea
+        run: >
+          python3 tools/check_api_contract.py
+          "${{ vars.TRAWLKIT_API_URL || 'https://trawl-design-lab-api.onrender.com' }}"
+          --wait 1200

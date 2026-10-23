@@ -87,3 +87,24 @@ describe('api', () => {
     );
   });
 });
+
+describe('404 de una ruta que la API no tiene', () => {
+  it('explica que la API en línea es anterior a la app', async () => {
+    const { api, ApiError, MISSING_ROUTE_MESSAGE } = await import('./client');
+    const respond = (detail: unknown) =>
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ detail }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+      );
+    vi.stubGlobal('fetch', respond('Not Found'));
+    await expect(api.seabeds()).rejects.toThrow(MISSING_ROUTE_MESSAGE);
+    vi.stubGlobal('fetch', respond('red desconocida: x'));
+    const err = await api.net('x').catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect((err as Error).message).toBe('red desconocida: x');
+    vi.unstubAllGlobals();
+  });
+});

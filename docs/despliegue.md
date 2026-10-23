@@ -121,5 +121,18 @@ Sin Docker, la API se levanta con `uv run trawlkit serve` (ver {doc}`web`).
 - **«simulación demasiado costosa» o «malla de optimización demasiado grande».** Son las guardas
   de costo del servidor gratuito: bajar la resolución o la cantidad de velocidades, o el tamaño de
   la malla.
+- **«Error 404: Not Found» en una función nueva, o «API desactualizada» en la cabecera.** La app
+  de GitHub Pages es de una versión más nueva que la API de Render: la app llama a una ruta que la
+  API todavía no tiene. `GET /health` informa `contract` (huella de las rutas de la API) y `commit`
+  (el commit desplegado, `RENDER_GIT_COMMIT`); la app compara esa huella con la de su build y, si
+  difieren, la cabecera muestra «API desactualizada» y los 404 de ruta explican la causa. Render
+  redespliega solo cada commit de `main` con la CI en verde (unos minutos después). Si no pasa:
+  Render → servicio `trawl-design-lab-api` → **Manual Deploy → Deploy latest commit**. El flujo
+  «Docs» termina con el job `api-check`, que espera hasta 20 minutos a que la API sirva el mismo
+  contrato que la app y deja un aviso en el resumen si no lo consigue
+  (`python tools/check_api_contract.py URL_API` lo comprueba desde una terminal). Antes, el
+  Blueprint tenía un `buildFilter` por rutas: si el último commit de un push no tocaba `src/`, la
+  API no se redesplegaba aunque los anteriores sí la cambiaran. Se quitó; si el servicio se creó
+  con el filtro, Render lo quita al sincronizar el Blueprint (o en *Settings → Build Filters*).
 - **404 en `/trawl-design-lab/app/`.** Pages no está activado con fuente *GitHub Actions* o el
   flujo «Docs» todavía no corrió en `main`.

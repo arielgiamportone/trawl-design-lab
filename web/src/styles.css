@@ -219,6 +219,9 @@ textarea {
 .api-status.down .led {
   background: #d03b3b;
 }
+.api-status.outdated .led {
+  background: #fab219;
+}
 .api-status.wait .led {
   background: #d9a400;
   animation: api-pulse 1.2s ease-in-out infinite;

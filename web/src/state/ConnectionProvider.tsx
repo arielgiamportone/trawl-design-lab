@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { api } from '../api/client';
-import { waitForApi, type ConnStatus, type WaitOptions } from '../lib/connection';
+import { isOutdated, waitForApi, type ConnStatus, type WaitOptions } from '../lib/connection';
 import { ConnectionContext } from './connectionContext';
 
 /** Intervalo de la comprobación de vida una vez conectada [ms]. */
@@ -19,6 +19,7 @@ export function ConnectionProvider({
 }) {
   const [status, setStatus] = useState<ConnStatus>('connecting');
   const [version, setVersion] = useState<string | undefined>();
+  const [outdated, setOutdated] = useState(false);
   const [round, setRound] = useState(0);
   const retry = useCallback(() => setRound((r) => r + 1), []);
 
@@ -29,6 +30,7 @@ export function ConnectionProvider({
       .then((h) => {
         if (!h) return;
         setVersion(h.version);
+        setOutdated(isOutdated(h.contract));
         recheck = window.setInterval(() => {
           api.health(ctrl.signal).catch(() => {
             if (!ctrl.signal.aborted) setRound((r) => r + 1);
@@ -47,7 +49,7 @@ export function ConnectionProvider({
   }, [round]);
 
   return (
-    <ConnectionContext.Provider value={{ status, version, retry }}>
+    <ConnectionContext.Provider value={{ status, version, outdated, retry }}>
       {children}
     </ConnectionContext.Provider>
   );

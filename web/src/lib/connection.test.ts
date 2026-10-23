@@ -118,3 +118,16 @@ describe('waitForApi', () => {
     expect(check).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('API desactualizada', () => {
+  it('compara la huella de rutas de /health con la de la app', async () => {
+    const { APP_CONTRACT, isOutdated, statusLabel } = await import('./connection');
+    expect(APP_CONTRACT).toMatch(/^[0-9a-f]{12}$/);
+    expect(isOutdated(APP_CONTRACT)).toBe(false);
+    expect(isOutdated('000000000000')).toBe(true);
+    expect(isOutdated(undefined)).toBe(true); // API vieja, sin huella
+    expect(isOutdated('x', '')).toBe(false); // app sin huella (no se puede comparar)
+    expect(statusLabel('ok', '1.0.0', true)).toBe('API desactualizada · v1.0.0');
+    expect(statusLabel('ok', '1.0.0')).toBe('API conectada · v1.0.0');
+  });
+});

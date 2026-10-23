@@ -66,10 +66,17 @@ class ErratumOut(BaseModel):
 
 
 class Health(BaseModel):
-    """Estado del servicio."""
+    """Estado del servicio.
+
+    ``contract`` es la huella de las rutas de la API (ver ``trawlkit.api.contract``): la app la
+    compara con la de su build para avisar si la API en línea es de otra versión. ``commit`` es
+    el commit desplegado (``RENDER_GIT_COMMIT`` en Render; ``None`` en local).
+    """
 
     status: str
     version: str
+    contract: str | None = None
+    commit: str | None = None
 
 
 class OptimizeGrid(BaseModel):

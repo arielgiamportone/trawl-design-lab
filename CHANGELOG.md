@@ -28,8 +28,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 - Motor: parámetro `seabed` que suma el rozamiento del tren y de los portones a la demanda.
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
+- `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API
+  desactualizada» si la API en línea es de otra versión, y un 404 de ruta lo explica. El flujo
+  «Docs» comprueba la API en línea al terminar (`tools/check_api_contract.py`).
+
 - Libro: capítulo 22 «Simulación con captura, fondo y portones acoplados», con el panorama de
   simuladores del mercado; 7 referencias nuevas (6 verificadas en Crossref).
+
+### Corregido
+- La API de Render quedaba sin redesplegar (404 en `/simulate/haul`, `/catalog/seabeds` y
+  `/design/layout`): se quitó el `buildFilter` del Blueprint.
 
 ## [1.0.0] - 2026-10-19
 

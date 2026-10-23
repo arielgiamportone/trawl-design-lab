@@ -71,6 +71,20 @@ export function detailMessage(detail: unknown): string {
   return JSON.stringify(detail);
 }
 
+/**
+ * Mensaje cuando la API no conoce la ruta (404 genérico de FastAPI, ``detail = "Not Found"``): la
+ * API en línea es anterior a esta versión de la app. Un 404 con otro ``detail`` (p. ej. «red
+ * desconocida») es un error de datos y se muestra tal cual.
+ */
+export const MISSING_ROUTE_MESSAGE =
+  'La API en línea es anterior a esta versión de la app y todavía no tiene esta función. ' +
+  'Se actualiza sola unos minutos después de cada cambio; si persiste, hay que redesplegarla ' +
+  '(Render → Manual Deploy → Deploy latest commit).';
+
+export function isMissingRoute(detail: unknown): boolean {
+  return detail === undefined || detail === 'Not Found';
+}
+
 async function request(path: string, init?: RequestInit): Promise<Response> {
   let res: Response;
   try {
@@ -86,7 +100,10 @@ async function request(path: string, init?: RequestInit): Promise<Response> {
     } catch {
       detail = undefined;
     }
-    const msg = detailMessage(detail) || `${res.status} ${res.statusText}`;
+    const msg =
+      res.status === 404 && isMissingRoute(detail)
+        ? MISSING_ROUTE_MESSAGE
+        : detailMessage(detail) || `${res.status} ${res.statusText}`;
     throw new ApiError(res.status, msg, detail);
   }
   return res;

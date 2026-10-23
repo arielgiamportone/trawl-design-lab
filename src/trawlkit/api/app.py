@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import tempfile
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -13,6 +14,7 @@ from fastapi.responses import JSONResponse, Response
 
 from trawlkit import __version__
 from trawlkit.api import service
+from trawlkit.api.contract import fingerprint
 from trawlkit.api.schemas import (
     CatalogItem,
     DesignRequest,
@@ -65,8 +67,14 @@ async def _not_found(_: Request, exc: service.NotFoundError) -> JSONResponse:
 
 @app.get("/health", response_model=Health)
 def health() -> Health:
-    """Comprobación de vida."""
-    return Health(status="ok", version=__version__)
+    """Comprobación de vida, con la versión, la huella de rutas y el commit desplegado."""
+    commit = os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("TRAWLKIT_COMMIT") or None
+    return Health(status="ok", version=__version__, contract=_contract(), commit=commit)
+
+
+@lru_cache(maxsize=1)
+def _contract() -> str:
+    return fingerprint(app.openapi())
 
 
 @app.get("/catalog/nets", response_model=list[CatalogItem])

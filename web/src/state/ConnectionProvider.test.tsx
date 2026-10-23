@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { APP_CONTRACT } from '../lib/connection';
 import { MODE_KEY } from '../lib/mode';
 import { App } from '../App';
 import { Header } from '../components/Header';
@@ -17,9 +18,12 @@ describe('ConnectionProvider + indicador', () => {
     let up = false;
     const fetchFn = vi.fn(async () => {
       if (!up) throw new TypeError('Failed to fetch');
-      return new Response(JSON.stringify({ status: 'ok', version: '0.1.0' }), {
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ status: 'ok', version: '0.1.0', contract: APP_CONTRACT }),
+        {
+          headers: { 'Content-Type': 'application/json' },
+        },
+      );
     });
     vi.stubGlobal('fetch', fetchFn);
     render(

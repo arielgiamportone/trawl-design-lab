@@ -121,14 +121,30 @@ export async function waitForApi<T>(
   }
 }
 
+/** Huella de rutas con la que se compiló la app (``vite.config.ts``). */
+export const APP_CONTRACT: string = typeof __API_CONTRACT__ === 'string' ? __API_CONTRACT__ : '';
+
+/**
+ * ¿La API en línea es de otra versión que la app? Sólo si ambas huellas existen y difieren (una
+ * API vieja sin ``contract`` en ``/health`` también cuenta como desactualizada).
+ */
+export function isOutdated(
+  apiContract: string | null | undefined,
+  appContract: string = APP_CONTRACT,
+): boolean {
+  if (!appContract) return false;
+  return apiContract !== appContract;
+}
+
 /** Texto del indicador de conexión para cada estado. */
-export function statusLabel(status: ConnStatus, version?: string): string {
+export function statusLabel(status: ConnStatus, version?: string, outdated = false): string {
   switch (status) {
     case 'connecting':
       return 'Conectando…';
     case 'waking':
       return 'Despertando la API (puede tardar hasta un minuto)…';
     case 'ok':
+      if (outdated) return version ? `API desactualizada · v${version}` : 'API desactualizada';
       return version ? `API conectada · v${version}` : 'API conectada';
     case 'down':
       return 'API no disponible';
