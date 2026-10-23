@@ -8,7 +8,9 @@ import {
   cameraPosition,
   RAMP_DARK,
   RAMP_LIGHT,
+  contactTriangles,
   type CameraView,
+  type ColorMode,
   type SimGeometry,
 } from '../../lib/sim3d';
 import { useChartColors, useResolvedTheme } from '../../lib/theme';
@@ -45,7 +47,15 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
   const theme = useResolvedTheme();
   const colors = useChartColors();
   const ramp = theme === 'dark' ? RAMP_DARK : RAMP_LIGHT;
-  const buffers = useMemo(() => buildBuffers(geometry, ramp), [geometry, ramp]);
+  const [mode, setMode] = useState<ColorMode>('tension');
+  const buffers = useMemo(
+    () => buildBuffers(geometry, ramp, mode, colors.s2),
+    [geometry, ramp, mode, colors.s2],
+  );
+  const contactShare = useMemo(() => {
+    const t = contactTriangles(geometry);
+    return t.length ? t.filter(Boolean).length / t.length : 0;
+  }, [geometry]);
   const host = useRef<HTMLDivElement>(null);
   const scene3d = useRef<Scene3D | null>(null);
   const [noGl] = useState(() => !hasWebGL());
@@ -202,6 +212,22 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
             </button>
           ))}
         </div>
+        <div className="segmented" role="group" aria-label="Color del paño">
+          <button
+            type="button"
+            aria-pressed={mode === 'tension'}
+            onClick={() => setMode('tension')}
+          >
+            Tensión
+          </button>
+          <button
+            type="button"
+            aria-pressed={mode === 'contact'}
+            onClick={() => setMode('contact')}
+          >
+            Contacto con el fondo
+          </button>
+        </div>
         <button type="button" className="btn small" onClick={savePng} disabled={noGl}>
           Descargar PNG
         </button>
@@ -221,15 +247,27 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
         />
       )}
       <figcaption className="net3d-legend">
-        <span>Tensión del hilo [N]</span>
-        <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
-        <span className="net3d-ticks">
-          <span>{fmt(Math.round(buffers.range[0]))}</span>
-          <span>≥ {fmt(Math.round(buffers.range[1]))}</span>
-        </span>
+        {mode === 'tension' ? (
+          <>
+            <span>Tensión del hilo [N]</span>
+            <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
+            <span className="net3d-ticks">
+              <span>{fmt(Math.round(buffers.range[0]))}</span>
+              <span>≥ {fmt(Math.round(buffers.range[1]))}</span>
+            </span>
+          </>
+        ) : (
+          <>
+            <span>
+              <span className="key-rect" style={{ background: colors.s2 }} aria-hidden="true" />{' '}
+              Paño apoyado en el fondo
+            </span>
+            <span className="net3d-contact">{fmtFixed(contactShare * 100, 0)} % del paño</span>
+          </>
+        )}
         <span className="help">
-          Línea llena: lima y burlón · discontinua: bridas y patentes · puntos: boyas · grilla:
-          fondo.
+          Línea llena: lima y burlón · discontinua: bridas, patentes y cables · puntos: boyas ·
+          grilla: fondo.
         </span>
       </figcaption>
     </figure>

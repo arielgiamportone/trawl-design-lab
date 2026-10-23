@@ -21,6 +21,8 @@ export interface CaseState {
   scaled: ScaledNet | null;
   /** Velocidad de arrastre prevista [kn] para el diagnóstico del modo guiado (no va a la API). */
   targetSpeed: number;
+  /** Captura esperada por lance [kg] (valor inicial del lance progresivo). */
+  expectedCatchKg: number;
 }
 
 export interface ScaledNet {
@@ -41,6 +43,7 @@ export const DEFAULT_CASE: CaseState = {
   edits: { std: {}, mod: {} },
   scaled: null,
   targetSpeed: 2,
+  expectedCatchKg: 500,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -66,6 +69,10 @@ export function sanitizeCase(raw: unknown): CaseState {
       typeof r.targetSpeed === 'number' && r.targetSpeed > 0 && r.targetSpeed <= 10
         ? r.targetSpeed
         : DEFAULT_CASE.targetSpeed,
+    expectedCatchKg:
+      typeof r.expectedCatchKg === 'number' && r.expectedCatchKg >= 0 && r.expectedCatchKg <= 20000
+        ? r.expectedCatchKg
+        : DEFAULT_CASE.expectedCatchKg,
   };
 }
 

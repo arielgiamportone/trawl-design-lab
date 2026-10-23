@@ -1,7 +1,7 @@
 /** Formulario de parámetros avanzados generado desde ``GET /params``. */
 import type { ParamInfo } from '../api/client';
 import { fmt, parseNumber } from './format';
-import { PROPELLER_LABELS } from './labels';
+import { PROPELLER_LABELS, SEABED_LABELS } from './labels';
 
 export type ParamKind = 'float' | 'int' | 'tuple' | 'enum' | 'string';
 
@@ -40,6 +40,9 @@ export function paramMeta(p: ParamInfo): ParamMeta {
   } else if (base === 'PropellerType') {
     meta.kind = 'enum';
     meta.options = Object.entries(PROPELLER_LABELS).map(([value, label]) => ({ value, label }));
+  } else if (p.name === 'seabed') {
+    meta.kind = 'enum';
+    meta.options = Object.entries(SEABED_LABELS).map(([value, label]) => ({ value, label }));
   }
   return meta;
 }
@@ -47,10 +50,12 @@ export function paramMeta(p: ParamInfo): ParamMeta {
 /** Texto del valor por defecto (para el placeholder). */
 export function defaultText(meta: ParamMeta): string {
   const d = meta.default;
+  if (meta.name === 'seabed' && d == null) return 'sin rozamiento de fondo';
   if (d === null || d === undefined) return 'automático';
   if (Array.isArray(d)) return d.map((x) => fmt(x as number)).join('; ');
   if (typeof d === 'number') return fmt(d);
-  if (meta.kind === 'enum') return PROPELLER_LABELS[String(d)] ?? String(d);
+  if (meta.kind === 'enum')
+    return PROPELLER_LABELS[String(d)] ?? SEABED_LABELS[String(d)] ?? String(d);
   return String(d);
 }
 
@@ -182,6 +187,7 @@ export const PARAM_LABELS: Record<string, string> = {
   warp_spare_fraction: 'Fracción de cable de repuesto',
   warp_drag_shares: 'Fracciones de resistencia del cable',
   report_speeds_kn: 'Velocidades de RN en el resumen [kn]',
+  seabed: 'Tipo de fondo (rozamiento del tren y portones)',
 };
 
 export function paramLabel(name: string): string {

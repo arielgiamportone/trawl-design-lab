@@ -40,6 +40,16 @@ export const HELP: Record<string, HelpEntry> = {
     range: [1.5, 4],
     chapter: '19_ventana_velocidad',
   },
+  catch_kg: {
+    text: 'Captura acumulada en el copo. Ocupa el extremo del copo, lo infla y agrega resistencia; los portones se cierran un poco y el tiro sube.',
+    unit: 'kg',
+    range: [0, 5000],
+    chapter: '22_simulacion_realista',
+  },
+  seabed: {
+    text: 'Tipo de fondo: fija el rozamiento del tren de fondo y de las zapatas de los portones. Los valores son estimaciones con rango (no hay una tabla publicada por sedimento).',
+    chapter: '22_simulacion_realista',
+  },
   // Parámetros de DesignCase
   speeds_kn: {
     text: 'Velocidades en las que se calculan las curvas de tiro y resistencia.',

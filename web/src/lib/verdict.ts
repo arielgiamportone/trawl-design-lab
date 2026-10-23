@@ -71,7 +71,11 @@ export function assess(d: DesignData, targetSpeed: number): Check[] {
             : `Sí: sobra ${pct} %`,
       why:
         `A ${kn(targetSpeed)} el buque puede tirar unos ${kgf(pull.available)} y la red con sus ` +
-        `portones y cables pide unos ${kgf(pull.demand)}. ` +
+        `portones y cables pide unos ${kgf(pull.demand)}` +
+        (typeof d.summary.seabed_friction_kgf === 'number'
+          ? ` (incluye ${kgf(d.summary.seabed_friction_kgf)} de roce con el fondo)`
+          : '') +
+        '. ' +
         (tone === 'crit'
           ? 'Con ese déficit el buque no llega a esa velocidad: baje la velocidad, use una red más chica o un buque más potente.'
           : tone === 'warn'

@@ -25,6 +25,10 @@ export type PlanView = 'sheet' | 'scale';
 export type Variant = 'std' | 'mod';
 export type ReportFormat = 'html' | 'pdf' | 'xlsx';
 export type LayoutMode = 'schematic' | 'true_scale';
+export type ScenarioIn = S['ScenarioIn'];
+export type SeabedOut = S['SeabedOut'];
+export type HaulRequest = S['HaulRequest'];
+export type HaulResponse = S['HaulResponse'];
 export type LayoutResponse = S['LayoutResponse'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
@@ -144,6 +148,11 @@ export const api = {
   async scaledNet(req: ScaledNetRequest, signal?: AbortSignal): Promise<NetSpec> {
     const res = await post('/optimize/scaled-net', req, signal);
     return (await res.json()) as NetSpec;
+  },
+  seabeds: (signal?: AbortSignal) => getJson<SeabedOut[]>('/catalog/seabeds', signal),
+  async haul(req: HaulRequest, signal?: AbortSignal): Promise<HaulResponse> {
+    const res = await post('/simulate/haul', req, signal);
+    return (await res.json()) as HaulResponse;
   },
   async simulate(req: SimulateRequest, signal?: AbortSignal): Promise<SimulateResponse> {
     const res = await post('/simulate', req, signal);

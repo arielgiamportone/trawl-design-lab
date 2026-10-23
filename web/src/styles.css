@@ -1723,7 +1723,7 @@ input[type='range'] {
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 10px;
 }
-.check {
+.checks .check {
   display: grid;
   gap: 4px;
   align-content: start;
@@ -1733,29 +1733,29 @@ input[type='range'] {
   border-radius: var(--radius);
   background: var(--surface);
 }
-.check.ok {
+.checks .check.ok {
   border-left-color: var(--good);
 }
-.check.warn {
+.checks .check.warn {
   border-left-color: var(--warn-mark);
 }
-.check.crit {
+.checks .check.crit {
   border-left-color: var(--crit);
 }
-.check-tone {
+.checks .check-tone {
   font-size: 11.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-2);
 }
-.check.ok .check-tone {
+.checks .check.ok .check-tone {
   color: var(--good);
 }
-.check.warn .check-tone {
+.checks .check.warn .check-tone {
   color: var(--warn);
 }
-.check.crit .check-tone {
+.checks .check.crit .check-tone {
   color: var(--crit);
 }
 .check-title {
@@ -2111,5 +2111,56 @@ label.check.small {
   .net3d-stage {
     height: auto;
     aspect-ratio: 1;
+  }
+}
+
+/* ---------- Fase 11: lance progresivo ---------- */
+.haul {
+  display: grid;
+  gap: 10px;
+}
+.haul-form .check {
+  align-self: end;
+  margin-top: 12px;
+}
+.haul-summary {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  font-weight: 550;
+}
+.haul-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.haul-chart {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  min-width: 0;
+}
+.haul-chart figcaption {
+  font-size: 13px;
+  font-weight: 650;
+}
+.haul-chart figcaption .unit {
+  color: var(--muted);
+  font-weight: 400;
+}
+.haul-chart-box {
+  height: 170px;
+  min-width: 0;
+}
+.net3d-contact {
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 720px) {
+  .haul-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

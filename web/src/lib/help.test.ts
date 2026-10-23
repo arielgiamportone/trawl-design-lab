@@ -22,6 +22,7 @@ describe('ayuda contextual', () => {
       '18_cables',
       '19_ventana_velocidad',
       '20_optimizacion',
+      '22_simulacion_realista',
       '30_caso_beagle',
     ]);
     for (const [k, h] of Object.entries(HELP)) {

@@ -3,12 +3,14 @@ import design from './fixtures/design.json';
 import designExcel from './fixtures/design_excel.json';
 import doors from './fixtures/doors.json';
 import errata from './fixtures/errata.json';
+import haul from './fixtures/haul.json';
 import layout from './fixtures/layout.json';
 import netMod from './fixtures/net_mod.json';
 import netStd from './fixtures/net_std.json';
 import nets from './fixtures/nets.json';
 import optimize from './fixtures/optimize.json';
 import params from './fixtures/params.json';
+import seabeds from './fixtures/seabeds.json';
 import simulate from './fixtures/simulate.json';
 import vessels from './fixtures/vessels.json';
 
@@ -17,12 +19,14 @@ export const fixtures = {
   designExcel,
   doors,
   errata,
+  haul,
   layout,
   netMod,
   netStd,
   nets,
   optimize,
   params,
+  seabeds,
   simulate,
   vessels,
 };
@@ -53,6 +57,8 @@ export function mockApi(overrides: { design?: (body: Record<string, unknown>) =>
     if (path === '/catalog/vessels') return json(vessels);
     if (path === '/catalog/doors') return json(doors);
     if (path === '/params') return json(params);
+    if (path === '/catalog/seabeds') return json(seabeds);
+    if (path === '/simulate/haul') return json(haul);
     if (path === '/errata') return json(errata);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);

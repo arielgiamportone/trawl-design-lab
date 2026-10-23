@@ -72,13 +72,39 @@ export interface Buffers {
   radius: number;
 }
 
-export function buildBuffers(g: SimGeometry, ramp: readonly string[]): Buffers {
+export type ColorMode = 'tension' | 'contact';
+
+/** Altura bajo la cual un nodo se considera apoyado en el fondo [m]. */
+export const CONTACT_Z = 0.02;
+
+/** Triángulos con los tres vértices apoyados en el fondo. */
+export function contactTriangles(g: SimGeometry): boolean[] {
+  return g.triangles.map((tri) => tri.every((n) => (g.nodes[n]?.[2] ?? 1) <= CONTACT_Z));
+}
+
+/**
+ * Buffers de la malla. ``mode = 'tension'`` colorea por tensión con ``ramp``; ``'contact'``
+ * pinta con ``contactColor`` el paño apoyado en el fondo y con ``ramp[0]`` el resto.
+ */
+export function buildBuffers(
+  g: SimGeometry,
+  ramp: readonly string[],
+  mode: ColorMode = 'tension',
+  contactColor = '#eb6834',
+): Buffers {
   const tensions = g.twine_tension_n.map(tensionOf);
   const range = tensionRange(tensions);
+  const touching = mode === 'contact' ? contactTriangles(g) : null;
+  const restColor = rampColor(0, ramp);
+  const hitColor = rampColor(0, [contactColor, contactColor]);
   const positions = new Float32Array(g.triangles.length * 9);
   const colors = new Float32Array(g.triangles.length * 9);
   g.triangles.forEach((tri, k) => {
-    const c = rampColor((tensions[k] ?? 0) / range[1], ramp);
+    const c = touching
+      ? touching[k]
+        ? hitColor
+        : restColor
+      : rampColor((tensions[k] ?? 0) / range[1], ramp);
     tri.forEach((n, j) => {
       const p = toThree(g.nodes[n] ?? [0, 0, 0]);
       positions.set(p, k * 9 + j * 3);

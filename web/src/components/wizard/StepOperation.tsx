@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import { fmtFixed } from '../../lib/format';
 import { checkRange } from '../../lib/help';
+import { SEABED_LABELS } from '../../lib/labels';
 import { parseParam } from '../../lib/params';
 import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
@@ -65,6 +66,46 @@ export function StepOperation() {
         />
         <p id={`${ids}-depth-msg`} className={depthError ? 'field-error' : 'field-warn'}>
           {depthError ?? (!range.ok ? range.message : '')}
+        </p>
+      </div>
+      <div className="field">
+        <label htmlFor={`${ids}-seabed`}>
+          Tipo de fondo <HelpTip topic="seabed" label="Tipo de fondo" />
+        </label>
+        <select
+          id={`${ids}-seabed`}
+          value={state.params.seabed ?? ''}
+          onChange={(e) =>
+            update((s) => ({ ...s, params: { ...s.params, seabed: e.target.value } }))
+          }
+        >
+          <option value="">No lo sé (sin rozamiento de fondo)</option>
+          {Object.entries(SEABED_LABELS).map(([id, label]) => (
+            <option key={id} value={id}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="field">
+        <label htmlFor={`${ids}-catch`}>
+          Captura esperada por lance [kg] <HelpTip topic="catch_kg" label="Captura esperada" />
+        </label>
+        <input
+          id={`${ids}-catch`}
+          type="number"
+          min={0}
+          max={20000}
+          step={50}
+          value={state.expectedCatchKg}
+          onChange={(e) =>
+            update({ expectedCatchKg: Math.min(20000, Math.max(0, Number(e.target.value) || 0)) })
+          }
+        />
+        <p className="help">
+          Se usa en el simulador (pestaña «Simulación», lance progresivo) para ver cómo cambian la
+          red y los portones a medida que entra la captura.
         </p>
       </div>
       <p className="help">

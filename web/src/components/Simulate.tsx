@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../api/client';
 import { fmt, fmtFixed, fmtPct } from '../lib/format';
 import { recall, remember } from '../lib/memo';
+import { Haul } from './sim/Haul';
 import { isSimGeometry } from '../lib/sim3d';
 import {
   compareRows,
@@ -121,7 +122,37 @@ function CompareTable({ r }: { r: SimulateResponse }) {
 const roundOrNull = (v: number | null) => (v === null ? null : Math.round(v));
 const round2 = (v: number | null) => (v === null ? null : Math.round(v * 100) / 100);
 
+const VIEW_KEY = 'simulate:view';
+type SimView = 'speeds' | 'haul';
+
+/** Pestaña «Simulación»: barrido de velocidades o lance progresivo con escenario. */
 export function Simulate() {
+  const [view, setViewState] = useState<SimView>(() => recall<SimView>(VIEW_KEY) ?? 'speeds');
+  const setView = (v: SimView) => {
+    remember(VIEW_KEY, v);
+    setViewState(v);
+  };
+  return (
+    <div>
+      <div className="panel-toolbar">
+        <h2 className="section-title">
+          Simulación de la forma <span className="badge warn">experimental</span>
+        </h2>
+        <div className="segmented" role="group" aria-label="Tipo de simulación">
+          <button type="button" aria-pressed={view === 'speeds'} onClick={() => setView('speeds')}>
+            Barrido de velocidad
+          </button>
+          <button type="button" aria-pressed={view === 'haul'} onClick={() => setView('haul')}>
+            Lance progresivo (captura y fondo)
+          </button>
+        </div>
+      </div>
+      {view === 'speeds' ? <SpeedSweep /> : <Haul />}
+    </div>
+  );
+}
+
+function SpeedSweep() {
   const { state, committed, catalogs } = useCase();
   const ids = useId();
   const [speeds, setSpeedsState] = useState<number[]>(() => recall<Sel>(SEL_KEY)?.speeds ?? [3]);
@@ -183,9 +214,6 @@ export function Simulate() {
 
   return (
     <div>
-      <h2 className="section-title">
-        Simulación de la forma <span className="badge warn">experimental</span>
-      </h2>
       <p className="section-sub" style={{ marginBottom: 12 }}>
         Busca la forma de equilibrio de la red ({netLabel}) remolcada a cada velocidad: paño de
         hilos con arrastre de Morison, relingas, boyas, lastre, bridas, patentes y contacto con el

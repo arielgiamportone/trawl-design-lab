@@ -105,3 +105,12 @@ export const SECTION_LABELS: Record<string, string> = {
 };
 
 export const VARIANT_LABELS = { std: 'estándar', mod: 'modificada' } as const;
+
+/** Tipos de fondo (``data/seabed.yaml``) para el parámetro ``seabed`` del motor. */
+export const SEABED_LABELS: Record<string, string> = {
+  mud: 'Fango',
+  sand: 'Arena',
+  mixed: 'Intermedio (mixto)',
+  gravel: 'Grava y conchilla',
+  rock: 'Roca o piedra',
+};
