@@ -156,6 +156,7 @@ def layout_of(net: str | NetSpec, mode: str = "schematic") -> dict[str, Any]:
                 "meshes_depth": s.meshes_depth,
                 "mesh_mm": s.mesh_mm,
                 "hanging_ratio": s.hanging_ratio,
+                "mesh_orientation": str(s.panel.mesh_orientation),
                 "cut_code": s.cut_code,
             }
             for s in lay.shapes[plane]
@@ -670,19 +671,35 @@ def fouling_catalogue() -> list[dict[str, Any]]:
 
 
 def _frame(r: Any) -> dict[str, Any]:
-    """Posiciones (al cm), tensiones y ensuciamiento de un estado, para animarlo."""
+    """Posiciones (al cm), tensiones, ensuciamiento y apertura de malla de un estado."""
     import numpy as np
 
-    return {
+    out = {
         "nodes": np.round(r.nodes, 2).tolist(),
         "twine_tension_n": np.round(r.twine_tension_n, 1).tolist(),
         "bar_tension_n": np.round(r.bar_tension_n, 1).tolist(),
         "fouling_tri": np.round(r.fouling_tri, 3).tolist(),
     }
+    if r.mesh is not None:
+        out["opening_deg"] = np.round(r.mesh.opening_deg, 1).tolist()
+        out["leg_i_mm"] = np.round(r.mesh.leg_i_mm, 2).tolist()
+        out["leg_j_mm"] = np.round(r.mesh.leg_j_mm, 2).tolist()
+        out["catch_fill"] = np.round(r.mesh.catch_fill, 3).tolist()
+    return out
 
 
 def _geometry(r: Any, model_warps: list[list[int]], doors: list[int]) -> dict[str, Any]:
+    mesh: dict[str, Any] = {}
+    if r.mesh is not None:
+        mesh = {
+            "tri_section": list(r.mesh.section),
+            "tri_orientation": list(r.mesh.orientation),
+            "tri_leg_mm": [round(float(v), 2) for v in r.mesh.leg_mm],
+            "tri_twine_mm": [round(float(v), 3) for v in r.mesh.twine_mm],
+            "tri_meshes": [round(float(v), 1) for v in r.mesh.meshes],
+        }
     return {
+        **mesh,
         "triangles": r.triangles.tolist(),
         "bars": r.bars.tolist(),
         "bar_kind": list(r.bar_kind),
@@ -711,8 +728,12 @@ def explore_case(
     ct: float | None = None,
     scenario: dict[str, Any] | None = None,
     include_geometry: bool = True,
+    species: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Explorador (``POST /simulate/explore``): :func:`trawlkit.sim.explore` y el motor."""
+    """Explorador (``POST /simulate/explore``): :func:`trawlkit.sim.explore` y el motor.
+
+    Con ``species`` cada estado suma la selectividad del copo (L50, SR, SF) de cada especie.
+    """
     import time
 
     import numpy as np
@@ -774,10 +795,17 @@ def explore_case(
         eng = result
     ekn = np.asarray(eng.case.speeds_kn, dtype=float)
     demand = float(np.interp(speed_kn, ekn, np.asarray(eng.performance.demand.std, dtype=float)))
+    _check_species(species or [])
+    results = []
+    for r in sims:
+        d = r.to_dict(geometry=False)
+        if species:
+            d["selectivity"] = _selectivity_summary(r, species)
+        results.append(d)
     out = {
         "variable": variable,
         "values": [float(v) for v in values],
-        "results": [r.to_dict(geometry=False) for r in sims],
+        "results": results,
         "geometry": geometry,
         "frames": frames,
         "engine": {
@@ -802,3 +830,188 @@ def explore_case(
     }
     jsonable: dict[str, Any] = to_jsonable(out)
     return jsonable
+
+
+# ---------------------------------------------------------------------------------------------
+# Selectividad (Fase 11.3)
+# ---------------------------------------------------------------------------------------------
+
+
+def species_catalogue() -> list[dict[str, Any]]:
+    """Especies con la forma de su sección transversal (``GET /catalog/species``)."""
+    from trawlkit.selectivity import species_catalogue as cat
+
+    return [s.to_dict() for s in cat()]
+
+
+def _check_species(ids: list[str]) -> None:
+    from trawlkit.selectivity import species
+
+    for key in ids:
+        try:
+            species(key)
+        except KeyError as exc:
+            raise BadRequestError(str(exc)) from exc
+
+
+def _selectivity_summary(r: Any, ids: list[str]) -> list[dict[str, Any]]:
+    """L25, L50, L75, SR y SF por especie, sin la curva (para el explorador)."""
+    from trawlkit.selectivity import selectivity
+
+    out = []
+    for c in selectivity(r, ids):
+        d = c.to_dict(per_triangle=False)
+        d.pop("lengths")
+        d.pop("retention")
+        out.append(d)
+    return out
+
+
+#: Variantes por defecto de ``POST /simulate/selectivity``: el copo de la red y el mismo en T90.
+SELECTIVITY_DEFAULT_VARIANTS: tuple[dict[str, Any], ...] = (
+    {"orientation": "diamond"},
+    {"orientation": "t90"},
+)
+
+
+def selectivity_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    compat: str = "corrected",
+    speed_kn: float = 3.0,
+    resolution: int = 3,
+    cn: float | None = None,
+    ct: float | None = None,
+    scenario: dict[str, Any] | None = None,
+    species: list[str] | None = None,
+    variants: list[dict[str, Any]] | None = None,
+    contact: float = 1.0,
+    zone_length_m: float | None = 3.0,
+    lengths: list[float] | None = None,
+    include_geometry: bool = True,
+) -> dict[str, Any]:
+    """Selectividad del copo (``POST /simulate/selectivity``) para varias variantes de copo.
+
+    Cada variante (orientación de malla, mallero, U1) es la red del pedido con el copo rehecho por
+    :func:`trawlkit.selectivity.codend_variant` (mismo ancho y largo relingados); todas se simulan
+    con la rigidez de apertura de la malla, para que la comparación sea pareja.
+    """
+    import time
+
+    from trawlkit.selectivity import codend_variant, retention_curve, species_source
+    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT, simulate
+    from trawlkit.sim.core import rigging_from_result
+    from trawlkit.sim.mesh import build_model
+
+    t0 = time.perf_counter()
+    ids = list(species or ["hake_hubbsi"])
+    _check_species(ids)
+    vars_ = [dict(v) for v in (variants or SELECTIVITY_DEFAULT_VARIANTS)]
+    sc = make_scenario({**(scenario or {}), "mesh_bending": True})
+    params = {"seabed": sc.seabed} if sc.seabed else {}
+    base = build_case(
+        net=net,
+        vessel=vessel,
+        door=door,
+        class_vessels=class_vessels,
+        compat=compat,
+        params=params,
+    )
+    estimate = estimate_sim_cost(len(vars_), resolution, base.net, coupled=sc.coupled_doors)
+    max_cost = sim_max_cost_s()
+    if estimate > max_cost:
+        raise BadRequestError(
+            f"selectividad demasiado costosa: ~{estimate:.0f} s estimados para {len(vars_)} "
+            f"variantes a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
+            "o la cantidad de variantes"
+        )
+    out_vars = []
+    for v in vars_:
+        orientation = str(v.get("orientation", "diamond"))
+        mesh_mm = v.get("mesh_mm")
+        hanging = v.get("hanging_ratio")
+        try:
+            spec = codend_variant(base.net, orientation, mesh_mm=mesh_mm, hanging_ratio=hanging)
+            case = dataclasses.replace(base, net=spec)
+            result = run_case(case)
+            r = simulate(
+                result,
+                speed_kn,
+                resolution=resolution,
+                coarse_resolution=None,
+                cn=DEFAULT_CN if cn is None else cn,
+                ct=DEFAULT_CT if ct is None else ct,
+                scenario=sc,
+            )
+        except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
+            raise BadRequestError(f"no se puede simular la variante {v}: {exc}") from exc
+        assert r.mesh is not None
+        curves = [
+            retention_curve(
+                r.mesh, key, lengths, contact=contact, zone_length_m=zone_length_m
+            ).to_dict()
+            for key in ids
+        ]
+        codend = [p for p in spec.panels if p.section.value in ("codend", "extension")]
+        entry: dict[str, Any] = {
+            "label": v.get("label") or _variant_label(orientation, mesh_mm or codend[0].mesh_mm),
+            "orientation": orientation,
+            "mesh_mm": float(mesh_mm or codend[0].mesh_mm),
+            "hanging_ratio": float(codend[0].hanging_ratio or 0.0),
+            "codend_panels": [
+                {
+                    "id": p.id,
+                    "meshes_top": p.meshes_top,
+                    "meshes_bottom": p.meshes_bottom,
+                    "meshes_depth": p.meshes_depth,
+                    "mesh_mm": p.mesh_mm,
+                    "hanging_ratio": p.hanging_ratio,
+                    "mesh_orientation": str(p.mesh_orientation),
+                }
+                for p in codend
+            ],
+            "result": r.to_dict(geometry=False),
+            "curves": curves,
+        }
+        if include_geometry:
+            model = build_model(
+                spec,
+                rigging_from_result(result),
+                resolution=resolution,
+                coupled_doors=sc.coupled_doors,
+            )
+            entry["geometry"] = _geometry(
+                r, [w.tolist() for w in model.warp_nodes], [int(d) for d in model.doors]
+            )
+            entry["frame"] = _frame(r)
+        out_vars.append(entry)
+    out = {
+        "species": ids,
+        "variants": out_vars,
+        "settings": {
+            "net_id": base.net.id,
+            "vessel_id": base.vessel.id,
+            "door_id": base.door.id,
+            "compat": base.compat.value,
+            "resolution": resolution,
+            "speed_kn": float(speed_kn),
+            "contact": contact,
+            "zone_length_m": zone_length_m,
+            "scenario": dataclasses.asdict(sc),
+            "species_source": species_source(),
+        },
+        "estimated_s": estimate,
+        "runtime_s": time.perf_counter() - t0,
+    }
+    jsonable: dict[str, Any] = to_jsonable(out)
+    return jsonable
+
+
+_ORIENTATION_LABEL = {"diamond": "Rombo", "t90": "T90", "square": "Cuadrada"}
+
+
+def _variant_label(orientation: str, mesh_mm: float) -> str:
+    return f"{_ORIENTATION_LABEL.get(orientation, orientation)} {mesh_mm:g} mm"

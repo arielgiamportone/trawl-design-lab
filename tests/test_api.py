@@ -480,3 +480,67 @@ def test_explore_endpoint_frames_and_validation() -> None:
         {"variable": "speed_kn", "values": [1.0, 1.5], "scenario": {"current_kn": 1.5}},
     ):
         assert client.post("/simulate/explore", json=bad).status_code in (400, 422), bad
+
+
+def test_species_catalogue_endpoint() -> None:
+    r = client.get("/catalog/species")
+    assert r.status_code == 200
+    ids = {s["id"] for s in r.json()}
+    assert {"hake_hubbsi", "cod", "nephrops", "plaice"} <= ids
+
+
+def test_selectivity_endpoint_variants_and_validation() -> None:
+    r = client.post(
+        "/simulate/selectivity",
+        json={
+            "resolution": 3,
+            "species": ["cod", "hake_hubbsi"],
+            "variants": [
+                {"orientation": "diamond", "mesh_mm": 120},
+                {"orientation": "t90", "mesh_mm": 120},
+            ],
+            "scenario": {"seabed": "mixed", "catch_kg": 300},
+        },
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    rombo, t90 = body["variants"]
+    assert rombo["label"] == "Rombo 120 mm" and t90["orientation"] == "t90"
+    assert all(p["mesh_orientation"] == "t90" for p in t90["codend_panels"])
+    c_r, c_t = rombo["curves"][0], t90["curves"][0]
+    assert c_r["species"] == "cod" and c_r["l50"] is not None
+    assert c_t["l50"] > c_r["l50"]
+    n_tri = len(rombo["geometry"]["triangles"])
+    assert len(rombo["frame"]["opening_deg"]) == n_tri == len(c_r["fit_tri"])
+    assert len(rombo["geometry"]["tri_orientation"]) == n_tri
+    assert rombo["result"]["params"]["mesh_bending_pa"] > 0
+    assert "mesh_summary" in rombo["result"]
+    for bad, code in (
+        ({"species": ["shark"]}, 422),
+        ({"variants": [{"orientation": "hexagonal"}]}, 422),
+        ({"variants": [{}, {}, {}, {}]}, 422),
+        ({"contact": 2}, 422),
+    ):
+        assert (
+            client.post("/simulate/selectivity", json={"resolution": 2, **bad}).status_code == code
+        )
+
+
+def test_explore_with_species_adds_selectivity() -> None:
+    r = client.post(
+        "/simulate/explore",
+        json={"variable": "catch_kg", "values": [100, 600], "resolution": 2, "species": ["cod"]},
+    )
+    assert r.status_code == 200, r.text
+    body = r.json()
+    sel = body["results"][1]["selectivity"][0]
+    assert sel["species"] == "cod" and "lengths" not in sel and "l50" in sel
+    assert len(body["frames"][0]["opening_deg"]) == len(body["geometry"]["triangles"])
+    assert len(body["geometry"]["tri_leg_mm"]) == len(body["geometry"]["triangles"])
+
+
+def test_layout_reports_mesh_orientation() -> None:
+    r = client.post("/design/layout", json={"net": "fao_a3_standard"})
+    assert r.status_code == 200, r.text
+    shapes = [s for p in r.json()["planes"] for s in p["shapes"]]
+    assert {s["mesh_orientation"] for s in shapes} == {"diamond"}

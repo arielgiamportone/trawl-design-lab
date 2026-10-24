@@ -35,8 +35,11 @@ from trawlkit.api.schemas import (
     ReportFormat,
     ScaledNetRequest,
     SeabedOut,
+    SelectivityRequest,
+    SelectivityResponse,
     SimulateRequest,
     SimulateResponse,
+    SpeciesOut,
     Variant,
 )
 from trawlkit.compat import ERRATA
@@ -114,6 +117,12 @@ def list_doors() -> list[Door]:
 def list_fouling() -> list[dict[str, Any]]:
     """Escenarios de ensuciamiento y colmatación de la red (nivel por zona)."""
     return service.fouling_catalogue()
+
+
+@app.get("/catalog/species", response_model=list[SpeciesOut])
+def list_species() -> list[dict[str, Any]]:
+    """Especies para la selectividad, con la forma de su sección transversal (A VERIFICAR)."""
+    return service.species_catalogue()
 
 
 @app.get("/catalog/seabeds", response_model=list[SeabedOut])
@@ -254,6 +263,30 @@ def simulate_explore(req: ExploreRequest) -> dict[str, Any]:
         cn=req.cn,
         ct=req.ct,
         scenario=req.scenario.model_dump(),
+        include_geometry=req.include_geometry,
+        species=req.species,
+    )
+
+
+@app.post("/simulate/selectivity", response_model=SelectivityResponse)
+def simulate_selectivity(req: SelectivityRequest) -> dict[str, Any]:
+    """Selectividad del copo por tamaño: curvas de retención por especie y variante de copo."""
+    return service.selectivity_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        species=req.species,
+        variants=[v.model_dump() for v in req.variants],
+        contact=req.contact,
+        zone_length_m=req.zone_length_m,
+        lengths=req.lengths,
         include_geometry=req.include_geometry,
     )
 

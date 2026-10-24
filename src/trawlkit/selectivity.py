@@ -15,17 +15,23 @@ con ``u = (cos θ, sen θ)``, ``v = (−sen θ, cos θ)``. Como ``A`` y ``B`` so
 Curva de retención del copo: las mallas candidatas son las del copo y la extensión en una franja
 de ``zone_length_m`` justo delante de la captura (o del extremo del copo vacío), donde los peces
 se acumulan y buscan salir (Herrmann 2005), ponderadas por su cantidad y sin la parte tapada por
-la captura. Con la
-variabilidad morfológica ``cv`` (individuos de la misma talla con secciones distintas)::
+la captura. Con la variabilidad morfológica ``cv`` (individuos de la misma talla con secciones
+distintas), la probabilidad de pasar por una malla elegida al azar en la franja es::
 
-    r(L) = 1 − C · Σ_m w_m Φ((L_m/L − 1)/cv) / Σ_m w_m
+    p(L) = Σ_m w_m Φ((L_m/L − 1)/cv) / Σ_m w_m
 
-``C`` es la probabilidad de contacto con una malla (1 = todos los peces la prueban). De la curva
+Cada pez prueba ``k`` mallas (``attempts``) y escapa si pasa por alguna; ``C`` es la fracción de
+peces que llega a probar (contacto)::
+
+    r(L) = 1 − C · [1 − (1 − p(L))^k]
+
+De la curva
 salen ``L50``, ``L25``, ``L75``, el rango de selección ``SR = L75 − L25`` y el factor de selección
 ``SF = L50 / mallero``.
 
-Supuestos (A VERIFICAR): escape sólo geométrico (sin comportamiento del pez), contacto ``C``
-constante, sección elíptica escalada con la talla y coeficientes de ``data/species.yaml``.
+Supuestos (A VERIFICAR): escape sólo geométrico (sin comportamiento del pez), contacto ``C`` e
+intentos ``k`` constantes y mallas probadas al azar en la franja, sección elíptica escalada
+con la talla y coeficientes de ``data/species.yaml``.
 """
 
 from __future__ import annotations
@@ -51,6 +57,8 @@ FloatArray = npt.NDArray[np.float64]
 ESCAPE_SECTIONS = ("codend", "extension")
 #: Largo de la franja de escape delante de la captura [m] (A VERIFICAR).
 ESCAPE_ZONE_M = 3.0
+#: Mallas que prueba cada pez en la franja (A VERIFICAR).
+ESCAPE_ATTEMPTS = 3
 #: Giros de la elipse que se prueban (la elipse es simétrica cada 180°).
 _THETA = np.linspace(0.0, math.pi, 91)
 
@@ -216,6 +224,7 @@ class SelectivityCurve:
     sf: float  # L50 / mallero (en la misma unidad)
     mesh_mm: float  # mallero medio de la zona de escape
     contact: float
+    attempts: int
     fit_tri: FloatArray  # talla máxima de paso por triángulo (NaN fuera de la zona)
     escape_meshes: float  # mallas candidatas (sin las tapadas por la captura)
 
@@ -235,6 +244,7 @@ class SelectivityCurve:
             "sf": _num(self.sf),
             "mesh_mm": self.mesh_mm,
             "contact": self.contact,
+            "attempts": self.attempts,
             "escape_meshes": self.escape_meshes,
             "range": _range_flag(self.retention),
         }
@@ -283,11 +293,14 @@ def retention_curve(
     contact: float = 1.0,
     sections: tuple[str, ...] = ESCAPE_SECTIONS,
     zone_length_m: float | None = ESCAPE_ZONE_M,
+    attempts: int = ESCAPE_ATTEMPTS,
 ) -> SelectivityCurve:
     """Curva de retención de ``shape`` con la forma de malla ``state`` (ver el módulo)."""
     sp = species(shape) if isinstance(shape, str) else shape
     if not 0.0 <= contact <= 1.0:
         raise ValueError("contact debe estar entre 0 y 1")
+    if not 1 <= attempts <= 50:
+        raise ValueError("attempts debe estar entre 1 y 50")
     ls = sp.lengths() if lengths is None else np.asarray(lengths, dtype=float)
     if ls.size < 2 or np.any(ls <= 0) or np.any(np.diff(ls) <= 0):
         raise ValueError("las tallas deben ser positivas y crecientes")
@@ -305,7 +318,8 @@ def retention_curve(
         sel = w > 0
         ratio = fit[sel][None, :] / ls[:, None]
         p_pass = _phi((ratio - 1.0) / max(sp.cv, 1e-6))
-        retention = 1.0 - contact * (p_pass * w[sel][None, :]).sum(axis=1) / total
+        p_mesh = (p_pass * w[sel][None, :]).sum(axis=1) / total
+        retention = 1.0 - contact * (1.0 - (1.0 - p_mesh) ** attempts)
     l25, l50, l75 = (_crossing(ls, retention, q) for q in (0.25, 0.5, 0.75))
     mesh_mm = (
         float(np.average(2.0 * state.leg_mm, weights=state.meshes * zone)) if zone.any() else 0.0
@@ -322,6 +336,7 @@ def retention_curve(
         sf=sf,
         mesh_mm=mesh_mm,
         contact=contact,
+        attempts=attempts,
         fit_tri=fit,
         escape_meshes=total,
     )
@@ -333,13 +348,14 @@ def selectivity(
     lengths: Sequence[float] | None = None,
     *,
     contact: float = 1.0,
+    attempts: int = ESCAPE_ATTEMPTS,
 ) -> list[SelectivityCurve]:
     """Curvas de retención de un :class:`~trawlkit.sim.SimResult` para varias especies."""
     state = result.mesh
     if state is None:
         raise ValueError("el resultado no tiene estado de malla")
     ids = [species_ids] if isinstance(species_ids, str) else list(species_ids)
-    return [retention_curve(state, s, lengths, contact=contact) for s in ids]
+    return [retention_curve(state, s, lengths, contact=contact, attempts=attempts) for s in ids]
 
 
 # ---------------------------------------------------------------------------------------------

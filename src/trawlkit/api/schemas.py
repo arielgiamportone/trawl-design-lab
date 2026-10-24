@@ -228,6 +228,9 @@ class ScenarioIn(BaseModel):
     current_kn: float = Field(default=0.0, ge=-2.0, le=2.0)
     warp_length_m: float | None = Field(default=None, ge=20.0, le=3000.0)
     haul_hours: float = Field(default=2.0, ge=0.1, le=24.0)
+    mesh_bending: bool | None = None
+    """Rigidez de apertura de la malla (None = sólo con paños T90 o de malla cuadrada)."""
+    mesh_bending_factor: float = Field(default=1.0, ge=0.0, le=20.0)
 
 
 class FoulingOut(BaseModel):
@@ -364,6 +367,8 @@ class ExploreRequest(BaseModel):
     ct: float | None = Field(default=None, ge=0.0, le=0.5)
     scenario: ScenarioIn = Field(default_factory=ScenarioIn)
     include_geometry: bool = True
+    species: list[str] = Field(default_factory=list, max_length=8)
+    """Especies (``GET /catalog/species``): cada estado suma L50, SR y SF del copo."""
 
 
 class ExploreResponse(BaseModel):
@@ -378,6 +383,84 @@ class ExploreResponse(BaseModel):
     frames: list[dict[str, Any]] | None
     """Por estado: posiciones de los nodos (redondeadas al cm), tensiones y ensuciamiento."""
     engine: dict[str, Any]
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
+
+
+class SpeciesOut(BaseModel):
+    """Especie con la forma de su sección transversal (``trawlkit.selectivity``)."""
+
+    id: str
+    name: str
+    scientific_name: str
+    group: str
+    measure: str
+    """TL (largo total) o CL (largo del caparazón)."""
+    unit: str
+    length_min: float
+    length_max: float
+    height: float
+    """Alto de la sección / talla."""
+    width: float
+    """Ancho de la sección / talla."""
+    compression: float
+    cv: float
+    notes: str
+
+
+class CodendVariant(BaseModel):
+    """Variante de copo: orientación de la malla y, opcionalmente, mallero y U1."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    orientation: Literal["diamond", "t90", "square"] = "diamond"
+    mesh_mm: float | None = Field(default=None, gt=5.0, le=400.0)
+    hanging_ratio: float | None = Field(default=None, gt=0.05, lt=1.0)
+    label: str | None = Field(default=None, max_length=40)
+
+
+class SelectivityRequest(BaseModel):
+    """Selectividad del copo (``POST /simulate/selectivity``).
+
+    Cada variante rehace el copo (y la extensión) con otra orientación de malla o mallero,
+    conservando su ancho y largo relingados, y se simula con el escenario pedido. Devuelve por
+    variante la curva de retención de cada especie (L25, L50, L75, SR, SF), la talla máxima de
+    paso de cada triángulo (mapa) y, con ``include_geometry``, la forma para el 3D y el zoom.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    speed_kn: float = Field(default=3.0, ge=SIM_SPEED_RANGE[0], le=SIM_SPEED_RANGE[1])
+    resolution: int = Field(default=3, ge=2, le=5)
+    cn: float | None = Field(default=None, gt=0.0, le=3.0)
+    ct: float | None = Field(default=None, ge=0.0, le=0.5)
+    scenario: ScenarioIn = Field(default_factory=lambda: ScenarioIn(catch_kg=300.0))
+    species: list[str] = Field(default_factory=lambda: ["hake_hubbsi"], min_length=1, max_length=8)
+    variants: list[CodendVariant] = Field(
+        default_factory=lambda: [CodendVariant(), CodendVariant(orientation="t90")],
+        min_length=1,
+        max_length=3,
+    )
+    contact: float = Field(default=1.0, ge=0.0, le=1.0)
+    zone_length_m: float | None = Field(default=3.0, gt=0.0, le=50.0)
+    lengths: list[float] | None = Field(default=None, min_length=2, max_length=400)
+    include_geometry: bool = True
+
+
+class SelectivityResponse(BaseModel):
+    """Resultado de ``POST /simulate/selectivity``."""
+
+    species: list[str]
+    variants: list[dict[str, Any]]
+    """Por variante: ``label``, ``orientation``, ``mesh_mm``, paños del copo, ``result``
+    (``SimResult.to_dict(geometry=False)``), ``curves`` (por especie) y, con geometría,
+    ``geometry`` y ``frame`` (posiciones, apertura de malla y captura por triángulo)."""
     settings: dict[str, Any]
     estimated_s: float
     runtime_s: float
@@ -463,6 +546,7 @@ class LayoutShape(BaseModel):
     meshes_depth: int
     mesh_mm: float
     hanging_ratio: float | None
+    mesh_orientation: str = "diamond"
     cut_code: str | None
 
 

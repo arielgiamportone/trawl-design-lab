@@ -157,6 +157,29 @@
     }
    }
   },
+  "/catalog/species": {
+   "get": {
+    "summary": "List Species",
+    "description": "Especies para la selectividad, con la forma de su sección transversal (A VERIFICAR).",
+    "operationId": "list_species_catalog_species_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/SpeciesOut"
+         },
+         "type": "array",
+         "title": "Response List Species Catalog Species Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/catalog/seabeds": {
    "get": {
     "summary": "List Seabeds",
@@ -555,6 +578,45 @@
     }
    }
   },
+  "/simulate/selectivity": {
+   "post": {
+    "summary": "Simulate Selectivity",
+    "description": "Selectividad del copo por tamaño: curvas de retención por especie y variante de copo.",
+    "operationId": "simulate_selectivity_simulate_selectivity_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SelectivityRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SelectivityResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/simulate/haul": {
    "post": {
     "summary": "Simulate Haul",
@@ -686,6 +748,62 @@
     ],
     "title": "CatalogItem",
     "description": "Entrada resumida de un catálogo."
+   },
+   "CodendVariant": {
+    "properties": {
+     "orientation": {
+      "type": "string",
+      "enum": [
+       "diamond",
+       "t90",
+       "square"
+      ],
+      "title": "Orientation",
+      "default": "diamond"
+     },
+     "mesh_mm": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 400.0,
+        "exclusiveMinimum": 5.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mesh Mm"
+     },
+     "hanging_ratio": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMaximum": 1.0,
+        "exclusiveMinimum": 0.05
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hanging Ratio"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 40
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "CodendVariant",
+    "description": "Variante de copo: orientación de la malla y, opcionalmente, mallero y U1."
    },
    "ConstraintOut": {
     "properties": {
@@ -1538,6 +1656,14 @@
       "type": "boolean",
       "title": "Include Geometry",
       "default": true
+     },
+     "species": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 8,
+      "title": "Species"
      }
     },
     "additionalProperties": false,
@@ -2129,6 +2255,11 @@
       ],
       "title": "Hanging Ratio"
      },
+     "mesh_orientation": {
+      "type": "string",
+      "title": "Mesh Orientation",
+      "default": "diamond"
+     },
      "cut_code": {
       "anyOf": [
        {
@@ -2161,6 +2292,16 @@
     ],
     "title": "LayoutShape",
     "description": "Polígono de un panel en un plano (``trawlkit.drawing.layout.PanelShape``), en metros.\n\n``y`` crece desde la boca hacia la bolsa; ``x = 0`` es el eje de la red. ``points`` va en\nsentido horario desde la esquina superior izquierda (un borde de 0 mallas da un triángulo)."
+   },
+   "MeshOrientation": {
+    "type": "string",
+    "enum": [
+     "diamond",
+     "t90",
+     "square"
+    ],
+    "title": "MeshOrientation",
+    "description": "Orientación de la malla del paño.\n\n``diamond`` es la malla rómbica clásica (la diagonal larga de la malla estirada a lo largo de\nla red); ``t90`` es el mismo paño girado 90° (la diagonal larga queda a lo ancho); ``square``\nes la malla cuadrada, con los hilos a lo largo y a lo ancho de la red (paño cortado en barras).\nEn malla cuadrada ``meshes_top``/``meshes_bottom``/``meshes_depth`` cuentan cuadrados de lado\nuna pata (``mesh_mm / 2``)."
    },
    "NetSpec": {
     "properties": {
@@ -2635,6 +2776,11 @@
       "description": "Cantidad de paneles iguales",
       "default": 1
      },
+     "mesh_orientation": {
+      "$ref": "#/components/schemas/MeshOrientation",
+      "description": "Orientación de la malla (rombo, T90, cuadrada)",
+      "default": "diamond"
+     },
      "cut_code": {
       "anyOf": [
        {
@@ -2931,6 +3077,24 @@
       "minimum": 0.1,
       "title": "Haul Hours",
       "default": 2.0
+     },
+     "mesh_bending": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Mesh Bending"
+     },
+     "mesh_bending_factor": {
+      "type": "number",
+      "maximum": 20.0,
+      "minimum": 0.0,
+      "title": "Mesh Bending Factor",
+      "default": 1.0
      }
     },
     "additionalProperties": false,
@@ -3000,6 +3164,222 @@
     ],
     "title": "Section",
     "description": "Sección estructural de la red."
+   },
+   "SelectivityRequest": {
+    "properties": {
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       }
+      ],
+      "title": "Net",
+      "default": "fao_a3_standard"
+     },
+     "vessel": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Vessel"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel"
+     },
+     "door": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Door"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Door"
+     },
+     "class_vessels": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Class Vessels"
+     },
+     "compat": {
+      "type": "string",
+      "enum": [
+       "excel",
+       "corrected"
+      ],
+      "title": "Compat",
+      "default": "corrected"
+     },
+     "speed_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "Speed Kn",
+      "default": 3.0
+     },
+     "resolution": {
+      "type": "integer",
+      "maximum": 5.0,
+      "minimum": 2.0,
+      "title": "Resolution",
+      "default": 3
+     },
+     "cn": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 3.0,
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cn"
+     },
+     "ct": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 0.5,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ct"
+     },
+     "scenario": {
+      "$ref": "#/components/schemas/ScenarioIn"
+     },
+     "species": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "maxItems": 8,
+      "minItems": 1,
+      "title": "Species"
+     },
+     "variants": {
+      "items": {
+       "$ref": "#/components/schemas/CodendVariant"
+      },
+      "type": "array",
+      "maxItems": 3,
+      "minItems": 1,
+      "title": "Variants"
+     },
+     "contact": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Contact",
+      "default": 1.0
+     },
+     "zone_length_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 50.0,
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Zone Length M",
+      "default": 3.0
+     },
+     "lengths": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "type": "array",
+        "maxItems": 400,
+        "minItems": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lengths"
+     },
+     "include_geometry": {
+      "type": "boolean",
+      "title": "Include Geometry",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "SelectivityRequest",
+    "description": "Selectividad del copo (``POST /simulate/selectivity``).\n\nCada variante rehace el copo (y la extensión) con otra orientación de malla o mallero,\nconservando su ancho y largo relingados, y se simula con el escenario pedido. Devuelve por\nvariante la curva de retención de cada especie (L25, L50, L75, SR, SF), la talla máxima de\npaso de cada triángulo (mapa) y, con ``include_geometry``, la forma para el 3D y el zoom."
+   },
+   "SelectivityResponse": {
+    "properties": {
+     "species": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Species"
+     },
+     "variants": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Variants"
+     },
+     "settings": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Settings"
+     },
+     "estimated_s": {
+      "type": "number",
+      "title": "Estimated S"
+     },
+     "runtime_s": {
+      "type": "number",
+      "title": "Runtime S"
+     }
+    },
+    "type": "object",
+    "required": [
+     "species",
+     "variants",
+     "settings",
+     "estimated_s",
+     "runtime_s"
+    ],
+    "title": "SelectivityResponse",
+    "description": "Resultado de ``POST /simulate/selectivity``."
    },
    "SimEngineRow": {
     "properties": {
@@ -3369,6 +3749,80 @@
     ],
     "title": "Species",
     "description": "Especie objetivo."
+   },
+   "SpeciesOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "scientific_name": {
+      "type": "string",
+      "title": "Scientific Name"
+     },
+     "group": {
+      "type": "string",
+      "title": "Group"
+     },
+     "measure": {
+      "type": "string",
+      "title": "Measure"
+     },
+     "unit": {
+      "type": "string",
+      "title": "Unit"
+     },
+     "length_min": {
+      "type": "number",
+      "title": "Length Min"
+     },
+     "length_max": {
+      "type": "number",
+      "title": "Length Max"
+     },
+     "height": {
+      "type": "number",
+      "title": "Height"
+     },
+     "width": {
+      "type": "number",
+      "title": "Width"
+     },
+     "compression": {
+      "type": "number",
+      "title": "Compression"
+     },
+     "cv": {
+      "type": "number",
+      "title": "Cv"
+     },
+     "notes": {
+      "type": "string",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "scientific_name",
+     "group",
+     "measure",
+     "unit",
+     "length_min",
+     "length_max",
+     "height",
+     "width",
+     "compression",
+     "cv",
+     "notes"
+    ],
+    "title": "SpeciesOut",
+    "description": "Especie con la forma de su sección transversal (``trawlkit.selectivity``)."
    },
    "ValidationError": {
     "properties": {
