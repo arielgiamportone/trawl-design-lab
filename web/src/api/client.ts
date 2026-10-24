@@ -33,6 +33,10 @@ export type ExploreRequest = S['ExploreRequest'];
 export type ExploreResponse = S['ExploreResponse'];
 export type FoulingOut = S['FoulingOut'];
 export type LayoutResponse = S['LayoutResponse'];
+export type SpeciesOut = S['SpeciesOut'];
+export type CodendVariant = S['CodendVariant'];
+export type SelectivityRequest = S['SelectivityRequest'];
+export type SelectivityResponse = S['SelectivityResponse'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -174,6 +178,11 @@ export const api = {
   async explore(req: ExploreRequest, signal?: AbortSignal): Promise<ExploreResponse> {
     const res = await post('/simulate/explore', req, signal);
     return (await res.json()) as ExploreResponse;
+  },
+  species: (signal?: AbortSignal) => getJson<SpeciesOut[]>('/catalog/species', signal),
+  async selectivity(req: SelectivityRequest, signal?: AbortSignal): Promise<SelectivityResponse> {
+    const res = await post('/simulate/selectivity', req, signal);
+    return (await res.json()) as SelectivityResponse;
   },
   async haul(req: HaulRequest, signal?: AbortSignal): Promise<HaulResponse> {
     const res = await post('/simulate/haul', req, signal);

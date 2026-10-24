@@ -11,6 +11,7 @@ import {
   exploreRequest,
   INDICATORS,
   series,
+  unitOf,
   valueAt,
   valuesFor,
   variableDef,
@@ -28,7 +29,7 @@ import { Timeline } from './Timeline';
 const NetAnim = lazy(() => import('../sim3d/NetAnim').then((m) => ({ default: m.NetAnim })));
 const REQ_KEY = 'explore:request';
 
-const CHARTS = ['dp', 'pull', 'av', 'fuel'] as const;
+const CHARTS = ['dp', 'pull', 'av', 'fuel', 'opening', 'l50'] as const;
 
 /** Explorador: estados de red, portones y cables al recorrer una variable, animados. */
 export function Explore() {
@@ -59,6 +60,11 @@ export function Explore() {
   const seabeds = useQuery({
     queryKey: ['seabeds'],
     queryFn: ({ signal }) => api.seabeds(signal),
+    staleTime: Infinity,
+  });
+  const speciesQ = useQuery({
+    queryKey: ['species'],
+    queryFn: ({ signal }) => api.species(signal),
     staleTime: Infinity,
   });
   const foulings = useQuery({
@@ -263,6 +269,20 @@ export function Explore() {
               </label>
             )}
             <label>
+              Selectividad de
+              <select
+                value={form.species ?? ''}
+                onChange={(e) => setForm({ species: e.target.value || null })}
+              >
+                <option value="">(sin selectividad)</option>
+                {(speciesQ.data ?? []).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
               Resolución
               <select
                 value={form.resolution}
@@ -344,6 +364,7 @@ export function Explore() {
                   ['tension', 'Tensión'],
                   ['contact', 'Contacto con el fondo'],
                   ['fouling', 'Ensuciamiento'],
+                  ['opening', 'Apertura de malla'],
                 ] as [AnimColor, string][]
               ).map(([v, l]) => (
                 <button
@@ -390,7 +411,7 @@ export function Explore() {
                   key={key}
                   id={`explore-${key}`}
                   title={ind.label}
-                  unit={ind.unit}
+                  unit={unitOf(r, ind)}
                   digits={ind.digits}
                   xs={values}
                   ys={ys}
@@ -444,7 +465,7 @@ function Dashboard({ r, t }: { r: ExploreResponse; t: number }) {
           <div className={`impact-item ${tone}`} key={ind.key} data-indicator={ind.key}>
             <span className="impact-label">{ind.label}</span>
             <span className="impact-value">
-              {fmtFixed(now, ind.digits)} <span className="unit">{ind.unit}</span>
+              {fmtFixed(now, ind.digits)} <span className="unit">{unitOf(r, ind)}</span>
             </span>
             <span className="impact-delta">
               {delta === null || Math.abs(delta) < eps

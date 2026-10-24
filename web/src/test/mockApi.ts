@@ -14,7 +14,9 @@ import nets from './fixtures/nets.json';
 import optimize from './fixtures/optimize.json';
 import params from './fixtures/params.json';
 import seabeds from './fixtures/seabeds.json';
+import selectivity from './fixtures/selectivity.json';
 import simulate from './fixtures/simulate.json';
+import species from './fixtures/species.json';
 import vessels from './fixtures/vessels.json';
 
 export const fixtures = {
@@ -32,7 +34,9 @@ export const fixtures = {
   optimize,
   params,
   seabeds,
+  selectivity,
   simulate,
+  species,
   vessels,
 };
 
@@ -76,6 +80,8 @@ export function mockApi(
     if (path === '/simulate/haul') return json(haul);
     if (path === '/simulate/explore') return json(explore);
     if (path === '/catalog/fouling') return json(fouling);
+    if (path === '/catalog/species') return json(species);
+    if (path === '/simulate/selectivity') return json(selectivity);
     if (path === '/errata') return json(errata);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);

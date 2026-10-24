@@ -88,8 +88,55 @@ export const PANEL_FIELD_ORDER: PanelField[] = [
   'count',
 ];
 
+/** Orientación de la malla del paño (campo de texto, no numérico). */
+export const ORIENTATION_FIELD = 'mesh_orientation';
+export type MeshOrientation = 'diamond' | 't90' | 'square';
+export const MESH_ORIENTATIONS: { id: MeshOrientation; label: string }[] = [
+  { id: 'diamond', label: 'Rombo' },
+  { id: 't90', label: 'T90 (girada 90°)' },
+  { id: 'square', label: 'Cuadrada' },
+];
+
 /** Ediciones crudas (texto) por panel y campo. */
-export type PanelEdits = Record<string, Partial<Record<PanelField, string>>>;
+export type PanelEdits = Record<
+  string,
+  Partial<Record<PanelField | typeof ORIENTATION_FIELD, string>>
+>;
+
+const isOrientation = (v: string | undefined): v is MeshOrientation =>
+  MESH_ORIENTATIONS.some((o) => o.id === v);
+
+/** Orientación vigente del panel: la editada o la del preset (rombo por defecto). */
+export function orientationOf(panel: Panel, edits: PanelEdits): MeshOrientation {
+  const e = edits[panel.id]?.[ORIENTATION_FIELD];
+  if (isOrientation(e)) return e;
+  const v = (panel as { mesh_orientation?: string }).mesh_orientation;
+  return isOrientation(v) ? v : 'diamond';
+}
+
+function presetOrientation(panel: Panel): MeshOrientation {
+  const v = (panel as { mesh_orientation?: string }).mesh_orientation;
+  return isOrientation(v) ? v : 'diamond';
+}
+
+/** Ediciones con la orientación del panel ``pid``; si vuelve a la del preset, se quita. */
+export function withOrientation(
+  edits: PanelEdits,
+  panel: Panel,
+  value: MeshOrientation,
+): PanelEdits {
+  const next: PanelEdits = {
+    ...edits,
+    [panel.id]: { ...edits[panel.id], [ORIENTATION_FIELD]: value },
+  };
+  if (value === presetOrientation(panel)) {
+    const p = { ...next[panel.id] };
+    delete p[ORIENTATION_FIELD];
+    if (Object.keys(p).length === 0) delete next[panel.id];
+    else next[panel.id] = p;
+  }
+  return next;
+}
 
 /** Valida el texto de una celda. Devuelve el número o un mensaje de error. */
 export function validateField(
@@ -117,6 +164,10 @@ export function editErrors(edits: PanelEdits): Record<string, string> {
   for (const [pid, fields] of Object.entries(edits)) {
     for (const [f, text] of Object.entries(fields)) {
       if (text === undefined) continue;
+      if (f === ORIENTATION_FIELD) {
+        if (!isOrientation(text)) out[`${pid}.${f}`] = 'Orientación desconocida';
+        continue;
+      }
       const r = validateField(f as PanelField, text);
       if (!r.ok) out[`${pid}.${f}`] = r.error;
     }
@@ -173,6 +224,8 @@ export function countEdits(spec: NetSpec | undefined, edits: PanelEdits): number
     const e = edits[p.id];
     if (!e) continue;
     for (const f of PANEL_FIELD_ORDER) if (isEdited(p, f, e[f])) n += 1;
+    const o = e[ORIENTATION_FIELD];
+    if (isOrientation(o) && o !== presetOrientation(p)) n += 1;
   }
   return n;
 }
@@ -182,8 +235,13 @@ export function countEdits(spec: NetSpec | undefined, edits: PanelEdits): number
  * del Excel) cuando existen, así que se actualizan en espejo de ``meshes_top``/``meshes_bottom``
  * conservando la correspondencia original del preset.
  */
-export function applyPanelEdits(panel: Panel, edits: Partial<Record<PanelField, string>>): Panel {
+export function applyPanelEdits(
+  panel: Panel,
+  edits: Partial<Record<PanelField | typeof ORIENTATION_FIELD, string>>,
+): Panel {
   const out: Panel & Record<string, unknown> = { ...panel };
+  const o = edits[ORIENTATION_FIELD];
+  if (isOrientation(o)) out.mesh_orientation = o;
   for (const f of PANEL_FIELD_ORDER) {
     const text = edits[f];
     if (text === undefined) continue;

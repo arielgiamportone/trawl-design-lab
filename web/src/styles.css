@@ -2234,3 +2234,89 @@ label.check.small {
     flex-basis: 100%;
   }
 }
+
+/* --- Selectividad y zoom por malla (Fase 11.3) ------------------------------------------- */
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4px 14px;
+  font-size: 13px;
+}
+.check-grid label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.inline-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.sel-chart-box {
+  height: 260px;
+  min-width: 0;
+}
+.mesh-zoom {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  background: var(--surface-2);
+}
+.mesh-zoom-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mesh-zoom-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .mesh-zoom-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.mesh-zoom-svg {
+  width: 100%;
+  max-height: 340px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+}
+.kv {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.kv dt {
+  color: var(--muted);
+}
+.kv dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+.mesh-zoom-fish {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+.mesh-zoom-fish label {
+  font-weight: 600;
+}
+.mesh-zoom-verdict {
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+.mesh-zoom-verdict.good {
+  color: var(--good);
+}
+.mesh-zoom-verdict.bad {
+  color: var(--crit);
+}

@@ -112,6 +112,8 @@ export interface ExploreForm {
   currentKn: number;
   warpLength: number | null;
   resolution: number;
+  /** Especie para la selectividad del copo en cada estado (null = sin selectividad). */
+  species?: string | null;
 }
 
 export const DEFAULT_EXPLORE: ExploreForm = {
@@ -159,6 +161,8 @@ export function exploreRequest(base: DesignRequest, f: ExploreForm): ExploreRequ
     current_kn: f.currentKn,
     warp_length_m: f.warpLength,
     haul_hours: 2,
+    mesh_bending: null,
+    mesh_bending_factor: 1,
   };
   if (f.variable === 'fouling_level' && !f.fouling) scenario.fouling = 'general';
   return {
@@ -175,6 +179,7 @@ export function exploreRequest(base: DesignRequest, f: ExploreForm): ExploreRequ
     ct: null,
     scenario,
     include_geometry: true,
+    species: f.species ? [f.species] : [],
   };
 }
 
@@ -196,6 +201,8 @@ export interface Frame {
   twine_tension_n: (number | number[])[];
   bar_tension_n: number[];
   fouling_tri: number[];
+  /** Ángulo entre las dos familias de hilos de cada triángulo [°]. */
+  opening_deg?: number[];
 }
 
 export function asGeometry(r: ExploreResponse): Geometry | null {
@@ -257,6 +264,10 @@ export interface Indicator {
 }
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+const sel = (key: 'l50' | 'sr') => (r: Record<string, unknown>) =>
+  num((r.selectivity as Record<string, unknown>[] | undefined)?.[0]?.[key]);
+const meshSummary = (key: string) => (r: Record<string, unknown>) =>
+  num((r.mesh_summary as Record<string, unknown> | undefined)?.[key]);
 const op = (key: string) => (r: Record<string, unknown>) =>
   num((r.operation as Record<string, unknown> | undefined)?.[key]);
 
@@ -334,6 +345,30 @@ export const INDICATORS: Indicator[] = [
     get: op('swept_area_km2_h'),
   },
   {
+    key: 'opening',
+    label: 'Apertura de malla del copo',
+    unit: '°',
+    digits: 0,
+    better: 'higher',
+    get: meshSummary('opening_deg'),
+  },
+  {
+    key: 'l50',
+    label: 'L50 del copo',
+    unit: 'talla',
+    digits: 1,
+    better: null,
+    get: sel('l50'),
+  },
+  {
+    key: 'sr',
+    label: 'Rango de selección (SR)',
+    unit: 'talla',
+    digits: 1,
+    better: null,
+    get: sel('sr'),
+  },
+  {
     key: 'contact',
     label: 'Área en contacto con el fondo',
     unit: 'km²/h',
@@ -342,6 +377,14 @@ export const INDICATORS: Indicator[] = [
     get: op('contact_area_km2_h'),
   },
 ];
+
+/** Unidad de un indicador: la de la talla de la especie para L50 y SR. */
+export function unitOf(r: ExploreResponse, ind: Indicator): string {
+  if (ind.unit !== 'talla') return ind.unit;
+  const s = (r.results[0] as Record<string, unknown> | undefined)?.selectivity as
+    { unit?: string }[] | undefined;
+  return s?.[0]?.unit ?? 'cm';
+}
 
 export function series(r: ExploreResponse, ind: Indicator): (number | null)[] {
   return r.results.map((x) => ind.get(x as Record<string, unknown>));

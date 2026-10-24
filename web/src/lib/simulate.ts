@@ -99,4 +99,4 @@ export function speedLabel(v: number): string {
 
 /** Vista de la pestaña «Simulación» (memoria de la sesión). */
 export const SIM_VIEW_KEY = 'simulate:view';
-export type SimView = 'speeds' | 'haul' | 'explore';
+export type SimView = 'speeds' | 'haul' | 'explore' | 'selectivity';

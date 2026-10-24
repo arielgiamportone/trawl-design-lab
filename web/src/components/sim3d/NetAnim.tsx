@@ -15,7 +15,7 @@ import {
 } from '../../lib/sim3d';
 import { useChartColors, useResolvedTheme } from '../../lib/theme';
 
-export type AnimColor = 'tension' | 'contact' | 'fouling';
+export type AnimColor = 'tension' | 'contact' | 'fouling' | 'opening' | 'values';
 export type AnimScope = 'net' | 'full';
 
 export interface NetAnimHandle {
@@ -32,6 +32,22 @@ interface Props {
   color: AnimColor;
   scope: AnimScope;
   label: string;
+  /** Valor por triángulo para ``color = 'values'`` (null = sin dato, gris). */
+  triValues?: (number | null)[];
+  /** Leyenda de ``triValues`` (p. ej. «Talla máxima que pasa [cm]»). */
+  valuesLabel?: string;
+  /** Clic sobre un triángulo del paño (para el zoom por malla). */
+  onPick?: (triangle: number) => void;
+  /** Triángulo resaltado. */
+  picked?: number | null;
+}
+
+/** Fracción abierta de la malla (sen β) interpolada entre dos cuadros. */
+function openingAt(a: Frame, b: Frame, k: number, f: number): number {
+  const oa = (a as Frame & { opening_deg?: number[] }).opening_deg?.[k];
+  const ob = (b as Frame & { opening_deg?: number[] }).opening_deg?.[k] ?? oa;
+  if (oa === undefined || ob === undefined) return 0;
+  return Math.max(0, Math.sin(((oa + (ob - oa) * f) * Math.PI) / 180));
 }
 
 /** Escala de color estable para toda la animación: tensión hasta el p95 de todos los cuadros. */
@@ -81,7 +97,7 @@ function hasWebGL(): boolean {
  * (interpolado entre los equilibrios calculados), coloreado por tensión, contacto o ensuciamiento.
  */
 export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
-  { geometry, frames, t, color, scope, label },
+  { geometry, frames, t, color, scope, label, triValues, valuesLabel, onPick, picked = null },
   ref,
 ) {
   const theme = useResolvedTheme();
@@ -90,6 +106,16 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
   const host = useRef<HTMLDivElement>(null);
   const [noGl] = useState(() => !hasWebGL());
   const tMax = useMemo(() => globalTensionMax(frames), [frames]);
+  const vMax = useMemo(() => {
+    const vals = (triValues ?? []).filter((v): v is number => v !== null && Number.isFinite(v));
+    return vals.length ? Math.max(...vals) : 1;
+  }, [triValues]);
+  const pickRef = useRef(onPick);
+  const pickedRef = useRef(picked);
+  useEffect(() => {
+    pickRef.current = onPick;
+    pickedRef.current = picked;
+  });
   // Encuadre «red»: paño y portones (sin los cables, que miden cientos de metros).
   const netNodes = useMemo(
     () => [...new Set([...geometry.triangles.flat(), ...geometry.doors])],
@@ -223,6 +249,8 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
     const restColor = rampColor(0, ramp);
     const hit = rampColor(0, [colors.s2, colors.s2]);
     const fouled = rampColor(0, [colors.s3, colors.s3]);
+    const mark = rampColor(0, [colors.s4, colors.s4]);
+    const none = rampColor(0, [colors.grid, colors.grid]);
     const update = (tt: number) => {
       nodeBuf = nodesAt(frames, tt, nodeBuf);
       const { i, f } = frameIndex(tt, frames.length);
@@ -243,11 +271,17 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
             number,
             number,
           ];
+        } else if (color === 'opening') {
+          c = rampColor(openingAt(a, b, k, f), ramp);
+        } else if (color === 'values') {
+          const v = triValues?.[k];
+          c = v === null || v === undefined ? none : rampColor(v / vMax, ramp);
         } else {
           const ta = tensionOf(a.twine_tension_n[k] ?? 0);
           const tb = tensionOf(b.twine_tension_n[k] ?? 0);
           c = rampColor((ta + (tb - ta) * f) / tMax, ramp);
         }
+        if (pickedRef.current === k) c = mark;
         for (let j = 0; j < 3; j++) {
           pos.set(P(tri[j] as number), k * 9 + j * 3);
           col.set(c, k * 9 + j * 3);
@@ -299,6 +333,30 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
       });
     };
 
+    // Clic (sin arrastre) sobre el paño: triángulo elegido (faceIndex = índice del triángulo).
+    const ray = new THREE.Raycaster();
+    let down: [number, number] | null = null;
+    const onDown = (e: PointerEvent) => {
+      down = [e.clientX, e.clientY];
+    };
+    const onUp = (e: PointerEvent) => {
+      if (!down || !pickRef.current) return;
+      const moved = Math.hypot(e.clientX - down[0], e.clientY - down[1]);
+      down = null;
+      if (moved > 4) return;
+      const rect = canvas.getBoundingClientRect();
+      const ndc = new THREE.Vector2(
+        ((e.clientX - rect.left) / rect.width) * 2 - 1,
+        -((e.clientY - rect.top) / rect.height) * 2 + 1,
+      );
+      ray.setFromCamera(ndc, camera);
+      const hitTri = ray.intersectObject(mesh)[0];
+      if (hitTri?.faceIndex !== undefined && hitTri.faceIndex !== null) {
+        pickRef.current(hitTri.faceIndex);
+      }
+    };
+    canvas.addEventListener('pointerdown', onDown);
+    canvas.addEventListener('pointerup', onUp);
     const controls = new OrbitControls(camera, canvas);
     controls.target.set(...frame.center);
     controls.listenToKeyEvents(el);
@@ -332,6 +390,8 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
       render,
       setView,
       dispose: () => {
+        canvas.removeEventListener('pointerdown', onDown);
+        canvas.removeEventListener('pointerup', onUp);
         ro?.disconnect();
         controls.dispose();
         scene.traverse((o) => {
@@ -351,14 +411,14 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
     };
     // La escena se rearma al cambiar geometría, cuadros, color, encuadre o tema; ``t`` sólo
     // actualiza los buffers (efecto de abajo).
-  }, [geometry, frames, color, frame, colors, ramp, tMax, noGl, label]);
+  }, [geometry, frames, color, frame, colors, ramp, tMax, noGl, label, triValues, vMax]);
 
   useEffect(() => {
     const s = scene3d.current;
     if (!s) return;
     s.update(t);
     s.render();
-  }, [t, geometry, frames, color, frame, colors]);
+  }, [t, geometry, frames, color, frame, colors, picked]);
 
   if (noGl) {
     return (
@@ -402,6 +462,19 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
               <span>≥ {fmt(Math.round(tMax))}</span>
             </span>
           </>
+        ) : color === 'opening' || color === 'values' ? (
+          <>
+            <span>
+              {color === 'opening'
+                ? 'Apertura de la malla (área / malla abierta en cuadrado)'
+                : (valuesLabel ?? 'Valor por triángulo')}
+            </span>
+            <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
+            <span className="net3d-ticks">
+              <span>0</span>
+              <span>{color === 'opening' ? '1' : fmt(Math.round(vMax))}</span>
+            </span>
+          </>
         ) : color === 'contact' ? (
           <span>
             <span className="key-rect" style={{ background: colors.s2 }} aria-hidden="true" /> Paño
@@ -411,6 +484,11 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
           <span>
             <span className="key-rect" style={{ background: colors.s3 }} aria-hidden="true" /> Paño
             ensuciado (más intenso = más nivel)
+          </span>
+        )}
+        {onPick && (
+          <span className="help">
+            Haga clic sobre el paño para ver sus mallas de cerca (zoom por malla).
           </span>
         )}
         <span className="help">

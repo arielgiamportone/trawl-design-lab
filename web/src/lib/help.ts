@@ -50,6 +50,22 @@ export const HELP: Record<string, HelpEntry> = {
     text: 'Tipo de fondo: fija el rozamiento del tren de fondo y de las zapatas de los portones. Los valores son estimaciones con rango (no hay una tabla publicada por sedimento).',
     chapter: '22_simulacion_realista',
   },
+  mesh_orientation: {
+    text: 'Orientación de la malla del paño. Rombo: la malla clásica, que la tensión a lo largo cierra. T90: el mismo paño girado 90°, que se mantiene más abierto. Cuadrada: hilos a lo largo y a lo ancho; la malla no se cierra.',
+    chapter: '24_malla_selectividad',
+  },
+  l50: {
+    text: 'Talla de retención al 50 %: los peces de esa talla tienen la mitad de chance de quedar en el copo. Sube con el mallero y con mallas más abiertas.',
+    chapter: '24_malla_selectividad',
+  },
+  selection_range: {
+    text: 'Rango de selección SR = L75 − L25: cuán gradual es el paso de escapar a quedar retenido. Un SR chico es una selección más nítida.',
+    chapter: '24_malla_selectividad',
+  },
+  fishselect: {
+    text: 'Modelo geométrico de escape (tipo FISHSELECT): un pez pasa si la sección más resistente de su cuerpo entra en la luz de la malla deformada, girándola a su favor.',
+    chapter: '24_malla_selectividad',
+  },
   // Parámetros de DesignCase
   speeds_kn: {
     text: 'Velocidades en las que se calculan las curvas de tiro y resistencia.',

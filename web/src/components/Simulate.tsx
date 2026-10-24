@@ -4,6 +4,7 @@ import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../a
 import { fmt, fmtFixed, fmtPct } from '../lib/format';
 import { recall, remember } from '../lib/memo';
 import { Explore } from './sim/Explore';
+import { Selectivity } from './sim/Selectivity';
 import { Haul } from './sim/Haul';
 import { isSimGeometry } from '../lib/sim3d';
 import {
@@ -152,14 +153,23 @@ export function Simulate() {
           >
             Explorador animado
           </button>
+          <button
+            type="button"
+            aria-pressed={view === 'selectivity'}
+            onClick={() => setView('selectivity')}
+          >
+            Mallas y selectividad
+          </button>
         </div>
       </div>
       {view === 'speeds' ? (
         <SpeedSweep />
       ) : view === 'haul' ? (
         <Haul onAnimate={() => setView('explore')} />
-      ) : (
+      ) : view === 'explore' ? (
         <Explore />
+      ) : (
+        <Selectivity />
       )}
     </div>
   );

@@ -10,6 +10,7 @@ import {
   isEdited,
   PANEL_FIELD_ORDER,
   withEdit,
+  withOrientation,
   type PanelEdits,
   type PanelField,
 } from '../../lib/panels';
@@ -195,6 +196,7 @@ export function InteractiveDesign() {
             panel={panel}
             edits={edits}
             onEdit={(f, text) => edit(panel.id, f, text)}
+            onOrientation={(o) => setEdits((e) => withOrientation(e, panel, o))}
             onReset={() =>
               setEdits((e) => {
                 const next = { ...e };

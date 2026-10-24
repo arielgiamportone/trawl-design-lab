@@ -124,6 +124,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/catalog/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Species
+         * @description Especies para la selectividad, con la forma de su sección transversal (A VERIFICAR).
+         */
+        get: operations["list_species_catalog_species_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/catalog/seabeds": {
         parameters: {
             query?: never;
@@ -327,6 +347,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/simulate/selectivity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Selectivity
+         * @description Selectividad del copo por tamaño: curvas de retención por especie y variante de copo.
+         */
+        post: operations["simulate_selectivity_simulate_selectivity_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/simulate/haul": {
         parameters: {
             query?: never;
@@ -382,6 +422,24 @@ export interface components {
             name?: string | null;
             /** Description */
             description?: string | null;
+        };
+        /**
+         * CodendVariant
+         * @description Variante de copo: orientación de la malla y, opcionalmente, mallero y U1.
+         */
+        CodendVariant: {
+            /**
+             * Orientation
+             * @default diamond
+             * @enum {string}
+             */
+            orientation: "diamond" | "t90" | "square";
+            /** Mesh Mm */
+            mesh_mm?: number | null;
+            /** Hanging Ratio */
+            hanging_ratio?: number | null;
+            /** Label */
+            label?: string | null;
         };
         /**
          * ConstraintOut
@@ -659,6 +717,8 @@ export interface components {
              * @default true
              */
             include_geometry: boolean;
+            /** Species */
+            species?: string[];
         };
         /**
          * ExploreResponse
@@ -908,9 +968,26 @@ export interface components {
             mesh_mm: number;
             /** Hanging Ratio */
             hanging_ratio: number | null;
+            /**
+             * Mesh Orientation
+             * @default diamond
+             */
+            mesh_orientation: string;
             /** Cut Code */
             cut_code: string | null;
         };
+        /**
+         * MeshOrientation
+         * @description Orientación de la malla del paño.
+         *
+         *     ``diamond`` es la malla rómbica clásica (la diagonal larga de la malla estirada a lo largo de
+         *     la red); ``t90`` es el mismo paño girado 90° (la diagonal larga queda a lo ancho); ``square``
+         *     es la malla cuadrada, con los hilos a lo largo y a lo ancho de la red (paño cortado en barras).
+         *     En malla cuadrada ``meshes_top``/``meshes_bottom``/``meshes_depth`` cuentan cuadrados de lado
+         *     una pata (``mesh_mm / 2``).
+         * @enum {string}
+         */
+        MeshOrientation: "diamond" | "t90" | "square";
         /**
          * NetSpec
          * @description Especificación completa de una red de arrastre.
@@ -1104,6 +1181,11 @@ export interface components {
              * @default 1
              */
             count: number;
+            /**
+             * @description Orientación de la malla (rombo, T90, cuadrada)
+             * @default diamond
+             */
+            mesh_orientation: components["schemas"]["MeshOrientation"];
             /** Cut Code */
             cut_code?: string | null;
             /**
@@ -1244,6 +1326,13 @@ export interface components {
              * @default 2
              */
             haul_hours: number;
+            /** Mesh Bending */
+            mesh_bending?: boolean | null;
+            /**
+             * Mesh Bending Factor
+             * @default 1
+             */
+            mesh_bending_factor: number;
         };
         /**
          * SeabedOut
@@ -1275,6 +1364,90 @@ export interface components {
          * @enum {string}
          */
         Section: "wing_tip" | "wing" | "square" | "belly" | "body" | "extension" | "codend";
+        /**
+         * SelectivityRequest
+         * @description Selectividad del copo (``POST /simulate/selectivity``).
+         *
+         *     Cada variante rehace el copo (y la extensión) con otra orientación de malla o mallero,
+         *     conservando su ancho y largo relingados, y se simula con el escenario pedido. Devuelve por
+         *     variante la curva de retención de cada especie (L25, L50, L75, SR, SF), la talla máxima de
+         *     paso de cada triángulo (mapa) y, con ``include_geometry``, la forma para el 3D y el zoom.
+         */
+        SelectivityRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /**
+             * Speed Kn
+             * @default 3
+             */
+            speed_kn: number;
+            /**
+             * Resolution
+             * @default 3
+             */
+            resolution: number;
+            /** Cn */
+            cn?: number | null;
+            /** Ct */
+            ct?: number | null;
+            scenario?: components["schemas"]["ScenarioIn"];
+            /** Species */
+            species?: string[];
+            /** Variants */
+            variants?: components["schemas"]["CodendVariant"][];
+            /**
+             * Contact
+             * @default 1
+             */
+            contact: number;
+            /**
+             * Zone Length M
+             * @default 3
+             */
+            zone_length_m: number | null;
+            /** Lengths */
+            lengths?: number[] | null;
+            /**
+             * Include Geometry
+             * @default true
+             */
+            include_geometry: boolean;
+        };
+        /**
+         * SelectivityResponse
+         * @description Resultado de ``POST /simulate/selectivity``.
+         */
+        SelectivityResponse: {
+            /** Species */
+            species: string[];
+            /** Variants */
+            variants: {
+                [key: string]: unknown;
+            }[];
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
+        };
         /**
          * SimEngineRow
          * @description Magnitudes empíricas del motor a una velocidad (comparables con la simulación).
@@ -1408,6 +1581,38 @@ export interface components {
             bottom_type?: string | null;
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * SpeciesOut
+         * @description Especie con la forma de su sección transversal (``trawlkit.selectivity``).
+         */
+        SpeciesOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Scientific Name */
+            scientific_name: string;
+            /** Group */
+            group: string;
+            /** Measure */
+            measure: string;
+            /** Unit */
+            unit: string;
+            /** Length Min */
+            length_min: number;
+            /** Length Max */
+            length_max: number;
+            /** Height */
+            height: number;
+            /** Width */
+            width: number;
+            /** Compression */
+            compression: number;
+            /** Cv */
+            cv: number;
+            /** Notes */
+            notes: string;
         };
         /** ValidationError */
         ValidationError: {
@@ -1590,6 +1795,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FoulingOut"][];
+                };
+            };
+        };
+    };
+    list_species_catalog_species_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SpeciesOut"][];
                 };
             };
         };
@@ -1878,6 +2103,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ExploreResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_selectivity_simulate_selectivity_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SelectivityRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SelectivityResponse"];
                 };
             };
             /** @description Validation Error */

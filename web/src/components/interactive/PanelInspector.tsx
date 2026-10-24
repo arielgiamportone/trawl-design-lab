@@ -1,13 +1,17 @@
 import { useId } from 'react';
 import type { Panel } from '../../api/client';
 import { toInput } from '../../lib/format';
+import { HelpTip } from '../HelpTip';
 import { PLANE_LABELS, SECTION_LABELS } from '../../lib/labels';
 import {
   currentValue,
   isEdited,
+  MESH_ORIENTATIONS,
+  orientationOf,
   PANEL_FIELD_ORDER,
   PANEL_FIELDS,
   validateField,
+  type MeshOrientation,
   type PanelEdits,
   type PanelField,
 } from '../../lib/panels';
@@ -16,15 +20,20 @@ interface Props {
   panel: Panel;
   edits: PanelEdits;
   onEdit: (field: PanelField, text: string) => void;
+  /** Cambio de la orientación de la malla (sin él, el selector no se muestra). */
+  onOrientation?: (value: MeshOrientation) => void;
   onReset: () => void;
   onClose: () => void;
 }
 
 /** Datos del panel seleccionado, con −/+ en los campos enteros. */
-export function PanelInspector({ panel, edits, onEdit, onReset, onClose }: Props) {
+export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, onClose }: Props) {
   const ids = useId();
   const pe = edits[panel.id] ?? {};
-  const anyEdited = PANEL_FIELD_ORDER.some((f) => isEdited(panel, f, pe[f]));
+  const orientation = orientationOf(panel, edits);
+  const presetOrientation = orientationOf(panel, {});
+  const anyEdited =
+    PANEL_FIELD_ORDER.some((f) => isEdited(panel, f, pe[f])) || orientation !== presetOrientation;
   return (
     <section className="inspector" aria-labelledby={`${ids}-t`} data-testid="panel-inspector">
       <div className="inspector-head">
@@ -98,6 +107,32 @@ export function PanelInspector({ panel, edits, onEdit, onReset, onClose }: Props
           </div>
         );
       })}
+      {onOrientation && (
+        <div className={`insp-row${orientation !== presetOrientation ? ' edited' : ''}`}>
+          <label htmlFor={`${ids}-orient`}>
+            Orientación de la malla{' '}
+            <HelpTip topic="mesh_orientation" label="Orientación de la malla" />
+          </label>
+          <div className="insp-input">
+            <select
+              id={`${ids}-orient`}
+              value={orientation}
+              onChange={(e) => onOrientation(e.target.value as MeshOrientation)}
+            >
+              {MESH_ORIENTATIONS.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          {orientation === 'square' && (
+            <p className="help">
+              En malla cuadrada las mallas cuentan cuadrados de una pata (mallero / 2) de lado.
+            </p>
+          )}
+        </div>
+      )}
       <button type="button" className="btn small" onClick={onReset} disabled={!anyEdited}>
         Restablecer este panel
       </button>

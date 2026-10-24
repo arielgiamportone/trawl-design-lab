@@ -2,6 +2,7 @@ import { ApiError } from '../../api/client';
 import { chapterUrl } from '../../lib/docs';
 import { catchPreset, EXPLORE_FORM_KEY } from '../../lib/explore';
 import { remember } from '../../lib/memo';
+import { DEFAULT_SEL, SEL_FORM_KEY } from '../../lib/selectivity';
 import { SIM_VIEW_KEY } from '../../lib/simulate';
 import { fmtFixed } from '../../lib/format';
 import { designPropeller, perfWindow } from '../../lib/series';
@@ -108,6 +109,22 @@ export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
           }}
         >
           Ver cómo trabaja la red (animación)
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            remember(SIM_VIEW_KEY, 'selectivity');
+            remember(SEL_FORM_KEY, {
+              ...DEFAULT_SEL,
+              catchKg: state.expectedCatchKg || DEFAULT_SEL.catchKg,
+              seabed: state.params.seabed || DEFAULT_SEL.seabed,
+              speed: Math.min(5, Math.max(1, Math.round(state.targetSpeed * 2) / 2)),
+            });
+            onExpert('simulacion');
+          }}
+        >
+          ¿Qué tallas retiene el copo?
         </button>
       </div>
       <details className="accordion">

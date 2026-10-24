@@ -10,7 +10,9 @@ import {
   countEdits,
   editErrors,
   editedSpec,
+  orientationOf,
   validateField,
+  withOrientation,
   type PanelEdits,
 } from './panels';
 
@@ -77,5 +79,17 @@ describe('<PanelTable>', () => {
     await userEvent.type(depth, '120');
     expect(depth.closest('td')).not.toHaveClass('edited');
     expect(screen.getByText(/Sin cambios/)).toBeInTheDocument();
+  });
+});
+
+describe('orientación de la malla', () => {
+  const panel = { id: 'I', mesh_orientation: 'diamond' } as unknown as Panel;
+  it('se edita, se cuenta, se aplica y vuelve al preset', () => {
+    const e = withOrientation({}, panel, 't90');
+    expect(orientationOf(panel, e)).toBe('t90');
+    expect(editErrors(e)).toEqual({});
+    expect(applyPanelEdits(panel, e.I ?? {}).mesh_orientation).toBe('t90');
+    expect(withOrientation(e, panel, 'diamond')).toEqual({});
+    expect(editErrors({ I: { mesh_orientation: 'hex' } })).toHaveProperty('I.mesh_orientation');
   });
 });

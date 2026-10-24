@@ -23,6 +23,7 @@ describe('ayuda contextual', () => {
       '19_ventana_velocidad',
       '20_optimizacion',
       '22_simulacion_realista',
+      '24_malla_selectividad',
       '30_caso_beagle',
     ]);
     for (const [k, h] of Object.entries(HELP)) {
