@@ -1,0 +1,844 @@
+import { useQuery } from '@tanstack/react-query';
+import { useId, useMemo, useState } from 'react';
+import { api, ApiError, type ObservationIn, type SensorParseResponse } from '../../api/client';
+import { fmt, fmtFixed } from '../../lib/format';
+import { recall, remember } from '../../lib/memo';
+import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
+import { useChartColors } from '../../lib/theme';
+import {
+  asCalibration,
+  asUncertainty,
+  atBound,
+  bandPct,
+  CAL_PARAMS,
+  calibrateRequest,
+  DEFAULT_CAL,
+  DEFAULT_UNC,
+  QUANTITY_LABELS,
+  relativeSpan,
+  tornado,
+  UNC_FORM_KEY,
+  uncertaintyRequest,
+  type CalForm,
+  type CalParam,
+  type UncForm,
+  type UncOutput,
+} from '../../lib/uncertainty';
+import { useCase } from '../../state/useCase';
+import { HelpTip } from '../HelpTip';
+
+type Sub = 'bands' | 'calibration';
+const SUB_KEY = 'uncertainty:sub';
+
+/** Incertidumbre (bandas P10–P90 y sensibilidad) y calibración con mediciones. */
+export function Uncertainty() {
+  const [sub, setSubState] = useState<Sub>(() => recall<Sub>(SUB_KEY) ?? 'bands');
+  const setSub = (s: Sub) => {
+    remember(SUB_KEY, s);
+    setSubState(s);
+  };
+  return (
+    <div className="uncertainty">
+      <div className="segmented" role="group" aria-label="Incertidumbre o calibración">
+        <button type="button" aria-pressed={sub === 'bands'} onClick={() => setSub('bands')}>
+          Bandas de incertidumbre
+        </button>
+        <button
+          type="button"
+          aria-pressed={sub === 'calibration'}
+          onClick={() => setSub('calibration')}
+        >
+          Calibración con mediciones
+        </button>
+      </div>
+      {sub === 'bands' ? <Bands /> : <Calibration />}
+    </div>
+  );
+}
+
+function errorBox(error: unknown) {
+  if (!error) return null;
+  const e = error as Error;
+  return (
+    <div className="alert error" role="alert">
+      <span>
+        <strong>
+          {error instanceof ApiError && error.status ? `Error ${error.status}` : 'Error'}:
+        </strong>{' '}
+        {e.message}
+      </span>
+    </div>
+  );
+}
+
+// --- bandas -----------------------------------------------------------------------------------
+
+function Bands() {
+  const { committed, state } = useCase();
+  const ids = useId();
+  const [form, setFormState] = useState<UncForm>(
+    () =>
+      recall<UncForm>(UNC_FORM_KEY) ?? {
+        ...DEFAULT_UNC,
+        speed: state.targetSpeed,
+        catchKg: state.expectedCatchKg || DEFAULT_UNC.catchKg,
+        seabed: state.params.seabed || DEFAULT_UNC.seabed,
+      },
+  );
+  const setForm = (patch: Partial<UncForm>) =>
+    setFormState((f) => {
+      const next = { ...f, ...patch };
+      remember(UNC_FORM_KEY, next);
+      return next;
+    });
+  const [submitted, setSubmitted] = useState<string | null>(null);
+  const seabeds = useQuery({
+    queryKey: ['seabeds'],
+    queryFn: ({ signal }) => api.seabeds(signal),
+    staleTime: Infinity,
+  });
+  const speciesQ = useQuery({
+    queryKey: ['species'],
+    queryFn: ({ signal }) => api.species(signal),
+    staleTime: Infinity,
+  });
+  const query = useQuery({
+    queryKey: ['uncertainty', submitted],
+    queryFn: ({ signal }) => api.uncertainty(JSON.parse(submitted as string), signal),
+    enabled: submitted !== null,
+    staleTime: Infinity,
+    retry: false,
+  });
+  const run = () => {
+    if (!committed) return;
+    const key = JSON.stringify(uncertaintyRequest(committed, form));
+    if (key === submitted) void query.refetch();
+    else setSubmitted(key);
+  };
+  const r = query.data ? asUncertainty(query.data) : null;
+  const [outKey, setOutKey] = useState<string | null>(null);
+  const shown = r?.outputs.find((o) => o.key === outKey) ?? r?.outputs[0];
+
+  return (
+    <div className="row-gap">
+      <p className="section-sub">
+        Varios datos del simulador no se conocen con precisión: los coeficientes del hilo, el
+        rozamiento con el fondo, la polar del portón y la densidad de la captura. Se simulan
+        muestras dentro de sus rangos (hipercubo latino) y se muestra la banda P10–P90 de cada
+        resultado y qué dato la mueve más.
+      </p>
+      <div className="opt-form explore-form" role="group" aria-label="Escenario">
+        <div className="field">
+          <label htmlFor={`${ids}-speed`}>Velocidad [kn]</label>
+          <select
+            id={`${ids}-speed`}
+            value={form.speed}
+            onChange={(e) => setForm({ speed: Number(e.target.value) })}
+          >
+            {SIM_SPEEDS.map((v) => (
+              <option key={v} value={v}>
+                {speedLabel(v)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-catch`}>Captura en el copo [kg]</label>
+          <input
+            id={`${ids}-catch`}
+            type="number"
+            min={0}
+            max={20000}
+            step={50}
+            value={form.catchKg}
+            onChange={(e) => setForm({ catchKg: Math.max(0, Number(e.target.value) || 0) })}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-seabed`}>Fondo</label>
+          <select
+            id={`${ids}-seabed`}
+            value={form.seabed ?? ''}
+            onChange={(e) => setForm({ seabed: e.target.value || null })}
+          >
+            {(seabeds.data ?? []).map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-n`}>Muestras</label>
+          <select
+            id={`${ids}-n`}
+            value={form.samples}
+            onChange={(e) => setForm({ samples: Number(e.target.value) })}
+          >
+            {[6, 10, 16, 24].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-sp`}>L50 de</label>
+          <select
+            id={`${ids}-sp`}
+            value={form.species ?? ''}
+            onChange={(e) => setForm({ species: e.target.value || null })}
+          >
+            <option value="">(sin selectividad)</option>
+            {(speciesQ.data ?? []).map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-res`}>Resolución</label>
+          <select
+            id={`${ids}-res`}
+            value={form.resolution}
+            onChange={(e) => setForm({ resolution: Number(e.target.value) })}
+          >
+            <option value={2}>Muy rápida (2)</option>
+            <option value={3}>Rápida (3)</option>
+          </select>
+        </div>
+      </div>
+      <div className="calc-row">
+        <button
+          type="button"
+          className="btn primary"
+          onClick={run}
+          disabled={!committed || query.isFetching}
+        >
+          Calcular bandas
+        </button>
+      </div>
+      <div className="status-line" role="status" aria-live="polite">
+        {query.isFetching ? (
+          <>
+            <span className="spinner" aria-hidden="true" /> Simulando {form.samples} muestras…
+          </>
+        ) : r ? (
+          <span>
+            {r.n} muestras ({r.converged} convergidas) en {fmtFixed(query.data?.runtime_s ?? 0, 1)}{' '}
+            s.
+          </span>
+        ) : null}
+      </div>
+      {errorBox(query.error)}
+      {r && (
+        <div className={`row-gap${query.isFetching ? ' stale' : ''}`}>
+          <BandTable outputs={r.outputs} selected={shown?.key} onSelect={setOutKey} />
+          {shown && <Tornado output={shown} inputs={r.inputs} />}
+          <details className="accordion">
+            <summary>
+              <span>Rangos de las entradas</span>
+            </summary>
+            <div className="accordion-body table-wrap">
+              <table className="data" data-testid="uncertainty-inputs">
+                <thead>
+                  <tr>
+                    <th scope="col">Entrada</th>
+                    <th scope="col">Nominal</th>
+                    <th scope="col">Rango</th>
+                    <th scope="col">Fuente</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {r.inputs.map((i) => (
+                    <tr key={i.name}>
+                      <th scope="row">{i.label}</th>
+                      <td className="num">{fmtFixed(i.nominal, 3)}</td>
+                      <td className="num">
+                        {fmtFixed(i.low, 3)} – {fmtFixed(i.high, 3)} {i.unit}
+                      </td>
+                      <td>{i.source}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      )}
+      {!r && !query.isFetching && !query.error && (
+        <p className="empty">
+          Pulse «Calcular bandas». Cada muestra parte de la forma nominal; con 10 muestras en
+          resolución muy rápida tarda del orden de un minuto en la API en línea.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function Strip({ o, span }: { o: UncOutput; span: number }) {
+  const c = useChartColors();
+  const ref = o.nominal ?? o.p50;
+  const W = 220;
+  const H = 22;
+  const x = (v: number) => W / 2 + ((100 * (v - ref)) / ref / span) * (W / 2 - 4);
+  return (
+    <svg
+      width={W}
+      height={H}
+      viewBox={`0 0 ${W} ${H}`}
+      className="band-strip"
+      role="img"
+      aria-label={`${o.label}: P10 ${fmtFixed(o.p10, 2)}, P90 ${fmtFixed(o.p90, 2)} ${o.unit}`}
+    >
+      <line x1={4} x2={W - 4} y1={H / 2} y2={H / 2} stroke={c.grid} />
+      <line x1={W / 2} x2={W / 2} y1={3} y2={H - 3} stroke={c.axis} strokeDasharray="2 2" />
+      <rect
+        x={x(o.p10)}
+        y={H / 2 - 5}
+        width={Math.max(2, x(o.p90) - x(o.p10))}
+        height={10}
+        rx={3}
+        fill={c.s1}
+        fillOpacity={0.35}
+      />
+      {o.values.map((v, k) =>
+        v === null ? null : <circle key={k} cx={x(v)} cy={H / 2} r={1.8} fill={c.s1} />,
+      )}
+      <line
+        x1={x(o.p50)}
+        x2={x(o.p50)}
+        y1={H / 2 - 7}
+        y2={H / 2 + 7}
+        stroke={c.text}
+        strokeWidth={2}
+      />
+    </svg>
+  );
+}
+
+function BandTable({
+  outputs,
+  selected,
+  onSelect,
+}: {
+  outputs: UncOutput[];
+  selected?: string;
+  onSelect: (k: string) => void;
+}) {
+  const span = relativeSpan(outputs);
+  const digits = (o: UncOutput) => (o.unit === 'kgf' ? 0 : o.unit === 'L/h' ? 1 : 2);
+  return (
+    <div className="table-wrap">
+      <table className="data" data-testid="uncertainty-table">
+        <caption>
+          Banda P10–P90 <HelpTip topic="p10_p90" label="Banda P10–P90" /> · escala ± {span} %
+          respecto del nominal (línea punteada); trazo negro = P50, puntos = muestras
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Resultado</th>
+            <th scope="col">Nominal</th>
+            <th scope="col">P10</th>
+            <th scope="col">P50</th>
+            <th scope="col">P90</th>
+            <th scope="col">Banda</th>
+            <th scope="col">Dispersión</th>
+          </tr>
+        </thead>
+        <tbody>
+          {outputs.map((o) => (
+            <tr
+              key={o.key}
+              data-output={o.key}
+              className={selected === o.key ? 'selected' : undefined}
+            >
+              <th scope="row">
+                <button type="button" className="link-button" onClick={() => onSelect(o.key)}>
+                  {o.label}
+                </button>{' '}
+                <span className="unit">[{o.unit}]</span>
+              </th>
+              <td className="num">{o.nominal === null ? '—' : fmtFixed(o.nominal, digits(o))}</td>
+              <td className="num">{fmtFixed(o.p10, digits(o))}</td>
+              <td className="num">{fmtFixed(o.p50, digits(o))}</td>
+              <td className="num">{fmtFixed(o.p90, digits(o))}</td>
+              <td className="num">
+                {bandPct(o) === null ? '—' : `± ${fmtFixed((bandPct(o) as number) / 2, 1)} %`}
+              </td>
+              <td>
+                <Strip o={o} span={span} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Tornado({ output, inputs }: { output: UncOutput; inputs: Parameters<typeof tornado>[1] }) {
+  const c = useChartColors();
+  const rows = tornado(output, inputs);
+  const LABEL = 190;
+  const W = 600;
+  const rowH = 26;
+  const H = rows.length * rowH + 20;
+  const half = (W - LABEL - 50) / 2;
+  const x0 = LABEL + 25 + half;
+  const x = (v: number) => x0 + v * half;
+  return (
+    <figure className="tornado" data-testid="tornado" style={{ margin: 0 }}>
+      <figcaption>
+        ¿Qué dato mueve más «{output.label.toLowerCase()}»?{' '}
+        <HelpTip topic="sensitivity" label="Sensibilidad" />
+      </figcaption>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="tornado-svg"
+        role="img"
+        aria-label={`Correlación de cada entrada con ${output.label}: ${rows
+          .map((r) => `${r.label} ${fmtFixed(r.rho, 2)}`)
+          .join(', ')}`}
+      >
+        <line x1={x0} x2={x0} y1={0} y2={H - 16} stroke={c.axis} />
+        {rows.map((r, k) => {
+          const cy = k * rowH + rowH / 2;
+          return (
+            <g key={r.name}>
+              <text x={LABEL} y={cy + 4} fontSize={12} fill={c.text2} textAnchor="end">
+                {r.label}
+              </text>
+              <rect
+                x={Math.min(x0, x(r.rho))}
+                y={cy - (rowH - 10) / 2}
+                width={Math.max(1, Math.abs(x(r.rho) - x0))}
+                height={rowH - 10}
+                rx={3}
+                fill={r.rho >= 0 ? c.s1 : c.s2}
+              />
+              <text
+                x={r.rho >= 0 ? x(r.rho) + 4 : x(r.rho) - 4}
+                y={cy + 4}
+                fontSize={11}
+                fill={c.muted}
+                textAnchor={r.rho >= 0 ? 'start' : 'end'}
+              >
+                {fmtFixed(r.rho, 2)}
+              </text>
+            </g>
+          );
+        })}
+        {[-1, 0, 1].map((t) => (
+          <text key={t} x={x(t)} y={H - 3} fontSize={10} fill={c.muted} textAnchor="middle">
+            {t}
+          </text>
+        ))}
+      </svg>
+      <p className="help">
+        Correlación de rangos (Spearman) entre cada entrada y el resultado: azul = al subir la
+        entrada sube el resultado; naranja = baja. Con pocas muestras es orientativa.
+      </p>
+    </figure>
+  );
+}
+
+// --- calibración ------------------------------------------------------------------------------
+
+const CAL_FORM_KEY = 'calibration:form';
+
+function Calibration() {
+  const { committed } = useCase();
+  const ids = useId();
+  const [form, setFormState] = useState<CalForm>(
+    () => recall<CalForm>(CAL_FORM_KEY) ?? DEFAULT_CAL,
+  );
+  const setForm = (patch: Partial<CalForm>) =>
+    setFormState((f) => {
+      const next = { ...f, ...patch };
+      remember(CAL_FORM_KEY, next);
+      return next;
+    });
+  const [csv, setCsv] = useState<string>('');
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [parsed, setParsed] = useState<SensorParseResponse | null>(null);
+  const [parseError, setParseError] = useState<unknown>(null);
+  const [parsing, setParsing] = useState(false);
+  const [submitted, setSubmitted] = useState<string | null>(null);
+  const seabeds = useQuery({
+    queryKey: ['seabeds'],
+    queryFn: ({ signal }) => api.seabeds(signal),
+    staleTime: Infinity,
+  });
+  const query = useQuery({
+    queryKey: ['calibrate', submitted],
+    queryFn: ({ signal }) => api.calibrate(JSON.parse(submitted as string), signal),
+    enabled: submitted !== null,
+    staleTime: Infinity,
+    retry: false,
+  });
+  const readLog = async (text: string) => {
+    setParsing(true);
+    setParseError(null);
+    try {
+      setParsed(await api.parseSensors({ csv: text, by: form.by, width: form.width, min_rows: 5 }));
+    } catch (e) {
+      setParsed(null);
+      setParseError(e);
+    } finally {
+      setParsing(false);
+    }
+  };
+  const loadExample = async () => {
+    try {
+      const text = await api.sensorExample();
+      setCsv(text);
+      setFileName('registro_sensores_ejemplo.csv (sintético)');
+      await readLog(text);
+    } catch (e) {
+      setParseError(e);
+    }
+  };
+  const onFile = async (f: File | undefined) => {
+    if (!f) return;
+    const text = await f.text();
+    setCsv(text);
+    setFileName(f.name);
+    await readLog(text);
+  };
+  const observations = useMemo(() => (parsed?.observations ?? []) as ObservationIn[], [parsed]);
+  const canRun =
+    !!committed &&
+    !query.isFetching &&
+    form.params.length > 0 &&
+    (form.source === 'dynamit' || observations.length > 0);
+  const run = () => {
+    if (!committed) return;
+    const key = JSON.stringify(calibrateRequest(committed, form, observations));
+    if (key === submitted) void query.refetch();
+    else setSubmitted(key);
+  };
+  const r = query.data ? asCalibration(query.data) : null;
+  const toggle = (p: CalParam) =>
+    setForm({
+      params: form.params.includes(p)
+        ? form.params.filter((x) => x !== p)
+        : [...form.params, p].slice(-3),
+    });
+
+  return (
+    <div className="row-gap">
+      <p className="section-sub">
+        Ajusta parámetros inciertos del simulador para que reproduzca mediciones: un registro de
+        sensores del lance (CSV) o la simulación DynamiT de la red FAO A-3. Levenberg–Marquardt
+        sobre los errores relativos. <HelpTip topic="calibration" label="Calibración" />
+      </p>
+      <div className="segmented" role="group" aria-label="Datos para calibrar">
+        <button
+          type="button"
+          aria-pressed={form.source === 'sensors'}
+          onClick={() => setForm({ source: 'sensors' })}
+        >
+          Registro de sensores (CSV)
+        </button>
+        <button
+          type="button"
+          aria-pressed={form.source === 'dynamit'}
+          onClick={() => setForm({ source: 'dynamit' })}
+        >
+          Referencia DynamiT (FAO A-3)
+        </button>
+      </div>
+      {form.source === 'sensors' && (
+        <div className="sensor-box">
+          <div className="opt-form explore-form" role="group" aria-label="Registro de sensores">
+            <div className="field">
+              <label htmlFor={`${ids}-file`}>
+                Archivo CSV <HelpTip topic="sensor_log" label="Registro de sensores" />
+              </label>
+              <input
+                id={`${ids}-file`}
+                type="file"
+                accept=".csv,.txt,text/csv"
+                onChange={(e) => void onFile(e.target.files?.[0])}
+              />
+              {fileName && <span className="help">{fileName}</span>}
+            </div>
+            <div className="field">
+              <label htmlFor={`${ids}-by`}>Tramos por</label>
+              <select
+                id={`${ids}-by`}
+                value={form.by}
+                onChange={(e) => {
+                  const by = e.target.value as CalForm['by'];
+                  setForm({ by, width: by === 'time' ? 20 : 0.25 });
+                }}
+              >
+                <option value="time">Tiempo</option>
+                <option value="speed">Velocidad</option>
+              </select>
+            </div>
+            <div className="field">
+              <label htmlFor={`${ids}-width`}>
+                Ancho del tramo [{form.by === 'time' ? 'min' : 'kn'}]
+              </label>
+              <input
+                id={`${ids}-width`}
+                type="number"
+                min={form.by === 'time' ? 1 : 0.05}
+                step={form.by === 'time' ? 1 : 0.05}
+                value={form.width}
+                onChange={(e) => setForm({ width: Math.max(0.05, Number(e.target.value) || 0) })}
+              />
+            </div>
+            <div className="field">
+              <label htmlFor={`${ids}-seabed`}>Fondo del lance</label>
+              <select
+                id={`${ids}-seabed`}
+                value={form.seabed ?? ''}
+                onChange={(e) => setForm({ seabed: e.target.value || null })}
+              >
+                {(seabeds.data ?? []).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="calc-row">
+            <button type="button" className="btn" onClick={() => void loadExample()}>
+              Usar el registro de ejemplo
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => void readLog(csv)}
+              disabled={!csv || parsing}
+            >
+              Volver a leer
+            </button>
+          </div>
+          {parsing && (
+            <p className="status-line">
+              <span className="spinner" aria-hidden="true" /> Leyendo el registro…
+            </p>
+          )}
+          {errorBox(parseError)}
+          {parsed && <SensorSummary parsed={parsed} />}
+        </div>
+      )}
+      <fieldset className="field">
+        <legend className="label">Parámetros a ajustar (hasta 3)</legend>
+        <div className="check-grid">
+          {CAL_PARAMS.map((p) => (
+            <label key={p.id} title={p.help}>
+              <input
+                type="checkbox"
+                checked={form.params.includes(p.id)}
+                onChange={() => toggle(p.id)}
+              />{' '}
+              {p.label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div className="opt-form explore-form" role="group" aria-label="Ajuste">
+        <div className="field">
+          <label htmlFor={`${ids}-evals`}>Evaluaciones máximas</label>
+          <select
+            id={`${ids}-evals`}
+            value={form.maxEvals}
+            onChange={(e) => setForm({ maxEvals: Number(e.target.value) })}
+          >
+            {[6, 12, 20, 30].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="field">
+          <label htmlFor={`${ids}-cres`}>Resolución</label>
+          <select
+            id={`${ids}-cres`}
+            value={form.resolution}
+            onChange={(e) => setForm({ resolution: Number(e.target.value) })}
+          >
+            <option value={2}>Muy rápida (2)</option>
+            <option value={3}>Rápida (3)</option>
+          </select>
+        </div>
+      </div>
+      <div className="calc-row">
+        <button type="button" className="btn primary" onClick={run} disabled={!canRun}>
+          Calibrar
+        </button>
+      </div>
+      <div className="status-line" role="status" aria-live="polite">
+        {query.isFetching ? (
+          <>
+            <span className="spinner" aria-hidden="true" /> Ajustando (hasta {form.maxEvals}{' '}
+            evaluaciones)…
+          </>
+        ) : r ? (
+          <span>
+            {r.evaluations} evaluaciones en {fmtFixed(r.runtime_s, 1)} s.
+          </span>
+        ) : null}
+      </div>
+      {errorBox(query.error)}
+      {r && (
+        <div className={`row-gap${query.isFetching ? ' stale' : ''}`}>
+          <div className="impact">
+            <div
+              className={`impact-item ${r.rmse_after_pct < r.rmse_before_pct ? 'good' : 'neutral'}`}
+            >
+              <span className="impact-label">Error cuadrático medio</span>
+              <span className="impact-value">
+                {fmtFixed(r.rmse_before_pct, 1)} → {fmtFixed(r.rmse_after_pct, 1)}{' '}
+                <span className="unit">%</span>
+              </span>
+              <span className="impact-delta">antes → después del ajuste</span>
+            </div>
+          </div>
+          <div className="table-wrap">
+            <table className="data" data-testid="calibration-params">
+              <caption>Parámetros ajustados</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Parámetro</th>
+                  <th scope="col">Inicial</th>
+                  <th scope="col">Ajustado</th>
+                  <th scope="col">Rango</th>
+                </tr>
+              </thead>
+              <tbody>
+                {r.params.map((p) => (
+                  <tr key={p.name}>
+                    <th scope="row">{p.label}</th>
+                    <td className="num">{fmtFixed(p.initial, 3)}</td>
+                    <td className="num">
+                      <strong>{fmtFixed(p.fitted, 3)}</strong>
+                      {p.std !== null && ` ± ${fmtFixed(p.std, 3)}`}
+                      {atBound(p) && (
+                        <span className="badge warn" title="El ajuste pide salir del rango">
+                          en el límite
+                        </span>
+                      )}
+                    </td>
+                    <td className="num">
+                      {fmtFixed(p.low, 2)} – {fmtFixed(p.high, 2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="table-wrap">
+            <table className="data" data-testid="calibration-observations">
+              <caption>Mediciones y simulación antes y después del ajuste</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Magnitud</th>
+                  <th scope="col">Velocidad · captura</th>
+                  <th scope="col">Medido</th>
+                  <th scope="col">Antes</th>
+                  <th scope="col">Después</th>
+                </tr>
+              </thead>
+              <tbody>
+                {r.observations.map((o, k) => (
+                  <tr key={k}>
+                    <th scope="row">
+                      {o.label} <span className="unit">[{o.unit}]</span>
+                    </th>
+                    <td className="num">
+                      {fmtFixed(o.speed_kn, 2)} kn · {fmt(o.catch_kg)} kg
+                    </td>
+                    <td className="num">{fmtFixed(o.value, o.unit === 'kgf' ? 0 : 2)}</td>
+                    <td className="num">
+                      {fmtFixed(o.before, o.unit === 'kgf' ? 0 : 2)}{' '}
+                      <span className="unit">({signed(o.error_before_pct)} %)</span>
+                    </td>
+                    <td className="num">
+                      {fmtFixed(o.after, o.unit === 'kgf' ? 0 : 2)}{' '}
+                      <span className="unit">({signed(o.error_after_pct)} %)</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="help">
+            El desvío ± sale de la curvatura del ajuste y es orientativo. Un parámetro «en el
+            límite» indica que el modelo no alcanza a reproducir las mediciones con valores físicos:
+            la diferencia es estructural (capítulo 25 del libro).
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const signed = (v: number) => `${v > 0 ? '+' : ''}${fmtFixed(v, 1)}`;
+
+function SensorSummary({ parsed }: { parsed: SensorParseResponse }) {
+  const log = parsed.log as {
+    mapping: Record<string, string>;
+    ignored: string[];
+    rows: number;
+    warnings: string[];
+  };
+  const ws = parsed.windows as {
+    speed_kn: number;
+    catch_kg: number;
+    n: number;
+    values: Record<string, number>;
+  }[];
+  const qs = [...new Set(ws.flatMap((w) => Object.keys(w.values)))];
+  return (
+    <div className="row-gap" data-testid="sensor-summary">
+      <p className="help">
+        {log.rows} filas · columnas reconocidas:{' '}
+        {Object.entries(log.mapping)
+          .map(([h, q]) => `«${h}» → ${q}`)
+          .join(' · ')}
+        {log.ignored.length > 0 && ` · ignoradas: ${log.ignored.join(', ')}`}
+        {log.warnings.map((w) => ` · ${w}`)}
+      </p>
+      <div className="table-wrap">
+        <table className="data">
+          <caption>Tramos estacionarios (mediana de cada tramo)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Velocidad</th>
+              <th scope="col">Captura</th>
+              <th scope="col">Filas</th>
+              {qs.map((q) => (
+                <th scope="col" key={q}>
+                  {QUANTITY_LABELS[q] ?? q}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {ws.map((w, k) => (
+              <tr key={k}>
+                <td className="num">{fmtFixed(w.speed_kn, 2)} kn</td>
+                <td className="num">{fmt(w.catch_kg)} kg</td>
+                <td className="num">{w.n}</td>
+                {qs.map((q) => (
+                  <td className="num" key={q}>
+                    {w.values[q] === undefined ? '—' : fmtFixed(w.values[q] as number, 2)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

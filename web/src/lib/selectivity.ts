@@ -77,6 +77,8 @@ export function selectivityRequest(base: DesignRequest, f: SelForm): Selectivity
     haul_hours: 2,
     mesh_bending: true,
     mesh_bending_factor: 1,
+    door_cl_factor: 1,
+    door_cd_factor: 1,
   };
   return {
     net: base.net,

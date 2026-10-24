@@ -1,0 +1,153 @@
+{
+ "log": {
+  "mapping": {
+   "Fecha hora": "time",
+   "Velocidad (kn)": "speed",
+   "Separacion portones (m)": "door_spread",
+   "Altura relinga (m)": "headrope_height",
+   "Tension babor (t)": "warp_tension_port",
+   "Tension estribor (t)": "warp_tension_stbd",
+   "Captura (kg)": "catch"
+  },
+  "ignored": [],
+  "rows": 360,
+  "quantities": [
+   "catch",
+   "door_spread",
+   "headrope_height",
+   "speed",
+   "time",
+   "warp_tension"
+  ],
+  "warnings": [
+   "tensión de un cable = promedio de babor y estribor"
+  ]
+ },
+ "windows": [
+  {
+   "speed_kn": 2.49,
+   "catch_kg": 100.0,
+   "n": 120,
+   "values": {
+    "door_spread_m": 42.7,
+    "headrope_height_m": 1.46,
+    "warp_tension_kgf": 404.5
+   },
+   "spread": {
+    "door_spread_m": 1.0,
+    "headrope_height_m": 0.09000000000000008,
+    "warp_tension_kgf": 16.5
+   },
+   "t_start": 63914248800,
+   "t_end": 63914249990
+  },
+  {
+   "speed_kn": 3.0,
+   "catch_kg": 300.0,
+   "n": 120,
+   "values": {
+    "door_spread_m": 42.8,
+    "headrope_height_m": 1.0,
+    "warp_tension_kgf": 560.25
+   },
+   "spread": {
+    "door_spread_m": 1.2000000000000028,
+    "headrope_height_m": 0.050000000000000044,
+    "warp_tension_kgf": 22.5
+   },
+   "t_start": 63914250000,
+   "t_end": 63914251190
+  },
+  {
+   "speed_kn": 3.5,
+   "catch_kg": 500.0,
+   "n": 120,
+   "values": {
+    "door_spread_m": 42.7,
+    "headrope_height_m": 0.955,
+    "warp_tension_kgf": 748.75
+   },
+   "spread": {
+    "door_spread_m": 1.2999999999999972,
+    "headrope_height_m": 0.05999999999999994,
+    "warp_tension_kgf": 30.5
+   },
+   "t_start": 63914251200,
+   "t_end": 63914252390
+  }
+ ],
+ "observations": [
+  {
+   "quantity": "door_spread_m",
+   "value": 42.7,
+   "speed_kn": 2.49,
+   "catch_kg": 100.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "headrope_height_m",
+   "value": 1.46,
+   "speed_kn": 2.49,
+   "catch_kg": 100.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "warp_tension_kgf",
+   "value": 404.5,
+   "speed_kn": 2.49,
+   "catch_kg": 100.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "door_spread_m",
+   "value": 42.8,
+   "speed_kn": 3.0,
+   "catch_kg": 300.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "headrope_height_m",
+   "value": 1.0,
+   "speed_kn": 3.0,
+   "catch_kg": 300.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "warp_tension_kgf",
+   "value": 560.25,
+   "speed_kn": 3.0,
+   "catch_kg": 300.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "door_spread_m",
+   "value": 42.7,
+   "speed_kn": 3.5,
+   "catch_kg": 500.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "headrope_height_m",
+   "value": 0.955,
+   "speed_kn": 3.5,
+   "catch_kg": 500.0,
+   "weight": 3.0,
+   "source": "sensores"
+  },
+  {
+   "quantity": "warp_tension_kgf",
+   "value": 748.75,
+   "speed_kn": 3.5,
+   "catch_kg": 500.0,
+   "weight": 3.0,
+   "source": "sensores"
+  }
+ ]
+}

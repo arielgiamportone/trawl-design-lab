@@ -367,6 +367,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/simulate/uncertainty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Uncertainty
+         * @description Incertidumbre: bandas P10–P90 y sensibilidad por Monte Carlo (hipercubo latino).
+         */
+        post: operations["simulate_uncertainty_simulate_uncertainty_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/simulate/calibrate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulate Calibrate
+         * @description Calibración: ajusta parámetros del simulador a observaciones (DynamiT o sensores).
+         */
+        post: operations["simulate_calibrate_simulate_calibrate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sensors/parse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sensors Parse
+         * @description Lee un registro de sensores (CSV) y lo resume en tramos estacionarios y observaciones.
+         */
+        post: operations["sensors_parse_sensors_parse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/sensors/example": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Sensors Example
+         * @description Registro de sensores de ejemplo (sintético, red FAO A-3) para probar la calibración.
+         */
+        get: operations["sensors_example_sensors_example_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/simulate/haul": {
         parameters: {
             query?: never;
@@ -411,6 +491,69 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * CalibrateRequest
+         * @description Calibración (``POST /simulate/calibrate``): ajusta parámetros a observaciones.
+         *
+         *     Las observaciones vienen en ``observations`` (p. ej. de ``POST /sensors/parse``) o, con
+         *     ``reference = "dynamit"``, de la simulación DynamiT de la red FAO A-3 estándar a 2, 3 y 4 kn.
+         *     Levenberg–Marquardt acotado sobre los errores relativos; ``max_evals`` limita las
+         *     evaluaciones (cada una simula todos los estados observados).
+         */
+        CalibrateRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /**
+             * Resolution
+             * @default 2
+             */
+            resolution: number;
+            scenario?: components["schemas"]["ScenarioIn"];
+            /** Reference */
+            reference?: "dynamit" | null;
+            /** Observations */
+            observations?: components["schemas"]["ObservationIn"][];
+            /** Params */
+            params?: ("cn" | "ct" | "door_cl_factor" | "door_cd_factor" | "mu_gear" | "mu_door")[];
+            /**
+             * Max Evals
+             * @default 16
+             */
+            max_evals: number;
+        };
+        /**
+         * CalibrateResponse
+         * @description Resultado de ``POST /simulate/calibrate``.
+         */
+        CalibrateResponse: {
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
+        };
         /**
          * CatalogItem
          * @description Entrada resumida de un catálogo.
@@ -1017,6 +1160,36 @@ export interface components {
             [key: string]: unknown;
         };
         /**
+         * ObservationIn
+         * @description Una medición: ``quantity`` = ``value`` a ``speed_kn`` con ``catch_kg`` en el copo.
+         */
+        ObservationIn: {
+            /**
+             * Quantity
+             * @enum {string}
+             */
+            quantity: "door_spread_m" | "ah_m" | "av_m" | "headrope_height_m" | "drag_kgf" | "towing_pull_kgf" | "warp_tension_kgf";
+            /** Value */
+            value: number;
+            /** Speed Kn */
+            speed_kn: number;
+            /**
+             * Catch Kg
+             * @default 0
+             */
+            catch_kg: number;
+            /**
+             * Weight
+             * @default 1
+             */
+            weight: number;
+            /**
+             * Source
+             * @default
+             */
+            source: string;
+        };
+        /**
          * OptimizeGrid
          * @description Malla inicial de la optimización (una corrida del motor por escala).
          */
@@ -1333,6 +1506,16 @@ export interface components {
              * @default 1
              */
             mesh_bending_factor: number;
+            /**
+             * Door Cl Factor
+             * @default 1
+             */
+            door_cl_factor: number;
+            /**
+             * Door Cd Factor
+             * @default 1
+             */
+            door_cd_factor: number;
         };
         /**
          * SeabedOut
@@ -1447,6 +1630,50 @@ export interface components {
             estimated_s: number;
             /** Runtime S */
             runtime_s: number;
+        };
+        /**
+         * SensorParseRequest
+         * @description Registro de sensores (``POST /sensors/parse``): CSV a tramos estacionarios.
+         *
+         *     ``by = "speed"`` agrupa por velocidad (``width`` en kn) y ``by = "time"`` por tiempo
+         *     (``width`` en minutos). Devuelve las columnas reconocidas, los tramos y las observaciones
+         *     listas para ``POST /simulate/calibrate``.
+         */
+        SensorParseRequest: {
+            /** Csv */
+            csv: string;
+            /**
+             * By
+             * @default speed
+             * @enum {string}
+             */
+            by: "speed" | "time";
+            /**
+             * Width
+             * @default 0.25
+             */
+            width: number;
+            /**
+             * Min Rows
+             * @default 5
+             */
+            min_rows: number;
+        };
+        /**
+         * SensorParseResponse
+         * @description Resultado de ``POST /sensors/parse``.
+         */
+        SensorParseResponse: {
+            /** Log */
+            log: {
+                [key: string]: unknown;
+            };
+            /** Windows */
+            windows: {
+                [key: string]: unknown;
+            }[];
+            /** Observations */
+            observations: components["schemas"]["ObservationIn"][];
         };
         /**
          * SimEngineRow
@@ -1613,6 +1840,96 @@ export interface components {
             cv: number;
             /** Notes */
             notes: string;
+        };
+        /**
+         * UncertainIn
+         * @description Rango uniforme de una entrada incierta (reemplaza el rango por defecto).
+         */
+        UncertainIn: {
+            /**
+             * Name
+             * @enum {string}
+             */
+            name: "cn" | "ct" | "mu_gear" | "mu_door" | "door_cl_factor" | "door_cd_factor" | "catch_bulk_density" | "catch_cp";
+            /** Low */
+            low: number;
+            /** High */
+            high: number;
+        };
+        /**
+         * UncertaintyRequest
+         * @description Incertidumbre (``POST /simulate/uncertainty``): Monte Carlo con hipercubo latino.
+         *
+         *     Muestrea las entradas inciertas (por defecto: C_N y C_T del hilo, rozamientos según el fondo,
+         *     polar del portón ±10 % y, con captura, densidad aparente y C_p) y simula cada muestra a
+         *     ``speed_kn`` arrancando de la forma nominal. ``inputs`` reemplaza los rangos de las entradas
+         *     nombradas; ``species`` suma la L50 del copo.
+         */
+        UncertaintyRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /**
+             * Speed Kn
+             * @default 3
+             */
+            speed_kn: number;
+            /**
+             * Resolution
+             * @default 2
+             */
+            resolution: number;
+            /** Cn */
+            cn?: number | null;
+            /** Ct */
+            ct?: number | null;
+            scenario?: components["schemas"]["ScenarioIn"];
+            /**
+             * Samples
+             * @default 10
+             */
+            samples: number;
+            /**
+             * Seed
+             * @default 0
+             */
+            seed: number;
+            /** Inputs */
+            inputs?: components["schemas"]["UncertainIn"][] | null;
+            /** Species */
+            species?: string[];
+        };
+        /**
+         * UncertaintyResponse
+         * @description Resultado de ``POST /simulate/uncertainty``.
+         */
+        UncertaintyResponse: {
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Estimated S */
+            estimated_s: number;
+            /** Runtime S */
+            runtime_s: number;
         };
         /** ValidationError */
         ValidationError: {
@@ -2145,6 +2462,125 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_uncertainty_simulate_uncertainty_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UncertaintyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UncertaintyResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_calibrate_simulate_calibrate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CalibrateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CalibrateResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sensors_parse_sensors_parse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SensorParseRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SensorParseResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sensors_example_sensors_example_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
                 };
             };
         };

@@ -2320,3 +2320,46 @@ label.check.small {
 .mesh-zoom-verdict.bad {
   color: var(--crit);
 }
+
+/* --- Incertidumbre y calibración (Fase 11.4) --------------------------------------------- */
+.uncertainty {
+  display: grid;
+  gap: 14px;
+}
+.band-strip {
+  display: block;
+  max-width: 100%;
+}
+table.data tr.selected th,
+table.data tr.selected td {
+  background: var(--surface-2);
+}
+.link-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--accent, inherit);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  text-align: left;
+}
+.tornado figcaption {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.tornado-svg {
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  display: block;
+}
+.sensor-box {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+}

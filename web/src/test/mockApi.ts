@@ -14,9 +14,13 @@ import nets from './fixtures/nets.json';
 import optimize from './fixtures/optimize.json';
 import params from './fixtures/params.json';
 import seabeds from './fixtures/seabeds.json';
+import calibrate from './fixtures/calibrate.json';
 import selectivity from './fixtures/selectivity.json';
+import sensorLog from './fixtures/sensor_log.csv?raw';
+import sensorsParse from './fixtures/sensors_parse.json';
 import simulate from './fixtures/simulate.json';
 import species from './fixtures/species.json';
+import uncertainty from './fixtures/uncertainty.json';
 import vessels from './fixtures/vessels.json';
 
 export const fixtures = {
@@ -34,9 +38,12 @@ export const fixtures = {
   optimize,
   params,
   seabeds,
+  calibrate,
   selectivity,
+  sensorsParse,
   simulate,
   species,
+  uncertainty,
   vessels,
 };
 
@@ -82,6 +89,11 @@ export function mockApi(
     if (path === '/catalog/fouling') return json(fouling);
     if (path === '/catalog/species') return json(species);
     if (path === '/simulate/selectivity') return json(selectivity);
+    if (path === '/simulate/uncertainty') return json(uncertainty);
+    if (path === '/simulate/calibrate') return json(calibrate);
+    if (path === '/sensors/parse') return json(sensorsParse);
+    if (path === '/sensors/example')
+      return new Response(sensorLog, { headers: { 'Content-Type': 'text/csv' } });
     if (path === '/errata') return json(errata);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);

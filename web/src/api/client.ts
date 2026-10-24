@@ -37,6 +37,13 @@ export type SpeciesOut = S['SpeciesOut'];
 export type CodendVariant = S['CodendVariant'];
 export type SelectivityRequest = S['SelectivityRequest'];
 export type SelectivityResponse = S['SelectivityResponse'];
+export type UncertaintyRequest = S['UncertaintyRequest'];
+export type UncertaintyResponse = S['UncertaintyResponse'];
+export type CalibrateRequest = S['CalibrateRequest'];
+export type CalibrateResponse = S['CalibrateResponse'];
+export type ObservationIn = S['ObservationIn'];
+export type SensorParseRequest = S['SensorParseRequest'];
+export type SensorParseResponse = S['SensorParseResponse'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -183,6 +190,22 @@ export const api = {
   async selectivity(req: SelectivityRequest, signal?: AbortSignal): Promise<SelectivityResponse> {
     const res = await post('/simulate/selectivity', req, signal);
     return (await res.json()) as SelectivityResponse;
+  },
+  async uncertainty(req: UncertaintyRequest, signal?: AbortSignal): Promise<UncertaintyResponse> {
+    const res = await post('/simulate/uncertainty', req, signal);
+    return (await res.json()) as UncertaintyResponse;
+  },
+  async calibrate(req: CalibrateRequest, signal?: AbortSignal): Promise<CalibrateResponse> {
+    const res = await post('/simulate/calibrate', req, signal);
+    return (await res.json()) as CalibrateResponse;
+  },
+  async parseSensors(req: SensorParseRequest, signal?: AbortSignal): Promise<SensorParseResponse> {
+    const res = await post('/sensors/parse', req, signal);
+    return (await res.json()) as SensorParseResponse;
+  },
+  async sensorExample(signal?: AbortSignal): Promise<string> {
+    const res = await request('/sensors/example', { signal });
+    return res.text();
   },
   async haul(req: HaulRequest, signal?: AbortSignal): Promise<HaulResponse> {
     const res = await post('/simulate/haul', req, signal);

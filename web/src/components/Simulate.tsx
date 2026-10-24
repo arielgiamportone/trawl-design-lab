@@ -5,6 +5,7 @@ import { fmt, fmtFixed, fmtPct } from '../lib/format';
 import { recall, remember } from '../lib/memo';
 import { Explore } from './sim/Explore';
 import { Selectivity } from './sim/Selectivity';
+import { Uncertainty } from './sim/Uncertainty';
 import { Haul } from './sim/Haul';
 import { isSimGeometry } from '../lib/sim3d';
 import {
@@ -160,6 +161,13 @@ export function Simulate() {
           >
             Mallas y selectividad
           </button>
+          <button
+            type="button"
+            aria-pressed={view === 'uncertainty'}
+            onClick={() => setView('uncertainty')}
+          >
+            Incertidumbre y calibración
+          </button>
         </div>
       </div>
       {view === 'speeds' ? (
@@ -168,8 +176,10 @@ export function Simulate() {
         <Haul onAnimate={() => setView('explore')} />
       ) : view === 'explore' ? (
         <Explore />
-      ) : (
+      ) : view === 'selectivity' ? (
         <Selectivity />
+      ) : (
+        <Uncertainty />
       )}
     </div>
   );

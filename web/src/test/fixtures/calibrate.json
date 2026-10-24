@@ -1,0 +1,200 @@
+{
+ "result": {
+  "params": [
+   {
+    "name": "door_cl_factor",
+    "label": "Factor de C_L del portón",
+    "initial": 1.0,
+    "fitted": 0.9070744236827539,
+    "std": 0.012547389929287401,
+    "low": 0.5,
+    "high": 1.5
+   }
+  ],
+  "observations": [
+   {
+    "quantity": "door_spread_m",
+    "value": 42.7,
+    "speed_kn": 2.49,
+    "catch_kg": 100.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Separación de portones",
+    "unit": "m",
+    "before": 45.563034699017905,
+    "after": 43.13067294255204,
+    "error_before_pct": 6.704999295123892,
+    "error_after_pct": 1.0086017389977497
+   },
+   {
+    "quantity": "headrope_height_m",
+    "value": 1.46,
+    "speed_kn": 2.49,
+    "catch_kg": 100.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Altura de la relinga superior",
+    "unit": "m",
+    "before": 1.3224260276742972,
+    "after": 1.4704565414863229,
+    "error_before_pct": -9.422874816828964,
+    "error_after_pct": 0.7162014716659559
+   },
+   {
+    "quantity": "warp_tension_kgf",
+    "value": 404.5,
+    "speed_kn": 2.49,
+    "catch_kg": 100.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Tensión del cable (portón)",
+    "unit": "kgf",
+    "before": 410.03404079345916,
+    "after": 401.1969868265785,
+    "error_before_pct": 1.3681188611765593,
+    "error_after_pct": -0.8165669155553834
+   },
+   {
+    "quantity": "door_spread_m",
+    "value": 42.8,
+    "speed_kn": 3.0,
+    "catch_kg": 300.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Separación de portones",
+    "unit": "m",
+    "before": 45.814262874696965,
+    "after": 43.403528811740756,
+    "error_before_pct": 7.042670267983575,
+    "error_after_pct": 1.4101140461232786
+   },
+   {
+    "quantity": "headrope_height_m",
+    "value": 1.0,
+    "speed_kn": 3.0,
+    "catch_kg": 300.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Altura de la relinga superior",
+    "unit": "m",
+    "before": 0.9096645959900265,
+    "after": 0.9974068783453166,
+    "error_before_pct": -9.033540400997353,
+    "error_after_pct": -0.25931216546833946
+   },
+   {
+    "quantity": "warp_tension_kgf",
+    "value": 560.25,
+    "speed_kn": 3.0,
+    "catch_kg": 300.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Tensión del cable (portón)",
+    "unit": "kgf",
+    "before": 572.1448867688531,
+    "after": 558.9335735169442,
+    "error_before_pct": 2.1231390930572136,
+    "error_after_pct": -0.2349712598046949
+   },
+   {
+    "quantity": "door_spread_m",
+    "value": 42.7,
+    "speed_kn": 3.5,
+    "catch_kg": 500.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Separación de portones",
+    "unit": "m",
+    "before": 46.077390258632185,
+    "after": 43.63327670219583,
+    "error_before_pct": 7.909579060028538,
+    "error_after_pct": 2.185659724111999
+   },
+   {
+    "quantity": "headrope_height_m",
+    "value": 0.955,
+    "speed_kn": 3.5,
+    "catch_kg": 500.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Altura de la relinga superior",
+    "unit": "m",
+    "before": 0.9269212811333906,
+    "after": 0.8939796775045993,
+    "error_before_pct": -2.9401799860323985,
+    "error_after_pct": -6.389562564963425
+   },
+   {
+    "quantity": "warp_tension_kgf",
+    "value": 748.75,
+    "speed_kn": 3.5,
+    "catch_kg": 500.0,
+    "weight": 3.0,
+    "source": "sensores",
+    "label": "Tensión del cable (portón)",
+    "unit": "kgf",
+    "before": 762.9054390360369,
+    "after": 743.9930703151534,
+    "error_before_pct": 1.890542776098414,
+    "error_after_pct": -0.6353161515654904
+   }
+  ],
+  "rmse_before_pct": 6.201356143022023,
+  "rmse_after_pct": 2.3644384880112645,
+  "evaluations": 5,
+  "history": [
+   {
+    "x": [
+     1.0
+    ],
+    "rmse_pct": 6.201356143022023,
+    "lambda": 0.01
+   },
+   {
+    "x": [
+     0.904856540924686
+    ],
+    "rmse_pct": 2.3698617237636546,
+    "lambda": 0.0033333333333333335
+   },
+   {
+    "x": [
+     0.9070744236827539
+    ],
+    "rmse_pct": 2.3644384880112645,
+    "lambda": 0.0011111111111111111
+   }
+  ],
+  "runtime_s": 15.60222968799917
+ },
+ "settings": {
+  "net_id": "fao_a3_standard",
+  "vessel_id": "fao_a3_150hp",
+  "door_id": "fao_flat_wood_a3",
+  "compat": "corrected",
+  "resolution": 2,
+  "reference": null,
+  "states": 3,
+  "scenario": {
+   "catch_kg": 0.0,
+   "catch_bulk_density": 750.0,
+   "catch_body_density": 1070.0,
+   "catch_cp": 1.0,
+   "seabed": "mixed",
+   "mu_gear": null,
+   "mu_door": null,
+   "coupled_doors": true,
+   "fouling": null,
+   "fouling_level": 1.0,
+   "current_kn": 0.0,
+   "warp_length_m": null,
+   "haul_hours": 2.0,
+   "mesh_bending": null,
+   "mesh_bending_factor": 1.0,
+   "door_cl_factor": 1.0,
+   "door_cd_factor": 1.0
+  }
+ },
+ "estimated_s": 24.5,
+ "runtime_s": 15.65333211699999
+}

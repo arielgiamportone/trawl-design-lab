@@ -66,6 +66,22 @@ export const HELP: Record<string, HelpEntry> = {
     text: 'Modelo geométrico de escape (tipo FISHSELECT): un pez pasa si la sección más resistente de su cuerpo entra en la luz de la malla deformada, girándola a su favor.',
     chapter: '24_malla_selectividad',
   },
+  p10_p90: {
+    text: 'Banda de incertidumbre: el 80 % de las muestras cae entre P10 y P90; P50 es la mediana. Se obtiene variando dentro de sus rangos los datos que no se conocen con precisión.',
+    chapter: '25_incertidumbre_calibracion',
+  },
+  sensitivity: {
+    text: 'Correlación de rangos entre cada dato incierto y el resultado: cerca de ±1, ese dato explica casi toda la variación; cerca de 0, casi no influye.',
+    chapter: '25_incertidumbre_calibracion',
+  },
+  calibration: {
+    text: 'Ajusta parámetros del simulador (coeficientes del hilo, polar del portón, rozamientos) para reproducir mediciones. Si un parámetro queda en el límite de su rango, la diferencia es del modelo, no del parámetro.',
+    chapter: '25_incertidumbre_calibracion',
+  },
+  sensor_log: {
+    text: 'CSV exportado por los sensores del arte: velocidad, separación de portones, altura de la relinga, tensiones de los cables, captura. Se reconocen nombres en español o inglés y la unidad entre paréntesis o como sufijo; el separador puede ser coma, punto y coma o tabulador.',
+    chapter: '25_incertidumbre_calibracion',
+  },
   // Parámetros de DesignCase
   speeds_kn: {
     text: 'Velocidades en las que se calculan las curvas de tiro y resistencia.',

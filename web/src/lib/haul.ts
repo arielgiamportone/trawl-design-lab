@@ -66,6 +66,8 @@ export function haulRequest(base: DesignRequest, f: HaulForm, geometry = true): 
       haul_hours: 2,
       mesh_bending: null,
       mesh_bending_factor: 1,
+      door_cl_factor: 1,
+      door_cd_factor: 1,
     },
     include_geometry: geometry,
   };
