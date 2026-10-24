@@ -232,8 +232,9 @@ y la tensión de las malletas sube a medida que entra la captura. Sobre roca el 
 portones sin captura es {glue:text}`fric_rock` kgf, frente a {glue:text}`fric_mud` kgf sobre
 fango.
 
-La captura también reduce la abertura de las mallas del copo y con ella la selectividad
-{cite:p}`oneill1996kynoch,herrmann2005`; el zoom malla a malla de la entrega 11.3 lo cuantifica.
+La captura también cambia la abertura de las mallas del copo, y con ella la selectividad
+{cite:p}`oneill1996kynoch,herrmann2005`; el zoom malla a malla de {doc}`24_malla_selectividad` lo
+cuantifica.
 
 ## Rozamiento de fondo en el motor empírico
 

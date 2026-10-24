@@ -181,6 +181,26 @@ cables:
 Se llega también desde el lance progresivo («Animar este lance en el explorador») y desde el
 resultado del modo guiado («Ver cómo trabaja la red»).
 
+## Mallas y selectividad
+
+La cuarta vista de «Simulación», **«Mallas y selectividad»** ({doc}`24_malla_selectividad`,
+`POST /simulate/selectivity`), simula el copo con la captura y el fondo elegidos y mide cada malla:
+
+- **Copos a comparar**: el de la red (rombo), el mismo copo en **T90** y en **malla cuadrada**, del
+  mismo ancho y largo relingados, con el mallero de la red o uno elegido.
+- **Especies**: merluzas, bacalao, eglefino, cigala, langostino, platija y lenguado. La tabla da
+  L50, SR y SF de cada copo; el gráfico, las curvas de retención de la especie elegida.
+- **Mapa de mallas en 3D**: el paño coloreado por la apertura de la malla o por la talla máxima
+  que pasa por ella.
+- **Zoom por malla**: al hacer clic sobre el paño se abre un parche de mallas con su forma
+  deformada, el hilo a escala, la luz y el área libre, y la sección de un pez de la talla elegida
+  girada para pasar; indica si pasa o queda retenido.
+
+El explorador animado acepta una especie: suma la apertura de malla del copo, L50 y SR al tablero
+y a los gráficos, y el paño se puede colorear por apertura de malla. En el diseño interactivo, el
+inspector del panel tiene la **orientación de la malla** (rombo, T90, cuadrada). Desde el resultado
+del modo guiado, «¿Qué tallas retiene el copo?» abre esta vista con la captura y el fondo elegidos.
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

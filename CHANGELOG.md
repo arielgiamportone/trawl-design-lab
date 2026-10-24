@@ -36,6 +36,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   - en la web, el «Explorador animado»: animación 3D del aparejo completo, línea de tiempo,
     tablero sincronizado, gráficos con cursor y exportación PNG/WebM;
   - capítulo 23 «Mar real y condiciones en funcionamiento».
+- **Zoom por malla y selectividad (Fase 11.3)**:
+  - orientación de la malla por paño (`Panel.mesh_orientation`: rombo, T90, cuadrada) en el motor
+    empírico, el plano a escala real y el simulador, con rigidez de apertura de la malla (bisagras
+    en los nudos, Sala et al. 2007) que distingue T90 del rombo;
+  - estado de cada malla en la simulación (`trawlkit.sim.meshstate`: ángulo, patas, luz, área
+    libre, captura) y parche de mallas exacto para el zoom;
+  - `trawlkit.selectivity`: prueba de paso geométrica tipo FISHSELECT (Herrmann et al. 2009),
+    curva de retención con L25/L50/L75, SR y SF, catálogo de especies (`data/species.yaml`,
+    A VERIFICAR) y `codend_variant` para rehacer el copo en otra orientación o mallero;
+  - `POST /simulate/selectivity`, `GET /catalog/species` y especies en `/simulate/explore`;
+  - en la web, la vista «Mallas y selectividad» (tabla, curvas, mapa 3D y zoom por malla), la
+    orientación en el inspector del panel y L50/SR en el explorador;
+  - capítulo 24 «Zoom por malla y selectividad».
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
 - `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API

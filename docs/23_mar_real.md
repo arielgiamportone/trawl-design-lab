@@ -207,7 +207,8 @@ sedimento y del elemento.
 ## Supuestos y límites
 
 - **Ensuciamiento**: es un modelo por zona con ganancias estimadas; no modela la colmatación
-  progresiva durante el lance ni la pérdida de selectividad.
+  progresiva durante el lance. El efecto de la forma de las mallas sobre la selectividad está en
+  {doc}`24_malla_selectividad`.
 - **Corriente**: sólo a lo largo del rumbo. La corriente cruzada y las maniobras requieren el
   modelo asimétrico y dinámico.
 - **Energía**: $\eta$ y SFC constantes; sin resistencia del casco ni consumo auxiliar.
