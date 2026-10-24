@@ -544,3 +544,73 @@ def test_layout_reports_mesh_orientation() -> None:
     assert r.status_code == 200, r.text
     shapes = [s for p in r.json()["planes"] for s in p["shapes"]]
     assert {s["mesh_orientation"] for s in shapes} == {"diamond"}
+
+
+def test_sensor_example_and_parse() -> None:
+    ex = client.get("/sensors/example")
+    assert ex.status_code == 200 and ex.headers["content-type"].startswith("text/csv")
+    assert "SINTÉTICO" in ex.text
+    r = client.post("/sensors/parse", json={"csv": ex.text, "by": "time", "width": 20})
+    assert r.status_code == 200, r.text
+    body = r.json()
+    assert body["log"]["rows"] == 360 and len(body["windows"]) == 3
+    assert {o["quantity"] for o in body["observations"]} == {
+        "door_spread_m",
+        "headrope_height_m",
+        "warp_tension_kgf",
+    }
+    bad = client.post("/sensors/parse", json={"csv": "a,b\n1,2"})
+    assert bad.status_code == 422 and "registro inválido" in bad.json()["detail"]
+
+
+def test_uncertainty_endpoint() -> None:
+    r = client.post(
+        "/simulate/uncertainty",
+        json={
+            "samples": 4,
+            "scenario": {"seabed": "mixed", "catch_kg": 200},
+            "inputs": [{"name": "cn", "low": 1.2, "high": 1.3}],
+        },
+    )
+    assert r.status_code == 200, r.text
+    res = r.json()["result"]
+    assert res["n"] == 4 and len(res["samples"]) == 4
+    cn = next(i for i in res["inputs"] if i["name"] == "cn")
+    assert (cn["low"], cn["high"]) == (1.2, 1.3)
+    dp = next(o for o in res["outputs"] if o["key"] == "door_spread_m")
+    assert dp["p10"] <= dp["p50"] <= dp["p90"] and len(dp["values"]) == 4
+    assert client.post("/simulate/uncertainty", json={"samples": 100}).status_code == 422
+    bad = client.post(
+        "/simulate/uncertainty", json={"inputs": [{"name": "cn", "low": 2, "high": 1}]}
+    )
+    assert bad.status_code == 422
+
+
+def test_calibrate_endpoint_validation_and_cost(monkeypatch: pytest.MonkeyPatch) -> None:
+    assert client.post("/simulate/calibrate", json={}).status_code == 422  # sin observaciones
+    assert (
+        client.post("/simulate/calibrate", json={"params": ["gravity"], "reference": "dynamit"})
+    ).status_code == 422
+    monkeypatch.setenv("TRAWLKIT_MAX_BATCH_SECONDS", "1")
+    r = client.post("/simulate/calibrate", json={"reference": "dynamit"})
+    assert r.status_code == 422 and "costosa" in r.json()["detail"]
+
+
+def test_calibrate_endpoint_recovers_example() -> None:
+    parsed = client.post(
+        "/sensors/parse",
+        json={"csv": client.get("/sensors/example").text, "by": "time", "width": 20},
+    ).json()
+    r = client.post(
+        "/simulate/calibrate",
+        json={
+            "observations": [o for o in parsed["observations"] if o["quantity"] == "door_spread_m"],
+            "params": ["door_cl_factor"],
+            "scenario": {"seabed": "mixed"},
+            "max_evals": 6,
+        },
+    )
+    assert r.status_code == 200, r.text
+    res = r.json()["result"]
+    assert res["params"][0]["fitted"] == pytest.approx(0.9, abs=0.04)
+    assert res["rmse_after_pct"] < res["rmse_before_pct"]

@@ -24,3 +24,5 @@ services:
         value: '20'
       - key: TRAWLKIT_MAX_OPT_GRID
         value: '15'
+      - key: TRAWLKIT_MAX_BATCH_SECONDS
+        value: '90'

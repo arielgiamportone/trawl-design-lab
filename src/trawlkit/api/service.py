@@ -1015,3 +1015,220 @@ _ORIENTATION_LABEL = {"diamond": "Rombo", "t90": "T90", "square": "Cuadrada"}
 
 def _variant_label(orientation: str, mesh_mm: float) -> str:
     return f"{_ORIENTATION_LABEL.get(orientation, orientation)} {mesh_mm:g} mm"
+
+
+# ---------------------------------------------------------------------------------------------
+# Incertidumbre, calibración y registros de sensores (Fase 11.4)
+# ---------------------------------------------------------------------------------------------
+
+#: Costo máximo estimado de los cálculos por lotes (incertidumbre, calibración) [s]
+#: (``TRAWLKIT_MAX_BATCH_SECONDS``).
+BATCH_MAX_COST_S = 120.0
+
+
+def batch_max_cost_s() -> float:
+    """Costo máximo estimado de ``/simulate/uncertainty`` y ``/simulate/calibrate`` [s]."""
+    return _env_float("TRAWLKIT_MAX_BATCH_SECONDS", BATCH_MAX_COST_S)
+
+
+#: Una muestra o evaluación con arranque en caliente cuesta una fracción de una simulación.
+WARM_FACTOR = 0.5
+
+
+def _guard(estimate: float, what: str) -> None:
+    limit = batch_max_cost_s()
+    if estimate > limit:
+        raise BadRequestError(
+            f"{what} demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
+            "baje la resolución, las muestras o las evaluaciones"
+        )
+
+
+def _case_for(
+    net: str | NetSpec,
+    vessel: str | Vessel | None,
+    door: str | Door | None,
+    class_vessels: list[str] | None,
+    compat: str,
+    sc: Any,
+) -> DesignCase:
+    params = {"seabed": sc.seabed} if sc.seabed else {}
+    return build_case(
+        net=net,
+        vessel=vessel,
+        door=door,
+        class_vessels=class_vessels,
+        compat=compat,
+        params=params,
+    )
+
+
+def uncertainty_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    compat: str = "corrected",
+    speed_kn: float = 3.0,
+    resolution: int = 2,
+    cn: float | None = None,
+    ct: float | None = None,
+    scenario: dict[str, Any] | None = None,
+    samples: int = 10,
+    seed: int = 0,
+    inputs: list[dict[str, Any]] | None = None,
+    species: list[str] | None = None,
+) -> dict[str, Any]:
+    """Incertidumbre (``POST /simulate/uncertainty``): :func:`trawlkit.sim.uncertainty`."""
+    import time
+
+    from trawlkit.sim import DEFAULT_CN, DEFAULT_CT
+    from trawlkit.sim.uncertainty import default_inputs, uncertainty
+
+    t0 = time.perf_counter()
+    sc = make_scenario(scenario or {})
+    _check_species(species or [])
+    case = _case_for(net, vessel, door, class_vessels, compat, sc)
+    cn_v = DEFAULT_CN if cn is None else cn
+    ct_v = DEFAULT_CT if ct is None else ct
+    inps = default_inputs(sc, cn_v, ct_v)
+    if inputs:
+        by_name = {i["name"]: i for i in inputs}
+        for k, inp in enumerate(inps):
+            if inp.name in by_name:
+                lo, hi = float(by_name[inp.name]["low"]), float(by_name[inp.name]["high"])
+                if not lo <= hi:
+                    raise BadRequestError(f"rango inválido para {inp.name}")
+                inps[k] = dataclasses.replace(inp, low=lo, high=hi, source="pedido")
+    estimate = estimate_sim_cost(
+        1 + int(WARM_FACTOR * samples), resolution, case.net, coupled=sc.coupled_doors
+    )
+    _guard(estimate, "incertidumbre")
+    result = run_case(case)
+    try:
+        u = uncertainty(
+            result,
+            speed_kn,
+            scenario=sc,
+            inputs=inps,
+            n=samples,
+            seed=seed,
+            resolution=resolution,
+            cn=cn_v,
+            ct=ct_v,
+            species=species or [],
+        )
+    except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
+        raise BadRequestError(f"no se puede calcular la incertidumbre: {exc}") from exc
+    out = {
+        "result": u.to_dict(),
+        "settings": {
+            "net_id": case.net.id,
+            "vessel_id": case.vessel.id,
+            "door_id": case.door.id,
+            "compat": case.compat.value,
+            "resolution": resolution,
+            "speed_kn": float(speed_kn),
+            "samples": samples,
+            "seed": seed,
+            "scenario": dataclasses.asdict(sc),
+        },
+        "estimated_s": estimate,
+        "runtime_s": time.perf_counter() - t0,
+    }
+    jsonable: dict[str, Any] = to_jsonable(out)
+    return jsonable
+
+
+def calibrate_case(
+    *,
+    net: str | NetSpec = "fao_a3_standard",
+    vessel: str | Vessel | None = None,
+    door: str | Door | None = None,
+    class_vessels: list[str] | None = None,
+    compat: str = "corrected",
+    resolution: int = 2,
+    scenario: dict[str, Any] | None = None,
+    reference: str | None = None,
+    observations: list[dict[str, Any]] | None = None,
+    params: list[str] | None = None,
+    max_evals: int = 16,
+) -> dict[str, Any]:
+    """Calibración (``POST /simulate/calibrate``): :func:`trawlkit.sim.calibration.calibrate`."""
+    import time
+
+    from trawlkit.sim.calibration import Observation, calibrate, dynamit_observations
+
+    t0 = time.perf_counter()
+    sc = make_scenario(scenario or {})
+    case = _case_for(net, vessel, door, class_vessels, compat, sc)
+    try:
+        obs = [Observation(**o) for o in (observations or [])]
+    except (TypeError, ValueError) as exc:
+        raise BadRequestError(f"observación inválida: {exc}") from exc
+    if reference == "dynamit":
+        if not _is_fao_a3_standard(case.net):
+            raise BadRequestError("la referencia DynamiT es de la red FAO A-3 estándar sin editar")
+        obs = dynamit_observations() + obs
+    if not obs:
+        raise BadRequestError("hacen falta observaciones o reference = 'dynamit'")
+    states = len({(o.speed_kn, o.catch_kg) for o in obs})
+    estimate = estimate_sim_cost(
+        states * (1 + int(WARM_FACTOR * max_evals)), resolution, case.net, coupled=sc.coupled_doors
+    )
+    _guard(estimate, "calibración")
+    result = run_case(case)
+    try:
+        c = calibrate(
+            result,
+            obs,
+            params or ["cn", "door_cl_factor"],
+            scenario=sc,
+            resolution=resolution,
+            max_evals=max_evals,
+        )
+    except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
+        raise BadRequestError(f"no se puede calibrar: {exc}") from exc
+    out = {
+        "result": c.to_dict(),
+        "settings": {
+            "net_id": case.net.id,
+            "vessel_id": case.vessel.id,
+            "door_id": case.door.id,
+            "compat": case.compat.value,
+            "resolution": resolution,
+            "reference": reference,
+            "states": states,
+            "scenario": dataclasses.asdict(sc),
+        },
+        "estimated_s": estimate,
+        "runtime_s": time.perf_counter() - t0,
+    }
+    jsonable: dict[str, Any] = to_jsonable(out)
+    return jsonable
+
+
+def parse_sensors(
+    csv: str, by: str = "speed", width: float = 0.25, min_rows: int = 5
+) -> dict[str, Any]:
+    """Registro de sensores a tramos y observaciones (``POST /sensors/parse``)."""
+    from trawlkit.sensors import parse_log, to_observations, windows
+
+    try:
+        log = parse_log(csv)
+        ws = windows(log, by=by, width=width, min_rows=min_rows)
+    except ValueError as exc:
+        raise BadRequestError(f"registro inválido: {exc}") from exc
+    return {
+        "log": log.to_dict(),
+        "windows": [w.to_dict() for w in ws],
+        "observations": [o.to_dict() for o in to_observations(ws)],
+    }
+
+
+def sensor_example() -> str:
+    """CSV de ejemplo (sintético) de ``GET /sensors/example``."""
+    from trawlkit.sensors import example_log
+
+    return example_log()

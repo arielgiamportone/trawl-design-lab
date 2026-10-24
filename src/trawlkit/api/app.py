@@ -16,6 +16,8 @@ from trawlkit import __version__
 from trawlkit.api import service
 from trawlkit.api.contract import fingerprint
 from trawlkit.api.schemas import (
+    CalibrateRequest,
+    CalibrateResponse,
     CatalogItem,
     DesignRequest,
     DesignResponse,
@@ -37,9 +39,13 @@ from trawlkit.api.schemas import (
     SeabedOut,
     SelectivityRequest,
     SelectivityResponse,
+    SensorParseRequest,
+    SensorParseResponse,
     SimulateRequest,
     SimulateResponse,
     SpeciesOut,
+    UncertaintyRequest,
+    UncertaintyResponse,
     Variant,
 )
 from trawlkit.compat import ERRATA
@@ -288,6 +294,65 @@ def simulate_selectivity(req: SelectivityRequest) -> dict[str, Any]:
         zone_length_m=req.zone_length_m,
         lengths=req.lengths,
         include_geometry=req.include_geometry,
+    )
+
+
+@app.post("/simulate/uncertainty", response_model=UncertaintyResponse)
+def simulate_uncertainty(req: UncertaintyRequest) -> dict[str, Any]:
+    """Incertidumbre: bandas P10–P90 y sensibilidad por Monte Carlo (hipercubo latino)."""
+    return service.uncertainty_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        samples=req.samples,
+        seed=req.seed,
+        inputs=None if req.inputs is None else [i.model_dump() for i in req.inputs],
+        species=req.species,
+    )
+
+
+@app.post("/simulate/calibrate", response_model=CalibrateResponse)
+def simulate_calibrate(req: CalibrateRequest) -> dict[str, Any]:
+    """Calibración: ajusta parámetros del simulador a observaciones (DynamiT o sensores)."""
+    return service.calibrate_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        resolution=req.resolution,
+        scenario=req.scenario.model_dump(),
+        reference=req.reference,
+        observations=[o.model_dump() for o in req.observations],
+        params=list(req.params),
+        max_evals=req.max_evals,
+    )
+
+
+@app.post("/sensors/parse", response_model=SensorParseResponse)
+def sensors_parse(req: SensorParseRequest) -> dict[str, Any]:
+    """Lee un registro de sensores (CSV) y lo resume en tramos estacionarios y observaciones."""
+    return service.parse_sensors(req.csv, req.by, req.width, req.min_rows)
+
+
+@app.get(
+    "/sensors/example",
+    response_class=Response,
+    responses={200: {"content": {"text/csv": {}}}},
+)
+def sensors_example() -> Response:
+    """Registro de sensores de ejemplo (sintético, red FAO A-3) para probar la calibración."""
+    return Response(
+        service.sensor_example(),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="registro_sensores_ejemplo.csv"'},
     )
 
 

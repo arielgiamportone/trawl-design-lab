@@ -231,6 +231,9 @@ class ScenarioIn(BaseModel):
     mesh_bending: bool | None = None
     """Rigidez de apertura de la malla (None = sólo con paños T90 o de malla cuadrada)."""
     mesh_bending_factor: float = Field(default=1.0, ge=0.0, le=20.0)
+    door_cl_factor: float = Field(default=1.0, ge=0.3, le=2.0)
+    """Factor sobre la sustentación de la polar del portón (calibración, incertidumbre)."""
+    door_cd_factor: float = Field(default=1.0, ge=0.3, le=2.0)
 
 
 class FoulingOut(BaseModel):
@@ -464,6 +467,153 @@ class SelectivityResponse(BaseModel):
     settings: dict[str, Any]
     estimated_s: float
     runtime_s: float
+
+
+class UncertainIn(BaseModel):
+    """Rango uniforme de una entrada incierta (reemplaza el rango por defecto)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: Literal[
+        "cn",
+        "ct",
+        "mu_gear",
+        "mu_door",
+        "door_cl_factor",
+        "door_cd_factor",
+        "catch_bulk_density",
+        "catch_cp",
+    ]
+    low: float
+    high: float
+
+
+class UncertaintyRequest(BaseModel):
+    """Incertidumbre (``POST /simulate/uncertainty``): Monte Carlo con hipercubo latino.
+
+    Muestrea las entradas inciertas (por defecto: C_N y C_T del hilo, rozamientos según el fondo,
+    polar del portón ±10 % y, con captura, densidad aparente y C_p) y simula cada muestra a
+    ``speed_kn`` arrancando de la forma nominal. ``inputs`` reemplaza los rangos de las entradas
+    nombradas; ``species`` suma la L50 del copo.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    speed_kn: float = Field(default=3.0, ge=SIM_SPEED_RANGE[0], le=SIM_SPEED_RANGE[1])
+    resolution: int = Field(default=2, ge=2, le=4)
+    cn: float | None = Field(default=None, gt=0.0, le=3.0)
+    ct: float | None = Field(default=None, ge=0.0, le=0.5)
+    scenario: ScenarioIn = Field(default_factory=ScenarioIn)
+    samples: int = Field(default=10, ge=4, le=24)
+    seed: int = Field(default=0, ge=0)
+    inputs: list[UncertainIn] | None = Field(default=None, max_length=8)
+    species: list[str] = Field(default_factory=list, max_length=3)
+
+
+class UncertaintyResponse(BaseModel):
+    """Resultado de ``POST /simulate/uncertainty``."""
+
+    result: dict[str, Any]
+    """Entradas (rangos), muestras, salidas con nominal, P10/P50/P90, valores por muestra y
+    sensibilidad (correlación de rangos de Spearman por entrada), y el resultado nominal."""
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
+
+
+CalibrationQuantity = Literal[
+    "door_spread_m",
+    "ah_m",
+    "av_m",
+    "headrope_height_m",
+    "drag_kgf",
+    "towing_pull_kgf",
+    "warp_tension_kgf",
+]
+CalibrationParam = Literal["cn", "ct", "door_cl_factor", "door_cd_factor", "mu_gear", "mu_door"]
+
+
+DEFAULT_CALIBRATION_PARAMS: tuple[CalibrationParam, ...] = ("cn", "door_cl_factor")
+
+
+class ObservationIn(BaseModel):
+    """Una medición: ``quantity`` = ``value`` a ``speed_kn`` con ``catch_kg`` en el copo."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    quantity: CalibrationQuantity
+    value: float = Field(gt=0.0)
+    speed_kn: float = Field(ge=0.3, le=6.0)
+    catch_kg: float = Field(default=0.0, ge=0.0, le=20000.0)
+    weight: float = Field(default=1.0, gt=0.0, le=10.0)
+    source: str = Field(default="", max_length=60)
+
+
+class CalibrateRequest(BaseModel):
+    """Calibración (``POST /simulate/calibrate``): ajusta parámetros a observaciones.
+
+    Las observaciones vienen en ``observations`` (p. ej. de ``POST /sensors/parse``) o, con
+    ``reference = "dynamit"``, de la simulación DynamiT de la red FAO A-3 estándar a 2, 3 y 4 kn.
+    Levenberg–Marquardt acotado sobre los errores relativos; ``max_evals`` limita las
+    evaluaciones (cada una simula todos los estados observados).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    resolution: int = Field(default=2, ge=2, le=3)
+    scenario: ScenarioIn = Field(default_factory=ScenarioIn)
+    reference: Literal["dynamit"] | None = None
+    observations: list[ObservationIn] = Field(default_factory=list, max_length=40)
+    params: list[CalibrationParam] = Field(
+        default_factory=lambda: list(DEFAULT_CALIBRATION_PARAMS), min_length=1, max_length=3
+    )
+    max_evals: int = Field(default=16, ge=3, le=30)
+
+
+class CalibrateResponse(BaseModel):
+    """Resultado de ``POST /simulate/calibrate``."""
+
+    result: dict[str, Any]
+    """Parámetros (inicial, ajustado, desvío aproximado, rango), observaciones con la simulación
+    antes y después y su error, error cuadrático medio relativo antes y después e historial."""
+    settings: dict[str, Any]
+    estimated_s: float
+    runtime_s: float
+
+
+class SensorParseRequest(BaseModel):
+    """Registro de sensores (``POST /sensors/parse``): CSV a tramos estacionarios.
+
+    ``by = "speed"`` agrupa por velocidad (``width`` en kn) y ``by = "time"`` por tiempo
+    (``width`` en minutos). Devuelve las columnas reconocidas, los tramos y las observaciones
+    listas para ``POST /simulate/calibrate``.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    csv: str = Field(min_length=3, max_length=2_000_000)
+    by: Literal["speed", "time"] = "speed"
+    width: float = Field(default=0.25, gt=0.0, le=120.0)
+    min_rows: int = Field(default=5, ge=1, le=10_000)
+
+
+class SensorParseResponse(BaseModel):
+    """Resultado de ``POST /sensors/parse``."""
+
+    log: dict[str, Any]
+    """Columnas reconocidas (encabezado → magnitud), ignoradas, filas y avisos."""
+    windows: list[dict[str, Any]]
+    observations: list[ObservationIn]
 
 
 class HaulResponse(BaseModel):
