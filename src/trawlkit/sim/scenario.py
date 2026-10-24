@@ -136,6 +136,10 @@ class Scenario:
     #: Rigidez de apertura de la malla: None = sólo si hay paños T90 o de malla cuadrada.
     mesh_bending: bool | None = None
     mesh_bending_factor: float = 1.0
+    #: Factores sobre la sustentación y el arrastre de la polar del portón (incertidumbre y
+    #: calibración; 1 = la polar del catálogo).
+    door_cl_factor: float = 1.0
+    door_cd_factor: float = 1.0
 
     def __post_init__(self) -> None:
         """Valida rangos físicos."""
@@ -165,6 +169,9 @@ class Scenario:
             raise ValueError("haul_hours fuera de rango (0,1–24 h)")
         if not 0.0 <= self.mesh_bending_factor <= 20.0:
             raise ValueError("mesh_bending_factor fuera de rango (0–20)")
+        for name in ("door_cl_factor", "door_cd_factor"):
+            if not 0.3 <= getattr(self, name) <= 2.0:
+                raise ValueError(f"{name} fuera de rango (0,3–2)")
 
     def fouling_zones(self) -> dict[str, float]:
         """Nivel de ensuciamiento efectivo por zona (alas, cuerpo, copo)."""

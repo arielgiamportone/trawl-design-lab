@@ -615,6 +615,12 @@ def simulate(
         if model is not None
         else build_model(spec, rig, resolution=resolution, coupled_doors=coupled)
     )
+    if scenario is not None and (scenario.door_cl_factor != 1.0 or scenario.door_cd_factor != 1.0):
+        mdl = dataclasses.replace(
+            mdl,
+            door_cl=mdl.door_cl * scenario.door_cl_factor,
+            door_cd=mdl.door_cd * scenario.door_cd_factor,
+        )
     mu_door: float | None = None
     catch_v = catch_w = 0.0
     catch_cp = 1.0
