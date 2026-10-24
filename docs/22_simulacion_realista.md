@@ -128,7 +128,7 @@ PV.md_table(
 No existe una tabla publicada de coeficientes de rozamiento por sedimento para artes de arrastre
 (sí mediciones del arrastre del tren de fondo por tipo de sedimento, {cite:t}`oneill2016`): los
 valores son estimaciones de ingeniería, marcadas «A VERIFICAR», y por eso llevan rango. La entrega
-de incertidumbre (11.4) los trata como variables inciertas en lugar de números exactos.
+de incertidumbre ({doc}`25_incertidumbre_calibracion`) los trata como variables inciertas en lugar de números exactos.
 
 ### Portones acoplados
 

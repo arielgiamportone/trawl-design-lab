@@ -201,6 +201,23 @@ y a los gráficos, y el paño se puede colorear por apertura de malla. En el dis
 inspector del panel tiene la **orientación de la malla** (rombo, T90, cuadrada). Desde el resultado
 del modo guiado, «¿Qué tallas retiene el copo?» abre esta vista con la captura y el fondo elegidos.
 
+## Incertidumbre y calibración
+
+La quinta vista de «Simulación», **«Incertidumbre y calibración»**
+({doc}`25_incertidumbre_calibracion`), tiene dos partes:
+
+- **Bandas de incertidumbre** (`POST /simulate/uncertainty`): con la velocidad, la captura, el
+  fondo y la cantidad de muestras, simula muestras de los datos inciertos y muestra, por
+  resultado, el nominal y la banda P10–P90 con las muestras sobre una escala común. Un gráfico de
+  tornado indica qué dato mueve más el resultado elegido.
+- **Calibración con mediciones** (`POST /sensors/parse`, `POST /simulate/calibrate`): se carga
+  el CSV de los sensores del lance (o el registro de ejemplo sintético). La vista muestra las
+  columnas reconocidas y los tramos estacionarios. Luego se eligen hasta 3 parámetros (C_N, C_T,
+  sustentación y arrastre del portón, rozamientos) y se ajustan. El resultado muestra el error
+  antes y después, los parámetros ajustados (marcados si quedan en el límite de su rango) y cada
+  medición frente a la simulación. Con la red FAO A-3 estándar también se puede calibrar contra
+  DynamiT.
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,

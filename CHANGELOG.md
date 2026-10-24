@@ -49,6 +49,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   - en la web, la vista «Mallas y selectividad» (tabla, curvas, mapa 3D y zoom por malla), la
     orientación en el inspector del panel y L50/SR en el explorador;
   - capítulo 24 «Zoom por malla y selectividad».
+- **Incertidumbre y calibración (Fase 11.4)**:
+  - `trawlkit.sim.uncertainty`: Monte Carlo con hipercubo latino (C_N, C_T, rozamientos según el
+    fondo, polar del portón, captura), P10/P50/P90 y sensibilidad de Spearman;
+  - `trawlkit.sim.calibration`: Levenberg–Marquardt acotado contra observaciones o DynamiT;
+  - `trawlkit.sensors`: importador genérico de registros de sensores en CSV (nombres y unidades
+    en español o inglés), tramos estacionarios y observaciones; registro de ejemplo sintético;
+  - `Scenario.door_cl_factor` / `door_cd_factor`;
+  - `POST /simulate/uncertainty`, `POST /simulate/calibrate`, `POST /sensors/parse`,
+    `GET /sensors/example` y la guarda `TRAWLKIT_MAX_BATCH_SECONDS`;
+  - en la web, la vista «Incertidumbre y calibración» (bandas, tornado, carga del CSV y ajuste);
+  - capítulo 25 «Incertidumbre, calibración y datos de sensores».
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
 - `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API

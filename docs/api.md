@@ -27,6 +27,10 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/simulate/haul` | Lance progresivo: forma, separación de portones y tiro mientras entra captura (escenario con fondo y portones acoplados). |
 | POST | `/simulate/explore` | Explorador: estados de red, portones y cables al recorrer una variable (captura, velocidad, cable, ensuciamiento, corriente, rozamiento), con conectividad común y posiciones por estado para animar; energía y huella. |
 | POST | `/simulate/selectivity` | Selectividad del copo: hasta 3 variantes de copo (rombo, T90, cuadrada; mallero y U1) con la curva de retención por especie (L25, L50, L75, SR, SF), la talla máxima de paso por triángulo y la forma para el mapa 3D y el zoom por malla. `/simulate/explore` acepta `species` y suma L50, SR y SF por estado. |
+| POST | `/simulate/uncertainty` | Incertidumbre: Monte Carlo con hipercubo latino sobre los datos inciertos (coeficientes del hilo, rozamientos, polar del portón, captura); P10/P50/P90 y sensibilidad (Spearman) por resultado. |
+| POST | `/simulate/calibrate` | Calibración: Levenberg–Marquardt acotado de hasta 3 parámetros contra observaciones (de sensores) o la referencia DynamiT de la FAO A-3. |
+| POST | `/sensors/parse` | Lee un registro de sensores (CSV de cualquier equipo) y lo resume en tramos estacionarios y observaciones. |
+| GET | `/sensors/example` | Registro de sensores de ejemplo (sintético) en CSV. |
 | POST | `/design/report` | Informe del caso en HTML, PDF o XLSX. |
 
 ## Ejemplo

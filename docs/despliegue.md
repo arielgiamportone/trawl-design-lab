@@ -73,6 +73,7 @@ Los resultados son los mismos que en local: el motor y los datos son idénticos.
 |---|---|---|---|---|
 | `TRAWLKIT_CORS_ORIGINS` | API | `*` | `https://arielgiamportone.github.io` | Orígenes permitidos, separados por comas (sin ruta ni barra final). |
 | `TRAWLKIT_MAX_SIM_SECONDS` | API | `30` | `20` | Costo estimado máximo de `POST /simulate` [s]. |
+| `TRAWLKIT_MAX_BATCH_SECONDS` | API | `120` | `90` | Costo estimado máximo de `POST /simulate/uncertainty` y `POST /simulate/calibrate` [s]. |
 | `TRAWLKIT_MAX_OPT_GRID` | API | `25` | `15` | Lado máximo de la malla de `POST /optimize` (2–25). |
 | `TRAWLKIT_ALLOW_REFINE` | API | permitido | permitido | `0`/`false` rechaza `refine: true` en `POST /optimize`. |
 | `PORT` | API (Docker) | `8000` | lo fija Render | Puerto de escucha de uvicorn. |
