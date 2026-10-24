@@ -1,0 +1,94 @@
+# Forma de la sección transversal de máxima resistencia de cada especie (trawlkit.selectivity).
+#
+# Modelo geométrico tipo FISHSELECT (Herrmann et al. 2009): un pez de talla L pasa por una malla
+# si su sección transversal más resistente (una elipse de alto h y ancho w) entra en la luz de la
+# malla, con el pez libre de girar. Aquí la sección se escala con la talla: h = height·L y
+# w = width·L, con un factor de compresión de los tejidos (compression ≤ 1) y una variabilidad
+# morfológica entre individuos de la misma talla (cv, desvío relativo de h y w).
+#
+# length: medida de talla (TL largo total, CL largo del caparazón) y unidad (cm o mm).
+# A VERIFICAR: los coeficientes son estimaciones de orden de magnitud a partir de la morfología
+# publicada (FISHSELECT para bacalao, eglefino y cigala; morfometría general para el resto). Para
+# un uso cuantitativo deben reemplazarse por mediciones de la especie en la pesquería.
+source: estimación a partir de Herrmann et al. 2009, Krag et al. 2008 y Frandsen et al. 2010 (A VERIFICAR)
+items:
+  - id: hake_hubbsi
+    name: Merluza común
+    scientific_name: Merluccius hubbsi
+    group: hake
+    length: {measure: TL, unit: cm, min: 10, max: 70}
+    height: 0.150
+    width: 0.095
+    compression: 0.90
+    cv: 0.06
+    notes: Pesquería de arrastre del Atlántico Sudoccidental; cuerpo alargado y fusiforme.
+  - id: hake_european
+    name: Merluza europea
+    scientific_name: Merluccius merluccius
+    group: hake
+    length: {measure: TL, unit: cm, min: 10, max: 70}
+    height: 0.145
+    width: 0.095
+    compression: 0.90
+    cv: 0.06
+    notes: Atlántico Nororiental y Mediterráneo.
+  - id: cod
+    name: Bacalao
+    scientific_name: Gadus morhua
+    group: gadoid
+    length: {measure: TL, unit: cm, min: 20, max: 100}
+    height: 0.170
+    width: 0.105
+    compression: 0.90
+    cv: 0.05
+    notes: Especie de referencia de FISHSELECT (secciones medidas en el Báltico y el mar de Barents).
+  - id: haddock
+    name: Eglefino
+    scientific_name: Melanogrammus aeglefinus
+    group: gadoid
+    length: {measure: TL, unit: cm, min: 15, max: 70}
+    height: 0.185
+    width: 0.095
+    compression: 0.90
+    cv: 0.05
+    notes: Cuerpo más alto y comprimido que el bacalao.
+  - id: nephrops
+    name: Cigala
+    scientific_name: Nephrops norvegicus
+    group: crustacean
+    length: {measure: CL, unit: mm, min: 15, max: 70}
+    height: 0.60
+    width: 0.55
+    compression: 1.0
+    cv: 0.05
+    notes: Sección del caparazón (rígido); la talla es el largo del caparazón. Las pinzas pueden enredarse en el paño y no se modelan.
+  - id: pleoticus
+    name: Langostino
+    scientific_name: Pleoticus muelleri
+    group: crustacean
+    length: {measure: TL, unit: cm, min: 6, max: 22}
+    height: 0.160
+    width: 0.130
+    compression: 0.98
+    cv: 0.06
+    notes: Sección del cefalotórax; pesquería patagónica con copos de 45–55 mm.
+  - id: plaice
+    name: Platija
+    scientific_name: Pleuronectes platessa
+    group: flatfish
+    length: {measure: TL, unit: cm, min: 10, max: 60}
+    height: 0.400
+    width: 0.075
+    compression: 0.90
+    cv: 0.06
+    notes: Pez plano; la sección es muy aplanada, por lo que pasa de canto por mallas abiertas.
+  - id: sole
+    name: Lenguado
+    scientific_name: Solea solea
+    group: flatfish
+    length: {measure: TL, unit: cm, min: 10, max: 50}
+    height: 0.330
+    width: 0.065
+    compression: 0.90
+    cv: 0.06
+    notes: Pez plano, más angosto que la platija.

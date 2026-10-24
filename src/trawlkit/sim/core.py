@@ -14,6 +14,7 @@ import numpy.typing as npt
 from trawlkit.io.schema import NetSpec
 from trawlkit.model import DesignCase, DesignResult, run
 from trawlkit.sim.mesh import NetModel, Rigging, build_model, interpolate_shape
+from trawlkit.sim.meshstate import MeshState, mesh_state
 from trawlkit.sim.scenario import Scenario
 from trawlkit.sim.solver import G, Params, RelaxResult, net_mask, relax
 
@@ -36,6 +37,10 @@ KW_PER_HP = 0.7457
 
 #: Resolución por defecto (divisiones nominales por panel).
 DEFAULT_RESOLUTION = 8
+#: Módulo de flexión del hilo para la rigidez de apertura de la malla [Pa] (A VERIFICAR: da
+#: EI ≈ 2·10⁻³ N·m² para un hilo de 4 mm, del orden de la resistencia a la apertura medida por
+#: Sala et al. 2007). Se activa sola si la red tiene paños T90 o de malla cuadrada.
+DEFAULT_MESH_BENDING_PA = 1.6e8
 
 CaseLike = DesignResult | DesignCase | NetSpec
 
@@ -95,6 +100,8 @@ class SimResult:
     operation: dict[str, Any] = field(default_factory=dict)
     #: Ensuciamiento de cada triángulo (0–1; vacío = red limpia).
     fouling_tri: FloatArray = field(default_factory=lambda: np.zeros(0))
+    #: Forma de la malla de cada triángulo (zoom por malla, selectividad).
+    mesh: MeshState | None = None
 
     def to_dict(self, *, geometry: bool = True) -> dict[str, Any]:
         """Representación serializable (``geometry=False`` omite nodos y conectividad)."""
@@ -145,6 +152,10 @@ class SimResult:
                 wing_tips_lower=list(self.wing_tips_lower),
                 fouling_tri=self.fouling_tri.tolist(),
             )
+            if self.mesh is not None:
+                out["mesh"] = self.mesh.to_dict()
+        if self.mesh is not None:
+            out["mesh_summary"] = self.mesh.summary()
         return out
 
 
@@ -353,6 +364,7 @@ def _result(
     scenario: Scenario | None = None,
     ground_kn: float | None = None,
     ff_fouling: FloatArray | None = None,
+    catch_fill: FloatArray | None = None,
 ) -> SimResult:
     x = relaxed.x
     fr = relaxed.forces
@@ -430,6 +442,7 @@ def _result(
             "resolution": float(resolution),
             "speed_ms": p.speed_ms,
             "mu_door": mu_door,
+            "mesh_bending_pa": p.mesh_bending,
         },
         scenario=_scenario_dict(scenario),
         catch=dict(relaxed.catch),
@@ -450,6 +463,7 @@ def _result(
             spread_m=spread,
         ),
         fouling_tri=np.zeros(0) if ff_fouling is None else ff_fouling.copy(),
+        mesh=mesh_state(model, x, catch_fill),
     )
 
 
@@ -639,6 +653,7 @@ def simulate(
         catch_cp=catch_cp,
         fouling=fouling_zones,
         fouling_gains=gains,
+        mesh_bending=_mesh_bending(mdl, scenario),
     )
     if x_init is not None and x_init.shape != mdl.x0.shape:
         x_init = None
@@ -655,10 +670,17 @@ def simulate(
         start[mdl.fixed] = mdl.x0[mdl.fixed]
     relaxed = relax(mdl, p, start, tol=tol, qoi_tol=qoi_tol, max_iter=max_iter)
     foul = None
-    if fouling_zones:
+    fill = None
+    if fouling_zones or catch_v > 0:
         from trawlkit.sim.solver import ForceField
 
-        foul = ForceField(mdl, p).foul
+        ff = ForceField(mdl, p)
+        if fouling_zones:
+            foul = ff.foul
+        if ff.has_catch:
+            ff.update_catch(relaxed.x)
+            fill = np.zeros(mdl.tri.shape[0])
+            fill[ff.catch_tri] = ff.catch_w
     return _result(
         mdl,
         rig,
@@ -670,7 +692,19 @@ def simulate(
         scenario,
         ground_kn=speed_kn,
         ff_fouling=foul,
+        catch_fill=fill,
     )
+
+
+def _mesh_bending(model: NetModel, scenario: Scenario | None) -> float:
+    """Módulo de flexión de la malla de la corrida (0 = sin rigidez de apertura)."""
+    flag = None if scenario is None else scenario.mesh_bending
+    if flag is None:
+        flag = any(o != "diamond" for o in model.tri_orientation)
+    if not flag:
+        return 0.0
+    factor = 1.0 if scenario is None else scenario.mesh_bending_factor
+    return DEFAULT_MESH_BENDING_PA * factor
 
 
 def sweep(

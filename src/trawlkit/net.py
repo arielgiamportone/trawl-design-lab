@@ -28,7 +28,7 @@ from trawlkit.materials import (
     materials_from_catalogue,
     twine_density_kg_m3,
 )
-from trawlkit.netting import vertical_opening_coefficient
+from trawlkit.netting import opening_product, vertical_opening_coefficient
 
 Number = float | npt.NDArray[np.float64]
 
@@ -139,20 +139,32 @@ def solid_surface_m2(
 
 
 def working_surface_m2(
-    u1: Number, mesh_mm: Number, t1: Number, t2: Number, n: Number, count: Number = 1
+    u1: Number,
+    mesh_mm: Number,
+    t1: Number,
+    t2: Number,
+    n: Number,
+    count: Number = 1,
+    opening: Number | None = None,
 ) -> Number:
     """Superficie de trabajo (razón de armadura) [m²]: ``0.5·U1·U2·mL²·(T1+T2)·N·nº paneles``.
 
     FAO: U2 = √(1−U1²) y mL en metros. Celda: ``'Mecánica de la Red'!M56``
     (``=(0.5*K56*L56*((G56)^2)*(H56+I56)*J56)*D56``). Coincide con
     :func:`trawlkit.netting.panel_working_area_m2` por panel, usando el U1 real del paño (W271).
+    ``opening`` reemplaza el producto ``U1·U2`` (malla cuadrada: 0.25, ver
+    :func:`trawlkit.netting.opening_product`).
     """
     u = np.asarray(u1, dtype=float)
-    u2 = np.asarray(vertical_opening_coefficient(u), dtype=float)
+    uu = (
+        u * np.asarray(vertical_opening_coefficient(u), dtype=float)
+        if opening is None
+        else np.asarray(opening, dtype=float)
+    )
     m_l = np.asarray(mesh_mm, dtype=float) / 1000.0
     edges = np.asarray(t1, dtype=float) + np.asarray(t2, dtype=float)
     depth = np.asarray(n, dtype=float)
-    return _out(0.5 * u * u2 * m_l**2 * edges * depth * np.asarray(count, dtype=float))
+    return _out(0.5 * uu * m_l**2 * edges * depth * np.asarray(count, dtype=float))
 
 
 def solidity(solid_surface: Number, working_surface: Number) -> Number:
@@ -284,6 +296,7 @@ class NettingRow:
     t2: int
     n: int
     u1: float
+    orientation: str = "diamond"
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -295,7 +308,15 @@ class NettingRow:
 
 def _row_key(panel: Panel) -> tuple[Any, ...]:
     t1, t2 = panel_edges(panel)
-    return (panel.section, panel.mesh_mm, panel.twine_diameter_mm, t1, t2, panel.meshes_depth)
+    return (
+        panel.section,
+        panel.mesh_mm,
+        panel.twine_diameter_mm,
+        t1,
+        t2,
+        panel.meshes_depth,
+        str(panel.mesh_orientation),
+    )
 
 
 def _runnage(panel: Panel) -> float:
@@ -355,6 +376,7 @@ def group_rows(spec: NetSpec) -> tuple[NettingRow, ...]:
                 t2=t2,
                 n=first.meshes_depth,
                 u1=float(first.hanging_ratio),
+                orientation=str(first.mesh_orientation),
             )
         )
 
@@ -552,7 +574,17 @@ def analyse(
                     solid_surface_m2(r.twine_mm, r.mesh_mm, r.t1, r.t2, r.n, r.count)
                 ),
                 working_surface_m2=float(
-                    working_surface_m2(r.u1, r.mesh_mm, r.t1, r.t2, r.n, r.count)
+                    working_surface_m2(
+                        r.u1,
+                        r.mesh_mm,
+                        r.t1,
+                        r.t2,
+                        r.n,
+                        r.count,
+                        opening=opening_product(r.orientation, r.u1)
+                        if r.orientation == "square"
+                        else None,
+                    )
                 ),
                 twine_density_kg_m3=density,
                 reference_twine_weight_kg=sn,

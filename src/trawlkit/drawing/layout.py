@@ -45,7 +45,11 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from trawlkit.io.schema import NetSpec, Panel, Plane, Section
-from trawlkit.netting import stretched_length_m, vertical_opening_coefficient
+from trawlkit.netting import (
+    SQUARE_MESH_COEFFICIENT,
+    orientation_coefficients,
+    stretched_length_m,
+)
 
 Point = tuple[float, float]
 Mode = Literal["schematic", "true_scale"]
@@ -320,13 +324,14 @@ def panel_size_m(
     panel: Panel, mode: Mode = "schematic", stretched: bool = False
 ) -> tuple[float, float, float]:
     """``(ancho superior, ancho inferior, alto)`` del panel en metros según el modo."""
+    square = str(panel.mesh_orientation) == "square"
     if mode == "schematic" or stretched:
-        u1 = u2 = 1.0
+        # En malla cuadrada cada malla contada es un cuadrado de una pata (mL/2) de lado.
+        u1 = u2 = SQUARE_MESH_COEFFICIENT if square else 1.0
     else:
-        if panel.hanging_ratio is None:
+        if panel.hanging_ratio is None and not square:
             raise ValueError(f"panel {panel.id}: hace falta hanging_ratio (U1) para true_scale")
-        u1 = float(panel.hanging_ratio)
-        u2 = float(vertical_opening_coefficient(u1))
+        u1, u2 = orientation_coefficients(panel.mesh_orientation, panel.hanging_ratio or 0.5)
     top = float(stretched_length_m(panel.meshes_top, panel.mesh_mm, u1))
     bottom = float(stretched_length_m(panel.meshes_bottom, panel.mesh_mm, u1))
     height = float(stretched_length_m(panel.meshes_depth, panel.mesh_mm, u2))

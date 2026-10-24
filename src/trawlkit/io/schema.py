@@ -38,6 +38,21 @@ class Section(StrEnum):
     CODEND = "codend"
 
 
+class MeshOrientation(StrEnum):
+    """Orientación de la malla del paño.
+
+    ``diamond`` es la malla rómbica clásica (la diagonal larga de la malla estirada a lo largo de
+    la red); ``t90`` es el mismo paño girado 90° (la diagonal larga queda a lo ancho); ``square``
+    es la malla cuadrada, con los hilos a lo largo y a lo ancho de la red (paño cortado en barras).
+    En malla cuadrada ``meshes_top``/``meshes_bottom``/``meshes_depth`` cuentan cuadrados de lado
+    una pata (``mesh_mm / 2``).
+    """
+
+    DIAMOND = "diamond"
+    T90 = "t90"
+    SQUARE = "square"
+
+
 class PropellerType(StrEnum):
     """Tipo de hélice (nomenclatura del modelo original)."""
 
@@ -79,6 +94,10 @@ class Panel(_Model):
     meshes_depth: int = Field(ge=1)
     hanging_ratio: float | None = Field(default=None, ge=0, le=1)
     count: int = Field(default=1, ge=1, description="Cantidad de paneles iguales")
+    mesh_orientation: MeshOrientation = Field(
+        default=MeshOrientation.DIAMOND,
+        description="Orientación de la malla (rombo, T90, cuadrada)",
+    )
     cut_code: str | None = None
     source_cells: dict[str, str] | None = Field(default=None, description="Procedencia en el Excel")
 

@@ -73,6 +73,29 @@ def vertical_opening_coefficient(u1: Number) -> Number:
     return _out(np.sqrt(1.0 - u * u))
 
 
+#: Coeficiente de abertura de la malla cuadrada a lo ancho y a lo largo: el lado del cuadrado es
+#: una pata, la mitad de la malla estirada.
+SQUARE_MESH_COEFFICIENT = 0.5
+
+
+def orientation_coefficients(orientation: str, u1: float) -> tuple[float, float]:
+    """Coeficientes "en el plano" (ancho, alto) por malla estirada según la orientación.
+
+    Rombo y T90: ``(U1, √(1−U1²))``, con ``U1`` = ``hanging_ratio`` (la abertura a lo ancho del
+    panel; en T90 la diagonal larga va a lo ancho, así que se espera un U1 mayor). Malla
+    cuadrada: ``(0.5, 0.5)``, porque cada malla contada es un cuadrado de lado una pata.
+    """
+    if str(orientation) == "square":
+        return SQUARE_MESH_COEFFICIENT, SQUARE_MESH_COEFFICIENT
+    return float(u1), float(vertical_opening_coefficient(u1))
+
+
+def opening_product(orientation: str, u1: float) -> float:
+    """Producto ``U1·U2`` de la superficie de trabajo; en malla cuadrada, ``0.25`` (lado ²/mL²)."""
+    cx, cy = orientation_coefficients(orientation, u1)
+    return cx * cy
+
+
 def panel_working_area_m2(u1: Number, t1: Number, t2: Number, n: Number, mesh_mm: Number) -> Number:
     """Superficie de trabajo del paño [m²]: ``U1·√(1−U1²)·((T1+T2)/2)·N·(mL/1000)²``.
 

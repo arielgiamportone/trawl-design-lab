@@ -133,6 +133,9 @@ class Scenario:
     warp_length_m: float | None = None
     #: Duración del lance [h] (para combustible por kg de captura).
     haul_hours: float = 2.0
+    #: Rigidez de apertura de la malla: None = sólo si hay paños T90 o de malla cuadrada.
+    mesh_bending: bool | None = None
+    mesh_bending_factor: float = 1.0
 
     def __post_init__(self) -> None:
         """Valida rangos físicos."""
@@ -160,6 +163,8 @@ class Scenario:
             raise ValueError("warp_length_m fuera de rango (20–3000 m)")
         if not 0.1 <= self.haul_hours <= 24.0:
             raise ValueError("haul_hours fuera de rango (0,1–24 h)")
+        if not 0.0 <= self.mesh_bending_factor <= 20.0:
+            raise ValueError("mesh_bending_factor fuera de rango (0–20)")
 
     def fouling_zones(self) -> dict[str, float]:
         """Nivel de ensuciamiento efectivo por zona (alas, cuerpo, copo)."""

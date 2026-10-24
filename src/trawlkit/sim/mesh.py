@@ -27,6 +27,13 @@ coordenadas de hilo), de modo que
   superficie sólida FAO ``Ss = d · N · mallero · (T1 + T2)`` (identidad verificada en los tests);
 * la tensión de cada familia es ``T = EA · max(|∂x/∂i| / a − 1, 0)`` (sólo tracción).
 
+Orientación de la malla (``Panel.mesh_orientation``): en **T90** el paño va girado 90°, así que
+la diagonal larga de la malla queda a lo ancho; el mapeo ``i = n + t``, ``j = n − t`` no cambia
+(la malla sigue siendo un rombo con las diagonales sobre los ejes del panel) pero el ángulo de
+reposo del nudo sí (ver :data:`DIAMOND_REST_ANGLE_DEG`). En malla **cuadrada** los hilos siguen
+los ejes del panel: ``i = t``, ``j = n``, con ``t`` y ``n`` medidos en patas. En los tres casos
+cada celda unidad en ``(i, j)`` es una malla: el triángulo tiene ``A_ij`` mallas.
+
 Este es el elemento triangular de Priour (1999, "Calculation of net shapes by the finite element
 method with triangular elements", *Commun. Numer. Meth. Engng.* 15:755–763; Priour 2013, *A
 Finite Element Method for Netting*, Springer), que da al paño rigidez nula al corte y a la
@@ -60,14 +67,14 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import numpy.typing as npt
 
 from trawlkit.drawing.layout import NetLayout, PanelShape, layout_net
 from trawlkit.io.schema import NetSpec, Panel
-from trawlkit.netting import vertical_opening_coefficient
+from trawlkit.netting import orientation_coefficients
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int64]
@@ -76,6 +83,20 @@ IntArray = npt.NDArray[np.int64]
 RHO_PA = 1140.0
 #: Aceleración de la gravedad [m/s²].
 GRAVITY = 9.80665
+#: Ángulo de reposo entre las dos familias de hilos de la malla rómbica [°] (A VERIFICAR: el
+#: paño usado y relajado queda entreabierto; Sala et al. 2007 miden la resistencia de la malla a
+#: abrirse). En T90 el reposo es el suplemento (el nudo girado tiende a abrir la malla a lo
+#: ancho) y en malla cuadrada, 90°.
+DIAMOND_REST_ANGLE_DEG = 40.0
+
+
+def rest_angle_rad(orientation: str, diamond_deg: float = DIAMOND_REST_ANGLE_DEG) -> float:
+    """Ángulo de reposo entre ``∂x/∂i`` y ``∂x/∂j`` según la orientación de la malla [rad]."""
+    o = str(orientation)
+    if o == "square":
+        return math.pi / 2.0
+    beta = math.radians(diamond_deg)
+    return math.pi - beta if o == "t90" else beta
 
 
 @dataclass(frozen=True)
@@ -178,6 +199,10 @@ class NetModel:
     #: Sección de cada triángulo (``Panel.section``: wing_tip, wing, square, belly, body,
     #: extension, codend).
     tri_section: tuple[str, ...] = ()
+    #: Orientación de la malla de cada triángulo (diamond, t90, square) y ángulo de reposo entre
+    #: las dos familias de hilos [rad] (rigidez de apertura de la malla, ``Params.mesh_bending``).
+    tri_orientation: tuple[str, ...] = ()
+    tri_rest_angle: FloatArray = field(default_factory=lambda: np.zeros(0))
     #: Anillos del copo y del cuerpo (dorso + vientre), del extremo cerrado hacia la boca.
     codend_rings: tuple[IntArray, ...] = ()
     #: Portones libres con cable hasta el buque (los puntos del buque son los nodos fijos).
@@ -233,7 +258,7 @@ class _UnionFind:
 
 def _u1u2(panel: Panel) -> tuple[float, float]:
     u1 = float(panel.hanging_ratio) if panel.hanging_ratio is not None else 0.5
-    return u1, float(vertical_opening_coefficient(u1))
+    return orientation_coefficients(panel.mesh_orientation, u1)
 
 
 def _runnage(panel: Panel) -> float:
@@ -327,6 +352,7 @@ def build_model(
     tri_mc: list[tuple[tuple[float, float], ...]] = []
     tri_panel: list[str] = []
     tri_sect: list[str] = []
+    tri_orient: list[str] = []
     tri_props: list[tuple[float, float, float, float]] = []  # a, d, EA, w
     grids: list[PanelGrid] = []
 
@@ -347,8 +373,10 @@ def build_model(
         if collapse:
             # Punta de ala: el borde de boca (3 mallas) se reduce a un punto (ver build_model).
             xx[0, :] = xx[0, :].mean()
+        # (t, n): mallas a lo ancho y a lo alto (rombo, T90) o patas (cuadrada).
         t = xx / (mesh_m * u1)
         n = (yy - shape.y_top) / (mesh_m * u2)
+        orient = str(panel.mesh_orientation)
         ids = np.empty(xx.shape, dtype=np.int64)
         for (r_, c_), _ in np.ndenumerate(xx):
             ids[r_, c_] = uf.make()
@@ -377,6 +405,7 @@ def build_model(
                     tri_mc.append(tuple((float(t[k]), float(n[k])) for k in tri_q))
                     tri_panel.append(key)
                     tri_sect.append(panel.section.value)
+                    tri_orient.append(orient)
                     tri_props.append((a, d, ea, w))
         g = PanelGrid(
             key,
@@ -491,13 +520,14 @@ def build_model(
     tri_d = np.array([p[1] for p in tri_props])
     tri_ea = np.array([p[2] for p in tri_props])
     tri_w = np.array([p[3] for p in tri_props])
-    gi, gj, area = _twine_operators(tri_mc)
+    gi, gj, area = _twine_operators(tri_mc, np.array([o == "square" for o in tri_orient]))
     # Descartar triángulos degenerados (área nula en coordenadas de hilo).
     keep = area > 1e-9
     tri, gi, gj, area = tri[keep], gi[keep], gj[keep], area[keep]
     tri_a, tri_d, tri_ea, tri_w = tri_a[keep], tri_d[keep], tri_ea[keep], tri_w[keep]
     tri_keys = tuple(k for k, kp in zip(tri_panel, keep.tolist(), strict=True) if kp)
     tri_sections = tuple(k for k, kp in zip(tri_sect, keep.tolist(), strict=True) if kp)
+    tri_orients = tuple(k for k, kp in zip(tri_orient, keep.tolist(), strict=True) if kp)
     solid = float(np.sum(2.0 * area * tri_a * tri_d))
 
     # --- relingas ---------------------------------------------------------------------------
@@ -671,6 +701,8 @@ def build_model(
         tri_w=tri_w,
         tri_panel=tri_keys,
         tri_section=tri_sections,
+        tri_orientation=tri_orients,
+        tri_rest_angle=np.array([rest_angle_rad(o) for o in tri_orients]),
         bar=np.asarray(bars, dtype=np.int64),
         bar_l0=np.asarray(l0),
         bar_ea=np.asarray(ea),
@@ -722,11 +754,18 @@ def _half_width_profile(layout: NetLayout, x: FloatArray) -> FloatArray:
 
 def _twine_operators(
     mc: Sequence[tuple[tuple[float, float], ...]],
+    square: npt.NDArray[np.bool_] | None = None,
 ) -> tuple[FloatArray, FloatArray, FloatArray]:
-    """Operadores ``∂x/∂i = Σ gi_k x_k``, ``∂x/∂j = Σ gj_k x_k`` y área en patas por triángulo."""
+    """Operadores ``∂x/∂i = Σ gi_k x_k``, ``∂x/∂j = Σ gj_k x_k`` y área en patas por triángulo.
+
+    Rombo y T90: ``i = n + t``, ``j = n − t``; malla cuadrada (``square``): ``i = t``, ``j = n``.
+    """
     tn = np.asarray(mc, dtype=float)  # (nt, 3, 2): (t, n)
     i = tn[:, :, 1] + tn[:, :, 0]
     j = tn[:, :, 1] - tn[:, :, 0]
+    if square is not None and square.any():
+        i[square] = tn[square, :, 0]
+        j[square] = tn[square, :, 1]
     di1, di2 = i[:, 1] - i[:, 0], i[:, 2] - i[:, 0]
     dj1, dj2 = j[:, 1] - j[:, 0], j[:, 2] - j[:, 0]
     det = di1 * dj2 - di2 * dj1

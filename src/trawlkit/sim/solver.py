@@ -29,6 +29,12 @@ Cargas
 * **Portones acoplados** (``NetModel.coupled_doors``): arrastre ``½ ρ C_D A v²`` en +x,
   sustentación ``½ ρ C_L A v²`` hacia afuera, peso en el agua; el cable de remolque es una cadena
   de barras con peso y Morison hasta el punto fijo del buque.
+* **Rigidez de apertura de la malla** (``mesh_bending > 0``, apagada por defecto): cada malla
+  resiste que el ángulo ``β`` entre sus dos familias de hilos se aleje del de reposo ``β₀``
+  (``NetModel.tri_rest_angle``) con la energía ``½ K (β − β₀)²`` por triángulo,
+  ``K = 4 · A_ij · EI / a`` (cuatro nudos por malla, cada uno como una bisagra de rigidez
+  ``EI/a``) y ``EI = E_b · π d⁴/64``. Es la "resistencia de la malla a abrirse" (Sala et al.
+  2007; Priour 2013, cap. 4) que distingue la malla T90 de la rómbica.
 * **Captura** (``catch_volume_m3 > 0``): ocupa los anillos del extremo del copo hasta llenar su
   volumen (se recalcula cada control de convergencia con la forma actual). Los hilos de esa zona
   no reciben Morison (flujo bloqueado); el paño recibe la presión ``½ ρ C_p v²`` normal hacia
@@ -92,6 +98,8 @@ class Params:
     #: Ensuciamiento por zona (alas, cuerpo, copo) y ganancias de diámetro, C_N y peso.
     fouling: tuple[tuple[str, float], ...] = ()
     fouling_gains: tuple[float, float, float] = (1.5, 0.3, 2.0)
+    #: Módulo de flexión del hilo para la rigidez de apertura de la malla [Pa] (0 = sin ella).
+    mesh_bending: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -149,6 +157,12 @@ class ForceField:
             self.k = self.k * fd
             self.kn = self.k * fc
             self.w = self.w * fw
+        # Rigidez de apertura de la malla (bisagras en los nudos).
+        self.bend_k = np.zeros(0)
+        if p.mesh_bending > 0.0 and model.tri_rest_angle.size == nt:
+            ei_bend = p.mesh_bending * np.pi * model.tri_d**4 / 64.0
+            self.bend_k = 4.0 * model.tri_area * ei_bend / model.tri_a
+            self.bend_idx = ((3 * model.tri)[:, :, None] + np.arange(3)).ravel()
         self.h = np.concatenate(
             [np.full((2 * nt, 3), 1.0 / 3.0), np.tile(np.array([0.5, 0.5, 0.0]), (nb, 1))]
         )
@@ -274,6 +288,23 @@ class ForceField:
             out[self.catch_low, 2] -= self.p.catch_weight_n / self.catch_low.size
         return out
 
+    def _bending(self, vec: FloatArray, s: FloatArray) -> FloatArray:
+        """Fuerzas nodales (aplanadas) de la rigidez de apertura de la malla."""
+        nt = self.nt
+        m = self.model
+        ui = vec[:nt] / s[:nt, None]
+        uj = vec[nt : 2 * nt] / s[nt : 2 * nt, None]
+        c = np.clip(np.einsum("ij,ij->i", ui, uj), -1.0, 1.0)
+        beta = np.arccos(c)
+        sb = np.maximum(np.sqrt(1.0 - c * c), 0.05)
+        moment = self.bend_k * (beta - m.tri_rest_angle)
+        dbi = -(uj - c[:, None] * ui) / (s[:nt] * sb)[:, None]
+        dbj = -(ui - c[:, None] * uj) / (s[nt : 2 * nt] * sb)[:, None]
+        f = -moment[:, None, None] * (
+            m.tri_gi[:, :, None] * dbi[:, None, :] + m.tri_gj[:, :, None] * dbj[:, None, :]
+        )
+        return np.bincount(self.bend_idx, weights=f.ravel(), minlength=3 * self.n)
+
     def tensions(self, x: FloatArray) -> FloatArray:
         """Tensión de cada segmento [N] en la configuración ``x``."""
         vec = np.einsum("sk,skc->sc", self.g, x[self.nodes])
@@ -303,6 +334,8 @@ class ForceField:
             self.g[:, :, None] * e[:, None, :]
         )
         total = np.bincount(self.idx, weights=fv.ravel(), minlength=3 * self.n) + self.const
+        if self.bend_k.size:
+            total += self._bending(vec, s)
         total = total.reshape(-1, 3)
         catch_x = 0.0
         if self.catch_tri.size:
