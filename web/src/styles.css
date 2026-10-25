@@ -1182,6 +1182,12 @@ tr.diff-sig:hover th {
   color: var(--text-2);
   padding: 0 16px 24px;
 }
+.footer p {
+  margin: 4px 0;
+}
+.footer a {
+  color: inherit;
+}
 
 .spread-pair {
   display: grid;

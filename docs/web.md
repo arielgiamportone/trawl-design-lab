@@ -11,6 +11,8 @@ publicada con este libro; cómo se despliega y sus limitaciones en {doc}`desplie
 
 ![Caso de diseño y KPI (escritorio, tema claro)](../web/docs/screenshots/escritorio-claro-caso.png)
 
+![Modo guiado: el diagnóstico con semáforos](../web/docs/screenshots/guiado-diagnostico.png)
+
 ## Puesta en marcha en desarrollo
 
 Se necesitan dos procesos: la API (Python) y el servidor de desarrollo de Vite (Node 22, npm 10).
@@ -333,7 +335,17 @@ consumo de datos** oculta «Diseño interactivo» y «Simulación», que descarg
 
 ![Optimizar: mejor diseño, mapa de factibilidad y frente de Pareto](../web/docs/screenshots/escritorio-claro-optimizar.png)
 
-![Simulación: proyecciones a 2, 3 y 4 kn y comparación con el motor y DynamiT](../web/docs/screenshots/escritorio-claro-simulacion.png)
+![Diseño interactivo: paneles sobre el plano, con tiradores](../web/docs/screenshots/escritorio-diseno-interactivo.png)
+
+![Simulación: la forma de equilibrio en 3D, coloreada por tensión, y sus proyecciones](../web/docs/screenshots/escritorio-simulacion-3d.png)
+
+![Selectividad: copo de rombo frente a T90](../web/docs/screenshots/escritorio-selectividad.png)
+
+![Catálogo FAO: procedencia valor por valor y validador](../web/docs/screenshots/escritorio-catalogo-fao.png)
+
+![Componentes: lista de materiales](../web/docs/screenshots/escritorio-componentes.png)
+
+![Lotes y flota: la red proyectada a cada buque](../web/docs/screenshots/escritorio-lotes.png)
 
 ## Arquitectura
 
@@ -365,12 +377,14 @@ web/
 
 ![Plano en móvil](../web/docs/screenshots/movil-plano.png)
 
+![Sin conexión: el motor del teléfono](../web/docs/screenshots/movil-sin-conexion.png)
+
 ## Pruebas
 
 ```bash
 cd web
-npm test               # Vitest (176 pruebas)
-npm run test:e2e       # Playwright (23 pruebas)
+npm test               # Vitest (pruebas unitarias)
+npm run test:e2e       # Playwright (de punta a punta)
 ```
 
 Playwright levanta la API (`uv run trawlkit serve`, requiere `uv sync --all-extras`) y
@@ -385,8 +399,8 @@ compara las respuestas con las de CPython (`tools/offline_expected.py`, toleranc
 
 ## Capturas
 
-Las capturas de esta página están en `web/docs/screenshots/`:
-
-- `escritorio-claro-caso.png` — caso de diseño, KPI y resumen (1440 × 900, tema claro).
-- `escritorio-oscuro-graficos.png` — pestaña de gráficos (tema oscuro).
-- `movil-plano.png` — plano en un teléfono de 390 px.
+Las capturas de esta página y del README están en `web/docs/screenshots/` y se regeneran con
+`npm run screenshots` (`screenshots/capture.spec.ts`, con el mismo arranque que las E2E: API local y
+`vite preview`). Son de escritorio a 1440 × 900 (`escritorio-*`, `guiado-diagnostico`) y de
+teléfono a 390 × 844 (`movil-*`); la de `movil-sin-conexion` prepara el motor del teléfono y corta
+la red antes de capturar.

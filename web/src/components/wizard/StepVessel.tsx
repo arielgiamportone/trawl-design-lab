@@ -58,7 +58,6 @@ export function StepVessel({ onBatch }: { onBatch?: () => void }) {
           <button type="button" className="link-button" onClick={onBatch}>
             Cárguelos en una planilla y calcule la red para cada uno
           </button>
-          .
         </p>
       )}
     </>

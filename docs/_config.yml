@@ -1,6 +1,7 @@
 title: trawl-design-lab
 author: Ariel Luján Giamportone
 copyright: "2026"
+logo: _static/img/emblema-utn-pesquera.svg
 language: es
 only_build_toc_files: true
 exclude_patterns: [_build, "**.ipynb_checkpoints", README.md, CITAS.md, _template_capitulo.md]

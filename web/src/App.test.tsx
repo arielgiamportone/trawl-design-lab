@@ -37,6 +37,20 @@ describe('App', () => {
     expect(await screen.findByText('API conectada · v0.1.0')).toBeInTheDocument();
   });
 
+  it('el pie nombra las tres Facultades de Ingeniería Pesquera de la UTN', () => {
+    mockApi();
+    renderApp();
+    const utn = screen.getByTestId('footer-utn');
+    expect(utn).toHaveTextContent('Hecho en la UTN · Ingeniería Pesquera');
+    const links = within(utn).getAllByRole('link');
+    expect(links.map((a) => a.textContent)).toEqual(['FRTDF', 'FRCh', 'FRMDP']);
+    expect(links.map((a) => a.getAttribute('href'))).toEqual([
+      'https://www.frtdf.utn.edu.ar/',
+      'https://www.frch.utn.edu.ar/',
+      'https://mdp.utn.edu.ar/',
+    ]);
+  });
+
   it('avisa si la API en línea es de otra versión que la app', async () => {
     mockApi({ contract: '000000000000' });
     renderApp();

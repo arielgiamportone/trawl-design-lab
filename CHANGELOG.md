@@ -157,6 +157,23 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 - Libro: capítulo 22 «Simulación con captura, fondo y portones acoplados», con el panorama de
   simuladores del mercado; 7 referencias nuevas (6 verificadas en Crossref).
+- **Documentación, identidad UTN**: README en castellano e inglés reescritos (banner, capturas,
+  capacidades, arquitectura, cadena de cálculo, indicadores, hoja de ruta) y sección «Nacido en la
+  UTN» con las tres Facultades Regionales de Ingeniería Pesquera (FRTDF, FRCh y FRMDP); página
+  `docs/utn.md` del libro, el emblema como logo del libro y el pie de la app con las tres Facultades.
+  El emblema es un dibujo propio, no un logo oficial.
+- Figuras SVG con tema claro y oscuro (`tools/make_figures.py`, `docs/_static/img/`): emblema,
+  banner, arquitectura, cadena de cálculo, fases y flujo de flota, en castellano e inglés.
+- Indicadores del README calculados del código y los datos (`tools/readme_stats.py`, con
+  `--check`); `tests/test_readme.py` verifica que estén al día y que las imágenes tengan URL
+  absoluta (PyPI).
+- Capturas de la app regeneradas con `npm run screenshots` (12 vistas: modo guiado, experto,
+  diseño interactivo, 3D, selectividad, optimizar, catálogo, componentes, lotes, teléfono y sin
+  conexión).
+- `CITATION.cff` y `.zenodo.json`: afiliación (UTN, Facultad Regional Tierra del Fuego) y palabras
+  clave de Ingeniería Pesquera.
+- Libro: introducción con todas las partes (capítulos 22 a 25 y 33 a 35), módulos nuevos en
+  `docs/motor.md` y el motor sin conexión en `docs/despliegue.md`.
 
 ### Corregido
 - Libro: las tablas generadas desde código en los capítulos 22 y 23 salían como texto (MyST-NB

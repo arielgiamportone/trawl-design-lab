@@ -48,8 +48,24 @@ export function App() {
           <OfflinePanel />
         </div>
         <footer className="footer">
-          trawl-design-lab · motor trawlkit · resultados orientativos: verifique con el plano y el
-          informe antes de construir.
+          <p>
+            trawl-design-lab · motor trawlkit · resultados orientativos: verifique con el plano y el
+            informe antes de construir.
+          </p>
+          <p data-testid="footer-utn">
+            Hecho en la UTN · Ingeniería Pesquera ·{' '}
+            <a href="https://www.frtdf.utn.edu.ar/" target="_blank" rel="noreferrer">
+              FRTDF
+            </a>{' '}
+            ·{' '}
+            <a href="https://www.frch.utn.edu.ar/" target="_blank" rel="noreferrer">
+              FRCh
+            </a>{' '}
+            ·{' '}
+            <a href="https://mdp.utn.edu.ar/" target="_blank" rel="noreferrer">
+              FRMDP
+            </a>
+          </p>
         </footer>
       </CaseProvider>
     </ConnectionProvider>

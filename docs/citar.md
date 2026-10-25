@@ -12,6 +12,7 @@ GitHub, el botón **Cite this repository** los da en APA y BibTeX.
 @software{giamportone_trawlkit,
   author    = {Giamportone, Ariel Luján},
   title     = {Trawl Design Lab (trawlkit): diseño y dimensionamiento de redes de arrastre},
+  organization = {Universidad Tecnológica Nacional, Facultad Regional Tierra del Fuego},
   version   = {1.0.0},
   year      = {2026},
   publisher = {Zenodo},
@@ -20,13 +21,14 @@ GitHub, el botón **Cite this repository** los da en APA y BibTeX.
 }
 ```
 
-El trabajo original en Excel se cita como {cite}`giamportone2024`.
+El trabajo original en Excel, hecho en Ingeniería Pesquera de la UTN ({doc}`utn`), se cita como
+{cite}`giamportone2024`.
 
 ## Instalación desde PyPI
 
 ```bash
 pip install trawlkit                           # motor y CLI
-pip install "trawlkit[api,report,optimize]"    # + API, informes PDF/XLSX y optimización
+pip install "trawlkit[api,report,optimize,excel]"   # + API, informes PDF/XLSX, optimización y planillas
 python -c "import trawlkit; print(trawlkit.__version__)"
 ```
 

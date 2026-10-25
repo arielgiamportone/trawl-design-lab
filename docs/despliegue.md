@@ -15,14 +15,22 @@ gratuitos:
 navegador ──► GitHub Pages ──► /trawl-design-lab/        libro (Jupyter Book)
                            └─► /trawl-design-lab/app/    app web estática (web/dist)
           │
-          └── fetch (CORS) ──► Render: trawl-design-lab-api (contenedor Docker)
-                               uvicorn trawlkit.api.app:app, GET /health, POST /design, …
+          ├── fetch (CORS) ──► Render: trawl-design-lab-api (contenedor Docker)
+          │                    uvicorn trawlkit.api.app:app, GET /health, POST /design, …
+          └── sin red ───────► Web Worker con Pyodide: la wheel de trawlkit (app/py/)
+                               trawlkit.api.offline, las mismas rutas sin servidor
 ```
 
 - **Libro y app** se construyen en el mismo flujo de GitHub Actions (`.github/workflows/docs.yml`):
   primero el libro (`jupyter-book build docs -W`), después la app con
   `VITE_BASE=/trawl-design-lab/app/` y la URL de la API, y se copia `web/dist` a
   `docs/_build/html/app/`. Se publica un único artefacto de Pages en cada push a `main`.
+- **Motor sin conexión**: el mismo flujo construye la *wheel* de `trawlkit` y la empaqueta con
+  `tools/offline_bundle.py` en `web/public/py/` (con `manifest.json`, la huella del contrato y las
+  ruedas puras que necesita en Pyodide, como openpyxl para los lotes en XLSX). La app la descarga
+  cuando el usuario elige «Preparar uso sin conexión» y la corre en un *Web Worker*
+  ({doc}`web`). La CI prueba que esa rueda dé en Pyodide las mismas respuestas que CPython
+  (`web/scripts/pyodide-parity.mjs`, tolerancia relativa 1e-9).
 - **API**: `Dockerfile` en la raíz (Python 3.12, Pango para los PDF de WeasyPrint, dependencias
   fijadas por `uv.lock` con los extras `api`, `report` y `optimize`, usuario sin privilegios,
   puerto `$PORT`). `render.yaml` es el *Blueprint* que describe el servicio. Render reconstruye la

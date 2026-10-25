@@ -23,6 +23,19 @@ el libro resuelve sus dependencias y devuelve un `DesignResult` con una etapa po
 | `trawlkit.compat` | — | Modos `EXCEL`/`CORRECTED` y registro `ERRATA` |
 | `trawlkit.model` | todas | `DesignCase`, `DesignResult`, `run` |
 
+Alrededor de ese núcleo, que reproduce el libro, crecieron módulos que el Excel no tenía:
+
+| Módulo | Qué hace | Capítulo |
+|---|---|---|
+| `trawlkit.optimize` | Escala de la red y velocidad óptimas con restricciones; armado óptimo con el catálogo de componentes (`optimize.components`) | {doc}`20_optimizacion`, {doc}`34_componentes` |
+| `trawlkit.sim` | Forma de equilibrio de la red (elementos de paño, Morison, relajación FIRE), escenario de lance, estado de malla, incertidumbre y calibración | {doc}`21_simulacion` a {doc}`25_incertidumbre_calibracion` |
+| `trawlkit.selectivity`, `trawlkit.sensors` | Tallas retenidas por especie según la malla deformada; lectura de registros de sensores | {doc}`24_malla_selectividad`, {doc}`25_incertidumbre_calibracion` |
+| `trawlkit.catalog`, `.topology`, `.netcheck`, `.provenance` | Caso de diseño de cada red del catálogo FAO, topologías distintas de la A-3, validador de consistencia y procedencia valor por valor | {doc}`33_catalogo_fao` |
+| `trawlkit.components`, `trawlkit.cost` | Catálogo de componentes con equivalentes genéricos; lista de materiales y costo orientativo | {doc}`34_componentes` |
+| `trawlkit.batch` | Planillas de flota, redes y casos; proyección de una red a cada buque; exportación | {doc}`35_lotes_proyeccion` |
+| `trawlkit.drawing`, `trawlkit.report` | Plano SVG (lámina y escala real), gráficos e informes HTML, PDF y XLSX | {doc}`informes` |
+| `trawlkit.api` | API FastAPI (`app`, `service`, `schemas`) y `api.offline`, el mismo servicio sin servidor que la app corre en Pyodide | {doc}`api`, {doc}`web` |
+
 ## Orden de las etapas
 
 El grafo de dependencias entre hojas (ver `legacy/formula_map.md`) obliga a un orden distinto al
