@@ -437,9 +437,13 @@ def compute(
     Erratas: ``footrope_mid_truncation`` (F46; también arrastra D89 y C124:C126, que usan el
     nombre ``Burlon``) y ``mod_length_wrong_rows`` (G48).
     """
+    from trawlkit.topology import is_a3_topology
+
+    geo = geometry if geometry is not None else analyse(spec, compat)
+    if not is_a3_topology(spec):
+        return compute_generic(spec, geo, compat, wing_hanging=wing_hanging)
     panels = spec.panels
     is_mod = (spec.variant_of is not None) if modified is None else modified
-    geo = geometry if geometry is not None else analyse(spec, compat)
 
     a = _find(panels, Section.WING_TIP, Plane.UPPER)
     b = _find(panels, Section.WING_TIP, Plane.LOWER)
@@ -562,4 +566,193 @@ def compute(
         solid_surface_m2=geo.solid_surface_m2,
         working_surface_m2=geo.working_surface_m2,
         net_weight_kg=geo.weight_air_kg,
+    )
+
+
+# ---------------------------------------------------------------------------------------------
+# Ruta genérica (redes del catálogo FAO, Fase 12)
+# ---------------------------------------------------------------------------------------------
+
+
+def _rope_from_spec(spec: NetSpec, which: str) -> tuple[float, float, float] | None:
+    """(ala, bocana, total) de la relinga si la spec trae los largos del plano."""
+    rope = getattr(spec, which)
+    extra = (rope.model_extra or {}) if rope is not None else {}
+    wing, bosom = extra.get("wing_m"), extra.get("bosom_m")
+    if wing is None or bosom is None:
+        return None
+    total = float(rope.length_m) if rope is not None and rope.length_m else 2 * wing + bosom
+    return float(wing), float(bosom), total
+
+
+def _taper_angle_deg(p: Panel) -> float:
+    """Ángulo del costado de un paño central respecto del eje, con su armado [°].
+
+    Del corte que dan las mallas: el paño pierde ``(T_boca − T_bolsa)/2`` mallas por costado
+    en ``N`` mallas de alto; con U1 a lo ancho y U2 a lo alto, ``tan θ = ΔT·U1 / (2·N·U2)``.
+    """
+    u1 = float(p.hanging_ratio or 0.5)
+    u2 = math.sqrt(max(1.0 - u1 * u1, 1e-9))
+    return math.degrees(
+        math.atan(abs(p.meshes_top - p.meshes_bottom) * u1 / (2.0 * p.meshes_depth * u2))
+    )
+
+
+def compute_generic(
+    spec: NetSpec,
+    geometry: NetGeometry,
+    compat: Compat = Compat.CORRECTED,
+    *,
+    wing_hanging: float = WING_HANGING,
+) -> NetDimensions:
+    """Dimensiones de una red que no tiene la estructura de la FAO A-3.
+
+    Se calculan a partir de las cadenas de paños del plano (``drawing.layout``), sobre la red
+    equivalente de 2 paneles si tiene costados (:func:`trawlkit.topology.equivalent_two_panel`):
+
+    * **Relingas**: los largos del plano si la spec los trae (``wing_m`` y ``bosom_m`` de la
+      relinga); si no, el alto estirado de la cadena de alas × ``wing_hanging`` y la bocana
+      (borde de boca del primer paño central menos las dos alas) × U1.
+    * **Círculo de pesca**: mallas del borde de boca del primer paño central de cada cara ×
+      mallero. **Circunferencia máxima**: la mayor suma dorso + vientre de las estaciones del
+      cuerpo, emparejadas desde el copo.
+    * **Ángulo de corte**: promedio del ángulo del costado de los paños centrales del dorso sin
+      el copo, con su armado (:func:`_taper_angle_deg`).
+    * **Proporciones de Nomura**: sólo para redes de fondo; si no, quedan vacías.
+
+    No aplica ninguna errata del libro Excel.
+    """
+    from trawlkit.drawing.layout import layout_net
+    from trawlkit.topology import equivalent_two_panel
+
+    eq = equivalent_two_panel(spec)
+    lay = layout_net(eq, mode="schematic")
+    planes: list[str] = [pl for pl in ("upper", "lower") if pl in lay.planes]
+    if not planes:
+        raise ValueError("la red no tiene dorso ni vientre")
+    central: dict[str, list[Panel]] = {pl: [s.panel for s in lay.central(pl)] for pl in planes}
+    wings: dict[str, list[Panel]] = {
+        pl: [s.panel for s in lay.side_chain(pl, "right")] for pl in planes
+    }
+
+    def wing_depth_m(pl: str) -> float:
+        return float(sum(_length(p) for p in wings.get(pl, [])))
+
+    def bosom_m(pl: str) -> float:
+        cs, ws = central.get(pl, []), wings.get(pl, [])
+        if not cs:
+            return 0.0
+        first = cs[0]
+        gap = first.meshes_top * first.mesh_mm
+        if ws:
+            gap -= 2 * ws[-1].meshes_bottom * ws[-1].mesh_mm
+        return max(gap, 0.0) / 1000.0 * float(first.hanging_ratio or 0.5)
+
+    def rope(which: str, pl: str) -> RopePieces:
+        given = _rope_from_spec(spec, which)
+        if given is not None:
+            w, b, total = given
+            return RopePieces(w, b, 1.0, 1.0, w, b, total)
+        w = wing_depth_m(pl)
+        b = bosom_m(pl)
+        wc = w * wing_hanging
+        return RopePieces(w, b, wing_hanging, 1.0, wc, b, 2 * wc + b)
+
+    headrope = rope("headrope", "upper" if "upper" in planes else planes[0])
+    footrope = rope("footrope", "lower" if "lower" in planes else planes[-1])
+
+    def plane_panels(pl: str) -> list[Panel]:
+        return [p for p in eq.panels if Plane(pl) in panel_planes(p)]
+
+    lengths = {pl: [s for s in lay.bands[pl]] for pl in planes}
+    total_length = max(sum(_length(b.panel) for b in lengths[pl]) for pl in planes)
+    upper = plane_panels("upper") if "upper" in planes else []
+    upper_no_bag = [
+        b.panel for b in lay.bands.get("upper", ()) if b.panel.section is not Section.CODEND
+    ]
+    no_bag = sum(_length(p) for p in upper_no_bag)
+    upper_wing = wing_depth_m("upper") if "upper" in planes else 0.0
+    lower_wing = wing_depth_m("lower") if "lower" in planes else 0.0
+    body_up = [p for p in central.get("upper", []) if p.section is Section.BODY]
+    back = _length(body_up[0]) if body_up else 0.0
+    bag = sum(_length(p) for p in central.get("upper", []) if p.section is Section.CODEND)
+    square = sum(_length(p) for p in eq.panels if p.section is Section.SQUARE)
+    fc = sum(
+        central[pl][0].meshes_top * central[pl][0].mesh_mm / 1000.0
+        for pl in planes
+        if central.get(pl)
+    )
+    # Estaciones del cuerpo emparejadas desde el copo (dorso y vientre).
+    up_c = list(reversed(central.get("upper", [])))
+    lo_c = list(reversed(central.get("lower", [])))
+    stations = [
+        (a.meshes_top * a.mesh_mm + b.meshes_top * b.mesh_mm) / 1000.0
+        for a, b in zip(up_c, lo_c, strict=False)
+    ]
+    circumference = max([*stations, fc]) if stations else fc
+    body_length = sum(_length(p) for p in upper if p.section is Section.BODY)
+    tapers = [
+        _taper_angle_deg(p)
+        for p in central.get("upper", [])
+        if p.section is not Section.CODEND and p.meshes_top != p.meshes_bottom
+    ]
+    cut_angle = float(np.mean(tapers)) if tapers else 0.0
+    sq = next((p for p in eq.panels if p.section is Section.SQUARE), None)
+    bottom_net = spec.family in (None, "bottom")
+    ratios = (
+        nomura_ratios(
+            headrope.length_m,
+            footrope.length_m,
+            total_length,
+            circumference,
+            upper_wing,
+            lower_wing,
+            back,
+            bag,
+        )
+        if bottom_net
+        else {}
+    )
+    tip = next((p for p in eq.panels if p.section is Section.WING_TIP), None)
+    reinforcement = (
+        float(wingtip_reinforcement_m(tip.meshes_depth, tip.mesh_mm, 1.0)) if tip else 0.0
+    )
+    return NetDimensions(
+        net_id=spec.id,
+        compat=compat,
+        headrope=headrope,
+        footrope=footrope,
+        headrope_m=headrope.length_m,
+        footrope_m=footrope.length_m,
+        total_length_m=total_length,
+        body_length_no_bag_m=no_bag,
+        max_circumference_m=circumference,
+        upper_wing_m=upper_wing,
+        lower_wing_m=lower_wing,
+        back_belly_m=back,
+        bag_m=bag,
+        square_m=square,
+        length_factor=float(
+            length_factor(
+                headrope.length_m,
+                footrope.length_m,
+                sq.meshes_depth if sq else 0,
+                sq.mesh_mm if sq else 0.0,
+            )
+        ),
+        fishing_circle_m=fc,
+        body_length_m=body_length,
+        fc_body_ratio=float(fc_body_ratio(fc, body_length)) if body_length else math.nan,
+        nomura_ratios=ratios,
+        nomura_reference=load_nomura_reference() if bottom_net else {},
+        wingtip_reinforcement_m=reinforcement,
+        wingtip_hanging=1.0,
+        wingtip_reinforcement_rope_m=wingtip_reinforcement_rope_m(reinforcement)
+        if reinforcement
+        else 0.0,
+        cut_angle_deg=cut_angle,
+        filtration_index=geometry.filtration_index,
+        solid_surface_m2=geometry.solid_surface_m2,
+        working_surface_m2=geometry.working_surface_m2,
+        net_weight_kg=geometry.weight_air_kg,
     )

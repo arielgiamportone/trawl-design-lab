@@ -32,7 +32,8 @@ panels:
   meshes_depth: 20
   hanging_ratio: 0.38
   count: 2
-  fao_cut: 1N4B / AB
+  cut_code: 1N4B
+  cut_code_x2: AB
 - id: C
   plane: upper
   section: wing
@@ -45,7 +46,8 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.38
   count: 2
-  fao_cut: 1N2B / AB
+  cut_code: 1N2B
+  cut_code_x2: AB
 - id: E
   plane: upper
   section: square
@@ -58,7 +60,7 @@ panels:
   meshes_depth: 20
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G1
   plane: upper
   section: body
@@ -71,7 +73,7 @@ panels:
   meshes_depth: 24
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G2
   plane: upper
   section: body
@@ -84,7 +86,7 @@ panels:
   meshes_depth: 100
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G3
   plane: upper
   section: body
@@ -97,7 +99,7 @@ panels:
   meshes_depth: 15
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G4
   plane: upper
   section: body
@@ -110,7 +112,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: I
   plane: upper
   section: codend
@@ -123,7 +125,7 @@ panels:
   meshes_depth: 250
   hanging_ratio: 0.38
   count: 1
-  fao_cut: AN
+  cut_code: AN
   note: Bolsa de izado de 80 mm, PE R1760 tex (Ø2,5), 100 × 30 mallas; faldón de 60 mm, PE R720 tex, 135/105
     × 30 mallas.
 - id: B
@@ -138,7 +140,7 @@ panels:
   meshes_depth: 20
   hanging_ratio: 0.38
   count: 2
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: D
   plane: lower
   section: wing
@@ -151,7 +153,8 @@ panels:
   meshes_depth: 70
   hanging_ratio: 0.38
   count: 2
-  fao_cut: 1N2B / AB
+  cut_code: 1N2B
+  cut_code_x2: AB
 - id: F
   plane: lower
   section: belly
@@ -164,7 +167,7 @@ panels:
   meshes_depth: 24
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
   note: En el plano el borde de boca del vientre se divide en 79 + 26 + 79 mallas de 120 mm bajo las alas
     de 67 mallas de 160 mm y la bocana.
 - id: H2
@@ -179,7 +182,7 @@ panels:
   meshes_depth: 100
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: H3
   plane: lower
   section: body
@@ -192,7 +195,7 @@ panels:
   meshes_depth: 15
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: H4
   plane: lower
   section: body
@@ -205,7 +208,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.38
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: J
   plane: lower
   section: codend
@@ -218,7 +221,7 @@ panels:
   meshes_depth: 250
   hanging_ratio: 0.38
   count: 1
-  fao_cut: AN
+  cut_code: AN
 headrope:
   name: lima
   length_m: 23.6
@@ -243,6 +246,9 @@ rigging:
   towing: pareja de barcos de 30–33 hp; cable de remolque 100,00–150,00 m PP Ø12 con cadena de lastre
     de 40 kg; 30,00 m PP Ø16 hasta el destorcedor
   bridles: superior 30,00 m PP Ø16; inferior 29,50 m PP Ø16 + cadena de reglaje 1,00 m (5 kg)
+design:
+  depth_m: 20.0
+  sweeps_m: 0.0
 notes:
 - 'Figura del apéndice 4 escaneada a 107 ppp (987 px de ancho): números legibles con ampliación salvo
   las filas del copo del vientre.'
@@ -272,6 +278,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.A.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.A.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -317,6 +328,11 @@ provenance:
     note: 'se lee 63 a la izquierda y 69 a la derecha; el plano es simétrico y 69 + 69 = 138 cierra con
       el cielo: 69'
   panels.C.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.C.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -367,6 +383,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.E.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.E.count:
     kind: transcribed
     document: bobpwp13
@@ -405,6 +426,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.G1.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.G1.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -451,6 +477,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.G2.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.G2.count:
     kind: transcribed
     document: bobpwp13
@@ -489,6 +520,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.G3.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.G3.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -535,6 +571,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.G4.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.G4.count:
     kind: transcribed
     document: bobpwp13
@@ -577,6 +618,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.I.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.I.count:
     kind: transcribed
     document: bobpwp13
@@ -615,6 +661,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.B.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.B.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -662,6 +713,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.D.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.D.count:
     kind: transcribed
     document: bobpwp13
@@ -701,6 +757,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.F.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.F.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -747,6 +808,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.H2.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.H2.count:
     kind: transcribed
     document: bobpwp13
@@ -789,6 +855,11 @@ provenance:
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
+  panels.H3.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.H3.count:
     kind: transcribed
     document: bobpwp13
@@ -827,6 +898,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
   panels.H4.meshes_depth:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+  panels.H4.cut_code:
     kind: transcribed
     document: bobpwp13
     page: 15 del PDF ([11] del documento)
@@ -874,6 +950,11 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
     note: el número de filas del copo del vientre está cortado en la figura; se toma el del dorso (250)
+  panels.J.cut_code:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
   panels.J.count:
     kind: transcribed
     document: bobpwp13
@@ -929,3 +1010,15 @@ provenance:
     page: 15 del PDF ([11] del documento)
     figure: Apéndice 4
     note: '25–30 kg de plomadas en el burlón más 5 kg en cada punta: 27,5 + 2 × 5 = 37,5 kg'
+  design.depth_m:
+    kind: transcribed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+    note: el documento ensaya la red hasta 20 m de profundidad
+  design.sweeps_m:
+    kind: assumed
+    document: bobpwp13
+    page: 15 del PDF ([11] del documento)
+    figure: Apéndice 4
+    note: en la pareja las malletas van directo al destorcedor y al cable; no hay patentes

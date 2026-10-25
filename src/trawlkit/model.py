@@ -34,7 +34,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass, field, fields, is_dataclass
+from dataclasses import dataclass, field, fields, is_dataclass, replace
 from enum import Enum
 from typing import Any, Generic, TypeVar
 
@@ -210,6 +210,9 @@ class DesignCase:
 
     # --- portones -----------------------------------------------------------------------
     spread_per_m: float = 2.65  # Port!D7 (apertura por metro de cable)
+    #: Separación de portones: "excel" (regla al metro de Port!E13, calibrada para la A-3 con
+    #: pastecas a 2,5 m) o "fridman" (de la DPA de Fridman con el portón del caso; Fase 12).
+    door_spread_rule: str = "excel"
     spread_correction_factor: float = 1.15  # Port!D28
     door_attack_angle_deg: float = 32.0  # Port!C134 (fila seleccionada de la polar)
     rob_share: float = 0.20  # Port!D210 = F146 (ROB = 20 % de FT)
@@ -256,6 +259,10 @@ class DesignCase:
     warp_spare_fraction: float = 0.5  # Cab!D12 = 2·Ls + 0.5·Ls
     warp_drag_shares: tuple[float, ...] = (0.05, 0.10)  # Rem!E191:H199
 
+    # --- aparejo (Fase 12) ----------------------------------------------------------------
+    rig: str | None = None  # "otter" o "pair" (None → net.rig o "otter")
+    pair_wing_spread_m: float | None = None  # pareja: separación de puntas de ala (None → ½ lima)
+
     # --- fondo ----------------------------------------------------------------------------
     seabed: str | None = None  # tipo de fondo (data/seabed.yaml); None = sin rozamiento extra
 
@@ -279,6 +286,12 @@ class DesignCase:
             raise ValueError("hace falta el puntal (vessel_depth_m o vessel.depth_m)")
         if not 0.0 < self.rob_share < 1.0:
             raise ValueError("rob_share debe estar entre 0 y 1")
+        if self.door_spread_rule not in ("excel", "fridman"):
+            raise ValueError("door_spread_rule debe ser 'excel' o 'fridman'")
+        if self.rig_kind not in ("otter", "pair"):
+            raise ValueError(f"rig debe ser 'otter' o 'pair', no {self.rig_kind!r}")
+        if self.pair_wing_spread_m is not None and self.pair_wing_spread_m <= 0:
+            raise ValueError("pair_wing_spread_m debe ser positivo")
         if self.door.area_m2 is None or self.door.length_m is None:
             raise ValueError(f"el portón {self.door.id!r} necesita area_m2 y length_m")
         try:
@@ -301,6 +314,16 @@ class DesignCase:
                 raise ValueError(str(exc)) from exc
 
     # --- derivados ------------------------------------------------------------------------
+
+    @property
+    def rig_kind(self) -> str:
+        """Aparejo: ``otter`` (portones) o ``pair`` (pareja de buques, sin portones)."""
+        return str(self.rig or self.net.rig or "otter")
+
+    @property
+    def is_pair(self) -> bool:
+        """Si el aparejo es de pareja."""
+        return self.rig_kind == "pair"
 
     @property
     def working_depth_m(self) -> float:
@@ -806,7 +829,9 @@ def _stage_rigging(case: DesignCase, dimensions: Pair[NetDimensions]) -> Rigging
         deep_factor=case.warp_deep_factor,
     )
     assert case.door.length_m is not None
-    crowfoot = rigging.crowfoot_m(case.door.length_m, case.crowfoot_extension_m)  # Port!E97:E99
+    # En la pareja no hay portón: el cable se une a las patentes sin pie de gallo.
+    door_length = 0.0 if case.is_pair else case.door.length_m
+    crowfoot = rigging.crowfoot_m(door_length, case.crowfoot_extension_m)  # Port!E97:E99
     return RiggingGeometry(
         towing=towing,
         vertical_opening_m=av,
@@ -817,6 +842,66 @@ def _stage_rigging(case: DesignCase, dimensions: Pair[NetDimensions]) -> Rigging
     )
 
 
+def pair_wing_spread_m(case: DesignCase) -> float:
+    """Separación de puntas de ala de la pareja [m]: la del caso o la mitad de la lima.
+
+    Los documentos de la FAO y la BOBP no miden la separación de la pareja: el patrón ajusta la
+    distancia entre los buques. Por defecto se supone que las puntas de ala trabajan separadas la
+    mitad de la lima (regla habitual de aparejamiento; supuesto documentado, ``notes``).
+    """
+    if case.pair_wing_spread_m is not None:
+        return float(case.pair_wing_spread_m)
+    head = case.net.headrope.length_m if case.net.headrope is not None else None
+    if head is None:
+        head = dimensions_mod.compute(case.net, compat=case.compat).headrope_m
+    return 0.5 * float(head)
+
+
+def pair_towing_spread_m(case: DesignCase, rig: RiggingGeometry) -> float:
+    """Separación de los puntos de remolque de la pareja [m] (unión cable-patente).
+
+    Invierte la regla de triángulos semejantes de Mec!L225 (DPA = Ds·LRw/(LRw + aparejo)) para
+    que la abertura de puntas de ala sea :func:`pair_wing_spread_m`.
+    """
+    lrw = rig.towing.net_length_working_m
+    rigging_m = rig.crowfoot.length_m + rig.crowfoot.extension_m + case.sweeps_m
+    rigging_m += rig.bridles.upper_m
+    return pair_wing_spread_m(case) * (lrw + rigging_m) / lrw
+
+
+def fridman_door_spread_m(
+    case: DesignCase, drag: DragStage, rig: RiggingGeometry, polar: DoorPolar
+) -> float:
+    """Separación de portones de la DPA de Fridman con el portón del caso [m].
+
+    La DPA de Fridman (Mec!P164, :func:`~trawlkit.rigging.fridman_spread`) sale de la
+    sustentación y la resistencia del portón frente a la de la red; se promedia en el rango de
+    velocidades de la superficie requerida (2–4 kn) y se lleva a los portones con la regla de
+    triángulos semejantes de Mec!L225 (Ds = DPA·(LRw + aparejo)/LRw).
+    """
+    door = case.door
+    assert door.area_m2 is not None
+    fr = rigging.fridman_spread(
+        door.area_m2,
+        polar.cd,
+        polar.cl,
+        case.speeds_ms,
+        drag.rn.std,
+        drag.rn.mod,
+        rig.towing.warp_horizontal_shallow_m,
+        rig.towing.net_length_working_m,
+        rig.towing.bridle_m,
+        compat=case.compat,
+    )
+    lo, hi = case.required_area_speed_range_kn
+    v = np.asarray(case.speeds)
+    dpa = float(np.mean(_arr(fr.dpa_std_m)[(v >= lo) & (v <= hi)]))
+    lrw = rig.towing.net_length_working_m
+    rigging_m = rig.crowfoot.length_m + rig.crowfoot.extension_m + case.sweeps_m
+    rigging_m += rig.bridles.upper_m
+    return dpa * (lrw + rigging_m) / lrw
+
+
 def _stage_doors(
     case: DesignCase, power: PowerStage, drag: DragStage, rig: RiggingGeometry
 ) -> DoorStage:
@@ -825,7 +910,12 @@ def _stage_doors(
     assert door.area_m2 is not None and door.length_m is not None
     polar = rigging.door_polar(door, case.door_attack_angle_deg)  # Port!C134:F134
     warp_m = rig.towing.warp_m  # Port!D9 = Mec!E177
-    spread = rigging.door_spread_m(case.gallows_spacing_m, case.spread_per_m, warp_m)  # E13
+    if case.is_pair:
+        spread = pair_towing_spread_m(case, rig)
+    elif case.door_spread_rule == "fridman":
+        spread = fridman_door_spread_m(case, drag, rig, polar)
+    else:
+        spread = rigging.door_spread_m(case.gallows_spacing_m, case.spread_per_m, warp_m)  # E13
     half_div = rigging.warp_divergence_deg(spread, case.gallows_spacing_m, warp_m)  # D21
     corrected = rigging.door_spread_corrected_m(
         warp_m, half_div, case.spread_correction_factor
@@ -856,6 +946,15 @@ def _stage_doors(
     )  # D252:D260
     cop = rigging.centre_of_pressure_m(door.length_m, case.door_attack_angle_deg)  # C266:C270
     moments = rigging.moment_balance(force, drag.rn.std, cop.d_m, case.sweep_lever_m)  # G281:H289
+    if case.is_pair:
+        # Pareja: no hay portones; sus fuerzas, su arrastre y su superficie requerida son nulos.
+        zero = 0.0 * v_ms
+        forces = rigging.door_forces_kgf(door.area_m2, 0.0, 0.0, v_ms)
+        areas, force = zero, zero
+        req = rigging.required_area_summary(zero, case.speeds, lo, hi)
+        req_class = {vid: req for vid in req_class}
+        per_door_class = 0.0
+        moments = rigging.moment_balance(zero, drag.rn.std, cop.d_m, case.sweep_lever_m)
     return DoorStage(
         door=door,
         polar=polar,
@@ -1056,6 +1155,11 @@ def _stage_spread(
         d_std.total_length_m, case.working_u2, d_std.cut_angle_deg
     )  # L233
     ah = rigging.horizontal_opening_m(cut, working, geometric, _arr(table.dpa_std_m))  # Dim!F61
+    if case.is_pair:
+        # Sin portones no hay DPA de Fridman: la abertura la fija la separación de la pareja.
+        ah = pair_wing_spread_m(case)
+        const = ah + 0.0 * case.speeds_ms
+        fridman = replace(fridman, dpa_std_m=const, dpa_mod_m=const)
     dpa_over_l = working / d_std.headrope_m  # O265 = O264/O260, O264 = L225
     ratio_table = rigging.catenary_ratio(dpa_over_l)
     if ratio_table != case.catenary_ratio:
@@ -1291,7 +1395,7 @@ def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
     simple (todo el peso apoyado): el simulador con portones acoplados reparte la reacción con la
     sustentación de las boyas y los cables.
     """
-    if case.seabed is None:
+    if case.seabed is None or case.net.family == "pelagic":
         return 0.0
     sb = rigging.seabed(case.seabed)
     dist = ballast.distribution_max
@@ -1300,7 +1404,8 @@ def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
     gear = sb.mu_gear.nominal * (ballast.footrope_weight_water_kgf + ballast_water)
     door = case.door
     door_water = door.weight_water_kg or (door.weight_air_kg or 0.0) * 0.6
-    return float(gear + DOORS_PER_RIG * sb.mu_door.nominal * door_water)
+    doors = 0 if case.is_pair else DOORS_PER_RIG
+    return float(gear + doors * sb.mu_door.nominal * door_water)
 
 
 def _stage_performance(
@@ -1319,6 +1424,8 @@ def _stage_performance(
     windows: dict[str, SpeedWindow] = {}
     for prop in (PropellerType.FIXED_PITCH, PropellerType.VARIABLE_PITCH_NOZZLE):
         ft = _ft_of(power.fridman, prop)
+        if case.is_pair:
+            ft = 2.0 * ft  # dos buques tiran de la misma red
         for variant in ("std", "mod"):
             windows[f"{prop.value}_{variant}"] = speed_window(
                 case.speeds, ft, demand.variant(variant)
@@ -1375,6 +1482,29 @@ def run(case: DesignCase) -> DesignResult:
         notes.append(
             f"warp_cd_horizontal_angle: CD del cable {warps.cd:.4f} con α = acos(cos δ1·cos δ2) = "
             f"{warps.cd_angle_deg:.2f}° interpolado (Rem!E106 usa δ2 → 0.02)"
+        )
+    if case.net.family == "pelagic":
+        notes.append(
+            "pelagic_not_applicable: red pelágica; el lastre de Koyama, el rozamiento del burlón "
+            "con el fondo y los ratios de Nomura están pensados para redes de fondo y no se "
+            "aplican (el rozamiento con el fondo vale 0)"
+        )
+    if case.is_pair:
+        notes.append(
+            f"pair_trawl: arrastre de pareja sin portones; puntas de ala a "
+            f"{pair_wing_spread_m(case):.1f} m"
+            + (
+                " (supuesto: ½ lima; cambiar con pair_wing_spread_m)"
+                if case.pair_wing_spread_m is None
+                else ""
+            )
+            + f", puntos de remolque a {doors.spread_m:.1f} m; el tiro disponible es el de dos "
+            "buques"
+        )
+    if case.door_spread_rule == "fridman" and not case.is_pair:
+        notes.append(
+            f"door_spread_fridman: separación de portones {doors.spread_m:.1f} m de la DPA de "
+            "Fridman con el portón del caso (la regla al metro de Port!E13 vale para la A-3)"
         )
     if not warps.selection.satisfies_breaking_load:
         notes.append(

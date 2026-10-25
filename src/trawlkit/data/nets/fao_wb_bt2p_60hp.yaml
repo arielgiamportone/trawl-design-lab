@@ -33,7 +33,8 @@ panels:
   meshes_depth: 18
   hanging_ratio: 0.4
   count: 2
-  fao_cut: 1N2B / AB
+  cut_code: 1N2B
+  cut_code_x2: AB
 - id: C
   plane: upper
   section: wing
@@ -46,7 +47,8 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.4
   count: 2
-  fao_cut: 1N2B / AB
+  cut_code: 1N2B
+  cut_code_x2: AB
 - id: E
   plane: upper
   section: square
@@ -59,7 +61,7 @@ panels:
   meshes_depth: 20
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G1
   plane: upper
   section: body
@@ -72,7 +74,7 @@ panels:
   meshes_depth: 10
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G2
   plane: upper
   section: body
@@ -85,7 +87,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
   note: Rtex 625 escrito una vez para el grupo de 80, 60 y 40 mm.
 - id: G3
   plane: upper
@@ -99,7 +101,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: G4
   plane: upper
   section: body
@@ -112,7 +114,7 @@ panels:
   meshes_depth: 100
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: I
   plane: upper
   section: codend
@@ -125,7 +127,7 @@ panels:
   meshes_depth: 150
   hanging_ratio: 0.4
   count: 1
-  fao_cut: AN
+  cut_code: AN
   note: El plano agrega un refuerzo/bolsa de izado de 120 mm, PA Ø3, 54 × 20 mallas.
 - id: B
   plane: lower
@@ -139,7 +141,7 @@ panels:
   meshes_depth: 18
   hanging_ratio: 0.4
   count: 2
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: D
   plane: lower
   section: wing
@@ -152,7 +154,8 @@ panels:
   meshes_depth: 70
   hanging_ratio: 0.4
   count: 2
-  fao_cut: 1N4B / AB
+  cut_code: 1N4B
+  cut_code_x2: AB
 - id: F
   plane: lower
   section: belly
@@ -165,7 +168,7 @@ panels:
   meshes_depth: 10
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: H2
   plane: lower
   section: body
@@ -178,7 +181,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: H3
   plane: lower
   section: body
@@ -191,7 +194,7 @@ panels:
   meshes_depth: 50
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: H4
   plane: lower
   section: body
@@ -204,7 +207,7 @@ panels:
   meshes_depth: 100
   hanging_ratio: 0.4
   count: 1
-  fao_cut: 1N2B
+  cut_code: 1N2B
 - id: J
   plane: lower
   section: codend
@@ -217,7 +220,7 @@ panels:
   meshes_depth: 150
   hanging_ratio: 0.4
   count: 1
-  fao_cut: AN
+  cut_code: AN
 headrope:
   name: lima
   length_m: 18.9
@@ -243,6 +246,12 @@ rigging:
   warp: acero Ø9 mm
   sweeps: 20,00–30,00 m combinado Ø12–14
   bridles: superior 10,00 m combinado Ø10; inferior 9,00 m combinado Ø12 + cadena de reglaje 1,00 m
+design:
+  depth_m: 30.0
+  sweeps_m: 25.0
+  door_length_m: 1.3
+  door_height_m: 0.65
+  door_weight_air_kg: 50.0
 notes:
 - 'Lectura de la figura AH827E132 (450 px): números legibles; los empalmes con cambio de mallero cierran
   (120×120 = 180×80; 130×80 ≈ 174×60; 124×60 = 186×40).'
@@ -270,6 +279,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.A.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -318,6 +332,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.C.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.C.count:
     kind: transcribed
     document: prado1990
@@ -358,6 +377,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.E.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -405,6 +429,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.G1.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.G1.count:
     kind: transcribed
     document: prado1990
@@ -444,6 +473,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.G2.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -491,6 +525,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.G3.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.G3.count:
     kind: transcribed
     document: prado1990
@@ -530,6 +569,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.G4.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -577,6 +621,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.I.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.I.count:
     kind: transcribed
     document: prado1990
@@ -616,6 +665,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.B.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -664,6 +718,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.D.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.D.count:
     kind: transcribed
     document: prado1990
@@ -704,6 +763,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.F.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -751,6 +815,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.H2.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.H2.count:
     kind: transcribed
     document: prado1990
@@ -790,6 +859,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.H3.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -837,6 +911,11 @@ provenance:
     document: prado1990
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
+  panels.H4.cut_code:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
   panels.H4.count:
     kind: transcribed
     document: prado1990
@@ -876,6 +955,11 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
   panels.J.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.cut_code:
     kind: transcribed
     document: prado1990
     page: Fishing gear and operations (cap. 4)
@@ -936,3 +1020,32 @@ provenance:
     page: Fishing gear and operations (cap. 4)
     figure: AH827E132
     note: '8–14 kg en el burlón más 2–3 kg en cada punta: 11 + 2 × 2 = 15 kg'
+  design.depth_m:
+    kind: assumed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: el Workbook no da la profundidad de trabajo; 30 m es típico de un arrastrero costero de 50–70
+      hp
+  design.sweeps_m:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'patentes de 20,00–30,00 m: valor medio'
+  design.door_length_m:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  design.door_height_m:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: '40–60 kg: valor medio'

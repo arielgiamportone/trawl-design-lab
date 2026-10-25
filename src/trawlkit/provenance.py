@@ -29,6 +29,7 @@ PANEL_FIELDS = (
     "meshes_depth",
     "hanging_ratio",
     "count",
+    "cut_code",
 )
 ROPE_FIELDS = ("length_m", "diameter_mm", "weight_kg_per_m")
 FLOAT_FIELDS = ("count", "diameter_mm", "buoyancy_kgf_each", "total_buoyancy_kgf")
@@ -74,6 +75,9 @@ def value_paths(spec: NetSpec) -> list[tuple[str, Any]]:
                 out.append((f"floats.{f}", v))
     if spec.ballast_kg is not None:
         out.append(("ballast_kg", spec.ballast_kg))
+    design = (spec.model_extra or {}).get("design")
+    if isinstance(design, dict):
+        out.extend((f"design.{k}", v) for k, v in design.items() if v is not None)
     return out
 
 

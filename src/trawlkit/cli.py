@@ -62,7 +62,23 @@ def build_case(
     class_vessel: list[str] | None = None,
     compat: str = "corrected",
 ) -> DesignCase:
-    """Arma un :class:`DesignCase` a partir de ids de catálogo y presets/rutas de red."""
+    """Arma un :class:`DesignCase` a partir de ids de catálogo y presets/rutas de red.
+
+    Una red del catálogo FAO (con potencia de diseño) sin buque ni portón indicados se calcula
+    con su propio caso de diseño (:func:`trawlkit.catalog.catalog_case`).
+    """
+    spec = load_net(net)
+    if spec.vessel_hp is not None and vessel is None and door is None and modified is None:
+        from trawlkit.catalog import catalog_case
+
+        try:
+            mode = Compat(compat)
+        except ValueError as exc:
+            raise typer.BadParameter("compat debe ser 'excel' o 'corrected'") from exc
+        cc = catalog_case(spec, compat=mode)
+        for a in cc.assumptions:
+            typer.echo(f"* {a}")
+        return cc.case
     vessels = {v.id: v for v in load_vessels().vessels}
     doors = {d.id: d for d in load_doors().doors}
     try:
@@ -79,7 +95,7 @@ def build_case(
     except ValueError as exc:
         raise typer.BadParameter("compat debe ser 'excel' o 'corrected'") from exc
     return DesignCase(
-        net=load_net(net),
+        net=spec,
         vessel=v,
         door=d,
         net_modified=load_net(modified) if modified else None,

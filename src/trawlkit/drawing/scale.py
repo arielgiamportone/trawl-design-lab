@@ -141,7 +141,8 @@ def _plane(
         xa, xb2 = px.x(m.x_top[0]), px.x(m.x_top[1])
         out.append(svg.line((xa, y_cota), (xa, px.y(m.y_top)), cls="dim-ext"))
         out.append(svg.line((xb2, y_cota), (xb2, px.y(m.y_top)), cls="dim-ext"))
-        out += _hdim(xa, xb2, y_cota, f"Boca {fmt_es(m.width_top)} m", above=True)
+        name = "Ancho" if plane == "side" else "Boca"
+        out += _hdim(xa, xb2, y_cota, f"{name} {fmt_es(m.width_top)} m", above=True)
     return out
 
 
@@ -177,6 +178,12 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     half = max(max(abs(v) for v in hung.plane_bbox(p)[::2]) for p in ("upper", "lower"))
     cx_up = margin + 120 + half * k
     cx_lo = cx_up + 2 * half * k + 210
+    has_side = "side" in hung.shapes
+    if has_side:
+        # Red de 4 paneles: los costados van entre el dorso y el vientre.
+        side_half = max(abs(v) for v in hung.plane_bbox("side")[::2])
+        cx_side = cx_up + half * k + 150 + side_half * k
+        cx_lo = cx_side + side_half * k + 150 + half * k
     px_up, px_lo = _Px(cx_up, top + k, k), _Px(cx_lo, top + k, k)
 
     children: list[svg.Element] = [
@@ -191,6 +198,10 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     ]
     children += _plane(hung, "upper", px_up, "right", "PLANO SUPERIOR (DORSO)")
     children += _plane(hung, "lower", px_lo, "left", "PLANO INFERIOR (VIENTRE)")
+    if has_side:
+        children += _plane(hung, "side", _Px(cx_side, top + k, k), "left", "COSTADOS (×2)")
+    planes = ("upper", "lower", "side") if has_side else ("upper", "lower")
+    plane_name = {"upper": "Dorso", "lower": "Vientre", "side": "Costado"}
 
     # Leyenda.
     lx = max(cx_lo + half * k + 90, SHEET_W - margin - 420)
@@ -202,11 +213,11 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
         ("Plano", "estirado", "relingado"),
         *[
             (
-                "Dorso" if p == "upper" else "Vientre",
+                plane_name[p],
                 f"{fmt_es(stretched.length(p))} m",
                 f"{fmt_es(hung.length(p))} m",
             )
-            for p in ("upper", "lower")
+            for p in planes
         ],
     ]
     for i, (a, b, c) in enumerate(rows):
@@ -243,7 +254,7 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     for h, cx in zip(heads, cols, strict=True):
         children.append(svg.text((cx, ly), h, cls="small bold" + ("" if cx == lx else " end")))
     seen: set[str] = set()
-    for plane in ("upper", "lower"):
+    for plane in planes:
         for s in hung.shapes[plane]:
             if s.id in seen or s.side == "left":
                 continue

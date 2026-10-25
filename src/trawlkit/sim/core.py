@@ -530,6 +530,8 @@ def operation_outputs(
     )
     km_h = ground_kn * 1.852
     contact = x[:, 2] <= 0.02
+    if model.floor_free:
+        contact[:] = False  # red pelágica: no toca el fondo
     foot = model.footrope
     on_bottom = foot[contact[foot]]
     foot_width = float(np.ptp(x[on_bottom, 1])) if on_bottom.size > 1 else 0.0
@@ -569,6 +571,17 @@ def operation_outputs(
             depth_m=rig.depth_m,
         )
     return out
+
+
+def _coupled(scenario: Scenario | None, result: DesignResult | None) -> bool:
+    """Si la corrida lleva portones acoplados.
+
+    Nunca en la pareja: no hay portones; los puntos de remolque (uniones de los cables con las
+    patentes) quedan fijos a la separación de la pareja.
+    """
+    if result is not None and result.case.is_pair:
+        return False
+    return bool(scenario and scenario.coupled_doors)
 
 
 def _scenario_dict(sc: Scenario | None) -> dict[str, Any]:
@@ -625,7 +638,7 @@ def simulate(
     """
     spec, rig, result = _resolve(case_or_spec, door_spread_m)
     t0 = time.perf_counter()
-    coupled = bool(scenario and scenario.coupled_doors)
+    coupled = _coupled(scenario, result)
     if scenario is not None and scenario.warp_length_m is not None:
         rig = dataclasses.replace(rig, warp_length_m=float(scenario.warp_length_m))
     if model is not None and model.coupled_doors != coupled:
@@ -772,12 +785,9 @@ def sweep(
     model: NetModel | None = None
     for v, dp in zip(speeds, dps, strict=True):
         if model is None:
-            spec, rig, _ = _resolve(case, dp)
+            spec, rig, res0 = _resolve(case, dp)
             model = build_model(
-                spec,
-                rig,
-                resolution=resolution,
-                coupled_doors=bool(scenario and scenario.coupled_doors),
+                spec, rig, resolution=resolution, coupled_doors=_coupled(scenario, res0)
             )
         res = simulate(
             case,
@@ -839,7 +849,7 @@ def explore(
     if isinstance(case, DesignCase):
         case = run(case)
     base = scenario or Scenario()
-    spec, rig, _ = _resolve(case, None)
+    spec, rig, res0 = _resolve(case, None)
     model: NetModel | None = None
     out: list[SimResult] = []
     prev: FloatArray | None = None
@@ -848,13 +858,14 @@ def explore(
         changes: dict[str, Any] = {} if variable == "speed_kn" else {variable: v}
         sc = dataclasses.replace(base, **changes)
         speed = v if variable == "speed_kn" else speed_kn
-        if model is None or (variable == "warp_length_m" and sc.coupled_doors):
+        coupled = _coupled(sc, res0)
+        if model is None or (variable == "warp_length_m" and coupled):
             rig_v = (
                 dataclasses.replace(rig, warp_length_m=sc.warp_length_m)
                 if sc.warp_length_m is not None
                 else rig
             )
-            model = build_model(spec, rig_v, resolution=resolution, coupled_doors=sc.coupled_doors)
+            model = build_model(spec, rig_v, resolution=resolution, coupled_doors=coupled)
         res = simulate(
             case,
             speed,

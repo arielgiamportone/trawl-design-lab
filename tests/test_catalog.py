@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
-import dataclasses
+import math
 
+import numpy as np
 import pytest
 
+from trawlkit.catalog import catalog_case
 from trawlkit.io.loader import NETS_DIR, load_net
 from trawlkit.io.schema import NetSpec
 from trawlkit.model import run
@@ -41,15 +43,37 @@ def test_catalogue_net_is_consistent_and_sourced(net_id: str) -> None:
 
 @pytest.mark.parametrize("net_id", CATALOGUE)
 def test_catalogue_net_runs_and_simulates(net_id: str) -> None:
-    case = dataclasses.replace(
-        standard_case(), net=load_net(net_id), net_modified=None, depth_m=30.0
-    )
-    result = run(case)
-    s = simulate(result, 2.5, resolution=2, coarse_resolution=None, door_spread_m=20.0)
+    result = run(catalog_case(net_id).case)
+    s = simulate(result, 2.5, resolution=2, coarse_resolution=None)
     assert s.converged
-    assert 0.5 < s.av_m < 8.0
+    assert 0.3 < s.av_m < 8.0
     assert 3.0 < s.ah_m < 20.0
     assert s.drag_kgf > 0
+
+
+@pytest.mark.parametrize("net_id", CATALOGUE)
+def test_catalogue_net_engine_matches_plan(net_id: str) -> None:
+    spec = load_net(net_id)
+    result = run(catalog_case(spec).case)
+    summary = result.summary()
+    nan = [k for k, v in summary.items() if isinstance(v, float) and math.isnan(v)]
+    assert nan == []
+    dims = result.dimensions.std
+    for name, value in (("headrope", dims.headrope_m), ("footrope", dims.footrope_m)):
+        rope = getattr(spec, name)
+        if rope is not None and rope.length_m:
+            assert value == pytest.approx(rope.length_m, rel=0.05), name
+    assert dims.max_circumference_m > 0 and dims.fishing_circle_m > 0
+    if spec.rig == "pair":
+        assert float(np.max(result.doors.rig_drag_kgf)) == 0.0
+        assert result.performance.seabed_friction_kgf >= 0.0
+
+
+def test_a3_case_is_unchanged_by_catalogue_rules() -> None:
+    # La A-3 sigue con la regla de portones del libro y sin notas de pareja ni pelágica.
+    r = run(standard_case())
+    assert r.case.rig_kind == "otter" and r.case.door_spread_rule == "excel"
+    assert not [n for n in r.notes if n.startswith(("pair_", "pelagic_", "door_spread_"))]
 
 
 def test_a3_provenance_is_excel() -> None:

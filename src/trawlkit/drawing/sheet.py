@@ -349,6 +349,37 @@ def _plane_elements(
     return out + labels
 
 
+def _side_view(
+    layout: NetLayout, cx: float, y0: float, y1: float, half_px: float
+) -> list[svg.Element]:
+    """Costados de una red de 4 paneles (los dos iguales): tercera vista, entre dorso y vientre.
+
+    Se dibuja con su propia escala, en la columna central de la lámina: paños, letra, mallas de
+    los bordes y alto en mallas.
+    """
+    shapes = layout.shapes.get("side", ())
+    if not shapes:
+        return []
+    top = min(sh.y_top for sh in shapes)
+    length = max(sh.y_bottom for sh in shapes) - top
+    half = max(max(abs(v) for v in (*sh.x_top, *sh.x_bottom)) for sh in shapes) or 1.0
+    sy = (y1 - y0) / length if length > 0 else 1.0
+    fr = _Frame(cx, y0 - top * sy, half_px / half, sy)
+    out: list[svg.Element] = [svg.text((cx, y0 - 22), "COSTADOS (×2)", cls="big mid bold")]
+    labels: list[svg.Element] = []
+    for sh in shapes:
+        out.append(svg.polygon([fr.p(pt) for pt in sh.points], cls="net-panel", id_=None))
+        ccx, ccy = fr.p(sh.centroid)
+        labels.append(svg.text((ccx, ccy + 5), sh.id, cls="letter mid"))
+        yt, yb = fr.y(sh.y_top), fr.y(sh.y_bottom)
+        if yb - yt >= 34:  # en una franja angosta sólo va la letra
+            labels.append(svg.text((cx, yt + 10), str(sh.meshes_top), cls="num mid"))
+            labels.append(svg.text((cx, yb - 3), str(sh.meshes_bottom), cls="num mid"))
+        right = max(fr.x(sh.x_top[1]), fr.x(sh.x_bottom[1]))
+        labels.append(svg.text((right + 6, (yt + yb) / 2 + 3), f"{sh.meshes_depth} N", cls="num"))
+    return out + labels
+
+
 # ---------------------------------------------------------------------------------------------
 # Tablas laterales
 # ---------------------------------------------------------------------------------------------
@@ -445,12 +476,15 @@ def _surface_box(result: DesignResult, variant: str, x: float, y: float) -> list
         svg.line((x + 128, y), (x + 128, y + 110), cls="thin"),
         svg.line((x + 204, y), (x + 204, y + 110), cls="thin"),
     ]
-    rows = (
+    rows = [
         ("Paneles inferiores", ss["lower"], wt["lower"]),
         ("Paneles superiores", ss["upper"], wt["upper"]),
-    )
+    ]
+    if "side" in ss:  # red de 4 paneles
+        rows.append(("Costados (×2)", ss["side"], wt["side"]))
+    step = 22 if len(rows) == 2 else 16
     for i, (name, a, b) in enumerate(rows):
-        yy = y + 50 + i * 22
+        yy = y + (50 if len(rows) == 2 else 46) + i * step
         out += [
             svg.text((c1, yy), name),
             svg.text((c2, yy), fmt_es(a), cls="mid"),
@@ -716,6 +750,7 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
         )
     )
 
+    children += _side_view(layout, 794.0, 200.0, 500.0, 40.0)
     children += _fishing_circle(result, variant, 760.0, 580.0)
     children += _surface_box(result, variant, 660.0, 640.0)
     children += _rigging(result, 56.0, 858.0, SHEET_W - margin - 350.0 - 20.0)

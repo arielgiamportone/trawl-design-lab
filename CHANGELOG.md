@@ -60,6 +60,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
     `GET /sensors/example` y la guarda `TRAWLKIT_MAX_BATCH_SECONDS`;
   - en la web, la vista «Incertidumbre y calibración» (bandas, tornado, carga del CSV y ajuste);
   - capítulo 25 «Incertidumbre, calibración y datos de sensores».
+- **Catálogo de redes FAO (Fase 12, en curso)**:
+  - procedencia por valor (`NetSpec.provenance`, `trawlkit.provenance`): documento, página,
+    figura y tipo (Excel, transcripto, derivado, supuesto) de cada número de la red;
+  - validador de consistencia `trawlkit.netcheck`: empalmes, bocana, costuras laterales, cortes
+    contra mallas (`netting.cut_code_ratio`), costados de las redes de 4 paneles y datos;
+  - primeras redes digitalizadas (`data/nets/`): arrastre de fondo de 2 paneles del Fisherman's
+    Workbook y dos arrastres de pareja de BOBP/WP/13 (`tools/catalog/`);
+  - motor generalizado: dimensiones genéricas para redes que no tienen la estructura de la A-3
+    (`trawlkit.topology`), arrastre de **pareja** (`DesignCase.rig`, `pair_wing_spread_m`; sin
+    portones, tiro de dos buques), redes de **4 paneles** (red equivalente de 2 paneles; costados
+    en la disposición, la lámina y la escala real), redes **pelágicas** (sin fondo en el
+    simulador, rozamiento nulo) y separación de portones de Fridman (`door_spread_rule`);
+  - `trawlkit.catalog.catalog_case`: caso de diseño de cada red con su buque, portón y
+    profundidad; `trawlkit run <red del catálogo>` lo usa.
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
 - `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API

@@ -95,6 +95,17 @@ NETS: list[dict[str, Any]] = [
             "value": 15.0,
             "note": "8–14 kg en el burlón más 2–3 kg en cada punta: 11 + 2 × 2 = 15 kg",
         },
+        "design": {
+            "depth_m": (
+                30.0,
+                "assumed",
+                "el Workbook no da la profundidad de trabajo; 30 m es típico de un arrastrero costero de 50–70 hp",
+            ),
+            "sweeps_m": (25.0, "transcribed", "patentes de 20,00–30,00 m: valor medio"),
+            "door_length_m": (1.30, "transcribed", None),
+            "door_height_m": (0.65, "transcribed", None),
+            "door_weight_air_kg": (50.0, "transcribed", "40–60 kg: valor medio"),
+        },
         "rigging": {
             "doors": "portones de 1,30 × 0,65 m, 40–60 kg",
             "warp": "acero Ø9 mm",
@@ -137,8 +148,8 @@ NETS: list[dict[str, Any]] = [
             ("G4", "upper", "body", 1, 40, 720, 200, 100, 100, "1N2B"),
             ("I", "upper", "codend", 1, 40, 720, 100, 100, 200, "AN"),
             ("B", "lower", "wing_tip", 2, 80, 720, 5, 50, 30, "1N2B"),
-            ("D", "lower", "wing", 2, 80, 720, 50, 93, 127, "1N2B / AB"),
-            ("F", "lower", "belly", 1, 80, 720, 232, 152, 60, "1N2B"),
+            ("D", "lower", "wing", 2, 80, 720, 50, 93, 127, "1N4B / AB"),
+            ("F", "lower", "belly", 1, 80, 720, 232, 152, 80, "1N2B"),
             ("H3", "lower", "body", 1, 60, 720, 203, 133, 70, "1N2B"),
             ("H4", "lower", "body", 1, 40, 720, 200, 100, 100, "1N2B"),
             ("J", "lower", "codend", 1, 40, 720, 100, 100, 200, "AN"),
@@ -154,6 +165,16 @@ NETS: list[dict[str, Any]] = [
                 "mesh_mm": (
                     "derived",
                     "columna de mallero ilegible en las alas del vientre; 80 mm por la unión 1/1 con el cuerpo de 80 mm",
+                ),
+                "cut_code": (
+                    "derived",
+                    "el corte del costado exterior está tapado en la figura; 1N4B es el que da el ensanche 50 → 93 en 127 mallas junto con el costado AB (127 − ⅔·127 = 42), como en el ala inferior del Fisherman's Workbook",
+                ),
+            },
+            "F": {
+                "meshes_depth": (
+                    "transcribed",
+                    "se lee 80 (la cifra está borrosa y parece 60): con 80 mallas el vientre llega a la estación de 203 mallas con el mismo largo estirado que el dorso (18,96 m contra 19,00 m) y el corte 1N2B da justo el cambio 232 → 152",
                 )
             },
             "G3": {
@@ -164,6 +185,7 @@ NETS: list[dict[str, Any]] = [
             },
         },
         "panel_notes": {
+            "C": "El corte del costado exterior se lee 1N2B, pero el ensanche 34 → 69 en 60 mallas con el costado AB pide un corte de ≈ 0,42 (2N3B); se conserva lo leído y el validador lo avisa.",
             "E": "En el plano la bocana del dorso es de 47 mallas (1,50 m de relinga) y las alas terminan en 69 mallas: 69 + 47 + 69 = 185, cinco más que las 180 del borde del cuerpo.",
             "I": "Bolsa de izado de 80 mm, PE R1760 tex (Ø2,5), 100 × 30 mallas; faldón (flapper) de 60 mm, PE R720 tex, 163/133 × 30 mallas.",
         },
@@ -204,6 +226,18 @@ NETS: list[dict[str, Any]] = [
         "ballast_kg": {
             "value": 37.5,
             "note": "25–30 kg de plomadas en el burlón más 5 kg en cada punta: 27,5 + 2 × 5 = 37,5 kg",
+        },
+        "design": {
+            "depth_m": (
+                20.0,
+                "transcribed",
+                "el documento ensaya la red hasta 20 m de profundidad",
+            ),
+            "sweeps_m": (
+                0.0,
+                "assumed",
+                "en la pareja las malletas van directo al destorcedor y al cable; no hay patentes",
+            ),
         },
         "rigging": {
             "towing": "pareja de barcos de 30–33 hp; cable de remolque 100,00–150,00 m PP Ø12–14 con cadena de lastre de 40–50 kg",
@@ -307,6 +341,18 @@ NETS: list[dict[str, Any]] = [
         "ballast_kg": {
             "value": 37.5,
             "note": "25–30 kg de plomadas en el burlón más 5 kg en cada punta: 27,5 + 2 × 5 = 37,5 kg",
+        },
+        "design": {
+            "depth_m": (
+                20.0,
+                "transcribed",
+                "el documento ensaya la red hasta 20 m de profundidad",
+            ),
+            "sweeps_m": (
+                0.0,
+                "assumed",
+                "en la pareja las malletas van directo al destorcedor y al cable; no hay patentes",
+            ),
         },
         "rigging": {
             "towing": "pareja de barcos de 30–33 hp; cable de remolque 100,00–150,00 m PP Ø12 con cadena de lastre de 40 kg; 30,00 m PP Ø16 hasta el destorcedor",

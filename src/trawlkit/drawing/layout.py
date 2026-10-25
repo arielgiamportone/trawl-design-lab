@@ -24,6 +24,10 @@ Reglas de disposición
   costado del primer panel central (la línea exterior de la red queda casi recta, como en el plano
   de 2014); el costado interior (corte AB, sobre la relinga) queda definido por los anchos.
 
+* **Costados** (redes de 4 paneles, ``Plane.SIDE``): se disponen por estaciones contadas desde el
+  copo, como una cadena central que termina donde termina la del dorso (:func:`_layout_side`);
+  los dos costados son iguales y se dibuja uno.
+
 Modos y escalas
 ---------------
 * ``"schematic"``: ancho ∝ mallas × mallero y alto ∝ N × mallero, es decir, la red a malla
@@ -450,6 +454,35 @@ def _layout_plane(
     return tuple(shapes), tuple(bands)
 
 
+def _layout_side(
+    panels: Sequence[Panel], mode: Mode, stretched: bool, y_end: float
+) -> tuple[tuple[PanelShape, ...], tuple[Band, ...]]:
+    """Costados de una red de 4 paneles, dispuestos por estaciones.
+
+    Los dos costados son iguales: se dibuja uno, centrado (``count = 2`` indica el par). Las
+    estaciones se cuentan desde el copo (como en :func:`trawlkit.topology.equivalent_two_panel`):
+    la cadena termina en ``y_end``, donde termina la cadena central del dorso.
+    """
+
+    def key(item: tuple[int, Panel]) -> tuple[int, int]:
+        return (SECTION_ORDER[item[1].section], item[0])
+
+    ordered = [p for _, p in sorted(enumerate(panels), key=key)]
+    sizes = {id(p): panel_size_m(p, mode, stretched) for p in ordered}
+    y = y_end - sum(sizes[id(p)][2] for p in ordered)
+    shapes: list[PanelShape] = []
+    bands: list[Band] = []
+    for p in ordered:
+        top, bottom, h = sizes[id(p)]
+        c = _shape(
+            p, Plane.SIDE.value, "center", y, y + h, (-top / 2, top / 2), (-bottom / 2, bottom / 2)
+        )
+        shapes.append(c)
+        bands.append(Band(Plane.SIDE.value, c.y_top, c.y_bottom, c.panel, (c.id,)))
+        y += h
+    return tuple(shapes), tuple(bands)
+
+
 def layout_net(spec: NetSpec, mode: Mode = "schematic", stretched: bool = False) -> NetLayout:
     """Dispone los paneles de ``spec`` por plano (ver reglas en el docstring del módulo).
 
@@ -465,7 +498,11 @@ def layout_net(spec: NetSpec, mode: Mode = "schematic", stretched: bool = False)
     shapes: dict[str, tuple[PanelShape, ...]] = {}
     bands: dict[str, tuple[Band, ...]] = {}
     for plane in PLANE_ORDER:
-        if plane in by_plane:
+        if plane == Plane.SIDE.value and plane in by_plane:
+            ref = next((shapes[p] for p in ("upper", "lower") if p in shapes), ())
+            y_end = max((s.y_bottom for s in ref if s.side == "center"), default=0.0)
+            shapes[plane], bands[plane] = _layout_side(by_plane[plane], mode, stretched, y_end)
+        elif plane in by_plane:
             shapes[plane], bands[plane] = _layout_plane(plane, by_plane[plane], mode, stretched)
     return NetLayout(
         net_id=spec.id,

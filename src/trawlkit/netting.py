@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import csv
 import math
+import re
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from functools import cache
@@ -290,6 +291,38 @@ def cut_steps(code: str, table: Sequence[CutRow] | None = None) -> tuple[int, in
         ):
             return row.mesh_increase_width, row.mesh_increase_height
     raise KeyError(f"código de corte sin filas de aumento en la tabla: {code!r}")
+
+
+_CUT_TOKEN = re.compile(r"(\d*)([NTB])")
+
+
+def cut_code_ratio(code: str) -> float:
+    """Razón de corte de un código FAO (``AB``, ``AN``, ``1N2B``, ``1T2B``…), sin la tabla.
+
+    En un ciclo de corte cada punta (N) baja una malla sin cambiar el ancho, cada malleta (B)
+    avanza media malla a lo ancho y media a lo alto, y cada transversal (T) avanza una malla a
+    lo ancho: razón = (T + B/2)/(N + B/2) mallas de ancho por malla de alto. Da los valores de la
+    tabla de cortes (1N2B = 1/2, 1N1B = 1/3, 1N4B = 2/3, AB = 1, AN = 0). ``ValueError`` si el
+    código no se entiende.
+    """
+    c = code.strip().upper().replace(" ", "")
+    counts = {"N": 0.0, "T": 0.0, "B": 0.0}
+    if c in ("AB", "AN", "AT"):
+        counts[c[1]] = 1.0
+    else:
+        pos = 0
+        for m in _CUT_TOKEN.finditer(c):
+            if m.start() != pos:
+                break
+            counts[m.group(2)] += float(m.group(1) or 1)
+            pos = m.end()
+        if pos != len(c) or pos == 0:
+            raise ValueError(f"código de corte no reconocido: {code!r}")
+    deep = counts["N"] + counts["B"] / 2.0
+    across = counts["T"] + counts["B"] / 2.0
+    if deep == 0.0:
+        raise ValueError(f"código de corte sin avance en alto: {code!r}")
+    return across / deep
 
 
 def cut_angle_deg(

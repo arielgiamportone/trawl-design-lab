@@ -24,6 +24,7 @@ from tools.catalog.transcriptions import ACCESSED, NETS  # noqa: E402
 
 from trawlkit.io.schema import NetSpec  # noqa: E402
 from trawlkit.netcheck import check  # noqa: E402
+from trawlkit.netting import cut_code_ratio  # noqa: E402
 from trawlkit.provenance import coverage  # noqa: E402
 
 OUT = ROOT / "src" / "trawlkit" / "data" / "nets"
@@ -44,6 +45,20 @@ def diameter_mm(rtex: float, material: str) -> float:
     """Diámetro aproximado del hilo de red a partir de su Rtex [mm]."""
     k = K_PA * math.sqrt(DENSITY["PA"] / DENSITY.get(material, DENSITY["PA"]))
     return round(k * math.sqrt(rtex), 2)
+
+
+def split_cut(cut: str | None) -> tuple[str | None, str | None]:
+    """Notación del plano → ``(cut_code, cut_code_x2)``.
+
+    ``"1N2B / AB"`` es un paño de ala: un costado con 1N2B y el otro (sobre la relinga) en
+    malletas; ``"1N2B"`` corta los dos costados igual; ``"AN"`` es un paño recto (copo).
+    """
+    if not cut:
+        return None, None
+    parts = [c.strip() for c in cut.split("/") if c.strip()]
+    for c in parts:
+        cut_code_ratio(c)  # ValueError si el código no se entiende
+    return parts[0], parts[1] if len(parts) > 1 else None
 
 
 def build(t: dict[str, Any]) -> dict[str, Any]:
@@ -84,13 +99,19 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
             "meshes_depth": int(depth),
             "hanging_ratio": float(h[0]),
             "count": int(count),
-            "fao_cut": cut,
         }
+        code, code2 = split_cut(cut)
+        if code is not None:
+            panel["cut_code"] = code
+        if code2 is not None:
+            panel["cut_code_x2"] = code2
         if pid in t.get("panel_notes", {}):
             panel["note"] = t["panel_notes"][pid]
         panels.append(panel)
         for f in ("mesh_mm", "rtex", "meshes_top", "meshes_bottom", "meshes_depth"):
             mark(f"panels.{pid}.{f}")
+        if code is not None:
+            mark(f"panels.{pid}.cut_code")
         mark(
             f"panels.{pid}.count",
             note="dos paños iguales (alas izquierda y derecha)" if count == 2 else None,
@@ -160,6 +181,12 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
         mark("ballast_kg", b.get("kind", "derived"), b.get("note"))
     if t.get("rigging"):
         spec["rigging"] = t["rigging"]
+    if d := t.get("design"):
+        # Caso de diseño de la fuente (trawlkit.catalog.catalog_case): profundidad, patentes y
+        # portón del plano, cada uno con su procedencia.
+        spec["design"] = {k: v[0] for k, v in d.items()}
+        for k, (_, kind, note) in d.items():
+            mark(f"design.{k}", kind, note)
     spec["notes"] = list(t.get("notes", []))
     spec["provenance"] = prov
     return spec

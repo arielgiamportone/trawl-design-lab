@@ -75,6 +75,7 @@ import numpy.typing as npt
 from trawlkit.drawing.layout import Band, NetLayout, PanelShape, layout_net
 from trawlkit.io.schema import NetSpec, Panel
 from trawlkit.netting import orientation_coefficients
+from trawlkit.topology import equivalent_two_panel
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int64]
@@ -217,6 +218,8 @@ class NetModel:
     door_weight_n: float = 0.0
     door_floor_m: float = 0.0  # altura del nodo del portón sobre la zapata [m]
     warp_length_m: float = 0.0  # largo de cable filado del modelo acoplado [m]
+    #: Red pelágica: trabaja a media agua, sin la restricción del fondo (Fase 12).
+    floor_free: bool = False
 
     @property
     def n_nodes(self) -> int:
@@ -392,6 +395,10 @@ def _grid_positions(
     return xx, np.array(yy)
 
 
+#: Largo mínimo del tramo patente/unión hasta el punto de remolque [m] (destorcedor y grilletes).
+MIN_SWEEP_M = 1.0
+
+
 def build_model(
     spec: NetSpec,
     rigging: Rigging,
@@ -416,6 +423,8 @@ def build_model(
     """
     if resolution < 2:
         raise ValueError("resolution debe ser ≥ 2")
+    # Las redes de 4 paneles se simulan con su equivalente de 2 (trawlkit.topology).
+    spec = equivalent_two_panel(spec)
     layout = layout_net(spec, mode="true_scale")
     planes = [p for p in ("upper", "lower") if p in layout.shapes]
     if planes != ["upper", "lower"]:
@@ -680,14 +689,17 @@ def build_model(
     x_list = [*x0.tolist()]
     junctions: list[int] = []
     doors: list[int] = []
-    rig_len = rigging.upper_bridle_m + rigging.sweeps_m
+    # Sin patentes (pareja: las malletas van al destorcedor) queda un tramo corto de unión, para
+    # que la barra no tenga largo nulo.
+    sweeps = max(rigging.sweeps_m, MIN_SWEEP_M)
+    rig_len = rigging.upper_bridle_m + sweeps
     for k, sgn in ((0, 1.0), (1, -1.0)):
         tip = 0.5 * (x0[tips_u[k]] + x0[tips_l[k]])
         door = np.array([0.0, sgn * rigging.door_spread_m / 2.0, rigging.door_height_m / 2.0])
         dy = door[1] - tip[1]
         dx = math.sqrt(max(rig_len**2 - dy**2, 1.0))
         door[0] = tip[0] - dx
-        frac = rigging.sweeps_m / rig_len
+        frac = sweeps / rig_len
         junc = door + frac * (tip - door)
         junc[2] = 0.3
         junctions.append(len(x_list))
@@ -704,7 +716,7 @@ def build_model(
         for a_, b_, ln, kind in (
             (tips_u[k], junctions[-1], rigging.upper_bridle_m, "upper_bridle"),
             (tips_l[k], junctions[-1], rigging.lower_bridle_m, "lower_bridle"),
-            (junctions[-1], doors[-1], rigging.sweeps_m, "sweep"),
+            (junctions[-1], doors[-1], sweeps, "sweep"),
         ):
             # Cables de acero: peso sumergido (mitad a cada extremo), sin carga hidrodinámica
             # (su arrastre no es de la red).
@@ -828,6 +840,7 @@ def build_model(
         door_weight_n=rigging.door_weight_water_kgf * GRAVITY,
         door_floor_m=rigging.door_height_m / 2.0,
         warp_length_m=rigging.warp_length_m if coupled_doors else 0.0,
+        floor_free=spec.family == "pelagic",
     )
 
 

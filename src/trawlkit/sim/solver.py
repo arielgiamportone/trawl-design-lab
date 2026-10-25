@@ -199,6 +199,8 @@ class ForceField:
         if model.coupled_doors:
             self.mu_node[list(model.doors)] = p.mu if p.mu_door is None else p.mu_door
             self.floor[list(model.doors)] = model.door_floor_m
+        if model.floor_free:
+            self.floor[:] = -np.inf  # red pelágica: sin fondo
         # Captura: zona ocupada (triángulos y nodos), flujo por segmento.
         self.flow = np.ones(2 * nt + nb)
         self.catch_tri = np.zeros(0, dtype=np.int64)
