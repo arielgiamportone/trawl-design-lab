@@ -1631,6 +1631,16 @@
       "type": "object",
       "title": "Params"
      },
+     "components": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Components",
+      "description": "Aportes de usuario (componentes en línea, estado «user») para este cálculo"
+     },
      "prices": {
       "additionalProperties": {
        "$ref": "#/components/schemas/PriceIn"
@@ -2319,6 +2329,15 @@
       "type": "object",
       "title": "Params"
      },
+     "components": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Components"
+     },
      "objective": {
       "type": "string",
       "enum": [
@@ -2682,6 +2701,16 @@
       "additionalProperties": true,
       "type": "object",
       "title": "Params"
+     },
+     "components": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Components",
+      "description": "Aportes de usuario (componentes en línea, estado «user») para este cálculo"
      }
     },
     "additionalProperties": false,

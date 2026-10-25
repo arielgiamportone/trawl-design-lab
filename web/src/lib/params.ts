@@ -1,9 +1,15 @@
 /** Formulario de parámetros avanzados generado desde ``GET /params``. */
 import type { ParamInfo } from '../api/client';
 import { fmt, parseNumber } from './format';
+import { REGION_LABEL } from './components';
 import { PROPELLER_LABELS, SEABED_LABELS } from './labels';
 
-export type ParamKind = 'float' | 'int' | 'tuple' | 'enum' | 'string';
+const BOOL_OPTIONS = [
+  { value: 'true', label: 'Sí' },
+  { value: 'false', label: 'No' },
+];
+
+export type ParamKind = 'float' | 'int' | 'tuple' | 'enum' | 'string' | 'bool' | 'strlist';
 
 export interface ParamMeta {
   name: string;
@@ -33,7 +39,14 @@ export function paramMeta(p: ParamInfo): ParamMeta {
   };
   if (base === 'float') meta.kind = 'float';
   else if (base === 'int') meta.kind = 'int';
-  else if (base.startsWith('tuple[')) {
+  else if (base === 'bool') {
+    meta.kind = 'bool';
+    meta.options = BOOL_OPTIONS;
+  } else if (base === 'tuple[str,...]') meta.kind = 'strlist';
+  else if (p.name === 'component_region') {
+    meta.kind = 'enum';
+    meta.options = Object.entries(REGION_LABEL).map(([value, label]) => ({ value, label }));
+  } else if (base.startsWith('tuple[')) {
     meta.kind = 'tuple';
     const inner = base.slice(6, -1).split(',');
     meta.tupleLen = inner.includes('...') ? null : inner.length;
@@ -51,11 +64,15 @@ export function paramMeta(p: ParamInfo): ParamMeta {
 export function defaultText(meta: ParamMeta): string {
   const d = meta.default;
   if (meta.name === 'seabed' && d == null) return 'sin rozamiento de fondo';
+  if (meta.kind === 'bool') return d ? 'Sí' : 'No';
+  if (meta.kind === 'strlist' && d == null) return 'todas';
   if (d === null || d === undefined) return 'automático';
   if (Array.isArray(d)) return d.map((x) => fmt(x as number)).join('; ');
   if (typeof d === 'number') return fmt(d);
   if (meta.kind === 'enum')
-    return PROPELLER_LABELS[String(d)] ?? SEABED_LABELS[String(d)] ?? String(d);
+    return (
+      PROPELLER_LABELS[String(d)] ?? SEABED_LABELS[String(d)] ?? REGION_LABEL[String(d)] ?? String(d)
+    );
   return String(d);
 }
 
@@ -87,6 +104,16 @@ export function parseParam(meta: ParamMeta, text: string): ParseResult | null {
       }
       if (nums.length === 0) return { ok: false, error: 'Lista vacía' };
       return { ok: true, value: nums };
+    }
+    case 'bool':
+      if (t === 'true' || t === 'false') return { ok: true, value: t === 'true' };
+      return { ok: false, error: 'Elija Sí o No' };
+    case 'strlist': {
+      const parts = t
+        .split(/[;,]/)
+        .map((x) => x.trim())
+        .filter(Boolean);
+      return parts.length ? { ok: true, value: parts } : { ok: false, error: 'Lista vacía' };
     }
     case 'enum':
       return meta.options?.some((o) => o.value === t)

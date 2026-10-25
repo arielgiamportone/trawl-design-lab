@@ -2481,3 +2481,79 @@ table.data tr.selected td {
   gap: 6px;
   font-size: 13px;
 }
+
+/* Componentes (Fase 13): lista de materiales, armado y aportes. */
+.components > .segmented,
+.components-catalog > .segmented {
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+.price-input {
+  width: 7em;
+  text-align: right;
+}
+.assembly-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.assembly-grid dl.kv {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  margin: 8px 0;
+}
+.assembly-grid dl.kv > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+}
+.assembly-grid dl.kv dt {
+  color: var(--muted);
+}
+.assembly-grid dl.kv dd {
+  margin: 0;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.contribute-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0 12px;
+  align-items: end;
+}
+.contribute-form .field > span {
+  font-size: 13px;
+  font-weight: 600;
+}
+.contribute-form .catalog-actions {
+  grid-column: 1 / -1;
+}
+.contrib-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.contrib-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+@media print {
+  .no-print,
+  header,
+  nav,
+  aside,
+  [role='tablist'] {
+    display: none !important;
+  }
+  .bom .table-wrap {
+    overflow: visible;
+  }
+}

@@ -103,7 +103,7 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
         {HELP[meta.name] && <HelpTip topic={meta.name} label={paramLabel(meta.name)} />}
       </div>
       <div className="param-row">
-        {meta.kind === 'enum' ? (
+        {meta.kind === 'enum' || meta.kind === 'bool' ? (
           <select
             id={idBase}
             value={value}
@@ -121,7 +121,7 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
           <input
             id={idBase}
             type="text"
-            inputMode={meta.kind === 'string' ? 'text' : 'decimal'}
+            inputMode={meta.kind === 'string' || meta.kind === 'strlist' ? 'text' : 'decimal'}
             autoComplete="off"
             spellCheck={false}
             placeholder={defaultText(meta)}

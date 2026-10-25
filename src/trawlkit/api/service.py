@@ -7,6 +7,8 @@ import inspect
 import math
 import os
 import re
+from collections.abc import Iterator
+from contextlib import contextmanager
 from functools import cache
 from typing import Any
 
@@ -436,17 +438,21 @@ def build_case(
 ) -> DesignCase:
     """Arma un :class:`DesignCase` validando ids contra los catálogos.
 
-    Una red del catálogo FAO (con potencia de diseño) sin buque, portón ni red modificada se
-    calcula con su propio caso (:func:`trawlkit.catalog.catalog_case`: buque de su potencia,
-    portón y profundidad del plano); ``params`` sobrescribe lo que sale de la fuente.
+    Una red del catálogo FAO (con potencia de diseño) sin buque ni red modificada se calcula con
+    su propio caso (:func:`trawlkit.catalog.catalog_case`: buque de su potencia, portón y
+    profundidad del plano; ``door`` reemplaza el portón); ``params`` sobrescribe lo que sale de
+    la fuente.
     """
     main = _net(net)
     assert main is not None
-    if main.vessel_hp is not None and vessel is None and door is None and net_modified is None:
+    if main.vessel_hp is not None and vessel is None and net_modified is None:
         from trawlkit.catalog import catalog_case
 
+        kw = _coerce_params(params or {})
         try:
-            return catalog_case(main, compat=Compat(compat), **_coerce_params(params or {})).case
+            case = catalog_case(main, compat=Compat(compat), **kw).case
+            # Portón elegido (p. ej. del catálogo de componentes) con el buque de la red.
+            return case if door is None else dataclasses.replace(case, door=_pick_door(door))
         except (TypeError, ValueError) as exc:
             raise BadRequestError(str(exc)) from exc
     vessels = vessel_presets()
@@ -480,6 +486,8 @@ def run_case(case: DesignCase) -> DesignResult:
     """Corre el caso; los errores numéricos del motor se informan como entrada inválida."""
     try:
         return run(case)
+    except KeyError as exc:
+        raise BadRequestError(f"el caso no se puede calcular: {exc.args[0]}") from exc
     except (ValueError, ZeroDivisionError, IndexError) as exc:
         raise BadRequestError(f"el caso no se puede calcular: {exc}") from exc
 
@@ -531,6 +539,24 @@ def optimize_case(
         raise BadRequestError(f"no se puede optimizar el caso: {exc}") from exc
     out: dict[str, Any] = to_jsonable(result.to_dict())
     return out
+
+
+@contextmanager
+def user_items(items: list[dict[str, Any]] | None) -> Iterator[None]:
+    """Habilita los aportes de usuario del pedido (``components``) mientras se calcula."""
+    from pydantic import ValidationError as PydValidationError
+
+    from trawlkit.components import user_components
+
+    try:
+        ctx = user_components(items or [])
+        ctx.__enter__()
+    except PydValidationError as exc:
+        raise BadRequestError(f"componente en línea inválido: {exc.errors()[0]['msg']}") from exc
+    try:
+        yield
+    finally:
+        ctx.__exit__(None, None, None)
 
 
 def design_bom(case: DesignCase, prices: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:

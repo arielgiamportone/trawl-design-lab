@@ -22,6 +22,10 @@ import simulate from './fixtures/simulate.json';
 import species from './fixtures/species.json';
 import uncertainty from './fixtures/uncertainty.json';
 import vessels from './fixtures/vessels.json';
+import bom from './fixtures/bom.json';
+import componentKinds from './fixtures/component_kinds.json';
+import componentsWire from './fixtures/components_wire.json';
+import optimizeComponents from './fixtures/optimize_components.json';
 
 export const fixtures = {
   design,
@@ -45,6 +49,10 @@ export const fixtures = {
   species,
   uncertainty,
   vessels,
+  bom,
+  componentKinds,
+  componentsWire,
+  optimizeComponents,
 };
 
 export interface Call {
@@ -95,6 +103,35 @@ export function mockApi(
     if (path === '/sensors/example')
       return new Response(sensorLog, { headers: { 'Content-Type': 'text/csv' } });
     if (path === '/errata') return json(errata);
+    if (path === '/catalog/components') return json(componentKinds);
+    if (path === '/catalog/components/wire') return json(componentsWire);
+    if (path.startsWith('/catalog/components/wire/')) {
+      const id = decodeURIComponent(path.split('/').pop() ?? '');
+      const item = componentsWire.find((w) => w.id === id);
+      return item ? json({ ...item, issues: [], generic: null }) : json({ detail: 'x' }, 404);
+    }
+    if (path.startsWith('/catalog/components/')) return json([]);
+    if (path === '/components/check') {
+      const b = body as Record<string, unknown>;
+      const ok = typeof b.diameter_mm === 'number';
+      return json({
+        ok,
+        item: ok ? { ...b, status: 'user' } : null,
+        issues: ok
+          ? []
+          : [
+              {
+                level: 'error',
+                code: 'schema',
+                message: 'diameter_mm: Field required',
+                panels: [],
+              },
+            ],
+        generic: null,
+      });
+    }
+    if (path === '/design/bom') return json(bom);
+    if (path === '/optimize/components') return json(optimizeComponents);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);
       return json((body as { compat?: string }).compat === 'excel' ? designExcel : design);

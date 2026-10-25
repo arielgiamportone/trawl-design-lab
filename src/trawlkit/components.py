@@ -22,7 +22,9 @@ rotura dentro del rango del material, flotación contra volumen, polar del port�
 from __future__ import annotations
 
 import math
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator, Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
 from functools import cache
 from pathlib import Path
 from typing import Annotated, Any, Literal
@@ -100,8 +102,8 @@ class ComponentBase(_Model):
 
     @property
     def is_generic(self) -> bool:
-        """Si es un genérico (sin marca)."""
-        return self.brand is None
+        """Si es un genérico (sin marca; un aporte de usuario nunca lo es)."""
+        return self.brand is None and self.status != "user"
 
 
 class TwineItem(ComponentBase):
@@ -246,6 +248,31 @@ def _load_kind(kind: str) -> tuple[ComponentBase, ...]:
     return tuple(out)
 
 
+#: Aportes de usuario habilitados en el pedido en curso (ver :func:`user_components`).
+_USER_ITEMS: ContextVar[tuple[ComponentBase, ...]] = ContextVar("user_components", default=())
+
+
+@contextmanager
+def user_components(
+    items: Iterable[ComponentBase | Mapping[str, Any]],
+) -> Iterator[tuple[ComponentBase, ...]]:
+    """Habilita aportes de usuario (``status: user``) mientras dura el bloque.
+
+    Dentro del bloque, :func:`load_components` y :func:`get_component` los incluyen como si
+    estuvieran en el catálogo, con su estado de aporte sin verificar. Lo usa la API para que un
+    aporte guardado en el navegador entre en el cálculo sólo en ese pedido.
+    """
+    parsed = tuple(
+        it if isinstance(it, ComponentBase) else parse_component({**it, "status": "user"})
+        for it in items
+    )
+    token = _USER_ITEMS.set(parsed)
+    try:
+        yield parsed
+    finally:
+        _USER_ITEMS.reset(token)
+
+
 def load_components(
     kind: str,
     *,
@@ -262,10 +289,15 @@ def load_components(
     * ``generic_only``: sólo genéricos;
     * ``statuses``: estados admitidos (por defecto sólo los publicados);
     * ``extra``: componentes agregados por el usuario (aportes), que pasan los mismos filtros.
+
+    Los aportes habilitados con :func:`user_components` se agregan siempre, con el estado
+    ``user`` admitido.
     """
     if kind not in MODELS:
         raise KeyError(f"tipo de componente desconocido: {kind!r} (use {', '.join(KINDS)})")
-    allowed = set(statuses)
+    enabled = _USER_ITEMS.get()
+    allowed = set(statuses) | ({"user"} if enabled else set())
+    extra = (*extra, *enabled)
     wanted = None if brands is None else {b.lower() for b in brands}
     out: list[ComponentBase] = []
     for item in (*_load_kind(kind), *(e for e in extra if e.kind == kind)):
@@ -520,4 +552,5 @@ __all__ = [
     "load_components",
     "parse_component",
     "summary",
+    "user_components",
 ]

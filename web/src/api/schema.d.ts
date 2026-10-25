@@ -786,6 +786,13 @@ export interface components {
             params?: {
                 [key: string]: unknown;
             };
+            /**
+             * Components
+             * @description Aportes de usuario (componentes en línea, estado «user») para este cálculo
+             */
+            components?: {
+                [key: string]: unknown;
+            }[];
             /** Prices */
             prices?: {
                 [key: string]: components["schemas"]["PriceIn"];
@@ -1044,6 +1051,10 @@ export interface components {
             params?: {
                 [key: string]: unknown;
             };
+            /** Components */
+            components?: {
+                [key: string]: unknown;
+            }[];
             /**
              * Objective
              * @default drag
@@ -1178,6 +1189,13 @@ export interface components {
             params?: {
                 [key: string]: unknown;
             };
+            /**
+             * Components
+             * @description Aportes de usuario (componentes en línea, estado «user») para este cálculo
+             */
+            components?: {
+                [key: string]: unknown;
+            }[];
         };
         /**
          * DesignResponse

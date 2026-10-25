@@ -1,4 +1,11 @@
 /** Cliente HTTP tipado para la API trawlkit (contrato en ../../openapi.json). */
+import type { Component } from '../lib/components';
+
+/** Ficha de ``GET /catalog/components/{kind}/{id}``: el componente, observaciones y genérico. */
+export type ComponentDetail = Component & {
+  issues?: { level: 'error' | 'warning'; code: string; message: string }[];
+  generic?: Component | null;
+};
 import type { components } from './schema';
 
 type S = components['schemas'];
@@ -46,6 +53,13 @@ export type CalibrateResponse = S['CalibrateResponse'];
 export type ObservationIn = S['ObservationIn'];
 export type SensorParseRequest = S['SensorParseRequest'];
 export type SensorParseResponse = S['SensorParseResponse'];
+export type ComponentKindOut = S['ComponentKindOut'];
+export type ComponentCheckOut = S['ComponentCheckOut'];
+export type BomRequest = S['BomRequest'];
+export type BomOut = S['BomOut'];
+export type ComponentOptimizeRequest = S['ComponentOptimizeRequest'];
+export type ComponentOptimizeResponse = S['ComponentOptimizeResponse'];
+export type AssemblyOut = S['AssemblyOut'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -185,6 +199,30 @@ export const api = {
   async scaledNet(req: ScaledNetRequest, signal?: AbortSignal): Promise<NetSpec> {
     const res = await post('/optimize/scaled-net', req, signal);
     return (await res.json()) as NetSpec;
+  },
+  componentKinds: (signal?: AbortSignal) =>
+    getJson<ComponentKindOut[]>('/catalog/components', signal),
+  components: (kind: string, signal?: AbortSignal) =>
+    getJson<Component[]>(`/catalog/components/${encodeURIComponent(kind)}`, signal),
+  component: (kind: string, id: string, signal?: AbortSignal) =>
+    getJson<ComponentDetail>(
+      `/catalog/components/${encodeURIComponent(kind)}/${encodeURIComponent(id)}`,
+      signal,
+    ),
+  async checkComponent(item: Record<string, unknown>, signal?: AbortSignal) {
+    const res = await post('/components/check', item, signal);
+    return (await res.json()) as ComponentCheckOut;
+  },
+  async bom(req: BomRequest, signal?: AbortSignal): Promise<BomOut> {
+    const res = await post('/design/bom', req, signal);
+    return (await res.json()) as BomOut;
+  },
+  async optimizeComponents(
+    req: ComponentOptimizeRequest,
+    signal?: AbortSignal,
+  ): Promise<ComponentOptimizeResponse> {
+    const res = await post('/optimize/components', req, signal);
+    return (await res.json()) as ComponentOptimizeResponse;
   },
   seabeds: (signal?: AbortSignal) => getJson<SeabedOut[]>('/catalog/seabeds', signal),
   fouling: (signal?: AbortSignal) => getJson<FoulingOut[]>('/catalog/fouling', signal),

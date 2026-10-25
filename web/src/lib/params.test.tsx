@@ -18,6 +18,18 @@ describe('paramMeta', () => {
     expect(meta('nomura_nhp')).toMatchObject({ kind: 'tuple', tupleLen: 2 });
     expect(meta('ft_propeller').kind).toBe('enum');
     expect(meta('headrope_rope').kind).toBe('string');
+    expect(meta('generic_only').kind).toBe('bool');
+    expect(meta('component_brands').kind).toBe('strlist');
+    expect(meta('component_region').kind).toBe('enum');
+  });
+  it('booleanos y listas de marcas', () => {
+    expect(parseParam(meta('generic_only'), 'true')).toEqual({ ok: true, value: true });
+    expect(parseParam(meta('generic_only'), 'x')).toMatchObject({ ok: false });
+    expect(parseParam(meta('component_brands'), 'Garware; Bridon-Bekaert')).toEqual({
+      ok: true,
+      value: ['Garware', 'Bridon-Bekaert'],
+    });
+    expect(defaultText(meta('generic_only'))).toBe('No');
   });
   it('placeholder con el valor por defecto', () => {
     expect(defaultText(meta('sweeps_m'))).toBe('25');

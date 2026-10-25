@@ -1,0 +1,38 @@
+name: Aporte de componente
+description: Proponer un paño, cable, cabo, portón, boya o cadena para el catálogo de componentes.
+title: "Componente: "
+labels: ["componente"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por el aporte. Lo revisa un mantenedor y, si los datos cierran, se suma a
+        `tools/components/` con su fuente. No incluya datos personales ni fichas completas de
+        fabricantes protegidas: alcanza con los valores que usa el motor y de dónde salen.
+  - type: textarea
+    id: datos
+    attributes:
+      label: Datos del componente
+      description: El JSON que genera «Proponer al catálogo» en la pestaña Componentes de la app.
+      render: markdown
+    validations:
+      required: true
+  - type: input
+    id: fuente
+    attributes:
+      label: Fuente
+      description: Etiqueta del producto, ficha técnica del proveedor (enlace), medición propia…
+    validations:
+      required: true
+  - type: input
+    id: lugar
+    attributes:
+      label: Dónde se consigue
+      description: País o puerto (sin direcciones ni nombres de personas).
+  - type: checkboxes
+    id: permiso
+    attributes:
+      label: Datos públicos
+      options:
+        - label: Los valores son públicos o propios y se pueden publicar con la fuente citada.
+          required: true

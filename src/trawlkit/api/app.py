@@ -220,16 +220,17 @@ def list_errata() -> list[ErratumOut]:
 
 
 def _run(req: DesignRequest) -> DesignResult:
-    case = service.build_case(
-        net=req.net,
-        net_modified=req.net_modified,
-        vessel=req.vessel,
-        door=req.door,
-        class_vessels=req.class_vessels,
-        compat=req.compat,
-        params=req.params,
-    )
-    return service.run_case(case)
+    with service.user_items(req.components):
+        case = service.build_case(
+            net=req.net,
+            net_modified=req.net_modified,
+            vessel=req.vessel,
+            door=req.door,
+            class_vessels=req.class_vessels,
+            compat=req.compat,
+            params=req.params,
+        )
+        return service.run_case(case)
 
 
 @app.post("/design", response_model=DesignResponse)
@@ -247,16 +248,17 @@ def design(req: DesignRequest) -> dict[str, Any]:
 @app.post("/design/bom", response_model=BomOut)
 def design_bom(req: BomRequest) -> dict[str, Any]:
     """Lista de materiales del caso: qué comprar, cuánto y su costo orientativo."""
-    case = service.build_case(
-        net=req.net,
-        net_modified=req.net_modified,
-        vessel=req.vessel,
-        door=req.door,
-        class_vessels=req.class_vessels,
-        compat=req.compat,
-        params=req.params,
-    )
-    return service.design_bom(case, {k: v.model_dump() for k, v in req.prices.items()})
+    with service.user_items(req.components):
+        case = service.build_case(
+            net=req.net,
+            net_modified=req.net_modified,
+            vessel=req.vessel,
+            door=req.door,
+            class_vessels=req.class_vessels,
+            compat=req.compat,
+            params=req.params,
+        )
+        return service.design_bom(case, {k: v.model_dump() for k, v in req.prices.items()})
 
 
 @app.post(
@@ -316,28 +318,29 @@ def optimize_components(req: ComponentOptimizeRequest) -> dict[str, Any]:
     Devuelve el mejor armado, 2 o 3 alternativas (una genérica si el mejor no lo es) y la lista
     de materiales con el costo orientativo de cada uno.
     """
-    case = service.build_case(
-        net=req.net,
-        vessel=req.vessel,
-        door=req.door,
-        class_vessels=req.class_vessels,
-        params=req.params,
-    )
-    return service.optimize_components_case(
-        case,
-        objective=req.objective,
-        speed_kn=req.speed_kn,
-        v_bounds=req.v_bounds,
-        margin=req.margin,
-        doors=req.doors,
-        floats=req.floats,
-        twines=req.twines,
-        prices={k: v.model_dump() for k, v in req.prices.items()},
-        currency=req.currency,
-        max_doors=req.max_doors,
-        max_floats=req.max_floats,
-        max_twines=req.max_twines,
-    )
+    with service.user_items(req.components):
+        case = service.build_case(
+            net=req.net,
+            vessel=req.vessel,
+            door=req.door,
+            class_vessels=req.class_vessels,
+            params=req.params,
+        )
+        return service.optimize_components_case(
+            case,
+            objective=req.objective,
+            speed_kn=req.speed_kn,
+            v_bounds=req.v_bounds,
+            margin=req.margin,
+            doors=req.doors,
+            floats=req.floats,
+            twines=req.twines,
+            prices={k: v.model_dump() for k, v in req.prices.items()},
+            currency=req.currency,
+            max_doors=req.max_doors,
+            max_floats=req.max_floats,
+            max_twines=req.max_twines,
+        )
 
 
 @app.post("/optimize/scaled-net", response_model=NetSpec)

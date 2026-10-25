@@ -20,6 +20,7 @@ const InteractiveDesign = lazy(() =>
 );
 const Simulate = lazy(() => import('./Simulate').then((m) => ({ default: m.Simulate })));
 const Catalog = lazy(() => import('./Catalog').then((m) => ({ default: m.Catalog })));
+const Components = lazy(() => import('./Components').then((m) => ({ default: m.Components })));
 
 export function Results() {
   const { design, pinned } = useCase();
@@ -47,6 +48,7 @@ export function Results() {
     { id: 'simulacion', label: 'Simulación' },
     { id: 'descargas', label: 'Descargas' },
     { id: 'catalogo', label: 'Catálogo FAO' },
+    { id: 'componentes', label: 'Componentes' },
     {
       id: 'notas',
       label: <>Notas y erratas {notes > 0 && <span className="badge">{notes}</span>}</>,
@@ -66,6 +68,7 @@ export function Results() {
             {tab === 'simulacion' && <Simulate />}
             {tab === 'diseno' && <InteractiveDesign />}
             {tab === 'catalogo' && <Catalog />}
+            {tab === 'componentes' && <Components />}
           </Suspense>
           {tab === 'paneles' && <PanelEditor />}
           {tab === 'plano' && <PlanViewer />}

@@ -145,3 +145,23 @@ def test_unknown_kind_and_id() -> None:
     with pytest.raises(KeyError):
         get_component("wire", "no_such_wire")
     assert isinstance(load_components("float")[0], ComponentBase)
+
+
+def test_user_components_context_is_scoped() -> None:
+    from trawlkit.components import user_components
+
+    data = {
+        "kind": "float",
+        "id": "user_float_x",
+        "name": "boya del puerto",
+        "material": "plástico",
+        "diameter_mm": 200,
+        "buoyancy_kgf": 3.5,
+    }
+    with user_components([data]) as items:
+        assert items[0].status == "user" and not items[0].is_generic
+        assert get_component("float", "user_float_x").name == "boya del puerto"
+        assert "user_float_x" in {f.id for f in load_components("float")}
+        assert "user_float_x" not in {f.id for f in load_components("float", generic_only=True)}
+    with pytest.raises(KeyError):
+        get_component("float", "user_float_x")

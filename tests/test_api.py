@@ -739,3 +739,25 @@ def test_optimize_components_endpoint() -> None:
     assert bad.status_code == 422
     missing = client.post("/optimize/components", json={**body, "doors": ["no_door"]})
     assert missing.status_code == 404
+
+
+def test_inline_user_components_enter_only_that_request() -> None:
+    wire = {
+        "kind": "wire",
+        "id": "user_wire_puerto",
+        "name": "Cable 6x19 del puerto",
+        "construction": "6x19",
+        "diameter_mm": 14,
+        "weight_kg_per_m": 0.72,
+        "breaking_load_t": 10.5,
+        "price": {"value": 1.5, "currency": "USD", "unit": "m", "date": "2026-10", "source": "u"},
+    }
+    body = {"params": {"warp_id": "user_wire_puerto"}, "components": [wire]}
+    r = client.post("/design/bom", json=body)
+    assert r.status_code == 200, r.text
+    warps = next(ln for ln in r.json()["lines"] if ln["key"] == "warps")
+    assert warps["component_id"] == "user_wire_puerto" and warps["cost"] is not None
+    # Sin el aporte en el pedido, el id no existe.
+    assert client.post("/design/bom", json={"params": body["params"]}).status_code == 422
+    bad = client.post("/design", json={"components": [{"kind": "wire", "id": "x", "name": "x"}]})
+    assert bad.status_code == 422

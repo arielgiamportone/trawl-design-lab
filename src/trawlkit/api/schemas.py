@@ -28,6 +28,11 @@ class DesignRequest(BaseModel):
     class_vessels: list[str] | None = None
     compat: Literal["excel", "corrected"] = "corrected"
     params: dict[str, Any] = Field(default_factory=dict)
+    components: list[dict[str, Any]] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Aportes de usuario (componentes en línea, estado «user») para este cálculo",
+    )
 
 
 class DesignResponse(BaseModel):
@@ -345,6 +350,7 @@ class ComponentOptimizeRequest(BaseModel):
     door: str | Door | None = None
     class_vessels: list[str] | None = None
     params: dict[str, Any] = Field(default_factory=dict)
+    components: list[dict[str, Any]] = Field(default_factory=list, max_length=50)
     objective: Literal["drag", "efficiency", "cost"] = "drag"
     speed_kn: float | None = Field(default=None, gt=0.5, le=6.0)
     v_bounds: tuple[float, float] = (1.5, 4.0)

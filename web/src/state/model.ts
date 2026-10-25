@@ -1,5 +1,6 @@
 /** Estado del caso de diseño y armado del ``DesignRequest``. */
 import type { DesignRequest, NetSpec } from '../api/client';
+import { sanitizeContributions, type Component } from '../lib/components';
 import { editErrors, editedSpec, type PanelEdits } from '../lib/panels';
 import { buildParams, type ParamMeta, type ParamValues } from '../lib/params';
 
@@ -23,6 +24,10 @@ export interface CaseState {
   targetSpeed: number;
   /** Captura esperada por lance [kg] (valor inicial del lance progresivo). */
   expectedCatchKg: number;
+  /** Aportes de usuario (componentes cargados en el navegador, «sin verificar»). */
+  contributions: Component[];
+  /** Si los aportes entran en el cálculo y en el armado (se envían como ``components``). */
+  useContributions: boolean;
 }
 
 export interface ScaledNet {
@@ -44,6 +49,8 @@ export const DEFAULT_CASE: CaseState = {
   scaled: null,
   targetSpeed: 2,
   expectedCatchKg: 500,
+  contributions: [],
+  useContributions: false,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -73,6 +80,8 @@ export function sanitizeCase(raw: unknown): CaseState {
       typeof r.expectedCatchKg === 'number' && r.expectedCatchKg >= 0 && r.expectedCatchKg <= 20000
         ? r.expectedCatchKg
         : DEFAULT_CASE.expectedCatchKg,
+    contributions: sanitizeContributions(r.contributions),
+    useContributions: r.useContributions === true,
   };
 }
 
@@ -134,5 +143,12 @@ export function buildRequest(
     compat: state.compat,
     params,
   };
+  const components = enabledContributions(state);
+  if (components.length) request.components = components;
   return { request, errors, pending };
+}
+
+/** Aportes que se envían a la API (sólo si el usuario los habilitó). */
+export function enabledContributions(state: CaseState): Component[] {
+  return state.useContributions ? state.contributions : [];
 }
