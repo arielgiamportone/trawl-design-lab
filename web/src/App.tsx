@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CasePanel } from './components/CasePanel';
 import { Header } from './components/Header';
+import { OfflinePanel } from './components/OfflinePanel';
 import { ProjectBar } from './components/ProjectBar';
 import { Results } from './components/Results';
 import { Wizard } from './components/wizard/Wizard';
@@ -43,6 +44,9 @@ export function App() {
             </main>
           </div>
         )}
+        <div className="offline-wrap">
+          <OfflinePanel />
+        </div>
         <footer className="footer">
           trawl-design-lab · motor trawlkit · resultados orientativos: verifique con el plano y el
           informe antes de construir.

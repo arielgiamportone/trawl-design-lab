@@ -71,7 +71,10 @@ export function defaultText(meta: ParamMeta): string {
   if (typeof d === 'number') return fmt(d);
   if (meta.kind === 'enum')
     return (
-      PROPELLER_LABELS[String(d)] ?? SEABED_LABELS[String(d)] ?? REGION_LABEL[String(d)] ?? String(d)
+      PROPELLER_LABELS[String(d)] ??
+      SEABED_LABELS[String(d)] ??
+      REGION_LABEL[String(d)] ??
+      String(d)
     );
   return String(d);
 }

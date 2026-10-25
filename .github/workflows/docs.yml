@@ -28,6 +28,10 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: web/package-lock.json
+      - name: Motor sin conexión (wheel para Pyodide, web/public/py/)
+        run: |
+          uv build --wheel -o dist-wheel
+          uv run python tools/offline_bundle.py dist-wheel/trawlkit-*.whl web/public/py
       - name: Construir la app web
         working-directory: web
         env:

@@ -2557,3 +2557,18 @@ table.data tr.selected td {
     overflow: visible;
   }
 }
+.api-status.local .led {
+  background: var(--accent);
+}
+.offline-wrap {
+  max-width: 1400px;
+  margin: 12px auto 0;
+  padding: 0 16px;
+}
+.offline-panel summary {
+  gap: 8px;
+}
+.offline-panel .segmented {
+  margin: 8px 0;
+  flex-wrap: wrap;
+}

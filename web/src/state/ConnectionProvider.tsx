@@ -20,8 +20,20 @@ export function ConnectionProvider({
   const [status, setStatus] = useState<ConnStatus>('connecting');
   const [version, setVersion] = useState<string | undefined>();
   const [outdated, setOutdated] = useState(false);
+  const [local, setLocal] = useState(false);
   const [round, setRound] = useState(0);
   const retry = useCallback(() => setRound((r) => r + 1), []);
+
+  // Al volver la red (o al perderla) se vuelve a comprobar: así se pasa de la API al motor del
+  // teléfono y de vuelta sin recargar.
+  useEffect(() => {
+    window.addEventListener('online', retry);
+    window.addEventListener('offline', retry);
+    return () => {
+      window.removeEventListener('online', retry);
+      window.removeEventListener('offline', retry);
+    };
+  }, [retry]);
 
   useEffect(() => {
     const ctrl = new AbortController();
@@ -31,6 +43,7 @@ export function ConnectionProvider({
         if (!h) return;
         setVersion(h.version);
         setOutdated(isOutdated(h.contract));
+        setLocal((h as { offline?: boolean }).offline === true);
         recheck = window.setInterval(() => {
           api.health(ctrl.signal).catch(() => {
             if (!ctrl.signal.aborted) setRound((r) => r + 1);
@@ -49,7 +62,7 @@ export function ConnectionProvider({
   }, [round]);
 
   return (
-    <ConnectionContext.Provider value={{ status, version, outdated, retry }}>
+    <ConnectionContext.Provider value={{ status, version, outdated, local, retry }}>
       {children}
     </ConnectionContext.Provider>
   );

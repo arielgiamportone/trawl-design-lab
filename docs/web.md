@@ -235,6 +235,44 @@ digitalizadas de documentos de la FAO:
   caso (buque de su potencia, portón y profundidad del plano). En el panel del caso, el buque y
   el portón muestran «Del plano» hasta que se elija uno.
 
+## Componentes, lista de materiales y aportes
+
+La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cuatro secciones:
+
+- **Catálogo**: paño e hilo, cables, cabos, portones, boyas y cadenas, con filtros por marca,
+  región y «sólo genéricos». La ficha muestra la fuente, la procedencia valor por valor, las
+  observaciones del validador y el genérico equivalente. «Usar en el caso» fija el componente
+  (`warp_id`, `float_id`, `twine_id`, `chain_id`, el portón o los cabos de lima y burlón).
+- **Lista de materiales** (`POST /design/bom`): qué comprar y cuánto, con el precio que el usuario
+  carga por línea (queda en el navegador). Se descarga en CSV (separador «;» y coma decimal) o se
+  imprime o guarda en PDF desde el navegador. Las líneas sin precio lo dicen y no suman cero.
+- **Armar con el catálogo** (`POST /optimize/components`): objetivo (menor resistencia, más área
+  por litro o menor costo), región del puerto y «sólo genéricos». Muestra el armado recomendado,
+  alternativas (una genérica si el mejor lleva marcas), las restricciones que no se cumplen y
+  «Aplicar al caso».
+- **Aportar**: formulario por tipo, validado con `POST /components/check`. El aporte se guarda en el
+  caso (también en el proyecto exportado) como «aporte, sin verificar» y se envía a la API en
+  `components` sólo si se marca «Usar mis aportes». «Exportar» baja el JSON y «Proponer al
+  catálogo» abre un *issue* con la plantilla `.github/ISSUE_TEMPLATE/componente.yml`.
+
+## Uso sin conexión y bajo consumo de datos
+
+La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,
+al pulsar **«Preparar uso sin conexión»** (panel al pie de la página), descarga una sola vez
+Pyodide 0.29.5, numpy, pydantic, pyyaml y la *wheel* de `trawlkit` (≈ 15 MB) en la caché
+`trawl-offline-v1`. Desde entonces:
+
+- si falla la red, el cliente de la API (`src/api/client.ts`) atiende el pedido con el motor del
+  teléfono (`src/engine/`: un *Web Worker* con `trawlkit.api.offline`), con las mismas rutas y
+  respuestas; el indicador dice «Sin conexión · motor del teléfono»;
+- «Siempre en el teléfono» usa el motor local aunque haya señal (ahorra datos);
+- la simulación, los informes y los planos SVG responden 503 con un mensaje que lo explica.
+
+La *wheel* se construye en la CI y en `docs.yml` (`uv build --wheel` y
+`tools/offline_bundle.py`, que la copia a `web/public/py/<hash>/` con su `manifest.json`); sin ese
+paso (desarrollo local) el botón avisa que la compilación no trae el motor. El **modo de bajo
+consumo de datos** oculta «Diseño interactivo» y «Simulación», que descargan three.js.
+
 ## Funcionalidades
 
 - **Caso de diseño** (panel izquierdo; arriba en móvil): red, variante modificada opcional, buque,
@@ -312,14 +350,19 @@ web/
 
 ```bash
 cd web
-npm test               # Vitest (57 pruebas)
-npm run test:e2e       # Playwright (6 pruebas)
+npm test               # Vitest (171 pruebas)
+npm run test:e2e       # Playwright (21 pruebas)
 ```
 
 Playwright levanta la API (`uv run trawlkit serve`, requiere `uv sync --all-extras`) y
 `vite preview` si no están corriendo, y reutiliza los que ya estén activos en local. Usa Chromium;
 en una máquina nueva instalarlo con `npx playwright install chromium`. En la CI (job `web` de
 `.github/workflows/ci.yml`) se corren lint, Prettier, typecheck, pruebas unitarias, build y E2E.
+
+Además, `scripts/pyodide-parity.mjs` corre `trawlkit.api.offline` dentro de Pyodide en Node y
+compara las respuestas con las de CPython (`tools/offline_expected.py`, tolerancia relativa
+1e-9), y `e2e/offline.spec.ts` instala la PWA, prepara el motor, corta la red con
+`context.setOffline(true)` y calcula, arma la lista de materiales y valida un aporte.
 
 ## Capturas
 

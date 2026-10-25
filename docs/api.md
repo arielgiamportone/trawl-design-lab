@@ -63,6 +63,28 @@ curl -s -X POST http://127.0.0.1:8000/design \
   -H 'Content-Type: application/json' -d '{"net": "bobp_wp13_pair_ho80"}'
 ```
 
+Una red del catálogo FAO con `door` (por ejemplo un portón del catálogo de componentes) y sin
+buque conserva el buque de la red y cambia sólo el portón.
+
+**Componentes** ({doc}`34_componentes`). `params` acepta `warp_id`, `float_id`, `twine_id` y
+`chain_id` (ids de `GET /catalog/components/{kind}`) y los filtros de la selección automática
+`component_brands` (lista), `component_region` y `generic_only` (booleano). `components` lleva
+aportes de usuario en línea (hasta 50, con estado «user»): el motor los ve sólo en ese pedido.
+`POST /design/bom` acepta lo mismo más `prices` (id de componente o clave de línea → precio
+orientativo con moneda y unidad):
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/design/bom \
+  -H 'Content-Type: application/json' \
+  -d '{"net": "fao_wb_bt2p_60hp", "params": {"generic_only": true},
+       "prices": {"doors": {"value": 300, "currency": "USD", "unit": "unit"}}}'
+```
+
+`POST /optimize/components` elige portón, cable, boyas e hilo del catálogo filtrado
+(`objective`: `drag`, `efficiency` o `cost`; `speed_kn` fija la velocidad, si no se elige la mejor
+entre `v_bounds`) y devuelve el armado recomendado, alternativas y la lista de materiales de cada
+uno.
+
 `POST /optimize` corre la optimización de escala y velocidad de {doc}`20_optimizacion` (malla y,
 si `refine`, evolución diferencial) y devuelve el mejor diseño, la malla de factibilidad y el frente
 de Pareto. `POST /optimize/scaled-net` devuelve la `NetSpec` de la red escalada por `s`

@@ -51,18 +51,29 @@ jobs:
       - run: npx prettier --check .
       - run: npm run typecheck
       - run: npm test
-      - run: npm run build
-      - uses: actions/upload-artifact@v4
-        with:
-          name: web-dist
-          path: web/dist/
-      # E2E contra `vite preview` + API real (Playwright levanta ambos servidores).
       - uses: astral-sh/setup-uv@v5
       - name: Librerías de sistema para WeasyPrint
         run: sudo apt-get update && sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0
       - name: Dependencias de la API
         working-directory: .
         run: uv sync --all-extras --dev
+      # Motor sin conexión: la wheel de trawlkit va con la app (web/public/py/) y se prueba
+      # dentro de Pyodide en Node contra las respuestas de CPython (tolerancia 1e-9).
+      - name: Motor sin conexión (wheel para Pyodide)
+        working-directory: .
+        run: |
+          uv build --wheel -o dist-wheel
+          uv run python tools/offline_bundle.py dist-wheel/trawlkit-*.whl web/public/py
+      - name: Paridad del motor en Pyodide
+        run: |
+          uv run python ../tools/offline_expected.py "$RUNNER_TEMP/offline_expected.json"
+          node scripts/pyodide-parity.mjs ../dist-wheel/trawlkit-*.whl "$RUNNER_TEMP/offline_expected.json"
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist/
+      # E2E contra `vite preview` + API real (Playwright levanta ambos servidores).
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
         env:

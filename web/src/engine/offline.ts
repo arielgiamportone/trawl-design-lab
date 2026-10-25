@@ -1,0 +1,214 @@
+/**
+ * Motor sin conexión en el teléfono (Pyodide en un *Web Worker*, Fase 13).
+ *
+ * «Preparar uso sin conexión» descarga una sola vez el intérprete, numpy, pydantic, pyyaml y la
+ * *wheel* de trawlkit (≈ 15 MB) y los guarda en la caché del navegador; desde entonces, si no hay
+ * red (o si el usuario lo elige), el cliente de la API atiende los pedidos con el motor local:
+ * las mismas rutas y respuestas que la API (``trawlkit.api.offline``).
+ */
+import { APP_CONTRACT } from '../lib/connection';
+import { loadJson, removeKey, saveJson } from '../lib/storage';
+import {
+  ENGINE_KEY,
+  OFFLINE_CACHE,
+  PY_PACKAGES,
+  PYODIDE_CORE,
+  PYODIDE_URL,
+  PYODIDE_VERSION,
+  READY_KEY,
+  wheelDir,
+  type WheelManifest,
+} from './config';
+
+export type EnginePref = 'auto' | 'local';
+
+export interface ReadyInfo {
+  version: string;
+  pyodide: string;
+  at: string;
+  bytes: number;
+}
+
+export function readyInfo(): ReadyInfo | null {
+  const r = loadJson<ReadyInfo>(READY_KEY);
+  return r && typeof r.version === 'string' ? r : null;
+}
+
+export function isPrepared(): boolean {
+  return readyInfo() !== null;
+}
+
+export function enginePref(): EnginePref {
+  return loadJson<EnginePref>(ENGINE_KEY) === 'local' ? 'local' : 'auto';
+}
+
+export function setEnginePref(p: EnginePref): void {
+  saveJson(ENGINE_KEY, p);
+}
+
+/** ¿Hay que usar el motor local sin intentar la red? */
+export function preferLocal(): boolean {
+  if (!isPrepared()) return false;
+  const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+  return offline || enginePref() === 'local';
+}
+
+interface Pending {
+  resolve: (v: unknown) => void;
+  reject: (e: Error) => void;
+  onProgress?: (stage: string) => void;
+}
+
+let worker: Worker | null = null;
+let seq = 0;
+const pending = new Map<number, Pending>();
+let readyPromise: Promise<void> | null = null;
+
+function getWorker(): Worker {
+  if (worker) return worker;
+  worker = new Worker(new URL('./pyodide.worker.ts', import.meta.url), { type: 'module' });
+  worker.onmessage = (e: MessageEvent) => {
+    const m = e.data as {
+      id: number;
+      type: string;
+      stage?: string;
+      out?: string;
+      message?: string;
+    };
+    const p = pending.get(m.id);
+    if (!p) return;
+    if (m.type === 'progress') return p.onProgress?.(m.stage ?? '');
+    pending.delete(m.id);
+    if (m.type === 'error') p.reject(new Error(m.message));
+    else p.resolve(m.out);
+  };
+  return worker;
+}
+
+function send(msg: Record<string, unknown>, onProgress?: (s: string) => void): Promise<unknown> {
+  const id = ++seq;
+  return new Promise((resolve, reject) => {
+    pending.set(id, { resolve, reject, onProgress });
+    getWorker().postMessage({ id, ...msg });
+  });
+}
+
+async function manifest(): Promise<WheelManifest> {
+  const res = await fetch(`${wheelDir()}manifest.json`, { cache: 'no-cache' }).catch(() => null);
+  if (!res?.ok) throw new Error('esta versión de la app no trae el motor sin conexión');
+  return (await res.json()) as WheelManifest;
+}
+
+/** Inicia el motor (una vez por sesión); la primera vez tarda unos segundos. */
+export function startEngine(onProgress?: (stage: string) => void): Promise<void> {
+  readyPromise ??= (async () => {
+    const m = await manifest();
+    await send(
+      {
+        type: 'init',
+        pyodideUrl: PYODIDE_URL,
+        wheelUrl: `${wheelDir()}${m.wheel}`,
+        packages: PY_PACKAGES,
+      },
+      onProgress,
+    );
+  })().catch((err: unknown) => {
+    readyPromise = null;
+    throw err;
+  });
+  return readyPromise;
+}
+
+/** Archivos de los paquetes (y sus dependencias) según el ``pyodide-lock.json``. */
+export function packageFiles(
+  lock: { packages: Record<string, { file_name: string; depends?: string[] }> },
+  names: string[],
+): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  const visit = (n: string) => {
+    const key = n.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    const p = lock.packages[key];
+    if (!p) return;
+    out.push(p.file_name);
+    for (const d of p.depends ?? []) visit(d);
+  };
+  names.forEach(visit);
+  return out;
+}
+
+/**
+ * Descarga y guarda en caché todo lo necesario, inicia el motor y prueba un diseño.
+ * ``onProgress`` recibe la etapa y los bytes descargados.
+ */
+export async function prepareOffline(
+  onProgress: (stage: string, bytes: number) => void,
+): Promise<ReadyInfo> {
+  let bytes = 0;
+  const m = await manifest();
+  onProgress('Buscando los archivos…', 0);
+  const lockRes = await fetch(`${PYODIDE_URL}pyodide-lock.json`);
+  if (!lockRes.ok) throw new Error(`no se pudo leer la lista de paquetes (${lockRes.status})`);
+  const lock = (await lockRes.json()) as Parameters<typeof packageFiles>[0];
+  const urls = [
+    ...PYODIDE_CORE.map((f) => `${PYODIDE_URL}${f}`),
+    ...packageFiles(lock, PY_PACKAGES).map((f) => `${PYODIDE_URL}${f}`),
+    `${wheelDir()}manifest.json`,
+    `${wheelDir()}${m.wheel}`,
+  ];
+  const cache = typeof caches !== 'undefined' ? await caches.open(OFFLINE_CACHE) : null;
+  for (const [i, url] of urls.entries()) {
+    onProgress(`Descargando ${i + 1} de ${urls.length}…`, bytes);
+    const hit = await cache?.match(url);
+    if (hit) {
+      bytes += Number(hit.headers.get('content-length') ?? 0);
+      continue;
+    }
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`falló la descarga de ${url.split('/').pop()} (${res.status})`);
+    const blob = await res.clone().blob();
+    bytes += blob.size;
+    await cache?.put(url, res);
+  }
+  await startEngine((stage) => onProgress(stage, bytes));
+  onProgress('Probando un diseño…', bytes);
+  const test = await localRequest('POST', '/design', '{}');
+  if (!test.ok) throw new Error('el motor sin conexión no pudo calcular el caso de prueba');
+  const info: ReadyInfo = {
+    version: m.version,
+    pyodide: PYODIDE_VERSION,
+    at: new Date().toISOString(),
+    bytes,
+  };
+  saveJson(READY_KEY, info);
+  return info;
+}
+
+/** Olvida el motor sin conexión y libera la caché. */
+export async function forgetOffline(): Promise<void> {
+  removeKey(READY_KEY);
+  setEnginePref('auto');
+  if (typeof caches !== 'undefined') await caches.delete(OFFLINE_CACHE);
+}
+
+/** Atiende un pedido con el motor local como si fuera la API (``Response`` con JSON). */
+export async function localRequest(
+  method: string,
+  path: string,
+  body: string | null,
+): Promise<Response> {
+  await startEngine();
+  const raw = (await send({ type: 'request', method, path, body })) as string;
+  const { status, body: out } = JSON.parse(raw) as { status: number; body: unknown };
+  const payload =
+    // El motor local es de la misma compilación que la app: su contrato es el de la app.
+    path === '/health' && out && typeof out === 'object'
+      ? { ...out, contract: APP_CONTRACT || null, offline: true }
+      : out;
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { 'Content-Type': 'application/json', 'X-Trawlkit-Engine': 'local' },
+  });
+}

@@ -17,12 +17,12 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Capa | Carpeta | Estado |
 |---|---|---|
 | Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
-| Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia. Fase 12: catálogo de 13 redes FAO publicadas y 3 borradores (BOBP/WP/10, /13, /20, Workbook, Schärfe 1983) con procedencia por valor (`data/nets/`, `tools/catalog/`) |
+| Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia. Fase 12: catálogo de 13 redes FAO publicadas y 3 borradores (BOBP/WP/10, /13, /20, Workbook, Schärfe 1983) con procedencia por valor (`data/nets/`, `tools/catalog/`). Fase 13: catálogo de componentes (paño, cables, cabos, portones, boyas, cadenas; genéricos del *Workbook* y datos puntuales de fabricantes, `data/components/`, `tools/components/`) |
 | CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG, con `--optimize` y `--simulate` opcionales), `plan` (lámina o escala real), `optimize`, `serve`, `version`, `errata` |
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/informes.md), ejemplos en [`examples/`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/examples/)) |
 | Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/20_optimizacion.md)) |
 | Simulación de forma | `src/trawlkit/sim/` | Fase 7 (experimental): forma de equilibrio de la red remolcada (elementos triangulares de paño, Morison, boyas, lastre, bridas y fondo; relajación dinámica FIRE), validada contra DynamiT ([capítulo 21](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/21_simulacion.md)) |
-| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`) |
+| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`). Fase 13: pestaña «Componentes» (lista de materiales, armado con el catálogo, aportes), app instalable y motor sin conexión en el teléfono (Pyodide) |
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
@@ -116,7 +116,9 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
     malla T90 y cuadrada, y selectividad (11.3 ✔); incertidumbre, calibración y registros de
     sensores (11.4 ✔)
 12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor ✔
-13. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
+13. Catálogos de componentes con equivalencias genéricas, lista de materiales y costo orientativo,
+    armado óptimo con lo que se consigue, aportes de usuarios y uso sin conexión ✔
+14. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
 
 ## Licencias
 

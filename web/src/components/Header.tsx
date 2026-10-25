@@ -34,7 +34,9 @@ export function Header({ mode, onModeChange }: Props) {
     conn.status === 'ok'
       ? conn.outdated
         ? 'outdated'
-        : 'ok'
+        : conn.local
+          ? 'local'
+          : 'ok'
       : conn.status === 'down'
         ? 'down'
         : 'wait';
@@ -75,7 +77,7 @@ export function Header({ mode, onModeChange }: Props) {
           role="status"
         >
           <span className="led" aria-hidden="true" />
-          {statusLabel(conn.status, conn.version, conn.outdated)}
+          {statusLabel(conn.status, conn.version, conn.outdated, conn.local)}
         </span>
         {conn.status === 'down' && (
           <button type="button" className="api-retry" onClick={conn.retry}>

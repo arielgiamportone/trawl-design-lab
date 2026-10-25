@@ -137,7 +137,13 @@ export function isOutdated(
 }
 
 /** Texto del indicador de conexión para cada estado. */
-export function statusLabel(status: ConnStatus, version?: string, outdated = false): string {
+export function statusLabel(
+  status: ConnStatus,
+  version?: string,
+  outdated = false,
+  local = false,
+): string {
+  if (status === 'ok' && local) return 'Sin conexión · motor del teléfono';
   switch (status) {
     case 'connecting':
       return 'Conectando…';

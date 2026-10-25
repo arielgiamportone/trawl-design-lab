@@ -131,3 +131,10 @@ describe('API desactualizada', () => {
     expect(statusLabel('ok', '1.0.0')).toBe('API conectada · v1.0.0');
   });
 });
+
+describe('statusLabel con el motor del teléfono', () => {
+  it('lo dice en lugar de «API conectada»', async () => {
+    const { statusLabel } = await import('./connection');
+    expect(statusLabel('ok', '1.0.0', false, true)).toBe('Sin conexión · motor del teléfono');
+  });
+});

@@ -1,4 +1,5 @@
 /** Cliente HTTP tipado para la API trawlkit (contrato en ../../openapi.json). */
+import { isPrepared, localRequest, preferLocal } from '../engine/offline';
 import type { Component } from '../lib/components';
 
 /** Ficha de ``GET /catalog/components/{kind}/{id}``: el componente, observaciones y genérico. */
@@ -115,12 +116,26 @@ export function isMissingRoute(detail: unknown): boolean {
   return detail === undefined || detail === 'Not Found';
 }
 
+/** Pedido al motor del teléfono (sin conexión): mismo contrato que la API. */
+async function localFetch(path: string, init?: RequestInit): Promise<Response> {
+  const body = typeof init?.body === 'string' ? init.body : null;
+  return localRequest(init?.method ?? 'GET', path, body);
+}
+
 async function request(path: string, init?: RequestInit): Promise<Response> {
   let res: Response;
-  try {
-    res = await fetch(`${apiBase()}${path}`, init);
-  } catch (err) {
-    throw new ApiError(0, `No se pudo conectar con la API (${apiBase()}): ${String(err)}`);
+  if (preferLocal()) {
+    res = await localFetch(path, init);
+  } else {
+    try {
+      res = await fetch(`${apiBase()}${path}`, init);
+    } catch (err) {
+      if (init?.signal?.aborted || !isPrepared()) {
+        throw new ApiError(0, `No se pudo conectar con la API (${apiBase()}): ${String(err)}`);
+      }
+      // Sin red: el motor del teléfono atiende el pedido.
+      res = await localFetch(path, init);
+    }
   }
   if (!res.ok) {
     let detail: unknown;

@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
+import { HEAVY_TABS, useLowData } from '../lib/lowdata';
 import { loadJson, saveJson } from '../lib/storage';
 import { TAB_IDS, TAB_KEY } from '../lib/tabs';
 import { useCase } from '../state/useCase';
@@ -32,9 +33,10 @@ export function Results() {
     setTabState(t);
     saveJson(TAB_KEY, t);
   };
+  const lowData = useLowData();
   const data = design.data;
   const notes = data?.notes.length ?? 0;
-  const tabs: TabDef[] = [
+  const allTabs: TabDef[] = [
     { id: 'resumen', label: 'Resumen' },
     { id: 'graficos', label: 'Gráficos' },
     { id: 'diseno', label: 'Diseño interactivo' },
@@ -54,26 +56,28 @@ export function Results() {
       label: <>Notas y erratas {notes > 0 && <span className="badge">{notes}</span>}</>,
     },
   ];
+  const tabs = lowData ? allTabs.filter((t) => !HEAVY_TABS.includes(t.id)) : allTabs;
+  const active = tabs.some((t) => t.id === tab) ? tab : 'resumen';
 
   return (
     <>
       <Kpis />
       <section className="card" aria-label="Detalle de resultados">
-        <Tabs tabs={tabs} active={tab} onChange={setTab} label="Secciones de resultados">
-          {tab === 'resumen' && <SummaryTable />}
+        <Tabs tabs={tabs} active={active} onChange={setTab} label="Secciones de resultados">
+          {active === 'resumen' && <SummaryTable />}
           <Suspense fallback={<p className="empty">Cargando…</p>}>
-            {tab === 'graficos' && <Charts />}
-            {tab === 'comparar' && <Compare />}
-            {tab === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}
-            {tab === 'simulacion' && <Simulate />}
-            {tab === 'diseno' && <InteractiveDesign />}
-            {tab === 'catalogo' && <Catalog />}
-            {tab === 'componentes' && <Components />}
+            {active === 'graficos' && <Charts />}
+            {active === 'comparar' && <Compare />}
+            {active === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}
+            {active === 'simulacion' && <Simulate />}
+            {active === 'diseno' && <InteractiveDesign />}
+            {active === 'catalogo' && <Catalog />}
+            {active === 'componentes' && <Components />}
           </Suspense>
-          {tab === 'paneles' && <PanelEditor />}
-          {tab === 'plano' && <PlanViewer />}
-          {tab === 'descargas' && <Downloads />}
-          {tab === 'notas' && <NotesErrata />}
+          {active === 'paneles' && <PanelEditor />}
+          {active === 'plano' && <PlanViewer />}
+          {active === 'descargas' && <Downloads />}
+          {active === 'notas' && <NotesErrata />}
         </Tabs>
       </section>
     </>

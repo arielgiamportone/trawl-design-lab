@@ -9,11 +9,8 @@ Convenciones del modelo original que se conservan como constantes nombradas:
 
 from __future__ import annotations
 
-import pint
-
-ureg = pint.UnitRegistry()
-ureg.formatter.default_format = "~P"
-Q_ = ureg.Quantity
+from functools import cache
+from typing import Any
 
 KNOT_TO_MS: float = 0.5144  # valor usado en el Excel (B272)
 KGF_TO_N: float = 9.80665
@@ -42,3 +39,25 @@ def kgf_to_n(f_kgf: float) -> float:
 def n_to_kgf(f_n: float) -> float:
     """Convierte N a kgf."""
     return f_n / KGF_TO_N
+
+
+@cache
+def _registry() -> Any:
+    import pint
+
+    reg = pint.UnitRegistry()
+    reg.formatter.default_format = "~P"
+    return reg
+
+
+def __getattr__(name: str) -> Any:
+    """``ureg`` y ``Q_`` de pint, creados al primer uso.
+
+    El motor no los necesita para calcular; así corre también donde pint no está instalado,
+    como el navegador con Pyodide.
+    """
+    if name == "ureg":
+        return _registry()
+    if name == "Q_":
+        return _registry().Quantity
+    raise AttributeError(name)

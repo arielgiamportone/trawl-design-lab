@@ -110,6 +110,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
     (una genérica si el mejor armado lleva marcas);
   - API: `POST /design/bom` y `POST /optimize/components`; `params` admite booleanos en los
     campos booleanos.
+- **Acceso: web, aportes y uso sin conexión (Fase 13.3)**:
+  - pestaña «Componentes»: catálogo con filtros y ficha (procedencia, validador, genérico
+    equivalente, «Usar en el caso»), lista de materiales con precios del usuario (CSV e
+    impresión/PDF), «Armar con el catálogo» y aportes de usuarios (validados, guardados en el
+    navegador como «aporte, sin verificar», exportables y proponibles como *issue* con la
+    plantilla `.github/ISSUE_TEMPLATE/componente.yml`);
+  - API: `components` (aportes en línea, sólo para ese pedido) en `/design`, `/design/bom` y
+    `/optimize/components`; una red del catálogo FAO con un portón elegido conserva su buque;
+  - PWA instalable (`vite-plugin-pwa`) y motor sin conexión: Pyodide 0.29.5 con la *wheel* de
+    trawlkit en un *Web Worker* (`trawlkit.api.offline`, las mismas rutas que la API), descargado
+    con «Preparar uso sin conexión»; prueba de paridad en Node contra CPython y e2e sin red;
+  - modo de bajo consumo de datos (sin vistas 3D ni simulación);
+  - pint se carga al primer uso de `trawlkit.ureg`/`trawlkit.Q_` (el motor no lo necesita);
+  - capítulo 34 «Componentes: catálogos, equivalencias y costo».
 - Cables: si ningún cable del catálogo alcanza la carga de rotura, se elige el más grueso con la
   nota `warp_undersized` (antes, error).
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto

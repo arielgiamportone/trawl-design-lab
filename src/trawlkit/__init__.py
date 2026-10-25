@@ -29,7 +29,14 @@ from trawlkit import (
 )
 from trawlkit.compat import Compat
 from trawlkit.model import DesignCase, DesignResult, run
-from trawlkit.units import Q_, ureg
+
+
+def __getattr__(name: str) -> object:
+    """``trawlkit.ureg`` y ``trawlkit.Q_`` (pint) se cargan al primer uso."""
+    if name in ("ureg", "Q_"):
+        return getattr(units, name)
+    raise AttributeError(name)
+
 
 __all__ = [
     "Compat",
