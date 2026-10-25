@@ -5,6 +5,9 @@ por borde) y velocidad de arrastre ``v``. Objetivos: área barrida por hora, vol
 hora o trabajo de remolque por m² barrido. Restricciones: reserva de tiro, red abierta, cable,
 portón y rango de velocidad. Ver ``docs/20_optimizacion.md``.
 
+:func:`optimise_components` (Fase 13) arma el aparejo con componentes del catálogo (portón,
+cable, boyas e hilo) por resistencia, eficiencia o costo.
+
 Uso::
 
     from trawlkit.optimize import optimise
@@ -12,6 +15,12 @@ Uso::
     res.best.s, res.best.v_kn, res.best.area_rate_m2_h
 """
 
+from trawlkit.optimize.components import (
+    COMPONENT_OBJECTIVES,
+    Assembly,
+    ComponentOptimization,
+    optimise_components,
+)
 from trawlkit.optimize.evaluate import (
     OBJECTIVE_ALIASES,
     OBJECTIVES,
@@ -34,8 +43,11 @@ from trawlkit.optimize.search import (
 from trawlkit.optimize.summary import summary_markdown
 
 __all__ = [
+    "COMPONENT_OBJECTIVES",
     "OBJECTIVES",
     "OBJECTIVE_ALIASES",
+    "Assembly",
+    "ComponentOptimization",
     "Constraint",
     "Curves",
     "Evaluation",
@@ -46,6 +58,7 @@ __all__ = [
     "evaluate",
     "grid_search",
     "optimise",
+    "optimise_components",
     "pareto_front",
     "scale_count",
     "scale_door",

@@ -11,6 +11,7 @@ sufijo diga ``_m``, ángulos en grados.
 from __future__ import annotations
 
 import csv
+from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import cache
 from typing import Any
@@ -398,6 +399,7 @@ def select_warp(
     min_diameter_mm: float,
     min_breaking_load_kgf: float,
     compat: Compat = Compat.CORRECTED,
+    items: Sequence[dict[str, Any]] | None = None,
 ) -> WarpSelection:
     """Cable de acero del catálogo (6x19+1 Seale) para el diámetro y la carga de rotura requeridos.
 
@@ -407,8 +409,15 @@ def select_warp(
     devuelve el menor diámetro que cumple a la vez Ø ≥ ``min_diameter_mm`` y
     rotura ≥ ``min_breaking_load_kgf`` (13 mm / 10.3 t para el modelo); si ninguno cumple,
     el más grueso del catálogo con ``satisfies_breaking_load = False``.
+
+    ``items`` reemplaza al catálogo del libro (p. ej. los cables del catálogo de componentes
+    filtrados por marca o región, Fase 13); cada ítem necesita ``id``, ``construction``,
+    ``diameter_mm``, ``weight_kg_per_m`` y ``breaking_load_t``.
     """
-    items = sorted(load_catalogue("warps").items, key=lambda it: float(it["diameter_mm"]))
+    pool = load_catalogue("warps").items if items is None else list(items)
+    if not pool:
+        raise ValueError("no hay cables para elegir (revise los filtros de componentes)")
+    items = sorted(pool, key=lambda it: float(it["diameter_mm"]))
     diameters = [float(it["diameter_mm"]) for it in items]
     if compat is Compat.EXCEL:
         chosen = items[excel_lookup_index(min_diameter_mm, diameters)]

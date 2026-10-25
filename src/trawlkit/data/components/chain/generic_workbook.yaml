@@ -1,0 +1,352 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: chain
+sources:
+- key: prado1990
+  title: FAO Fisherman's Workbook (Prado y Dremière 1990)
+  url: https://www.fao.org/3/ah827e/ah827e.pdf
+  accessed: '2026-10-25'
+items:
+- id: chain_common_5mm
+  name: Cadena de acero común Ø5 mm
+  link: corto
+  link_diameter_mm: 5.0
+  weight_kg_per_m: 0.5
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_6mm
+  name: Cadena de acero común Ø6 mm
+  link: corto
+  link_diameter_mm: 6.0
+  weight_kg_per_m: 0.75
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_7mm
+  name: Cadena de acero común Ø7 mm
+  link: corto
+  link_diameter_mm: 7.0
+  weight_kg_per_m: 1.0
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_8mm
+  name: Cadena de acero común Ø8 mm
+  link: corto
+  link_diameter_mm: 8.0
+  weight_kg_per_m: 1.35
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_9mm
+  name: Cadena de acero común Ø9 mm
+  link: corto
+  link_diameter_mm: 9.0
+  weight_kg_per_m: 1.9
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_10mm
+  name: Cadena de acero común Ø10 mm
+  link: corto
+  link_diameter_mm: 10.0
+  weight_kg_per_m: 2.25
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_11mm
+  name: Cadena de acero común Ø11 mm
+  link: corto
+  link_diameter_mm: 11.0
+  weight_kg_per_m: 2.7
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_13mm
+  name: Cadena de acero común Ø13 mm
+  link: corto
+  link_diameter_mm: 13.0
+  weight_kg_per_m: 3.8
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_14mm
+  name: Cadena de acero común Ø14 mm
+  link: corto
+  link_diameter_mm: 14.0
+  weight_kg_per_m: 4.4
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_16mm
+  name: Cadena de acero común Ø16 mm
+  link: corto
+  link_diameter_mm: 16.0
+  weight_kg_per_m: 5.8
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_18mm
+  name: Cadena de acero común Ø18 mm
+  link: corto
+  link_diameter_mm: 18.0
+  weight_kg_per_m: 7.3
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_common_20mm
+  name: Cadena de acero común Ø20 mm
+  link: corto
+  link_diameter_mm: 20.0
+  weight_kg_per_m: 9.0
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: peso aproximado
+  notes:
+  - El Workbook no da la rotura de la cadena común; no usarla en tiro.
+- id: chain_ht_7mm
+  name: Cadena de acero de alta resistencia Ø7 mm
+  link: corto
+  link_diameter_mm: 7.0
+  grade: alta resistencia
+  weight_kg_per_m: 1.09
+  breaking_load_t: 6.158
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    breaking_load_t:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: ton-fuerza
+- id: chain_ht_10mm
+  name: Cadena de acero de alta resistencia Ø10 mm
+  link: corto
+  link_diameter_mm: 10.0
+  grade: alta resistencia
+  weight_kg_per_m: 2.207
+  breaking_load_t: 12.57
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    breaking_load_t:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: ton-fuerza
+- id: chain_ht_13mm
+  name: Cadena de acero de alta resistencia Ø13 mm
+  link: corto
+  link_diameter_mm: 13.0
+  grade: alta resistencia
+  weight_kg_per_m: 3.72
+  breaking_load_t: 21.24
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    breaking_load_t:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: ton-fuerza
+- id: chain_ht_16mm
+  name: Cadena de acero de alta resistencia Ø16 mm
+  link: corto
+  link_diameter_mm: 16.0
+  grade: alta resistencia
+  weight_kg_per_m: 5.64
+  breaking_load_t: 32.175
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    breaking_load_t:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: ton-fuerza
+- id: chain_ht_19mm
+  name: Cadena de acero de alta resistencia Ø19 mm
+  link: corto
+  link_diameter_mm: 19.0
+  grade: alta resistencia
+  weight_kg_per_m: 7.14
+  breaking_load_t: 45.37
+  regions:
+  - global
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    weight_kg_per_m:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+    breaking_load_t:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Chains and thimbles»
+      note: ton-fuerza

@@ -1,0 +1,845 @@
+"""Genera ``src/trawlkit/data/components/<tipo>/<fuente>.yaml`` (Fase 13).
+
+* **Genéricos** (``generic_workbook.yaml``): ajusta una ley por material o construcción a las
+  tablas del FAO *Fisherman's Workbook* (``tools/components/sources.py``) y escribe ítems a
+  tamaños estándar con valores *derivados* del ajuste (el error máximo va en la procedencia).
+  Boyas, cadenas y portones se transcriben (son ejemplos por tamaño o potencia).
+* **Fabricantes**: datos puntuales con su fuente y su genérico equivalente.
+* **Libro Excel de la A-3** (``excel_a3.yaml``): los catálogos del libro, con procedencia Excel.
+
+Después valida cada ítem (``trawlkit.components.check``) y falla si hay errores.
+
+    uv run python tools/components/build_components.py
+"""
+
+from __future__ import annotations
+
+import math
+import pathlib
+import sys
+from collections.abc import Callable, Sequence
+from typing import Any
+
+import numpy as np
+import yaml
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+
+from tools.components import sources as src  # noqa: E402
+
+OUT = ROOT / "src" / "trawlkit" / "data" / "components"
+DATA = ROOT / "src" / "trawlkit" / "data"
+HEADER = (
+    "# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes\n"
+    "# (tools/components/sources.py) y regenerar.\n"
+)
+
+
+# --- Ajustes ---------------------------------------------------------------------------------
+
+
+def power_fit(x: Sequence[float], y: Sequence[float]) -> tuple[float, float, float]:
+    """``y = a·x^b`` por mínimos cuadrados en logaritmos; devuelve (a, b, error relativo máx)."""
+    lx, ly = np.log(np.asarray(x, float)), np.log(np.asarray(y, float))
+    b, la = np.polyfit(lx, ly, 1)
+    a = math.exp(la)
+    err = float(np.max(np.abs(a * np.asarray(x, float) ** b / np.asarray(y, float) - 1.0)))
+    return a, float(b), err
+
+
+def d2_fit(d: Sequence[float], y: Sequence[float]) -> tuple[float, float]:
+    """``y = k·d²`` por mínimos cuadrados; devuelve (k, error relativo máx)."""
+    dd = np.asarray(d, float) ** 2
+    yy = np.asarray(y, float)
+    k = float(np.sum(yy * dd) / np.sum(dd * dd))
+    return k, float(np.max(np.abs(k * dd / yy - 1.0)))
+
+
+def r(x: float, nd: int = 3) -> float:
+    """Redondeo a ``nd`` cifras significativas."""
+    if x == 0:
+        return 0.0
+    return float(f"{x:.{nd}g}")
+
+
+def num(x: float) -> str:
+    return f"{x:.3g}".replace(".", ",")
+
+
+# --- Procedencia -----------------------------------------------------------------------------
+
+
+def prov(doc: str, kind: str = "transcribed", page: str | None = None, note: str | None = None):
+    d: dict[str, Any] = {"kind": kind, "document": doc}
+    if page:
+        d["page"] = page
+    if note:
+        d["note"] = note
+    return d
+
+
+def source(doc: str, page: str | None = None) -> dict[str, Any]:
+    s = {k: v for k, v in src.DOCS[doc].items() if v is not None}
+    s["accessed"] = src.ACCESSED
+    if page:
+        s["page"] = page
+    return s
+
+
+# --- Genéricos del Workbook ------------------------------------------------------------------
+
+WB = "prado1990"
+
+
+def twine_generics() -> list[dict[str, Any]]:
+    out = []
+    for key, t in src.TWINE_TABLES.items():
+        rt = [p[0] for p in t["points"]]
+        fits = {
+            "diameter_mm": power_fit(rt, [p[1] for p in t["points"]]),
+            "breaking_load_kgf": power_fit(rt, [p[2] for p in t["points"]]),
+            "knot_breaking_load_kgf": power_fit(rt, [p[3] for p in t["points"]]),
+        }
+        page = f"Workbook, «{t['page']}»"
+        for rtex in rt:
+            item: dict[str, Any] = {
+                "id": f"twine_{key.lower()}_r{rtex}",
+                "name": f"Hilo {t['material']} {t['construction'].split(',')[0]} R{rtex} tex",
+                "material": t["material"],
+                "construction": t["construction"],
+                "rtex": float(rtex),
+                "runnage_m_per_kg": r(1e6 / rtex),
+                "knotted": True,
+                "regions": ["global"],
+                "provenance": {
+                    "rtex": prov(WB, page=page, note="tamaño de la tabla de referencia"),
+                    "runnage_m_per_kg": prov(WB, "derived", page, "10⁶ / Rtex"),
+                },
+            }
+            for f, (a, b, err) in fits.items():
+                item[f] = r(a * rtex**b)
+                what = {
+                    "diameter_mm": "diámetro",
+                    "breaking_load_kgf": "rotura seco sin nudo",
+                    "knot_breaking_load_kgf": "rotura mojado con nudo",
+                }[f]
+                item["provenance"][f] = prov(
+                    WB,
+                    "derived",
+                    page,
+                    f"{what} = {num(a)}·Rtex^{b:.3f}, ajuste a {len(rt)} filas de la tabla "
+                    f"(error máx. {100 * err:.0f} %)",
+                )
+            out.append(item)
+    return out
+
+
+ROPE_SIZES = (6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 40)
+
+
+def rope_generics() -> list[dict[str, Any]]:
+    out = []
+    for key, t in src.ROPE_TABLES.items():
+        d = [p[0] for p in t["points"]]
+        kgm = [p[1] if t.get("kg_per_m") else p[1] / 100.0 for p in t["points"]]
+        mbl_t = [p[2] / 1000.0 for p in t["points"]]
+        kw, ew = d2_fit(d, kgm)
+        am, bm, em = power_fit(d, mbl_t)
+        material = t.get("material", key)
+        page = (
+            "Workbook, «Synthetic fibre rope»"
+            if material != "combinado"
+            else ("Workbook, «Combination wire (2): steel - polypropylene»")
+        )
+        sizes = [s for s in ROPE_SIZES if min(d) <= s <= max(d)]
+        for s in sizes:
+            out.append(
+                {
+                    "id": f"rope_{key.lower()}_{s}mm",
+                    "name": f"Cabo {material} {t['construction']} Ø{s} mm",
+                    "material": material,
+                    "construction": t["construction"],
+                    "diameter_mm": float(s),
+                    "weight_kg_per_m": r(kw * s * s),
+                    "breaking_load_t": r(am * s**bm),
+                    "regions": ["global"],
+                    "provenance": {
+                        "diameter_mm": prov(WB, page=page, note="tamaño estándar"),
+                        "weight_kg_per_m": prov(
+                            WB,
+                            "derived",
+                            page,
+                            f"kg/m = {kw:.5f}·d², ajuste a {len(d)} filas (error máx. "
+                            f"{100 * ew:.0f} %)",
+                        ),
+                        "breaking_load_t": prov(
+                            WB,
+                            "derived",
+                            page,
+                            f"rotura [t] = {num(am)}·d^{bm:.3f}, ajuste a {len(d)} filas (error "
+                            f"máx. {100 * em:.0f} %)",
+                        ),
+                    },
+                }
+            )
+    return out
+
+
+def wire_generics() -> list[dict[str, Any]]:
+    out = []
+    page = "Workbook, «Galvanised steel wire rope: runnage, breaking strength»"
+    for key, t in src.WIRE_TABLES.items():
+        d = [p[0] for p in t["points"]]
+        kw, ew = d2_fit(d, [p[1] / 100.0 for p in t["points"]])
+        km, em = d2_fit(d, [p[2] / 1000.0 for p in t["points"]])
+        for s in range(int(min(d)), int(max(d)) + 1, 2 if max(d) - min(d) > 8 else 1):
+            out.append(
+                {
+                    "id": f"wire_{key}_{s}mm",
+                    "name": f"Cable de acero galvanizado {t['construction']} Ø{s} mm",
+                    "construction": t["construction"],
+                    "core": t["core"],
+                    "diameter_mm": float(s),
+                    "weight_kg_per_m": r(kw * s * s),
+                    "breaking_load_t": r(km * s * s),
+                    "regions": ["global"],
+                    "notes": [f"Uso habitual: {t['use']}."],
+                    "provenance": {
+                        "diameter_mm": prov(
+                            WB, page=page, note="tamaño dentro del rango de la tabla"
+                        ),
+                        "weight_kg_per_m": prov(
+                            WB,
+                            "derived",
+                            page,
+                            f"kg/m = {kw:.5f}·d², ajuste a {len(d)} filas (error máx. "
+                            f"{100 * ew:.0f} %)",
+                        ),
+                        "breaking_load_t": prov(
+                            WB,
+                            "derived",
+                            page,
+                            f"rotura [t] = {km:.5f}·d² (acero de 145 kgf/mm²), ajuste a {len(d)} "
+                            f"filas (error máx. {100 * em:.0f} %)",
+                        ),
+                    },
+                }
+            )
+    return out
+
+
+def float_generics() -> list[dict[str, Any]]:
+    page = "Workbook, «Spherical floats and trawl floats» (ejemplos de catálogos de proveedores)"
+    out = []
+    for k, (mat, mount, dia, vol, buoy, depth) in enumerate(src.FLOAT_TABLE):
+        slug = "alu" if mat == "aluminio" else "pl"
+        out.append(
+            {
+                "id": f"float_{slug}_{int(dia)}mm_{k}",
+                "name": f"Boya de {mat} Ø{int(dia)} mm, {mount}",
+                "material": mat,
+                "mount": mount,
+                "diameter_mm": float(dia),
+                "volume_l": float(vol),
+                "buoyancy_kgf": float(buoy),
+                "max_depth_m": float(depth),
+                "regions": ["global"],
+                "provenance": {
+                    f: prov(WB, page=page)
+                    for f in ("diameter_mm", "volume_l", "buoyancy_kgf", "max_depth_m")
+                },
+                "notes": [
+                    "La profundidad máxima depende del fabricante; confirmarla con el proveedor."
+                ],
+            }
+        )
+    return out
+
+
+def chain_generics() -> list[dict[str, Any]]:
+    page = "Workbook, «Chains and thimbles»"
+    out = []
+    for dia, w in src.CHAIN_COMMON:
+        out.append(
+            {
+                "id": f"chain_common_{int(dia)}mm",
+                "name": f"Cadena de acero común Ø{int(dia)} mm",
+                "link": "corto",
+                "link_diameter_mm": float(dia),
+                "weight_kg_per_m": float(w),
+                "regions": ["global"],
+                "provenance": {
+                    "link_diameter_mm": prov(WB, page=page),
+                    "weight_kg_per_m": prov(WB, page=page, note="peso aproximado"),
+                },
+                "notes": ["El Workbook no da la rotura de la cadena común; no usarla en tiro."],
+            }
+        )
+    for dia, mbl, w in src.CHAIN_HIGH_TENSILE:
+        out.append(
+            {
+                "id": f"chain_ht_{int(dia)}mm",
+                "name": f"Cadena de acero de alta resistencia Ø{int(dia)} mm",
+                "link": "corto",
+                "link_diameter_mm": float(dia),
+                "grade": "alta resistencia",
+                "weight_kg_per_m": float(w),
+                "breaking_load_t": float(mbl),
+                "regions": ["global"],
+                "provenance": {
+                    "link_diameter_mm": prov(WB, page=page),
+                    "weight_kg_per_m": prov(WB, page=page),
+                    "breaking_load_t": prov(WB, page=page, note="ton-fuerza"),
+                },
+            }
+        )
+    return out
+
+
+def _excel_door(door_id: str) -> dict[str, Any]:
+    raw = yaml.safe_load((DATA / "doors.yaml").read_text(encoding="utf-8"))
+    return next(d for d in raw["doors"] if d["id"] == door_id)
+
+
+def _polar(door_id: str, scale_cl: float = 1.0) -> list[dict[str, Any]]:
+    out = []
+    for c in _excel_door(door_id)["coefficients"]:
+        if c.get("cl") is None or c.get("cd") is None:
+            continue
+        out.append({"angle_deg": c["angle_deg"], "cl": round(c["cl"] * scale_cl, 3), "cd": c["cd"]})
+    return out
+
+
+FLAT_POLAR_NOTE = (
+    "polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias "
+    "B259:D264); su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura "
+    "(Lange 1993)"
+)
+OVAL_POLAR_NOTE = (
+    "polar del portón oval polivalente (Morgère) del libro Excel de la A-3 (Tablas de "
+    "Referencias B281:D286)"
+)
+
+
+def door_generics() -> list[dict[str, Any]]:
+    page = "Workbook, «Otter boards: properties of the principal types, choice depending on power»"
+    out: list[dict[str, Any]] = []
+
+    def base(
+        did: str,
+        name: str,
+        typ: str,
+        hp: tuple[float, float],
+        length: float,
+        height: float,
+        area: float,
+        weight: tuple[float, float],
+        polar: list[dict[str, Any]],
+        polar_prov: dict,
+        wcoef: float,
+        dims_prov: dict | None = None,
+    ) -> dict[str, Any]:
+        w = 0.5 * (weight[0] + weight[1])
+        dp = dims_prov or prov(WB, page=page)
+        return {
+            "id": did,
+            "name": name,
+            "type": typ,
+            "length_m": length,
+            "height_m": height,
+            "area_m2": area,
+            "weight_air_kg": w,
+            "weight_water_coefficient": wcoef,
+            "hp_range": [hp[0], hp[1]],
+            "coefficients": polar,
+            "regions": ["global"],
+            "provenance": {
+                "length_m": dp,
+                "height_m": dp,
+                "area_m2": prov(WB, page=page),
+                "weight_air_kg": prov(
+                    WB,
+                    page=page,
+                    note=f"peso máximo usado {weight[0]:g}–{weight[1]:g} kg: valor medio; con un "
+                    "material liviano puede ser hasta 50 % menor",
+                ),
+                "hp_range": prov(WB, page=page),
+                "coefficients": polar_prov,
+            },
+        }
+
+    flat = _polar("fao_flat_wood_a3")
+    for hp, length, height, area, weight in src.DOOR_FLAT:
+        out.append(
+            base(
+                f"door_flat_{int(hp[1])}hp",
+                f"Portón plano rectangular {length:g} × {height:g} m ({int(hp[0])}–{int(hp[1])} hp)"
+                if hp[0] != hp[1]
+                else f"Portón plano rectangular {length:g} × {height:g} m ({int(hp[0])} hp)",
+                "flat",
+                hp,
+                length,
+                height,
+                area,
+                weight,
+                flat,
+                prov("giamportone2024", "derived", note=FLAT_POLAR_NOTE),
+                0.6,
+            )
+        )
+    oval = _polar("morgere_polivalente_oval")
+    for hp, length, height, area, weight in src.DOOR_OVAL:
+        out.append(
+            base(
+                f"door_oval_{int(hp[1])}hp",
+                f"Portón oval cambado {length:g} × {height:g} m ({int(hp[0])} hp)",
+                "oval",
+                hp,
+                length,
+                height,
+                area,
+                weight,
+                oval,
+                prov("giamportone2024", "derived", note=OVAL_POLAR_NOTE),
+                0.87,
+            )
+        )
+    k = src.CL_MAX["v"] / 0.93
+    vpolar = _polar("fao_flat_wood_a3", scale_cl=k)
+    for hp, area, weight in src.DOOR_V:
+        length = math.sqrt(area / 0.5)
+        height = 0.5 * length
+        out.append(
+            base(
+                f"door_v_{int(hp)}hp",
+                f"Portón en V de {area:g} m² ({int(hp)} hp)",
+                "v",
+                (hp, hp),
+                round(length, 2),
+                round(height, 2),
+                area,
+                (weight, weight),
+                vpolar,
+                prov(
+                    "lange1993",
+                    "assumed",
+                    note=f"polar del portón plano con CL × {k:.3f}: el portón en V plano tiene "
+                    "CL máximo 0,70–0,85 (Lange 1993) frente a 0,95 del plano; CD sin cambio",
+                ),
+                0.87,
+                dims_prov=prov(
+                    WB,
+                    "assumed",
+                    page,
+                    "el Workbook da sólo la superficie; se supone alto/largo = 0,5",
+                ),
+            )
+        )
+    for i, (hp, h, length, area, weight) in enumerate(src.DOOR_SUBERKRUB):
+        out.append(
+            base(
+                f"door_suberkrub_{area:g}m2".replace(".", "_"),
+                f"Portón pelágico Süberkrüb {area:g} m² ({int(hp[0])}–{int(hp[1])} hp)"
+                if hp[0] != hp[1]
+                else f"Portón pelágico Süberkrüb {area:g} m² ({int(hp[0])} hp)",
+                "suberkrub",
+                hp,
+                length,
+                h,
+                area,
+                weight,
+                oval,
+                prov(
+                    "giamportone2024",
+                    "assumed",
+                    note="no hay polar publicada del Süberkrüb; se usa la del portón oval "
+                    "cambado (" + OVAL_POLAR_NOTE + ")",
+                ),
+                0.87,
+            )
+        )
+        del i
+    return out
+
+
+def door_rebyc() -> list[dict[str, Any]]:
+    page = "Tabla 5 y texto «Puertas de arrastre»"
+    flat = _polar("fao_flat_wood_a3")
+    out = []
+    for label, length, height, use in src.DOOR_REBYC:
+        out.append(
+            {
+                "id": "door_rebyc_" + label.replace("'", "ft").replace('"', "in").replace("x", "x"),
+                "name": f"Puerta plana de madera {label} (flota camaronera del Caribe colombiano)",
+                "type": "flat_wood",
+                "product": "medida usada en la flota",
+                "length_m": round(length, 3),
+                "height_m": round(height, 3),
+                "area_m2": round(length * height, 3),
+                "hp_range": [165, 520],
+                "weight_water_coefficient": 0.6,
+                "coefficients": flat,
+                "country": "CO",
+                "regions": ["latam"],
+                "notes": [f"Uso: {use}."],
+                "provenance": {
+                    "length_m": prov("zuniga2006", page=page, note=f"{label} (pies × pulgadas)"),
+                    "height_m": prov("zuniga2006", page=page, note=f"{label} (pies × pulgadas)"),
+                    "area_m2": prov("zuniga2006", "derived", page, "largo × alto"),
+                    "hp_range": prov(
+                        "zuniga2006", page="Tabla 1", note="potencia de la flota: 165–520 hp"
+                    ),
+                    "coefficients": prov("giamportone2024", "assumed", note=FLAT_POLAR_NOTE),
+                },
+            }
+        )
+    return out
+
+
+# --- Fabricantes -----------------------------------------------------------------------------
+
+
+def nearest_generic(
+    generics: list[dict[str, Any]],
+    key: Callable[[dict[str, Any]], float],
+    target: float,
+    pred: Callable[[dict[str, Any]], bool],
+) -> str | None:
+    cands = [g for g in generics if pred(g)]
+    if not cands:
+        return None
+    return min(cands, key=lambda g: abs(key(g) - target))["id"]
+
+
+def garware_twine(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out = []
+    for line, t in src.GARWARE_TWINE.items():
+        page = f"Garware, «{t['page']}»"
+        for dia, run, bl, kbl in t["points"]:
+            rtex = 1e6 / run
+            out.append(
+                {
+                    "id": f"garware_{line.lower()}_{str(dia).replace('.', '_')}mm",
+                    "name": f"Garware {line} Ø{dia:g} mm (PE trenzado para arrastre)",
+                    "brand": "Garware",
+                    "product": line,
+                    "country": "IN",
+                    "regions": ["global", "south_asia", "africa", "latam"],
+                    "material": "PE",
+                    "construction": "trenzado",
+                    "diameter_mm": dia,
+                    "runnage_m_per_kg": float(run),
+                    "rtex": r(rtex),
+                    "breaking_load_kgf": float(bl),
+                    "knot_breaking_load_kgf": float(kbl),
+                    "generic_of": nearest_generic(
+                        generics, lambda g: g["rtex"], rtex, lambda g: g["material"] == "PE"
+                    ),
+                    "notes": [t["note"] + "."],
+                    "provenance": {
+                        "diameter_mm": prov("garware_fisheries", page=page, note="diámetro real"),
+                        "runnage_m_per_kg": prov("garware_fisheries", page=page),
+                        "breaking_load_kgf": prov("garware_fisheries", page=page),
+                        "knot_breaking_load_kgf": prov(
+                            "garware_fisheries",
+                            page=page,
+                            note="la ficha da la rotura con nudo mayor que sin nudo (ensayo "
+                            "propio del fabricante)",
+                        ),
+                        "rtex": prov("garware_fisheries", "derived", page, "10⁶ / rendimiento"),
+                    },
+                }
+            )
+    return out
+
+
+def garware_rope(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    page = "Garware, «Fisheries: Trawl Ropes» (X2)"
+    out = []
+    for dia, gm, bl in src.GARWARE_X2:
+        out.append(
+            {
+                "id": f"garware_x2_{int(dia)}mm",
+                "name": f"Garware X2 Ø{int(dia)} mm (PP/PE tipo Danline)",
+                "brand": "Garware",
+                "product": "X2",
+                "country": "IN",
+                "regions": ["global", "south_asia", "africa", "latam"],
+                "material": "PP",
+                "construction": "3 o 4 cordones, mezcla PP/PE",
+                "diameter_mm": float(dia),
+                "weight_kg_per_m": gm / 1000.0,
+                "breaking_load_t": bl / 1000.0,
+                "generic_of": nearest_generic(
+                    generics,
+                    lambda g: g["diameter_mm"],
+                    dia,
+                    lambda g: g["material"] == "PP",
+                ),
+                "notes": ["Relingas, refuerzos, tiras del copo y frente de redes pelágicas."],
+                "provenance": {
+                    "diameter_mm": prov("garware_fisheries", page=page),
+                    "weight_kg_per_m": prov("garware_fisheries", page=page, note="g/m de la ficha"),
+                    "breaking_load_t": prov("garware_fisheries", page=page, note="kgf de la ficha"),
+                },
+            }
+        )
+    return out
+
+
+def bridon_wire(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    out = []
+    for product, t in src.BRIDON_WIRE.items():
+        page = f"Bridon-Bekaert 2023, «{product.split(' 6x')[0]}»"
+        for dia, kg100, mbl in t["points"]:
+            slug = product.lower().replace(" ", "_").replace("(", "").replace(")", "")
+            slug = slug.replace("/", "").replace("&", "")
+            out.append(
+                {
+                    "id": f"bridon_{slug}_{int(dia)}mm",
+                    "name": f"Bridon-Bekaert {product} Ø{int(dia)} mm",
+                    "brand": "Bridon-Bekaert",
+                    "product": product,
+                    "country": "BE",
+                    "regions": ["global", "europe"],
+                    "construction": t["construction"],
+                    "core": t["core"],
+                    "diameter_mm": float(dia),
+                    "weight_kg_per_m": kg100 / 100.0,
+                    "breaking_load_t": float(mbl),
+                    "generic_of": nearest_generic(
+                        generics,
+                        lambda g: g["diameter_mm"],
+                        dia,
+                        lambda g, key=t["generic"]: g["id"].startswith(f"wire_{key}_"),
+                    ),
+                    "provenance": {
+                        "diameter_mm": prov("bridon2023", page=page),
+                        "weight_kg_per_m": prov("bridon2023", page=page, note="kg/100 m"),
+                        "breaking_load_t": prov("bridon2023", page=page, note="carga mínima"),
+                    },
+                }
+            )
+    return out
+
+
+def pfeifer_wire(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    page = "PFEIFER 6x19W-FC, tabla de datos"
+    out = []
+    for dia, kg100, kn in src.PFEIFER_6X19W:
+        out.append(
+            {
+                "id": f"pfeifer_6x19w_fc_{int(dia)}mm",
+                "name": f"PFEIFER 6x19W-FC Ø{int(dia)} mm (cable de diámetro chico)",
+                "brand": "PFEIFER",
+                "product": "6x19W-FC",
+                "country": "DE",
+                "regions": ["europe"],
+                "construction": "6x19 Warrington",
+                "core": "FC",
+                "diameter_mm": float(dia),
+                "weight_kg_per_m": kg100 / 100.0,
+                "breaking_load_t": round(kn / 9.80665, 2),
+                "generic_of": nearest_generic(
+                    generics,
+                    lambda g: g["diameter_mm"],
+                    dia,
+                    lambda g: g["id"].startswith("wire_6x19_1261_fc_"),
+                ),
+                "provenance": {
+                    "diameter_mm": prov("pfeifer_6x19w", page=page),
+                    "weight_kg_per_m": prov("pfeifer_6x19w", page=page, note="kg/100 m"),
+                    "breaking_load_t": prov(
+                        "pfeifer_6x19w", "derived", page, f"{kn:g} kN / 9,807 (EN 12385-4)"
+                    ),
+                },
+            }
+        )
+    return out
+
+
+# --- Libro Excel de la A-3 -------------------------------------------------------------------
+
+
+def excel_items(kind: str) -> list[dict[str, Any]]:
+    def exc(cell: str) -> dict[str, Any]:
+        return prov("giamportone2024", "excel", note=cell)
+
+    out: list[dict[str, Any]] = []
+    if kind == "door":
+        raw = yaml.safe_load((DATA / "doors.yaml").read_text(encoding="utf-8"))
+        for d in raw["doors"]:
+            item = {
+                "id": d["id"],
+                "name": d["name"],
+                "type": "flat_wood" if d["type"].startswith("flat") else "oval",
+                "brand": "Morgère" if "morgere" in d["id"] else None,
+                "length_m": d["length_m"],
+                "height_m": d["height_m"],
+                "area_m2": d["area_m2"],
+                "weight_air_kg": d["weight_air_kg"],
+                "weight_water_kg": d["weight_water_kg"],
+                "weight_water_coefficient": d.get("weight_water_coefficient"),
+                "coefficients": [
+                    {k: c[k] for k in ("angle_deg", "cl", "cd")} for c in d["coefficients"]
+                ],
+                "regions": ["global"],
+                "provenance": {
+                    f: exc(d["source"])
+                    for f in ("length_m", "height_m", "area_m2", "weight_air_kg", "coefficients")
+                },
+            }
+            if item["brand"]:
+                item["generic_of"] = "door_oval_100hp"
+            out.append(item)
+        return out
+    file, rows = {
+        "rope": ("ropes", None),
+        "wire": ("warps", None),
+        "chain": ("chains", None),
+        "float": ("floats", None),
+        "twine": ("materials", None),
+    }[kind]
+    del rows
+    raw = yaml.safe_load((DATA / f"{file}.yaml").read_text(encoding="utf-8"))
+    for k, it in enumerate(raw["items"]):
+        cell = it.get("source", raw.get("source"))
+        if kind == "rope":
+            out.append(
+                {
+                    "id": it["id"],
+                    "name": f"{it['brand']} {it['description']}",
+                    "brand": it["brand"],
+                    "country": "AR",
+                    "regions": ["latam"],
+                    "material": "combinado" if "combinado" in it["material"] else it["material"],
+                    "construction": it["construction"],
+                    "diameter_mm": float(it["diameter_mm"]),
+                    "weight_kg_per_m": float(it["weight_kg_per_m"]),
+                    "breaking_load_t": float(it["breaking_load_t"]),
+                    "provenance": {
+                        f: exc(cell) for f in ("diameter_mm", "weight_kg_per_m", "breaking_load_t")
+                    },
+                }
+            )
+        elif kind == "wire":
+            out.append(
+                {
+                    "id": it["id"],
+                    "name": f"Cable {it['construction']} Ø{it['diameter_mm']:g} mm",
+                    "construction": it["construction"],
+                    "core": "IWRC",
+                    "diameter_mm": float(it["diameter_mm"]),
+                    "weight_kg_per_m": float(it["weight_kg_per_m"]),
+                    "breaking_load_t": float(it["breaking_load_t"]),
+                    "regions": ["latam"],
+                    "provenance": {
+                        f: exc(cell) for f in ("diameter_mm", "weight_kg_per_m", "breaking_load_t")
+                    },
+                }
+            )
+        elif kind == "chain":
+            out.append(
+                {
+                    "id": it["id"],
+                    "name": f"{it['brand']} {it['description']}",
+                    "brand": it["brand"],
+                    "regions": ["latam"],
+                    "link": "corto" if it["link"] == "short" else "largo",
+                    "link_diameter_mm": float(it["link_diameter_mm"]),
+                    "grade": str(it["grade"]),
+                    "weight_kg_per_m": float(it["weight_kg_per_m"]),
+                    "breaking_load_t": float(it["breaking_load_t"]),
+                    "generic_of": "chain_ht_7mm"
+                    if it["link_diameter_mm"] == 7
+                    else "chain_ht_19mm",
+                    "provenance": {
+                        f: exc(cell)
+                        for f in ("link_diameter_mm", "weight_kg_per_m", "breaking_load_t")
+                    },
+                }
+            )
+        elif kind == "float":
+            out.append(
+                {
+                    "id": f"float_excel_{int(it['diameter_mm'])}mm_{k}",
+                    "name": f"Boya Ø{int(it['diameter_mm'])} mm (libro Excel de la A-3)",
+                    "material": "plástico",
+                    "diameter_mm": float(it["diameter_mm"]),
+                    "buoyancy_kgf": float(it["buoyancy_kgf"]),
+                    "regions": ["latam"],
+                    "notes": [it["note"]] if it.get("note") else [],
+                    "provenance": {f: exc(cell) for f in ("diameter_mm", "buoyancy_kgf")},
+                }
+            )
+        elif kind == "twine":
+            out.append(
+                {
+                    "id": f"twine_excel_{it['id']}",
+                    "name": f"Hilo PA R{it['rtex']:g} tex (libro Excel de la A-3)",
+                    "material": it["material"],
+                    "rtex": float(it["rtex"]),
+                    "diameter_mm": float(it["diameter_mm"]),
+                    "runnage_m_per_kg": float(it["runnage_m_per_kg"]),
+                    "regions": ["latam"],
+                    "provenance": {
+                        f: exc(cell) for f in ("rtex", "diameter_mm", "runnage_m_per_kg")
+                    },
+                }
+            )
+    return out
+
+
+# --- Escritura -------------------------------------------------------------------------------
+
+
+def write(kind: str, name: str, docs: list[str], items: list[dict[str, Any]]) -> None:
+    path = OUT / kind / f"{name}.yaml"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = {"kind": kind, "sources": [source(d) for d in docs], "items": items}
+    path.write_text(
+        HEADER + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=100),
+        encoding="utf-8",
+    )
+
+
+def main() -> int:
+    tw = twine_generics()
+    ro = rope_generics()
+    wi = wire_generics()
+    write("twine", "generic_workbook", [WB], tw)
+    write("twine", "garware", ["garware_fisheries"], garware_twine(tw))
+    write("twine", "excel_a3", ["giamportone2024"], excel_items("twine"))
+    write("rope", "generic_workbook", [WB], ro)
+    write("rope", "garware", ["garware_fisheries"], garware_rope(ro))
+    write("rope", "excel_a3", ["giamportone2024"], excel_items("rope"))
+    write("wire", "generic_workbook", [WB], wi)
+    write("wire", "bridon_2023", ["bridon2023"], bridon_wire(wi))
+    write("wire", "pfeifer", ["pfeifer_6x19w"], pfeifer_wire(wi))
+    write("wire", "excel_a3", ["giamportone2024"], excel_items("wire"))
+    write("float", "generic_workbook", [WB], float_generics())
+    write("float", "excel_a3", ["giamportone2024"], excel_items("float"))
+    write("chain", "generic_workbook", [WB], chain_generics())
+    write("chain", "excel_a3", ["giamportone2024"], excel_items("chain"))
+    write("door", "generic_workbook", [WB, "lange1993", "giamportone2024"], door_generics())
+    write("door", "rebyc_colombia", ["zuniga2006"], door_rebyc())
+    write("door", "excel_a3", ["giamportone2024"], excel_items("door"))
+
+    from trawlkit import components as comp
+
+    comp._load_kind.cache_clear()
+    bad = 0
+    for kind in comp.KINDS:
+        items = comp.load_components(kind, statuses=("published", "draft", "user"))
+        issues = [i for it in items for i in comp.check(it)]
+        errs = [i for i in issues if i.level == "error"]
+        bad += len(errs)
+        print(f"{kind}: {len(items)} ítems, {len(errs)} errores, {len(issues) - len(errs)} avisos")
+        for i in issues:
+            print(f"   {i.level}: {i.message}")
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

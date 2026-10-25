@@ -248,6 +248,15 @@ class DesignCase:
     float_front_fifth_share: float = 0.6  # Flot!G106
     headrope_rope: str | None = None  # Cab!D3 (None → spec o COMBINADO 12)
     footrope_rope: str | None = None  # Cab!D4 (None → spec o COMBINADO 14)
+
+    # --- componentes del catálogo (Fase 13; None = los del libro) --------------------------
+    warp_id: str | None = None  # cable del catálogo de componentes (None → selección automática)
+    float_id: str | None = None  # boya del catálogo de componentes
+    twine_id: str | None = None  # hilo de todos los paños salvo el copo
+    chain_id: str | None = None  # cadena de lastre y reglaje (lista de materiales)
+    component_brands: tuple[str, ...] | None = None  # marcas para la selección automática
+    component_region: str | None = None  # región del puerto para la selección automática
+    generic_only: bool = False  # sólo componentes genéricos en la selección automática
     ballast_min_speed_kn: float = 1.0  # Flot!F225 = ROUNDDOWN(M197): modificada a 1 kn
     ballast_max_speed_kn: float = 3.0  # Flot!F226 = ROUNDUP(L201): estándar a 3 kn
     adjust_chain_m: float = 2.0  # Flot!F224
@@ -280,6 +289,19 @@ class DesignCase:
         object.__setattr__(self, "class_vessels", tuple(self.class_vessels))
         object.__setattr__(self, "compat", Compat(self.compat))
         object.__setattr__(self, "ft_propeller", PropellerType(self.ft_propeller))
+        if self.component_brands is not None:
+            object.__setattr__(self, "component_brands", tuple(self.component_brands))
+        if self.twine_id is not None:
+            from trawlkit.components import TwineItem, apply_twine, get_component
+
+            try:
+                twine = get_component("twine", self.twine_id)
+            except KeyError as exc:
+                raise ValueError(str(exc)) from exc
+            assert isinstance(twine, TwineItem)
+            object.__setattr__(self, "net", apply_twine(self.net, twine))
+            if self.net_modified is not None:
+                object.__setattr__(self, "net_modified", apply_twine(self.net_modified, twine))
         if self.working_depth_m <= 0:
             raise ValueError("hace falta la profundidad de trabajo (depth_m o net.species.depth_m)")
         if self.gallows_spacing_m <= 0:
@@ -297,7 +319,11 @@ class DesignCase:
         if self.door.area_m2 is None or self.door.length_m is None:
             raise ValueError(f"el portón {self.door.id!r} necesita area_m2 y length_m")
         try:
-            rigging.door_polar(self.door, self.door_attack_angle_deg)
+            rigging.door_polar(
+                self.door,
+                self.door_attack_angle_deg,
+                interpolate=self.compat is Compat.CORRECTED,
+            )
         except KeyError as exc:
             raise ValueError(str(exc)) from exc
         if self.ft_propeller not in power_mod.FRIDMAN_KF:
@@ -910,7 +936,9 @@ def _stage_doors(
     """'Portones y aparejamiento': separación, polar, ROB, fuerzas, superficie, Pφ y momentos."""
     door = case.door
     assert door.area_m2 is not None and door.length_m is not None
-    polar = rigging.door_polar(door, case.door_attack_angle_deg)  # Port!C134:F134
+    polar = rigging.door_polar(
+        door, case.door_attack_angle_deg, interpolate=case.compat is Compat.CORRECTED
+    )  # Port!C134:F134
     warp_m = rig.towing.warp_m  # Port!D9 = Mec!E177
     if case.is_pair:
         spread = pair_towing_spread_m(case, rig)
@@ -990,6 +1018,48 @@ def _rope(case: DesignCase, which: str) -> RopeSpec:
     return rigging.select_rope(str(chosen))
 
 
+def component_filters(case: DesignCase) -> dict[str, Any] | None:
+    """Filtros de la selección automática de componentes, o ``None`` si se usan los del libro."""
+    if case.component_brands is None and case.component_region is None and not case.generic_only:
+        return None
+    return {
+        "brands": case.component_brands,
+        "region": case.component_region,
+        "generic_only": case.generic_only,
+    }
+
+
+def _case_floats(case: DesignCase) -> tuple[tuple[float, ...], tuple[float, ...]]:
+    """Boyas para elegir: la del caso, las del catálogo de componentes filtrado o las del libro."""
+    from trawlkit.components import FloatItem, get_component, load_components
+
+    if case.float_id is not None:
+        item = get_component("float", case.float_id)
+        assert isinstance(item, FloatItem)
+        return (item.diameter_mm,), (item.buoyancy_kgf,)
+    flt = component_filters(case)
+    if flt is not None:
+        items = [f for f in load_components("float", **flt) if isinstance(f, FloatItem)]
+        if items:
+            return (
+                tuple(f.diameter_mm for f in items),
+                tuple(f.buoyancy_kgf for f in items),
+            )
+    return _float_catalogue()
+
+
+def _case_warps(case: DesignCase) -> list[dict[str, Any]] | None:
+    """Cables para elegir: el del caso o los del catálogo de componentes filtrado (None = libro)."""
+    from trawlkit.components import get_component, load_components
+
+    if case.warp_id is not None:
+        return [get_component("wire", case.warp_id).model_dump()]
+    flt = component_filters(case)
+    if flt is None:
+        return None
+    return [w.model_dump() for w in load_components("wire", **flt)]
+
+
 def _float_catalogue() -> tuple[tuple[float, ...], tuple[float, ...]]:
     """Diámetros y flotaciones unitarias del catálogo de boyas (Flot!D72:E82)."""
     items = load_catalogue("floats").items
@@ -1055,9 +1125,12 @@ def _stage_floats(
         )
 
     design = class_avg[v.id]  # F70 = N43
-    diameters, buoyancies = _float_catalogue()
+    diameters, buoyancies = _case_floats(case)
     counts = _arr(rigging.float_count(design, _arr(buoyancies)))  # F72:F82
     count = case.float_count
+    if count is None and case.float_id is not None:
+        count = int(counts[0])
+        notes.append(f"float_count = {count} boyas {case.float_id} (catálogo de componentes)")
     if count is None and case.net.floats is not None:
         count = int(case.net.floats.count)
         notes.append(f"float_count tomado de la spec ({count} boyas)")
@@ -1072,6 +1145,8 @@ def _stage_floats(
         notes.append(f"float_count = {count} boyas de {target:g} mm del catálogo (Flot!F72:F82)")
     if case.float_diameter_mm is not None:
         diameter = float(case.float_diameter_mm)
+    elif case.float_id is not None:
+        diameter = float(diameters[0])
     elif case.compat is Compat.EXCEL:
         diameter = rigging.float_diameter_for_count_mm(count, counts, _arr(diameters))  # F92
     else:
@@ -1364,7 +1439,9 @@ def _stage_warps(
     loads = rigging.working_load_and_breaking_load(
         total.std, case.speeds, case.warp_design_speed_kn, case.warp_safety_factor
     )  # E267, E272
-    selection = rigging.select_warp(diameter, loads.min_breaking_load_kgf, case.compat)  # Cab!D11
+    selection = rigging.select_warp(
+        diameter, loads.min_breaking_load_kgf, case.compat, items=_case_warps(case)
+    )  # Cab!D11
     return WarpStage(
         warp_m=warp_m,
         sweeps_plus_bridle_m=rigging_m,

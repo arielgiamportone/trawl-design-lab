@@ -13,6 +13,12 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | GET | `/catalog/nets/{net_id}` | Especificación completa de una red predefinida (paneles, relingas, boyas). |
 | GET | `/catalog/nets/{net_id}/provenance` | Procedencia de cada valor de la red (documento, figura, tipo y nota). |
 | GET | `/catalog/nets/{net_id}/check` | Validador de consistencia de la red (empalmes, bocana, cortes, costados). |
+| GET | `/catalog/components` | Tipos de componente (paño, cables, cabos, portones, boyas, cadenas) con cantidad de ítems, genéricos y marcas. |
+| GET | `/catalog/components/{kind}` | Componentes de un tipo con su procedencia; filtros `brand` (repetible), `region`, `generic`, `status`. |
+| GET | `/catalog/components/{kind}/{item_id}` | Un componente con sus observaciones y su genérico equivalente. |
+| POST | `/components/check` | Valida un componente cargado por el usuario (esquema y coherencia física). |
+| POST | `/design/bom` | Lista de materiales del caso (paño, relingas, malletas, cable, boyas, portones, lastre) con costo orientativo según `prices` o el precio del catálogo; cuenta las líneas sin precio. |
+| POST | `/optimize/components` | Armado con componentes del catálogo (portón, cable, boyas, hilo) por `drag`, `efficiency` o `cost`, con alternativas y lista de materiales; filtros en `params` (`component_brands`, `component_region`, `generic_only`). |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
 | GET | `/catalog/fouling` | Escenarios de ensuciamiento y colmatación de la red (nivel por zona). |

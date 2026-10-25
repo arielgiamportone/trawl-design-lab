@@ -1,0 +1,140 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: wire
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: steel_6x19_seale_9_5mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø9.5 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 9.5
+  weight_kg_per_m: 0.343
+  breaking_load_t: 5.5
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B338:G338
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B338:G338
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B338:G338
+- id: steel_6x19_seale_12mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø12 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.531
+  breaking_load_t: 8.55
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B339:G339
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B339:G339
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B339:G339
+- id: steel_6x19_seale_13mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø13 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 13.0
+  weight_kg_per_m: 0.643
+  breaking_load_t: 10.3
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B340:G340
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B340:G340
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B340:G340
+- id: steel_6x19_seale_14mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø14 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.727
+  breaking_load_t: 11.2
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B341:G341
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B341:G341
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B341:G341
+- id: steel_6x19_seale_16mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø16 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.95
+  breaking_load_t: 14.69
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B342:G342
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B342:G342
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B342:G342
+- id: steel_6x19_seale_18mm
+  name: Cable CA 6X19+1 AT Seale Compactado Ø18 mm
+  construction: CA 6X19+1 AT Seale Compactado
+  core: IWRC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.2
+  breaking_load_t: 18.46
+  regions:
+  - latam
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B343:G343
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B343:G343
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!B343:G343

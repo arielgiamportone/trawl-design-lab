@@ -1,0 +1,1909 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: twine
+sources:
+- key: prado1990
+  title: FAO Fisherman's Workbook (Prado y Dremière 1990)
+  url: https://www.fao.org/3/ah827e/ah827e.pdf
+  accessed: '2026-10-25'
+items:
+- id: twine_pa_twisted_r100
+  name: Hilo PA torcido R100 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 100.0
+  runnage_m_per_kg: 10000.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 0.331
+  breaking_load_kgf: 6.03
+  knot_breaking_load_kgf: 3.93
+- id: twine_pa_twisted_r230
+  name: Hilo PA torcido R230 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 230.0
+  runnage_m_per_kg: 4350.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 0.517
+  breaking_load_kgf: 13.4
+  knot_breaking_load_kgf: 8.21
+- id: twine_pa_twisted_r390
+  name: Hilo PA torcido R390 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 390.0
+  runnage_m_per_kg: 2560.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 0.685
+  breaking_load_kgf: 22.3
+  knot_breaking_load_kgf: 13.1
+- id: twine_pa_twisted_r540
+  name: Hilo PA torcido R540 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 540.0
+  runnage_m_per_kg: 1850.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 0.814
+  breaking_load_kgf: 30.5
+  knot_breaking_load_kgf: 17.5
+- id: twine_pa_twisted_r700
+  name: Hilo PA torcido R700 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 700.0
+  runnage_m_per_kg: 1430.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 0.935
+  breaking_load_kgf: 39.1
+  knot_breaking_load_kgf: 22.0
+- id: twine_pa_twisted_r950
+  name: Hilo PA torcido R950 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 950.0
+  runnage_m_per_kg: 1050.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.1
+  breaking_load_kgf: 52.5
+  knot_breaking_load_kgf: 28.8
+- id: twine_pa_twisted_r1200
+  name: Hilo PA torcido R1200 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 1200.0
+  runnage_m_per_kg: 833.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.25
+  breaking_load_kgf: 65.7
+  knot_breaking_load_kgf: 35.4
+- id: twine_pa_twisted_r1280
+  name: Hilo PA torcido R1280 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 1280.0
+  runnage_m_per_kg: 781.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.29
+  breaking_load_kgf: 69.9
+  knot_breaking_load_kgf: 37.5
+- id: twine_pa_twisted_r1690
+  name: Hilo PA torcido R1690 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 1690.0
+  runnage_m_per_kg: 592.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.5
+  breaking_load_kgf: 91.3
+  knot_breaking_load_kgf: 47.9
+- id: twine_pa_twisted_r2000
+  name: Hilo PA torcido R2000 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 2000.0
+  runnage_m_per_kg: 500.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.64
+  breaking_load_kgf: 107.0
+  knot_breaking_load_kgf: 55.6
+- id: twine_pa_twisted_r2600
+  name: Hilo PA torcido R2600 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 2600.0
+  runnage_m_per_kg: 385.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 1.88
+  breaking_load_kgf: 138.0
+  knot_breaking_load_kgf: 70.2
+- id: twine_pa_twisted_r3400
+  name: Hilo PA torcido R3400 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 3400.0
+  runnage_m_per_kg: 294.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 2.17
+  breaking_load_kgf: 179.0
+  knot_breaking_load_kgf: 88.9
+- id: twine_pa_twisted_r5000
+  name: Hilo PA torcido R5000 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 5000.0
+  runnage_m_per_kg: 200.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 2.67
+  breaking_load_kgf: 259.0
+  knot_breaking_load_kgf: 125.0
+- id: twine_pa_twisted_r8000
+  name: Hilo PA torcido R8000 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 8000.0
+  runnage_m_per_kg: 125.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 3.43
+  breaking_load_kgf: 407.0
+  knot_breaking_load_kgf: 190.0
+- id: twine_pa_twisted_r11000
+  name: Hilo PA torcido R11000 tex
+  material: PA
+  construction: torcido, multifilamento continuo
+  rtex: 11000.0
+  runnage_m_per_kg: 90.9
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,0284·Rtex^0.533, ajuste a 15 filas de la tabla (error máx. 7 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,0722·Rtex^0.961, ajuste a 15 filas de la tabla (error máx. 4 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,0669·Rtex^0.885, ajuste a 15 filas de la tabla (error máx. 9 %)
+  diameter_mm: 4.06
+  breaking_load_kgf: 553.0
+  knot_breaking_load_kgf: 251.0
+- id: twine_pa_braided_r1350
+  name: Hilo PA trenzado R1350 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 1350.0
+  runnage_m_per_kg: 741.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 1.58
+  breaking_load_kgf: 80.5
+  knot_breaking_load_kgf: 44.2
+- id: twine_pa_braided_r1950
+  name: Hilo PA trenzado R1950 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 1950.0
+  runnage_m_per_kg: 513.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 1.96
+  breaking_load_kgf: 112.0
+  knot_breaking_load_kgf: 60.2
+- id: twine_pa_braided_r2800
+  name: Hilo PA trenzado R2800 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 2800.0
+  runnage_m_per_kg: 357.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 2.44
+  breaking_load_kgf: 156.0
+  knot_breaking_load_kgf: 81.6
+- id: twine_pa_braided_r4000
+  name: Hilo PA trenzado R4000 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 4000.0
+  runnage_m_per_kg: 250.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 3.02
+  breaking_load_kgf: 216.0
+  knot_breaking_load_kgf: 110.0
+- id: twine_pa_braided_r5000
+  name: Hilo PA trenzado R5000 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 5000.0
+  runnage_m_per_kg: 200.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 3.45
+  breaking_load_kgf: 265.0
+  knot_breaking_load_kgf: 133.0
+- id: twine_pa_braided_r7200
+  name: Hilo PA trenzado R7200 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 7200.0
+  runnage_m_per_kg: 139.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 4.29
+  breaking_load_kgf: 369.0
+  knot_breaking_load_kgf: 180.0
+- id: twine_pa_braided_r10500
+  name: Hilo PA trenzado R10500 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 10500.0
+  runnage_m_per_kg: 95.2
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 5.38
+  breaking_load_kgf: 520.0
+  knot_breaking_load_kgf: 247.0
+- id: twine_pa_braided_r14000
+  name: Hilo PA trenzado R14000 tex
+  material: PA
+  construction: trenzado, multifilamento continuo
+  rtex: 14000.0
+  runnage_m_per_kg: 71.4
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: diámetro = 0,021·Rtex^0.599, ajuste a 8 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura seco sin nudo = 0,115·Rtex^0.909, ajuste a 8 filas de la tabla (error máx. 2 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twines: nylon (PA), multifilament twisted or braided»'
+      note: rotura mojado con nudo = 0,105·Rtex^0.839, ajuste a 8 filas de la tabla (error máx. 2 %)
+  diameter_mm: 6.39
+  breaking_load_kgf: 675.0
+  knot_breaking_load_kgf: 315.0
+- id: twine_pes_twisted_r370
+  name: Hilo PES torcido R370 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 370.0
+  runnage_m_per_kg: 2700.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 0.603
+  breaking_load_kgf: 21.6
+  knot_breaking_load_kgf: 9.5
+- id: twine_pes_twisted_r555
+  name: Hilo PES torcido R555 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 555.0
+  runnage_m_per_kg: 1800.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 0.742
+  breaking_load_kgf: 31.4
+  knot_breaking_load_kgf: 13.7
+- id: twine_pes_twisted_r750
+  name: Hilo PES torcido R750 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 750.0
+  runnage_m_per_kg: 1330.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 0.865
+  breaking_load_kgf: 41.4
+  knot_breaking_load_kgf: 18.0
+- id: twine_pes_twisted_r980
+  name: Hilo PES torcido R980 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 980.0
+  runnage_m_per_kg: 1020.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 0.991
+  breaking_load_kgf: 53.1
+  knot_breaking_load_kgf: 23.0
+- id: twine_pes_twisted_r1200
+  name: Hilo PES torcido R1200 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 1200.0
+  runnage_m_per_kg: 833.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 1.1
+  breaking_load_kgf: 64.0
+  knot_breaking_load_kgf: 27.6
+- id: twine_pes_twisted_r1500
+  name: Hilo PES torcido R1500 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 1500.0
+  runnage_m_per_kg: 667.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 1.23
+  breaking_load_kgf: 78.6
+  knot_breaking_load_kgf: 33.8
+- id: twine_pes_twisted_r1850
+  name: Hilo PES torcido R1850 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 1850.0
+  runnage_m_per_kg: 541.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 1.37
+  breaking_load_kgf: 95.5
+  knot_breaking_load_kgf: 40.9
+- id: twine_pes_twisted_r3700
+  name: Hilo PES torcido R3700 tex
+  material: PES
+  construction: torcido, multifilamento continuo
+  rtex: 3700.0
+  runnage_m_per_kg: 270.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0296·Rtex^0.510, ajuste a 8 filas de la tabla (error máx. 2 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0913·Rtex^0.924, ajuste a 8 filas de la tabla (error máx. 3 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0446·Rtex^0.907, ajuste a 8 filas de la tabla (error máx. 6 %)
+  diameter_mm: 1.95
+  breaking_load_kgf: 181.0
+  knot_breaking_load_kgf: 76.6
+- id: twine_pp_twisted_r210
+  name: Hilo PP torcido R210 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 210.0
+  runnage_m_per_kg: 4760.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 0.62
+  breaking_load_kgf: 12.8
+  knot_breaking_load_kgf: 7.51
+- id: twine_pp_twisted_r430
+  name: Hilo PP torcido R430 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 430.0
+  runnage_m_per_kg: 2330.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 0.89
+  breaking_load_kgf: 24.2
+  knot_breaking_load_kgf: 13.8
+- id: twine_pp_twisted_r920
+  name: Hilo PP torcido R920 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 920.0
+  runnage_m_per_kg: 1090.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 1.31
+  breaking_load_kgf: 47.7
+  knot_breaking_load_kgf: 26.2
+- id: twine_pp_twisted_r1920
+  name: Hilo PP torcido R1920 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 1920.0
+  runnage_m_per_kg: 521.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 1.9
+  breaking_load_kgf: 91.8
+  knot_breaking_load_kgf: 48.9
+- id: twine_pp_twisted_r2820
+  name: Hilo PP torcido R2820 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 2820.0
+  runnage_m_per_kg: 355.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 2.31
+  breaking_load_kgf: 129.0
+  knot_breaking_load_kgf: 67.7
+- id: twine_pp_twisted_r3300
+  name: Hilo PP torcido R3300 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 3300.0
+  runnage_m_per_kg: 303.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 2.5
+  breaking_load_kgf: 149.0
+  knot_breaking_load_kgf: 77.3
+- id: twine_pp_twisted_r4700
+  name: Hilo PP torcido R4700 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 4700.0
+  runnage_m_per_kg: 213.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 2.99
+  breaking_load_kgf: 204.0
+  knot_breaking_load_kgf: 104.0
+- id: twine_pp_twisted_r5640
+  name: Hilo PP torcido R5640 tex
+  material: PP
+  construction: torcido, multifilamento continuo
+  rtex: 5640.0
+  runnage_m_per_kg: 177.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0414·Rtex^0.506, ajuste a 8 filas de la tabla (error máx. 3 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,11·Rtex^0.890, ajuste a 8 filas de la tabla (error máx. 8 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0814·Rtex^0.846, ajuste a 8 filas de la tabla (error máx. 14 %)
+  diameter_mm: 3.27
+  breaking_load_kgf: 240.0
+  knot_breaking_load_kgf: 122.0
+- id: twine_pe_twisted_r370
+  name: Hilo PE torcido o trenzado R370 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 370.0
+  runnage_m_per_kg: 2700.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 0.825
+  breaking_load_kgf: 12.6
+  knot_breaking_load_kgf: 8.7
+- id: twine_pe_twisted_r700
+  name: Hilo PE torcido o trenzado R700 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 700.0
+  runnage_m_per_kg: 1430.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 1.13
+  breaking_load_kgf: 23.4
+  knot_breaking_load_kgf: 16.3
+- id: twine_pe_twisted_r1050
+  name: Hilo PE torcido o trenzado R1050 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 1050.0
+  runnage_m_per_kg: 952.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 1.39
+  breaking_load_kgf: 34.7
+  knot_breaking_load_kgf: 24.4
+- id: twine_pe_twisted_r1410
+  name: Hilo PE torcido o trenzado R1410 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 1410.0
+  runnage_m_per_kg: 709.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 1.61
+  breaking_load_kgf: 46.1
+  knot_breaking_load_kgf: 32.6
+- id: twine_pe_twisted_r2170
+  name: Hilo PE torcido o trenzado R2170 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 2170.0
+  runnage_m_per_kg: 461.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 1.99
+  breaking_load_kgf: 70.1
+  knot_breaking_load_kgf: 49.9
+- id: twine_pe_twisted_r2800
+  name: Hilo PE torcido o trenzado R2800 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 2800.0
+  runnage_m_per_kg: 357.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 2.26
+  breaking_load_kgf: 89.7
+  knot_breaking_load_kgf: 64.2
+- id: twine_pe_twisted_r3400
+  name: Hilo PE torcido o trenzado R3400 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 3400.0
+  runnage_m_per_kg: 294.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 2.49
+  breaking_load_kgf: 108.0
+  knot_breaking_load_kgf: 77.8
+- id: twine_pe_twisted_r4440
+  name: Hilo PE torcido o trenzado R4440 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 4440.0
+  runnage_m_per_kg: 225.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 2.85
+  breaking_load_kgf: 140.0
+  knot_breaking_load_kgf: 101.0
+- id: twine_pe_twisted_r5300
+  name: Hilo PE torcido o trenzado R5300 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 5300.0
+  runnage_m_per_kg: 189.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 3.11
+  breaking_load_kgf: 167.0
+  knot_breaking_load_kgf: 121.0
+- id: twine_pe_twisted_r7680
+  name: Hilo PE torcido o trenzado R7680 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 7680.0
+  runnage_m_per_kg: 130.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 3.75
+  breaking_load_kgf: 239.0
+  knot_breaking_load_kgf: 174.0
+- id: twine_pe_twisted_r10100
+  name: Hilo PE torcido o trenzado R10100 tex
+  material: PE
+  construction: torcido o trenzado, filamentos gruesos
+  rtex: 10100.0
+  runnage_m_per_kg: 99.0
+  knotted: true
+  regions:
+  - global
+  provenance:
+    rtex:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: tamaño de la tabla de referencia
+    runnage_m_per_kg:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: 10⁶ / Rtex
+    diameter_mm:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: diámetro = 0,0432·Rtex^0.499, ajuste a 11 filas de la tabla (error máx. 8 %)
+    breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura seco sin nudo = 0,0407·Rtex^0.970, ajuste a 11 filas de la tabla (error máx. 26 %)
+    knot_breaking_load_kgf:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Twine: polyester (PES), polyethylene (PE), polypropylene (PP)»'
+      note: rotura mojado con nudo = 0,0252·Rtex^0.988, ajuste a 11 filas de la tabla (error máx. 24 %)
+  diameter_mm: 4.29
+  breaking_load_kgf: 311.0
+  knot_breaking_load_kgf: 228.0

@@ -1,0 +1,1089 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: wire
+sources:
+- key: prado1990
+  title: FAO Fisherman's Workbook (Prado y Dremière 1990)
+  url: https://www.fao.org/3/ah827e/ah827e.pdf
+  accessed: '2026-10-25'
+items:
+- id: wire_6x7_fc_8mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø8 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.222
+  breaking_load_t: 3.08
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_9mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø9 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 9.0
+  weight_kg_per_m: 0.281
+  breaking_load_t: 3.9
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_10mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø10 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.347
+  breaking_load_t: 4.81
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_11mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø11 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 11.0
+  weight_kg_per_m: 0.42
+  breaking_load_t: 5.82
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_12mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø12 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.5
+  breaking_load_t: 6.93
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_13mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø13 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 13.0
+  weight_kg_per_m: 0.586
+  breaking_load_t: 8.13
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_14mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø14 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.68
+  breaking_load_t: 9.43
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_15mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø15 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 15.0
+  weight_kg_per_m: 0.781
+  breaking_load_t: 10.8
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x7_fc_16mm
+  name: Cable de acero galvanizado 6x7 (6/1) Ø16 mm
+  construction: 6x7 (6/1)
+  core: FC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.888
+  breaking_load_t: 12.3
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros chicos, buques costeros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00347·d², ajuste a 5 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04811·d² (acero de 145 kgf/mm²), ajuste a 5 filas (error máx. 0 %)
+- id: wire_6x12_fc_6mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø6 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0877
+  breaking_load_t: 1.09
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x12_fc_8mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø8 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.156
+  breaking_load_t: 1.94
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x12_fc_10mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø10 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.244
+  breaking_load_t: 3.02
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x12_fc_12mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø12 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.351
+  breaking_load_t: 4.35
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x12_fc_14mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø14 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.477
+  breaking_load_t: 5.93
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x12_fc_16mm
+  name: Cable de acero galvanizado 6x12 (12/fibra) Ø16 mm
+  construction: 6x12 (12/fibra)
+  core: FC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.624
+  breaking_load_t: 7.74
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas y cables de arrastreros chicos.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00244·d², ajuste a 6 filas (error máx. 11 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.03024·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 1 %)
+- id: wire_6x19_1261_fc_8mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø8 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.215
+  breaking_load_t: 2.85
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_10mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø10 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.336
+  breaking_load_t: 4.46
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_12mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø12 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.483
+  breaking_load_t: 6.42
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_14mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø14 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.658
+  breaking_load_t: 8.74
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_16mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø16 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.859
+  breaking_load_t: 11.4
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_18mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø18 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.09
+  breaking_load_t: 14.4
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_20mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø20 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.34
+  breaking_load_t: 17.8
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_22mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø22 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 22.0
+  weight_kg_per_m: 1.62
+  breaking_load_t: 21.6
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_1261_fc_24mm
+  name: Cable de acero galvanizado 6x19 (12/6/1) Ø24 mm
+  construction: 6x19 (12/6/1)
+  core: FC
+  diameter_mm: 24.0
+  weight_kg_per_m: 1.93
+  breaking_load_t: 25.7
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: patentes y cables de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00336·d², ajuste a 9 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04457·d² (acero de 145 kgf/mm²), ajuste a 9 filas (error máx. 0 %)
+- id: wire_6x19_991_16mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø16 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.926
+  breaking_load_t: 12.3
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x19_991_18mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø18 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.17
+  breaking_load_t: 15.5
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x19_991_20mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø20 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.45
+  breaking_load_t: 19.2
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x19_991_22mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø22 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 22.0
+  weight_kg_per_m: 1.75
+  breaking_load_t: 23.2
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x19_991_24mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø24 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 24.0
+  weight_kg_per_m: 2.08
+  breaking_load_t: 27.6
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x19_991_26mm
+  name: Cable de acero galvanizado 6x19 (9/9/1) Ø26 mm
+  construction: 6x19 (9/9/1)
+  core: FC o IWRC
+  diameter_mm: 26.0
+  weight_kg_per_m: 2.45
+  breaking_load_t: 32.4
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: cables de remolque de arrastreros.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00362·d², ajuste a 6 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04793·d² (acero de 145 kgf/mm²), ajuste a 6 filas (error máx. 0 %)
+- id: wire_6x24_fc_8mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø8 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.198
+  breaking_load_t: 2.6
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_10mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø10 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.309
+  breaking_load_t: 4.06
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_12mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø12 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.445
+  breaking_load_t: 5.85
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_14mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø14 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.606
+  breaking_load_t: 7.97
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_16mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø16 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.792
+  breaking_load_t: 10.4
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_18mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø18 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.0
+  breaking_load_t: 13.2
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_20mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø20 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.24
+  breaking_load_t: 16.3
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_22mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø22 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 22.0
+  weight_kg_per_m: 1.5
+  breaking_load_t: 19.7
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_24mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø24 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 24.0
+  weight_kg_per_m: 1.78
+  breaking_load_t: 23.4
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)
+- id: wire_6x24_fc_26mm
+  name: Cable de acero galvanizado 6x24 (15/9/fibra) Ø26 mm
+  construction: 6x24 (15/9/fibra)
+  core: FC
+  diameter_mm: 26.0
+  weight_kg_per_m: 2.09
+  breaking_load_t: 27.5
+  regions:
+  - global
+  notes:
+  - 'Uso habitual: malletas, estrobos de portón, maniobra.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: tamaño dentro del rango de la tabla
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: kg/m = 0.00309·d², ajuste a 10 filas (error máx. 0 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Galvanised steel wire rope: runnage, breaking strength»'
+      note: rotura [t] = 0.04065·d² (acero de 145 kgf/mm²), ajuste a 10 filas (error máx. 0 %)

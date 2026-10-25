@@ -84,6 +84,32 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
     red») y, en el modo guiado, redes filtradas por la potencia del buque;
   - capítulo 33 «Catálogo de redes FAO», con la comparación del motor y el simulador entre sí y
     con las aberturas medidas por Schärfe.
+- **Catálogo de componentes (Fase 13.1)**:
+  - `trawlkit.components`: paño e hilo, cables de acero, cabos, portones, boyas y cadenas, con
+    marca, región, genérico equivalente, estado, precio orientativo opcional y procedencia por
+    valor;
+  - 290 ítems (`data/components/`, `tools/components/`):
+    - genéricos ajustados a las tablas del FAO *Fisherman's Workbook* (hilos, cabos, cables,
+      boyas, cadenas y portones por potencia);
+    - datos puntuales de Garware, Bridon-Bekaert y PFEIFER;
+    - puertas de la flota camaronera colombiana (FAO REBYC);
+    - los catálogos del libro Excel de la A-3;
+  - validador físico de cada ítem (peso, rotura, tenacidad, flotación, polar);
+  - API: `GET /catalog/components[/{kind}[/{id}]]` con filtros y `POST /components/check`.
+- **Motor y optimizador con componentes (Fase 13.2)**:
+  - `DesignCase` acepta componentes del catálogo: `warp_id`, `float_id`, `twine_id` (hilo de
+    todos los paños salvo el copo), `chain_id` y filtros de la selección automática
+    (`component_brands`, `component_region`, `generic_only`); sin ellos, la A-3 no cambia;
+  - portones del catálogo de componentes por id en la API; en modo corregido, la polar del portón
+    se interpola entre ángulos vecinos (en modo Excel el ángulo sigue debiendo estar en la polar);
+  - `trawlkit.cost.bill_of_materials`: lista de materiales con cantidades y costo orientativo por
+    moneda; un precio faltante se informa, nunca se toma como cero;
+  - `trawlkit.optimize.optimise_components`: elige portón, cable, boyas e hilo del catálogo
+    filtrado por mínima resistencia, mínimo R_T/AH o mínimo costo, con las restricciones de tiro,
+    red abierta, cable, portón, profundidad de las boyas y rotura del hilo, y da alternativas
+    (una genérica si el mejor armado lleva marcas);
+  - API: `POST /design/bom` y `POST /optimize/components`; `params` admite booleanos en los
+    campos booleanos.
 - Cables: si ningún cable del catálogo alcanza la carga de rotura, se elige el más grueso con la
   nota `warp_undersized` (antes, error).
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto

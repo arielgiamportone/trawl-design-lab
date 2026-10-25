@@ -109,6 +109,89 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/catalog/components": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Component Kinds
+         * @description Tipos de componente (paño, cables, cabos, portones, boyas, cadenas) con su cantidad.
+         */
+        get: operations["list_component_kinds_catalog_components_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/components/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Components
+         * @description Componentes de un tipo, con su procedencia.
+         *
+         *     Filtros: marcas (``brand``, repetible; los genéricos siempre se incluyen), región del puerto,
+         *     sólo genéricos y estado.
+         */
+        get: operations["list_components_catalog_components__kind__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/components/{kind}/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Component
+         * @description Un componente con su procedencia, sus observaciones y su genérico equivalente.
+         */
+        get: operations["get_component_catalog_components__kind___item_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/components/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Check Component
+         * @description Valida un componente cargado por el usuario (esquema y coherencia física).
+         */
+        post: operations["check_component_components_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/catalog/vessels": {
         parameters: {
             query?: never;
@@ -269,6 +352,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/design/bom": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Design Bom
+         * @description Lista de materiales del caso: qué comprar, cuánto y su costo orientativo.
+         */
+        post: operations["design_bom_design_bom_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/plan": {
         parameters: {
             query?: never;
@@ -326,6 +429,29 @@ export interface paths {
          * @description Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial).
          */
         post: operations["optimize_optimize_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/optimize/components": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Optimize Components
+         * @description Armado recomendado con componentes del catálogo (portón, cable, boyas e hilo).
+         *
+         *     Devuelve el mejor armado, 2 o 3 alternativas (una genérica si el mejor no lo es) y la lista
+         *     de materiales con el costo orientativo de cada uno.
+         */
+        post: operations["optimize_components_optimize_components_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -537,6 +663,135 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
+         * AssemblyOut
+         * @description Un armado evaluado (``trawlkit.optimize.components.Assembly``).
+         */
+        AssemblyOut: {
+            /** Components */
+            components: {
+                [key: string]: string | null;
+            };
+            /** Float Count */
+            float_count: number | null;
+            /** Speed Kn */
+            speed_kn: number;
+            /** Demand Kgf */
+            demand_kgf: number;
+            /** Available Kgf */
+            available_kgf: number;
+            /** Thrust Margin */
+            thrust_margin: number;
+            /** Net Drag Kgf */
+            net_drag_kgf: number;
+            /** Ah M */
+            ah_m: number;
+            /** Av M */
+            av_m: number;
+            /** Area Rate M2 H */
+            area_rate_m2_h: number;
+            /** Energy Kgf M Per M2 */
+            energy_kgf_m_per_m2: number;
+            /** Door Area M2 */
+            door_area_m2: number;
+            /** Door Required M2 */
+            door_required_m2: number;
+            /** Constraints */
+            constraints: components["schemas"]["ConstraintOut"][];
+            /** Feasible */
+            feasible: boolean;
+            /** Penalty */
+            penalty: number;
+            /** Generic */
+            generic: boolean;
+            /** Cost */
+            cost: number | null;
+            /** Currency */
+            currency: string | null;
+            /** Missing Prices */
+            missing_prices: number;
+            bom: components["schemas"]["BomOut"];
+        };
+        /**
+         * BomLineOut
+         * @description Una línea de la lista de materiales (``trawlkit.cost.BomLine``).
+         */
+        BomLineOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Quantity */
+            quantity: number;
+            /** Unit */
+            unit: string;
+            /** Component Id */
+            component_id?: string | null;
+            /** Component Kind */
+            component_kind?: string | null;
+            /** Component Name */
+            component_name?: string | null;
+            /** Unit Price */
+            unit_price?: number | null;
+            /** Currency */
+            currency?: string | null;
+            /** Price Source */
+            price_source?: string | null;
+            /** Cost */
+            cost?: number | null;
+            /** Note */
+            note?: string | null;
+        };
+        /**
+         * BomOut
+         * @description Lista de materiales con totales por moneda y cantidad de líneas sin precio.
+         */
+        BomOut: {
+            /** Lines */
+            lines: components["schemas"]["BomLineOut"][];
+            /** Totals */
+            totals: {
+                [key: string]: number;
+            };
+            /** Missing Prices */
+            missing_prices: number;
+        };
+        /**
+         * BomRequest
+         * @description Lista de materiales del caso (``POST /design/bom``).
+         *
+         *     ``prices`` mapea id de componente o clave de línea (``netting_pa``, ``doors``, ``floats``…) a
+         *     un precio orientativo; sin precio, se usa el del catálogo o la línea queda «sin precio».
+         */
+        BomRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Net Modified */
+            net_modified?: string | components["schemas"]["NetSpec"] | null;
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /** Params */
+            params?: {
+                [key: string]: unknown;
+            };
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+        };
+        /**
          * CalibrateRequest
          * @description Calibración (``POST /simulate/calibrate``): ajusta parámetros a observaciones.
          *
@@ -711,6 +966,160 @@ export interface components {
             hanging_ratio?: number | null;
             /** Label */
             label?: string | null;
+        };
+        /**
+         * ComponentCheckOut
+         * @description Resultado de validar un componente: el ítem normalizado y sus observaciones.
+         */
+        ComponentCheckOut: {
+            /** Ok */
+            ok: boolean;
+            /** Item */
+            item?: {
+                [key: string]: unknown;
+            } | null;
+            /** Issues */
+            issues: components["schemas"]["CheckIssue"][];
+            /** Generic */
+            generic?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * ComponentCheckRequest
+         * @description Componente a validar (un aporte de usuario): sus campos según ``kind``.
+         */
+        ComponentCheckRequest: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "twine" | "wire" | "rope" | "door" | "float" | "chain";
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * ComponentKindOut
+         * @description Resumen de un tipo de componente del catálogo.
+         */
+        ComponentKindOut: {
+            /** Kind */
+            kind: string;
+            /** Label */
+            label: string;
+            /** Items */
+            items: number;
+            /** Generic */
+            generic: number;
+            /** Brands */
+            brands: string[];
+        };
+        /**
+         * ComponentOptimizeRequest
+         * @description Armado con componentes del catálogo (``POST /optimize/components``).
+         *
+         *     ``net``, ``vessel``, ``door`` y ``params`` como en ``DesignRequest`` (los filtros van en
+         *     ``params``: ``component_brands``, ``component_region``, ``generic_only``). ``objective``:
+         *     ``drag`` (mín. R_T), ``efficiency`` (mín. R_T/AH) o ``cost`` (mín. costo de la lista de
+         *     materiales). ``speed_kn`` fija la velocidad; sin ella se elige la mejor entre ``v_bounds``.
+         *     ``doors``/``floats``/``twines`` fijan los candidatos por id.
+         */
+        ComponentOptimizeRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /** Params */
+            params?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Objective
+             * @default drag
+             * @enum {string}
+             */
+            objective: "drag" | "efficiency" | "cost";
+            /** Speed Kn */
+            speed_kn?: number | null;
+            /**
+             * V Bounds
+             * @default [
+             *       1.5,
+             *       4
+             *     ]
+             */
+            v_bounds: [
+                number,
+                number
+            ];
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
+            /** Doors */
+            doors?: string[] | null;
+            /** Floats */
+            floats?: string[] | null;
+            /** Twines */
+            twines?: string[] | null;
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /** Currency */
+            currency?: string | null;
+            /**
+             * Max Doors
+             * @default 5
+             */
+            max_doors: number;
+            /**
+             * Max Floats
+             * @default 4
+             */
+            max_floats: number;
+            /**
+             * Max Twines
+             * @default 4
+             */
+            max_twines: number;
+        };
+        /**
+         * ComponentOptimizeResponse
+         * @description Resultado de ``POST /optimize/components``.
+         */
+        ComponentOptimizeResponse: {
+            best: components["schemas"]["AssemblyOut"];
+            /** Alternatives */
+            alternatives: components["schemas"]["AssemblyOut"][];
+            /** Objective */
+            objective: string;
+            /** Feasible */
+            feasible: boolean;
+            /** Evaluated */
+            evaluated: number;
+            /** Candidates */
+            candidates: {
+                [key: string]: (string | null)[];
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Notes */
+            notes: string[];
         };
         /**
          * ConstraintOut
@@ -1565,6 +1974,35 @@ export interface components {
          */
         Plane: "upper" | "lower" | "side";
         /**
+         * PriceIn
+         * @description Precio orientativo de un componente o de una línea de la lista de materiales.
+         */
+        PriceIn: {
+            /** Value */
+            value: number;
+            /**
+             * Currency
+             * @description Código ISO 4217
+             */
+            currency: string;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "kg" | "m" | "unit";
+            /**
+             * Date
+             * @description AAAA-MM o AAAA-MM-DD
+             * @default
+             */
+            date: string;
+            /**
+             * Source
+             * @default usuario
+             */
+            source: string;
+        };
+        /**
          * PropellerType
          * @description Tipo de hélice (nomenclatura del modelo original).
          * @enum {string}
@@ -2366,6 +2804,131 @@ export interface operations {
             };
         };
     };
+    list_component_kinds_catalog_components_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComponentKindOut"][];
+                };
+            };
+        };
+    };
+    list_components_catalog_components__kind__get: {
+        parameters: {
+            query?: {
+                brand?: string[] | null;
+                region?: string | null;
+                generic?: boolean;
+                status?: "published" | "draft" | "user" | "all";
+            };
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    }[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_component_catalog_components__kind___item_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_component_components_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ComponentCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComponentCheckOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_vessels_catalog_vessels_get: {
         parameters: {
             query?: never;
@@ -2539,6 +3102,39 @@ export interface operations {
             };
         };
     };
+    design_bom_design_bom_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BomRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BomOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     design_plan_design_plan_post: {
         parameters: {
             query?: {
@@ -2631,6 +3227,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OptimizeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    optimize_components_optimize_components_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ComponentOptimizeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComponentOptimizeResponse"];
                 };
             };
             /** @description Validation Error */

@@ -1,0 +1,537 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: twine
+sources:
+- key: garware_fisheries
+  title: Garware Technical Fibres, Fisheries brochure (redes de arrastre trenzadas y cabos)
+  url: https://www.garwarefibres.com/sites/default/files/brochure/solutions/Fisheries%20Brochure.pdf
+  accessed: '2026-10-25'
+items:
+- id: garware_sapphire_1_2mm
+  name: Garware Sapphire Ø1.2 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 1.2
+  runnage_m_per_kg: 775.0
+  rtex: 1290.0
+  breaking_load_kgf: 59.0
+  knot_breaking_load_kgf: 80.0
+  generic_of: twine_pe_twisted_r1410
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sapphire_2_1mm
+  name: Garware Sapphire Ø2.1 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 2.1
+  runnage_m_per_kg: 340.0
+  rtex: 2940.0
+  breaking_load_kgf: 115.0
+  knot_breaking_load_kgf: 150.0
+  generic_of: twine_pe_twisted_r2800
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sapphire_3_1mm
+  name: Garware Sapphire Ø3.1 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 3.1
+  runnage_m_per_kg: 190.0
+  rtex: 5260.0
+  breaking_load_kgf: 220.0
+  knot_breaking_load_kgf: 299.0
+  generic_of: twine_pe_twisted_r5300
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sapphire_4_2mm
+  name: Garware Sapphire Ø4.2 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 4.2
+  runnage_m_per_kg: 101.0
+  rtex: 9900.0
+  breaking_load_kgf: 355.0
+  knot_breaking_load_kgf: 520.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sapphire_5_0mm
+  name: Garware Sapphire Ø5 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 5.0
+  runnage_m_per_kg: 75.0
+  rtex: 13300.0
+  breaking_load_kgf: 544.0
+  knot_breaking_load_kgf: 732.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sapphire_6_0mm
+  name: Garware Sapphire Ø6 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: Sapphire
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 6.0
+  runnage_m_per_kg: 59.0
+  rtex: 16900.0
+  breaking_load_kgf: 700.0
+  knot_breaking_load_kgf: 975.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - 'red compacta: 25–30 % menos diámetro que el PE estándar.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (Sapphire)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_1_2mm
+  name: Garware SNG Ø1.2 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 1.2
+  runnage_m_per_kg: 840.0
+  rtex: 1190.0
+  breaking_load_kgf: 62.0
+  knot_breaking_load_kgf: 75.0
+  generic_of: twine_pe_twisted_r1050
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_2_1mm
+  name: Garware SNG Ø2.1 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 2.1
+  runnage_m_per_kg: 350.0
+  rtex: 2860.0
+  breaking_load_kgf: 140.0
+  knot_breaking_load_kgf: 185.0
+  generic_of: twine_pe_twisted_r2800
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_3_1mm
+  name: Garware SNG Ø3.1 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 3.1
+  runnage_m_per_kg: 190.0
+  rtex: 5260.0
+  breaking_load_kgf: 260.0
+  knot_breaking_load_kgf: 315.0
+  generic_of: twine_pe_twisted_r5300
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_4_2mm
+  name: Garware SNG Ø4.2 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 4.2
+  runnage_m_per_kg: 110.0
+  rtex: 9090.0
+  breaking_load_kgf: 420.0
+  knot_breaking_load_kgf: 515.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_5_0mm
+  name: Garware SNG Ø5 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 5.0
+  runnage_m_per_kg: 80.0
+  rtex: 12500.0
+  breaking_load_kgf: 590.0
+  knot_breaking_load_kgf: 745.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento
+- id: garware_sng_6_0mm
+  name: Garware SNG Ø6 mm (PE trenzado para arrastre)
+  brand: Garware
+  product: SNG
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: trenzado
+  diameter_mm: 6.0
+  runnage_m_per_kg: 61.0
+  rtex: 16400.0
+  breaking_load_kgf: 730.0
+  knot_breaking_load_kgf: 940.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - hasta 20 % menos diámetro que Sapphire.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: diámetro real
+    runnage_m_per_kg:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: la ficha da la rotura con nudo mayor que sin nudo (ensayo propio del fabricante)
+    rtex:
+      kind: derived
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Braided Trawl Nets (SNG)»'
+      note: 10⁶ / rendimiento

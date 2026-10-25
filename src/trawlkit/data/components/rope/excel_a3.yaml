@@ -1,0 +1,104 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: rope
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: pp_14_retorcido_3_cordones
+  name: Moscuzza PP 14 Retorcido 3 cordones
+  brand: Moscuzza
+  country: AR
+  regions:
+  - latam
+  material: PP
+  construction: retorcido 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.125
+  breaking_load_t: 4.3
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A293:F293
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A293:F293
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A293:F293
+- id: combinado_12_acero6x24_7
+  name: Moscuzza COMBINADO 12 Acero6x24+7
+  brand: Moscuzza
+  country: AR
+  regions:
+  - latam
+  material: combinado
+  construction: acero 6x24+7
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.438
+  breaking_load_t: 3.48
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A294:F294
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A294:F294
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A294:F294
+- id: combinado_14_acero6x24_7
+  name: Moscuzza COMBINADO 14 Acero6x24+7
+  brand: Moscuzza
+  country: AR
+  regions:
+  - latam
+  material: combinado
+  construction: acero 6x24+7
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.624
+  breaking_load_t: 8.7
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A295:F295
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A295:F295
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A295:F295
+- id: pp_16_retorcido_3_cordones
+  name: Moscuzza PP 16 Retorcido 3 cordones
+  brand: Moscuzza
+  country: AR
+  regions:
+  - latam
+  material: PP
+  construction: retorcido 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1636363636
+  breaking_load_t: 5.6
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A296:F296
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A296:F296
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A296:F296

@@ -54,7 +54,12 @@ class Material:
 
 #: Polímeros que el libro Excel no trae (sólo tiene PA): densidad usual [kg/m³] para las redes
 #: del catálogo FAO (Fase 12). PE: polietileno; PP: polipropileno; PES: poliéster.
-POLYMER_DENSITY_KG_M3: dict[str, float] = {"PE": 950.0, "PP": 910.0, "PES": 1380.0}
+POLYMER_DENSITY_KG_M3: dict[str, float] = {
+    "PE": 950.0,
+    "PP": 910.0,
+    "PES": 1380.0,
+    "UHMWPE": 970.0,
+}
 
 
 def materials_from_catalogue(catalogue: Catalogue) -> tuple[Material, ...]:

@@ -1,0 +1,203 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: float
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: float_excel_100mm_0
+  name: Boya Ø100 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 100.0
+  buoyancy_kgf: 0.3
+  regions:
+  - latam
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D72:E72
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D72:E72
+- id: float_excel_135mm_1
+  name: Boya Ø135 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 135.0
+  buoyancy_kgf: 0.76
+  regions:
+  - latam
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D73:E73
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D73:E73
+- id: float_excel_200mm_2
+  name: Boya Ø200 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 200.0
+  buoyancy_kgf: 3.2
+  regions:
+  - latam
+  notes:
+  - la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D74:E74
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D74:E74
+- id: float_excel_280mm_3
+  name: Boya Ø280 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 280.0
+  buoyancy_kgf: 7.5
+  regions:
+  - latam
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D75:E75
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D75:E75
+- id: float_excel_200mm_4
+  name: Boya Ø200 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 200.0
+  buoyancy_kgf: 3.2
+  regions:
+  - latam
+  notes:
+  - la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D76:E76
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D76:E76
+- id: float_excel_200mm_5
+  name: Boya Ø200 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 200.0
+  buoyancy_kgf: 3.0
+  regions:
+  - latam
+  notes:
+  - la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D77:E77
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D77:E77
+- id: float_excel_250mm_6
+  name: Boya Ø250 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 250.0
+  buoyancy_kgf: 6.54
+  regions:
+  - latam
+  notes:
+  - la hoja lista 2 boyas de 250 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D78:E78
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D78:E78
+- id: float_excel_250mm_7
+  name: Boya Ø250 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 250.0
+  buoyancy_kgf: 5.75
+  regions:
+  - latam
+  notes:
+  - la hoja lista 2 boyas de 250 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D79:E79
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D79:E79
+- id: float_excel_300mm_8
+  name: Boya Ø300 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 300.0
+  buoyancy_kgf: 10.01
+  regions:
+  - latam
+  notes:
+  - la hoja lista 2 boyas de 300 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D80:E80
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D80:E80
+- id: float_excel_300mm_9
+  name: Boya Ø300 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 300.0
+  buoyancy_kgf: 8.33
+  regions:
+  - latam
+  notes:
+  - la hoja lista 2 boyas de 300 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D81:E81
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D81:E81
+- id: float_excel_200mm_10
+  name: Boya Ø200 mm (libro Excel de la A-3)
+  material: plástico
+  diameter_mm: 200.0
+  buoyancy_kgf: 3.1
+  regions:
+  - latam
+  notes:
+  - la hoja lista 4 boyas de 200 mm con distinta flotación (modelos distintos); se conservan todas
+  provenance:
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D82:E82
+    buoyancy_kgf:
+      kind: excel
+      document: giamportone2024
+      note: Flotación y Lastre!D82:E82

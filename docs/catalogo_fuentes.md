@@ -70,3 +70,35 @@ capítulo {doc}`33_catalogo_fao`):
 | `scharfe_krill_front1600` | Schärfe ap. 8 | borrador | alto del ala del vientre y Rtex del ala |
 | pelágica de 4 paneles | Workbook, AH827E133 | no digitalizada | figura de 450 px: el frente de 800 mm no se lee |
 
+
+## Componentes del arte (Fase 13)
+
+El catálogo de componentes (`trawlkit.components`, `data/components/`) junta paño e hilo, cables
+de acero, cabos, portones, boyas y cadenas. Cada ítem trae su fuente y la procedencia de cada
+valor, y los de marca dicen a qué **genérico** equivalen.
+
+| Clave | Fuente | Qué se toma | Cómo |
+|---|---|---|---|
+| `prado1990` | FAO *Fisherman's Workbook* | Hilos de PA, PE, PP y PES; cabos de PA, PE, PES, PP y combinados; cables 6x7, 6x12, 6x19 y 6x24; boyas; cadenas; portones por potencia (plano, oval, V y Süberkrüb) | Genéricos: ley ajustada a cada tabla (potencia o d²), valores *derivados* a tamaños estándar con el error del ajuste; boyas, cadenas y portones *transcriptos* |
+| `garware_fisheries` | Garware Technical Fibres (India) | Paño de PE trenzado Sapphire y SNG; cabo X2 (PP/PE) | 6–8 tamaños por línea, *transcriptos* |
+| `bridon2023` | Bridon-Bekaert, catálogo de pesca 2023 | Cables Marblue 6x19 y Dyform Starfish 6x26 | 4–5 tamaños por línea |
+| `pfeifer_6x19w` | PFEIFER 6x19W-FC | Cables chicos de 6 a 16 mm | 6 tamaños |
+| `zuniga2006` | FAO REBYC, flota camaronera del Caribe colombiano | Puertas planas de madera de 6'×28" a 10'×40" usadas en la flota | Medidas *transcriptas*, polar supuesta (la del portón plano) |
+| `lange1993` | Lange (ICES 1993) | Sustentación máxima del portón plano (0,95) y en V (0,70–0,85) | Polar del portón en V *supuesta*: la del plano con el CL escalado |
+| `giamportone2024` | Libro Excel de la A-3 | Cabos Moscuzza, cadenas Trawlex, cables 6x19 Seale, boyas, hilos PA y los dos portones con su polar | Procedencia *Excel* |
+
+Criterios:
+
+- **Datos puntuales**: de cada línea de producto de un fabricante se toman a lo sumo 10 tamaños,
+  con la cita. No se copian tablas ni fichas completas, y ninguna ficha se guarda en el
+  repositorio.
+- **Genéricos**: lo que se consigue en cualquier ferretería naval. Sus valores salen de leyes
+  ajustadas a las tablas de referencia, no de una marca.
+- **Validador físico** (`trawlkit.components.check`): peso por metro contra diámetro, carga de
+  rotura por mm², tenacidad del hilo, flotación frente al volumen de la esfera y polar del
+  portón. Lo usa también la app para revisar los aportes de los usuarios.
+- **Buscadas sin datos abiertos**: Hampidjan, Euronete, Vónin, Usha Martin, Cotesi, Morgère,
+  Thyborøn, Injector y Ekkó publican rangos o piden la ficha por correo. Los proveedores
+  latinoamericanos no publican fichas en línea; para ellos están los genéricos y los aportes.
+- **Normas**: ISO 1805 (paño), ISO 2307 (cabos) e ISO 2408 / EN 12385-4 (cables) se citan como
+  método de ensayo. Son pagas y sus tablas no se reproducen.

@@ -1,0 +1,273 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: rope
+sources:
+- key: garware_fisheries
+  title: Garware Technical Fibres, Fisheries brochure (redes de arrastre trenzadas y cabos)
+  url: https://www.garwarefibres.com/sites/default/files/brochure/solutions/Fisheries%20Brochure.pdf
+  accessed: '2026-10-25'
+items:
+- id: garware_x2_6mm
+  name: Garware X2 Ø6 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.016800000000000002
+  breaking_load_t: 0.863
+  generic_of: rope_pp_6mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_8mm
+  name: Garware X2 Ø8 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.03
+  breaking_load_t: 1.553
+  generic_of: rope_pp_8mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_10mm
+  name: Garware X2 Ø10 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.0455
+  breaking_load_t: 2.358
+  generic_of: rope_pp_10mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_12mm
+  name: Garware X2 Ø12 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0659
+  breaking_load_t: 3.45
+  generic_of: rope_pp_12mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_14mm
+  name: Garware X2 Ø14 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.09090000000000001
+  breaking_load_t: 4.8
+  generic_of: rope_pp_14mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_16mm
+  name: Garware X2 Ø16 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1159
+  breaking_load_t: 5.516
+  generic_of: rope_pp_16mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_20mm
+  name: Garware X2 Ø20 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.18180000000000002
+  breaking_load_t: 8.74
+  generic_of: rope_pp_20mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha
+- id: garware_x2_24mm
+  name: Garware X2 Ø24 mm (PP/PE tipo Danline)
+  brand: Garware
+  product: X2
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 o 4 cordones, mezcla PP/PE
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.2591
+  breaking_load_t: 12.2
+  generic_of: rope_pp_24mm
+  notes:
+  - Relingas, refuerzos, tiras del copo y frente de redes pelágicas.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: g/m de la ficha
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
+      note: kgf de la ficha

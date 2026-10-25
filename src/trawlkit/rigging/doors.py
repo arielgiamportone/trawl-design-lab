@@ -240,16 +240,30 @@ def select_door(door_id: str) -> Door:
     raise KeyError(f"portón desconocido: {door_id!r}")
 
 
-def door_polar(door: Door, angle_deg: float) -> DoorPolar:
+def door_polar(door: Door, angle_deg: float, *, interpolate: bool = False) -> DoorPolar:
     """CL, CD y CL/CD del portón al ángulo de ataque dado (Port!C132:F137; fila 134 = 32°).
 
-    El ángulo debe existir en la polar del catálogo; ``cl_cd = CL/CD`` (Tab!E259:E264).
+    Por defecto el ángulo debe existir en la polar del catálogo, como el ``LOOKUP`` del libro;
+    ``cl_cd = CL/CD`` (Tab!E259:E264). Con ``interpolate`` (portones del catálogo de componentes,
+    cuya polar no siempre tiene 32°) se interpola linealmente entre los dos ángulos vecinos con
+    coeficientes; fuera del rango de la polar sigue siendo ``KeyError``.
     """
     for coef in door.coefficients:
         if coef.angle_deg == angle_deg:
             if coef.cl is None or coef.cd is None:
                 raise ValueError(f"sin coeficientes para {door.id!r} a {angle_deg}°")
             return DoorPolar(angle_deg=angle_deg, cl=coef.cl, cd=coef.cd, cl_cd=coef.cl / coef.cd)
+    if interpolate:
+        pts = sorted(
+            (c.angle_deg, c.cl, c.cd)
+            for c in door.coefficients
+            if c.cl is not None and c.cd is not None
+        )
+        for (a0, l0, d0), (a1, l1, d1) in zip(pts, pts[1:], strict=False):
+            if a0 < angle_deg < a1:
+                t = (angle_deg - a0) / (a1 - a0)
+                cl, cd = l0 + t * (l1 - l0), d0 + t * (d1 - d0)
+                return DoorPolar(angle_deg=angle_deg, cl=cl, cd=cd, cl_cd=cl / cd)
     raise KeyError(f"ángulo {angle_deg}° no está en la polar de {door.id!r}")
 
 

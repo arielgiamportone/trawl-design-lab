@@ -1,0 +1,415 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: wire
+sources:
+- key: bridon2023
+  title: Bridon-Bekaert, 2023 Fishing Catalogue
+  url: https://www.bekaert.com/content/dam/bbrg-myrope/products/technical-sheets/2023%20Fishing%20Catalogue.pdf
+  accessed: '2026-10-25'
+items:
+- id: bridon_marblue_6x19_991_poly_core_14mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø14 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: fibra sintética
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.703
+  breaking_load_t: 10.4
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_poly_core_16mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø16 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: fibra sintética
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.909
+  breaking_load_t: 14.9
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_poly_core_18mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø18 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: fibra sintética
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.168
+  breaking_load_t: 18.8
+  generic_of: wire_6x19_991_18mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_poly_core_20mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø20 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: fibra sintética
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.442
+  breaking_load_t: 23.2
+  generic_of: wire_6x19_991_20mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_poly_core_24mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø24 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: fibra sintética
+  diameter_mm: 24.0
+  weight_kg_per_m: 2.0540000000000003
+  breaking_load_t: 33.5
+  generic_of: wire_6x19_991_24mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_iwrc_14mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) IWRC Ø14 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: IWRC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.8270000000000001
+  breaking_load_t: 12.6
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_iwrc_16mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) IWRC Ø16 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: IWRC
+  diameter_mm: 16.0
+  weight_kg_per_m: 1.02
+  breaking_load_t: 16.1
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_iwrc_18mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) IWRC Ø18 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: IWRC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.2890000000000001
+  breaking_load_t: 20.3
+  generic_of: wire_6x19_991_18mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_iwrc_20mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) IWRC Ø20 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: IWRC
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.646
+  breaking_load_t: 25.1
+  generic_of: wire_6x19_991_20mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_marblue_6x19_991_iwrc_24mm
+  name: Bridon-Bekaert Marblue 6x19 (9/9/1) IWRC Ø24 mm
+  brand: Bridon-Bekaert
+  product: Marblue 6x19 (9/9/1) IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x19 (9/9/1)
+  core: IWRC
+  diameter_mm: 24.0
+  weight_kg_per_m: 2.354
+  breaking_load_t: 36.1
+  generic_of: wire_6x19_991_24mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Marblue»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_iwrc_20mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 IWRC Ø20 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.83
+  breaking_load_t: 29.8
+  generic_of: wire_6x19_991_20mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_iwrc_22mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 IWRC Ø22 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 22.0
+  weight_kg_per_m: 2.166
+  breaking_load_t: 36.0
+  generic_of: wire_6x19_991_22mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_iwrc_24mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 IWRC Ø24 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 24.0
+  weight_kg_per_m: 2.5469999999999997
+  breaking_load_t: 42.9
+  generic_of: wire_6x19_991_24mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_iwrc_26mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 IWRC Ø26 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 26.0
+  weight_kg_per_m: 3.072
+  breaking_load_t: 50.3
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima

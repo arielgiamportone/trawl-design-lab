@@ -1,0 +1,56 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: chain
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: trawlex_short_link_7mm
+  name: Trawlex CORTO 7 GRADO80 6
+  brand: Trawlex
+  regions:
+  - latam
+  link: corto
+  link_diameter_mm: 7.0
+  grade: '80'
+  weight_kg_per_m: 1.05
+  breaking_load_t: 6.0
+  generic_of: chain_ht_7mm
+  provenance:
+    link_diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A316:C316
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A316:C316
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A316:C316
+- id: trawlex_long_link_19mm
+  name: Trawlex LARGO 19 GRADO80 45
+  brand: Trawlex
+  regions:
+  - latam
+  link: largo
+  link_diameter_mm: 19.0
+  grade: '80'
+  weight_kg_per_m: 6.31
+  breaking_load_t: 45.0
+  generic_of: chain_ht_19mm
+  provenance:
+    link_diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A317:C317
+    weight_kg_per_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A317:C317
+    breaking_load_t:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A317:C317

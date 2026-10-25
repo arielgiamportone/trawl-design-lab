@@ -1,0 +1,50 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: twine
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: twine_excel_pa_r1280tex
+  name: Hilo PA R1280 tex (libro Excel de la A-3)
+  material: PA
+  rtex: 1280.0
+  diameter_mm: 1.37
+  runnage_m_per_kg: 780.0
+  regions:
+  - latam
+  provenance:
+    rtex:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A36:I36
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A36:I36
+    runnage_m_per_kg:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A36:I36
+- id: twine_excel_pa_r950tex
+  name: Hilo PA R950 tex (libro Excel de la A-3)
+  material: PA
+  rtex: 950.0
+  diameter_mm: 1.16
+  runnage_m_per_kg: 1050.0
+  regions:
+  - latam
+  provenance:
+    rtex:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A37:I37
+    diameter_mm:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A37:I37
+    runnage_m_per_kg:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A37:I37

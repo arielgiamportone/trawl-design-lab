@@ -36,7 +36,8 @@ def select_rope(name: str) -> RopeSpec:
     """Cabo del catálogo por descripción (``"COMBINADO 12 Acero6x24+7"``) o por ``id``.
 
     Equivale a ``Cab!G3 = LOOKUP(resulmat, cabl, Tab!E293:E296)`` (kg/m), ``H3`` (resistencia [t])
-    e ``I3`` (diámetro).
+    e ``I3`` (diámetro). Si no está en el catálogo del libro, se busca por ``id`` en el catálogo
+    de componentes (:mod:`trawlkit.components`, Fase 13).
     """
     for item in load_catalogue("ropes").items:
         if name in (item.get("description"), item.get("id")):
@@ -47,7 +48,20 @@ def select_rope(name: str) -> RopeSpec:
                 weight_kg_per_m=float(item["weight_kg_per_m"]),
                 breaking_load_t=float(item["breaking_load_t"]),
             )
-    raise KeyError(f"cabo desconocido: {name!r}")
+    from trawlkit.components import RopeItem, get_component
+
+    try:
+        comp = get_component("rope", name)
+    except KeyError:
+        raise KeyError(f"cabo desconocido: {name!r}") from None
+    assert isinstance(comp, RopeItem)
+    return RopeSpec(
+        id=comp.id,
+        description=comp.name,
+        diameter_mm=comp.diameter_mm,
+        weight_kg_per_m=comp.weight_kg_per_m,
+        breaking_load_t=comp.breaking_load_t,
+    )
 
 
 def rope_weight_air_kg(length_m: float, weight_kg_per_m: float) -> float:

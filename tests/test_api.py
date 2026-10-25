@@ -234,7 +234,7 @@ def test_optimize_endpoint_refine_is_seeded() -> None:
         {"v_bounds": [0.1, 3.0]},
         {"grid": {"n_s": 40, "n_v": 5}},
         {"margin": -0.1},
-        {"door_angle": 33.3},
+        {"door_angle": 80.0},
         {"unknown": 1},
     ],
 )
@@ -657,3 +657,85 @@ def test_calibrate_endpoint_recovers_example() -> None:
     res = r.json()["result"]
     assert res["params"][0]["fitted"] == pytest.approx(0.9, abs=0.04)
     assert res["rmse_after_pct"] < res["rmse_before_pct"]
+
+
+def test_component_catalogue_endpoints() -> None:
+    kinds = {k["kind"]: k for k in client.get("/catalog/components").json()}
+    assert set(kinds) == {"twine", "wire", "rope", "door", "float", "chain"}
+    assert kinds["wire"]["generic"] > 0 and "Bridon-Bekaert" in kinds["wire"]["brands"]
+    wires = client.get("/catalog/components/wire", params={"generic": True}).json()
+    assert wires and all("brand" not in w for w in wires)
+    bridon = client.get(
+        "/catalog/components/wire", params={"brand": ["Bridon-Bekaert"], "region": "europe"}
+    ).json()
+    assert any(w.get("brand") == "Bridon-Bekaert" for w in bridon)
+    one = client.get("/catalog/components/twine/garware_sapphire_3_1mm").json()
+    assert one["provenance"]["breaking_load_kgf"]["kind"] == "transcribed"
+    assert one["generic"]["material"] == "PE"
+    assert client.get("/catalog/components/bobbin").status_code == 404
+    assert client.get("/catalog/components/wire/nope").status_code == 404
+
+
+def test_component_check_flags_bad_contribution() -> None:
+    ok = client.post(
+        "/components/check",
+        json={
+            "kind": "rope",
+            "id": "mi_cabo",
+            "name": "PP 12 del puerto",
+            "material": "PP",
+            "diameter_mm": 12,
+            "weight_kg_per_m": 0.066,
+            "breaking_load_t": 2.0,
+        },
+    ).json()
+    assert ok["ok"] and ok["item"]["status"] == "user" and not ok["issues"]
+    bad = client.post(
+        "/components/check",
+        json={
+            "kind": "float",
+            "id": "x",
+            "name": "boya",
+            "material": "plástico",
+            "diameter_mm": 100,
+            "buoyancy_kgf": 9,
+        },
+    ).json()
+    assert any(i["code"] == "buoyancy" for i in bad["issues"])
+    schema = client.post(
+        "/components/check", json={"kind": "wire", "id": "y", "name": "sin datos"}
+    ).json()
+    assert not schema["ok"] and schema["issues"][0]["code"] == "schema"
+
+
+def test_design_bom_and_component_params() -> None:
+    price = {"value": 450.0, "currency": "USD", "unit": "unit"}
+    bom = client.post("/design/bom", json={"prices": {"doors": price}}).json()
+    lines = {ln["key"]: ln for ln in bom["lines"]}
+    assert lines["doors"]["cost"] == 900.0 and bom["totals"] == {"USD": 900.0}
+    assert bom["missing_prices"] == len(bom["lines"]) - 1
+    # Parámetros de componentes: booleano sólo en campos booleanos; portón del catálogo nuevo.
+    body = {"params": {"generic_only": True, "warp_id": "wire_6x24_fc_16mm"}}
+    r = client.post("/design/bom", json=body)
+    assert r.status_code == 200
+    warps = next(ln for ln in r.json()["lines"] if ln["key"] == "warps")
+    assert warps["component_id"] == "wire_6x24_fc_16mm"
+    assert client.post("/design", json={"params": {"depth_m": True}}).status_code == 422
+    r = client.post("/design", json={"vessel": "fao_a3_180hp", "door": "door_flat_200hp"})
+    assert r.status_code == 200 and r.json()["case"]["door"] == "door_flat_200hp"
+    assert client.post("/design", json={"door": "no_door"}).status_code == 404
+
+
+def test_optimize_components_endpoint() -> None:
+    body = {"net": "fao_wb_bt2p_60hp", "params": {"generic_only": True}, "max_doors": 3}
+    r = client.post("/optimize/components", json=body)
+    assert r.status_code == 200, r.text
+    out = r.json()
+    assert out["feasible"] and out["best"]["generic"]
+    assert out["best"]["components"]["warp"] is not None
+    assert out["best"]["bom"]["lines"]
+    assert len(out["candidates"]["door"]) == 3
+    bad = client.post("/optimize/components", json={**body, "objective": "speed"})
+    assert bad.status_code == 422
+    missing = client.post("/optimize/components", json={**body, "doors": ["no_door"]})
+    assert missing.status_code == 404

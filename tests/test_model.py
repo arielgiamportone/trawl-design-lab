@@ -44,8 +44,13 @@ def test_validation() -> None:
         DesignCase(net, v150, door, speeds_kn=(2.0, 1.0))
     with pytest.raises(ValueError, match="rob_share"):
         DesignCase(net, v150, door, rob_share=1.5)
+    # Como el LOOKUP del libro, en modo EXCEL el ángulo debe estar en la polar; en CORRECTED se
+    # interpola entre los vecinos (Fase 13) y sólo falla fuera del rango.
     with pytest.raises(ValueError, match="33"):
-        DesignCase(net, v150, door, door_attack_angle_deg=33)
+        DesignCase(net, v150, door, door_attack_angle_deg=33, compat=Compat.EXCEL)
+    assert DesignCase(net, v150, door, door_attack_angle_deg=33).door_attack_angle_deg == 33
+    with pytest.raises(ValueError, match="80"):
+        DesignCase(net, v150, door, door_attack_angle_deg=80)
     with pytest.raises(ValueError, match="profundidad"):
         DesignCase(net.model_copy(update={"species": None}), v150, door)
     with pytest.raises(ValueError, match="pastecas"):

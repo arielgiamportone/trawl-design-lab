@@ -1,0 +1,113 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: door
+sources:
+- key: giamportone2024
+  title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  accessed: '2026-10-25'
+items:
+- id: fao_flat_wood_a3
+  name: Porton plano de madera con bastidor de hierro FAO para A3,B3,C3
+  type: flat_wood
+  brand: null
+  length_m: 1.9
+  height_m: 0.95
+  area_m2: 1.805
+  weight_air_kg: 135.0
+  weight_water_kg: 80.595
+  weight_water_coefficient: 0.597
+  coefficients:
+  - angle_deg: 25.0
+    cl: 0.8
+    cd: 0.53
+  - angle_deg: 30.0
+    cl: 0.92
+    cd: 0.67
+  - angle_deg: 32.0
+    cl: 0.93
+    cd: 0.71
+  - angle_deg: 35.0
+    cl: 0.86
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 0.78
+    cd: 0.79
+  - angle_deg: 45.0
+    cl: 0.76
+    cd: 0.89
+  regions:
+  - global
+  provenance:
+    length_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A245:E264
+    height_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A245:E264
+    area_m2:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A245:E264
+    weight_air_kg:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A245:E264
+    coefficients:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A245:E264
+- id: morgere_polivalente_oval
+  name: Morgere Polivalente Oval
+  type: oval
+  brand: Morgère
+  length_m: 1.4
+  height_m: 0.952
+  area_m2: 1.0467786722
+  weight_air_kg: 120.0
+  weight_water_kg: 104.4
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 25.0
+    cl: null
+    cd: null
+  - angle_deg: 27.0
+    cl: 1.22
+    cd: 0.75
+  - angle_deg: 30.0
+    cl: 1.2
+    cd: 0.77
+  - angle_deg: 35.0
+    cl: 1.04
+    cd: 0.79
+  - angle_deg: 40.0
+    cl: 0.95
+    cd: 0.84
+  - angle_deg: 45.0
+    cl: 0.88
+    cd: 0.92
+  regions:
+  - global
+  provenance:
+    length_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A267:E286
+    height_m:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A267:E286
+    area_m2:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A267:E286
+    weight_air_kg:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A267:E286
+    coefficients:
+      kind: excel
+      document: giamportone2024
+      note: Tablas de Referencias!A267:E286
+  generic_of: door_oval_100hp

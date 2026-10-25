@@ -167,6 +167,99 @@ def net_check(net_id: str) -> dict[str, Any]:
     return summary(net_preset(net_id))
 
 
+def component_kinds() -> list[dict[str, Any]]:
+    """Tipos de componente con cantidad de ítems, genéricos y marcas."""
+    from trawlkit import components as comp
+
+    out = []
+    for kind in comp.KINDS:
+        sm = comp.summary(comp.load_components(kind))
+        out.append(
+            {
+                "kind": kind,
+                "label": comp.KIND_LABEL[kind],
+                "items": sm["items"],
+                "generic": sm["generic"],
+                "brands": sm["brands"],
+            }
+        )
+    return out
+
+
+def component_list(
+    kind: str,
+    *,
+    brand: list[str] | None = None,
+    region: str | None = None,
+    generic_only: bool = False,
+    status: str = "published",
+) -> list[dict[str, Any]]:
+    """Componentes de un tipo con filtros (ver :func:`trawlkit.components.load_components`)."""
+    from trawlkit import components as comp
+
+    statuses = ("published", "draft", "user") if status == "all" else (status,)
+    try:
+        items = comp.load_components(
+            kind,
+            brands=brand or None,
+            region=region,
+            generic_only=generic_only,
+            statuses=statuses,
+        )
+    except KeyError as exc:
+        raise NotFoundError(exc.args[0]) from exc
+    return [it.model_dump(mode="json", exclude_none=True) for it in items]
+
+
+def component_get(kind: str, item_id: str) -> dict[str, Any]:
+    """Un componente con su procedencia, sus observaciones y su genérico equivalente."""
+    from trawlkit import components as comp
+
+    try:
+        item = comp.get_component(kind, item_id)
+    except KeyError as exc:
+        raise NotFoundError(exc.args[0]) from exc
+    generic = comp.generic_for(item)
+    return {
+        **item.model_dump(mode="json", exclude_none=True),
+        "issues": [i.to_dict() for i in comp.check(item)],
+        "generic": None
+        if generic is None or generic.id == item.id
+        else generic.model_dump(mode="json", exclude_none=True),
+    }
+
+
+def component_check(data: dict[str, Any]) -> dict[str, Any]:
+    """Valida un componente (un aporte): esquema, coherencia física y genérico equivalente."""
+    from pydantic import ValidationError as PydValidationError
+
+    from trawlkit import components as comp
+
+    try:
+        item = comp.parse_component({"status": "user", **data})
+    except PydValidationError as exc:
+        issues = [
+            {
+                "level": "error",
+                "code": "schema",
+                "message": f"{'.'.join(str(x) for x in e['loc'])}: {e['msg']}",
+                "panels": [],
+            }
+            for e in exc.errors()
+        ]
+        return {"ok": False, "item": None, "issues": issues, "generic": None}
+    issues = [i.to_dict() for i in comp.check(item)]
+    generic = comp.generic_for(item)
+    return {
+        "ok": not any(i["level"] == "error" for i in issues),
+        "item": item.model_dump(mode="json", exclude_none=True),
+        "issues": issues,
+        "generic": None
+        if generic is None or generic.id == item.id
+        else generic.model_dump(mode="json", exclude_none=True),
+    }
+
+
 @cache
 def vessel_presets() -> dict[str, Vessel]:
     """Buques del catálogo por id."""
@@ -266,6 +359,21 @@ def _pick(value: Any, presets: dict[str, Any], kind: str) -> Any:
     return value
 
 
+def _pick_door(value: str | Door | None) -> Door:
+    """Portón por id: primero el catálogo de la A-3, luego el catálogo de componentes."""
+    if isinstance(value, str) and value not in door_presets():
+        from trawlkit.components import DoorItem, get_component
+
+        try:
+            item = get_component("door", value)
+        except KeyError as exc:
+            raise NotFoundError(f"portón desconocido: {value!r}") from exc
+        assert isinstance(item, DoorItem)
+        return item.to_door()
+    picked: Door = _pick(value, door_presets(), "portón")
+    return picked
+
+
 @cache
 def _field_comments() -> dict[str, str]:
     """Comentarios en línea de cada campo de ``DesignCase`` (celda del Excel)."""
@@ -296,7 +404,8 @@ def params_info() -> list[dict[str, Any]]:
 
 
 def _coerce_params(params: dict[str, Any]) -> dict[str, Any]:
-    allowed = {p["name"] for p in params_info()}
+    info = {p["name"]: p["type"] for p in params_info()}
+    allowed = set(info)
     unknown = set(params) - allowed
     if unknown:
         raise BadRequestError(f"parámetros desconocidos: {sorted(unknown)}")
@@ -304,7 +413,11 @@ def _coerce_params(params: dict[str, Any]) -> dict[str, Any]:
     for k, v in params.items():
         values = v if isinstance(v, list) else [v]
         for item in values:
-            if isinstance(item, bool) or not isinstance(item, (int, float, str)):
+            if isinstance(item, bool):
+                if info[k] != "bool":
+                    raise BadRequestError(f"{k}: valor no admitido {item!r}")
+                continue
+            if not isinstance(item, (int, float, str)):
                 raise BadRequestError(f"{k}: valor no admitido {item!r}")
             if isinstance(item, (int, float)) and (not math.isfinite(item) or item < 0):
                 raise BadRequestError(f"{k}: debe ser un número finito y no negativo ({item!r})")
@@ -338,7 +451,7 @@ def build_case(
             raise BadRequestError(str(exc)) from exc
     vessels = vessel_presets()
     v: Vessel = _pick(vessel, vessels, "buque")
-    d: Door = _pick(door, door_presets(), "portón")
+    d: Door = _pick_door(door)
     if class_vessels is None:
         others = tuple(o for o in vessels.values() if o.id != v.id)
     else:
@@ -416,6 +529,57 @@ def optimize_case(
         )
     except (ValueError, ZeroDivisionError, IndexError) as exc:
         raise BadRequestError(f"no se puede optimizar el caso: {exc}") from exc
+    out: dict[str, Any] = to_jsonable(result.to_dict())
+    return out
+
+
+def design_bom(case: DesignCase, prices: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Lista de materiales del caso (:func:`trawlkit.cost.bill_of_materials`)."""
+    from trawlkit.cost import bill_of_materials
+
+    bom = bill_of_materials(run_case(case), prices or {})
+    out: dict[str, Any] = to_jsonable(bom.to_dict())
+    return out
+
+
+def optimize_components_case(
+    case: DesignCase,
+    *,
+    objective: str = "drag",
+    speed_kn: float | None = None,
+    v_bounds: tuple[float, float] = (1.5, 4.0),
+    margin: float = 0.1,
+    doors: list[str] | None = None,
+    floats: list[str] | None = None,
+    twines: list[str] | None = None,
+    prices: dict[str, dict[str, Any]] | None = None,
+    currency: str | None = None,
+    max_doors: int = 5,
+    max_floats: int = 4,
+    max_twines: int = 4,
+) -> dict[str, Any]:
+    """Corre :func:`trawlkit.optimize.optimise_components` y lo serializa."""
+    from trawlkit.optimize import Limits, optimise_components
+
+    try:
+        result = optimise_components(
+            case,
+            objective,
+            speed_kn=speed_kn,
+            doors=doors,
+            floats=floats,
+            twines=twines,
+            prices=prices or {},
+            currency=currency,
+            limits=Limits(margin=margin, v_min_kn=v_bounds[0], v_max_kn=v_bounds[1]),
+            max_doors=max_doors,
+            max_floats=max_floats,
+            max_twines=max_twines,
+        )
+    except KeyError as exc:
+        raise NotFoundError(f"componente desconocido: {exc}") from exc
+    except (ValueError, ZeroDivisionError, IndexError) as exc:
+        raise BadRequestError(f"no se puede armar el caso: {exc}") from exc
     out: dict[str, Any] = to_jsonable(result.to_dict())
     return out
 

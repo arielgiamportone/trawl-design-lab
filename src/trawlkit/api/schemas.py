@@ -88,6 +88,35 @@ class CatalogItem(BaseModel):
     coverage: CatalogCoverage | None = None
 
 
+class ComponentKindOut(BaseModel):
+    """Resumen de un tipo de componente del catálogo."""
+
+    kind: str
+    label: str
+    items: int
+    generic: int
+    brands: list[str]
+
+
+class ComponentCheckRequest(BaseModel):
+    """Componente a validar (un aporte de usuario): sus campos según ``kind``."""
+
+    model_config = ConfigDict(extra="allow")
+
+    kind: Literal["twine", "wire", "rope", "door", "float", "chain"]
+    id: str
+    name: str
+
+
+class ComponentCheckOut(BaseModel):
+    """Resultado de validar un componente: el ítem normalizado y sus observaciones."""
+
+    ok: bool
+    item: dict[str, Any] | None = None
+    issues: list[CheckIssue]
+    generic: dict[str, Any] | None = None
+
+
 class ProvenanceRow(BaseModel):
     """Un valor de la red y su procedencia (``trawlkit.provenance``)."""
 
@@ -250,6 +279,130 @@ class OptimizeResponse(BaseModel):
     refine: dict[str, Any] | None
     runtime_s: float
     engine_runs: int
+
+
+class PriceIn(BaseModel):
+    """Precio orientativo de un componente o de una línea de la lista de materiales."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    value: float = Field(ge=0)
+    currency: str = Field(min_length=3, max_length=3, description="Código ISO 4217")
+    unit: Literal["kg", "m", "unit"]
+    date: str = Field(default="", description="AAAA-MM o AAAA-MM-DD")
+    source: str = Field(default="usuario")
+
+
+class BomRequest(DesignRequest):
+    """Lista de materiales del caso (``POST /design/bom``).
+
+    ``prices`` mapea id de componente o clave de línea (``netting_pa``, ``doors``, ``floats``…) a
+    un precio orientativo; sin precio, se usa el del catálogo o la línea queda «sin precio».
+    """
+
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+
+
+class BomLineOut(BaseModel):
+    """Una línea de la lista de materiales (``trawlkit.cost.BomLine``)."""
+
+    key: str
+    label: str
+    quantity: float
+    unit: str
+    component_id: str | None = None
+    component_kind: str | None = None
+    component_name: str | None = None
+    unit_price: float | None = None
+    currency: str | None = None
+    price_source: str | None = None
+    cost: float | None = None
+    note: str | None = None
+
+
+class BomOut(BaseModel):
+    """Lista de materiales con totales por moneda y cantidad de líneas sin precio."""
+
+    lines: list[BomLineOut]
+    totals: dict[str, float]
+    missing_prices: int
+
+
+class ComponentOptimizeRequest(BaseModel):
+    """Armado con componentes del catálogo (``POST /optimize/components``).
+
+    ``net``, ``vessel``, ``door`` y ``params`` como en ``DesignRequest`` (los filtros van en
+    ``params``: ``component_brands``, ``component_region``, ``generic_only``). ``objective``:
+    ``drag`` (mín. R_T), ``efficiency`` (mín. R_T/AH) o ``cost`` (mín. costo de la lista de
+    materiales). ``speed_kn`` fija la velocidad; sin ella se elige la mejor entre ``v_bounds``.
+    ``doors``/``floats``/``twines`` fijan los candidatos por id.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    params: dict[str, Any] = Field(default_factory=dict)
+    objective: Literal["drag", "efficiency", "cost"] = "drag"
+    speed_kn: float | None = Field(default=None, gt=0.5, le=6.0)
+    v_bounds: tuple[float, float] = (1.5, 4.0)
+    margin: float = Field(default=0.1, ge=0.0, le=2.0)
+    doors: list[str] | None = Field(default=None, max_length=8)
+    floats: list[str] | None = Field(default=None, max_length=6)
+    twines: list[str] | None = Field(default=None, max_length=6)
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+    currency: str | None = Field(default=None, min_length=3, max_length=3)
+    max_doors: int = Field(default=5, ge=1, le=8)
+    max_floats: int = Field(default=4, ge=1, le=6)
+    max_twines: int = Field(default=4, ge=1, le=6)
+
+    @model_validator(mode="after")
+    def _check_bounds(self) -> ComponentOptimizeRequest:
+        v_lo, v_hi = self.v_bounds
+        if not 0.5 <= v_lo < v_hi <= 6.0:
+            raise ValueError("v_bounds debe cumplir 0.5 ≤ v_lo < v_hi ≤ 6")
+        return self
+
+
+class AssemblyOut(BaseModel):
+    """Un armado evaluado (``trawlkit.optimize.components.Assembly``)."""
+
+    components: dict[str, str | None]
+    float_count: int | None
+    speed_kn: float
+    demand_kgf: float
+    available_kgf: float
+    thrust_margin: float
+    net_drag_kgf: float
+    ah_m: float
+    av_m: float
+    area_rate_m2_h: float
+    energy_kgf_m_per_m2: float
+    door_area_m2: float
+    door_required_m2: float
+    constraints: list[ConstraintOut]
+    feasible: bool
+    penalty: float
+    generic: bool
+    cost: float | None
+    currency: str | None
+    missing_prices: int
+    bom: BomOut
+
+
+class ComponentOptimizeResponse(BaseModel):
+    """Resultado de ``POST /optimize/components``."""
+
+    best: AssemblyOut
+    alternatives: list[AssemblyOut]
+    objective: str
+    feasible: bool
+    evaluated: int
+    candidates: dict[str, list[str | None]]
+    settings: dict[str, Any]
+    notes: list[str]
 
 
 class ScaledNetRequest(BaseModel):

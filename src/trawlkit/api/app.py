@@ -6,9 +6,9 @@ import os
 import tempfile
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
@@ -16,9 +16,16 @@ from trawlkit import __version__
 from trawlkit.api import service
 from trawlkit.api.contract import fingerprint
 from trawlkit.api.schemas import (
+    BomOut,
+    BomRequest,
     CalibrateRequest,
     CalibrateResponse,
     CatalogItem,
+    ComponentCheckOut,
+    ComponentCheckRequest,
+    ComponentKindOut,
+    ComponentOptimizeRequest,
+    ComponentOptimizeResponse,
     DesignRequest,
     DesignResponse,
     ErratumOut,
@@ -132,6 +139,42 @@ def get_net_check(net_id: str) -> dict[str, Any]:
     return service.net_check(net_id)
 
 
+@app.get("/catalog/components", response_model=list[ComponentKindOut])
+def list_component_kinds() -> list[dict[str, Any]]:
+    """Tipos de componente (paño, cables, cabos, portones, boyas, cadenas) con su cantidad."""
+    return service.component_kinds()
+
+
+@app.get("/catalog/components/{kind}", response_model=list[dict[str, Any]])
+def list_components(
+    kind: str,
+    brand: Annotated[list[str] | None, Query()] = None,
+    region: str | None = None,
+    generic: bool = False,
+    status: Literal["published", "draft", "user", "all"] = "published",
+) -> list[dict[str, Any]]:
+    """Componentes de un tipo, con su procedencia.
+
+    Filtros: marcas (``brand``, repetible; los genéricos siempre se incluyen), región del puerto,
+    sólo genéricos y estado.
+    """
+    return service.component_list(
+        kind, brand=brand, region=region, generic_only=generic, status=status
+    )
+
+
+@app.get("/catalog/components/{kind}/{item_id}", response_model=dict[str, Any])
+def get_component(kind: str, item_id: str) -> dict[str, Any]:
+    """Un componente con su procedencia, sus observaciones y su genérico equivalente."""
+    return service.component_get(kind, item_id)
+
+
+@app.post("/components/check", response_model=ComponentCheckOut)
+def check_component(req: ComponentCheckRequest) -> dict[str, Any]:
+    """Valida un componente cargado por el usuario (esquema y coherencia física)."""
+    return service.component_check(req.model_dump())
+
+
 @app.get("/catalog/vessels", response_model=list[Vessel])
 def list_vessels() -> list[Vessel]:
     """Buques del catálogo."""
@@ -201,6 +244,21 @@ def design(req: DesignRequest) -> dict[str, Any]:
     }
 
 
+@app.post("/design/bom", response_model=BomOut)
+def design_bom(req: BomRequest) -> dict[str, Any]:
+    """Lista de materiales del caso: qué comprar, cuánto y su costo orientativo."""
+    case = service.build_case(
+        net=req.net,
+        net_modified=req.net_modified,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        params=req.params,
+    )
+    return service.design_bom(case, {k: v.model_dump() for k, v in req.prices.items()})
+
+
 @app.post(
     "/design/plan", response_class=Response, responses={200: {"content": {"image/svg+xml": {}}}}
 )
@@ -248,6 +306,37 @@ def optimize(req: OptimizeRequest) -> dict[str, Any]:
         seed=req.seed,
         propeller=req.propeller,
         door_angle=req.door_angle,
+    )
+
+
+@app.post("/optimize/components", response_model=ComponentOptimizeResponse)
+def optimize_components(req: ComponentOptimizeRequest) -> dict[str, Any]:
+    """Armado recomendado con componentes del catálogo (portón, cable, boyas e hilo).
+
+    Devuelve el mejor armado, 2 o 3 alternativas (una genérica si el mejor no lo es) y la lista
+    de materiales con el costo orientativo de cada uno.
+    """
+    case = service.build_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        params=req.params,
+    )
+    return service.optimize_components_case(
+        case,
+        objective=req.objective,
+        speed_kn=req.speed_kn,
+        v_bounds=req.v_bounds,
+        margin=req.margin,
+        doors=req.doors,
+        floats=req.floats,
+        twines=req.twines,
+        prices={k: v.model_dump() for k, v in req.prices.items()},
+        currency=req.currency,
+        max_doors=req.max_doors,
+        max_floats=req.max_floats,
+        max_twines=req.max_twines,
     )
 
 

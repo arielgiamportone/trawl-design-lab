@@ -1,0 +1,1684 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: rope
+sources:
+- key: prado1990
+  title: FAO Fisherman's Workbook (Prado y Dremière 1990)
+  url: https://www.fao.org/3/ah827e/ah827e.pdf
+  accessed: '2026-10-25'
+items:
+- id: rope_pa_6mm
+  name: Cabo PA 3 cordones Ø6 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0234
+  breaking_load_t: 0.771
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_8mm
+  name: Cabo PA 3 cordones Ø8 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.0416
+  breaking_load_t: 1.35
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_10mm
+  name: Cabo PA 3 cordones Ø10 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.065
+  breaking_load_t: 2.09
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_12mm
+  name: Cabo PA 3 cordones Ø12 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0936
+  breaking_load_t: 2.99
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_14mm
+  name: Cabo PA 3 cordones Ø14 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.127
+  breaking_load_t: 4.04
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_16mm
+  name: Cabo PA 3 cordones Ø16 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.166
+  breaking_load_t: 5.24
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_18mm
+  name: Cabo PA 3 cordones Ø18 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.211
+  breaking_load_t: 6.6
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_20mm
+  name: Cabo PA 3 cordones Ø20 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.26
+  breaking_load_t: 8.11
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_22mm
+  name: Cabo PA 3 cordones Ø22 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 22.0
+  weight_kg_per_m: 0.315
+  breaking_load_t: 9.77
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_24mm
+  name: Cabo PA 3 cordones Ø24 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.374
+  breaking_load_t: 11.6
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_28mm
+  name: Cabo PA 3 cordones Ø28 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 28.0
+  weight_kg_per_m: 0.51
+  breaking_load_t: 15.7
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_32mm
+  name: Cabo PA 3 cordones Ø32 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.666
+  breaking_load_t: 20.3
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_36mm
+  name: Cabo PA 3 cordones Ø36 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 36.0
+  weight_kg_per_m: 0.843
+  breaking_load_t: 25.6
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pa_40mm
+  name: Cabo PA 3 cordones Ø40 mm
+  material: PA
+  construction: 3 cordones
+  diameter_mm: 40.0
+  weight_kg_per_m: 1.04
+  breaking_load_t: 31.4
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00065·d², ajuste a 10 filas (error máx. 2 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0232·d^1.955, ajuste a 10 filas (error máx. 5 %)
+- id: rope_pe_6mm
+  name: Cabo PE 3 cordones Ø6 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0168
+  breaking_load_t: 0.397
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_8mm
+  name: Cabo PE 3 cordones Ø8 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.0298
+  breaking_load_t: 0.68
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_10mm
+  name: Cabo PE 3 cordones Ø10 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.0466
+  breaking_load_t: 1.03
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_12mm
+  name: Cabo PE 3 cordones Ø12 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0671
+  breaking_load_t: 1.45
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_14mm
+  name: Cabo PE 3 cordones Ø14 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.0914
+  breaking_load_t: 1.94
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_16mm
+  name: Cabo PE 3 cordones Ø16 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.119
+  breaking_load_t: 2.49
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_18mm
+  name: Cabo PE 3 cordones Ø18 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.151
+  breaking_load_t: 3.1
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_20mm
+  name: Cabo PE 3 cordones Ø20 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.186
+  breaking_load_t: 3.77
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_22mm
+  name: Cabo PE 3 cordones Ø22 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 22.0
+  weight_kg_per_m: 0.226
+  breaking_load_t: 4.51
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_24mm
+  name: Cabo PE 3 cordones Ø24 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.268
+  breaking_load_t: 5.31
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_28mm
+  name: Cabo PE 3 cordones Ø28 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 28.0
+  weight_kg_per_m: 0.365
+  breaking_load_t: 7.08
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_32mm
+  name: Cabo PE 3 cordones Ø32 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.477
+  breaking_load_t: 9.1
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_36mm
+  name: Cabo PE 3 cordones Ø36 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 36.0
+  weight_kg_per_m: 0.604
+  breaking_load_t: 11.3
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pe_40mm
+  name: Cabo PE 3 cordones Ø40 mm
+  material: PE
+  construction: 3 cordones
+  diameter_mm: 40.0
+  weight_kg_per_m: 0.746
+  breaking_load_t: 13.8
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00047·d², ajuste a 10 filas (error máx. 1 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0139·d^1.871, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pes_6mm
+  name: Cabo PES 3 cordones Ø6 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0288
+  breaking_load_t: 0.579
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_8mm
+  name: Cabo PES 3 cordones Ø8 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.0512
+  breaking_load_t: 1.02
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_10mm
+  name: Cabo PES 3 cordones Ø10 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.08
+  breaking_load_t: 1.59
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_12mm
+  name: Cabo PES 3 cordones Ø12 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.115
+  breaking_load_t: 2.28
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_14mm
+  name: Cabo PES 3 cordones Ø14 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.157
+  breaking_load_t: 3.09
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_16mm
+  name: Cabo PES 3 cordones Ø16 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.205
+  breaking_load_t: 4.02
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_18mm
+  name: Cabo PES 3 cordones Ø18 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.259
+  breaking_load_t: 5.07
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_20mm
+  name: Cabo PES 3 cordones Ø20 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.32
+  breaking_load_t: 6.25
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_22mm
+  name: Cabo PES 3 cordones Ø22 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 22.0
+  weight_kg_per_m: 0.387
+  breaking_load_t: 7.54
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_24mm
+  name: Cabo PES 3 cordones Ø24 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.461
+  breaking_load_t: 8.96
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_28mm
+  name: Cabo PES 3 cordones Ø28 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 28.0
+  weight_kg_per_m: 0.627
+  breaking_load_t: 12.1
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_32mm
+  name: Cabo PES 3 cordones Ø32 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.819
+  breaking_load_t: 15.8
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_36mm
+  name: Cabo PES 3 cordones Ø36 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 36.0
+  weight_kg_per_m: 1.04
+  breaking_load_t: 20.0
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pes_40mm
+  name: Cabo PES 3 cordones Ø40 mm
+  material: PES
+  construction: 3 cordones
+  diameter_mm: 40.0
+  weight_kg_per_m: 1.28
+  breaking_load_t: 24.6
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00080·d², ajuste a 10 filas (error máx. 4 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,0168·d^1.975, ajuste a 10 filas (error máx. 3 %)
+- id: rope_pp_6mm
+  name: Cabo PP 3 cordones Ø6 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0162
+  breaking_load_t: 0.554
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_8mm
+  name: Cabo PP 3 cordones Ø8 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.0288
+  breaking_load_t: 0.952
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_10mm
+  name: Cabo PP 3 cordones Ø10 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.045
+  breaking_load_t: 1.45
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_12mm
+  name: Cabo PP 3 cordones Ø12 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0648
+  breaking_load_t: 2.04
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_14mm
+  name: Cabo PP 3 cordones Ø14 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.0882
+  breaking_load_t: 2.73
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_16mm
+  name: Cabo PP 3 cordones Ø16 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.115
+  breaking_load_t: 3.51
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_18mm
+  name: Cabo PP 3 cordones Ø18 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.146
+  breaking_load_t: 4.38
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_20mm
+  name: Cabo PP 3 cordones Ø20 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.18
+  breaking_load_t: 5.34
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_22mm
+  name: Cabo PP 3 cordones Ø22 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 22.0
+  weight_kg_per_m: 0.218
+  breaking_load_t: 6.39
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_24mm
+  name: Cabo PP 3 cordones Ø24 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.259
+  breaking_load_t: 7.53
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_28mm
+  name: Cabo PP 3 cordones Ø28 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 28.0
+  weight_kg_per_m: 0.353
+  breaking_load_t: 10.1
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_32mm
+  name: Cabo PP 3 cordones Ø32 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.461
+  breaking_load_t: 12.9
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_36mm
+  name: Cabo PP 3 cordones Ø36 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 36.0
+  weight_kg_per_m: 0.583
+  breaking_load_t: 16.2
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_pp_40mm
+  name: Cabo PP 3 cordones Ø40 mm
+  material: PP
+  construction: 3 cordones
+  diameter_mm: 40.0
+  weight_kg_per_m: 0.72
+  breaking_load_t: 19.7
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: kg/m = 0.00045·d², ajuste a 10 filas (error máx. 5 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: Workbook, «Synthetic fibre rope»
+      note: rotura [t] = 0,019·d^1.883, ajuste a 10 filas (error máx. 2 %)
+- id: rope_combinado_3_10mm
+  name: Cabo combinado acero + PP, 3 cordones Ø10 mm
+  material: combinado
+  construction: acero + PP, 3 cordones
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.0731
+  breaking_load_t: 1.09
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00073·d², ajuste a 5 filas (error máx. 30 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0374·d^1.466, ajuste a 5 filas (error máx. 16 %)
+- id: rope_combinado_3_12mm
+  name: Cabo combinado acero + PP, 3 cordones Ø12 mm
+  material: combinado
+  construction: acero + PP, 3 cordones
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.105
+  breaking_load_t: 1.43
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00073·d², ajuste a 5 filas (error máx. 30 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0374·d^1.466, ajuste a 5 filas (error máx. 16 %)
+- id: rope_combinado_3_14mm
+  name: Cabo combinado acero + PP, 3 cordones Ø14 mm
+  material: combinado
+  construction: acero + PP, 3 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.143
+  breaking_load_t: 1.79
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00073·d², ajuste a 5 filas (error máx. 30 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0374·d^1.466, ajuste a 5 filas (error máx. 16 %)
+- id: rope_combinado_3_16mm
+  name: Cabo combinado acero + PP, 3 cordones Ø16 mm
+  material: combinado
+  construction: acero + PP, 3 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.187
+  breaking_load_t: 2.18
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00073·d², ajuste a 5 filas (error máx. 30 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0374·d^1.466, ajuste a 5 filas (error máx. 16 %)
+- id: rope_combinado_3_18mm
+  name: Cabo combinado acero + PP, 3 cordones Ø18 mm
+  material: combinado
+  construction: acero + PP, 3 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.237
+  breaking_load_t: 2.59
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00073·d², ajuste a 5 filas (error máx. 30 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0374·d^1.466, ajuste a 5 filas (error máx. 16 %)
+- id: rope_combinado_6_14mm
+  name: Cabo combinado acero + PP, 6 cordones Ø14 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.193
+  breaking_load_t: 3.8
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)
+- id: rope_combinado_6_16mm
+  name: Cabo combinado acero + PP, 6 cordones Ø16 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.252
+  breaking_load_t: 4.6
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)
+- id: rope_combinado_6_18mm
+  name: Cabo combinado acero + PP, 6 cordones Ø18 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.319
+  breaking_load_t: 5.43
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)
+- id: rope_combinado_6_20mm
+  name: Cabo combinado acero + PP, 6 cordones Ø20 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.393
+  breaking_load_t: 6.31
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)
+- id: rope_combinado_6_22mm
+  name: Cabo combinado acero + PP, 6 cordones Ø22 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 22.0
+  weight_kg_per_m: 0.476
+  breaking_load_t: 7.23
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)
+- id: rope_combinado_6_24mm
+  name: Cabo combinado acero + PP, 6 cordones Ø24 mm
+  material: combinado
+  construction: acero + PP, 6 cordones
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.567
+  breaking_load_t: 8.18
+  regions:
+  - global
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: tamaño estándar
+    weight_kg_per_m:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: kg/m = 0.00098·d², ajuste a 7 filas (error máx. 23 %)
+    breaking_load_t:
+      kind: derived
+      document: prado1990
+      page: 'Workbook, «Combination wire (2): steel - polypropylene»'
+      note: rotura [t] = 0,0892·d^1.422, ajuste a 7 filas (error máx. 5 %)

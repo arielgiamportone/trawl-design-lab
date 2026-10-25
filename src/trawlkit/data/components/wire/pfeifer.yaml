@@ -1,0 +1,177 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: wire
+sources:
+- key: pfeifer_6x19w
+  title: PFEIFER, ficha técnica del cable 6x19W-FC (EN 12385-4)
+  url: https://www.pfeifer.info/out/assets/6X19W-FC_SDB_EN_1.PDF
+  accessed: '2026-10-25'
+items:
+- id: pfeifer_6x19w_fc_6mm
+  name: PFEIFER 6x19W-FC Ø6 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.129
+  breaking_load_t: 2.14
+  generic_of: wire_6x19_1261_fc_8mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 21 kN / 9,807 (EN 12385-4)
+- id: pfeifer_6x19w_fc_8mm
+  name: PFEIFER 6x19W-FC Ø8 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.23
+  breaking_load_t: 3.81
+  generic_of: wire_6x19_1261_fc_8mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 37.4 kN / 9,807 (EN 12385-4)
+- id: pfeifer_6x19w_fc_10mm
+  name: PFEIFER 6x19W-FC Ø10 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.359
+  breaking_load_t: 5.96
+  generic_of: wire_6x19_1261_fc_10mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 58.4 kN / 9,807 (EN 12385-4)
+- id: pfeifer_6x19w_fc_12mm
+  name: PFEIFER 6x19W-FC Ø12 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.517
+  breaking_load_t: 8.58
+  generic_of: wire_6x19_1261_fc_12mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 84.1 kN / 9,807 (EN 12385-4)
+- id: pfeifer_6x19w_fc_14mm
+  name: PFEIFER 6x19W-FC Ø14 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.7040000000000001
+  breaking_load_t: 11.62
+  generic_of: wire_6x19_1261_fc_14mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 114 kN / 9,807 (EN 12385-4)
+- id: pfeifer_6x19w_fc_16mm
+  name: PFEIFER 6x19W-FC Ø16 mm (cable de diámetro chico)
+  brand: PFEIFER
+  product: 6x19W-FC
+  country: DE
+  regions:
+  - europe
+  construction: 6x19 Warrington
+  core: FC
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.919
+  breaking_load_t: 15.3
+  generic_of: wire_6x19_1261_fc_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+    weight_kg_per_m:
+      kind: transcribed
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: kg/100 m
+    breaking_load_t:
+      kind: derived
+      document: pfeifer_6x19w
+      page: PFEIFER 6x19W-FC, tabla de datos
+      note: 150 kN / 9,807 (EN 12385-4)

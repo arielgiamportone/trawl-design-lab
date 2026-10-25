@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import dataclasses
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -258,7 +259,8 @@ class Evaluator:
     ``door`` (id del catálogo o :class:`Door`), ``door_angle`` (ángulo de ataque, debe estar en la
     polar) y ``propeller`` reemplazan los del caso; ``compat`` es :attr:`Compat.CORRECTED` por
     defecto. Si ``s_step`` se indica, la escala se redondea a ese paso antes de evaluar (lo usa el
-    optimizador para reutilizar corridas).
+    optimizador para reutilizar corridas). ``warps`` reemplaza el catálogo de cables del libro
+    para la restricción del cable (los del catálogo de componentes, Fase 13).
     """
 
     def __init__(
@@ -271,6 +273,7 @@ class Evaluator:
         compat: Compat | str = Compat.CORRECTED,
         limits: Limits | None = None,
         s_step: float | None = None,
+        warps: Sequence[dict[str, Any]] | None = None,
     ) -> None:
         """Prepara el caso (portón, ángulo, hélice, modo) y la malla de velocidades."""
         self.limits = limits or Limits()
@@ -294,7 +297,8 @@ class Evaluator:
         # malla para que una red grande no aborte la corrida (select_warp sin candidatos).
         self.case = dataclasses.replace(case, speeds_kn=grid, warp_design_speed_kn=grid[0])
         self.speeds = np.asarray(grid, dtype=float)
-        warps = load_catalogue("warps").items
+        if warps is None:
+            warps = load_catalogue("warps").items
         self._warps = sorted(
             (
                 (str(w["id"]), float(w["diameter_mm"]), float(w["breaking_load_t"]) * 1000.0)
