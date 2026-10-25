@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { REGION_LABEL } from '../../lib/components';
 import { fmtFixed } from '../../lib/format';
 import { checkRange } from '../../lib/help';
 import { SEABED_LABELS } from '../../lib/labels';
@@ -108,6 +109,41 @@ export function StepOperation() {
           red y los portones a medida que entra la captura.
         </p>
       </div>
+      <fieldset className="field">
+        <legend>¿Qué consigue en su puerto?</legend>
+        <label htmlFor={`${ids}-region`}>Región del puerto</label>
+        <select
+          id={`${ids}-region`}
+          value={state.params.component_region ?? ''}
+          onChange={(e) =>
+            update((s) => ({ ...s, params: { ...s.params, component_region: e.target.value } }))
+          }
+        >
+          <option value="">Cualquiera (cables y boyas del libro FAO A-3)</option>
+          {Object.entries(REGION_LABEL).map(([id, label]) => (
+            <option key={id} value={id}>
+              {label}
+            </option>
+          ))}
+        </select>
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={state.params.generic_only === 'true'}
+            onChange={(e) =>
+              update((s) => ({
+                ...s,
+                params: { ...s.params, generic_only: e.target.checked ? 'true' : '' },
+              }))
+            }
+          />
+          Sólo componentes genéricos (los que se consiguen en cualquier ferretería naval)
+        </label>
+        <p className="help">
+          El cable y las boyas se eligen entre los que hay en esa región. La lista de materiales y
+          el armado con el catálogo están en la pestaña «Componentes» del modo experto.
+        </p>
+      </fieldset>
       <p className="help">
         El resto de los parámetros (aparejo, flotación, cables, métodos de cálculo) usa valores
         recomendados; puede cambiarlos en el modo experto.

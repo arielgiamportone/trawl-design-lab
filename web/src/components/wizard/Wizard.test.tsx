@@ -47,6 +47,11 @@ describe('modo guiado', () => {
     expect(await screen.findByText(/Fuera del rango habitual/)).toBeInTheDocument();
     await userEvent.clear(depth);
     await userEvent.type(depth, '60');
+    await userEvent.selectOptions(
+      screen.getByRole('combobox', { name: 'Región del puerto' }),
+      'latam',
+    );
+    await userEvent.click(screen.getByRole('checkbox', { name: /Sólo componentes genéricos/ }));
     await next();
 
     // Paso 4: diagnóstico
@@ -62,7 +67,12 @@ describe('modo guiado', () => {
       const last = calls.filter((c) => c.url.endsWith('/design')).at(-1);
       expect(last?.body).toMatchObject({
         vessel: 'fao_a3_180hp',
-        params: { ft_propeller: 'variable_pitch_nozzle', depth_m: 60 },
+        params: {
+          ft_propeller: 'variable_pitch_nozzle',
+          depth_m: 60,
+          component_region: 'latam',
+          generic_only: true,
+        },
       });
     });
   });
