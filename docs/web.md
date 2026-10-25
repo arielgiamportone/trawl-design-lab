@@ -89,7 +89,9 @@ La app abre en el **modo guiado**, pensado para quien quiere una respuesta rápi
 todos los parámetros. Son cuatro pasos:
 
 1. **Buque**: el buque del catálogo (potencia, eslora) y el tipo de hélice.
-2. **Red**: la red, si se compara con otra y los portones.
+2. **Red**: la red, si se compara con otra y los portones. Se ofrecen las redes adecuadas a la
+   potencia del buque elegido (la A-3 y las del catálogo FAO cuyo rango de ensayo, ±25 %, la
+   incluye); «Ver todas» quita el filtro. Los borradores del catálogo no aparecen.
 3. **Operación**: la velocidad de arrastre prevista (control deslizante) y la profundidad.
 4. **Resultado**: un diagnóstico con semáforos. Dice si alcanza la potencia a esa velocidad
    (tiro disponible frente a la demanda de red, portones y cables, interpolados a la velocidad
@@ -217,6 +219,21 @@ La quinta vista de «Simulación», **«Incertidumbre y calibración»**
   antes y después, los parámetros ajustados (marcados si quedan en el límite de su rango) y cada
   medición frente a la simulación. Con la red FAO A-3 estándar también se puede calibrar contra
   DynamiT.
+
+## Catálogo FAO
+
+La pestaña **«Catálogo FAO»** del modo experto ({doc}`33_catalogo_fao`) lista las redes
+digitalizadas de documentos de la FAO:
+
+- **Filtros**: texto, familia (fondo, pelágica), aparejo (portones, pareja), fuente y potencia
+  del buque. Los borradores quedan ocultos salvo con «Mostrar borradores».
+- **Insignias**: pareja, 4 paneles, pelágica, borrador y avisos o errores del validador.
+- **Ficha de la red**: la fuente con enlace al documento y la barra de procedencia (transcripto,
+  derivado, supuesto, Excel). Muestra también los avisos del validador y la tabla de procedencia
+  valor por valor, filtrable por tipo y con la nota de cada supuesto.
+- **«Usar esta red»**: la pone en el caso sin buque ni portón, y la API la calcula con su propio
+  caso (buque de su potencia, portón y profundidad del plano). En el panel del caso, el buque y
+  el portón muestran «Del plano» hasta que se elija uno.
 
 ## Funcionalidades
 

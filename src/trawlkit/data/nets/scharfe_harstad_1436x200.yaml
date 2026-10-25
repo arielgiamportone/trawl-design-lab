@@ -1,0 +1,1519 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: scharfe_harstad_1436x200
+name: Arrastre pelágico Harstad de 4 paneles, 1436 × 200 mm (Schärfe 1983)
+description: Red pelágica noruega de 4 paños iguales con 1436 mallas de 200 mm de circunferencia (287
+  m) y cuerpo de 190–60 mm; se usó a bordo para muestreo biológico.
+source: 'Schärfe 1983 (FI:DP/GLO/82/001), apéndice 6: Harstad trawl, 1436 × 200 = 287 m circumference
+  (https://www.fao.org/4/x6567e/x6567e00.htm)'
+family: pelagic
+rig: otter
+vessel_hp:
+- 1000
+- 1500
+target_species: peces linterna (Benthosema pterotum), capa D1 de 100–150 m
+status: draft
+sources:
+- key: scharfe1983
+  title: 'Schärfe 1983 (FI:DP/GLO/82/001), apéndice 6: Harstad trawl, 1436 × 200 = 287 m circumference'
+  url: https://www.fao.org/4/x6567e/x6567e00.htm
+  accessed: '2026-10-25'
+  figure: Apéndice 6 (x6567e07.gif)
+  page: Apéndice 6 (x6567e07.gif)
+panels:
+- id: UW
+  plane: upper
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 1.87
+  rtex: 2430.0
+  meshes_top: 50
+  meshes_bottom: 130
+  meshes_depth: 80
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: AB
+- id: LW
+  plane: lower
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 1.87
+  rtex: 2430.0
+  meshes_top: 50
+  meshes_bottom: 130
+  meshes_depth: 80
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: AB
+- id: U1
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 1.48
+  rtex: 1520.0
+  meshes_top: 359
+  meshes_bottom: 310
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: U2
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 190.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 310
+  meshes_bottom: 260
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: U3
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 140.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 260
+  meshes_bottom: 202
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: U4
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 202
+  meshes_bottom: 143
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: U5
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 214
+  meshes_bottom: 115
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: U6
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 155
+  meshes_bottom: 96
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+- id: U7
+  plane: upper
+  section: codend
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 144
+  meshes_bottom: 144
+  meshes_depth: 125
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: AN
+- id: L1
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 1.48
+  rtex: 1520.0
+  meshes_top: 359
+  meshes_bottom: 310
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: L2
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 190.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 310
+  meshes_bottom: 260
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: L3
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 140.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 260
+  meshes_bottom: 202
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: L4
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 202
+  meshes_bottom: 143
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: L5
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 214
+  meshes_bottom: 115
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: 1N2B
+- id: L6
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 155
+  meshes_bottom: 96
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+- id: L7
+  plane: lower
+  section: codend
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 144
+  meshes_bottom: 144
+  meshes_depth: 125
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: AN
+- id: S1
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 1.48
+  rtex: 1520.0
+  meshes_top: 359
+  meshes_bottom: 310
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N2B
+- id: S2
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 190.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 310
+  meshes_bottom: 260
+  meshes_depth: 50
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N2B
+- id: S3
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 140.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 260
+  meshes_bottom: 202
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N2B
+- id: S4
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 202
+  meshes_bottom: 143
+  meshes_depth: 60
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N2B
+- id: S5
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 214
+  meshes_bottom: 115
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N2B
+- id: S6
+  plane: side
+  section: body
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.41
+  rtex: 1370.0
+  meshes_top: 155
+  meshes_bottom: 96
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 2
+- id: S7
+  plane: side
+  section: codend
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 144
+  meshes_bottom: 144
+  meshes_depth: 125
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: AN
+rigging:
+  doors: SÜBERKRÜB cambados de 4,3 × 1,9 m (8,2 m²), 1,35 t
+  bridles: 100 m (las inferiores 94 m más 6 m de cadena de peso delantero)
+  front_weights: cadena de 230 a 520 kg por lado según el lance
+design:
+  depth_m: 125.0
+  sweeps_m: 80.0
+  door_length_m: 4.3
+  door_height_m: 1.9
+  door_weight_air_kg: 1350.0
+  vessel_length_m: 45.0
+notes:
+- Los costados del plano tienen alas como el dorso y el vientre; en el modelo los costados empiezan en
+  la primera estación del cuerpo (las relingas van por las alas del dorso y del vientre).
+- 'Cuatro paños iguales: 4 × 359 = 1436 mallas de 200 mm.'
+- 'BORRADOR: el plano cose 260 mallas de 190 mm con 260 de 140 mm (26 % de diferencia de largo); el validador
+  lo marca como error. Puede ser un fruncido del plano o una lectura del mallero; queda para revisar con
+  el original.'
+provenance:
+  panels.UW.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.meshes_depth:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.UW.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 2430
+  panels.UW.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.LW.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.meshes_depth:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.LW.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 2430
+  panels.LW.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.U1.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U1.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1520
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.U2.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U2.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.U3.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U3.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.U4.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U4.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.U5.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U5.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U6.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U6.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U6.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U6.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U6.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.U6.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U6.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.U6.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.U7.mesh_mm:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.U7.rtex:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.U7.meshes_top:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.U7.meshes_bottom:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.U7.meshes_depth:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.U7.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U7.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.U7.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.U7.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L1.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.L1.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L1.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1520
+  panels.L1.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.L2.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L2.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.L3.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L3.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L4.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.L4.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L4.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.L4.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L5.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.L5.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L5.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.L5.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L6.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L6.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L6.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L6.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L6.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.L6.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L6.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.L6.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.L7.mesh_mm:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.L7.rtex:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.L7.meshes_top:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.L7.meshes_bottom:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.L7.meshes_depth:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.L7.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L7.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.L7.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.L7.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S1.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S1.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S1.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S1.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S1.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.S1.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S1.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S1.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1520
+  panels.S1.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S2.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S2.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S2.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S2.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S2.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 49,5 filas; se redondea a 50
+  panels.S2.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S2.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S2.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.S2.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S3.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S3.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S3.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S3.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S3.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.S3.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S3.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S3.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.S3.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S4.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S4.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S4.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S4.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S4.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 59,5 filas; se redondea a 60
+  panels.S4.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S4.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S4.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.S4.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S5.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S5.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S5.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S5.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S5.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.S5.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S5.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S5.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.S5.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S6.mesh_mm:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S6.rtex:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S6.meshes_top:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S6.meshes_bottom:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S6.meshes_depth:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el plano da 99,5 filas; se redondea a 100
+  panels.S6.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S6.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 1370
+  panels.S6.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  panels.S7.mesh_mm:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.S7.rtex:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.S7.meshes_top:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.S7.meshes_bottom:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.S7.meshes_depth:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'el plano no dibuja el copo (sólo indica un forro de 4,6 mm sin nudo, PA R380 tex): se modela
+      un copo de 40 mm de 5 m que empalma con el borde de 96 mallas de 60 mm'
+  panels.S7.cut_code:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  panels.S7.count:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S7.twine_diameter_mm:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.S7.hanging_ratio:
+    kind: derived
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: el documento calcula la boca con la mitad del largo de paño de las relingas (U1 = 0,5); con
+      eso la red de krill da los 256 m² de boca que informa
+  design.depth_m:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 'capa D1 entre 100 y 150 m: valor medio'
+  design.sweeps_m:
+    kind: assumed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: malletas de 100 m; el motor calcula la superior con su regla y el resto va como patente
+  design.door_length_m:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: portones SÜBERKRÜB de 4,3 × 1,9 m = 8,2 m²
+  design.door_height_m:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: 1,35 t cada uno
+  design.vessel_length_m:
+    kind: transcribed
+    document: scharfe1983
+    page: Apéndice 6 (x6567e07.gif)
+    figure: Apéndice 6 (x6567e07.gif)
+    note: B/I Dr. Fridtjof Nansen, 45 m y 1500 hp

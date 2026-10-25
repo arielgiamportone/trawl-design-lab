@@ -405,7 +405,8 @@ def select_warp(
     diámetro mínimo (mayor Ø ≤ 12.28 mm → 12 mm, 8.55 t) e ignora la carga mínima de rotura
     Rem!E272 (8.8 t). :attr:`Compat.EXCEL` reproduce ese ``LOOKUP``; :attr:`Compat.CORRECTED`
     devuelve el menor diámetro que cumple a la vez Ø ≥ ``min_diameter_mm`` y
-    rotura ≥ ``min_breaking_load_kgf`` (13 mm / 10.3 t para el modelo).
+    rotura ≥ ``min_breaking_load_kgf`` (13 mm / 10.3 t para el modelo); si ninguno cumple,
+    el más grueso del catálogo con ``satisfies_breaking_load = False``.
     """
     items = sorted(load_catalogue("warps").items, key=lambda it: float(it["diameter_mm"]))
     diameters = [float(it["diameter_mm"]) for it in items]
@@ -418,9 +419,9 @@ def select_warp(
             if float(it["diameter_mm"]) >= min_diameter_mm
             and float(it["breaking_load_t"]) * 1000.0 >= min_breaking_load_kgf
         ]
-        if not candidates:
-            raise ValueError("ningún cable del catálogo cumple diámetro y carga de rotura")
-        chosen = candidates[0]
+        # Si ninguno alcanza (artes grandes, fuera del rango del catálogo del libro), el más
+        # grueso, con ``satisfies_breaking_load = False`` (nota ``warp_undersized`` del motor).
+        chosen = candidates[0] if candidates else items[-1]
     return WarpSelection(
         id=str(chosen["id"]),
         construction=str(chosen["construction"]),

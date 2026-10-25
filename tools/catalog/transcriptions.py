@@ -365,3 +365,8 @@ NETS: list[dict[str, Any]] = [
         ],
     },
 ]
+
+# Fase 12.3: BOBP/WP/10, BOBP/WP/20 y Schärfe (1983).
+from tools.catalog.transcriptions_123 import NETS_123  # noqa: E402
+
+NETS += NETS_123

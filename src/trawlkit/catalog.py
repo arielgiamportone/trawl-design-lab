@@ -55,10 +55,16 @@ def design_hp(spec: NetSpec) -> float:
     return 0.5 * (float(lo) + float(hi))
 
 
-def generic_vessel(bhp: float) -> Vessel:
-    """Buque genérico de ``bhp`` hp semejante al de 150 hp de la A-3 (raíz cúbica)."""
+def generic_vessel(bhp: float, length_m: float | None = None) -> Vessel:
+    """Buque genérico de ``bhp`` hp semejante al de 150 hp de la A-3.
+
+    Las medidas escalan con la raíz cúbica de la potencia o, si se da la eslora del documento
+    (``length_m``), con la razón de esloras.
+    """
     ref = next(v for v in load_vessels().vessels if v.id == REFERENCE_VESSEL_ID)
     k = (bhp / ref.bhp) ** (1.0 / 3.0)
+    if length_m is not None:
+        k = length_m / float(ref.length_m or 9.0)
     return Vessel(
         id=f"generic_{bhp:g}hp",
         name=f"Buque genérico de {bhp:g} hp (escalado del de 150 hp de la A-3)",
@@ -110,12 +116,14 @@ def catalog_case(
     design = _design(spec)
     notes: list[str] = []
     hp = design_hp(spec)
-    vessel = generic_vessel(hp)
+    length = design.get("vessel_length_m")
+    vessel = generic_vessel(hp, None if length is None else float(length))
     if spec.vessel_hp is None:
         notes.append("la red no da potencia de diseño: buque genérico de 150 hp")
+    rule = "eslora del documento" if length is not None else "raíz cúbica de la potencia"
     notes.append(
         f"buque genérico de {hp:g} hp: eslora {vessel.length_m} m, manga {vessel.beam_m} m y "
-        f"puntal {vessel.depth_m} m escalados del de 150 hp de la A-3 (raíz cúbica de la potencia)"
+        f"puntal {vessel.depth_m} m escalados del de 150 hp de la A-3 ({rule})"
     )
     rig = overrides.get("rig") or spec.rig or "otter"
     if "door_length_m" in design and "door_height_m" in design:
@@ -157,6 +165,7 @@ def catalog_case(
         vessel=vessel,
         door=door,
         speeds_kn=tuple(float(v) for v in speeds_kn),
+        assumptions=tuple(notes),
         **kwargs,
     )
     return CatalogCase(case=case, assumptions=notes)

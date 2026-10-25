@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { ApiError } from '../api/client';
+import { ApiError, type CatalogItem } from '../api/client';
 import { fmtFixed } from '../lib/format';
 import { countEdits } from '../lib/panels';
 import { useCase } from '../state/useCase';
@@ -11,17 +11,30 @@ const COMPAT_HELP: Record<Compat, string> = {
   excel: 'Reproduce el libro Excel original con sus erratas, para validar contra él.',
 };
 
+/** Redes agrupadas por documento de origen, para el selector. */
+function netGroups(nets: CatalogItem[]): [string, CatalogItem[]][] {
+  const out = new Map<string, CatalogItem[]>();
+  for (const n of nets) {
+    const g = n.source ? (n.source.title.split(',')[0] ?? n.source.key) : 'FAO A-3 (libro Excel)';
+    out.set(g, [...(out.get(g) ?? []), n]);
+  }
+  return [...out];
+}
+
 export function CasePanel() {
   const { state, update, catalogs, errors, design, calculate, dirty, committed, specs } = useCase();
   const ids = useId();
   const nErrors = Object.keys(errors).length;
   const busy = design.isFetching;
   const err = design.error;
-  const vesselValue = state.vessel ?? catalogs.vessels[0]?.id ?? '';
-  const doorValue = state.door ?? catalogs.doors[0]?.id ?? '';
+  const net = catalogs.nets.find((n) => n.id === state.net);
+  // Red del catálogo FAO sin buque ni portón elegidos: la API arma su propio caso.
+  const fromPlan = !!net?.vessel_hp && !state.netModified;
+  const vesselValue = state.vessel ?? (fromPlan ? '' : (catalogs.vessels[0]?.id ?? ''));
+  const doorValue = state.door ?? (fromPlan ? '' : (catalogs.doors[0]?.id ?? ''));
+  const groups = netGroups(catalogs.nets);
   const vessel = catalogs.vessels.find((v) => v.id === vesselValue);
   const door = catalogs.doors.find((d) => d.id === doorValue);
-  const net = catalogs.nets.find((n) => n.id === state.net);
   const edited = countEdits(specs.std, state.edits.std) + countEdits(specs.mod, state.edits.mod);
 
   return (
@@ -61,10 +74,15 @@ export function CasePanel() {
           }
         >
           {catalogs.nets.length === 0 && <option value={state.net}>{state.net}</option>}
-          {catalogs.nets.map((n) => (
-            <option key={n.id} value={n.id}>
-              {n.name ?? n.id}
-            </option>
+          {groups.map(([group, nets]) => (
+            <optgroup key={group} label={group}>
+              {nets.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.name ?? n.id}
+                  {n.status === 'draft' ? ' (borrador)' : ''}
+                </option>
+              ))}
+            </optgroup>
           ))}
         </select>
         {net?.description && <p className="help">{net.description}</p>}
@@ -116,8 +134,9 @@ export function CasePanel() {
         <select
           id={`${ids}-vessel`}
           value={vesselValue}
-          onChange={(e) => update({ vessel: e.target.value })}
+          onChange={(e) => update({ vessel: e.target.value || null })}
         >
+          {fromPlan && <option value="">Del plano: buque de la potencia de diseño</option>}
           {catalogs.vessels.map((v) => (
             <option key={v.id} value={v.id}>
               {v.name ?? v.id}
@@ -137,8 +156,9 @@ export function CasePanel() {
         <select
           id={`${ids}-door`}
           value={doorValue}
-          onChange={(e) => update({ door: e.target.value })}
+          onChange={(e) => update({ door: e.target.value || null })}
         >
+          {fromPlan && <option value="">Del plano (o escalado a la potencia)</option>}
           {catalogs.doors.map((d) => (
             <option key={d.id} value={d.id}>
               {d.name}

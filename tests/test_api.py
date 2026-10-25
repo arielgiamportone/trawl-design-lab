@@ -30,6 +30,49 @@ def test_catalogs() -> None:
     assert len(client.get("/errata").json()) >= 25
 
 
+def test_catalog_items_have_filter_fields() -> None:
+    items = {n["id"]: n for n in client.get("/catalog/nets").json()}
+    pair = items["bobp_wp13_pair_ho80"]
+    assert pair["family"] == "bottom" and pair["rig"] == "pair"
+    assert pair["vessel_hp"] == [30, 33] and pair["status"] == "published"
+    assert pair["source"]["url"].startswith("https://www.fao.org/")
+    assert pair["check"]["ok"] and pair["coverage"]["fraction"] == 1.0
+    assert items["scharfe_krill_1420x200"]["four_panel"] is True
+    drafts = client.get("/catalog/nets", params={"status": "draft"}).json()
+    assert drafts and all(d["status"] == "draft" for d in drafts)
+    assert not client.get("/health").json().get("nets_failed")
+
+
+def test_catalog_provenance_and_check() -> None:
+    rows = client.get("/catalog/nets/bobp_wp13_pair_ho80/provenance").json()
+    by_path = {r["path"]: r for r in rows}
+    f = by_path["panels.F.meshes_depth"]
+    assert f["value"] == 80 and f["provenance"]["kind"] == "transcribed"
+    assert "80" in f["provenance"]["note"]
+    a3 = client.get("/catalog/nets/fao_a3_standard/provenance").json()
+    assert all(r["provenance"]["kind"] == "excel" for r in a3)
+    chk = client.get("/catalog/nets/bobp_wp13_pair_ho80/check").json()
+    assert chk["ok"] and chk["warnings"] >= 1
+    assert any(i["code"] == "cut" for i in chk["issues"])
+    assert client.get("/catalog/nets/nope/check").status_code == 404
+
+
+def test_design_catalog_net_uses_its_own_case() -> None:
+    r = client.post("/design", json={"net": "bobp_wp13_pair_ho80"})
+    assert r.status_code == 200, r.text
+    body = r.json()
+    notes = body["notes"]
+    assert any(n.startswith("pair_trawl") for n in notes)
+    assert any(n.startswith("catalog: buque genérico de 31.5 hp") for n in notes)
+    assert body["summary"]["rob_3kn_kgf"] == 0.0
+    # Los parámetros del usuario mandan sobre los de la fuente.
+    r2 = client.post("/design", json={"net": "bobp_wp13_pair_ho80", "params": {"depth_m": 25}})
+    assert r2.json()["summary"]["working_depth_m"] == 25.0
+    # Con buque elegido, se usa el caso del libro (con portones).
+    r3 = client.post("/design", json={"net": "fao_wb_bt2p_60hp", "vessel": "fao_a3_150hp"})
+    assert not any(n.startswith("catalog:") for n in r3.json()["notes"])
+
+
 def test_design_excel_mode_reproduces_summary() -> None:
     r = client.post("/design", json={**STD, "compat": "excel"})
     assert r.status_code == 200, r.text

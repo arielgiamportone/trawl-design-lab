@@ -6,7 +6,7 @@ import os
 import tempfile
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,10 +30,12 @@ from trawlkit.api.schemas import (
     Health,
     LayoutMode,
     LayoutResponse,
+    NetCheckOut,
     OptimizeRequest,
     OptimizeResponse,
     ParamInfo,
     PlanView,
+    ProvenanceRow,
     ReportFormat,
     ScaledNetRequest,
     SeabedOut,
@@ -81,7 +83,11 @@ async def _not_found(_: Request, exc: service.NotFoundError) -> JSONResponse:
 def health() -> Health:
     """Comprobación de vida, con la versión, la huella de rutas y el commit desplegado."""
     commit = os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("TRAWLKIT_COMMIT") or None
-    return Health(status="ok", version=__version__, contract=_contract(), commit=commit)
+    service.net_presets()  # registra las redes que no validan
+    failed = sorted(service.NET_LOAD_ERRORS) or None
+    return Health(
+        status="ok", version=__version__, contract=_contract(), commit=commit, nets_failed=failed
+    )
 
 
 @lru_cache(maxsize=1)
@@ -90,12 +96,16 @@ def _contract() -> str:
 
 
 @app.get("/catalog/nets", response_model=list[CatalogItem])
-def list_nets() -> list[CatalogItem]:
-    """Redes predefinidas."""
-    return [
-        CatalogItem(id=k, name=v.name, description=v.description)
-        for k, v in service.net_presets().items()
-    ]
+def list_nets(status: Literal["all", "published", "draft"] = "all") -> list[dict[str, Any]]:
+    """Redes predefinidas: la FAO A-3 y el catálogo FAO.
+
+    Cada una con familia, aparejo, potencia, fuente, validador y cobertura de procedencia;
+    ``status`` filtra publicadas o borradores.
+    """
+    items = service.catalog_items()
+    if status == "all":
+        return items
+    return [it for it in items if (it["status"] or "published") == status]
 
 
 @app.get("/catalog/nets/{net_id}", response_model=NetSpec)
@@ -105,6 +115,21 @@ def get_net(net_id: str) -> NetSpec:
     if net_id not in presets:
         raise HTTPException(404, f"red desconocida: {net_id!r}")
     return presets[net_id]
+
+
+@app.get("/catalog/nets/{net_id}/provenance", response_model=list[ProvenanceRow])
+def get_net_provenance(net_id: str) -> list[dict[str, Any]]:
+    """Procedencia de cada valor de la red.
+
+    Documento, página, figura y tipo (Excel, transcripto, derivado o supuesto) con su nota.
+    """
+    return service.net_provenance(net_id)
+
+
+@app.get("/catalog/nets/{net_id}/check", response_model=NetCheckOut)
+def get_net_check(net_id: str) -> dict[str, Any]:
+    """Validador de consistencia de la red (empalmes, bocana, cortes, costados, datos)."""
+    return service.net_check(net_id)
 
 
 @app.get("/catalog/vessels", response_model=list[Vessel])

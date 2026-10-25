@@ -28,6 +28,7 @@ parts:
       - file: 30_caso_beagle
       - file: 31_validacion_excel
       - file: 32_validacion_dynamit
+      - file: 33_catalogo_fao
       - file: erratas
   - caption: Software
     chapters:

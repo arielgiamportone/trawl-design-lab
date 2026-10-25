@@ -268,6 +268,8 @@ class DesignCase:
 
     # --- informe --------------------------------------------------------------------------
     report_speeds_kn: tuple[float, ...] = (2.0, 3.0, 3.5)  # velocidades de la RN en summary()
+    #: Supuestos con que se armó el caso (``trawlkit.catalog.catalog_case``); van a las notas.
+    assumptions: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         """Normaliza y valida las entradas."""
@@ -1454,6 +1456,7 @@ def run(case: DesignCase) -> DesignResult:
         notes.append(
             "Compat.EXCEL: se reproducen las erratas registradas en trawlkit.compat.ERRATA"
         )
+    notes.extend(f"catalog: {a}" for a in case.assumptions)
     geometry = _stage_geometry(case)
     notes.extend(f"geometry/{v}: {n}" for v in ("std", "mod") for n in geometry.variant(v).notes)
     dimensions = _stage_dimensions(case, geometry)

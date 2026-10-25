@@ -19,6 +19,7 @@ const InteractiveDesign = lazy(() =>
   import('./interactive/InteractiveDesign').then((m) => ({ default: m.InteractiveDesign })),
 );
 const Simulate = lazy(() => import('./Simulate').then((m) => ({ default: m.Simulate })));
+const Catalog = lazy(() => import('./Catalog').then((m) => ({ default: m.Catalog })));
 
 export function Results() {
   const { design, pinned } = useCase();
@@ -45,6 +46,7 @@ export function Results() {
     { id: 'optimizar', label: 'Optimizar' },
     { id: 'simulacion', label: 'Simulación' },
     { id: 'descargas', label: 'Descargas' },
+    { id: 'catalogo', label: 'Catálogo FAO' },
     {
       id: 'notas',
       label: <>Notas y erratas {notes > 0 && <span className="badge">{notes}</span>}</>,
@@ -63,6 +65,7 @@ export function Results() {
             {tab === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}
             {tab === 'simulacion' && <Simulate />}
             {tab === 'diseno' && <InteractiveDesign />}
+            {tab === 'catalogo' && <Catalog />}
           </Suspense>
           {tab === 'paneles' && <PanelEditor />}
           {tab === 'plano' && <PlanViewer />}

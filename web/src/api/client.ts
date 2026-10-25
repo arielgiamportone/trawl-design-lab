@@ -3,6 +3,8 @@ import type { components } from './schema';
 
 type S = components['schemas'];
 export type CatalogItem = S['CatalogItem'];
+export type ProvenanceRow = S['ProvenanceRow'];
+export type NetCheck = S['NetCheckOut'];
 export type NetSpec = S['NetSpec'];
 export type Panel = S['Panel'];
 export type Vessel = S['Vessel'];
@@ -142,6 +144,10 @@ export const api = {
   nets: (signal?: AbortSignal) => getJson<CatalogItem[]>('/catalog/nets', signal),
   net: (id: string, signal?: AbortSignal) =>
     getJson<NetSpec>(`/catalog/nets/${encodeURIComponent(id)}`, signal),
+  netProvenance: (id: string, signal?: AbortSignal) =>
+    getJson<ProvenanceRow[]>(`/catalog/nets/${encodeURIComponent(id)}/provenance`, signal),
+  netCheck: (id: string, signal?: AbortSignal) =>
+    getJson<NetCheck>(`/catalog/nets/${encodeURIComponent(id)}/check`, signal),
   vessels: (signal?: AbortSignal) => getJson<Vessel[]>('/catalog/vessels', signal),
   doors: (signal?: AbortSignal) => getJson<Door[]>('/catalog/doors', signal),
   params: (signal?: AbortSignal) => getJson<ParamInfo[]>('/params', signal),

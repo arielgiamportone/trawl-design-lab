@@ -1,0 +1,917 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: bobp_wp10_pair_680x60
+name: Arrastre de pareja de gran abertura, 680 mallas de 60 mm (BOBP/WP/10)
+description: Red de arrastre de fondo de gran abertura para dos barcos de 65 hp, con alas de 120 mm, cuerpo
+  de 80–40 mm y copo de 32 y 25 mm. Ensayada en Palk Bay en 1980.
+source: 'BOBP/WP/10, apéndice 6: Two boat high opening bottom trawl, 680 meshes of 60 mm (https://www.fao.org/4/ad950e/ad950e00.pdf)'
+family: bottom
+rig: pair
+vessel_hp:
+- 65
+- 65
+target_species: peces de fondo y semipelágicos, Palk Bay (menos de 30–40 m)
+status: published
+sources:
+- key: bobpwp10
+  title: 'BOBP/WP/10, apéndice 6: Two boat high opening bottom trawl, 680 meshes of 60 mm'
+  url: https://www.fao.org/4/ad950e/ad950e00.pdf
+  accessed: '2026-10-25'
+  figure: Apéndice 6
+  page: 20 del PDF ([16] del documento)
+panels:
+- id: A
+  plane: upper
+  section: wing_tip
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 4
+  meshes_bottom: 40
+  meshes_depth: 24
+  hanging_ratio: 0.33
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: C
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 40
+  meshes_bottom: 85
+  meshes_depth: 90
+  hanging_ratio: 0.33
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: E
+  plane: upper
+  section: square
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 312
+  meshes_bottom: 272
+  meshes_depth: 40
+  hanging_ratio: 0.33
+  count: 1
+  cut_code: 1N2B
+- id: G1
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 340
+  meshes_bottom: 140
+  meshes_depth: 200
+  hanging_ratio: 0.33
+  count: 1
+  cut_code: 1N2B
+- id: G2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 186
+  meshes_bottom: 60
+  meshes_depth: 126
+  hanging_ratio: 0.33
+  count: 1
+  cut_code: 1N2B
+- id: I1
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 32.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 80
+  meshes_bottom: 80
+  meshes_depth: 100
+  hanging_ratio: 0.33
+  count: 1
+  cut_code: AN
+  note: 'Copo en dos tramos: 32 mm y 25 mm; bolsa de izado de 100 mm, PE R1760 tex.'
+- id: I2
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 25.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 112
+  meshes_bottom: 112
+  meshes_depth: 100
+  hanging_ratio: 0.33
+  count: 1
+  cut_code: AN
+- id: B
+  plane: lower
+  section: wing_tip
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 4
+  meshes_bottom: 40
+  meshes_depth: 24
+  hanging_ratio: 0.32
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: D
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 40
+  meshes_bottom: 70
+  meshes_depth: 90
+  hanging_ratio: 0.32
+  count: 2
+  cut_code: 1N4B
+  cut_code_x2: AB
+- id: D2
+  plane: lower
+  section: belly
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 86
+  meshes_bottom: 106
+  meshes_depth: 40
+  hanging_ratio: 0.32
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+  note: 'El vientre cose 70 mallas de 120 mm del ala con 86 de 80 mm (18 %): fruncido del plano.'
+- id: F
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 340
+  meshes_bottom: 140
+  meshes_depth: 200
+  hanging_ratio: 0.32
+  count: 1
+  cut_code: 1N2B
+- id: H
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 186
+  meshes_bottom: 60
+  meshes_depth: 126
+  hanging_ratio: 0.32
+  count: 1
+  cut_code: 1N2B
+- id: J1
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 32.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 80
+  meshes_bottom: 80
+  meshes_depth: 100
+  hanging_ratio: 0.32
+  count: 1
+  cut_code: AN
+- id: J2
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 25.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 112
+  meshes_bottom: 112
+  meshes_depth: 100
+  hanging_ratio: 0.32
+  count: 1
+  cut_code: AN
+headrope:
+  name: lima
+  length_m: 29.0
+  diameter_mm: 14
+  wing_m: 13.7
+  bosom_m: 1.6
+  description: combinado Ø14 + PE Ø20 en las alas
+  construction: combinado_14_acero6x24_7
+footrope:
+  name: burlón
+  length_m: 35.3
+  diameter_mm: 14
+  wing_m: 16.9
+  bosom_m: 1.5
+  description: combinado Ø14
+  construction: combinado_14_acero6x24_7
+design:
+  depth_m: 30.0
+  sweeps_m: 0.0
+notes:
+- 'El vientre tiene una segunda sección de ala de 80 mm (D2, de a pares) bajo las alas de 120 mm, frente
+  al cielo del dorso: es la estructura de la FAO A-3.'
+- 'El borde de boca del cielo (312 mallas de 80 mm) suma las alas del dorso (85 de 120 mm) y la bocana
+  (60 de 80 mm): 2 × 10,2 + 4,8 = 25,2 m.'
+provenance:
+  panels.A.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.A.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.A.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.C.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.C.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.C.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.E.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.E.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.G1.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G1.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.G2.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.G2.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.I1.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I1.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.I2.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.I2.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del dorso: 1,60 m de relinga sobre 60 mallas de 80 mm (0,33)'
+  panels.B.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.B.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.B.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.D.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.D.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.D2.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.D2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.D2.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.F.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.F.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.H.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.H.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.J1.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J1.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  panels.J2.mesh_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.rtex:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.meshes_top:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.meshes_depth:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.cut_code:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.count:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  panels.J2.hanging_ratio:
+    kind: derived
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: 'U1 de la bocana del vientre: 1,50 m de burlón sobre 58 mallas de 80 mm (0,32)'
+  headrope.length_m:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  headrope.diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  footrope.length_m:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  footrope.diameter_mm:
+    kind: transcribed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+  design.depth_m:
+    kind: assumed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: el documento sitúa la pesca en Palk Bay, a menos de 30–40 m; se toma 30 m
+  design.sweeps_m:
+    kind: assumed
+    document: bobpwp10
+    page: 20 del PDF ([16] del documento)
+    figure: Apéndice 6
+    note: el plano no da el aparejo de la pareja; malletas directo al cable

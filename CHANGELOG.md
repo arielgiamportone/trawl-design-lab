@@ -60,20 +60,32 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
     `GET /sensors/example` y la guarda `TRAWLKIT_MAX_BATCH_SECONDS`;
   - en la web, la vista «Incertidumbre y calibración» (bandas, tornado, carga del CSV y ajuste);
   - capítulo 25 «Incertidumbre, calibración y datos de sensores».
-- **Catálogo de redes FAO (Fase 12, en curso)**:
+- **Catálogo de redes FAO (Fase 12)**:
   - procedencia por valor (`NetSpec.provenance`, `trawlkit.provenance`): documento, página,
     figura y tipo (Excel, transcripto, derivado, supuesto) de cada número de la red;
-  - validador de consistencia `trawlkit.netcheck`: empalmes, bocana, costuras laterales, cortes
-    contra mallas (`netting.cut_code_ratio`), costados de las redes de 4 paneles y datos;
-  - primeras redes digitalizadas (`data/nets/`): arrastre de fondo de 2 paneles del Fisherman's
-    Workbook y dos arrastres de pareja de BOBP/WP/13 (`tools/catalog/`);
-  - motor generalizado: dimensiones genéricas para redes que no tienen la estructura de la A-3
-    (`trawlkit.topology`), arrastre de **pareja** (`DesignCase.rig`, `pair_wing_spread_m`; sin
-    portones, tiro de dos buques), redes de **4 paneles** (red equivalente de 2 paneles; costados
-    en la disposición, la lámina y la escala real), redes **pelágicas** (sin fondo en el
-    simulador, rozamiento nulo) y separación de portones de Fridman (`door_spread_rule`);
+  - validador de consistencia `trawlkit.netcheck`: empalmes (error por encima de 20 %: los
+    planos fruncen hasta 18 %), bocana, costuras laterales, cortes contra mallas
+    (`netting.cut_code_ratio`), costados de las redes de 4 paneles y datos;
+  - 16 redes digitalizadas (`data/nets/`, `tools/catalog/`), 13 publicadas y 3 borradores:
+    *Fisherman's Workbook*, BOBP/WP/10, /13 y /20 (fondo de gran abertura, uno y dos barcos) y
+    Schärfe 1983 (pelágicas de 4 paneles, con las aberturas medidas en el mar);
+  - motor generalizado: dimensiones genéricas para redes sin la estructura de la A-3 o con los
+    largos de relinga del plano (`trawlkit.topology`), arrastre de **pareja**
+    (`DesignCase.rig`, `pair_wing_spread_m`; sin portones, tiro de dos buques), redes de
+    **4 paneles** (red equivalente de 2 paneles; costados en la disposición, la lámina y la escala
+    real), redes **pelágicas** (sin fondo en el simulador, rozamiento nulo) y separación de
+    portones de Fridman (`door_spread_rule`);
   - `trawlkit.catalog.catalog_case`: caso de diseño de cada red con su buque, portón y
-    profundidad; `trawlkit run <red del catálogo>` lo usa.
+    profundidad; lo usan `trawlkit run <red>` y `POST /design` sin buque ni portón;
+  - API: `GET /catalog/nets` con familia, aparejo, potencia, estado, fuente, validador y
+    cobertura (`?status=`); `GET /catalog/nets/{id}/provenance` y `/check`; `/health` informa
+    `nets_failed`;
+  - web: pestaña «Catálogo FAO» (filtros, procedencia valor por valor, validador, «Usar esta
+    red») y, en el modo guiado, redes filtradas por la potencia del buque;
+  - capítulo 33 «Catálogo de redes FAO», con la comparación del motor y el simulador entre sí y
+    con las aberturas medidas por Schärfe.
+- Cables: si ningún cable del catálogo alcanza la carga de rotura, se elige el más grueso con la
+  nota `warp_undersized` (antes, error).
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto
   con el fondo); tipo de fondo y captura esperada en el modo guiado.
 - `/health` informa la huella de rutas (`contract`) y el commit desplegado; la app avisa «API

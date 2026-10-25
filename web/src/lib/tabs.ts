@@ -10,5 +10,6 @@ export const TAB_IDS = [
   'optimizar',
   'simulacion',
   'descargas',
+  'catalogo',
   'notas',
 ];

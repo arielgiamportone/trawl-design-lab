@@ -30,7 +30,11 @@ def test_catalogue_net_is_consistent_and_sourced(net_id: str) -> None:
     assert spec.family in ("bottom", "semi_pelagic", "pelagic")
     assert spec.rig in ("otter", "pair")
     assert spec.sources and spec.sources[0].url
-    assert errors(spec) == []
+    if spec.status == "published":
+        assert errors(spec) == []
+    else:
+        # Un borrador dice por qué lo es.
+        assert any("BORRADOR" in n for n in spec.notes)
     cov = coverage(spec)
     assert cov["fraction"] == 1.0, cov["missing"]
     kinds = set(cov["by_kind"])
@@ -46,9 +50,15 @@ def test_catalogue_net_runs_and_simulates(net_id: str) -> None:
     result = run(catalog_case(net_id).case)
     s = simulate(result, 2.5, resolution=2, coarse_resolution=None)
     assert s.converged
-    assert 0.3 < s.av_m < 8.0
-    assert 3.0 < s.ah_m < 20.0
     assert s.drag_kgf > 0
+    if result.case.net.family == "pelagic":
+        # Redes pelágicas grandes: abertura de decenas de metros (ver el capítulo 33, donde se
+        # compara con lo medido por Schärfe 1983).
+        assert 3.0 < s.ah_m < 80.0
+        assert 3.0 < s.av_m < 100.0
+    else:
+        assert 0.3 < s.av_m < 8.0
+        assert 3.0 < s.ah_m < 20.0
 
 
 @pytest.mark.parametrize("net_id", CATALOGUE)

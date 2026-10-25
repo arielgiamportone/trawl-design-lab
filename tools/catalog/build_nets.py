@@ -187,6 +187,9 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
         spec["design"] = {k: v[0] for k, v in d.items()}
         for k, (_, kind, note) in d.items():
             mark(f"design.{k}", kind, note)
+    if t.get("measured"):
+        # Mediciones del documento (abertura, velocidad, cable): datos de validación.
+        spec["measured"] = t["measured"]
     spec["notes"] = list(t.get("notes", []))
     spec["provenance"] = prov
     return spec
@@ -206,9 +209,11 @@ def main() -> int:
             encoding="utf-8",
         )
         errs = [i for i in issues if i.level == "error"]
-        failed += bool(errs)
+        # Un borrador puede no cerrar (queda a la vista para revisarlo); una red publicada no.
+        failed += bool(errs) and spec.status == "published"
         print(
-            f"{t['id']}: {len(spec.panels)} paños, procedencia {cov['with_provenance']}/"
+            f"{t['id']} [{spec.status}]: {len(spec.panels)} paños, "
+            f"procedencia {cov['with_provenance']}/"
             f"{cov['values']}, {len(errs)} errores, {len(issues) - len(errs)} avisos"
         )
         for i in issues:

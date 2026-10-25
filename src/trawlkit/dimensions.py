@@ -440,7 +440,10 @@ def compute(
     from trawlkit.topology import is_a3_topology
 
     geo = geometry if geometry is not None else analyse(spec, compat)
-    if not is_a3_topology(spec):
+    # La ruta del libro (constantes de la A-3) sólo para la estructura de la A-3 sin largos de
+    # relinga del plano; una red del catálogo con esa estructura usa los largos de su plano.
+    plan_ropes = _rope_from_spec(spec, "headrope") is not None
+    if not is_a3_topology(spec) or plan_ropes:
         return compute_generic(spec, geo, compat, wing_hanging=wing_hanging)
     panels = spec.panels
     is_mod = (spec.variant_of is not None) if modified is None else modified

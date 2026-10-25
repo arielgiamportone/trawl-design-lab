@@ -19,7 +19,15 @@ from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignCase, DesignResult, run
 
 #: Campos de ``DesignCase`` que no se sobrescriben vía ``params`` (tienen su propio campo).
-_STRUCTURAL = {"net", "net_modified", "vessel", "door", "class_vessels", "compat"}
+_STRUCTURAL = {
+    "net",
+    "net_modified",
+    "vessel",
+    "door",
+    "class_vessels",
+    "compat",
+    "assumptions",
+}
 
 
 class BadRequestError(ValueError):
@@ -92,6 +100,71 @@ def net_presets() -> dict[str, NetSpec]:
             continue
         out[path.stem] = spec
     return out
+
+
+@cache
+def catalog_items() -> list[dict[str, Any]]:
+    """Resumen de cada red para filtrar el catálogo (ver ``CatalogItem``).
+
+    Corre el validador y la cobertura de procedencia de cada red una sola vez (memorizado).
+    """
+    from trawlkit.netcheck import summary
+    from trawlkit.provenance import coverage
+    from trawlkit.topology import has_sides
+
+    out: list[dict[str, Any]] = []
+    for key, spec in net_presets().items():
+        src = spec.sources[0] if spec.sources else None
+        chk = summary(spec)
+        cov = coverage(spec)
+        out.append(
+            {
+                "id": key,
+                "name": spec.name,
+                "description": spec.description,
+                "family": spec.family,
+                "rig": spec.rig,
+                "vessel_hp": list(spec.vessel_hp) if spec.vessel_hp else None,
+                "status": spec.status,
+                "target_species": spec.target_species,
+                "source": None
+                if src is None
+                else {
+                    "key": src.key,
+                    "title": src.title,
+                    "url": src.url,
+                    "figure": src.figure,
+                    "page": src.page,
+                },
+                "panels": len(spec.panels),
+                "four_panel": has_sides(spec),
+                "check": {k: chk[k] for k in ("ok", "errors", "warnings")},
+                "coverage": {k: cov[k] for k in ("values", "fraction", "by_kind")},
+            }
+        )
+    return out
+
+
+def net_preset(net_id: str) -> NetSpec:
+    """Red del catálogo por id (``NotFoundError`` si no existe)."""
+    presets = net_presets()
+    if net_id not in presets:
+        raise NotFoundError(f"red desconocida: {net_id!r}")
+    return presets[net_id]
+
+
+def net_provenance(net_id: str) -> list[dict[str, Any]]:
+    """Procedencia de cada valor de la red (``trawlkit.provenance.provenance_table``)."""
+    from trawlkit.provenance import provenance_table
+
+    return [row.to_dict() for row in provenance_table(net_preset(net_id))]
+
+
+def net_check(net_id: str) -> dict[str, Any]:
+    """Validador de consistencia completo de la red."""
+    from trawlkit.netcheck import summary
+
+    return summary(net_preset(net_id))
 
 
 @cache
@@ -248,7 +321,21 @@ def build_case(
     compat: str = "corrected",
     params: dict[str, Any] | None = None,
 ) -> DesignCase:
-    """Arma un :class:`DesignCase` validando ids contra los catálogos."""
+    """Arma un :class:`DesignCase` validando ids contra los catálogos.
+
+    Una red del catálogo FAO (con potencia de diseño) sin buque, portón ni red modificada se
+    calcula con su propio caso (:func:`trawlkit.catalog.catalog_case`: buque de su potencia,
+    portón y profundidad del plano); ``params`` sobrescribe lo que sale de la fuente.
+    """
+    main = _net(net)
+    assert main is not None
+    if main.vessel_hp is not None and vessel is None and door is None and net_modified is None:
+        from trawlkit.catalog import catalog_case
+
+        try:
+            return catalog_case(main, compat=Compat(compat), **_coerce_params(params or {})).case
+        except (TypeError, ValueError) as exc:
+            raise BadRequestError(str(exc)) from exc
     vessels = vessel_presets()
     v: Vessel = _pick(vessel, vessels, "buque")
     d: Door = _pick(door, door_presets(), "portón")
@@ -256,9 +343,11 @@ def build_case(
         others = tuple(o for o in vessels.values() if o.id != v.id)
     else:
         others = tuple(_pick(c, vessels, "buque") for c in class_vessels)
-    main = _net(net)
-    assert main is not None
     kwargs = _coerce_params(params or {})
+    design = (main.model_extra or {}).get("design")
+    if "depth_m" not in kwargs and isinstance(design, dict) and design.get("depth_m"):
+        # Red del catálogo con buque o portón elegidos: la profundidad sale de la fuente.
+        kwargs["depth_m"] = float(design["depth_m"])
     try:
         case = DesignCase(
             net=main,
@@ -267,6 +356,7 @@ def build_case(
             net_modified=_net(net_modified),
             class_vessels=others,
             compat=Compat(compat),
+            depth_m=kwargs.pop("depth_m", None),
         )
         return dataclasses.replace(case, **kwargs) if kwargs else case
     except (TypeError, ValueError) as exc:

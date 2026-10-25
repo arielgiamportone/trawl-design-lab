@@ -33,7 +33,10 @@ export interface paths {
         };
         /**
          * List Nets
-         * @description Redes predefinidas.
+         * @description Redes predefinidas: la FAO A-3 y el catálogo FAO.
+         *
+         *     Cada una con familia, aparejo, potencia, fuente, validador y cobertura de procedencia;
+         *     ``status`` filtra publicadas o borradores.
          */
         get: operations["list_nets_catalog_nets_get"];
         put?: never;
@@ -56,6 +59,48 @@ export interface paths {
          * @description Especificación completa de una red predefinida (paneles, relingas, boyas).
          */
         get: operations["get_net_catalog_nets__net_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/nets/{net_id}/provenance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Net Provenance
+         * @description Procedencia de cada valor de la red.
+         *
+         *     Documento, página, figura y tipo (Excel, transcripto, derivado o supuesto) con su nota.
+         */
+        get: operations["get_net_provenance_catalog_nets__net_id__provenance_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/catalog/nets/{net_id}/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Net Check
+         * @description Validador de consistencia de la red (empalmes, bocana, cortes, costados, datos).
+         */
+        get: operations["get_net_check_catalog_nets__net_id__check_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -555,8 +600,38 @@ export interface components {
             runtime_s: number;
         };
         /**
+         * CatalogCheck
+         * @description Resumen del validador de consistencia (``trawlkit.netcheck``).
+         */
+        CatalogCheck: {
+            /** Ok */
+            ok: boolean;
+            /** Errors */
+            errors: number;
+            /** Warnings */
+            warnings: number;
+        };
+        /**
+         * CatalogCoverage
+         * @description Cobertura de procedencia: fracción de valores con fuente y conteo por tipo.
+         */
+        CatalogCoverage: {
+            /** Values */
+            values: number;
+            /** Fraction */
+            fraction: number;
+            /** By Kind */
+            by_kind: {
+                [key: string]: number;
+            };
+        };
+        /**
          * CatalogItem
          * @description Entrada resumida de un catálogo.
+         *
+         *     Para las redes, además de id, nombre y descripción, los datos para filtrar el catálogo sin
+         *     bajar cada especificación: familia, aparejo, potencia de diseño, estado, fuente, cantidad de
+         *     paños, si es de 4 paneles, validador y cobertura de procedencia.
          */
         CatalogItem: {
             /** Id */
@@ -565,6 +640,59 @@ export interface components {
             name?: string | null;
             /** Description */
             description?: string | null;
+            /** Family */
+            family?: string | null;
+            /** Rig */
+            rig?: string | null;
+            /** Vessel Hp */
+            vessel_hp?: [
+                number,
+                number
+            ] | null;
+            /** Status */
+            status?: string | null;
+            /** Target Species */
+            target_species?: string | null;
+            source?: components["schemas"]["CatalogSource"] | null;
+            /** Panels */
+            panels?: number | null;
+            /** Four Panel */
+            four_panel?: boolean | null;
+            check?: components["schemas"]["CatalogCheck"] | null;
+            coverage?: components["schemas"]["CatalogCoverage"] | null;
+        };
+        /**
+         * CatalogSource
+         * @description Documento del que sale una red del catálogo.
+         */
+        CatalogSource: {
+            /** Key */
+            key: string;
+            /** Title */
+            title: string;
+            /** Url */
+            url: string;
+            /** Figure */
+            figure?: string | null;
+            /** Page */
+            page?: string | null;
+        };
+        /**
+         * CheckIssue
+         * @description Problema de consistencia de una red.
+         */
+        CheckIssue: {
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "error" | "warning";
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Panels */
+            panels: string[];
         };
         /**
          * CodendVariant
@@ -1021,6 +1149,8 @@ export interface components {
             contract?: string | null;
             /** Commit */
             commit?: string | null;
+            /** Nets Failed */
+            nets_failed?: string[] | null;
         };
         /**
          * LayoutPlane
@@ -1131,6 +1261,20 @@ export interface components {
          * @enum {string}
          */
         MeshOrientation: "diamond" | "t90" | "square";
+        /**
+         * NetCheckOut
+         * @description Resultado completo del validador de una red.
+         */
+        NetCheckOut: {
+            /** Ok */
+            ok: boolean;
+            /** Errors */
+            errors: number;
+            /** Warnings */
+            warnings: number;
+            /** Issues */
+            issues: components["schemas"]["CheckIssue"][];
+        };
         /**
          * NetSpec
          * @description Especificación completa de una red de arrastre.
@@ -1453,6 +1597,20 @@ export interface components {
          * @enum {string}
          */
         ProvenanceKind: "excel" | "transcribed" | "derived" | "assumed";
+        /**
+         * ProvenanceRow
+         * @description Un valor de la red y su procedencia (``trawlkit.provenance``).
+         */
+        ProvenanceRow: {
+            /** Path */
+            path: string;
+            /** Value */
+            value: unknown;
+            /** Provenance */
+            provenance?: {
+                [key: string]: unknown;
+            } | null;
+        };
         /**
          * Rope
          * @description Cabo o relinga.
@@ -2086,7 +2244,9 @@ export interface operations {
     };
     list_nets_catalog_nets_get: {
         parameters: {
-            query?: never;
+            query?: {
+                status?: "all" | "published" | "draft";
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2100,6 +2260,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CatalogItem"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2122,6 +2291,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["NetSpec"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_net_provenance_catalog_nets__net_id__provenance_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                net_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProvenanceRow"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_net_check_catalog_nets__net_id__check_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                net_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NetCheckOut"];
                 };
             };
             /** @description Validation Error */

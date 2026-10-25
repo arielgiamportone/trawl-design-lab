@@ -33,8 +33,10 @@ from trawlkit.io.schema import NetSpec, Panel
 Level = Literal["error", "warning"]
 
 #: Diferencia relativa de largo estirado en un empalme: aviso y error.
+#: Los planos reales cosen paños con distinto armado (fruncido) hasta ≈ 18 % (BOBP/WP/10, Schärfe
+#: 1983); por encima del 20 % es casi seguro un error de lectura (un 2 por un 3, 243 por 343).
 SEAM_WARN = 0.04
-SEAM_ERROR = 0.10
+SEAM_ERROR = 0.20
 #: Diferencia relativa de largo entre las franjas del dorso y del vientre.
 SIDE_WARN = 0.15
 #: Diferencia admitida entre el cambio de ancho del paño y el que da su corte [mallas]: la mayor

@@ -50,5 +50,23 @@ Documentos revisados que **no** traen planos de red completos:
 
 ## Registro por red
 
-Se completa a medida que se digitaliza cada red: lecturas dudosas, supuestos y resultado del
-validador.
+Estado al cerrar la Fase 12 (detalle valor por valor en la procedencia de cada red y en el
+capítulo {doc}`33_catalogo_fao`):
+
+| Red | Fuente | Estado | Lecturas dudosas y supuestos |
+|---|---|---|---|
+| `fao_wb_bt2p_60hp` | Workbook, AH827E132 | publicada | profundidad supuesta (30 m) |
+| `bobp_wp13_pair_ho80` | WP/13 ap. 3 | publicada | F: 80 filas (leído 60); D: 1N4B; corte del ala C dudoso |
+| `bobp_wp13_pair_ho120` | WP/13 ap. 4 | publicada | filas del copo del vientre (de las del dorso) |
+| `bobp_wp10_ho360x160` | WP/10 ap. 3 y 4 | publicada | filas del ala del dorso (45 por estaciones) |
+| `bobp_wp10_pair_480x160` | WP/10 ap. 5 | publicada | Rtex del copo (único rótulo) |
+| `bobp_wp10_pair_680x60` | WP/10 ap. 6 | publicada | fruncido de 18 % en el ala del vientre |
+| `bobp_wp20_ho` | WP/20 ap. 2 | publicada | cortes de las puntas de ala |
+| `bobp_wp20_pair_ho` | WP/20 ap. 3 | publicada | cortes de las alas (de WP/10 ap. 5) |
+| `bobp_wp20_fish_shrimp` | WP/20 ap. 1 | borrador | escaneo de 107 ppp: bordes de alas y cielo supuestos |
+| `scharfe_krill_1420x200` | Schärfe ap. 5 | publicada | filas con media malla redondeadas; alas de los costados no modeladas |
+| `scharfe_harstad_1436x200` | Schärfe ap. 6 | borrador | empalme de 26 % (190 → 140 mm); copo supuesto |
+| `scharfe_krill_front800` | Schärfe ap. 7 | publicada | dorso y vientre con alas distintas (mitades del plano) |
+| `scharfe_krill_front1600` | Schärfe ap. 8 | borrador | alto del ala del vientre y Rtex del ala |
+| pelágica de 4 paneles | Workbook, AH827E133 | no digitalizada | figura de 450 px: el frente de 800 mm no se lee |
+

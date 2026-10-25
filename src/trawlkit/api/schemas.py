@@ -39,12 +39,79 @@ class DesignResponse(BaseModel):
     result: dict[str, Any]
 
 
+class CatalogSource(BaseModel):
+    """Documento del que sale una red del catálogo."""
+
+    key: str
+    title: str
+    url: str
+    figure: str | None = None
+    page: str | None = None
+
+
+class CatalogCheck(BaseModel):
+    """Resumen del validador de consistencia (``trawlkit.netcheck``)."""
+
+    ok: bool
+    errors: int
+    warnings: int
+
+
+class CatalogCoverage(BaseModel):
+    """Cobertura de procedencia: fracción de valores con fuente y conteo por tipo."""
+
+    values: int
+    fraction: float
+    by_kind: dict[str, int]
+
+
 class CatalogItem(BaseModel):
-    """Entrada resumida de un catálogo."""
+    """Entrada resumida de un catálogo.
+
+    Para las redes, además de id, nombre y descripción, los datos para filtrar el catálogo sin
+    bajar cada especificación: familia, aparejo, potencia de diseño, estado, fuente, cantidad de
+    paños, si es de 4 paneles, validador y cobertura de procedencia.
+    """
 
     id: str
     name: str | None = None
     description: str | None = None
+    family: str | None = None
+    rig: str | None = None
+    vessel_hp: tuple[float, float] | None = None
+    status: str | None = None
+    target_species: str | None = None
+    source: CatalogSource | None = None
+    panels: int | None = None
+    four_panel: bool | None = None
+    check: CatalogCheck | None = None
+    coverage: CatalogCoverage | None = None
+
+
+class ProvenanceRow(BaseModel):
+    """Un valor de la red y su procedencia (``trawlkit.provenance``)."""
+
+    path: str
+    value: Any
+    provenance: dict[str, Any] | None = None
+
+
+class CheckIssue(BaseModel):
+    """Problema de consistencia de una red."""
+
+    level: Literal["error", "warning"]
+    code: str
+    message: str
+    panels: list[str]
+
+
+class NetCheckOut(BaseModel):
+    """Resultado completo del validador de una red."""
+
+    ok: bool
+    errors: int
+    warnings: int
+    issues: list[CheckIssue]
 
 
 class ParamInfo(BaseModel):
@@ -77,6 +144,8 @@ class Health(BaseModel):
     version: str
     contract: str | None = None
     commit: str | None = None
+    #: Redes del paquete que no validan como ``NetSpec`` (vacío = todas bien).
+    nets_failed: list[str] | None = None
 
 
 class OptimizeGrid(BaseModel):

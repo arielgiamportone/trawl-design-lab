@@ -2363,3 +2363,121 @@ table.data tr.selected td {
   border-radius: var(--radius);
   padding: 12px 14px;
 }
+
+/* --- Catálogo de redes FAO (Fase 12) --- */
+.alert.good {
+  background: var(--good-bg);
+  color: var(--good);
+  border-color: color-mix(in srgb, var(--good) 35%, transparent);
+}
+.catalog {
+  display: grid;
+  gap: 14px;
+}
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+}
+.catalog-filters input[type='search'] {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.catalog-filters input[type='number'] {
+  width: 80px;
+}
+.catalog-filters select {
+  width: auto;
+  flex: 0 1 200px;
+  min-width: 0;
+}
+.prov-table td.kind {
+  white-space: nowrap;
+}
+.catalog table.data tbody tr {
+  cursor: pointer;
+}
+.catalog table.data td .badge {
+  margin-left: 4px;
+}
+.catalog-card h3 .badge {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.catalog-card h4 {
+  margin: 18px 0 6px;
+  font-size: 14px;
+}
+.catalog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.catalog-actions .alert {
+  margin-top: 0;
+}
+.prov-bar-wrap {
+  margin: 14px 0 0;
+}
+.prov-bar-wrap figcaption {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.prov-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.prov-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  font-size: 12.5px;
+}
+.prov-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: baseline;
+}
+.prov-excel {
+  background: #6b5bd2;
+}
+.prov-transcribed {
+  background: var(--good);
+}
+.prov-derived {
+  background: var(--accent);
+}
+.prov-assumed {
+  background: var(--warn);
+}
+.prov-none {
+  background: var(--crit);
+}
+.prov-table {
+  max-height: 420px;
+  overflow: auto;
+}
+.prov-table td.note {
+  font-size: 12.5px;
+  color: var(--text-2);
+  min-width: 260px;
+}
+.issues {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}

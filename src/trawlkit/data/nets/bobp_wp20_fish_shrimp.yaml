@@ -1,0 +1,902 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: bobp_wp20_fish_shrimp
+name: Arrastre de gran abertura pescado/camarón, un barco (BOBP/WP/20)
+description: Red de arrastre de fondo de gran abertura para pescado y camarón, para un barco de 65–75
+  hp, con alas de 80 mm, cuerpo de 60–40 mm y copo de 30 mm (Tamil Nadu, 1980–81).
+source: 'BOBP/WP/20, apéndice 1: One-boat high-opening fish-cum-shrimp trawl (https://www.fao.org/4/ad960e/ad960e00.pdf)'
+family: bottom
+rig: otter
+vessel_hp:
+- 65
+- 75
+target_species: pescado y camarón (Palk Bay, golfo de Mannar)
+status: draft
+sources:
+- key: bobpwp20
+  title: 'BOBP/WP/20, apéndice 1: One-boat high-opening fish-cum-shrimp trawl'
+  url: https://www.fao.org/4/ad960e/ad960e00.pdf
+  accessed: '2026-10-25'
+  figure: Apéndice 1
+  page: 24 del PDF ([19] del documento)
+panels:
+- id: A
+  plane: upper
+  section: wing_tip
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 14
+  meshes_bottom: 30
+  meshes_depth: 32
+  hanging_ratio: 0.35
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: C
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 30
+  meshes_bottom: 110
+  meshes_depth: 190
+  hanging_ratio: 0.35
+  count: 2
+  cut_code: 1N3B
+  cut_code_x2: AB
+- id: E
+  plane: upper
+  section: square
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 272
+  meshes_bottom: 262
+  meshes_depth: 30
+  hanging_ratio: 0.35
+  count: 1
+- id: G1
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 350
+  meshes_bottom: 200
+  meshes_depth: 180
+  hanging_ratio: 0.35
+  count: 1
+- id: G2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 300
+  meshes_bottom: 180
+  meshes_depth: 120
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: 1N2B
+- id: G3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 30.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 240
+  meshes_bottom: 120
+  meshes_depth: 120
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: 1N2B
+  note: Mallero sin rótulo en el plano; 30 mm es el que empalma 180 × 40 = 240 × 30 (7,2 m) y el del copo.
+- id: I
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 30.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 120
+  meshes_bottom: 120
+  meshes_depth: 200
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: AN
+- id: B
+  plane: lower
+  section: wing_tip
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 14
+  meshes_bottom: 32
+  meshes_depth: 32
+  hanging_ratio: 0.35
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: D
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 32
+  meshes_bottom: 100
+  meshes_depth: 190
+  hanging_ratio: 0.35
+  count: 2
+  cut_code: 1N3B
+  cut_code_x2: AB
+- id: F
+  plane: lower
+  section: belly
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 350
+  meshes_bottom: 200
+  meshes_depth: 180
+  hanging_ratio: 0.35
+  count: 1
+- id: H2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 300
+  meshes_bottom: 180
+  meshes_depth: 120
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: 1N2B
+- id: H3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 30.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 240
+  meshes_bottom: 120
+  meshes_depth: 120
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: 1N2B
+- id: J
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 30.0
+  twine_diameter_mm: 1.25
+  rtex: 720.0
+  meshes_top: 120
+  meshes_bottom: 120
+  meshes_depth: 200
+  hanging_ratio: 0.35
+  count: 1
+  cut_code: AN
+headrope:
+  name: lima
+  length_m: 26.7
+  diameter_mm: 14
+  wing_m: 12.2
+  bosom_m: 2.3
+  description: PP Ø14
+  construction: pp_14_retorcido_3_cordones
+footrope:
+  name: burlón
+  length_m: 31.2
+  diameter_mm: 14
+  wing_m: 14.6
+  bosom_m: 2.0
+  description: PP Ø16
+  construction: pp_16_retorcido_3_cordones
+floats:
+  count: 13
+  diameter_mm: 200
+ballast_kg: 45.2
+design:
+  depth_m: 30.0
+  sweeps_m: 25.0
+  door_length_m: 1.4
+  door_height_m: 0.7
+  door_weight_air_kg: 52.5
+notes:
+- 'BORRADOR: la figura del documento es un escaneo de 107 ppp (611 × 875 px); se leen los malleros, las
+  filas, las relingas y el aparejo, pero varias cifras de mallas de los bordes son ilegibles y van como
+  supuestas.'
+- 'El dorso tiene 30 filas de cielo que el vientre no compensa en el largo de las alas: las estaciones
+  del cuerpo no coinciden (lectura dudosa de las filas de las alas).'
+provenance:
+  panels.A.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.A.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.A.meshes_top:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.A.meshes_bottom:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.A.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.A.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.A.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.A.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.A.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.C.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.C.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.C.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.E.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.E.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.E.meshes_top:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.E.meshes_bottom:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.E.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.E.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.E.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.E.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.G1.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G1.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G1.meshes_top:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.G1.meshes_bottom:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.G1.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G1.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G1.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G1.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.G2.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G2.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.G3.mesh_mm:
+    kind: derived
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: mallero sin rótulo; 30 mm empalma con 180 × 40 mm
+  panels.G3.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.G3.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.I.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.I.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.B.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.B.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.B.meshes_top:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.B.meshes_bottom:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.B.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.B.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.B.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.B.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.B.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.D.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.D.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.D.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.F.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.F.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.F.meshes_top:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.F.meshes_bottom:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el escaneo (107 ppp) no deja leer esta cifra; valor elegido para que cierren el corte y los
+      empalmes
+  panels.F.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.F.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.F.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.F.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.H2.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H2.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.H3.mesh_mm:
+    kind: derived
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: mallero sin rótulo; 30 mm empalma con 180 × 40 mm
+  panels.H3.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.H3.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  panels.J.mesh_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.rtex:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.meshes_top:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.meshes_bottom:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.meshes_depth:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.cut_code:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.count:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.twine_diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  panels.J.hanging_ratio:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano no se lee lo suficiente para derivar U1 de las bocanas
+  headrope.length_m:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  headrope.diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  footrope.length_m:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  footrope.diameter_mm:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  floats.count:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano da 32,5 kgf de flotación total; 13 boyas de 2,5 kgf (Ø200 supuesto)
+  floats.diameter_mm:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el plano da 32,5 kgf de flotación total; 13 boyas de 2,5 kgf (Ø200 supuesto)
+  ballast_kg:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: lastre total del plano
+  design.depth_m:
+    kind: assumed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: el documento no da la profundidad; 30 m como WP/10
+  design.sweeps_m:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: 'patentes de 20,00–30,00 m PP Ø16: valor medio'
+  design.door_length_m:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: portón plano de 1,40 × 0,70 m
+  design.door_height_m:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: bobpwp20
+    page: 24 del PDF ([19] del documento)
+    figure: Apéndice 1
+    note: '50–55 kg: valor medio'

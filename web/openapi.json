@@ -28,19 +28,46 @@
   "/catalog/nets": {
    "get": {
     "summary": "List Nets",
-    "description": "Redes predefinidas.",
+    "description": "Redes predefinidas: la FAO A-3 y el catálogo FAO.\n\nCada una con familia, aparejo, potencia, fuente, validador y cobertura de procedencia;\n``status`` filtra publicadas o borradores.",
     "operationId": "list_nets_catalog_nets_get",
+    "parameters": [
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "all",
+        "published",
+        "draft"
+       ],
+       "type": "string",
+       "default": "all",
+       "title": "Status"
+      }
+     }
+    ],
     "responses": {
      "200": {
       "description": "Successful Response",
       "content": {
        "application/json": {
         "schema": {
+         "type": "array",
          "items": {
           "$ref": "#/components/schemas/CatalogItem"
          },
-         "type": "array",
          "title": "Response List Nets Catalog Nets Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
         }
        }
       }
@@ -71,6 +98,90 @@
        "application/json": {
         "schema": {
          "$ref": "#/components/schemas/NetSpec"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/nets/{net_id}/provenance": {
+   "get": {
+    "summary": "Get Net Provenance",
+    "description": "Procedencia de cada valor de la red.\n\nDocumento, página, figura y tipo (Excel, transcripto, derivado o supuesto) con su nota.",
+    "operationId": "get_net_provenance_catalog_nets__net_id__provenance_get",
+    "parameters": [
+     {
+      "name": "net_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Net Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/ProvenanceRow"
+         },
+         "title": "Response Get Net Provenance Catalog Nets  Net Id  Provenance Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/catalog/nets/{net_id}/check": {
+   "get": {
+    "summary": "Get Net Check",
+    "description": "Validador de consistencia de la red (empalmes, bocana, cortes, costados, datos).",
+    "operationId": "get_net_check_catalog_nets__net_id__check_get",
+    "parameters": [
+     {
+      "name": "net_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Net Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/NetCheckOut"
         }
        }
       }
@@ -1001,6 +1112,57 @@
     "title": "CalibrateResponse",
     "description": "Resultado de ``POST /simulate/calibrate``."
    },
+   "CatalogCheck": {
+    "properties": {
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "errors": {
+      "type": "integer",
+      "title": "Errors"
+     },
+     "warnings": {
+      "type": "integer",
+      "title": "Warnings"
+     }
+    },
+    "type": "object",
+    "required": [
+     "ok",
+     "errors",
+     "warnings"
+    ],
+    "title": "CatalogCheck",
+    "description": "Resumen del validador de consistencia (``trawlkit.netcheck``)."
+   },
+   "CatalogCoverage": {
+    "properties": {
+     "values": {
+      "type": "integer",
+      "title": "Values"
+     },
+     "fraction": {
+      "type": "number",
+      "title": "Fraction"
+     },
+     "by_kind": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "By Kind"
+     }
+    },
+    "type": "object",
+    "required": [
+     "values",
+     "fraction",
+     "by_kind"
+    ],
+    "title": "CatalogCoverage",
+    "description": "Cobertura de procedencia: fracción de valores con fuente y conteo por tipo."
+   },
    "CatalogItem": {
     "properties": {
      "id": {
@@ -1028,6 +1190,123 @@
        }
       ],
       "title": "Description"
+     },
+     "family": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Family"
+     },
+     "rig": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rig"
+     },
+     "vessel_hp": {
+      "anyOf": [
+       {
+        "prefixItems": [
+         {
+          "type": "number"
+         },
+         {
+          "type": "number"
+         }
+        ],
+        "type": "array",
+        "maxItems": 2,
+        "minItems": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel Hp"
+     },
+     "status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Status"
+     },
+     "target_species": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Target Species"
+     },
+     "source": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/CatalogSource"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "panels": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Panels"
+     },
+     "four_panel": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Four Panel"
+     },
+     "check": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/CatalogCheck"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "coverage": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/CatalogCoverage"
+       },
+       {
+        "type": "null"
+       }
+      ]
      }
     },
     "type": "object",
@@ -1035,7 +1314,89 @@
      "id"
     ],
     "title": "CatalogItem",
-    "description": "Entrada resumida de un catálogo."
+    "description": "Entrada resumida de un catálogo.\n\nPara las redes, además de id, nombre y descripción, los datos para filtrar el catálogo sin\nbajar cada especificación: familia, aparejo, potencia de diseño, estado, fuente, cantidad de\npaños, si es de 4 paneles, validador y cobertura de procedencia."
+   },
+   "CatalogSource": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "url": {
+      "type": "string",
+      "title": "Url"
+     },
+     "figure": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Figure"
+     },
+     "page": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Page"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "title",
+     "url"
+    ],
+    "title": "CatalogSource",
+    "description": "Documento del que sale una red del catálogo."
+   },
+   "CheckIssue": {
+    "properties": {
+     "level": {
+      "type": "string",
+      "enum": [
+       "error",
+       "warning"
+      ],
+      "title": "Level"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     },
+     "panels": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Panels"
+     }
+    },
+    "type": "object",
+    "required": [
+     "level",
+     "code",
+     "message",
+     "panels"
+    ],
+    "title": "CheckIssue",
+    "description": "Problema de consistencia de una red."
    },
    "CodendVariant": {
     "properties": {
@@ -2330,6 +2691,20 @@
        }
       ],
       "title": "Commit"
+     },
+     "nets_failed": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Nets Failed"
      }
     },
     "type": "object",
@@ -2590,6 +2965,38 @@
     ],
     "title": "MeshOrientation",
     "description": "Orientación de la malla del paño.\n\n``diamond`` es la malla rómbica clásica (la diagonal larga de la malla estirada a lo largo de\nla red); ``t90`` es el mismo paño girado 90° (la diagonal larga queda a lo ancho); ``square``\nes la malla cuadrada, con los hilos a lo largo y a lo ancho de la red (paño cortado en barras).\nEn malla cuadrada ``meshes_top``/``meshes_bottom``/``meshes_depth`` cuentan cuadrados de lado\nuna pata (``mesh_mm / 2``)."
+   },
+   "NetCheckOut": {
+    "properties": {
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "errors": {
+      "type": "integer",
+      "title": "Errors"
+     },
+     "warnings": {
+      "type": "integer",
+      "title": "Warnings"
+     },
+     "issues": {
+      "items": {
+       "$ref": "#/components/schemas/CheckIssue"
+      },
+      "type": "array",
+      "title": "Issues"
+     }
+    },
+    "type": "object",
+    "required": [
+     "ok",
+     "errors",
+     "warnings",
+     "issues"
+    ],
+    "title": "NetCheckOut",
+    "description": "Resultado completo del validador de una red."
    },
    "NetSpec": {
     "properties": {
@@ -3371,6 +3778,36 @@
     ],
     "title": "ProvenanceKind",
     "description": "Cómo se obtuvo un valor de una spec."
+   },
+   "ProvenanceRow": {
+    "properties": {
+     "path": {
+      "type": "string",
+      "title": "Path"
+     },
+     "value": {
+      "title": "Value"
+     },
+     "provenance": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Provenance"
+     }
+    },
+    "type": "object",
+    "required": [
+     "path",
+     "value"
+    ],
+    "title": "ProvenanceRow",
+    "description": "Un valor de la red y su procedencia (``trawlkit.provenance``)."
    },
    "Rope": {
     "properties": {

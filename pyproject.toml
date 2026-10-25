@@ -98,6 +98,7 @@ ignore = ["D100", "D104", "D203", "D213"]
 "tools/*" = ["D"]
 # Transcripciones de planos: notas largas en una línea (más fáciles de revisar contra la figura).
 "tools/catalog/transcriptions.py" = ["D", "E501"]
+"tools/catalog/transcriptions_123.py" = ["D", "E501"]
 
 [tool.mypy]
 python_version = "3.11"

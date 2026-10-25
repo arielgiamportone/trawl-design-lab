@@ -17,7 +17,7 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Capa | Carpeta | Estado |
 |---|---|---|
 | Motor de cálculo (`trawlkit`) | `src/trawlkit/` | Fase 2: potencia, paños, mecánica, dimensiones, resistencia, aparejo (portones, bridas, aberturas, flotación, lastre, cables), ventana de velocidad y `model.run` que los encadena; validado contra el Excel (rtol 1e-6) en modo `EXCEL` |
-| Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia |
+| Datos y catálogos | `src/trawlkit/data/` | Fase 1: redes FAO A-3 (estándar y modificada), buques, portones, boyas, cabos, cadenas, cables, tablas de referencia. Fase 12: catálogo de 13 redes FAO publicadas y 3 borradores (BOBP/WP/10, /13, /20, Workbook, Schärfe 1983) con procedencia por valor (`data/nets/`, `tools/catalog/`) |
 | CLI | `src/trawlkit/cli.py` | `trawlkit run` (resumen), `report` (informe HTML/PDF/XLSX/SVG, con `--optimize` y `--simulate` opcionales), `plan` (lámina o escala real), `optimize`, `serve`, `version`, `errata` |
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/informes.md), ejemplos en [`examples/`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/examples/)) |
 | Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/20_optimizacion.md)) |
@@ -115,7 +115,7 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
     ensuciamiento, corriente, energía, huella y explorador animado (11.2 ✔); zoom malla a malla,
     malla T90 y cuadrada, y selectividad (11.3 ✔); incertidumbre, calibración y registros de
     sensores (11.4 ✔)
-12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor
+12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor ✔
 13. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
 
 ## Licencias

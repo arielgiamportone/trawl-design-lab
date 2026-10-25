@@ -9,8 +9,10 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/health` | Comprobación de vida. |
-| GET | `/catalog/nets` | Redes predefinidas. |
+| GET | `/catalog/nets` | Redes predefinidas (FAO A-3 y catálogo FAO) con familia, aparejo, potencia, fuente, validador y cobertura de procedencia; `?status=published\|draft`. |
 | GET | `/catalog/nets/{net_id}` | Especificación completa de una red predefinida (paneles, relingas, boyas). |
+| GET | `/catalog/nets/{net_id}/provenance` | Procedencia de cada valor de la red (documento, figura, tipo y nota). |
+| GET | `/catalog/nets/{net_id}/check` | Validador de consistencia de la red (empalmes, bocana, cortes, costados). |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
 | GET | `/catalog/fouling` | Escenarios de ensuciamiento y colmatación de la red (nivel por zona). |
@@ -44,6 +46,16 @@ curl -s -X POST http://127.0.0.1:8000/design \
 El cuerpo `DesignRequest` acepta redes, buques y portones por id del catálogo o como especificación
 completa, el modo de cálculo y `params` con los parámetros de `GET /params`. Los ids se validan
 contra el catálogo; los parámetros numéricos deben ser finitos y no negativos.
+
+Una red del catálogo FAO ({doc}`33_catalogo_fao`) enviada **sin buque, portón ni red modificada**
+se calcula con su propio caso (`trawlkit.catalog.catalog_case`): buque genérico de la potencia de
+diseño, portón y profundidad del plano, pareja sin portones. Los supuestos vuelven en `notes`
+con el prefijo `catalog:`, y `params` sobrescribe lo que sale de la fuente:
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/design \
+  -H 'Content-Type: application/json' -d '{"net": "bobp_wp13_pair_ho80"}'
+```
 
 `POST /optimize` corre la optimización de escala y velocidad de {doc}`20_optimizacion` (malla y,
 si `refine`, evolución diferencial) y devuelve el mejor diseño, la malla de factibilidad y el frente
