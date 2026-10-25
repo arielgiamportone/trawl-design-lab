@@ -9,6 +9,7 @@ interface InitMsg {
   type: 'init';
   pyodideUrl: string;
   wheelUrl: string;
+  extraUrls?: string[];
   packages: string[];
 }
 interface RequestMsg {
@@ -44,14 +45,18 @@ async function init(msg: InitMsg): Promise<void> {
   progress('Cargando numpy y pydantic…');
   await py.loadPackage(msg.packages);
   progress('Instalando el motor trawlkit…');
-  const res = await fetch(msg.wheelUrl);
-  if (!res.ok) throw new Error(`no se pudo descargar el motor (${res.status})`);
-  const name = msg.wheelUrl.split('/').pop() ?? 'trawlkit.whl';
-  py.FS.writeFile(`/tmp/${name}`, new Uint8Array(await res.arrayBuffer()));
-  await py.runPythonAsync(
-    `import micropip\nawait micropip.install("emfs:/tmp/${name}", deps=False)\n` +
-      'from trawlkit.api import offline',
-  );
+  const names: string[] = [];
+  for (const url of [...(msg.extraUrls ?? []), msg.wheelUrl]) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`no se pudo descargar ${url.split('/').pop()} (${res.status})`);
+    const name = url.split('/').pop() ?? 'paquete.whl';
+    py.FS.writeFile(`/tmp/${name}`, new Uint8Array(await res.arrayBuffer()));
+    names.push(name);
+  }
+  const installs = names
+    .map((n) => `await micropip.install("emfs:/tmp/${n}", deps=False)`)
+    .join('\n');
+  await py.runPythonAsync(`import micropip\n${installs}\nfrom trawlkit.api import offline`);
   handle = py.globals.get('offline').handle_json;
 }
 

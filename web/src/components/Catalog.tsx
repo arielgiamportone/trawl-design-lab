@@ -37,6 +37,7 @@ export function Catalog() {
       netModified: null,
       vessel: null,
       door: null,
+      fromBatch: null,
       edits: { std: {}, mod: {} },
       scaled: null,
     }));

@@ -30,6 +30,7 @@ parts:
       - file: 32_validacion_dynamit
       - file: 33_catalogo_fao
       - file: 34_componentes
+      - file: 35_lotes_proyeccion
       - file: erratas
   - caption: Software
     chapters:

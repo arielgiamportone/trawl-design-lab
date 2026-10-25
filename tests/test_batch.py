@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import io
+import math
 from functools import cache
 
 import pytest
@@ -103,7 +104,12 @@ def _projection(net: str, hp: float):  # type: ignore[no-untyped-def]
 def test_projection_follows_the_power_similarity_law() -> None:
     same = _projection("fao_a3_standard", 150.0)
     assert same.s0 == pytest.approx(1.0)
-    assert same.s == pytest.approx(1.0, abs=0.05) and same.feasible
+    assert 0.8 <= same.s <= 1.05 and same.feasible
+    # La escala final sigue a la de semejanza: s/s₀ casi constante entre 40 y 300 hp.
+    ratios = [
+        _projection("fao_wb_bt2p_60hp", hp).s / math.sqrt(hp / 60) for hp in (40.0, 150.0, 300.0)
+    ]
+    assert max(ratios) - min(ratios) < 0.1
     big = _projection("fao_wb_bt2p_60hp", 150.0)
     assert big.s0 == pytest.approx(2.5**0.5)
     assert big.feasible

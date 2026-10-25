@@ -255,6 +255,25 @@ La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cuatro secciones:
   `components` sólo si se marca «Usar mis aportes». «Exportar» baja el JSON y «Proponer al
   catálogo» abre un *issue* con la plantilla `.github/ISSUE_TEMPLATE/componente.yml`.
 
+## Lotes y flota
+
+La pestaña **«Lotes y flota»** ({doc}`35_lotes_proyeccion`) calcula muchos casos de una vez:
+
+- **Qué cargar**: flota de buques, redes (planos) o casos completos, con «Descargar plantilla»
+  (XLSX con hoja de ayuda, o CSV).
+- **Carga**: se arrastra o elige el archivo (.xlsx o .csv); `POST /batch/parse` devuelve las filas
+  reconocidas y las observaciones por fila y columna. La flota se puede corregir en la tabla
+  (nombre, potencia, eslora, profundidad, velocidad) o quitar buques antes de calcular.
+- **Flota**: red a proyectar (catálogo FAO o la del caso), objetivo (la mayor red, menos trabajo
+  por m² o el armado más barato con los precios de la lista de materiales), región del puerto,
+  «sólo genéricos» y «armar con el catálogo».
+- **Cálculo** por tramos (`POST /batch/run`) que entran en la guarda de costo del servidor, o de 10
+  buques con el motor del teléfono, con barra de avance y «Cancelar».
+- **Resultados**: semáforo por fila, filtro, «Abrir este caso» (pone la red escalada, el buque y
+  el portón del lote en el caso; el panel lo indica con «Caso del lote») y descargas en XLSX,
+  CSV, informe PDF y vista para imprimir (`POST /batch/export`).
+- El último lote queda guardado en IndexedDB y vuelve al abrir la pestaña.
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,
@@ -350,8 +369,8 @@ web/
 
 ```bash
 cd web
-npm test               # Vitest (171 pruebas)
-npm run test:e2e       # Playwright (21 pruebas)
+npm test               # Vitest (176 pruebas)
+npm run test:e2e       # Playwright (23 pruebas)
 ```
 
 Playwright levanta la API (`uv run trawlkit serve`, requiere `uv sync --all-extras`) y

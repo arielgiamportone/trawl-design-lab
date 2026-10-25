@@ -115,6 +115,27 @@ uv run trawlkit run fao_a3_standard --vessel fao_a3_150hp --door fao_flat_wood_a
 imprime la tabla Markdown del resumen (etiquetas en español, con unidades), las notas de la
 corrida y, con `--json`, escribe `summary()` y `to_dict()`.
 
+### Muchos casos: lotes y flotas
+
+`trawlkit.batch` ({doc}`35_lotes_proyeccion`) lee planillas de flota, redes o casos y calcula
+todo de una vez; `project_net` proyecta una red a otro buque (semejanza por potencia y refinado):
+
+```python
+from trawlkit.batch import fleet_vessel, project_net, read_input, result_xlsx, run_input
+
+p = project_net("fao_wb_bt2p_60hp", fleet_vessel({"name": "Mi buque", "bhp": 120}))
+p.s0, p.s, p.summary()["speed_kn"], p.net  # escala por semejanza, escala final, red escalada
+
+inp = read_input(open("flota.xlsx", "rb").read(), "flota.xlsx", "fleet")
+res = run_input(inp, net="fao_wb_bt2p_60hp")
+open("lote.xlsx", "wb").write(result_xlsx(res))
+```
+
+```bash
+uv run trawlkit batch --template flota.xlsx
+uv run trawlkit batch flota.xlsx --net fao_wb_bt2p_60hp -o lote.pdf
+```
+
 ## Validación con los valores de referencia
 
 `tools/extract_excel.py` vuelca los valores cacheados del libro en `tests/golden/*.json` (un JSON

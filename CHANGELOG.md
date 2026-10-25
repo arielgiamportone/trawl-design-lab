@@ -138,6 +138,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
     una ficha por buque;
   - CLI `trawlkit batch` (y `--template`); API `/batch/parse`, `/batch/run`, `/batch/export`,
     `/batch/template`, también en el motor sin conexión (salvo el PDF).
+- **Lotes en la web, sin conexión e informe (Fase 14.2)**:
+  - pestaña «Lotes y flota»: plantillas, carga de CSV/XLSX, vista previa editable de la flota,
+    cálculo por tramos con avance y cancelación, resultados con semáforos y filtro, «Abrir este
+    caso» (red escalada, buque y portón del lote en línea) y descargas XLSX, CSV, PDF e
+    impresión; el último lote queda en IndexedDB; enlace desde el modo guiado;
+  - el motor sin conexión calcula lotes y escribe planillas: openpyxl y et_xmlfile viajan con la
+    wheel (`tools/offline_bundle.py`), y las respuestas binarias pasan por el *worker*;
+  - informe del lote en HTML/PDF con una ficha por buque y su lámina;
+  - capítulo 35 «Flotas, lotes y proyección de redes».
 - Cables: si ningún cable del catálogo alcanza la carga de rotura, se elige el más grueso con la
   nota `warp_undersized` (antes, error).
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto

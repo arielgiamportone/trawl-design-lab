@@ -108,6 +108,7 @@ export function startEngine(onProgress?: (stage: string) => void): Promise<void>
         type: 'init',
         pyodideUrl: PYODIDE_URL,
         wheelUrl: `${wheelDir()}${m.wheel}`,
+        extraUrls: (m.extras ?? []).map((e) => `${wheelDir()}${e}`),
         packages: PY_PACKAGES,
       },
       onProgress,
@@ -156,6 +157,7 @@ export async function prepareOffline(
     ...PYODIDE_CORE.map((f) => `${PYODIDE_URL}${f}`),
     ...packageFiles(lock, PY_PACKAGES).map((f) => `${PYODIDE_URL}${f}`),
     `${wheelDir()}manifest.json`,
+    ...(m.extras ?? []).map((e) => `${wheelDir()}${e}`),
     `${wheelDir()}${m.wheel}`,
   ];
   const cache = typeof caches !== 'undefined' ? await caches.open(OFFLINE_CACHE) : null;
@@ -201,7 +203,26 @@ export async function localRequest(
 ): Promise<Response> {
   await startEngine();
   const raw = (await send({ type: 'request', method, path, body })) as string;
-  const { status, body: out } = JSON.parse(raw) as { status: number; body: unknown };
+  const parsed = JSON.parse(raw) as {
+    status: number;
+    body?: unknown;
+    binary?: string;
+    media?: string;
+    filename?: string;
+  };
+  const { status, body: out } = parsed;
+  if (parsed.binary !== undefined) {
+    // Planillas, CSV e informes: el motor los devuelve en base64.
+    const bytes = Uint8Array.from(atob(parsed.binary), (c) => c.charCodeAt(0));
+    return new Response(bytes, {
+      status,
+      headers: {
+        'Content-Type': parsed.media ?? 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${parsed.filename ?? 'archivo'}"`,
+        'X-Trawlkit-Engine': 'local',
+      },
+    });
+  }
   const payload =
     // El motor local es de la misma compilación que la app: su contrato es el de la app.
     path === '/health' && out && typeof out === 'object'

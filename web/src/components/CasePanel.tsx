@@ -129,12 +129,29 @@ export function CasePanel() {
         <p className="help">Se calcula en paralelo y se compara con la red estándar.</p>
       </div>
 
+      {state.fromBatch && (
+        <div className="alert info" role="status" data-testid="from-batch">
+          <span>
+            <strong>Caso del lote: {state.fromBatch.label}</strong> (buque de{' '}
+            {state.fromBatch.vessel.bhp} hp
+            {state.fromBatch.door ? `, portón ${state.fromBatch.door.name}` : ''}).{' '}
+            <button
+              type="button"
+              className="btn small ghost"
+              onClick={() => update({ fromBatch: null })}
+            >
+              Usar el buque del catálogo
+            </button>
+          </span>
+        </div>
+      )}
+
       <div className="field">
         <label htmlFor={`${ids}-vessel`}>Buque</label>
         <select
           id={`${ids}-vessel`}
           value={vesselValue}
-          onChange={(e) => update({ vessel: e.target.value || null })}
+          onChange={(e) => update({ vessel: e.target.value || null, fromBatch: null })}
         >
           {fromPlan && <option value="">Del plano: buque de la potencia de diseño</option>}
           {catalogs.vessels.map((v) => (
@@ -156,7 +173,13 @@ export function CasePanel() {
         <select
           id={`${ids}-door`}
           value={doorValue}
-          onChange={(e) => update({ door: e.target.value || null })}
+          onChange={(e) =>
+            update((s) => ({
+              ...s,
+              door: e.target.value || null,
+              fromBatch: s.fromBatch ? { ...s.fromBatch, door: null } : null,
+            }))
+          }
         >
           {fromPlan && <option value="">Del plano (o escalado a la potencia)</option>}
           {catalogs.doors.map((d) => (

@@ -1,10 +1,11 @@
 // Paridad del motor en el navegador (Pyodide) con la API: corre `trawlkit.api.offline` dentro de
 // Pyodide en Node y compara las respuestas con las de CPython (tolerancia relativa 1e-9).
 //
-// Uso: node scripts/pyodide-parity.mjs <trawlkit.whl> <esperado.json>
+// Uso: node scripts/pyodide-parity.mjs <trawlkit.whl | manifest.json> <esperado.json>
+// Con el manifiesto de web/public/py/ se instalan también las wheels extra (openpyxl).
 // `esperado.json` es [{method, path, body, status, response}] (tools/offline_expected.py).
 import { readFileSync } from 'node:fs';
-import { basename } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { loadPyodide } from 'pyodide';
 
 const [wheel, expectedPath] = process.argv.slice(2);
@@ -17,13 +18,22 @@ const expected = JSON.parse(readFileSync(expectedPath, 'utf8'));
 const t0 = Date.now();
 const py = await loadPyodide();
 await py.loadPackage(['numpy', 'pydantic', 'pyyaml', 'micropip']);
-const target = `/tmp/${basename(wheel)}`;
-py.FS.writeFile(target, readFileSync(wheel));
-await py.runPythonAsync(`
-import micropip
-await micropip.install("emfs:${target}", deps=False)
-from trawlkit.api import offline
-`);
+const files = [];
+if (wheel.endsWith('.json')) {
+  const m = JSON.parse(readFileSync(wheel, 'utf8'));
+  for (const rel of [...(m.extras ?? []), m.wheel]) files.push(join(dirname(wheel), rel));
+} else {
+  files.push(wheel);
+}
+const installs = [];
+for (const f of files) {
+  const target = `/tmp/${basename(f)}`;
+  py.FS.writeFile(target, readFileSync(f));
+  installs.push(`await micropip.install("emfs:${target}", deps=False)`);
+}
+await py.runPythonAsync(
+  `import micropip\n${installs.join('\n')}\nfrom trawlkit.api import offline`,
+);
 console.log(`Pyodide listo en ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 
 const RTOL = 1e-9;
@@ -61,7 +71,14 @@ for (const c of expected) {
   const out = JSON.parse(handle(c.method, c.path, c.body == null ? null : JSON.stringify(c.body)));
   try {
     if (out.status !== c.status) throw new Error(`estado ${out.status} ≠ ${c.status}`);
-    if (c.status === 200) compare(out.body, c.response, 'body');
+    if (c.binary !== undefined) {
+      // Binarios (XLSX, CSV): se compara el contenido decodificado que da CPython.
+      if (c.binary.kind === 'xlsx') {
+        if (!out.binary || atob(out.binary).slice(0, 2) !== 'PK') throw new Error('no es un XLSX');
+      } else if (atob(out.binary) !== atob(c.binary.data)) {
+        throw new Error('el contenido difiere');
+      }
+    } else if (c.status === 200) compare(out.body, c.response, 'body');
     console.log(`ok   ${c.method} ${c.path} (${Date.now() - t} ms)`);
   } catch (err) {
     failed += 1;

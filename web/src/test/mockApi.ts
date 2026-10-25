@@ -26,6 +26,8 @@ import bom from './fixtures/bom.json';
 import componentKinds from './fixtures/component_kinds.json';
 import componentsWire from './fixtures/components_wire.json';
 import optimizeComponents from './fixtures/optimize_components.json';
+import batchParse from './fixtures/batch_parse.json';
+import batchRun from './fixtures/batch_run.json';
 
 export const fixtures = {
   design,
@@ -53,6 +55,8 @@ export const fixtures = {
   componentKinds,
   componentsWire,
   optimizeComponents,
+  batchParse,
+  batchRun,
 };
 
 export interface Call {
@@ -131,6 +135,15 @@ export function mockApi(
       });
     }
     if (path === '/design/bom') return json(bom);
+    if (path === '/batch/parse') return json(batchParse);
+    if (path === '/batch/run') return json(batchRun);
+    if (path === '/batch/export' || path === '/batch/template') {
+      return new Response('PK-fake', {
+        headers: {
+          'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
+      });
+    }
     if (path === '/optimize/components') return json(optimizeComponents);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);

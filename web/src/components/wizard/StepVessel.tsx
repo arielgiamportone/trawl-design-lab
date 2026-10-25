@@ -4,7 +4,7 @@ import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
 import { ChoiceCards } from './ChoiceCards';
 
-export function StepVessel() {
+export function StepVessel({ onBatch }: { onBatch?: () => void }) {
   const { state, update, catalogs } = useCase();
   const ids = useId();
   const vessel = state.vessel ?? catalogs.vessels[0]?.id ?? '';
@@ -28,7 +28,7 @@ export function StepVessel() {
             </>
           }
           value={vessel}
-          onChange={(v) => update({ vessel: v })}
+          onChange={(v) => update({ vessel: v, fromBatch: null })}
           choices={catalogs.vessels.map((v) => ({
             value: v.id,
             title: `${v.bhp} BHP${v.length_m ? ` · ${String(v.length_m).replace('.', ',')} m de eslora` : ''}`,
@@ -52,6 +52,15 @@ export function StepVessel() {
         }
         choices={Object.entries(PROPELLER_LABELS).map(([value, title]) => ({ value, title }))}
       />
+      {onBatch && (
+        <p className="help">
+          ¿Tiene varios buques?{' '}
+          <button type="button" className="link-button" onClick={onBatch}>
+            Cárguelos en una planilla y calcule la red para cada uno
+          </button>
+          .
+        </p>
+      )}
     </>
   );
 }

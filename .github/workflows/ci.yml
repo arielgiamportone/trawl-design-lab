@@ -67,7 +67,7 @@ jobs:
       - name: Paridad del motor en Pyodide
         run: |
           uv run python ../tools/offline_expected.py "$RUNNER_TEMP/offline_expected.json"
-          node scripts/pyodide-parity.mjs ../dist-wheel/trawlkit-*.whl "$RUNNER_TEMP/offline_expected.json"
+          node scripts/pyodide-parity.mjs public/py/manifest.json "$RUNNER_TEMP/offline_expected.json"
       - run: npm run build
       - uses: actions/upload-artifact@v4
         with:

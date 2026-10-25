@@ -71,7 +71,7 @@ export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
             </span>
           </div>
         )}
-        {current.id === 'buque' && <StepVessel />}
+        {current.id === 'buque' && <StepVessel onBatch={() => onExpert('lotes')} />}
         {current.id === 'red' && <StepNet />}
         {current.id === 'operacion' && <StepOperation />}
         {current.id === 'resultado' && <StepResult onExpert={onExpert} />}

@@ -22,7 +22,7 @@ software reproducible, testeado y generalizable a cualquier red parametrizable.
 | Planos e informes | `src/trawlkit/drawing/`, `src/trawlkit/report/` | Fase 3: lámina A3 como los planos de 2014, vista a escala real, gráficos SVG, informe HTML/PDF/XLSX ([docs/informes.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/informes.md), ejemplos en [`examples/`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/examples/)) |
 | Optimización | `src/trawlkit/optimize/` | Fase 6: escala de la red y velocidad de arrastre (área barrida, volumen filtrado o energía) con restricciones de tiro, apertura, cable y portón; malla, frente de Pareto y evolución diferencial (`trawlkit optimize`, [capítulo 20](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/20_optimizacion.md)) |
 | Simulación de forma | `src/trawlkit/sim/` | Fase 7 (experimental): forma de equilibrio de la red remolcada (elementos triangulares de paño, Morison, boyas, lastre, bridas y fondo; relajación dinámica FIRE), validada contra DynamiT ([capítulo 21](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/21_simulacion.md)) |
-| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`). Fase 13: pestaña «Componentes» (lista de materiales, armado con el catálogo, aportes), app instalable y motor sin conexión en el teléfono (Pyodide) |
+| API HTTP y frontend | `src/trawlkit/api/`, `web/` | Fase 4: API FastAPI (`trawlkit serve`) y app React con editor de caso y paneles, indicadores, gráficos, plano, comparación y descargas ([docs/web.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/web.md)); pestañas «Optimizar» y «Simulación» (`POST /optimize`, `POST /simulate`). Fase 13: pestaña «Componentes» (lista de materiales, armado con el catálogo, aportes), app instalable y motor sin conexión en el teléfono (Pyodide). Fase 14: pestaña «Lotes y flota» (planillas de flota, redes y casos; proyección de una red a cada buque) y `trawlkit batch` |
 | Documentación (Jupyter Book, es) | `docs/` | Índice, arquitectura del motor (`docs/motor.md`), informes y planos (`docs/informes.md`), erratas |
 | Material original | `legacy/` | Excel, planos, validación DynamiT |
 
@@ -118,7 +118,7 @@ result.performance.design.max_speed_kn  # velocidad máxima remolcable [kn]
 12. Catálogo de redes públicas (serie FAO) digitalizado con procedencia por valor ✔
 13. Catálogos de componentes con equivalencias genéricas, lista de materiales y costo orientativo,
     armado óptimo con lo que se consigue, aportes de usuarios y uso sin conexión ✔
-14. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques
+14. Carga masiva (Excel/CSV), cálculo por lotes y proyección automática de redes a buques ✔
 
 ## Licencias
 

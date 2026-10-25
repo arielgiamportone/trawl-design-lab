@@ -1,5 +1,5 @@
 /** Estado del caso de diseño y armado del ``DesignRequest``. */
-import type { DesignRequest, NetSpec } from '../api/client';
+import type { DesignRequest, Door, NetSpec, Vessel } from '../api/client';
 import { sanitizeContributions, type Component } from '../lib/components';
 import { editErrors, editedSpec, type PanelEdits } from '../lib/panels';
 import { buildParams, type ParamMeta, type ParamValues } from '../lib/params';
@@ -28,6 +28,17 @@ export interface CaseState {
   contributions: Component[];
   /** Si los aportes entran en el cálculo y en el armado (se envían como ``components``). */
   useContributions: boolean;
+  /**
+   * Caso abierto desde un lote (Fase 14): buque y portón en línea (el portón escalado no tiene
+   * id de catálogo). Reemplazan a ``vessel``/``door`` hasta que se elija otro.
+   */
+  fromBatch: FromBatch | null;
+}
+
+export interface FromBatch {
+  label: string;
+  vessel: Vessel;
+  door: Door | null;
 }
 
 export interface ScaledNet {
@@ -51,6 +62,7 @@ export const DEFAULT_CASE: CaseState = {
   expectedCatchKg: 500,
   contributions: [],
   useContributions: false,
+  fromBatch: null,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -82,6 +94,18 @@ export function sanitizeCase(raw: unknown): CaseState {
         : DEFAULT_CASE.expectedCatchKg,
     contributions: sanitizeContributions(r.contributions),
     useContributions: r.useContributions === true,
+    fromBatch: sanitizeFromBatch(r.fromBatch),
+  };
+}
+
+function sanitizeFromBatch(raw: unknown): FromBatch | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Partial<FromBatch>;
+  if (!r.vessel || typeof r.vessel !== 'object' || typeof r.vessel.bhp !== 'number') return null;
+  return {
+    label: typeof r.label === 'string' ? r.label : 'lote',
+    vessel: r.vessel,
+    door: r.door && typeof r.door === 'object' ? r.door : null,
   };
 }
 
@@ -138,8 +162,8 @@ export function buildRequest(
   const request: DesignRequest = {
     net,
     net_modified: netModified ?? null,
-    vessel: state.vessel,
-    door: state.door,
+    vessel: state.fromBatch?.vessel ?? state.vessel,
+    door: state.fromBatch?.door ?? state.door,
     compat: state.compat,
     params,
   };

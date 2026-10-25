@@ -61,6 +61,13 @@ export type BomOut = S['BomOut'];
 export type ComponentOptimizeRequest = S['ComponentOptimizeRequest'];
 export type ComponentOptimizeResponse = S['ComponentOptimizeResponse'];
 export type AssemblyOut = S['AssemblyOut'];
+export type BatchFile = S['BatchFile'];
+export type BatchParseRequest = S['BatchParseRequest'];
+export type BatchParseResponse = S['BatchParseResponse'];
+export type BatchRunRequest = S['BatchRunRequest'];
+export type BatchRunResponse = S['BatchRunResponse'];
+export type BatchFormat = 'csv' | 'xlsx' | 'pdf' | 'html';
+export type BatchKind = 'fleet' | 'nets' | 'cases';
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -238,6 +245,22 @@ export const api = {
   ): Promise<ComponentOptimizeResponse> {
     const res = await post('/optimize/components', req, signal);
     return (await res.json()) as ComponentOptimizeResponse;
+  },
+  async batchParse(req: BatchParseRequest, signal?: AbortSignal): Promise<BatchParseResponse> {
+    const res = await post('/batch/parse', req, signal);
+    return (await res.json()) as BatchParseResponse;
+  },
+  async batchRun(req: BatchRunRequest, signal?: AbortSignal): Promise<BatchRunResponse> {
+    const res = await post('/batch/run', req, signal);
+    return (await res.json()) as BatchRunResponse;
+  },
+  async batchExport(req: BatchRunRequest, format: BatchFormat, signal?: AbortSignal) {
+    const res = await post(`/batch/export?format=${format}`, req, signal);
+    return res.blob();
+  },
+  async batchTemplate(kind: BatchKind, format: 'xlsx' | 'csv', signal?: AbortSignal) {
+    const res = await request(`/batch/template?kind=${kind}&format=${format}`, { signal });
+    return res.blob();
   },
   seabeds: (signal?: AbortSignal) => getJson<SeabedOut[]>('/catalog/seabeds', signal),
   fouling: (signal?: AbortSignal) => getJson<FoulingOut[]>('/catalog/fouling', signal),

@@ -29,6 +29,8 @@ export function wheelDir(): string {
 
 export interface WheelManifest {
   wheel: string;
+  /** Wheels puras extra (openpyxl y et_xmlfile, para las planillas XLSX). */
+  extras?: string[];
   version: string;
   pyodide: string;
   bytes?: number;

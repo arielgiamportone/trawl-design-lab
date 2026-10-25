@@ -136,6 +136,34 @@ class Projection:
             "assembly": None if self.assembly is None else self.assembly.to_dict(),
             "notes": list(self.notes),
             "engine_runs": self.engine_runs,
+            "case": None if self.case is None else self.case_params(),
+        }
+
+    def case_params(self) -> dict[str, Any]:
+        """Lo necesario para abrir la proyección como caso: portón y parámetros del motor."""
+        assert self.case is not None
+        c = self.case
+        params: dict[str, Any] = {
+            k: getattr(c, k)
+            for k in (
+                "depth_m",
+                "seabed",
+                "warp_id",
+                "float_id",
+                "float_count",
+                "twine_id",
+                "component_region",
+                "generic_only",
+                "door_spread_rule",
+                "sweeps_m",
+            )
+            if getattr(c, k) not in (None, False)
+        }
+        params["ft_propeller"] = c.ft_propeller.value
+        return {
+            "door": c.door.model_dump(mode="json", exclude_none=True),
+            "vessel": c.vessel.model_dump(mode="json", exclude_none=True),
+            "params": params,
         }
 
 
@@ -260,6 +288,9 @@ def project_net(
         "ft_propeller": prop,
         "component_region": region,
         "generic_only": generic,
+        # La separación de portones «al metro» del libro (Port!E13) está calibrada para la A-3 y
+        # su cable; con otra red y otro buque sale de la DPA de Fridman (como en el catálogo).
+        "door_spread_rule": "fridman",
     }
     if not base.is_pair and base.door.area_m2 and abs(vessel.bhp - p_design) > 1e-9:
         changes["door"] = scale_door(base.door, float(base.door.area_m2) * vessel.bhp / p_design)
