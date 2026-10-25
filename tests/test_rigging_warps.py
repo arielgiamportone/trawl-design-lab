@@ -191,8 +191,10 @@ def test_select_warp_excel_is_undersized_and_corrected_fixes_it() -> None:
     assert corrected.diameter_mm == 13 and corrected.breaking_load_t == 10.3
     assert corrected.satisfies_breaking_load
     assert corrected.to_dict()["id"] == "steel_6x19_seale_13mm"
-    with pytest.raises(ValueError):
-        select_warp(12.0, 1e6)
+    # Ninguno alcanza: el más grueso del catálogo, marcado como insuficiente.
+    huge = select_warp(12.0, 1e6)
+    assert not huge.satisfies_breaking_load
+    assert huge.diameter_mm >= corrected.diameter_mm
 
 
 def test_total_drag_corrected_includes_doors() -> None:
