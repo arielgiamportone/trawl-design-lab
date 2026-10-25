@@ -19,6 +19,10 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/components/check` | Valida un componente cargado por el usuario (esquema y coherencia física). |
 | POST | `/design/bom` | Lista de materiales del caso (paño, relingas, malletas, cable, boyas, portones, lastre) con costo orientativo según `prices` o el precio del catálogo; cuenta las líneas sin precio. |
 | POST | `/optimize/components` | Armado con componentes del catálogo (portón, cable, boyas, hilo) por `drag`, `efficiency` o `cost`, con alternativas y lista de materiales; filtros en `params` (`component_brands`, `component_region`, `generic_only`). |
+| POST | `/batch/parse` | Lee una planilla de flota, redes o casos (CSV como texto o XLSX en base64): filas reconocidas, observaciones por fila y columna, y costo estimado del lote. |
+| POST | `/batch/run` | Calcula el lote: proyecta una red a cada buque de la flota (escala por semejanza de potencia refinada, velocidad y armado), o calcula casos o redes cargadas. Guarda de costo `TRAWLKIT_MAX_BATCH_SECONDS`. |
+| POST | `/batch/export` | El lote en `csv` (resumen), `xlsx` (resumen, materiales y una hoja de paneles por red escalada), `pdf` o `html` (ficha por buque). |
+| GET | `/batch/template` | Plantilla de planilla (`kind`: `fleet`, `nets`, `cases`; `format`: `xlsx` con hoja de ayuda, o `csv`). |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
 | GET | `/catalog/fouling` | Escenarios de ensuciamiento y colmatación de la red (nivel por zona). |

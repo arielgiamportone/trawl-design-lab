@@ -411,6 +411,70 @@ class ComponentOptimizeResponse(BaseModel):
     notes: list[str]
 
 
+class BatchFile(BaseModel):
+    """Planilla del lote: CSV como texto o XLSX en base64."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    filename: str = Field(default="planilla.csv", max_length=200)
+    content: str = Field(min_length=1, max_length=8_000_000)
+    encoding: Literal["text", "base64"] = "text"
+
+
+class BatchParseRequest(BaseModel):
+    """Lectura de una planilla (``POST /batch/parse``): vista previa sin calcular."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    file: BatchFile
+    mode: Literal["fleet", "cases", "nets"] = "fleet"
+
+
+class BatchRunRequest(BatchParseRequest):
+    """Lote (``POST /batch/run`` y ``/batch/export``).
+
+    ``mode = "fleet"``: la red ``net`` (id, especificación o, si la planilla trae una sola red,
+    ésa) se proyecta a cada buque. ``objective``: ``area`` (la mayor red que el buque remolca),
+    ``energy`` (menor R_T/AH) o ``cost`` (armado más barato con ``prices``). ``region`` y
+    ``generic_only`` filtran los componentes (cada buque puede traer los suyos en la planilla).
+    """
+
+    net: str | NetSpec | None = None
+    objective: Literal["area", "energy", "cost"] = "area"
+    margin: float = Field(default=0.1, ge=0.0, le=2.0)
+    region: str | None = None
+    generic_only: bool = False
+    assemble: bool = True
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+    currency: str | None = Field(default=None, min_length=3, max_length=3)
+    detail: bool = True
+
+
+class BatchParseResponse(BaseModel):
+    """Vista previa del lote: filas reconocidas por tipo y observaciones."""
+
+    mode: str
+    size: int
+    fleet: dict[str, Any] | None
+    nets: list[dict[str, Any]]
+    cases: list[dict[str, Any]]
+    issues: list[dict[str, Any]]
+    estimated_s: float
+    max_s: float
+
+
+class BatchRunResponse(BaseModel):
+    """Resultado del lote: una fila por buque, caso o red."""
+
+    mode: str
+    rows: list[dict[str, Any]]
+    counts: dict[str, int]
+    settings: dict[str, Any]
+    issues: list[dict[str, Any]]
+    runtime_s: float
+    engine_runs: int
+
+
 class ScaledNetRequest(BaseModel):
     """Red escalada geométricamente por ``s`` (``POST /optimize/scaled-net``).
 

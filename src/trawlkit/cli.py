@@ -288,6 +288,92 @@ def optimize(
 
 
 @app.command()
+def batch(
+    sheet: Annotated[
+        Path | None, typer.Argument(help="Planilla CSV o XLSX (flota, redes o casos).")
+    ] = None,
+    mode: Annotated[str, typer.Option(help="fleet (flota × red) | cases | nets")] = "fleet",
+    net: Annotated[
+        str | None, typer.Option(help="Red a proyectar a la flota (id del catálogo o ruta YAML).")
+    ] = None,
+    objective: Annotated[
+        str, typer.Option(help="area (mayor red) | energy (R_T/AH) | cost (armado más barato)")
+    ] = "area",
+    margin: Annotated[float, typer.Option(help="Reserva de tiro: F_T ≥ (1+margin)·R_T.")] = 0.1,
+    region: Annotated[str | None, typer.Option(help="Región del puerto (latam, africa…).")] = None,
+    generic_only: Annotated[bool, typer.Option(help="Sólo componentes genéricos.")] = False,
+    assemble: Annotated[
+        bool, typer.Option(help="Elige portón, cable, boyas e hilo del catálogo.")
+    ] = True,
+    out: Annotated[
+        Path | None, typer.Option("-o", "--out", help="Salida: .xlsx, .csv, .json o .pdf.")
+    ] = None,
+    template: Annotated[
+        Path | None,
+        typer.Option(help="Escribe una plantilla (de --mode) en esta ruta (.xlsx o .csv) y sale."),
+    ] = None,
+) -> None:
+    """Carga masiva y cálculo por lotes: proyecta una red a una flota, o calcula casos o redes."""
+    from trawlkit import batch as bt
+
+    kind = {"fleet": "fleet", "cases": "cases", "nets": "nets"}.get(mode)
+    if kind is None:
+        raise typer.BadParameter("mode: fleet, cases o nets")
+    if template is not None:
+        data = bt.template(kind, "csv" if template.suffix.lower() == ".csv" else "xlsx")
+        if isinstance(data, str):
+            template.write_text(data, encoding="utf-8")
+        else:
+            template.write_bytes(data)
+        typer.echo(f"plantilla escrita en {template}")
+        return
+    if sheet is None:
+        raise typer.BadParameter("falta la planilla (o use --template)")
+    inp = bt.read_input(sheet.read_bytes(), sheet.name, kind)  # type: ignore[arg-type]
+    for i in inp.issues:
+        where = ", ".join(x for x in (i.sheet, f"fila {i.row}" if i.row else "", i.column) if x)
+        typer.echo(f"[{i.level}] {where}: {i.message}", err=True)
+    spec = None if net is None else load_net(net)
+    options = bt.ProjectOptions(
+        objective=objective,  # type: ignore[arg-type]
+        margin=margin,
+        assemble=assemble,
+        region=region,
+        generic_only=generic_only,
+    )
+    res = bt.run_input(
+        inp,
+        net=spec,
+        options=options,
+        progress=lambda i, n: typer.echo(f"  {i}/{n}", err=True),
+    )
+    c = res.counts
+    typer.echo(
+        f"{len(res.rows)} filas: {c['ok']} cumplen, {c['infeasible']} no cumplen, "
+        f"{c['error']} con error ({res.runtime_s:.1f} s, {res.engine_runs} corridas del motor)"
+    )
+    if out is None:
+        typer.echo(bt.to_csv(res))
+        return
+    suffix = out.suffix.lower()
+    if suffix == ".xlsx":
+        out.write_bytes(bt.result_xlsx(res))
+    elif suffix == ".csv":
+        out.write_text(bt.to_csv(res), encoding="utf-8")
+    elif suffix == ".json":
+        from trawlkit.api.service import to_jsonable
+
+        out.write_text(json.dumps(to_jsonable(res.to_dict()), ensure_ascii=False, indent=1))
+    elif suffix == ".pdf":
+        from trawlkit.report.batch import batch_pdf
+
+        out.write_bytes(batch_pdf(res))
+    else:
+        raise typer.BadParameter("salida: .xlsx, .csv, .json o .pdf")
+    typer.echo(f"resultados en {out}")
+
+
+@app.command()
 def serve(
     host: Annotated[str, typer.Option(help="Interfaz de escucha.")] = "127.0.0.1",
     port: Annotated[int, typer.Option(help="Puerto.")] = 8000,

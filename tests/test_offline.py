@@ -56,6 +56,21 @@ POSTS: list[tuple[str, dict[str, object]]] = [
     ),
     ("/optimize", {"grid": {"n_s": 3, "n_v": 3}, "refine": False}),
     ("/optimize/scaled-net", {"net": "fao_a3_standard", "s": 1.1}),
+    (
+        "/batch/run",
+        {
+            "file": {"filename": "f.csv", "content": "nombre;potencia\nA;60\nB;150\n"},
+            "net": "fao_wb_bt2p_60hp",
+            "assemble": False,
+        },
+    ),
+    (
+        "/batch/parse",
+        {
+            "file": {"filename": "c.csv", "content": "caso;red\nuno;fao_a3_standard\n"},
+            "mode": "cases",
+        },
+    ),
 ]
 
 
@@ -86,6 +101,25 @@ def test_post_routes_match_the_api(path: str, body: dict[str, object]) -> None:
         assert _strip_runtime(out) == _strip_runtime(r.json())
     else:
         assert isinstance(out["detail"], type(r.json()["detail"]))
+
+
+def test_binary_batch_routes() -> None:
+    import base64
+
+    status, out = offline.handle("GET", "/batch/template?kind=fleet&format=xlsx")
+    assert status == 200 and isinstance(out, offline.Binary)
+    assert out.data == client.get("/batch/template?kind=fleet&format=xlsx").content
+    body = {
+        "file": {"filename": "f.csv", "content": "nombre;potencia\nA;60\n"},
+        "net": "fao_wb_bt2p_60hp",
+        "assemble": False,
+    }
+    wrapped = json.loads(offline.handle_json("POST", "/batch/export?format=csv", json.dumps(body)))
+    assert wrapped["status"] == 200 and wrapped["media"].startswith("text/csv")
+    api_csv = client.post("/batch/export?format=csv", json=body).content
+    assert base64.b64decode(wrapped["binary"]) == api_csv
+    pdf = offline.handle("POST", "/batch/export?format=pdf", json.dumps(body))
+    assert pdf[0] == 503
 
 
 def test_server_only_routes_and_json_wrapper() -> None:

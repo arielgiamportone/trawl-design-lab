@@ -3,9 +3,9 @@
 :func:`handle` atiende un pedido ``(método, ruta, cuerpo)`` como lo haría la API FastAPI
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
-lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D y la
-optimización por malla. Lo demás (simulación, informes, planos SVG, incertidumbre) devuelve 503
-con un mensaje que lo explica.
+lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
+optimización por malla y los lotes (Fase 14; el PDF del lote, no). Lo demás (simulación,
+informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que lo explica.
 
 Usa los mismos modelos de pedido y respuesta que la API (:mod:`trawlkit.api.schemas`) y las
 mismas funciones de :mod:`trawlkit.api.service`; ``tests/test_offline.py`` compara cada ruta con
@@ -14,9 +14,11 @@ la API.
 
 from __future__ import annotations
 
+import base64
 import json
 import re
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Any, TypeVar
 from urllib.parse import parse_qs, unquote, urlsplit
 
@@ -37,6 +39,15 @@ NEEDS_SERVER = (
 M = TypeVar("M", bound=BaseModel)
 Query = dict[str, list[str]]
 Handler = Callable[[re.Match[str], Query, Any], Any]
+
+
+@dataclass(frozen=True)
+class Binary:
+    """Respuesta que no es JSON (planillas, CSV, HTML): contenido, tipo MIME y nombre."""
+
+    data: bytes
+    media: str
+    filename: str
 
 
 class _HTTPError(Exception):
@@ -251,6 +262,35 @@ def _scaled_net(_m: re.Match[str], _q_: Query, body: Any) -> Any:
     return _dump(NetSpec, service.scaled_net(req.net, req.s))
 
 
+def _batch_parse(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.BatchParseRequest, body)
+    return _dump(sc.BatchParseResponse, service.batch_parse(req.file.model_dump(), req.mode))
+
+
+def _batch_run(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.BatchRunRequest, body)
+    return _dump(sc.BatchRunResponse, service.batch_run(req.model_dump(mode="json")))
+
+
+def _batch_export(_m: re.Match[str], query: Query, body: Any) -> Any:
+    req = _body(sc.BatchRunRequest, body)
+    fmt = _q(query, "format", "xlsx") or "xlsx"
+    if fmt == "pdf":
+        # WeasyPrint sólo corre en el servidor; sin conexión, el informe HTML se imprime.
+        raise _HTTPError(503, "el PDF del lote necesita conexión: use format=html e imprímalo")
+    data, media, name = service.batch_export(req.model_dump(mode="json"), fmt)
+    return Binary(data, media, name)
+
+
+def _batch_template(_m: re.Match[str], query: Query, _b: Any) -> Any:
+    kind = _q(query, "kind", "fleet") or "fleet"
+    fmt = _q(query, "format", "xlsx") or "xlsx"
+    if kind not in ("fleet", "nets", "cases") or fmt not in ("xlsx", "csv"):
+        raise _HTTPError(422, "kind: fleet, nets o cases; format: xlsx o csv")
+    data, media, name = service.batch_template(kind, fmt)
+    return Binary(data, media, name)
+
+
 _ID = r"(?P<id>[^/]+)"
 _KIND = r"(?P<kind>[^/]+)"
 
@@ -276,6 +316,10 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/optimize"), _optimize),
     ("POST", re.compile(r"/optimize/components"), _optimize_components),
     ("POST", re.compile(r"/optimize/scaled-net"), _scaled_net),
+    ("POST", re.compile(r"/batch/parse"), _batch_parse),
+    ("POST", re.compile(r"/batch/run"), _batch_run),
+    ("POST", re.compile(r"/batch/export"), _batch_export),
+    ("GET", re.compile(r"/batch/template"), _batch_template),
 ]
 
 
@@ -286,7 +330,7 @@ def supports(method: str, path: str) -> bool:
 
 
 def handle(method: str, path: str, body: Any = None) -> tuple[int, Any]:
-    """Atiende un pedido como la API: ``(estado HTTP, cuerpo JSON)``.
+    """Atiende un pedido como la API: ``(estado HTTP, cuerpo JSON o :class:`Binary`)``.
 
     ``path`` puede llevar la consulta (``/catalog/components/wire?generic=true``); ``body`` es el
     cuerpo ya decodificado (o el texto JSON).
@@ -315,9 +359,20 @@ def handle(method: str, path: str, body: Any = None) -> tuple[int, Any]:
 
 
 def handle_json(method: str, path: str, body: str | None = None) -> str:
-    """:func:`handle` con entrada y salida en texto JSON (lo que pasa por el *worker*)."""
+    """:func:`handle` con entrada y salida en texto JSON (lo que pasa por el *worker*).
+
+    Una respuesta binaria va en base64: ``{"status", "binary", "media", "filename"}``.
+    """
     status, out = handle(method, path, body)
+    if isinstance(out, Binary):
+        payload: dict[str, Any] = {
+            "status": status,
+            "binary": base64.b64encode(out.data).decode("ascii"),
+            "media": out.media,
+            "filename": out.filename,
+        }
+        return json.dumps(payload)
     return json.dumps({"status": status, "body": out}, ensure_ascii=False, allow_nan=False)
 
 
-__all__ = ["NEEDS_SERVER", "ROUTES", "handle", "handle_json", "supports"]
+__all__ = ["NEEDS_SERVER", "ROUTES", "Binary", "handle", "handle_json", "supports"]

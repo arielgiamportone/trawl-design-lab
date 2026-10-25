@@ -124,6 +124,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   - modo de bajo consumo de datos (sin vistas 3D ni simulación);
   - pint se carga al primer uso de `trawlkit.ureg`/`trawlkit.Q_` (el motor no lo necesita);
   - capítulo 34 «Componentes: catálogos, equivalencias y costo».
+- **Carga masiva, lotes y proyección de redes a buques (Fase 14.1)**:
+  - `trawlkit.batch`: lectura de planillas CSV y XLSX de flotas, redes (paneles) y casos, con
+    nombres de columna en español o inglés, unidades convertibles (kW, ft, m/s…), coma decimal y
+    observaciones por fila y columna sin abortar el lote; plantillas con hoja de ayuda;
+  - redes desde planilla, validadas con `netcheck` (con errores quedan como borrador); la A-3
+    exportada a planilla y releída da el mismo resultado;
+  - `project_net`: proyección de una red a otro buque (escala por semejanza de potencia
+    s₀ = √(P/P_diseño), la mayor escala factible entre 0,7·s₀ y 1,3·s₀ a la velocidad del buque o
+    entre 2 y 4 kn, portón escalado y armado del catálogo de componentes);
+  - lotes de flota × red, de casos (cualquier parámetro de `GET /params` como columna) y de
+    redes; exportación CSV y XLSX (resumen, materiales, redes escaladas) e informe HTML/PDF con
+    una ficha por buque;
+  - CLI `trawlkit batch` (y `--template`); API `/batch/parse`, `/batch/run`, `/batch/export`,
+    `/batch/template`, también en el motor sin conexión (salvo el PDF).
 - Cables: si ningún cable del catálogo alcanza la carga de rotura, se elige el más grueso con la
   nota `warp_undersized` (antes, error).
 - Web: vista «Lance progresivo» con gráficos contra la captura y 3D por paso (tensión o contacto

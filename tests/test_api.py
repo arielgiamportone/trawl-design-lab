@@ -761,3 +761,45 @@ def test_inline_user_components_enter_only_that_request() -> None:
     assert client.post("/design/bom", json={"params": body["params"]}).status_code == 422
     bad = client.post("/design", json={"components": [{"kind": "wire", "id": "x", "name": "x"}]})
     assert bad.status_code == 422
+
+
+def _fleet_file() -> dict[str, str]:
+    import base64
+
+    r = client.get("/batch/template?kind=fleet&format=xlsx")
+    assert r.status_code == 200 and r.headers["content-type"].startswith("application/vnd")
+    return {
+        "filename": "flota.xlsx",
+        "content": base64.b64encode(r.content).decode(),
+        "encoding": "base64",
+    }
+
+
+def test_batch_endpoints() -> None:
+    f = _fleet_file()
+    p = client.post("/batch/parse", json={"file": f, "mode": "fleet"}).json()
+    assert p["size"] == 3 and p["issues"] == [] and p["estimated_s"] < p["max_s"]
+    body = {"file": f, "mode": "fleet", "net": "fao_wb_bt2p_60hp", "assemble": False}
+    r = client.post("/batch/run", json=body)
+    assert r.status_code == 200, r.text
+    out = r.json()
+    assert len(out["rows"]) == 3 and out["counts"]["error"] == 0
+    first = out["rows"][0]
+    assert first["summary"]["s"] > 0 and first["detail"]["net"]["panels"]
+    csv_r = client.post("/batch/export?format=csv", json=body)
+    assert csv_r.status_code == 200 and csv_r.text.startswith("Fila;Nombre;Estado")
+    assert "lote.csv" in csv_r.headers["content-disposition"]
+    tpl = client.get("/batch/template?kind=cases&format=csv")
+    assert tpl.status_code == 200 and tpl.text.startswith("caso;red")
+    # sin red elegida, archivo dañado, lote demasiado caro
+    assert client.post("/batch/run", json={"file": f, "mode": "fleet"}).status_code == 422
+    bad = {"filename": "x.xlsx", "content": "aGVsbG8=", "encoding": "base64"}
+    assert client.post("/batch/parse", json={"file": bad, "mode": "fleet"}).status_code == 422
+    assert client.get("/batch/template?kind=otra").status_code == 422
+
+
+def test_batch_cost_guard(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TRAWLKIT_MAX_BATCH_SECONDS", "0.5")
+    body = {"file": _fleet_file(), "mode": "fleet", "net": "fao_wb_bt2p_60hp"}
+    r = client.post("/batch/run", json=body)
+    assert r.status_code == 422 and "tramos" in r.json()["detail"]

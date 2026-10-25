@@ -16,6 +16,10 @@ from trawlkit import __version__
 from trawlkit.api import service
 from trawlkit.api.contract import fingerprint
 from trawlkit.api.schemas import (
+    BatchParseRequest,
+    BatchParseResponse,
+    BatchRunRequest,
+    BatchRunResponse,
     BomOut,
     BomRequest,
     CalibrateRequest,
@@ -341,6 +345,59 @@ def optimize_components(req: ComponentOptimizeRequest) -> dict[str, Any]:
             max_floats=req.max_floats,
             max_twines=req.max_twines,
         )
+
+
+BatchFormat = Literal["csv", "xlsx", "pdf", "html"]
+TemplateKind = Literal["fleet", "nets", "cases"]
+
+
+@app.post("/batch/parse", response_model=BatchParseResponse)
+def batch_parse(req: BatchParseRequest) -> dict[str, Any]:
+    """Lee una planilla de flota, redes o casos (CSV o XLSX): vista previa y observaciones."""
+    return service.batch_parse(req.file.model_dump(), req.mode)
+
+
+@app.post("/batch/run", response_model=BatchRunResponse)
+def batch_run(req: BatchRunRequest) -> dict[str, Any]:
+    """Calcula el lote: proyecta la red a cada buque de la flota, o calcula casos o redes."""
+    return service.batch_run(req.model_dump(mode="json"))
+
+
+@app.post(
+    "/batch/export",
+    response_class=Response,
+    responses={
+        200: {
+            "content": {
+                "text/csv": {},
+                "application/pdf": {},
+                "text/html": {},
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {},
+            }
+        }
+    },
+)
+def batch_export(req: BatchRunRequest, format: BatchFormat = "xlsx") -> Response:
+    """Lote exportado: CSV (resumen), XLSX (resumen, materiales, redes) o informe PDF/HTML."""
+    data, media, name = service.batch_export(req.model_dump(mode="json"), format)
+    return Response(
+        data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
+    )
+
+
+@app.get(
+    "/batch/template",
+    response_class=Response,
+    responses={200: {"content": {"text/csv": {}, "application/octet-stream": {}}}},
+)
+def batch_template(
+    kind: TemplateKind = "fleet", format: Literal["xlsx", "csv"] = "xlsx"
+) -> Response:
+    """Plantilla de planilla (flota, redes o casos) con ejemplos y hoja de ayuda."""
+    data, media, name = service.batch_template(kind, format)
+    return Response(
+        data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
+    )
 
 
 @app.post("/optimize/scaled-net", response_model=NetSpec)

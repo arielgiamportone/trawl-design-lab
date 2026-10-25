@@ -869,6 +869,197 @@
     }
    }
   },
+  "/batch/parse": {
+   "post": {
+    "summary": "Batch Parse",
+    "description": "Lee una planilla de flota, redes o casos (CSV o XLSX): vista previa y observaciones.",
+    "operationId": "batch_parse_batch_parse_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BatchParseRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/BatchParseResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/batch/run": {
+   "post": {
+    "summary": "Batch Run",
+    "description": "Calcula el lote: proyecta la red a cada buque de la flota, o calcula casos o redes.",
+    "operationId": "batch_run_batch_run_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BatchRunRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/BatchRunResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/batch/export": {
+   "post": {
+    "summary": "Batch Export",
+    "description": "Lote exportado: CSV (resumen), XLSX (resumen, materiales, redes) o informe PDF/HTML.",
+    "operationId": "batch_export_batch_export_post",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "csv",
+        "xlsx",
+        "pdf",
+        "html"
+       ],
+       "type": "string",
+       "default": "xlsx",
+       "title": "Format"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BatchRunRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/csv": {},
+       "application/pdf": {},
+       "text/html": {},
+       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/batch/template": {
+   "get": {
+    "summary": "Batch Template",
+    "description": "Plantilla de planilla (flota, redes o casos) con ejemplos y hoja de ayuda.",
+    "operationId": "batch_template_batch_template_get",
+    "parameters": [
+     {
+      "name": "kind",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "fleet",
+        "nets",
+        "cases"
+       ],
+       "type": "string",
+       "default": "fleet",
+       "title": "Kind"
+      }
+     },
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "xlsx",
+        "csv"
+       ],
+       "type": "string",
+       "default": "xlsx",
+       "title": "Format"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/csv": {},
+       "application/octet-stream": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/optimize/scaled-net": {
    "post": {
     "summary": "Optimize Scaled Net",
@@ -1399,6 +1590,288 @@
     ],
     "title": "AssemblyOut",
     "description": "Un armado evaluado (``trawlkit.optimize.components.Assembly``)."
+   },
+   "BatchFile": {
+    "properties": {
+     "filename": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Filename",
+      "default": "planilla.csv"
+     },
+     "content": {
+      "type": "string",
+      "maxLength": 8000000,
+      "minLength": 1,
+      "title": "Content"
+     },
+     "encoding": {
+      "type": "string",
+      "enum": [
+       "text",
+       "base64"
+      ],
+      "title": "Encoding",
+      "default": "text"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "content"
+    ],
+    "title": "BatchFile",
+    "description": "Planilla del lote: CSV como texto o XLSX en base64."
+   },
+   "BatchParseRequest": {
+    "properties": {
+     "file": {
+      "$ref": "#/components/schemas/BatchFile"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "fleet",
+       "cases",
+       "nets"
+      ],
+      "title": "Mode",
+      "default": "fleet"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "BatchParseRequest",
+    "description": "Lectura de una planilla (``POST /batch/parse``): vista previa sin calcular."
+   },
+   "BatchParseResponse": {
+    "properties": {
+     "mode": {
+      "type": "string",
+      "title": "Mode"
+     },
+     "size": {
+      "type": "integer",
+      "title": "Size"
+     },
+     "fleet": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fleet"
+     },
+     "nets": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Nets"
+     },
+     "cases": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Cases"
+     },
+     "issues": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Issues"
+     },
+     "estimated_s": {
+      "type": "number",
+      "title": "Estimated S"
+     },
+     "max_s": {
+      "type": "number",
+      "title": "Max S"
+     }
+    },
+    "type": "object",
+    "required": [
+     "mode",
+     "size",
+     "fleet",
+     "nets",
+     "cases",
+     "issues",
+     "estimated_s",
+     "max_s"
+    ],
+    "title": "BatchParseResponse",
+    "description": "Vista previa del lote: filas reconocidas por tipo y observaciones."
+   },
+   "BatchRunRequest": {
+    "properties": {
+     "file": {
+      "$ref": "#/components/schemas/BatchFile"
+     },
+     "mode": {
+      "type": "string",
+      "enum": [
+       "fleet",
+       "cases",
+       "nets"
+      ],
+      "title": "Mode",
+      "default": "fleet"
+     },
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Net"
+     },
+     "objective": {
+      "type": "string",
+      "enum": [
+       "area",
+       "energy",
+       "cost"
+      ],
+      "title": "Objective",
+      "default": "area"
+     },
+     "margin": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Margin",
+      "default": 0.1
+     },
+     "region": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Region"
+     },
+     "generic_only": {
+      "type": "boolean",
+      "title": "Generic Only",
+      "default": false
+     },
+     "assemble": {
+      "type": "boolean",
+      "title": "Assemble",
+      "default": true
+     },
+     "prices": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/PriceIn"
+      },
+      "type": "object",
+      "title": "Prices"
+     },
+     "currency": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 3,
+        "minLength": 3
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Currency"
+     },
+     "detail": {
+      "type": "boolean",
+      "title": "Detail",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "BatchRunRequest",
+    "description": "Lote (``POST /batch/run`` y ``/batch/export``).\n\n``mode = \"fleet\"``: la red ``net`` (id, especificación o, si la planilla trae una sola red,\nésa) se proyecta a cada buque. ``objective``: ``area`` (la mayor red que el buque remolca),\n``energy`` (menor R_T/AH) o ``cost`` (armado más barato con ``prices``). ``region`` y\n``generic_only`` filtran los componentes (cada buque puede traer los suyos en la planilla)."
+   },
+   "BatchRunResponse": {
+    "properties": {
+     "mode": {
+      "type": "string",
+      "title": "Mode"
+     },
+     "rows": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Rows"
+     },
+     "counts": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "type": "object",
+      "title": "Counts"
+     },
+     "settings": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Settings"
+     },
+     "issues": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Issues"
+     },
+     "runtime_s": {
+      "type": "number",
+      "title": "Runtime S"
+     },
+     "engine_runs": {
+      "type": "integer",
+      "title": "Engine Runs"
+     }
+    },
+    "type": "object",
+    "required": [
+     "mode",
+     "rows",
+     "counts",
+     "settings",
+     "issues",
+     "runtime_s",
+     "engine_runs"
+    ],
+    "title": "BatchRunResponse",
+    "description": "Resultado del lote: una fila por buque, caso o red."
    },
    "BomLineOut": {
     "properties": {

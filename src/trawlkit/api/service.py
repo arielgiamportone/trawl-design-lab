@@ -1523,3 +1523,136 @@ def sensor_example() -> str:
     from trawlkit.sensors import example_log
 
     return example_log()
+
+
+# ---------------------------------------------------------------------------------------------
+# Carga masiva y lotes (Fase 14)
+# ---------------------------------------------------------------------------------------------
+
+
+def _batch_bytes(file: dict[str, Any]) -> bytes | str:
+    import base64
+    import binascii
+
+    if file.get("encoding") == "base64":
+        try:
+            return base64.b64decode(file["content"], validate=True)
+        except (binascii.Error, ValueError) as exc:
+            raise BadRequestError("el archivo no es base64 válido") from exc
+    return str(file["content"])
+
+
+def batch_read(file: dict[str, Any], mode: str) -> Any:
+    """Lee la planilla del lote (errores de formato como entrada inválida)."""
+    from trawlkit.batch import read_input
+
+    data = _batch_bytes(file)
+    try:
+        return read_input(data, str(file.get("filename") or "planilla.csv"), mode)  # type: ignore[arg-type]
+    # openpyxl falla con excepciones propias (zip dañado, archivo que no es XLSX): cualquier
+    # error de lectura es un archivo inválido del cliente.
+    except Exception as exc:
+        raise BadRequestError(f"no se pudo leer la planilla: {exc}") from exc
+
+
+def _batch_options(req: dict[str, Any]) -> Any:
+    from trawlkit.batch import ProjectOptions
+
+    return ProjectOptions(
+        objective=req.get("objective", "area"),
+        margin=float(req.get("margin", 0.1)),
+        assemble=bool(req.get("assemble", True)),
+        prices=dict(req.get("prices") or {}),
+        currency=req.get("currency"),
+        region=req.get("region"),
+        generic_only=bool(req.get("generic_only", False)),
+    )
+
+
+def batch_parse(file: dict[str, Any], mode: str) -> dict[str, Any]:
+    """Vista previa del lote con su costo estimado."""
+    from trawlkit.batch import estimate_cost_s
+
+    inp = batch_read(file, mode)
+    out: dict[str, Any] = to_jsonable(inp.to_dict())
+    out["estimated_s"] = estimate_cost_s(inp.mode, inp.size)
+    out["max_s"] = batch_max_cost_s()
+    return out
+
+
+def batch_compute(req: dict[str, Any]) -> Any:
+    """Lee y corre el lote con la guarda de costo (``TRAWLKIT_MAX_BATCH_SECONDS``)."""
+    from trawlkit.batch import estimate_cost_s, run_input
+
+    inp = batch_read(req["file"], req.get("mode", "fleet"))
+    errors = [i for i in inp.issues if i.level == "error" and i.code in ("empty", "too_many")]
+    if errors:
+        raise BadRequestError(errors[0].message)
+    options = _batch_options(req)
+    estimate = estimate_cost_s(inp.mode, inp.size, options)
+    limit = batch_max_cost_s()
+    if estimate > limit:
+        raise BadRequestError(
+            f"lote demasiado grande: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
+            "pártalo en tramos más chicos"
+        )
+    net = req.get("net")
+    if isinstance(net, str):
+        net = _net(net)
+    try:
+        return run_input(inp, net=net, options=options)
+    except KeyError as exc:
+        raise NotFoundError(str(exc.args[0] if exc.args else exc)) from exc
+    except ValueError as exc:
+        raise BadRequestError(str(exc)) from exc
+
+
+def batch_run(req: dict[str, Any]) -> dict[str, Any]:
+    """Corre el lote y lo serializa."""
+    res = batch_compute(req)
+    out: dict[str, Any] = to_jsonable(res.to_dict(detail=bool(req.get("detail", True))))
+    return out
+
+
+def batch_export(req: dict[str, Any], fmt: str) -> tuple[bytes, str, str]:
+    """Corre el lote y lo exporta: (contenido, tipo MIME, nombre de archivo)."""
+    from trawlkit.batch import result_xlsx, to_csv
+
+    res = batch_compute(req)
+    if fmt == "csv":
+        return to_csv(res).encode("utf-8"), "text/csv; charset=utf-8", "lote.csv"
+    if fmt == "xlsx":
+        return (
+            result_xlsx(res),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "lote.xlsx",
+        )
+    if fmt == "pdf":
+        from trawlkit.report.batch import batch_pdf
+
+        if res.mode != "fleet":
+            raise BadRequestError("el informe PDF es para lotes de flota")
+        return batch_pdf(res), "application/pdf", "lote.pdf"
+    if fmt == "html":
+        from trawlkit.report.batch import batch_html
+
+        return batch_html(res).encode("utf-8"), "text/html; charset=utf-8", "lote.html"
+    raise BadRequestError("formato: csv, xlsx, pdf o html")
+
+
+def batch_template(kind: str, fmt: str) -> tuple[bytes, str, str]:
+    """Plantilla de planilla: (contenido, tipo MIME, nombre de archivo)."""
+    from trawlkit.batch import template
+
+    try:
+        data = template(kind, fmt)
+    except ValueError as exc:
+        raise BadRequestError(str(exc)) from exc
+    names = {"fleet": "flota", "nets": "redes", "cases": "casos"}
+    if isinstance(data, str):
+        return data.encode("utf-8"), "text/csv; charset=utf-8", f"plantilla_{names[kind]}.csv"
+    return (
+        data,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        f"plantilla_{names[kind]}.xlsx",
+    )

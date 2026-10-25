@@ -458,6 +458,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/batch/parse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Batch Parse
+         * @description Lee una planilla de flota, redes o casos (CSV o XLSX): vista previa y observaciones.
+         */
+        post: operations["batch_parse_batch_parse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/batch/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Batch Run
+         * @description Calcula el lote: proyecta la red a cada buque de la flota, o calcula casos o redes.
+         */
+        post: operations["batch_run_batch_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/batch/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Batch Export
+         * @description Lote exportado: CSV (resumen), XLSX (resumen, materiales, redes) o informe PDF/HTML.
+         */
+        post: operations["batch_export_batch_export_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/batch/template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Batch Template
+         * @description Plantilla de planilla (flota, redes o casos) con ejemplos y hoja de ayuda.
+         */
+        get: operations["batch_template_batch_template_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/optimize/scaled-net": {
         parameters: {
             query?: never;
@@ -710,6 +790,150 @@ export interface components {
             /** Missing Prices */
             missing_prices: number;
             bom: components["schemas"]["BomOut"];
+        };
+        /**
+         * BatchFile
+         * @description Planilla del lote: CSV como texto o XLSX en base64.
+         */
+        BatchFile: {
+            /**
+             * Filename
+             * @default planilla.csv
+             */
+            filename: string;
+            /** Content */
+            content: string;
+            /**
+             * Encoding
+             * @default text
+             * @enum {string}
+             */
+            encoding: "text" | "base64";
+        };
+        /**
+         * BatchParseRequest
+         * @description Lectura de una planilla (``POST /batch/parse``): vista previa sin calcular.
+         */
+        BatchParseRequest: {
+            file: components["schemas"]["BatchFile"];
+            /**
+             * Mode
+             * @default fleet
+             * @enum {string}
+             */
+            mode: "fleet" | "cases" | "nets";
+        };
+        /**
+         * BatchParseResponse
+         * @description Vista previa del lote: filas reconocidas por tipo y observaciones.
+         */
+        BatchParseResponse: {
+            /** Mode */
+            mode: string;
+            /** Size */
+            size: number;
+            /** Fleet */
+            fleet: {
+                [key: string]: unknown;
+            } | null;
+            /** Nets */
+            nets: {
+                [key: string]: unknown;
+            }[];
+            /** Cases */
+            cases: {
+                [key: string]: unknown;
+            }[];
+            /** Issues */
+            issues: {
+                [key: string]: unknown;
+            }[];
+            /** Estimated S */
+            estimated_s: number;
+            /** Max S */
+            max_s: number;
+        };
+        /**
+         * BatchRunRequest
+         * @description Lote (``POST /batch/run`` y ``/batch/export``).
+         *
+         *     ``mode = "fleet"``: la red ``net`` (id, especificación o, si la planilla trae una sola red,
+         *     ésa) se proyecta a cada buque. ``objective``: ``area`` (la mayor red que el buque remolca),
+         *     ``energy`` (menor R_T/AH) o ``cost`` (armado más barato con ``prices``). ``region`` y
+         *     ``generic_only`` filtran los componentes (cada buque puede traer los suyos en la planilla).
+         */
+        BatchRunRequest: {
+            file: components["schemas"]["BatchFile"];
+            /**
+             * Mode
+             * @default fleet
+             * @enum {string}
+             */
+            mode: "fleet" | "cases" | "nets";
+            /** Net */
+            net?: string | components["schemas"]["NetSpec"] | null;
+            /**
+             * Objective
+             * @default area
+             * @enum {string}
+             */
+            objective: "area" | "energy" | "cost";
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
+            /** Region */
+            region?: string | null;
+            /**
+             * Generic Only
+             * @default false
+             */
+            generic_only: boolean;
+            /**
+             * Assemble
+             * @default true
+             */
+            assemble: boolean;
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /** Currency */
+            currency?: string | null;
+            /**
+             * Detail
+             * @default true
+             */
+            detail: boolean;
+        };
+        /**
+         * BatchRunResponse
+         * @description Resultado del lote: una fila por buque, caso o red.
+         */
+        BatchRunResponse: {
+            /** Mode */
+            mode: string;
+            /** Rows */
+            rows: {
+                [key: string]: unknown;
+            }[];
+            /** Counts */
+            counts: {
+                [key: string]: number;
+            };
+            /** Settings */
+            settings: {
+                [key: string]: unknown;
+            };
+            /** Issues */
+            issues: {
+                [key: string]: unknown;
+            }[];
+            /** Runtime S */
+            runtime_s: number;
+            /** Engine Runs */
+            engine_runs: number;
         };
         /**
          * BomLineOut
@@ -3278,6 +3502,143 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ComponentOptimizeResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    batch_parse_batch_parse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchParseRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchParseResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    batch_run_batch_run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchRunRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchRunResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    batch_export_batch_export_post: {
+        parameters: {
+            query?: {
+                format?: "csv" | "xlsx" | "pdf" | "html";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchRunRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                    "application/pdf": unknown;
+                    "text/html": unknown;
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    batch_template_batch_template_get: {
+        parameters: {
+            query?: {
+                kind?: "fleet" | "nets" | "cases";
+                format?: "xlsx" | "csv";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                    "application/octet-stream": unknown;
                 };
             };
             /** @description Validation Error */
