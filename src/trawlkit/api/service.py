@@ -14,7 +14,7 @@ import yaml
 from pydantic import ValidationError
 
 from trawlkit.compat import Compat
-from trawlkit.io import DATA_DIR, load_doors, load_net, load_vessels
+from trawlkit.io import load_doors, load_net, load_vessels
 from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignCase, DesignResult, run
 
@@ -66,18 +66,29 @@ def refine_allowed() -> bool:
     return raw not in {"0", "false", "no", "off"}
 
 
+#: Archivos de red que no validan como ``NetSpec`` (nombre → error), para diagnóstico.
+NET_LOAD_ERRORS: dict[str, str] = {}
+
+
 @cache
 def net_presets() -> dict[str, NetSpec]:
-    """Redes de ``trawlkit/data/*.yaml`` (sólo los archivos que validan como ``NetSpec``)."""
+    """Redes del paquete (``data/*.yaml`` y ``data/nets/*.yaml``) que validan como ``NetSpec``.
+
+    Las que no validan se registran en :data:`NET_LOAD_ERRORS` en lugar de descartarse en
+    silencio.
+    """
+    from trawlkit.io.loader import net_files
+
     out: dict[str, NetSpec] = {}
-    for path in sorted(DATA_DIR.glob("*.yaml")):
+    for path in net_files():
         with path.open(encoding="utf-8") as fh:
             raw = yaml.safe_load(fh)
         if not isinstance(raw, dict) or "panels" not in raw:
             continue
         try:
             spec = NetSpec.model_validate(raw)
-        except ValidationError:
+        except ValidationError as exc:
+            NET_LOAD_ERRORS[path.stem] = str(exc)
             continue
         out[path.stem] = spec
     return out

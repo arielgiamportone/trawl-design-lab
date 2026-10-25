@@ -1,0 +1,54 @@
+# Fuentes del catálogo de redes FAO
+
+Registro de la búsqueda y digitalización del catálogo de redes (Fase 12): qué documentos públicos
+de la FAO traen planos de redes de arrastre, qué se transcribió de cada uno, qué se supuso y por
+qué. Cada valor de cada red lleva además su propia procedencia (documento, página y figura) en el
+archivo de la red (`src/trawlkit/data/nets/<id>.yaml`).
+
+## Alcance de la búsqueda
+
+Los dos catálogos clásicos de la FAO no se encontraron en línea como texto completo:
+el *FAO Catalogue of Fishing Gear Designs* {cite:p}`faocatalogue` y el *FAO Catalogue of
+Small-Scale Fishing Gear* {cite:p}`faosmallscale1987`. Tampoco el *Fisheries Technical Paper 189*,
+*Bottom trawls for small-scale fishing* (Brabant y Nédélec, 1979), del que sólo hay registros de
+biblioteca. La búsqueda se hizo en fao.org (`fao.org/4/…`, `fao.org/docrep/…`) y en el
+repositorio abierto de la FAO, entre octubre de 2026 y la fecha de este registro, con consultas
+sobre planos de arrastre de fondo, de gran abertura, de pareja y pelágicos.
+
+Los documentos con planos legibles que sí están publicados son los de la tabla. Todos usan la
+notación de la FAO para planos de red: mallas de cada borde, alto en mallas, mallero estirado,
+material y Rtex del hilo, cortes (`AB`, `1N2B`…) y largos de relingas en metros.
+
+## Documentos
+
+| Documento | Clave | URL | Planos de red | Otros |
+|---|---|---|---|---|
+| Prado y Dremière (1990), *Fisherman's Workbook*, FAO/Fishing News Books | `prado1990` | https://www.fao.org/4/ah827e/AH827E04.htm | Arrastre de fondo de 2 paneles para 50–70 hp (fig. AH827E132); arrastre pelágico de 4 paneles para 120–150 hp (fig. AH827E133) | Aparejo de ambos |
+| Pajot y Crockett (1980), *Fishing trials with high-opening bottom trawls in Palk Bay, Tamil Nadu*, BOBP/WP/10 | `bobpwp10` | https://www.fao.org/4/ad950e/ad950e00.pdf | Ap. 3: gran abertura, un barco, 360 mallas de 160 mm; ap. 5: pareja, 480 × 160 mm; ap. 6: pareja, 680 × 60 mm | Ap. 4: portón de 1,30 × 0,65 m, 50 kg |
+| Pajot y Crockett (1981), *Trials of two-boat bottom trawling in Bangladesh*, BOBP/WP/13 | `bobpwp13` | https://www.fao.org/4/ad953e/ad953e00.pdf | Ap. 3: pareja, 464 × 80 mm; ap. 4: pareja, 368 × 120 mm | Aparejo de pareja |
+| Pajot, Crockett, Pandurangan y Ramamoorthy (1982), *Further trials of mechanised trawling for food fish in Tamil Nadu*, BOBP/WP/20 | `bobpwp20` | https://www.fao.org/4/ad960e/ad960e00.pdf | Ap. 1: pescado y camarón, un barco; ap. 2: gran abertura, un barco; ap. 3: gran abertura, pareja | Portones y aparejo de los aps. 1 y 2 |
+| Schärfe (1983), *Midwater trawling trials for lantern fish… Gulf of Oman*, FI:DP/GLO/82/001 | `scharfe1983` | https://www.fao.org/4/x6567e/x6567e00.htm | Aps. 5 a 8: arrastres pelágicos de 4 paneles (krill 1420 × 200 mm; Harstad 1436 × 200 mm; krill con boca de 800 y 1600 mm) | Aparejo |
+
+Documentos revisados que **no** traen planos de red completos:
+- BOBP/WP/21 (cubierta y maquinaria);
+- BOBP/REP/37 (sólo una tabla de especificaciones generales);
+- BOBP/MIS/04 (selectividad del copo, sin plano);
+- el *Fisheries Technical Paper 506* (descripción general de artes).
+
+## Criterios de digitalización
+
+- **Transcripto**: valor leído en la figura (mallas, alto, mallero, Rtex, cortes, relingas).
+- **Derivado**: calculado de valores transcriptos, con la fórmula en la nota; por ejemplo, el
+  diámetro del hilo a partir del Rtex y el material, o el U1 a partir del largo de relinga y las
+  mallas del borde.
+- **Supuesto**: valor que el plano no da y el motor necesita, por ejemplo el U1 del cuerpo. Va
+  marcado y con la razón; nunca sin marca.
+- Las redes cuyas lecturas no cierran con el validador quedan en estado `draft` y no se publican
+  en la aplicación hasta resolverse.
+- **Derechos**: los documentos son © FAO. El catálogo guarda sólo los datos técnicos transcriptos
+  con su cita y enlace; no reproduce las figuras.
+
+## Registro por red
+
+Se completa a medida que se digitaliza cada red: lecturas dudosas, supuestos y resultado del
+validador.

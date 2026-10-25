@@ -1156,6 +1156,32 @@ export interface components {
             ballast_kg?: number | null;
             /** Notes */
             notes?: string[];
+            /** Family */
+            family?: ("bottom" | "semi_pelagic" | "pelagic") | null;
+            /** Rig */
+            rig?: ("otter" | "pair") | null;
+            /**
+             * Vessel Hp
+             * @description Potencia del buque de diseño [hp] (mín, máx)
+             */
+            vessel_hp?: [
+                number,
+                number
+            ] | null;
+            /** Target Species */
+            target_species?: string | null;
+            /**
+             * Status
+             * @default published
+             * @enum {string}
+             */
+            status: "published" | "draft";
+            /** Sources */
+            sources?: components["schemas"]["SourceDocument"][];
+            /** Provenance */
+            provenance?: {
+                [key: string]: components["schemas"]["Provenance"];
+            };
         } & {
             [key: string]: unknown;
         };
@@ -1400,6 +1426,33 @@ export interface components {
          * @enum {string}
          */
         PropellerType: "fixed_pitch" | "fixed_pitch_nozzle" | "variable_pitch" | "variable_pitch_nozzle";
+        /**
+         * Provenance
+         * @description Procedencia de un valor: documento (clave bibliográfica), página, figura y tipo.
+         */
+        Provenance: {
+            /** @default transcribed */
+            kind: components["schemas"]["ProvenanceKind"];
+            /**
+             * Document
+             * @description Clave de docs/referencias.bib
+             */
+            document?: string | null;
+            /** Page */
+            page?: string | null;
+            /** Figure */
+            figure?: string | null;
+            /** Note */
+            note?: string | null;
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * ProvenanceKind
+         * @description Cómo se obtuvo un valor de una spec.
+         * @enum {string}
+         */
+        ProvenanceKind: "excel" | "transcribed" | "derived" | "assumed";
         /**
          * Rope
          * @description Cabo o relinga.
@@ -1792,6 +1845,32 @@ export interface components {
             estimated_s: number;
             /** Runtime S */
             runtime_s: number;
+        };
+        /**
+         * SourceDocument
+         * @description Documento fuente de una spec digitalizada.
+         */
+        SourceDocument: {
+            /**
+             * Key
+             * @description Clave de docs/referencias.bib
+             */
+            key: string;
+            /** Title */
+            title: string;
+            /** Url */
+            url?: string | null;
+            /**
+             * Accessed
+             * @description Fecha de consulta (AAAA-MM-DD)
+             */
+            accessed?: string | null;
+            /** Figure */
+            figure?: string | null;
+            /** Page */
+            page?: string | null;
+        } & {
+            [key: string]: unknown;
         };
         /**
          * Species

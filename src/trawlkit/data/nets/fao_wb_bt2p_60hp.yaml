@@ -1,0 +1,938 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: fao_wb_bt2p_60hp
+name: Arrastre de fondo de 2 paneles, 50–70 hp (FAO Fisherman's Workbook)
+description: Red de arrastre de fondo de dos caras para buques de 50–70 hp, con alas de 120 mm, cielo
+  en el dorso, cuerpo de 80–40 mm y copo de 40 mm. Plano de la FAO reproducido en el Fisherman's Workbook
+  (Prado y Dremière 1990).
+source: 'Fisherman''s Workbook — Fishing gear and operations: 2-panel bottom trawl (https://www.fao.org/4/ah827e/AH827E04.htm)'
+family: bottom
+rig: otter
+vessel_hp:
+- 50
+- 70
+target_species: peces demersales y camarón (pesca costera)
+status: published
+sources:
+- key: prado1990
+  title: 'Fisherman''s Workbook — Fishing gear and operations: 2-panel bottom trawl'
+  url: https://www.fao.org/4/ah827e/AH827E04.htm
+  accessed: '2026-10-25'
+  figure: AH827E132
+  page: Fishing gear and operations (cap. 4)
+panels:
+- id: A
+  plane: upper
+  section: wing_tip
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 3
+  meshes_bottom: 30
+  meshes_depth: 18
+  hanging_ratio: 0.4
+  count: 2
+  fao_cut: 1N2B / AB
+- id: C
+  plane: upper
+  section: wing
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 30
+  meshes_bottom: 55
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 2
+  fao_cut: 1N2B / AB
+- id: E
+  plane: upper
+  section: square
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 150
+  meshes_bottom: 130
+  meshes_depth: 20
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: G1
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 130
+  meshes_bottom: 120
+  meshes_depth: 10
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: G2
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 80.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 180
+  meshes_bottom: 130
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+  note: Rtex 625 escrito una vez para el grupo de 80, 60 y 40 mm.
+- id: G3
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 174
+  meshes_bottom: 124
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: G4
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 186
+  meshes_bottom: 86
+  meshes_depth: 100
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: I
+  plane: upper
+  section: codend
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 150
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: AN
+  note: El plano agrega un refuerzo/bolsa de izado de 120 mm, PA Ø3, 54 × 20 mallas.
+- id: B
+  plane: lower
+  section: wing_tip
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 2
+  meshes_bottom: 29
+  meshes_depth: 18
+  hanging_ratio: 0.4
+  count: 2
+  fao_cut: 1N2B
+- id: D
+  plane: lower
+  section: wing
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 29
+  meshes_bottom: 53
+  meshes_depth: 70
+  hanging_ratio: 0.4
+  count: 2
+  fao_cut: 1N4B / AB
+- id: F
+  plane: lower
+  section: belly
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 130
+  meshes_bottom: 120
+  meshes_depth: 10
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: H2
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 80.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 180
+  meshes_bottom: 130
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: H3
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 174
+  meshes_bottom: 124
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: H4
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 0.95
+  rtex: 625.0
+  meshes_top: 186
+  meshes_bottom: 86
+  meshes_depth: 100
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: 1N2B
+- id: J
+  plane: lower
+  section: codend
+  material: PA
+  mesh_mm: 40.0
+  twine_diameter_mm: 1.15
+  rtex: 910.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 150
+  hanging_ratio: 0.4
+  count: 1
+  fao_cut: AN
+headrope:
+  name: lima
+  length_m: 18.9
+  diameter_mm: 12
+  wing_m: 8.5
+  bosom_m: 1.9
+  description: PP Ø12 / combinado Ø12
+  construction: combinado_12_acero6x24_7
+footrope:
+  name: burlón
+  length_m: 23.2
+  diameter_mm: 14
+  wing_m: 11.0
+  bosom_m: 1.2
+  description: PP Ø14 / combinado Ø12
+  construction: combinado_14_acero6x24_7
+floats:
+  count: 12
+  diameter_mm: 130
+ballast_kg: 15.0
+rigging:
+  doors: portones de 1,30 × 0,65 m, 40–60 kg
+  warp: acero Ø9 mm
+  sweeps: 20,00–30,00 m combinado Ø12–14
+  bridles: superior 10,00 m combinado Ø10; inferior 9,00 m combinado Ø12 + cadena de reglaje 1,00 m
+notes:
+- 'Lectura de la figura AH827E132 (450 px): números legibles; los empalmes con cambio de mallero cierran
+  (120×120 = 180×80; 130×80 ≈ 174×60; 124×60 = 186×40).'
+- 'La bocana del dorso (40 mallas) y del vientre (24 mallas) cierran exactamente con las alas: 55 + 40
+  + 55 = 150 y 53 + 24 + 53 = 130.'
+provenance:
+  panels.A.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.A.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.A.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.A.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.C.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.C.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.C.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.C.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.C.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.C.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.C.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.C.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.E.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.E.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.E.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.G1.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G1.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.G1.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.G2.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G2.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.G2.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.G3.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G3.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.G3.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.G4.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.G4.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.G4.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.I.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.I.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.I.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.B.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.B.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.B.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.B.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.D.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.D.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.D.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.D.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.D.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.D.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.D.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.D.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.F.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.F.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.F.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.H2.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H2.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.H2.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.H3.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H3.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.H3.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.H4.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.H4.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 625
+  panels.H4.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  panels.J.mesh_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.rtex:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.meshes_top:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.meshes_bottom:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.meshes_depth:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.count:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  panels.J.twine_diameter_mm:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PA); Rtex 910
+  panels.J.hanging_ratio:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: 'U1 de la bocana del dorso: 1,90 m de relinga sobre 40 mallas de 120 mm (1,90 / 4,80 = 0,40);
+      el plano no da U1 por paño, se usa en toda la red.'
+  headrope.length_m:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  headrope.diameter_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  footrope.length_m:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  footrope.diameter_mm:
+    kind: transcribed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+  floats.count:
+    kind: assumed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: el plano indica 9–15 boyas de Ø13 cm (o 3–4 de Ø20 cm); se toma 12
+  floats.diameter_mm:
+    kind: assumed
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: el plano indica 9–15 boyas de Ø13 cm (o 3–4 de Ø20 cm); se toma 12
+  ballast_kg:
+    kind: derived
+    document: prado1990
+    page: Fishing gear and operations (cap. 4)
+    figure: AH827E132
+    note: '8–14 kg en el burlón más 2–3 kg en cada punta: 11 + 2 × 2 = 15 kg'

@@ -40,3 +40,4 @@ parts:
   - caption: Referencias
     chapters:
       - file: bibliografia
+      - file: catalogo_fuentes

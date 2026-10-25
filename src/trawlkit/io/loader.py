@@ -34,11 +34,22 @@ def load_yaml(path: Path | str, model: type[T]) -> T:
     return model.model_validate(raw)
 
 
+#: Carpeta del catálogo de redes digitalizadas (Fase 12); la FAO A-3 sigue en ``DATA_DIR``.
+NETS_DIR = DATA_DIR / "nets"
+
+
+def net_files() -> list[Path]:
+    """Archivos de redes: los de ``DATA_DIR`` con paneles y los de ``DATA_DIR/nets``."""
+    return sorted(DATA_DIR.glob("*.yaml")) + sorted(NETS_DIR.glob("*.yaml"))
+
+
 def load_net(name_or_path: str | Path) -> NetSpec:
-    """Carga una red por nombre de preset (``fao_a3_standard``) o por ruta."""
+    """Carga una red por nombre de preset (``fao_a3_standard``, ``bobp_wp13_ho80``) o por ruta."""
     p = Path(name_or_path)
     if not p.exists():
         p = DATA_DIR / f"{name_or_path}.yaml"
+        if not p.exists():
+            p = NETS_DIR / f"{name_or_path}.yaml"
     return load_yaml(p, NetSpec)
 
 

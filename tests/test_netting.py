@@ -420,5 +420,8 @@ def test_material_catalogue_lookup() -> None:
     assert_close(weight_in_water_coefficient(1140, 1025), 1 - 1025 / 1140)
     assert abs(weight_in_water_coefficient(1140) - pa.weight_in_water_coefficient_seawater) < 0.002
     assert pa.to_dict()["material"] == "PA"
+    # El libro sólo trae PA; PE, PP y PES se agregan como polímeros genéricos (Fase 12).
+    pe = find_material(mats, "PE")
+    assert pe.id == "pe_generic" and pe.density_kg_m3 == 950
     with pytest.raises(KeyError):
-        find_material(mats, "PE")
+        find_material(mats, "KEVLAR")

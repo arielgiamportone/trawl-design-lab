@@ -52,13 +52,26 @@ class Material:
         return asdict(self)
 
 
+#: Polímeros que el libro Excel no trae (sólo tiene PA): densidad usual [kg/m³] para las redes
+#: del catálogo FAO (Fase 12). PE: polietileno; PP: polipropileno; PES: poliéster.
+POLYMER_DENSITY_KG_M3: dict[str, float] = {"PE": 950.0, "PP": 910.0, "PES": 1380.0}
+
+
 def materials_from_catalogue(catalogue: Catalogue) -> tuple[Material, ...]:
-    """Convierte el catálogo genérico (``load_catalogue("materials")``) en :class:`Material`."""
+    """Convierte el catálogo genérico (``load_catalogue("materials")``) en :class:`Material`.
+
+    Agrega una entrada genérica (sólo densidad) por cada polímero de
+    :data:`POLYMER_DENSITY_KG_M3` que el catálogo no tenga.
+    """
     fields = {f for f in Material.__dataclass_fields__}
     out: list[Material] = []
     for item in catalogue.items:
         kwargs = {k: v for k, v in item.items() if k in fields}
         out.append(Material(**kwargs))
+    present = {m.material.upper() for m in out}
+    for name, rho in POLYMER_DENSITY_KG_M3.items():
+        if name not in present:
+            out.append(Material(id=f"{name.lower()}_generic", material=name, density_kg_m3=rho))
     return tuple(out)
 
 

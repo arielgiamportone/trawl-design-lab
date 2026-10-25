@@ -197,8 +197,22 @@ def _float_positions(
     return tuple(-total / 2.0 + total * (k + 0.5) / count for k in range(count))
 
 
+def _rope_pieces(spec: NetSpec, which: str) -> tuple[float, float] | None:
+    """(ala, bocana) de la relinga según el plano, si la spec los trae (redes del catálogo)."""
+    rope = getattr(spec, which)
+    extra = (rope.model_extra or {}) if rope is not None else {}
+    wing, bosom = extra.get("wing_m"), extra.get("bosom_m")
+    if wing is None or bosom is None:
+        return None
+    return float(wing), float(bosom)
+
+
 def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> Rigging:
-    """Aparejo de la red estándar a partir del resultado del motor (modo del caso)."""
+    """Aparejo de la red estándar a partir del resultado del motor (modo del caso).
+
+    Las relingas salen del motor (largo corregido de ala y bocana), salvo que la spec traiga los
+    largos del plano (``wing_m`` y ``bosom_m`` de la relinga, redes del catálogo).
+    """
     dims = r.dimensions.std
     fl = r.floats
     dist = fl.distribution
@@ -211,6 +225,14 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
     else:
         buoy = float(fl.flotation_total_kgf) / max(fl.count, 1)
     bd = r.ballast.distribution_max
+    head = _rope_pieces(r.case.net, "headrope") or (
+        float(dims.headrope.wing_corrected_m),
+        float(dims.headrope.bosom_corrected_m),
+    )
+    foot = _rope_pieces(r.case.net, "footrope") or (
+        float(dims.footrope.wing_corrected_m),
+        float(dims.footrope.bosom_corrected_m),
+    )
     return Rigging(
         door_spread_m=float(r.doors.spread_m if door_spread_m is None else door_spread_m),
         upper_bridle_m=float(r.bridles.lengths.upper_m),
@@ -219,10 +241,10 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         # 0,71 m más larga que la superior —más de lo que absorbe la punta de ala— y floja.
         lower_bridle_m=float(r.bridles.lengths.upper_m),
         sweeps_m=float(r.bridles.sweeps_m),
-        headrope_wing_m=float(dims.headrope.wing_corrected_m),
-        headrope_bosom_m=float(dims.headrope.bosom_corrected_m),
-        footrope_wing_m=float(dims.footrope.wing_corrected_m),
-        footrope_bosom_m=float(dims.footrope.bosom_corrected_m),
+        headrope_wing_m=head[0],
+        headrope_bosom_m=head[1],
+        footrope_wing_m=foot[0],
+        footrope_bosom_m=foot[1],
         headrope_diameter_mm=float(fl.headrope_rope.diameter_mm),
         footrope_diameter_mm=float(r.ballast.footrope_rope.diameter_mm),
         headrope_water_kgf_m=float(fl.headrope_weight_water_kgf) / float(dims.headrope_m),
@@ -233,8 +255,8 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         float_cd=float(np.mean(fl.cd)),
         float_positions_m=_float_positions(
             int(fl.count),
-            float(dims.headrope.wing_corrected_m),
-            float(dims.headrope.bosom_corrected_m),
+            head[0],
+            head[1],
             dist.on_bosom,
             dist.front_fifth,
             dist.spacing_front_fifth_m,

@@ -2698,6 +2698,93 @@
       },
       "type": "array",
       "title": "Notes"
+     },
+     "family": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "bottom",
+         "semi_pelagic",
+         "pelagic"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Family"
+     },
+     "rig": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "otter",
+         "pair"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rig"
+     },
+     "vessel_hp": {
+      "anyOf": [
+       {
+        "prefixItems": [
+         {
+          "type": "number"
+         },
+         {
+          "type": "number"
+         }
+        ],
+        "type": "array",
+        "maxItems": 2,
+        "minItems": 2
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel Hp",
+      "description": "Potencia del buque de diseño [hp] (mín, máx)"
+     },
+     "target_species": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Target Species"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "published",
+       "draft"
+      ],
+      "title": "Status",
+      "default": "published"
+     },
+     "sources": {
+      "items": {
+       "$ref": "#/components/schemas/SourceDocument"
+      },
+      "type": "array",
+      "title": "Sources"
+     },
+     "provenance": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/Provenance"
+      },
+      "type": "object",
+      "title": "Provenance"
      }
     },
     "additionalProperties": true,
@@ -3216,6 +3303,74 @@
     ],
     "title": "PropellerType",
     "description": "Tipo de hélice (nomenclatura del modelo original)."
+   },
+   "Provenance": {
+    "properties": {
+     "kind": {
+      "$ref": "#/components/schemas/ProvenanceKind",
+      "default": "transcribed"
+     },
+     "document": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Document",
+      "description": "Clave de docs/referencias.bib"
+     },
+     "page": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Page"
+     },
+     "figure": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Figure"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "title": "Provenance",
+    "description": "Procedencia de un valor: documento (clave bibliográfica), página, figura y tipo."
+   },
+   "ProvenanceKind": {
+    "type": "string",
+    "enum": [
+     "excel",
+     "transcribed",
+     "derived",
+     "assumed"
+    ],
+    "title": "ProvenanceKind",
+    "description": "Cómo se obtuvo un valor de una spec."
    },
    "Rope": {
     "properties": {
@@ -4132,6 +4287,72 @@
     ],
     "title": "SimulateResponse",
     "description": "Resultado de ``POST /simulate``."
+   },
+   "SourceDocument": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key",
+      "description": "Clave de docs/referencias.bib"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     },
+     "accessed": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Accessed",
+      "description": "Fecha de consulta (AAAA-MM-DD)"
+     },
+     "figure": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Figure"
+     },
+     "page": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Page"
+     }
+    },
+    "additionalProperties": true,
+    "type": "object",
+    "required": [
+     "key",
+     "title"
+    ],
+    "title": "SourceDocument",
+    "description": "Documento fuente de una spec digitalizada."
    },
    "Species": {
     "properties": {

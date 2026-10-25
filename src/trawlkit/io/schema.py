@@ -9,7 +9,7 @@ crece.
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -121,6 +121,40 @@ class FloatSpec(_Model):
     total_buoyancy_kgf: float | None = None
 
 
+class ProvenanceKind(StrEnum):
+    """Cómo se obtuvo un valor de una spec."""
+
+    EXCEL = "excel"  # celda del libro Excel original (``source_cells``)
+    TRANSCRIBED = "transcribed"  # leído en una figura o tabla de un documento
+    DERIVED = "derived"  # calculado a partir de valores transcriptos (fórmula en ``note``)
+    ASSUMED = "assumed"  # el documento no lo da y el motor lo necesita (razón en ``note``)
+
+
+class Provenance(_Model):
+    """Procedencia de un valor: documento (clave bibliográfica), página, figura y tipo."""
+
+    kind: ProvenanceKind = ProvenanceKind.TRANSCRIBED
+    document: str | None = Field(default=None, description="Clave de docs/referencias.bib")
+    page: str | None = None
+    figure: str | None = None
+    note: str | None = None
+
+
+class SourceDocument(_Model):
+    """Documento fuente de una spec digitalizada."""
+
+    key: str = Field(description="Clave de docs/referencias.bib")
+    title: str
+    url: str | None = None
+    accessed: str | None = Field(default=None, description="Fecha de consulta (AAAA-MM-DD)")
+    figure: str | None = None
+    page: str | None = None
+
+
+NetFamily = Literal["bottom", "semi_pelagic", "pelagic"]
+NetRig = Literal["otter", "pair"]
+
+
 class NetSpec(_Model):
     """Especificación completa de una red de arrastre."""
 
@@ -136,6 +170,17 @@ class NetSpec(_Model):
     floats: FloatSpec | None = None
     ballast_kg: float | None = None
     notes: list[str] = Field(default_factory=list)
+    # --- catálogo (Fase 12) -------------------------------------------------------------
+    family: NetFamily | None = None
+    rig: NetRig | None = None
+    vessel_hp: tuple[float, float] | None = Field(
+        default=None, description="Potencia del buque de diseño [hp] (mín, máx)"
+    )
+    target_species: str | None = None
+    status: Literal["published", "draft"] = "published"
+    sources: list[SourceDocument] = Field(default_factory=list)
+    #: Procedencia por valor, por ruta de campo (``panels.C.meshes_top``, ``headrope.length_m``).
+    provenance: dict[str, Provenance] = Field(default_factory=dict)
 
 
 class Vessel(_Model):

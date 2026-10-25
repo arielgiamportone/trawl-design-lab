@@ -72,7 +72,7 @@ from dataclasses import dataclass, field
 import numpy as np
 import numpy.typing as npt
 
-from trawlkit.drawing.layout import NetLayout, PanelShape, layout_net
+from trawlkit.drawing.layout import Band, NetLayout, PanelShape, layout_net
 from trawlkit.io.schema import NetSpec, Panel
 from trawlkit.netting import orientation_coefficients
 
@@ -293,16 +293,93 @@ def _collapses_top(panel: Panel) -> bool:
     return panel.section.value == "wing_tip" and panel.meshes_top <= 0.15 * panel.meshes_bottom
 
 
+_FORCE_SIGMA_SEAMS = False
+
+
+def _band_rows(
+    bands_u: Sequence[Band], bands_l: Sequence[Band], resolution: int
+) -> tuple[dict[str, list[FloatArray]], dict[str, list[FloatArray]], bool]:
+    """Filas de nodos de cada franja de dorso y vientre (fracciones del alto de la franja).
+
+    Con la misma cantidad de franjas (la FAO A-3) cada par de franjas lleva
+    :func:`_rows_for` filas parejas, y las costuras se arman franja por franja. Si las franjas
+    son distintas (cielo sólo en el dorso, alas de distinto largo), se trabaja en la posición
+    relativa a lo largo de la red ``σ = y / L`` de cada plano: los bordes de franja de los dos
+    planos parten el largo en tramos, cada tramo lleva las mismas filas en los dos planos, y la
+    costura une nodos de igual ``σ``. Devuelve también las ``σ`` de cada fila.
+    """
+    same = len(bands_u) == len(bands_l) and not _FORCE_SIGMA_SEAMS
+    planes = {"upper": bands_u, "lower": bands_l}
+    r_out: dict[str, list[FloatArray]] = {"upper": [], "lower": []}
+    s_out: dict[str, list[FloatArray]] = {"upper": [], "lower": []}
+    length = {pl: (b[-1].y_bottom - b[0].y_top) or 1.0 for pl, b in planes.items()}
+    if same:
+        for bu, bl in zip(bands_u, bands_l, strict=True):
+            n = _rows_for(max(bu.y_bottom - bu.y_top, bl.y_bottom - bl.y_top), resolution)
+            r = np.linspace(0.0, 1.0, n + 1)
+            for pl, b in (("upper", bu), ("lower", bl)):
+                r_out[pl].append(r)
+                y0 = b.y_top - planes[pl][0].y_top
+                s_out[pl].append((y0 + r * (b.y_bottom - b.y_top)) / length[pl])
+        return r_out, s_out, True
+    cuts: list[float] = []
+    for pl, bs in planes.items():
+        for b in bs:
+            for y in (b.y_top, b.y_bottom):
+                cuts.append((y - bs[0].y_top) / length[pl])
+    cuts.sort()
+    sigma = [0.0]
+    for c in cuts:
+        if c - sigma[-1] > 2e-3:
+            sigma.append(c)
+    sigma[-1] = 1.0
+    span = max(length.values())
+    k = [
+        max(1, round(resolution * (b - a) * span / 9.0))
+        for a, b in zip(sigma, sigma[1:], strict=False)
+    ]
+
+    def snap(v: float) -> int:
+        return int(np.argmin(np.abs(np.asarray(sigma) - v)))
+
+    # Al menos 2 filas por franja: se reparten en sus tramos (iguales en los dos planos).
+    for _ in range(4):
+        changed = False
+        for pl, bs in planes.items():
+            for b in bs:
+                i0 = snap((b.y_top - bs[0].y_top) / length[pl])
+                i1 = snap((b.y_bottom - bs[0].y_top) / length[pl])
+                if i1 > i0 and sum(k[i0:i1]) < 2:
+                    k[int(np.argmax([sigma[j + 1] - sigma[j] for j in range(i0, i1)])) + i0] += 1
+                    changed = True
+        if not changed:
+            break
+    for pl, bs in planes.items():
+        for b in bs:
+            i0 = snap((b.y_top - bs[0].y_top) / length[pl])
+            i1 = max(snap((b.y_bottom - bs[0].y_top) / length[pl]), i0 + 1)
+            pts = [sigma[i0]]
+            for j in range(i0, min(i1, len(k))):
+                pts.extend(np.linspace(sigma[j], sigma[j + 1], k[j] + 1)[1:].tolist())
+            sv = np.asarray(pts)
+            r_out[pl].append((sv - sv[0]) / max(sv[-1] - sv[0], 1e-12))
+            s_out[pl].append(sv)
+    return r_out, s_out, False
+
+
 def _rows_for(height_m: float, resolution: int) -> int:
     return max(2, round(resolution * height_m / 9.0))
 
 
 def _grid_positions(
-    shape: PanelShape, s_cols: FloatArray, rows: int, inner_to_outer: bool
+    shape: PanelShape, s_cols: FloatArray, r_rows: FloatArray, inner_to_outer: bool
 ) -> tuple[FloatArray, FloatArray]:
-    """Posiciones 2D del plano (x lateral, y boca→bolsa) de la grilla de un panel."""
+    """Posiciones 2D del plano (x lateral, y boca→bolsa) de la grilla de un panel.
+
+    ``r_rows`` son las fracciones del alto (0 = boca, 1 = bolsa) de cada fila de nodos.
+    """
     s = np.asarray(s_cols, dtype=float)
-    r = np.linspace(0.0, 1.0, rows + 1)
+    r = np.asarray(r_rows, dtype=float)
     if inner_to_outer and shape.side == "left":
         # col 0 = interior (x mayor) → exterior (x menor)
         xt = shape.x_top[1] - s * shape.width_top
@@ -357,16 +434,13 @@ def build_model(
     grids: list[PanelGrid] = []
 
     bands = {pl: layout.bands[pl] for pl in planes}
-    if len(bands["upper"]) != len(bands["lower"]):
-        raise ValueError("dorso y vientre deben tener la misma cantidad de franjas")
-    band_rows = [
-        _rows_for(max(bu.y_bottom - bu.y_top, bl.y_bottom - bl.y_top), resolution)
-        for bu, bl in zip(bands["upper"], bands["lower"], strict=True)
-    ]
+    band_r, band_s, same_bands = _band_rows(bands["upper"], bands["lower"], resolution)
 
-    def add_grid(shape: PanelShape, plane: str, s_cols: FloatArray, rows: int) -> PanelGrid:
+    def add_grid(
+        shape: PanelShape, plane: str, s_cols: FloatArray, r_rows: FloatArray
+    ) -> PanelGrid:
         panel = shape.panel
-        xx, yy = _grid_positions(shape, s_cols, rows, inner_to_outer=shape.side != "center")
+        xx, yy = _grid_positions(shape, s_cols, r_rows, inner_to_outer=shape.side != "center")
         u1, u2 = _u1u2(panel)
         mesh_m = panel.mesh_mm / 1000.0
         collapse = _collapses_top(panel)
@@ -414,7 +488,7 @@ def build_model(
             shape.side,
             ids,
             np.asarray(s_cols, float),
-            np.linspace(0, 1, rows + 1),
+            np.asarray(r_rows, dtype=float),
         )
         grids.append(g)
         return g
@@ -430,7 +504,7 @@ def build_model(
         central = list(layout.central(plane))
         right = list(layout.side_chain(plane, "right"))
         left = list(layout.side_chain(plane, "left"))
-        rows_of = {id(b.panel): band_rows[k] for k, b in enumerate(bands[plane])}
+        rows_of = {id(b.panel): band_r[plane][k] for k, b in enumerate(bands[plane])}
         first = central[0]
         last_wing = right[-1]
         f_right = (last_wing.x_bottom[0] - first.x_top[0]) / first.width_top
@@ -479,11 +553,25 @@ def build_model(
 
     up, lo = per_plane["upper"], per_plane["lower"]
     for edges_u, edges_l in ((up.outer_r, lo.outer_r), (up.outer_l, lo.outer_l)):
-        for k_band, (a_e, b_e) in enumerate(zip(edges_u, edges_l, strict=True)):
-            if k_band == 0 and (up.collapsed or lo.collapsed):
-                # Las puntas de lima y burlón quedan separadas: las une la barra "wing_end".
-                a_e, b_e = a_e[1:], b_e[1:]
-            union_edges(a_e, b_e)
+        if same_bands:
+            for k_band, (a_e, b_e) in enumerate(zip(edges_u, edges_l, strict=True)):
+                if k_band == 0 and (up.collapsed or lo.collapsed):
+                    # Las puntas de lima y burlón quedan separadas: las une la barra "wing_end".
+                    a_e, b_e = a_e[1:], b_e[1:]
+                union_edges(a_e, b_e)
+            continue
+        # Franjas distintas en dorso y vientre: las filas de ambos planos están en las mismas
+        # posiciones relativas del largo (``_band_rows``); se cosen los nodos de igual posición.
+        at: dict[float, list[int]] = {}
+        for edges, s_list in ((edges_u, band_s["upper"]), (edges_l, band_s["lower"])):
+            for e, s_e in zip(edges, s_list, strict=True):
+                for node, s_node in zip(e.tolist(), s_e.tolist(), strict=True):
+                    at.setdefault(round(s_node, 9), []).append(int(node))
+        for s_key, nodes in at.items():
+            if s_key == 0.0 and (up.collapsed or lo.collapsed):
+                continue
+            for k in nodes[1:]:
+                uf.union(nodes[0], k)
     end = np.concatenate([up.codend_end, lo.codend_end])
     for k in end[1:].tolist():
         uf.union(int(end[0]), int(k))
