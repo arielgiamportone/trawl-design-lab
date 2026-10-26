@@ -1,5 +1,6 @@
 /** Cliente HTTP tipado para la API trawlkit (contrato en ../../openapi.json). */
 import { isPrepared, localRequest, preferLocal } from '../engine/offline';
+import { getLang, type Lang } from '../i18n';
 import type { Component } from '../lib/components';
 
 /** Ficha de ``GET /catalog/components/{kind}/{id}``: el componente, observaciones y genérico. */
@@ -163,7 +164,17 @@ async function errorOf(res: Response): Promise<ApiError> {
   return new ApiError(res.status, msg, detail);
 }
 
-async function request(path: string, init?: RequestInit): Promise<Response> {
+/**
+ * Agrega el idioma de la interfaz al pedido (``?lang=en``) para que la API y el motor del
+ * teléfono respondan los textos en ese idioma. El español es el idioma por defecto del motor.
+ */
+export function withLang(path: string, lang: Lang = getLang()): string {
+  if (lang === 'es') return path;
+  return `${path}${path.includes('?') ? '&' : '?'}lang=${lang}`;
+}
+
+async function request(rawPath: string, init?: RequestInit): Promise<Response> {
+  const path = withLang(rawPath);
   let res: Response;
   if (preferLocal()) {
     res = await localFetch(path, init);
@@ -196,7 +207,7 @@ export async function classroomRequest(
   if (init.body !== undefined) headers['Content-Type'] = 'application/json';
   let res: Response;
   try {
-    res = await fetch(`${apiBase()}/classroom${path}`, {
+    res = await fetch(`${apiBase()}/classroom${withLang(path)}`, {
       method: init.method ?? 'GET',
       headers,
       body: init.body === undefined ? undefined : JSON.stringify(init.body),

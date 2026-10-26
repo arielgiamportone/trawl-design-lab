@@ -1,13 +1,17 @@
-/** Formato numérico en español (coma decimal, punto de miles) con Intl es-AR. */
+/**
+ * Formato numérico según el idioma de la interfaz: en español coma decimal y punto de miles
+ * (``es-AR``); en inglés, al revés (``en-US``).
+ */
+import { getLang, locale } from '../i18n';
 
-const LOCALE = 'es-AR';
 const cache = new Map<string, Intl.NumberFormat>();
 
 function nf(opts: Intl.NumberFormatOptions): Intl.NumberFormat {
-  const key = JSON.stringify(opts);
+  const loc = locale();
+  const key = `${loc}|${JSON.stringify(opts)}`;
   let f = cache.get(key);
   if (!f) {
-    f = new Intl.NumberFormat(LOCALE, opts);
+    f = new Intl.NumberFormat(loc, opts);
     cache.set(key, f);
   }
   return f;
@@ -32,6 +36,22 @@ export function fmtFixed(value: number | null | undefined, digits = 1): string {
   return nf({ maximumFractionDigits: digits, minimumFractionDigits: 0 }).format(value);
 }
 
+/** Número con el formato del idioma activo y opciones de ``Intl`` (reemplaza ``toLocaleString``). */
+export function fmtNum(value: number | null | undefined, opts: Intl.NumberFormatOptions = {}): string {
+  if (value === null || value === undefined || !Number.isFinite(value)) return '—';
+  return nf(opts).format(value);
+}
+
+/** Fecha y hora con el formato del idioma activo. */
+export function fmtDate(date: Date, opts: Intl.DateTimeFormatOptions): string {
+  return date.toLocaleString(locale(), opts);
+}
+
+/** Separador decimal del idioma activo. */
+export function decimalSep(): string {
+  return getLang() === 'en' ? '.' : ',';
+}
+
 /** Porcentaje con signo (``+12,3 %``). */
 export function fmtPct(value: number | null | undefined, digits = 1): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return '—';
@@ -40,7 +60,7 @@ export function fmtPct(value: number | null | undefined, digits = 1): string {
     minimumFractionDigits: digits,
     signDisplay: 'exceptZero',
   }).format(value);
-  return `${s} %`;
+  return getLang() === 'en' ? `${s}%` : `${s} %`;
 }
 
 /** Diferencia absoluta con signo. */
@@ -65,18 +85,21 @@ export function fmtAxis(value: number): string {
 export function parseNumber(text: string): number | null {
   const t = text.trim().replace(/\s/g, '');
   if (!t) return null;
-  // «1.234,5» (es-AR con miles) → 1234.5; «1,5» → 1.5
-  const norm =
-    t.includes(',') && t.includes('.')
+  // Con los dos separadores, el último es el decimal: «1.234,5» (es) y «1,234.5» (en) → 1234.5;
+  // con uno solo, es el decimal: «1,5» y «1.5» → 1.5.
+  const both = t.includes(',') && t.includes('.');
+  const norm = !both
+    ? t.replace(',', '.')
+    : t.lastIndexOf(',') > t.lastIndexOf('.')
       ? t.replace(/\./g, '').replace(',', '.')
-      : t.replace(',', '.');
+      : t.replace(/,/g, '');
   if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(norm)) return null;
   const n = Number(norm);
   return Number.isFinite(n) ? n : null;
 }
 
-/** Número en formato editable (coma decimal, sin separador de miles). */
+/** Número en formato editable (separador decimal del idioma, sin separador de miles). */
 export function toInput(value: number | null | undefined): string {
   if (value === null || value === undefined) return '';
-  return String(value).replace('.', ',');
+  return String(value).replace('.', decimalSep());
 }

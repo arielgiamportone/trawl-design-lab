@@ -4,27 +4,13 @@ import { statusLabel } from '../lib/connection';
 import { DOCS_URL } from '../lib/docs';
 import type { UiMode } from '../lib/mode';
 import { applyThemePref, initialThemePref, type ThemePref } from '../lib/theme';
+import { LANGS, setLang, useLang, useT } from '../i18n';
+import { setUnits, useUnits, type UnitSystem } from '../lib/units';
 import { useConnection } from '../state/connectionContext';
 
-const THEMES: { value: ThemePref; label: string }[] = [
-  { value: 'auto', label: 'Auto' },
-  { value: 'light', label: 'Claro' },
-  { value: 'dark', label: 'Oscuro' },
-];
-
-const MODES: { value: UiMode; label: string; title: string }[] = [
-  {
-    value: 'simple',
-    label: 'Guiado',
-    title: 'Asistente paso a paso con diagnóstico en lenguaje llano',
-  },
-  { value: 'expert', label: 'Experto', title: 'Todos los parámetros, pestañas y herramientas' },
-  {
-    value: 'aula',
-    label: 'Aula UTN',
-    title: 'Ejercicios con corrección, laboratorios guiados, cursos y entregas',
-  },
-];
+const THEMES: ThemePref[] = ['auto', 'light', 'dark'];
+const MODES: UiMode[] = ['simple', 'expert', 'aula'];
+const SYSTEMS: UnitSystem[] = ['metric', 'imperial'];
 
 interface Props {
   mode: UiMode;
@@ -35,6 +21,9 @@ export function Header({ mode, onModeChange }: Props) {
   const [theme, setTheme] = useState<ThemePref>(initialThemePref);
   useEffect(() => applyThemePref(theme), [theme]);
   const conn = useConnection();
+  const T = useT();
+  const lang = useLang();
+  const system = useUnits();
   const status =
     conn.status === 'ok'
       ? conn.outdated
@@ -50,35 +39,31 @@ export function Header({ mode, onModeChange }: Props) {
     <header className="app-header">
       <div className="brand">
         <h1>
-          trawl-design-lab <span className="dot">·</span> Diseño de redes de arrastre
+          trawl-design-lab <span className="dot">·</span> {T.app.title}
         </h1>
       </div>
       <div className="header-tools">
-        <div className="segmented mode-switch" role="group" aria-label="Modo de la interfaz">
+        <div className="segmented mode-switch" role="group" aria-label={T.app.modesLabel}>
           {MODES.map((m) => (
             <button
-              key={m.value}
+              key={m}
               type="button"
-              aria-pressed={mode === m.value}
-              title={m.title}
-              onClick={() => onModeChange(m.value)}
+              aria-pressed={mode === m}
+              title={T.app.modes[m].title}
+              onClick={() => onModeChange(m)}
             >
-              {m.label}
+              {T.app.modes[m].label}
             </button>
           ))}
         </div>
         {DOCS_URL && (
           <a className="docs-link" href={DOCS_URL}>
-            Documentación
+            {T.app.docs}
           </a>
         )}
         <span
           className={`api-status ${status}`}
-          title={
-            conn.outdated
-              ? `${apiBase()}: la API es de otra versión que la app; algunas funciones pueden dar error hasta que se redespliegue`
-              : apiBase()
-          }
+          title={conn.outdated ? T.app.outdated(apiBase()) : apiBase()}
           role="status"
         >
           <span className="led" aria-hidden="true" />
@@ -86,18 +71,40 @@ export function Header({ mode, onModeChange }: Props) {
         </span>
         {conn.status === 'down' && (
           <button type="button" className="api-retry" onClick={conn.retry}>
-            Reintentar
+            {T.common.retry}
           </button>
         )}
-        <div className="segmented" role="group" aria-label="Tema de color">
-          {THEMES.map((t) => (
+        <div className="segmented" role="group" aria-label={T.units.language}>
+          {LANGS.map((l) => (
             <button
-              key={t.value}
+              key={l}
               type="button"
-              aria-pressed={theme === t.value}
-              onClick={() => setTheme(t.value)}
+              lang={l}
+              aria-pressed={lang === l}
+              title={l === 'es' ? 'Español' : 'English'}
+              onClick={() => setLang(l)}
             >
-              {t.label}
+              {l.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        <div className="segmented" role="group" aria-label={T.units.system}>
+          {SYSTEMS.map((u) => (
+            <button
+              key={u}
+              type="button"
+              aria-pressed={system === u}
+              title={u === 'metric' ? T.units.metricTitle : T.units.imperialTitle}
+              onClick={() => setUnits(u)}
+            >
+              {T.units[u]}
+            </button>
+          ))}
+        </div>
+        <div className="segmented" role="group" aria-label={T.app.themeLabel}>
+          {THEMES.map((t) => (
+            <button key={t} type="button" aria-pressed={theme === t} onClick={() => setTheme(t)}>
+              {T.app.themes[t]}
             </button>
           ))}
         </div>

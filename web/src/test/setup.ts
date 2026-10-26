@@ -1,9 +1,14 @@
+import './locale';
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
 import { afterEach } from 'vitest';
+import { setLang } from '../i18n';
+import { setUnits } from '../lib/units';
 
 afterEach(() => {
   cleanup();
+  setLang('es');
+  setUnits('metric');
   try {
     window.localStorage.clear();
   } catch {
