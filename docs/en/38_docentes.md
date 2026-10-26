@@ -23,7 +23,7 @@ from IPython.display import Markdown
 import _plots_v as PV
 from myst_nb import glue
 from trawlkit.teaching import bank, load_bank
-from trawlkit.teaching.bank import LEVEL_LABELS, level_label
+from trawlkit.teaching.bank import level_label
 from trawlkit.teaching.labs import load_labs
 
 EX = list(load_bank().values())
