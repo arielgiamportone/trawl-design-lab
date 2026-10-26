@@ -221,10 +221,13 @@ def test_binary_design_routes_offline() -> None:
 
 def test_phone_limits(monkeypatch: pytest.MonkeyPatch) -> None:
     """Las guardas del teléfono rechazan una simulación cara con 422, no la cuelgan."""
+    import os
+
     for key in offline.PHONE_LIMITS:
         monkeypatch.delenv(key, raising=False)
     offline.phone_limits()
     try:
+        assert all(os.environ[k] == v for k, v in offline.PHONE_LIMITS.items())
         status, out = offline.handle(
             "POST",
             "/simulate",
@@ -234,5 +237,6 @@ def test_phone_limits(monkeypatch: pytest.MonkeyPatch) -> None:
         status, _ = offline.handle("POST", "/optimize", json.dumps({"refine": True}))
         assert status == 422
     finally:
+        # phone_limits() escribió en os.environ: no debe quedar para otras pruebas.
         for key in offline.PHONE_LIMITS:
-            monkeypatch.delenv(key, raising=False)
+            os.environ.pop(key, None)
