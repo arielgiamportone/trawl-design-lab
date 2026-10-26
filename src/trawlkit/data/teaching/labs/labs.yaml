@@ -50,7 +50,7 @@ labs:
         en:
           title: A larger codend mesh
           instruction: >
-            In the "Panels" tab, change the mesh size of the two codend panels (I and J) from 40 to
+            In the "Panel editor" tab, change the mesh size of the two codend panels (I and J) from 40 to
             50 mm, without changing the number of meshes, and calculate again.
         target: {tab: paneles, hint: Editar los paños de la sección copo, en: {hint: Edit the panels of the codend section}}
         checks:
@@ -253,7 +253,7 @@ labs:
         instruction: Fije el caso actual con «Fijar A» en la pestaña «Comparar».
         en:
           title: The A-3 on 150 HP
-          instruction: Pin the current case with "Pin A" in the "Compare" tab.
+          instruction: In the "Compare" tab, pin the current result as A.
         target: {tab: comparar}
         questions:
           - {id: vmax, kind: number, prompt: "Velocidad máxima de la A-3", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed of the A-3"}}
