@@ -1,0 +1,110 @@
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { classroom, useSession } from '../../lib/classroom';
+import { loadJson, saveJson } from '../../lib/storage';
+import { Login } from './Login';
+import { Practice } from './Practice';
+import { StudentView } from './StudentView';
+import { TeacherView } from './TeacherView';
+
+type View = 'practica' | 'aula';
+const VIEW_KEY = 'trawl-design-lab:aula-view';
+const ROLE: Record<string, string> = {
+  student: 'alumno',
+  teacher: 'docente',
+  admin: 'administración',
+};
+
+/**
+ * Modo «Aula UTN» (Fase 17): práctica libre con el banco de ejercicios y los laboratorios (sin
+ * cuenta, también sin conexión) y el aula del curso (alumnos y docentes, en línea).
+ */
+export function Classroom() {
+  const session = useSession();
+  const [view, setViewState] = useState<View>(() => loadJson<View>(VIEW_KEY) ?? 'practica');
+  const setView = (v: View) => {
+    setViewState(v);
+    saveJson(VIEW_KEY, v);
+  };
+  return (
+    <div className="aula" data-testid="aula">
+      <div className="aula-top">
+        <h2 className="section-title">Aula UTN</h2>
+        <div className="segmented" role="group" aria-label="Sección del aula">
+          <button
+            type="button"
+            aria-pressed={view === 'practica'}
+            onClick={() => setView('practica')}
+          >
+            Práctica libre
+          </button>
+          <button type="button" aria-pressed={view === 'aula'} onClick={() => setView('aula')}>
+            {session ? 'Mis cursos' : 'Cursos (ingresar)'}
+          </button>
+        </div>
+        {session && (
+          <span className="aula-who">
+            {`${session.user.display_name} (${ROLE[session.user.role] ?? session.user.role})`}
+            <button
+              type="button"
+              className="btn ghost small"
+              onClick={() => void classroom.logout()}
+            >
+              Salir
+            </button>
+          </span>
+        )}
+      </div>
+      {view === 'practica' ? <Practice /> : <ClassArea />}
+    </div>
+  );
+}
+
+function ClassArea() {
+  const session = useSession();
+  const status = useQuery({
+    queryKey: ['aula', 'status'],
+    queryFn: () => classroom.status(),
+    staleTime: 60_000,
+    retry: false,
+  });
+  const me = useQuery({
+    queryKey: ['aula', 'me', session?.token],
+    queryFn: () => classroom.me(),
+    enabled: !!session && status.data?.enabled === true,
+    retry: false,
+  });
+  if (status.error)
+    return (
+      <p className="alert warn" role="status">
+        El aula necesita conexión con la API: {status.error.message}
+      </p>
+    );
+  if (!status.data) return <p className="empty">Consultando el aula…</p>;
+  if (!status.data.enabled)
+    return (
+      <p className="alert info" role="status">
+        {status.data.detail}
+      </p>
+    );
+  if (!session) return <Login />;
+  if (me.error) {
+    return (
+      <div>
+        <p className="alert error" role="alert">
+          {me.error.message}
+        </p>
+        <button type="button" className="btn" onClick={() => void classroom.logout()}>
+          Volver a ingresar
+        </button>
+      </div>
+    );
+  }
+  if (!me.data) return <p className="empty">Cargando…</p>;
+  const courses = me.data.courses;
+  return me.data.role === 'student' ? (
+    <StudentView courses={courses} />
+  ) : (
+    <TeacherView courses={courses} admin={me.data.role === 'admin'} />
+  );
+}

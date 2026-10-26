@@ -31,6 +31,12 @@ import batchRun from './fixtures/batch_run.json';
 import construction from './fixtures/construction.json';
 import economics from './fixtures/economics.json';
 import economicsCompare from './fixtures/economics_compare.json';
+import teachingExercise from './fixtures/teaching_exercise.json';
+import teachingExercises from './fixtures/teaching_exercises.json';
+import teachingGrade from './fixtures/teaching_grade.json';
+import teachingLab from './fixtures/teaching_lab.json';
+import teachingLabCheck from './fixtures/teaching_lab_check.json';
+import teachingLabs from './fixtures/teaching_labs.json';
 
 export const fixtures = {
   design,
@@ -63,6 +69,12 @@ export const fixtures = {
   construction,
   economics,
   economicsCompare,
+  teachingExercise,
+  teachingExercises,
+  teachingGrade,
+  teachingLab,
+  teachingLabCheck,
+  teachingLabs,
 };
 
 export interface Call {
@@ -71,7 +83,7 @@ export interface Call {
   body: unknown;
 }
 
-const json = (data: unknown, status = 200) =>
+export const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
 /** Reemplaza ``fetch`` por un doble que responde como la API con los fixtures grabados. */
@@ -79,6 +91,8 @@ export function mockApi(
   overrides: {
     design?: (body: Record<string, unknown>) => Response;
     contract?: string | null;
+    /** Rutas del aula (``/classroom/...``); sin esto, el aula está deshabilitada. */
+    classroom?: (path: string, method: string, body: unknown) => Response | undefined;
   } = {},
 ) {
   const calls: Call[] = [];
@@ -139,6 +153,19 @@ export function mockApi(
             ],
         generic: null,
       });
+    }
+    if (path === '/teaching/exercises') return json(teachingExercises);
+    if (path.startsWith('/teaching/exercises/')) return json(teachingExercise);
+    if (path === '/teaching/grade') return json(teachingGrade);
+    if (path === '/teaching/labs') return json(teachingLabs);
+    if (path === '/teaching/labs/check') return json(teachingLabCheck);
+    if (path.startsWith('/teaching/labs/')) return json(teachingLab);
+    if (path.startsWith('/classroom/')) {
+      const r = overrides.classroom?.(path.slice('/classroom'.length), method, body);
+      if (r) return r;
+      if (path === '/classroom/status')
+        return json({ enabled: false, detail: 'El aula no está habilitada en este servidor.' });
+      return json({ detail: 'El aula no está habilitada en este servidor.' }, 503);
     }
     if (path === '/design/bom') return json(bom);
     if (path === '/design/construction') return json(construction);

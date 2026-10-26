@@ -14,3 +14,6 @@ web/node_modules/
 web/dist/
 .env
 dist-wheel/
+# Base del aula de las E2E y de pruebas locales
+e2e-aula.db
+aula.db

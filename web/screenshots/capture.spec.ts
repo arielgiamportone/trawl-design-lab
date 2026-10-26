@@ -1,11 +1,13 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type APIRequestContext, type Locator, type Page } from '@playwright/test';
+import { E2E_ADMIN } from '../playwright.config';
 
 // Capturas de README y docs/web.md. Cada prueba deja un PNG en docs/screenshots/.
 const OUT = 'docs/screenshots';
+const API = `http://127.0.0.1:${process.env.E2E_API_PORT ?? 8000}/classroom`;
 
 async function start(
   page: Page,
-  opts: { mode: 'expert' | 'simple'; tab?: string; dark?: boolean },
+  opts: { mode: 'expert' | 'simple' | 'aula'; tab?: string; dark?: boolean },
 ) {
   await page.addInitScript((o) => {
     if (!sessionStorage.getItem('shot-init')) {
@@ -160,6 +162,104 @@ test.describe('escritorio', () => {
   });
 });
 
+/** Curso de muestra para la captura del docente: una tarea y tres alumnos con entregas. */
+async function sampleCourse(request: APIRequestContext): Promise<string> {
+  const post = async (path: string, data: unknown, token?: string) => {
+    const r = await request.post(`${API}${path}`, {
+      data,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    expect(r.ok(), await r.text()).toBe(true);
+    return (await r.json()) as Record<string, unknown>;
+  };
+  const admin = (await post('/auth/login', E2E_ADMIN)).token as string;
+  const course = await post(
+    '/courses',
+    { name: 'Tecnología de Artes de Pesca', term: '2026-2C' },
+    admin,
+  );
+  const a = await post(
+    `/courses/${String(course.id)}/assignments`,
+    {
+      title: 'TP 1: potencia y resistencia',
+      // Datos del libro para todos: así la captura muestra notas variadas y legibles.
+      per_student_data: false,
+      items: [
+        { kind: 'exercise', ref: 'potencia.fridman_tiro' },
+        { kind: 'exercise', ref: 'resistencia.aberdeen' },
+        { kind: 'lab', ref: 'lab.buque_y_velocidad', points: 2 },
+      ],
+    },
+    admin,
+  );
+  const students = [
+    ['Legajo 31.204', ['1185', '1592']],
+    ['Legajo 31.377', ['1185', '900']],
+    ['Legajo 31.512', ['1000', '']],
+  ] as const;
+  for (const [i, [name, answers]] of students.entries()) {
+    const s = await post('/auth/register', {
+      username: `alumno-captura-${Date.now()}-${i}`,
+      password: 'alumno-123',
+      display_name: name,
+      course_code: course.code,
+    });
+    const tok = s.token as string;
+    await post(
+      `/assignments/${String(a.id)}/items/0/submit`,
+      { answers: { ft_kgf: answers[0] } },
+      tok,
+    );
+    if (answers[1])
+      await post(
+        `/assignments/${String(a.id)}/items/1/submit`,
+        { answers: { rn_kgf: answers[1] } },
+        tok,
+      );
+  }
+  return admin;
+}
+
+test.describe('aula', () => {
+  test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('aula: planilla del docente', async ({ page, request }) => {
+    await sampleCourse(request);
+    await start(page, { mode: 'aula' });
+    await page.getByRole('button', { name: /Cursos \(ingresar\)/ }).click();
+    await page.getByLabel('Usuario').fill(E2E_ADMIN.username);
+    await page.getByLabel('Contraseña').fill(E2E_ADMIN.password);
+    await page.getByRole('button', { name: 'Ingresar', exact: true }).last().click();
+    await page
+      .getByRole('button', { name: /Tecnología de Artes de Pesca/ })
+      .last()
+      .click();
+    await page
+      .getByRole('button', { name: /TP 1: potencia/ })
+      .last()
+      .click();
+    await expect(page.getByTestId('grades').getByRole('row')).toHaveCount(4);
+    await shot(page, 'escritorio-aula-docente');
+  });
+
+  test('aula: laboratorio sobre la app', async ({ page }) => {
+    await start(page, { mode: 'aula' });
+    await page
+      .locator('.aula-lab')
+      .filter({ hasText: 'El paño y la resistencia' })
+      .getByRole('button', { name: 'Empezar' })
+      .click();
+    const panel = page.getByTestId('lab-panel');
+    await expect(panel).toContainText('Paso 1 de 3');
+    await expect(page.getByText('2,27').first()).toBeVisible({ timeout: 60_000 });
+    await panel.getByLabel(/Superficie sólida/).fill('38,75');
+    await panel.getByLabel(/Resistencia de la red a 3 kn/).fill('1592');
+    await panel.getByRole('button', { name: 'Comprobar con mi caso' }).click();
+    await expect(panel).toContainText('Paso cumplido.', { timeout: 30_000 });
+    await shot(page, 'escritorio-aula-laboratorio');
+  });
+});
+
 test.describe('teléfono', () => {
   test.use({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true });
 
@@ -177,6 +277,17 @@ test.describe('teléfono', () => {
     await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
     await expect(page.getByTestId('join-map')).toBeVisible();
     await shot(page, 'movil-guia-taller', page.getByTestId('assembly'));
+  });
+
+  test('ejercicio del aula en el teléfono', async ({ page }) => {
+    await start(page, { mode: 'aula' });
+    await page.getByRole('button', { name: /Tiro disponible de Fridman/ }).click();
+    await page.getByRole('button', { name: 'Datos del libro' }).click();
+    const ex = page.getByTestId('exercise');
+    await ex.getByLabel(/Tiro disponible/).fill('1185');
+    await ex.getByRole('button', { name: 'Corregir' }).click();
+    await expect(ex.getByTestId('grade')).toContainText('100 %');
+    await shot(page, 'movil-aula-ejercicio', ex);
   });
 
   test('sin conexión: motor del teléfono', async ({ page, context }) => {

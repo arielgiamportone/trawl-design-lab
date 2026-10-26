@@ -1,7 +1,7 @@
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { HEAVY_TABS, useLowData } from '../lib/lowdata';
 import { loadJson, saveJson } from '../lib/storage';
-import { TAB_IDS, TAB_KEY } from '../lib/tabs';
+import { TAB_EVENT, TAB_IDS, TAB_KEY } from '../lib/tabs';
 import { useCase } from '../state/useCase';
 import { Downloads } from './Downloads';
 import { Kpis } from './Kpis';
@@ -40,6 +40,15 @@ export function Results() {
     setTabState(t);
     saveJson(TAB_KEY, t);
   };
+  // El laboratorio guiado abre pestañas desde afuera (lib/tabs.goToTab).
+  useEffect(() => {
+    const on = (e: Event) => {
+      const id = (e as CustomEvent<string>).detail;
+      if (TAB_IDS.includes(id)) setTabState(id);
+    };
+    window.addEventListener(TAB_EVENT, on);
+    return () => window.removeEventListener(TAB_EVENT, on);
+  }, []);
   const lowData = useLowData();
   const data = design.data;
   const notes = data?.notes.length ?? 0;

@@ -1,0 +1,330 @@
+[
+ {
+  "id": "potencia.fridman_tiro",
+  "chapter": "10_potencia",
+  "topic": "potencia",
+  "level": "basico",
+  "title": "Tiro disponible de Fridman",
+  "answers": 1
+ },
+ {
+  "id": "potencia.prado_bollard",
+  "chapter": "10_potencia",
+  "topic": "potencia",
+  "level": "basico",
+  "title": "Tiro a punto fijo de Prado y Dremière",
+  "answers": 1
+ },
+ {
+  "id": "potencia.prado_arrastre",
+  "chapter": "10_potencia",
+  "topic": "potencia",
+  "level": "intermedio",
+  "title": "Potencia de arrastre y tiro pescando (Prado)",
+  "answers": 4
+ },
+ {
+  "id": "potencia.koyama_tiro",
+  "chapter": "10_potencia",
+  "topic": "potencia",
+  "level": "intermedio",
+  "title": "Tiro de Koyama a potencia constante",
+  "answers": 2
+ },
+ {
+  "id": "panos.hilo_y_borde",
+  "chapter": "11_panos_y_cortes",
+  "topic": "panos",
+  "level": "basico",
+  "title": "Rendimiento del hilo y borde estirado",
+  "answers": 2
+ },
+ {
+  "id": "panos.corte_simetrico",
+  "chapter": "11_panos_y_cortes",
+  "topic": "panos",
+  "level": "intermedio",
+  "title": "Corte de un paño simétrico",
+  "answers": 3
+ },
+ {
+  "id": "panos.angulo_corte",
+  "chapter": "11_panos_y_cortes",
+  "topic": "panos",
+  "level": "intermedio",
+  "title": "Ángulo de ataque de un corte",
+  "answers": 2
+ },
+ {
+  "id": "panos.mallas_y_area",
+  "chapter": "11_panos_y_cortes",
+  "topic": "panos",
+  "level": "basico",
+  "title": "Mallas y superficie de trabajo de un paño",
+  "answers": 2
+ },
+ {
+  "id": "mecanica.indice_filtracion",
+  "chapter": "12_mecanica_red",
+  "topic": "mecanica",
+  "level": "basico",
+  "title": "Índice de filtración d/l",
+  "answers": 1
+ },
+ {
+  "id": "mecanica.superficie_solida",
+  "chapter": "12_mecanica_red",
+  "topic": "mecanica",
+  "level": "basico",
+  "title": "Superficie sólida de un paño",
+  "answers": 1
+ },
+ {
+  "id": "mecanica.solidez",
+  "chapter": "12_mecanica_red",
+  "topic": "mecanica",
+  "level": "intermedio",
+  "title": "Solidez y coeficiente de filtrado",
+  "answers": 3
+ },
+ {
+  "id": "dimensiones.lima_por_piezas",
+  "chapter": "13_dimensiones",
+  "topic": "dimensiones",
+  "level": "intermedio",
+  "title": "Largo de la lima por piezas (Martini)",
+  "answers": 3
+ },
+ {
+  "id": "dimensiones.circunferencia",
+  "chapter": "13_dimensiones",
+  "topic": "dimensiones",
+  "level": "basico",
+  "title": "Circunferencia de pesca y abertura vertical estimada",
+  "answers": 3
+ },
+ {
+  "id": "resistencia.aberdeen",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "basico",
+  "title": "Resistencia de diseño (Aberdeen demersal)",
+  "answers": 1
+ },
+ {
+  "id": "resistencia.tauti",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "intermedio",
+  "title": "Resistencia de Tauti–Nomura–Shu",
+  "answers": 2
+ },
+ {
+  "id": "resistencia.comparar",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "intermedio",
+  "title": "Dos escuelas, dos resultados",
+  "answers": 3
+ },
+ {
+  "id": "resistencia.reid",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "basico",
+  "title": "Resistencia de una red pelágica (Reid)",
+  "answers": 1
+ },
+ {
+  "id": "resistencia.velocidad",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "basico",
+  "title": "Cuánto sube la resistencia con la velocidad",
+  "answers": 3
+ },
+ {
+  "id": "portones.fuerzas",
+  "chapter": "15_portones_aparejo",
+  "topic": "portones",
+  "level": "basico",
+  "title": "Resistencia y fuerza de abertura de un portón",
+  "answers": 2
+ },
+ {
+  "id": "portones.separacion",
+  "chapter": "15_portones_aparejo",
+  "topic": "portones",
+  "level": "basico",
+  "title": "Separación entre portones «al metro»",
+  "answers": 2
+ },
+ {
+  "id": "portones.superficie",
+  "chapter": "15_portones_aparejo",
+  "topic": "portones",
+  "level": "intermedio",
+  "title": "Superficie de portón necesaria",
+  "answers": 3
+ },
+ {
+  "id": "aberturas.dpa",
+  "chapter": "16_aberturas",
+  "topic": "aberturas",
+  "level": "basico",
+  "title": "Abertura entre puntas de ala por triángulos semejantes",
+  "answers": 2
+ },
+ {
+  "id": "aberturas.vertical",
+  "chapter": "16_aberturas",
+  "topic": "aberturas",
+  "level": "basico",
+  "title": "Abertura vertical por la circunferencia",
+  "answers": 3
+ },
+ {
+  "id": "flotacion.empirica",
+  "chapter": "17_flotacion_lastre",
+  "topic": "flotacion",
+  "level": "basico",
+  "title": "Flotación por Koyama y por Prado",
+  "answers": 3
+ },
+ {
+  "id": "flotacion.boyas",
+  "chapter": "17_flotacion_lastre",
+  "topic": "flotacion",
+  "level": "basico",
+  "title": "Número de boyas",
+  "answers": 2
+ },
+ {
+  "id": "flotacion.fridman",
+  "chapter": "17_flotacion_lastre",
+  "topic": "flotacion",
+  "level": "avanzado",
+  "title": "Balance vertical de Fridman",
+  "answers": 4
+ },
+ {
+  "id": "flotacion.lastre",
+  "chapter": "17_flotacion_lastre",
+  "topic": "flotacion",
+  "level": "basico",
+  "title": "Lastre y su reparto",
+  "answers": 3
+ },
+ {
+  "id": "cables.por_profundidad",
+  "chapter": "18_cables",
+  "topic": "cables",
+  "level": "basico",
+  "title": "Cable filado según la profundidad",
+  "answers": 2
+ },
+ {
+  "id": "cables.angulos",
+  "chapter": "18_cables",
+  "topic": "cables",
+  "level": "intermedio",
+  "title": "Ángulos del cable de remolque",
+  "answers": 2
+ },
+ {
+  "id": "cables.diametro",
+  "chapter": "18_cables",
+  "topic": "cables",
+  "level": "basico",
+  "title": "Diámetro y peso del cable",
+  "answers": 2
+ },
+ {
+  "id": "ventana.interpolada",
+  "chapter": "19_ventana_velocidad",
+  "topic": "ventana",
+  "level": "intermedio",
+  "title": "Velocidad máxima remolcable",
+  "answers": 1
+ },
+ {
+  "id": "ventana.caso_a3",
+  "chapter": "19_ventana_velocidad",
+  "topic": "ventana",
+  "level": "avanzado",
+  "title": "La A-3 con el motor completo",
+  "answers": 2
+ },
+ {
+  "id": "optimizacion.area_barrida",
+  "chapter": "20_optimizacion",
+  "topic": "optimizacion",
+  "level": "basico",
+  "title": "Área barrida por hora",
+  "answers": 3
+ },
+ {
+  "id": "mar.corriente",
+  "chapter": "23_mar_real",
+  "topic": "mar",
+  "level": "basico",
+  "title": "Arrastrar con o contra la corriente",
+  "answers": 2
+ },
+ {
+  "id": "selectividad.logistica",
+  "chapter": "24_malla_selectividad",
+  "topic": "selectividad",
+  "level": "intermedio",
+  "title": "Curva de retención logística",
+  "answers": 3
+ },
+ {
+  "id": "construccion.ciclo",
+  "chapter": "36_construccion",
+  "topic": "construccion",
+  "level": "basico",
+  "title": "Leer un ciclo de corte",
+  "answers": 3
+ },
+ {
+  "id": "construccion.embande",
+  "chapter": "36_construccion",
+  "topic": "construccion",
+  "level": "basico",
+  "title": "Embando y mallas por metro",
+  "answers": 3
+ },
+ {
+  "id": "construccion.toma",
+  "chapter": "36_construccion",
+  "topic": "construccion",
+  "level": "intermedio",
+  "title": "Unir paños de distinto número de mallas",
+  "answers": 2
+ },
+ {
+  "id": "economia.gasoil",
+  "chapter": "37_economia",
+  "topic": "economia",
+  "level": "basico",
+  "title": "Gasoil del arrastre",
+  "answers": 3
+ },
+ {
+  "id": "economia.equilibrio",
+  "chapter": "37_economia",
+  "topic": "economia",
+  "level": "intermedio",
+  "title": "Precio de equilibrio con tripulación a la parte",
+  "answers": 1
+ },
+ {
+  "id": "economia.red_por_hora",
+  "chapter": "37_economia",
+  "topic": "economia",
+  "level": "basico",
+  "title": "Cuánto cuesta la red por hora de arrastre",
+  "answers": 3
+ }
+]

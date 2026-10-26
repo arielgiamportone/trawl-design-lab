@@ -19,6 +19,11 @@ const MODES: { value: UiMode; label: string; title: string }[] = [
     title: 'Asistente paso a paso con diagnóstico en lenguaje llano',
   },
   { value: 'expert', label: 'Experto', title: 'Todos los parámetros, pestañas y herramientas' },
+  {
+    value: 'aula',
+    label: 'Aula UTN',
+    title: 'Ejercicios con corrección, laboratorios guiados, cursos y entregas',
+  },
 ];
 
 interface Props {

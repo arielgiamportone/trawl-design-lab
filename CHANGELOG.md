@@ -6,6 +6,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- App web, modo **«Aula UTN»** (Fase 17.3): práctica libre con el banco de ejercicios (filtros
+  por capítulo y nivel, datos nuevos o los del libro, pistas, corrección por respuesta y
+  explicación; sin cuenta y sin conexión) y laboratorios guiados en un panel sobre el modo
+  experto que lleva a la pestaña de cada paso, comprueba el caso abierto y corrige las
+  preguntas. Aula del curso, en línea: ingreso y alta con código; el alumno ve sus tareas con sus
+  propios datos, entrega ejercicios y laboratorios y recibe la corrección según la política de la
+  tarea; el docente crea cursos y tareas eligiendo del banco, ve la planilla de notas, revisa
+  entregas con nota y comentario, resetea contraseñas y descarga notas (Excel) y enunciados o
+  clave por alumno (PDF); la administración genera invitaciones. Pruebas Vitest y E2E (la API
+  de las E2E arranca con el aula sobre SQLite); capturas nuevas.
 - **Aula UTN en el servidor (Fase 17.2)**: `trawlkit.classroom` y rutas `/classroom`. Cuentas sin
   correo (usuario, nombre o legajo y contraseña con scrypt), alumnos que se registran con el
   código del curso y docentes con un código de invitación del administrador; sesión con token

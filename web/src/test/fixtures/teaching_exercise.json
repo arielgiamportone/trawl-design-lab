@@ -1,0 +1,40 @@
+{
+ "id": "resistencia.aberdeen",
+ "seed": 0,
+ "chapter": "14_resistencia",
+ "topic": "resistencia",
+ "level": "basico",
+ "title": "Resistencia de diseño (Aberdeen demersal)",
+ "statement": "Una red de fondo de polietileno tiene una superficie sólida de 38,75 m². Con la fórmula del Marine Laboratory Aberdeen, R_N [t] = Ss·(0,00624 + 0,00475·v²)/(1 + 0,0641·v) con v en nudos, calcule la resistencia de la red a 3,0 kn en kgf.",
+ "data": [
+  {
+   "key": "ss",
+   "label": "Superficie sólida",
+   "value": 38.75,
+   "unit": "m²",
+   "text": "38,75"
+  },
+  {
+   "key": "v",
+   "label": "Velocidad",
+   "value": 3.0,
+   "unit": "kn",
+   "text": "3,0"
+  }
+ ],
+ "answers": [
+  {
+   "key": "rn_kgf",
+   "label": "Resistencia de la red",
+   "unit": "kgf",
+   "kind": "number",
+   "options": null
+  }
+ ],
+ "hints": [
+  "La fórmula da toneladas; multiplique por 1000."
+ ],
+ "refs": [
+  "aberdeen"
+ ]
+}

@@ -2791,3 +2791,268 @@ table.data tr.row-best td {
   background: var(--accent-soft);
   font-weight: 600;
 }
+
+/* ---------- Aula UTN (Fase 17) ---------- */
+.aula-layout {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+}
+.aula {
+  display: grid;
+  gap: 14px;
+}
+.aula-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+.aula-who {
+  font-size: 13px;
+  color: var(--text-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.aula-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.aula-filters .field {
+  min-width: 180px;
+}
+.aula-h {
+  margin-top: 18px;
+}
+.aula-list {
+  list-style: none;
+  margin: 12px 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.aula-row {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.aula-row:hover {
+  background: var(--surface-2);
+}
+.aula-row-title {
+  font-weight: 600;
+}
+.aula-row-sub {
+  color: var(--text-2);
+  font-size: 12.5px;
+  margin: 2px 0 0;
+  flex-basis: 100%;
+}
+.aula-lab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.aula-ex {
+  margin-top: 12px;
+}
+.aula-ex-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.aula-ex-head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.aula-statement {
+  line-height: 1.5;
+}
+table.data.aula-data {
+  width: auto;
+  min-width: 320px;
+}
+.aula-answers .field input,
+.aula-answers .field select {
+  max-width: 260px;
+}
+.aula-answer.ok input,
+.aula-answer.ok select,
+.lab-body .field.ok input {
+  border-color: var(--good);
+}
+.aula-answer.bad input,
+.aula-answer.bad select,
+.lab-body .field.bad input {
+  border-color: var(--crit);
+}
+.aula-mark {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.aula-expl {
+  margin: 6px 0 0;
+  font-weight: 400;
+}
+.aula-courses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: stretch;
+}
+.aula-course {
+  display: grid;
+  gap: 2px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  min-width: 200px;
+}
+.aula-course span {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.aula-course[aria-pressed='true'] {
+  border-color: var(--accent-bg);
+  box-shadow: inset 0 0 0 1px var(--accent-bg);
+}
+.aula-join {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  min-width: 240px;
+}
+.aula-join .calc-row {
+  margin-top: 0;
+}
+.aula-code {
+  font-size: 13px;
+  font-weight: 400;
+}
+.aula-code strong {
+  font-family: var(--mono, monospace);
+  letter-spacing: 0.08em;
+  font-size: 15px;
+}
+.aula-course-panel,
+.aula-assignment,
+.aula-teacher,
+.aula-student,
+.aula-grades {
+  display: grid;
+  gap: 10px;
+}
+.aula-assignment > .btn,
+.aula-grades > .btn,
+.aula-assignments > .btn {
+  justify-self: start;
+}
+.aula-join input {
+  width: 100%;
+}
+.aula-pick {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  max-height: 260px;
+  overflow: auto;
+  margin-top: 12px;
+}
+.aula-review {
+  font-weight: 700;
+}
+.aula-review-box {
+  border-color: var(--accent-bg);
+}
+.aula-invites {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 4px;
+}
+.aula-login {
+  max-width: 480px;
+}
+.table-scroll {
+  overflow-x: auto;
+}
+
+/* Panel del laboratorio en curso, sobre el modo experto. */
+.lab-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(70vh, 640px);
+  overflow: auto;
+  z-index: 40;
+  padding: 12px 14px;
+  border-color: var(--accent-bg);
+}
+.lab-panel.collapsed {
+  max-height: none;
+}
+.lab-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.lab-body h4 {
+  margin: 6px 0 4px;
+}
+.lab-body p {
+  margin: 6px 0;
+}
+.lab-body textarea,
+.aula-editor textarea,
+.aula-review-box textarea {
+  width: 100%;
+}
+.lab-progress {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.lab-checks {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0;
+  font-size: 13px;
+  display: grid;
+  gap: 3px;
+}
+.lab-checks .ok {
+  color: var(--good);
+}
+.lab-checks .bad {
+  color: var(--crit);
+}
+@media print {
+  .lab-panel {
+    display: none;
+  }
+}

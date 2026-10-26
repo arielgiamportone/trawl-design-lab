@@ -78,6 +78,14 @@ export type BatchRunRequest = S['BatchRunRequest'];
 export type BatchRunResponse = S['BatchRunResponse'];
 export type BatchFormat = 'csv' | 'xlsx' | 'pdf' | 'html';
 export type BatchKind = 'fleet' | 'nets' | 'cases';
+export type ExerciseSummary = S['ExerciseSummaryOut'];
+export type ExerciseInstance = S['ExerciseInstanceOut'];
+export type ExerciseGrade = S['GradeOut'];
+export type LabSummary = S['LabSummaryOut'];
+export type Lab = S['LabOut'];
+export type LabStep = S['LabStepOut'];
+export type LabStepResult = S['LabStepResultOut'];
+export type LabCheckRequest = S['LabCheckRequest'];
 
 const DEFAULT_BASE = 'http://127.0.0.1:8000';
 
@@ -139,6 +147,22 @@ async function localFetch(path: string, init?: RequestInit): Promise<Response> {
   return localRequest(init?.method ?? 'GET', path, body);
 }
 
+/** Error de la API a partir de una respuesta no exitosa. */
+async function errorOf(res: Response): Promise<ApiError> {
+  let detail: unknown;
+  try {
+    const body = (await res.json()) as { detail?: unknown };
+    detail = body.detail;
+  } catch {
+    detail = undefined;
+  }
+  const msg =
+    res.status === 404 && isMissingRoute(detail)
+      ? MISSING_ROUTE_MESSAGE
+      : detailMessage(detail) || `${res.status} ${res.statusText}`;
+  return new ApiError(res.status, msg, detail);
+}
+
 async function request(path: string, init?: RequestInit): Promise<Response> {
   let res: Response;
   if (preferLocal()) {
@@ -154,20 +178,34 @@ async function request(path: string, init?: RequestInit): Promise<Response> {
       res = await localFetch(path, init);
     }
   }
-  if (!res.ok) {
-    let detail: unknown;
-    try {
-      const body = (await res.json()) as { detail?: unknown };
-      detail = body.detail;
-    } catch {
-      detail = undefined;
-    }
-    const msg =
-      res.status === 404 && isMissingRoute(detail)
-        ? MISSING_ROUTE_MESSAGE
-        : detailMessage(detail) || `${res.status} ${res.statusText}`;
-    throw new ApiError(res.status, msg, detail);
+  if (!res.ok) throw await errorOf(res);
+  return res;
+}
+
+/**
+ * Pedido al aula (``/classroom``): sólo en línea, con el token de la sesión. Sin conexión no hay
+ * motor local que lo atienda.
+ */
+export async function classroomRequest(
+  path: string,
+  token: string | null,
+  init: { method?: string; body?: unknown; signal?: AbortSignal } = {},
+): Promise<Response> {
+  const headers: Record<string, string> = {};
+  if (token) headers.Authorization = `Bearer ${token}`;
+  if (init.body !== undefined) headers['Content-Type'] = 'application/json';
+  let res: Response;
+  try {
+    res = await fetch(`${apiBase()}/classroom${path}`, {
+      method: init.method ?? 'GET',
+      headers,
+      body: init.body === undefined ? undefined : JSON.stringify(init.body),
+      signal: init.signal,
+    });
+  } catch (err) {
+    throw new ApiError(0, `El aula necesita conexión con la API (${apiBase()}): ${String(err)}`);
   }
+  if (!res.ok) throw await errorOf(res);
   return res;
 }
 
@@ -344,5 +382,24 @@ export const api = {
   async simulate(req: SimulateRequest, signal?: AbortSignal): Promise<SimulateResponse> {
     const res = await post('/simulate', req, signal);
     return (await res.json()) as SimulateResponse;
+  },
+  exercises: (signal?: AbortSignal) => getJson<ExerciseSummary[]>('/teaching/exercises', signal),
+  exercise: (id: string, seed: number, signal?: AbortSignal) =>
+    getJson<ExerciseInstance>(`/teaching/exercises/${encodeURIComponent(id)}?seed=${seed}`, signal),
+  async grade(
+    id: string,
+    seed: number,
+    answers: Record<string, string>,
+    signal?: AbortSignal,
+  ): Promise<ExerciseGrade> {
+    const res = await post('/teaching/grade', { id, seed, answers }, signal);
+    return (await res.json()) as ExerciseGrade;
+  },
+  labs: (signal?: AbortSignal) => getJson<LabSummary[]>('/teaching/labs', signal),
+  lab: (id: string, signal?: AbortSignal) =>
+    getJson<Lab>(`/teaching/labs/${encodeURIComponent(id)}`, signal),
+  async labCheck(req: LabCheckRequest, signal?: AbortSignal): Promise<LabStepResult> {
+    const res = await post('/teaching/labs/check', req, signal);
+    return (await res.json()) as LabStepResult;
   },
 };

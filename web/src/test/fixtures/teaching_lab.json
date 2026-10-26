@@ -1,0 +1,84 @@
+{
+ "id": "lab.buque_y_velocidad",
+ "chapter": "19_ventana_velocidad",
+ "topic": "ventana",
+ "level": "basico",
+ "title": "Más potencia, más velocidad",
+ "summary": "Cambiar el buque y ver cómo se mueve la ventana de velocidad.",
+ "steps": 2,
+ "start": {
+  "net": "fao_a3_standard",
+  "vessel": "fao_a3_150hp"
+ },
+ "step_list": [
+  {
+   "id": "base",
+   "title": "Velocidad máxima con 150 HP",
+   "instruction": "En la pestaña «Gráficos», mire dónde se cruzan el tiro y la resistencia total.",
+   "target": {
+    "mode": "expert",
+    "tab": "graficos",
+    "hint": null
+   },
+   "checks": [
+    {
+     "label": "Buque de 150 HP",
+     "fact": "vessel.bhp",
+     "op": "=="
+    }
+   ],
+   "questions": [
+    {
+     "id": "vmax",
+     "kind": "number",
+     "prompt": "Velocidad máxima",
+     "unit": "kn",
+     "options": null
+    }
+   ]
+  },
+  {
+   "id": "buque",
+   "title": "Cambiar al buque de 180 HP",
+   "instruction": "En el panel del caso, elija el buque de 180 HP y vuelva a calcular.",
+   "target": {
+    "mode": "expert",
+    "tab": "graficos",
+    "hint": "Selector «Buque» del panel del caso"
+   },
+   "checks": [
+    {
+     "label": "Buque de 180 HP o más",
+     "fact": "vessel.bhp",
+     "op": ">="
+    },
+    {
+     "label": "La velocidad máxima subió",
+     "fact": "summary.max_speed_kn",
+     "op": ">"
+    }
+   ],
+   "questions": [
+    {
+     "id": "vmax",
+     "kind": "number",
+     "prompt": "Velocidad máxima con 180 HP",
+     "unit": "kn",
+     "options": null
+    },
+    {
+     "id": "rn",
+     "kind": "choice",
+     "prompt": "¿Cambió la resistencia de la red a 3 kn?",
+     "unit": "",
+     "options": [
+      "Sí, subió",
+      "Sí, bajó",
+      "No: la red es la misma"
+     ]
+    }
+   ]
+  }
+ ],
+ "closing": "La potencia mueve la curva de tiro; la red fija la curva de resistencia. La ventana es el tramo en que la primera queda por encima de la segunda.\n"
+}

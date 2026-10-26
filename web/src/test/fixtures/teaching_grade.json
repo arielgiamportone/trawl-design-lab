@@ -1,0 +1,17 @@
+{
+ "id": "resistencia.aberdeen",
+ "seed": 0,
+ "score": 1.0,
+ "answers": [
+  {
+   "key": "rn_kgf",
+   "ok": true,
+   "given": "1592",
+   "expected": 1592.1852721630462,
+   "expected_text": "1 592",
+   "error_rel": 0.00011636344481097565,
+   "message": "correcta"
+  }
+ ],
+ "explanation": "R_N = 38,75·(0,00624 + 0,00475·3,0²)/(1 + 0,0641·3,0) = 1,592 t = 1 592 kgf."
+}

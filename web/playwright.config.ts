@@ -6,8 +6,11 @@ const API_PORT = Number(process.env.E2E_API_PORT ?? 8000);
 /**
  * E2E contra `vite preview` (build de producción) y la API real.
  * Si la API o el preview ya están corriendo se reutilizan; si no, Playwright los inicia
- * (la API con `uv run trawlkit serve`, que requiere `uv sync` en la raíz del repo).
+ * (la API con `uv run trawlkit serve`, que requiere `uv sync` en la raíz del repo). La API arranca
+ * con el aula habilitada sobre una base SQLite descartable y un administrador de prueba.
  */
+export const E2E_ADMIN = { username: 'admin-e2e', password: 'clave-e2e-123' };
+const DB = 'sqlite:///e2e-aula.db';
 export default defineConfig({
   testDir: './e2e',
   timeout: 60_000,
@@ -37,8 +40,12 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: `uv run trawlkit serve --port ${API_PORT}`,
+      command:
+        `rm -f e2e-aula.db && uv run trawlkit classroom create-admin ` +
+        `--username ${E2E_ADMIN.username} --password ${E2E_ADMIN.password} && ` +
+        `uv run trawlkit serve --port ${API_PORT}`,
       cwd: '..',
+      env: { DATABASE_URL: DB },
       url: `http://127.0.0.1:${API_PORT}/health`,
       reuseExistingServer: true,
       timeout: 120_000,

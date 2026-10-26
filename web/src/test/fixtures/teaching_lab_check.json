@@ -1,0 +1,27 @@
+{
+ "lab_id": "lab.buque_y_velocidad",
+ "step_id": "base",
+ "done": true,
+ "checks": [
+  {
+   "label": "Buque de 150 HP",
+   "ok": true,
+   "fact": "vessel.bhp",
+   "value": 150.0,
+   "target": 150.0
+  }
+ ],
+ "questions": [
+  {
+   "id": "vmax",
+   "ok": true,
+   "given": "2,27",
+   "expected_text": "2,27",
+   "message": "correcta"
+  }
+ ],
+ "values": {
+  "summary.max_speed_kn": 2.2684049494387843,
+  "vessel.bhp": 150.0
+ }
+}

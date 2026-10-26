@@ -1,0 +1,56 @@
+[
+ {
+  "id": "lab.pano_y_resistencia",
+  "chapter": "14_resistencia",
+  "topic": "resistencia",
+  "level": "basico",
+  "title": "El paño y la resistencia",
+  "summary": "Cambiar la malla del copo y el hilo del cuerpo y ver qué pasa con la superficie sólida, la resistencia y la velocidad máxima.\n",
+  "steps": 3
+ },
+ {
+  "id": "lab.buque_y_velocidad",
+  "chapter": "19_ventana_velocidad",
+  "topic": "ventana",
+  "level": "basico",
+  "title": "Más potencia, más velocidad",
+  "summary": "Cambiar el buque y ver cómo se mueve la ventana de velocidad.",
+  "steps": 2
+ },
+ {
+  "id": "lab.portones",
+  "chapter": "16_aberturas",
+  "topic": "aberturas",
+  "level": "intermedio",
+  "title": "Otro portón, otra boca",
+  "summary": "Comparar el portón plano de madera de la A-3 con un portón oval y su efecto en la abertura.",
+  "steps": 2
+ },
+ {
+  "id": "lab.profundidad",
+  "chapter": "18_cables",
+  "topic": "cables",
+  "level": "intermedio",
+  "title": "Pescar más hondo",
+  "summary": "Cambiar la profundidad de trabajo y seguir el cable, los ángulos y la abertura.",
+  "steps": 2
+ },
+ {
+  "id": "lab.red_chica",
+  "chapter": "20_optimizacion",
+  "topic": "optimizacion",
+  "level": "avanzado",
+  "title": "Una red a la medida del buque",
+  "summary": "Probar una red más chica del catálogo en el buque de 150 HP y comparar.",
+  "steps": 2
+ },
+ {
+  "id": "lab.taller",
+  "chapter": "36_construccion",
+  "topic": "construccion",
+  "level": "basico",
+  "title": "Del plano al taller",
+  "summary": "Recorrer la guía de construcción de la A-3 y entender la hoja de corte y el armado.",
+  "steps": 2
+ }
+]
