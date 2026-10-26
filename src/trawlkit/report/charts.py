@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from trawlkit.drawing.svg import Element, document, line, polyline, rect, text
+from trawlkit.i18n import N_, get_lang, t
 from trawlkit.report.labels import fmt
 from trawlkit.report.tables import METHOD_LABELS, PULL_METHODS, VARIANT_LABELS
 
@@ -133,7 +134,7 @@ def nice_ticks(lo: float, hi: float, target: int = 5) -> list[float]:
 
 def _tick_label(v: float) -> str:
     if abs(v) >= 1000 and float(v).is_integer():
-        return f"{int(v):,}".replace(",", " ")
+        return f"{int(v):,}".replace(",", " " if get_lang() == "es" else ",")
     return f"{v:g}"
 
 
@@ -176,16 +177,16 @@ def axes(
 ) -> list[Element]:
     """Rejilla horizontal, línea base, marcas y títulos de ejes (con unidades)."""
     out: list[Element] = []
-    for t in yticks:
-        y = plot.y(t)
+    for tick in yticks:
+        y = plot.y(tick)
         out.append(line((plot.x0, y), (plot.x0 + plot.w, y), cls="gridline"))
-        out.append(text((plot.x0 - 6, y + 3.5), _tick_label(t), cls="tick end"))
+        out.append(text((plot.x0 - 6, y + 3.5), _tick_label(tick), cls="tick end"))
     base = plot.y(plot.ymin)
     out.append(line((plot.x0, base), (plot.x0 + plot.w, base), cls="axisline"))
-    for t in xticks:
-        x = plot.x(t)
+    for tick in xticks:
+        x = plot.x(tick)
         out.append(line((x, base), (x, base + 4), cls="axisline"))
-        out.append(text((x, base + 15), _tick_label(t), cls="tick mid"))
+        out.append(text((x, base + 15), _tick_label(tick), cls="tick mid"))
     out.append(text((plot.x0 + plot.w / 2, base + 32), xlabel, cls="axis-title mid"))
     out.append(text((plot.x0, plot.y0 - 10), ylabel, cls="axis-title"))
     return out
@@ -250,7 +251,14 @@ def _series(
                 "circle",
                 {"cx": plot.x(float(a)), "cy": plot.y(float(b)), "r": 6.0, "class": "hit"},
             )
-            c.add(Element("title", text=f"{name}: {fmt(float(b))} {unit} a {fmt(float(a))} kn"))
+            tip = t(
+                "{name}: {value} {unit} a {speed} kn",
+                name=name,
+                value=fmt(float(b)),
+                unit=unit,
+                speed=fmt(float(a)),
+            )
+            c.add(Element("title", text=tip))
             g.add(c)
     return g
 
@@ -301,7 +309,7 @@ def towing_chart(result: DesignResult) -> str:
     v = list(case.speeds_kn)
     curves = result.power.curves
     win = result.performance.design
-    pull = [(attr, name, _arr(getattr(curves, attr))) for attr, name in PULL_METHODS]
+    pull = [(attr, t(name), _arr(getattr(curves, attr))) for attr, name in PULL_METHODS]
     demand = [("std", _arr(result.warps.total.std)), ("mod", _arr(result.warps.total.mod))]
     ymax_data = max(float(np.nanmax(a)) for _, _, a in pull)
     ymax_data = max(ymax_data, *(float(np.nanmax(a)) for _, a in demand))
@@ -311,34 +319,39 @@ def towing_chart(result: DesignResult) -> str:
         ("line", f"series s{i}", f"FT {name}") for i, (_, name, _) in enumerate(pull, 1)
     ]
     items += [
-        ("line", "series bold ink", "R total estándar"),
-        ("line", "series bold ink dashed", "R total modificada"),
-        ("area", "window", "Ventana viable"),
+        ("line", "series bold ink", t("R total estándar")),
+        ("line", "series bold ink dashed", t("R total modificada")),
+        ("area", "window", t("Ventana viable")),
     ]
     lw = WIDTH - 84
     lh = legend_height(items, lw)
     top = 44 + lh + 18
     plot = Plot(64, top, WIDTH - 64 - 92, HEIGHT - top - 46, xt[0], xt[-1], yt[0], yt[-1])
     out: list[Element] = [
-        text((20, 24), f"Tiro disponible y resistencia total — {case.vessel.id}", "chart-title"),
+        text(
+            (20, 24),
+            t("Tiro disponible y resistencia total — {vessel}", vessel=case.vessel.id),
+            "chart-title",
+        ),
         *legend(items, 64, 44, lw),
     ]
     feas = [float(s) for s in win.feasible_speeds_kn]
     if feas and win.max_speed_kn is not None:
         x0, x1 = plot.x(min(feas)), plot.x(win.max_speed_kn)
         shade = rect(x0, plot.y0, x1 - x0, plot.h, cls="window")
-        shade.add(Element("title", text=f"Ventana viable hasta {fmt(win.max_speed_kn)} kn"))
+        shade.add(Element("title", text=t("Ventana viable hasta {v} kn", v=fmt(win.max_speed_kn))))
         out.append(shade)
-    out += axes(plot, xt, yt, "Velocidad de arrastre [kn]", "Fuerza [kgf]")
+    out += axes(plot, xt, yt, t("Velocidad de arrastre [kn]"), t("Fuerza [kgf]"))
     ends: list[tuple[float, str, str]] = []
     for i, (attr, name, arr) in enumerate(pull, 1):
         out.append(_series(attr, plot, v, list(arr), f"series s{i}", f"FT {name}"))
         ends.append((plot.y(float(arr[-1])), name, "direct-muted"))
     for key, arr in demand:
         dash = " dashed" if key == "mod" else ""
-        name = f"R total {VARIANT_LABELS[key]}"
+        variant = t(VARIANT_LABELS[key])
+        name = t("R total {variant}", variant=variant)
         out.append(_series(f"demand_{key}", plot, v, list(arr), f"series bold ink{dash}", name))
-        ends.append((plot.y(float(arr[-1])), name.replace("R total ", "R "), "direct"))
+        ends.append((plot.y(float(arr[-1])), f"R {variant}", "direct"))
     x_end = plot.x0 + plot.w
     for y_orig, y_lab, label, cls in _spread_labels(ends, plot.y0, plot.y0 + plot.h):
         out.append(polyline([(x_end + 2, y_orig), (x_end + 10, y_lab)], cls="leader"))
@@ -346,16 +359,20 @@ def towing_chart(result: DesignResult) -> str:
     if win.max_speed_kn is not None:
         xm = plot.x(win.max_speed_kn)
         mk = line((xm, plot.y0), (xm, plot.y0 + plot.h), cls="marker")
-        mk.add(Element("title", text=f"Velocidad máxima {fmt(win.max_speed_kn)} kn"))
+        mk.add(Element("title", text=t("Velocidad máxima {v} kn", v=fmt(win.max_speed_kn))))
         out.append(Element("g", {"data-marker": "max_speed"}, [mk]))
-        out.append(text((xm + 5, plot.y0 + 12), f"v máx = {win.max_speed_kn:.2f} kn", "direct"))
-    desc = (
-        f"Tiro disponible (Fridman, Prado–Dremière, Koyama, Nomura, Hamuro) del buque "
-        f"{case.vessel.id} y resistencia total de la red estándar y modificada entre "
-        f"{v[0]:g} y {v[-1]:g} kn. Velocidad máxima remolcable: "
-        f"{fmt(win.max_speed_kn)} kn."
+        vmax = t("v máx = {v} kn", v=f"{win.max_speed_kn:.2f}")
+        out.append(text((xm + 5, plot.y0 + 12), vmax, "direct"))
+    desc = t(
+        "Tiro disponible (Fridman, Prado–Dremière, Koyama, Nomura, Hamuro) del buque "
+        "{vessel} y resistencia total de la red estándar y modificada entre "
+        "{v0} y {v1} kn. Velocidad máxima remolcable: {vmax} kn.",
+        vessel=case.vessel.id,
+        v0=f"{v[0]:g}",
+        v1=f"{v[-1]:g}",
+        vmax=fmt(win.max_speed_kn),
     )
-    return _chart("Tiro disponible frente a resistencia total", desc, out)
+    return _chart(t("Tiro disponible frente a resistencia total"), desc, out)
 
 
 def drag_methods_chart(result: DesignResult, variant: str = "std") -> str:
@@ -373,35 +390,39 @@ def drag_methods_chart(result: DesignResult, variant: str = "std") -> str:
     yt = nice_ticks(0.0, max(ymax, float(np.nanmax(avg_v))), 5)
     xt = nice_ticks(v[0], v[-1], 8)
     others = len([m for m in methods if m != design])
+    labels = {m: t(METHOD_LABELS[m]) for m in methods if m in METHOD_LABELS}
+    labels[design] = t(METHOD_LABELS[design])
     items: list[LegendItem] = [
-        ("line", "series bold s1", f"RN de diseño: {METHOD_LABELS[design]}"),
-        ("line", "series ink dashed", "Promedio de métodos"),
-        ("line", "context", f"Otros métodos ({others})"),
+        ("line", "series bold s1", t("RN de diseño: {method}", method=labels[design])),
+        ("line", "series ink dashed", t("Promedio de métodos")),
+        ("line", "context", t("Otros métodos ({n})", n=others)),
     ]
     lw = WIDTH - 84
     top = 44 + legend_height(items, lw) + 18
     gutter = 150.0
     plot = Plot(64, top, WIDTH - 64 - gutter, HEIGHT - top - 46, xt[0], xt[-1], yt[0], yt[-1])
-    title_v = VARIANT_LABELS[variant]
+    title_v = t(VARIANT_LABELS[variant])
+    title = t("Resistencia de la red {variant} por método", variant=title_v)
     out: list[Element] = [
-        text((20, 24), f"Resistencia de la red {title_v} por método", "chart-title"),
+        text((20, 24), title, "chart-title"),
         *legend(items, 64, 44, lw),
-        *axes(plot, xt, yt, "Velocidad de arrastre [kn]", "Resistencia de la red RN [kgf]"),
+        *axes(plot, xt, yt, t("Velocidad de arrastre [kn]"), t("Resistencia de la red RN [kgf]")),
     ]
     ends: list[tuple[float, str, str]] = []
     for m in methods:
         if m == design:
             continue
         arr = _arr(cols[m])
-        out.append(_series(m, plot, v, list(arr), "context", METHOD_LABELS[m], hit=True))
+        out.append(_series(m, plot, v, list(arr), "context", labels[m], hit=True))
         last = arr[np.isfinite(arr)]
         if last.size:
-            ends.append((plot.y(float(last[-1])), METHOD_LABELS[m], "direct-muted"))
-    out.append(_series("average", plot, v, list(avg_v), "series ink dashed", "Promedio"))
-    ends.append((plot.y(float(avg_v[-1])), "Promedio", "direct"))
+            ends.append((plot.y(float(last[-1])), labels[m], "direct-muted"))
+    avg_name = t("Promedio")
+    out.append(_series("average", plot, v, list(avg_v), "series ink dashed", avg_name))
+    ends.append((plot.y(float(avg_v[-1])), avg_name, "direct"))
     d_arr = _arr(cols[design])
-    out.append(_series(design, plot, v, list(d_arr), "series bold s1", METHOD_LABELS[design]))
-    ends.append((plot.y(float(d_arr[-1])), f"{METHOD_LABELS[design]} (diseño)", "direct"))
+    out.append(_series(design, plot, v, list(d_arr), "series bold s1", labels[design]))
+    ends.append((plot.y(float(d_arr[-1])), t("{method} (diseño)", method=labels[design]), "direct"))
     x_end = plot.x0 + plot.w
     for y_orig, y_lab, label, cls in _spread_labels(ends, plot.y0, plot.y0 + plot.h, 10.5):
         out.append(polyline([(x_end + 2, y_orig), (x_end + 12, y_lab)], cls="leader"))
@@ -412,11 +433,16 @@ def drag_methods_chart(result: DesignResult, variant: str = "std") -> str:
                 "circle", {"cx": plot.x(a), "cy": plot.y(float(b)), "r": 3.5, "class": "f1 dot"}
             )
         )
-    desc = (
-        f"Resistencia de la red {title_v} según {len(methods)} métodos empíricos entre "
-        f"{v[0]:g} y {v[-1]:g} kn; la RN de diseño es {METHOD_LABELS[design]}."
+    desc = t(
+        "Resistencia de la red {variant} según {n} métodos empíricos entre "
+        "{v0} y {v1} kn; la RN de diseño es {method}.",
+        variant=title_v,
+        n=len(methods),
+        v0=f"{v[0]:g}",
+        v1=f"{v[-1]:g}",
+        method=labels[design],
     )
-    return _chart(f"Resistencia de la red {title_v} por método", desc, out)
+    return _chart(title, desc, out)
 
 
 def breakdown_values(result: DesignResult, speed_kn: float = 3.5) -> dict[str, dict[str, float]]:
@@ -433,10 +459,10 @@ def breakdown_values(result: DesignResult, speed_kn: float = 3.5) -> dict[str, d
 
 
 _PART_LABELS = {
-    "RN": "RN red",
-    "RB": "RB boyas",
-    "Rw": "Rw cables",
-    "ROB": "ROB portones",
+    "RN": N_("RN red"),
+    "RB": N_("RB boyas"),
+    "Rw": N_("Rw cables"),
+    "ROB": N_("ROB portones"),
 }
 
 
@@ -444,7 +470,8 @@ def drag_breakdown_chart(result: DesignResult, speed_kn: float = 3.5) -> str:
     """Barras horizontales apiladas RN / RB / Rw / ROB a ``speed_kn`` (estándar y modificada)."""
     data = breakdown_values(result, speed_kn)
     parts = list(_PART_LABELS)
-    items: list[LegendItem] = [("swatch", f"f{i}", _PART_LABELS[p]) for i, p in enumerate(parts, 1)]
+    part_labels = {p: t(name) for p, name in _PART_LABELS.items()}
+    items: list[LegendItem] = [("swatch", f"f{i}", part_labels[p]) for i, p in enumerate(parts, 1)]
     totals = {k: sum(d.values()) for k, d in data.items()}
     xt = nice_ticks(0.0, max(totals.values()), 6)
     lw = WIDTH - 84
@@ -457,25 +484,30 @@ def drag_breakdown_chart(result: DesignResult, speed_kn: float = 3.5) -> str:
         height += 16
     plot = Plot(110, top, WIDTH - 110 - 90, band * len(data), xt[0], xt[-1], 0.0, 1.0)
     out: list[Element] = [
-        text((20, 24), f"Composición de la resistencia total a {speed_kn:g} kn", "chart-title"),
+        text(
+            (20, 24),
+            t("Composición de la resistencia total a {v} kn", v=f"{speed_kn:g}"),
+            "chart-title",
+        ),
         *legend(items, 64, 44, lw),
     ]
-    for t in xt:
-        x = plot.x(t)
+    for tick in xt:
+        x = plot.x(tick)
         out.append(line((x, plot.y0), (x, plot.y0 + plot.h), cls="gridline"))
-        out.append(text((x, plot.y0 + plot.h + 15), _tick_label(t), cls="tick mid"))
+        out.append(text((x, plot.y0 + plot.h + 15), _tick_label(tick), cls="tick mid"))
     out.append(line((plot.x0, plot.y0), (plot.x0, plot.y0 + plot.h), cls="axisline"))
     out.append(
         text(
             (plot.x0 + plot.w / 2, plot.y0 + plot.h + 32),
-            "Resistencia [kgf]",
+            t("Resistencia [kgf]"),
             cls="axis-title mid",
         )
     )
     for row, (var, d) in enumerate(data.items()):
         yc = plot.y0 + band * row + band / 2
         g = Element("g", {"data-series": var, "class": "bar"})
-        out.append(text((plot.x0 - 8, yc + 3.5), f"Red {VARIANT_LABELS[var]}", "legend end"))
+        net_name = t("Red {variant}", variant=t(VARIANT_LABELS[var]))
+        out.append(text((plot.x0 - 8, yc + 3.5), net_name, "legend end"))
         acc = 0.0
         for i, p in enumerate(parts, 1):
             x0, x1 = plot.x(acc), plot.x(acc + d[p])
@@ -483,7 +515,7 @@ def drag_breakdown_chart(result: DesignResult, speed_kn: float = 3.5) -> str:
             w = max(x1 - x0 - 2.0, 0.6)  # 2 px de separación entre segmentos
             seg = rect(x0, yc - bar / 2, w, bar, cls=f"f{i}", rx=0)
             seg.attrs["data-part"] = p
-            seg.add(Element("title", text=f"{_PART_LABELS[p]}: {fmt(round(d[p], 2))} kgf"))
+            seg.add(Element("title", text=f"{part_labels[p]}: {fmt(round(d[p], 2))} kgf"))
             g.add(seg)
         out.append(g)
         total_txt = f"{fmt(round(totals[var], 1))} kgf"
@@ -494,15 +526,18 @@ def drag_breakdown_chart(result: DesignResult, speed_kn: float = 3.5) -> str:
         out.append(
             text(
                 (20, height - 10),
-                "Modo EXCEL: el total del libro (Rem!H118) omite ROB; aquí se muestra sumado.",
+                t("Modo EXCEL: el total del libro (Rem!H118) omite ROB; aquí se muestra sumado."),
                 "direct-muted",
             )
         )
     desc = "; ".join(
-        f"red {VARIANT_LABELS[k]}: " + ", ".join(f"{p} {fmt(round(x, 1))}" for p, x in d.items())
+        t("red {variant}", variant=t(VARIANT_LABELS[k]))
+        + ": "
+        + ", ".join(f"{p} {fmt(round(x, 1))}" for p, x in d.items())
         for k, d in data.items()
     )
-    return _chart(f"Composición de la resistencia a {speed_kn:g} kn", desc + " (kgf)", out, height)
+    title = t("Composición de la resistencia a {v} kn", v=f"{speed_kn:g}")
+    return _chart(title, desc + " (kgf)", out, height)
 
 
 def spread_chart(result: DesignResult) -> str:
@@ -514,19 +549,20 @@ def spread_chart(result: DesignResult) -> str:
     dpa = {"std": _arr(s.fridman.dpa_std_m), "mod": _arr(s.fridman.dpa_mod_m)}
     av = {"std": _arr(s.vertical.fridman.std.av_m), "mod": _arr(s.vertical.fridman.mod.av_m)}
     items: list[LegendItem] = [
-        ("line", f"series s{i}", f"Red {VARIANT_LABELS[k]}") for i, k in enumerate(variants, 1)
+        ("line", f"series s{i}", t("Red {variant}", variant=t(VARIANT_LABELS[k])))
+        for i, k in enumerate(variants, 1)
     ]
-    items.append(("line", "ref", "Valor de diseño"))
+    items.append(("line", "ref", t("Valor de diseño")))
     lw = WIDTH - 84
     top = 44 + legend_height(items, lw) + 34
     out: list[Element] = [
-        text((20, 24), "Aberturas de la red según Fridman", "chart-title"),
+        text((20, 24), t("Aberturas de la red según Fridman"), "chart-title"),
         *legend(items, 64, 44, lw),
     ]
     panel_w = (WIDTH - 64 - 40 - 60) / 2
     panels: list[tuple[str, str, dict[str, Any], float, str]] = [
-        ("dpa", "DPA — distancia entre puntas de alas [m]", dpa, s.horizontal_opening_m, "AH"),
-        ("av", "AV — abertura vertical [m]", av, s.vertical.suzuki_m, "AV Suzuki"),
+        ("dpa", t("DPA — distancia entre puntas de alas [m]"), dpa, s.horizontal_opening_m, "AH"),
+        ("av", t("AV — abertura vertical [m]"), av, s.vertical.suzuki_m, "AV Suzuki"),
     ]
     for j, (key, ylabel, series, ref, ref_name) in enumerate(panels):
         hi = max(float(np.nanmax(series[k])) for k in variants)
@@ -534,7 +570,7 @@ def spread_chart(result: DesignResult) -> str:
         xt = nice_ticks(v[0], v[-1], 4)
         x0 = 56 + j * (panel_w + 60)
         plot = Plot(x0, top, panel_w, HEIGHT - top - 46, xt[0], xt[-1], yt[0], yt[-1])
-        out += axes(plot, xt, yt, "Velocidad [kn]", ylabel)
+        out += axes(plot, xt, yt, t("Velocidad [kn]"), ylabel)
         yr = plot.y(ref)
         r = line((plot.x0, yr), (plot.x0 + plot.w, yr), cls="ref")
         r.add(Element("title", text=f"{ref_name} = {fmt(ref)} m"))
@@ -543,13 +579,17 @@ def spread_chart(result: DesignResult) -> str:
             text((plot.x0 + plot.w - 2, yr - 4), f"{ref_name} {ref:.2f} m", "direct-muted end")
         )
         for i, k in enumerate(variants, 1):
-            name = f"{key.upper()} {VARIANT_LABELS[k]}"
+            name = f"{key.upper()} {t(VARIANT_LABELS[k])}"
             out.append(_series(f"{key}_{k}", plot, v, list(series[k]), f"series s{i}", name, "m"))
-    desc = (
-        f"DPA y AV de Baranov–Fridman entre {v[0]:g} y {v[-1]:g} kn. AH de diseño "
-        f"{fmt(s.horizontal_opening_m)} m, AV de Suzuki {fmt(s.vertical.suzuki_m)} m."
+    desc = t(
+        "DPA y AV de Baranov–Fridman entre {v0} y {v1} kn. AH de diseño "
+        "{ah} m, AV de Suzuki {av} m.",
+        v0=f"{v[0]:g}",
+        v1=f"{v[-1]:g}",
+        ah=fmt(s.horizontal_opening_m),
+        av=fmt(s.vertical.suzuki_m),
     )
-    return _chart("Aberturas de la red según Fridman", desc, out)
+    return _chart(t("Aberturas de la red según Fridman"), desc, out)
 
 
 ChartFn = Callable[["DesignResult"], str]
@@ -569,12 +609,13 @@ def all_charts(result: DesignResult) -> dict[str, str]:
     return out
 
 
+#: Títulos de los gráficos (en español; se traducen con :func:`trawlkit.i18n.t` al usarlos).
 CHART_TITLES: dict[str, str] = {
-    "remolque": "Tiro disponible frente a resistencia total",
-    "resistencia_std": "Resistencia de la red estándar por método",
-    "resistencia_mod": "Resistencia de la red modificada por método",
-    "composicion": "Composición de la resistencia total",
-    "aberturas": "Aberturas de la red (Fridman)",
+    "remolque": N_("Tiro disponible frente a resistencia total"),
+    "resistencia_std": N_("Resistencia de la red estándar por método"),
+    "resistencia_mod": N_("Resistencia de la red modificada por método"),
+    "composicion": N_("Composición de la resistencia total"),
+    "aberturas": N_("Aberturas de la red (Fridman)"),
 }
 
 __all__ = [

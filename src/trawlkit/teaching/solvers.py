@@ -23,6 +23,7 @@ from trawlkit import dimensions, drag, net, netting, power
 from trawlkit.construction import cut_cycle
 from trawlkit.economics import KNOT_MS
 from trawlkit.economics import G as G_ECON
+from trawlkit.i18n import N_
 from trawlkit.io import PropellerType
 from trawlkit.performance import speed_window
 from trawlkit.rigging import ballast, doors, floats, spread, warps
@@ -79,7 +80,7 @@ def derive(name: str, values: Values) -> Values:
 
 
 def derived_labels(name: str) -> dict[str, tuple[str, str]]:
-    """Etiqueta y unidad de los datos que agrega ``derive``."""
+    """Etiqueta (en español, marcada con ``N_``) y unidad de los datos que agrega ``derive``."""
     return dict(_entry(name).derived)
 
 
@@ -184,8 +185,8 @@ def _derive_corte(v: Values) -> Values:
     "corte_simetrico",
     derive=_derive_corte,
     derived={
-        "t2": ("Mallas del borde menor (T2)", "mallas"),
-        "n": ("Mallas de alto (N)", "mallas"),
+        "t2": (N_("Mallas del borde menor (T2)"), "mallas"),
+        "n": (N_("Mallas de alto (N)"), "mallas"),
     },
 )
 def _corte_simetrico(v: Values) -> Values:
@@ -550,7 +551,7 @@ def _derive_embande(v: Values) -> Values:
     return {"relinga": round(_f(v, "e_obj") * stretched, 1)}
 
 
-@solver("embande", derive=_derive_embande, derived={"relinga": ("Largo de la relinga", "m")})
+@solver("embande", derive=_derive_embande, derived={"relinga": (N_("Largo de la relinga"), "m")})
 def _embande(v: Values) -> Values:
     stretched = netting.stretched_length_m(_f(v, "mallas"), _f(v, "malla"))
     e = _f(v, "relinga") / float(stretched)
@@ -566,7 +567,7 @@ def _derive_toma(v: Values) -> Values:
     return {"nb": round(_f(v, "na") * _f(v, "razon_b"))}
 
 
-@solver("toma_union", derive=_derive_toma, derived={"nb": ("Mallas del paño B", "mallas")})
+@solver("toma_union", derive=_derive_toma, derived={"nb": (N_("Mallas del paño B"), "mallas")})
 def _toma_union(v: Values) -> Values:
     na, nb = int(_f(v, "na")), int(_f(v, "nb"))
     frac = Fraction(na, nb).limit_denominator(8)

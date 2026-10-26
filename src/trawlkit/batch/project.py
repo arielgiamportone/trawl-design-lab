@@ -30,6 +30,7 @@ from typing import Any, Literal
 
 from trawlkit.batch.fleet import FleetVessel
 from trawlkit.catalog import catalog_case, design_hp
+from trawlkit.i18n import t
 from trawlkit.io import Door, NetSpec, Vessel, load_doors, load_net, load_vessels
 from trawlkit.model import DesignCase
 from trawlkit.optimize import (
@@ -267,8 +268,13 @@ def project_net(
     p_design = design_hp(spec)
     s0 = math.sqrt(vessel.bhp / p_design)
     notes.append(
-        f"escala por semejanza s₀ = √({vessel.bhp:g} / {p_design:g}) = {s0:.3f} "
-        "(superficie de paño ∝ potencia)"
+        t(
+            "escala por semejanza s₀ = √({hp:g} / {design:g}) = {s0:.3f} "
+            "(superficie de paño ∝ potencia)",
+            hp=vessel.bhp,
+            design=p_design,
+            s0=s0,
+        )
     )
     overrides: dict[str, Any] = {}
     if fv.fishing_depth_m is not None:
@@ -278,10 +284,12 @@ def project_net(
     if spec.vessel_hp is None:
         # Red sin potencia de diseño (la A-3 del libro): el caso del libro, 150 hp y su portón.
         base = DesignCase(spec, _a3_vessel(), _a3_door(), **overrides)
-        notes.append("red sin potencia de diseño: caso base del libro (buque y portón de la A-3)")
+        notes.append(
+            t("red sin potencia de diseño: caso base del libro (buque y portón de la A-3)")
+        )
     else:
         base = catalog_case(spec, **overrides).case
-        notes += [f"caso base: {a}" for a in base.assumptions]
+        notes += [t("caso base: {note}", note=a) for a in base.assumptions]
     prop = vessel.propeller if vessel.propeller in FRIDMAN_KF else base.ft_propeller
     region = fv.region or opt.region
     generic = fv.generic_only or opt.generic_only
@@ -325,12 +333,16 @@ def project_net(
         runs += used
     if best.feasible and best.s >= s_bounds[1] - 0.01:
         notes.append(
-            "la escala llegó al tope del rango (1,3·s₀): el buque podría con una red mayor"
+            t("la escala llegó al tope del rango (1,3·s₀): el buque podría con una red mayor")
         )
     if not best.feasible:
-        notes.append("ninguna escala de la malla cumple todas las restricciones")
+        notes.append(t("ninguna escala de la malla cumple todas las restricciones"))
     scaled = scale_net(spec, best.s)
-    scaled = scaled.model_copy(update={"name": f"{spec.name} × {best.s:.2f} para {vessel.name}"})
+    scaled = scaled.model_copy(
+        update={
+            "name": t("{net} × {s:.2f} para {vessel}", net=spec.name, s=best.s, vessel=vessel.name)
+        }
+    )
     assembly: Assembly | None = None
     final = dataclasses.replace(case, net=scaled)
     if opt.assemble:
@@ -354,7 +366,7 @@ def project_net(
             final = _with_assembly(final, assembly, ca)
             notes += list(ca.notes)
         except ValueError as exc:
-            notes.append(f"armado con componentes: {exc}")
+            notes.append(t("armado con componentes: {exc}", exc=exc))
     return Projection(
         vessel=fv,
         base_net=spec.id,

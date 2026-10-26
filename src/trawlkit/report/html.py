@@ -13,6 +13,7 @@ from collections.abc import Callable, Sequence
 from html import escape
 from typing import TYPE_CHECKING
 
+from trawlkit.i18n import N_, dec, get_lang, t
 from trawlkit.report.labels import fmt
 from trawlkit.report.tables import Table, all_tables, errata_table, notes_table, summary_table
 
@@ -30,60 +31,68 @@ WIDE_TABLE_COLUMNS = 8
 #: Metodología: (etapa, autores / fuentes, descripción en una línea).
 METHODOLOGY: tuple[tuple[str, str, str], ...] = (
     (
-        "Potencia y tiro disponible",
-        "Fridman; Prado y Dremière (FAO); Koyama; Nomura; Hamuro",
-        "Reparto de la potencia al freno y fuerza de tiro FT disponible por velocidad.",
+        N_("Potencia y tiro disponible"),
+        N_("Fridman; Prado y Dremière (FAO); Koyama; Nomura; Hamuro"),
+        N_("Reparto de la potencia al freno y fuerza de tiro FT disponible por velocidad."),
     ),
     (
-        "Paños y cortes",
-        "FAO (tabla de cortes); Prado",
-        "Largos estirados, superficie de trabajo de cada paño, códigos y ángulo de corte.",
+        N_("Paños y cortes"),
+        N_("FAO (tabla de cortes); Prado"),
+        N_("Largos estirados, superficie de trabajo de cada paño, códigos y ángulo de corte."),
     ),
     (
-        "Mecánica de la red",
+        N_("Mecánica de la red"),
         "FAO; L. G. Pérez Águila (2010)",
-        "Índice de filtración d/l, superficies sólida y de trabajo, solidez y pesos.",
+        N_("Índice de filtración d/l, superficies sólida y de trabajo, solidez y pesos."),
     ),
     (
-        "Dimensiones",
-        "Martini (nivel 2); A. Fujiishi; Nomura",
-        "Lima y burlón, largos, circunferencias, factor largo y proporciones de referencia.",
+        N_("Dimensiones"),
+        N_("Martini (nivel 2); A. Fujiishi; Nomura"),
+        N_("Lima y burlón, largos, circunferencias, factor largo y proporciones de referencia."),
     ),
     (
-        "Resistencia de la red",
-        "Tauti, Nomura y Shu; Koyama; Hamuro; Reid; Robertson; MacLennan; "
-        "Marine Laboratory Aberdeen; Fridman; Dickson",
-        "Trece fórmulas empíricas de RN; Aberdeen demersal es la RN de diseño.",
+        N_("Resistencia de la red"),
+        N_(
+            "Tauti, Nomura y Shu; Koyama; Hamuro; Reid; Robertson; MacLennan; "
+            "Marine Laboratory Aberdeen; Fridman; Dickson"
+        ),
+        N_("Trece fórmulas empíricas de RN; Aberdeen demersal es la RN de diseño."),
     ),
     (
-        "Portones",
-        "Fridman; catálogos FAO y Morgère",
-        "Separación entre portones, polar CL/CD, ROB como fracción de FT y superficie requerida.",
+        N_("Portones"),
+        N_("Fridman; catálogos FAO y Morgère"),
+        N_(
+            "Separación entre portones, polar CL/CD, ROB como fracción de FT y "
+            "superficie requerida."
+        ),
     ),
     (
-        "Bridas, patentes y pies de gallo",
+        N_("Bridas, patentes y pies de gallo"),
         "Martini; P. Y. Dremière",
-        "Longitudes de bridas y patentes y ángulo de ataque δ del aparejo.",
+        N_("Longitudes de bridas y patentes y ángulo de ataque δ del aparejo."),
     ),
     (
-        "Aberturas",
-        "Baranov y Fridman; N. Suzuki (JICA); Prado y Dremière; A. Izzo (INIDEP); Martini",
-        "DPA por Fridman, geométrica y por corte; abertura horizontal y vertical.",
+        N_("Aberturas"),
+        N_("Baranov y Fridman; N. Suzuki (JICA); Prado y Dremière; A. Izzo (INIDEP); Martini"),
+        N_("DPA por Fridman, geométrica y por corte; abertura horizontal y vertical."),
     ),
     (
-        "Flotación y lastre",
-        "Koyama; Prado y Dremière; Fridman; Hoerner (1975)",
-        "Flotación de la lima, número y reparto de boyas, su resistencia y el lastre del burlón.",
+        N_("Flotación y lastre"),
+        N_("Koyama; Prado y Dremière; Fridman; Hoerner (1975)"),
+        N_(
+            "Flotación de la lima, número y reparto de boyas, su resistencia y el "
+            "lastre del burlón."
+        ),
     ),
     (
-        "Cables de remolque",
-        "Nomura y Yamazaki; L. G. Pérez Águila; MacLennan; Kowalski y Gianotti",
-        "Ángulos, diámetro, CD, resistencia del cable, cargas y selección del catálogo.",
+        N_("Cables de remolque"),
+        N_("Nomura y Yamazaki; L. G. Pérez Águila; MacLennan; Kowalski y Gianotti"),
+        N_("Ángulos, diámetro, CD, resistencia del cable, cargas y selección del catálogo."),
     ),
     (
-        "Ventana de velocidad",
+        N_("Ventana de velocidad"),
         "trawlkit",
-        "Velocidad máxima remolcable donde el tiro disponible iguala la resistencia total.",
+        N_("Velocidad máxima remolcable donde el tiro disponible iguala la resistencia total."),
     ),
 )
 
@@ -199,10 +208,11 @@ def inline_svg(svg: str) -> str:
     return _XML_DECL.sub("", svg).strip()
 
 
-def placeholder_svg(title: str = "Plano no disponible") -> str:
+def placeholder_svg(title: str | None = None) -> str:
     """Lámina provisoria: marco con el texto 'Plano no disponible'."""
     from trawlkit.drawing.svg import document, rect, text
 
+    title = t("Plano no disponible") if title is None else title
     w, h = 1190.0, 842.0
     return document(
         w,
@@ -211,7 +221,9 @@ def placeholder_svg(title: str = "Plano no disponible") -> str:
             rect(10, 10, w - 20, h - 20, cls="line"),
             rect(20, 20, w - 40, h - 40, cls="thin"),
             text((w / 2, h / 2), title, cls="title mid"),
-            text((w / 2, h / 2 + 22), "trawlkit.drawing no está disponible", cls="muted-text mid"),
+            text(
+                (w / 2, h / 2 + 22), t("trawlkit.drawing no está disponible"), cls="muted-text mid"
+            ),
         ],
         title_text=title,
     )
@@ -263,7 +275,7 @@ def _e(value: object) -> str:
 def _cell(value: object) -> tuple[str, bool]:
     """Texto formateado y si es numérico."""
     if isinstance(value, bool):
-        return ("sí" if value else "no"), False
+        return (t("sí") if value else t("no")), False
     if isinstance(value, int | float):
         return fmt(float(value)), True
     if value is None:
@@ -288,6 +300,7 @@ def render_table(table: Table, *, caption: bool = True, hide: Sequence[str] = ()
             meta=table.meta,
         )
     kv = [c.key for c in table.columns] == ["group", "name", "value", "unit"]
+    status_class = _status_classes()
     head = "".join(
         f'<th scope="col"{" class=num" if _is_num_col(table, i) else ""}>{_e(c.heading)}</th>'
         for i, c in enumerate(table.columns)
@@ -305,7 +318,7 @@ def render_table(table: Table, *, caption: bool = True, hide: Sequence[str] = ()
                     txt = ""
                 prev_group = value
             if table.key == "erratas" and table.columns[i].key == "status":
-                cls = f"status-{txt}"
+                cls = f"status-{status_class.get(txt, txt)}"
             tds.append(f'<td class="{cls}">{_e(txt)}</td>' if cls else f"<td>{_e(txt)}</td>")
         body.append("<tr>" + "".join(tds) + "</tr>")
     cap = f"<caption>{_e(table.title)}</caption>" if caption else ""
@@ -313,7 +326,7 @@ def render_table(table: Table, *, caption: bool = True, hide: Sequence[str] = ()
     if table.note:
         foot += f'<p class="source">{_e(table.note)}</p>'
     if table.source:
-        foot += f'<p class="source">Celdas del libro: {_e(table.source)}</p>'
+        foot += f'<p class="source">{_e(t("Celdas del libro: {cells}", cells=table.source))}</p>'
     wide = len(table.columns) >= WIDE_TABLE_COLUMNS
     small = len(table.rows) <= 14
     classes = "tblock" + (" wide" if wide else "") + (" small" if small else "")
@@ -322,6 +335,11 @@ def render_table(table: Table, *, caption: bool = True, hide: Sequence[str] = ()
         f"{cap}<thead><tr>{head}</tr></thead><tbody>{''.join(body)}</tbody></table></div>"
         f"{foot}</div>"
     )
+
+
+def _status_classes() -> dict[str, str]:
+    """Estado traducido de una errata → clase CSS (siempre la palabra en español)."""
+    return {t(s): s for s in (N_("reproducida"), N_("corregida"), N_("documentada"))}
 
 
 def _is_num_col(table: Table, i: int) -> bool:
@@ -334,22 +352,22 @@ def _kpis(result: DesignResult) -> str:
     win = result.performance.design
     sel = result.warps.selection
     tiles: list[tuple[str, str, str, str, str]] = [
-        ("Abertura vertical (AV)", fmt(result.spread.vertical.suzuki_m), "m", "Suzuki", ""),
-        ("Abertura horizontal (AH)", fmt(result.spread.horizontal_opening_m), "m", "", ""),
+        (t("Abertura vertical (AV)"), fmt(result.spread.vertical.suzuki_m), "m", "Suzuki", ""),
+        (t("Abertura horizontal (AH)"), fmt(result.spread.horizontal_opening_m), "m", "", ""),
     ]
     if any(abs(v - 3.0) < 1e-9 for v in case.speeds_kn):
         rn3 = float(result.drag.rn.std[case.speed_index(3.0)])
-        tiles.append(("RN a 3 kn", fmt(round(rn3, 1)), "kgf", "red estándar, Aberdeen", ""))
+        tiles.append((t("RN a 3 kn"), fmt(round(rn3, 1)), "kgf", t("red estándar, Aberdeen"), ""))
     vmax = "—" if win.max_speed_kn is None else f"{win.max_speed_kn:.2f}"
-    tiles.append(("Velocidad máxima", vmax, "kn", "FT ≥ R, red estándar", ""))
+    tiles.append((t("Velocidad máxima"), vmax, "kn", t("FT ≥ R, red estándar"), ""))
     ok = sel.satisfies_breaking_load
     tiles.append(
         (
-            "Cable seleccionado",
+            t("Cable seleccionado"),
             fmt(sel.diameter_mm),
             "mm",
-            f"rotura {fmt(sel.breaking_load_t)} t — "
-            + ("cumple" if ok else "no cumple la rotura mínima"),
+            t("rotura {load} t — ", load=fmt(sel.breaking_load_t))
+            + (t("cumple") if ok else t("no cumple la rotura mínima")),
             "ok" if ok else "warn",
         )
     )
@@ -372,37 +390,44 @@ def _cover(result: DesignResult, generated: _dt.date) -> str:
     if case.net_modified is not None:
         nets_mod = f"{case.net_modified.name} ({case.net_modified.id})"
     else:
-        nets_mod = "— (misma red que la estándar)"
+        nets_mod = t("— (misma red que la estándar)")
     others = [v for v in case.vessel_class if v.id != case.vessel.id]
     vessel = f"{case.vessel.name or case.vessel.id} — {case.vessel.bhp:g} BHP"
     facts = [
-        ("Red estándar", nets),
-        ("Red modificada", nets_mod),
-        ("Buque de diseño", vessel),
+        (t("Red estándar"), nets),
+        (t("Red modificada"), nets_mod),
+        (t("Buque de diseño"), vessel),
         (
-            "Buques de la clase",
+            t("Buques de la clase"),
             ", ".join(f"{v.id} ({v.bhp:g} BHP)" for v in others) if others else "—",
         ),
-        ("Portón", f"{case.door.name} ({case.door.id})"),
-        ("Modo de compatibilidad", case.compat.value),
-        ("Velocidades", ", ".join(f"{v:g}" for v in case.speeds_kn) + " kn"),
-        ("Fecha", generated.isoformat()),
-        ("Versión de trawlkit", __version__),
+        (t("Portón"), f"{case.door.name} ({case.door.id})"),
+        (t("Modo de compatibilidad"), case.compat.value),
+        (t("Velocidades"), ", ".join(f"{v:g}" for v in case.speeds_kn) + " kn"),
+        (t("Fecha"), generated.isoformat()),
+        (t("Versión de trawlkit"), __version__),
     ]
     dl = "".join(f"<dt>{_e(k)}</dt><dd>{_e(v)}</dd>" for k, v in facts)
     return (
         '<section id="portada" class="cover">'
-        '<div class="kicker">Informe de diseño · trawlkit</div>'
+        f'<div class="kicker">{_e(t("Informe de diseño · trawlkit"))}</div>'
         f"<h1>{_e(case.net.name)}</h1>"
-        '<p class="muted">Dimensionamiento de red, aparejo, flotación, lastre y cable de '
-        "remolque a partir del modelo FAO A-3.</p>"
+        '<p class="muted">'
+        + _e(
+            t(
+                "Dimensionamiento de red, aparejo, flotación, lastre y cable de remolque a "
+                "partir del modelo FAO A-3."
+            )
+        )
+        + "</p>"
         f'<dl class="facts">{dl}</dl></section>'
     )
 
 
 def _toc(entries: Sequence[tuple[str, str]]) -> str:
-    items = "".join(f'<li><a href="#{_e(i)}">{_e(t)}</a></li>' for i, t in entries)
-    return f'<nav class="toc" aria-label="Contenido"><h2>Contenido</h2><ol>{items}</ol></nav>'
+    items = "".join(f'<li><a href="#{_e(i)}">{_e(name)}</a></li>' for i, name in entries)
+    head = _e(t("Contenido"))
+    return f'<nav class="toc" aria-label="{head}"><h2>{head}</h2><ol>{items}</ol></nav>'
 
 
 def _sheet_section(sid: str, title: str, svg: str, note: str) -> str:
@@ -423,15 +448,21 @@ def _optimization_section(opt: OptimizationResult) -> str:
     )
 
     figs = "".join(
-        f'<figure id="grafico-{_e(k)}" role="img" aria-label="{_e(OPT_CHART_TITLES[k])}">'
-        f"{inline_svg(svg)}<figcaption>{_e(OPT_CHART_TITLES[k])}</figcaption></figure>"
+        f'<figure id="grafico-{_e(k)}" role="img" aria-label="{_e(t(OPT_CHART_TITLES[k]))}">'
+        f"{inline_svg(svg)}<figcaption>{_e(t(OPT_CHART_TITLES[k]))}</figcaption></figure>"
         for k, svg in optimization_charts(opt).items()
     )
     return (
-        '<section id="optimizacion" class="major"><h2>Optimización</h2>'
-        '<p class="muted">Escala de la red (mismo mallero, s veces más mallas por borde) y '
-        "velocidad de arrastre que mejor cumplen el objetivo respetando tiro, apertura, cable y "
-        "portón (trawlkit.optimize).</p>"
+        f'<section id="optimizacion" class="major"><h2>{_e(t("Optimización"))}</h2>'
+        '<p class="muted">'
+        + _e(
+            t(
+                "Escala de la red (mismo mallero, s veces más mallas por borde) y velocidad de "
+                "arrastre que mejor cumplen el objetivo respetando tiro, apertura, cable y "
+                "portón (trawlkit.optimize)."
+            )
+        )
+        + "</p>"
         + render_table(optimization_best_table(opt))
         + render_table(optimization_constraints_table(opt))
         + figs
@@ -443,21 +474,27 @@ def _optimization_section(opt: OptimizationResult) -> str:
 def _simulation_section(result: DesignResult, sims: Sequence[SimResult]) -> str:
     from trawlkit.report.extras import simulation_projections, simulation_table
 
-    views = (("plan", "Planta"), ("profile", "Perfil"), ("front", "Frente"))
+    views = (("plan", N_("Planta")), ("profile", N_("Perfil")), ("front", N_("Frente")))
     figs = []
     for v, proj in simulation_projections(sims).items():
-        vtxt = f"{v:.1f}".replace(".", ",")
+        vtxt = dec(v, 1)
         for key, name in views:
-            cap = f"{name} de la red simulada a {vtxt} kn"
+            cap = t("{view} de la red simulada a {v} kn", view=t(name), v=vtxt)
             figs.append(
                 f'<figure class="sim" role="img" aria-label="{_e(cap)}">'
                 f"{inline_svg(proj[key])}<figcaption>{_e(cap)}</figcaption></figure>"
             )
     return (
-        '<section id="simulacion" class="major"><h2>Simulación</h2>'
-        '<p class="muted">Forma de equilibrio de la red remolcada (trawlkit.sim, experimental): '
-        "paño de hilos con arrastre de Morison, relingas, boyas, lastre, bridas, patentes y "
-        "contacto con el fondo.</p>"
+        f'<section id="simulacion" class="major"><h2>{_e(t("Simulación"))}</h2>'
+        '<p class="muted">'
+        + _e(
+            t(
+                "Forma de equilibrio de la red remolcada (trawlkit.sim, experimental): paño de "
+                "hilos con arrastre de Morison, relingas, boyas, lastre, bridas, patentes y "
+                "contacto con el fondo."
+            )
+        )
+        + "</p>"
         + render_table(simulation_table(result, sims))
         + "".join(figs)
         + "</section>"
@@ -490,11 +527,11 @@ def render_html(
     has_mod = case.net_modified is not None
 
     sections: list[str] = []
-    toc: list[tuple[str, str]] = [("resumen", "Resumen")]
+    toc: list[tuple[str, str]] = [("resumen", t("Resumen"))]
 
     summary = summary_table(result)
     sections.append(
-        '<section id="resumen" class="major"><h2>Resumen</h2>'
+        f'<section id="resumen" class="major"><h2>{_e(t("Resumen"))}</h2>'
         + _kpis(result)
         + render_table(summary, hide=("key",))
         + "</section>"
@@ -503,146 +540,173 @@ def render_html(
     def sheet(key: str) -> str:
         return sheets.get(key) or placeholder_svg()
 
-    toc.append(("lamina-estandar", "Lámina de la red estándar"))
+    toc.append(("lamina-estandar", t("Lámina de la red estándar")))
     sections.append(
         _sheet_section(
             "lamina-estandar",
-            "Lámina de la red estándar",
+            t("Lámina de la red estándar"),
             sheet("std"),
-            f"Plano de paños de {case.net.id}.",
+            t("Plano de paños de {net}.", net=case.net.id),
         )
     )
     if has_mod:
         assert case.net_modified is not None
-        toc.append(("lamina-modificada", "Lámina de la red modificada"))
+        toc.append(("lamina-modificada", t("Lámina de la red modificada")))
         sections.append(
             _sheet_section(
                 "lamina-modificada",
-                "Lámina de la red modificada",
+                t("Lámina de la red modificada"),
                 sheet("mod"),
-                f"Plano de paños de {case.net_modified.id}.",
+                t("Plano de paños de {net}.", net=case.net_modified.id),
             )
         )
-    toc.append(("escala", "Escala real"))
+    toc.append(("escala", t("Escala real")))
+    scale_note = N_(
+        "Vista a escala real reducida para la página; el archivo {file} conserva la escala."
+    )
     scale_html = [
         _sheet_section(
             "escala",
-            "Escala real — red estándar",
+            t("Escala real — red estándar"),
             sheet("scale_std"),
-            "Vista a escala real reducida para la página; el archivo plano_escala_estandar.svg "
-            "conserva la escala.",
+            t(scale_note, file="plano_escala_estandar.svg"),
         )
     ]
     if has_mod:
         scale_html.append(
             _sheet_section(
                 "escala-modificada",
-                "Escala real — red modificada",
+                t("Escala real — red modificada"),
                 sheet("scale_mod"),
-                "Vista a escala real reducida para la página; el archivo "
-                "plano_escala_modificada.svg conserva la escala.",
+                t(scale_note, file="plano_escala_modificada.svg"),
             )
         )
     sections.extend(scale_html)
 
-    toc.append(("graficos", "Gráficos"))
+    toc.append(("graficos", t("Gráficos")))
     figs = "".join(
-        f'<figure id="grafico-{_e(k)}" role="img" aria-label="{_e(CHART_TITLES.get(k, k))}">'
-        f"{inline_svg(svg)}<figcaption>{_e(CHART_TITLES.get(k, k))}</figcaption></figure>"
+        f'<figure id="grafico-{_e(k)}" role="img" aria-label="{_e(t(CHART_TITLES.get(k, k)))}">'
+        f"{inline_svg(svg)}<figcaption>{_e(t(CHART_TITLES.get(k, k)))}</figcaption></figure>"
         for k, svg in chart_svgs.items()
     )
     sections.append(
-        '<section id="graficos" class="major"><h2>Gráficos</h2>'
-        '<p class="muted">Los valores de cada gráfico están en las tablas de la sección '
-        "siguiente.</p>"
-        f"{figs}</section>"
+        f'<section id="graficos" class="major"><h2>{_e(t("Gráficos"))}</h2>'
+        '<p class="muted">'
+        + _e(t("Los valores de cada gráfico están en las tablas de la sección siguiente."))
+        + f"</p>{figs}</section>"
     )
 
     if optimization is not None:
-        toc.append(("optimizacion", "Optimización"))
+        toc.append(("optimizacion", t("Optimización")))
         sections.append(_optimization_section(optimization))
     if simulation:
-        toc.append(("simulacion", "Simulación"))
+        toc.append(("simulacion", t("Simulación")))
         sections.append(_simulation_section(result, simulation))
 
     from trawlkit.report.construction import report_tables
 
-    toc.append(("construccion", "Construcción"))
-    construction_html = "".join(render_table(t) for t in report_tables(result))
+    toc.append(("construccion", t("Construcción")))
+    construction_html = "".join(render_table(tb) for tb in report_tables(result))
     sections.append(
-        '<section id="construccion" class="major"><h2>Construcción y materiales</h2>'
-        "<p>Lista de materiales y guía para el taller (red estándar): paño a comprar, hoja de "
-        "corte, uniones, montaje en relingas, boyas, lastre y cortes de cabos. La versión para "
-        "imprimir en A4 sale de <code>trawlkit build-guide</code> o de la pestaña "
-        "«Construcción» de la app.</p>"
-        f"{construction_html}</section>"
+        '<section id="construccion" class="major">'
+        f"<h2>{_e(t('Construcción y materiales'))}</h2>"
+        + t(
+            "<p>Lista de materiales y guía para el taller (red estándar): paño a comprar, hoja "
+            "de corte, uniones, montaje en relingas, boyas, lastre y cortes de cabos. La versión "
+            "para imprimir en A4 sale de <code>trawlkit build-guide</code> o de la pestaña "
+            "«Construcción» de la app.</p>"
+        )
+        + f"{construction_html}</section>"
     )
 
-    toc.append(("tablas", "Tablas"))
+    toc.append(("tablas", t("Tablas")))
     skip = {"resumen", "erratas", "notas"}
-    tables = [t for t in all_tables(result) if t.key not in skip]
+    tables = [tb for tb in all_tables(result) if tb.key not in skip]
     # Primero las angostas (A4 vertical, junto al título) y luego las anchas (A4 apaisado),
     # para no forzar un cambio de página por cada tabla.
-    tables.sort(key=lambda t: len(t.columns) >= WIDE_TABLE_COLUMNS)
-    tables_html = "".join(render_table(t) for t in tables)
-    sections.append(f'<section id="tablas" class="major"><h2>Tablas</h2>{tables_html}</section>')
-
-    toc.append(("erratas", "Erratas"))
+    tables.sort(key=lambda tb: len(tb.columns) >= WIDE_TABLE_COLUMNS)
+    tables_html = "".join(render_table(tb) for tb in tables)
     sections.append(
-        '<section id="erratas" class="major erratas-block"><h2>Erratas del libro original</h2>'
-        f"<p>Modo de compatibilidad del caso: <strong>{_e(case.compat.value)}</strong>. "
-        "En modo <em>excel</em> se reproducen las erratas para validar la migración contra el "
-        "libro; en modo <em>corrected</em> se aplican las fórmulas correctas.</p>"
+        f'<section id="tablas" class="major"><h2>{_e(t("Tablas"))}</h2>{tables_html}</section>'
+    )
+
+    toc.append(("erratas", t("Erratas")))
+    sections.append(
+        '<section id="erratas" class="major erratas-block">'
+        f"<h2>{_e(t('Erratas del libro original'))}</h2>"
+        + t(
+            "<p>Modo de compatibilidad del caso: <strong>{mode}</strong>. "
+            "En modo <em>excel</em> se reproducen las erratas para validar la migración contra "
+            "el libro; en modo <em>corrected</em> se aplican las fórmulas correctas.</p>",
+            mode=_e(case.compat.value),
+        )
         + '<div class="erratas-block">'
         + render_table(errata_table(result), caption=False)
         + "</div></section>"
     )
 
-    toc.append(("notas", "Notas"))
+    toc.append(("notas", t("Notas")))
     notes = notes_table(result)
     notes_html = (
         '<ul class="notes">' + "".join(f"<li>{_e(r[1])}</li>" for r in notes.rows) + "</ul>"
         if notes.rows
-        else "<p>La corrida no dejó notas.</p>"
+        else f"<p>{_e(t('La corrida no dejó notas.'))}</p>"
     )
-    sections.append(f'<section id="notas"><h2>Notas de la corrida</h2>{notes_html}</section>')
+    sections.append(
+        f'<section id="notas"><h2>{_e(t("Notas de la corrida"))}</h2>{notes_html}</section>'
+    )
 
-    toc.append(("metodologia", "Metodología"))
+    toc.append(("metodologia", t("Metodología")))
     rows = "".join(
-        f"<tr><td>{_e(stage)}</td><td>{_e(authors)}</td><td>{_e(desc)}</td></tr>"
+        f"<tr><td>{_e(t(stage))}</td><td>{_e(t(authors))}</td><td>{_e(t(desc))}</td></tr>"
         for stage, authors, desc in METHODOLOGY
     )
     sections.append(
-        '<section id="metodologia" class="major"><h2>Metodología</h2>'
-        "<p>El motor reproduce, hoja por hoja, el libro <em>Calculos_Red_FAO_A3.xlsx</em> y "
-        "encadena las etapas en el orden en que el libro resuelve sus dependencias.</p>"
-        '<div class="table-wrap"><table><thead><tr><th scope="col">Etapa</th>'
-        '<th scope="col">Autores y fuentes</th><th scope="col">Qué calcula</th></tr></thead>'
+        f'<section id="metodologia" class="major"><h2>{_e(t("Metodología"))}</h2>'
+        + t(
+            "<p>El motor reproduce, hoja por hoja, el libro <em>Calculos_Red_FAO_A3.xlsx</em> y "
+            "encadena las etapas en el orden en que el libro resuelve sus dependencias.</p>"
+        )
+        + f'<div class="table-wrap"><table><thead><tr><th scope="col">{_e(t("Etapa"))}</th>'
+        f'<th scope="col">{_e(t("Autores y fuentes"))}</th>'
+        f'<th scope="col">{_e(t("Qué calcula"))}</th></tr></thead>'
         f"<tbody>{rows}</tbody></table></div></section>"
     )
 
-    toc.append(("creditos", "Créditos"))
+    toc.append(("creditos", t("Créditos")))
     sections.append(
-        '<section id="creditos"><h2>Créditos y licencias</h2>'
-        "<p>Modelo Excel original (<em>Calculos_Red_FAO_A3.xlsx</em>, 2014-2024): "
-        "<strong>Ariel Luján Giamportone</strong>.</p>"
-        "<p>Documentación y datos: licencia Creative Commons Atribución 4.0 (CC BY 4.0). "
-        "Código de trawlkit: licencia MIT.</p>"
-        '<p class="muted">Repositorio: github.com/arielgiamportone/trawl-design-lab · '
-        "Modelo original: github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel</p>"
-        "</section>"
+        f'<section id="creditos"><h2>{_e(t("Créditos y licencias"))}</h2>'
+        + t(
+            "<p>Modelo Excel original (<em>Calculos_Red_FAO_A3.xlsx</em>, 2014-2024): "
+            "<strong>Ariel Luján Giamportone</strong>.</p>"
+            "<p>Documentación y datos: licencia Creative Commons Atribución 4.0 (CC BY 4.0). "
+            "Código de trawlkit: licencia MIT.</p>"
+        )
+        + '<p class="muted">'
+        + t(
+            "Repositorio: github.com/arielgiamportone/trawl-design-lab · "
+            "Modelo original: github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel"
+        )
+        + "</p></section>"
     )
 
-    title = f"Informe de diseño — {case.net.name}"
+    title = t("Informe de diseño — {net}", net=case.net.name)
+    css = CSS
+    if get_lang() != "es":
+        css = css.replace(
+            '"trawlkit · informe de diseño"', f'"{t("trawlkit · informe de diseño")}"'
+        )
     return (
-        '<!DOCTYPE html>\n<html lang="es"><head><meta charset="utf-8">'
+        f'<!DOCTYPE html>\n<html lang="{get_lang()}"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width, initial-scale=1">'
         f'<meta name="generator" content="trawlkit"><title>{_e(title)}</title>'
-        f"<style>{CSS}</style></head><body>"
+        f"<style>{css}</style></head><body>"
         + _cover(result, generated)
         + _toc(toc)
         + "".join(sections)
-        + f"<footer>Generado por trawlkit el {_e(generated.isoformat())}.</footer>"
+        + "<footer>"
+        + _e(t("Generado por trawlkit el {date}.", date=generated.isoformat()))
+        + "</footer>"
         + "</body></html>\n"
     )
 

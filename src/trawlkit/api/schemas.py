@@ -1432,7 +1432,10 @@ class LabQuestionOut(BaseModel):
     kind: Literal["number", "choice", "text"]
     prompt: str
     unit: str
-    options: list[str] | None
+    options: list[str] | None = Field(description="Textos de las opciones en el idioma activo")
+    option_ids: list[str] | None = Field(
+        default=None, description="Ids estables de las opciones (se puede responder con el id)"
+    )
 
 
 class LabTargetOut(BaseModel):

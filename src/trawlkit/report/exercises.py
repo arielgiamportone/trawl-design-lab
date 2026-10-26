@@ -10,6 +10,7 @@ import datetime as _dt
 import html
 from collections.abc import Sequence
 
+from trawlkit.i18n import get_lang, t
 from trawlkit.report.construction import _CSS
 from trawlkit.teaching.bank import LEVEL_LABELS, ExerciseInstance, Solution
 
@@ -52,31 +53,38 @@ def _answers_html(ex: ExerciseInstance, sol: Solution | None) -> str:
 def exercise_sheet_html(
     items: Sequence[tuple[ExerciseInstance, Solution | None]],
     *,
-    title: str = "Guía de ejercicios",
+    title: str | None = None,
     subtitle: str | None = None,
     generated: _dt.date | None = None,
 ) -> str:
     """Guía en HTML autocontenido; con soluciones en los ítems es la clave de respuestas."""
+    title = t("Guía de ejercicios") if title is None else title
     date = (generated or _dt.date.today()).isoformat()
     key = any(sol is not None for _, sol in items)
     blocks = []
     for n, (ex, sol) in enumerate(items, 1):
-        level = LEVEL_LABELS.get(ex.level, ex.level)
+        level = t(LEVEL_LABELS.get(ex.level, ex.level))
         blocks.append(
             "<div class='ex'>"
             f"<h3>{n}. {html.escape(ex.title)}<span class='tag'>{html.escape(level)}</span>"
-            f"<span class='tag'>{html.escape(ex.id)} · semilla {ex.seed}</span></h3>"
+            f"<span class='tag'>{html.escape(ex.id)} · {t('semilla {seed}', seed=ex.seed)}</span>"
+            "</h3>"
             f"<p>{html.escape(ex.statement)}</p>{_data_table(ex)}"
             f"{_answers_html(ex, sol)}</div>"
         )
     sub = f"<p class='muted'>{html.escape(subtitle)}</p>" if subtitle else ""
-    kind = "Clave de respuestas" if key else "Enunciados"
+    kind = t("Clave de respuestas") if key else t("Enunciados")
+    intro = t(
+        "{kind}. Generada el {date} con trawlkit. Los números usan coma decimal; las "
+        "respuestas se aceptan dentro de la tolerancia de cada ejercicio.",
+        kind=kind,
+        date=date,
+    )
     return (
-        "<!doctype html><html lang='es'><head><meta charset='utf-8'>"
+        f"<!doctype html><html lang='{get_lang()}'><head><meta charset='utf-8'>"
         f"<title>{html.escape(title)}</title><style>{_CSS}{_EXTRA_CSS}</style></head><body>"
         f"<h1>{html.escape(title)}</h1>{sub}"
-        f"<p class='small muted'>{kind}. Generada el {date} con trawlkit. Los números usan coma "
-        "decimal; las respuestas se aceptan dentro de la tolerancia de cada ejercicio.</p>"
+        f"<p class='small muted'>{intro}</p>"
         f"{''.join(blocks)}</body></html>"
     )
 
@@ -89,7 +97,7 @@ def exercise_sheet_pdf(html_text: str) -> bytes:
         from weasyprint import HTML
     except (ImportError, OSError) as exc:  # pragma: no cover - depende del entorno
         raise RuntimeError(
-            'el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)'
+            t('el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)')
         ) from exc
     out = HTML(string=flatten_css_vars(html_text)).write_pdf()
     assert isinstance(out, bytes)

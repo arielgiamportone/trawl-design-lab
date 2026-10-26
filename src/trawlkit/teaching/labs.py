@@ -11,12 +11,18 @@ parámetros del caso (``case.depth_m``) y, si hace falta, la guía de construcci
 (``construction.joins``). Una comprobación compara un hecho con un valor fijo o con el mismo hecho
 en el caso de partida del laboratorio (``baseline``). No hay ``eval``: sólo ruta, comparador y
 valor.
+
+Idiomas (Fase 18.1): los textos se escriben en español y cada objeto trae un bloque ``en:`` con su
+traducción; los atributos (``title``, ``instruction``, ``label``, ``prompt``…) devuelven el texto
+del idioma activo. Las opciones de las preguntas de opción múltiple tienen un ``id`` estable
+(``answer`` es un id) y se corrigen por id o por el texto de la opción en cualquier idioma.
 """
 
 from __future__ import annotations
 
 import dataclasses
 import math
+import re
 from dataclasses import asdict, dataclass
 from functools import cache
 from pathlib import Path
@@ -25,8 +31,16 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from trawlkit.i18n import t
 from trawlkit.io import DATA_DIR
-from trawlkit.teaching.bank import DEFAULT_TOL_REL, Level, fmt, parse_number
+from trawlkit.teaching.bank import (
+    DEFAULT_TOL_REL,
+    Level,
+    english,
+    fmt,
+    localized,
+    number_readings,
+)
 
 LABS_DIR = DATA_DIR / "teaching" / "labs"
 
@@ -34,7 +48,62 @@ Op = Literal["==", "!=", "<", "<=", ">", ">="]
 
 
 class _Model(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+
+class CheckEn(_Model):
+    """Comprobación en inglés."""
+
+    label: str
+
+
+class QuestionEn(_Model):
+    """Pregunta en inglés."""
+
+    prompt: str
+
+
+class TargetEn(_Model):
+    """Indicación del paso en inglés."""
+
+    hint: str
+
+
+class StepEn(_Model):
+    """Paso en inglés."""
+
+    title: str
+    instruction: str
+
+
+class LabEn(_Model):
+    """Laboratorio en inglés."""
+
+    title: str
+    summary: str
+    closing: str = ""
+
+
+def _norm_text(text: Any) -> str:
+    return re.sub(r"\s+", " ", str(text)).strip().casefold()
+
+
+class Option(_Model):
+    """Opción de una pregunta de opción múltiple: id estable y texto en cada idioma."""
+
+    id: str = Field(pattern=r"^[a-z0-9_]+$")
+    es: str
+    en: str | None = None
+
+    @property
+    def text(self) -> str:
+        """Texto en el idioma activo."""
+        return localized(self.es, self.en)
+
+    def matches(self, given: Any) -> bool:
+        """Verdadero si ``given`` es el id o el texto de la opción en algún idioma."""
+        g = _norm_text(given)
+        return g in {_norm_text(x) for x in (self.id, self.es, self.en) if x}
 
 
 class Check(_Model):
@@ -46,7 +115,13 @@ class Check(_Model):
     baseline_factor: float | None = Field(
         default=None, description="Compara con el hecho del caso de partida por este factor"
     )
-    label: str
+    label_es: str = Field(alias="label")
+    en: CheckEn | None = None
+
+    @property
+    def label(self) -> str:
+        """Rótulo en el idioma activo."""
+        return localized(self.label_es, self.en.label if self.en else None)
 
     @model_validator(mode="after")
     def _one(self) -> Check:
@@ -60,21 +135,49 @@ class Question(_Model):
 
     id: str
     kind: Literal["number", "choice", "text"]
-    prompt: str
+    prompt_es: str = Field(alias="prompt")
     unit: str = ""
     fact: str | None = None
     tol_rel: float = DEFAULT_TOL_REL
     tol_abs: float = 0.0
-    options: list[str] | None = None
-    answer: str | None = None
+    choices: list[Option] | None = Field(default=None, alias="options")
+    answer: str | None = Field(default=None, description="Id de la opción correcta")
+    en: QuestionEn | None = None
 
     @model_validator(mode="after")
     def _shape(self) -> Question:
         if self.kind == "number" and not self.fact:
             raise ValueError(f"{self.id}: una pregunta numérica necesita fact")
-        if self.kind == "choice" and (not self.options or self.answer not in self.options):
-            raise ValueError(f"{self.id}: una opción múltiple necesita options y answer")
+        ids = [o.id for o in self.choices or []]
+        if self.kind == "choice" and (not ids or self.answer not in ids):
+            raise ValueError(f"{self.id}: una opción múltiple necesita options y answer (un id)")
+        if len(set(ids)) != len(ids):
+            raise ValueError(f"{self.id}: ids de opción repetidos")
         return self
+
+    @property
+    def prompt(self) -> str:
+        """Pregunta en el idioma activo."""
+        return localized(self.prompt_es, self.en.prompt if self.en else None)
+
+    @property
+    def options(self) -> list[str] | None:
+        """Textos de las opciones en el idioma activo (``None`` si no es de opción múltiple)."""
+        return None if self.choices is None else [o.text for o in self.choices]
+
+    @property
+    def option_ids(self) -> list[str] | None:
+        """Ids de las opciones, en el mismo orden que :attr:`options`."""
+        return None if self.choices is None else [o.id for o in self.choices]
+
+    def option_for(self, given: Any) -> Option | None:
+        """La opción que nombra ``given`` (por id o por su texto en cualquier idioma)."""
+        return next((o for o in self.choices or [] if o.matches(given)), None)
+
+    def answer_text(self) -> str | None:
+        """Texto de la opción correcta en el idioma activo."""
+        opt = next((o for o in self.choices or [] if o.id == self.answer), None)
+        return None if opt is None else opt.text
 
 
 class Target(_Model):
@@ -82,18 +185,37 @@ class Target(_Model):
 
     mode: Literal["expert", "simple"] = "expert"
     tab: str | None = None
-    hint: str | None = None
+    hint_es: str | None = Field(default=None, alias="hint")
+    en: TargetEn | None = None
+
+    @property
+    def hint(self) -> str | None:
+        """Indicación en el idioma activo."""
+        if self.hint_es is None:
+            return None
+        return localized(self.hint_es, self.en.hint if self.en else None)
 
 
 class Step(_Model):
     """Un paso del laboratorio."""
 
     id: str
-    title: str
-    instruction: str
+    title_es: str = Field(alias="title")
+    instruction_es: str = Field(alias="instruction")
     target: Target = Field(default_factory=Target)
     checks: list[Check] = Field(default_factory=list)
     questions: list[Question] = Field(default_factory=list)
+    en: StepEn | None = None
+
+    @property
+    def title(self) -> str:
+        """Título en el idioma activo."""
+        return localized(self.title_es, self.en.title if self.en else None)
+
+    @property
+    def instruction(self) -> str:
+        """Consigna en el idioma activo."""
+        return localized(self.instruction_es, self.en.instruction if self.en else None)
 
 
 class LabSpec(_Model):
@@ -103,11 +225,30 @@ class LabSpec(_Model):
     chapter: str
     topic: str
     level: Level
-    title: str
-    summary: str
+    title_es: str = Field(alias="title")
+    summary_es: str = Field(alias="summary")
     start: dict[str, Any] = Field(description="Caso de partida (un DesignRequest)")
     steps: list[Step] = Field(min_length=1)
-    closing: str = ""
+    closing_es: str = Field(default="", alias="closing")
+    en: LabEn | None = None
+
+    def _en(self, name: str) -> str | None:
+        return getattr(self.en, name) if self.en is not None and english() else None
+
+    @property
+    def title(self) -> str:
+        """Título en el idioma activo."""
+        return localized(self.title_es, self._en("title"))
+
+    @property
+    def summary(self) -> str:
+        """Resumen en el idioma activo."""
+        return localized(self.summary_es, self._en("summary"))
+
+    @property
+    def closing(self) -> str:
+        """Cierre en el idioma activo."""
+        return localized(self.closing_es, self._en("closing"))
 
 
 class _File(_Model):
@@ -138,6 +279,47 @@ def lab(lab_id: str) -> LabSpec:
         return load_labs()[lab_id]
     except KeyError:
         raise UnknownLabError(lab_id) from None
+
+
+def lab_view(spec: LabSpec) -> dict[str, Any]:
+    """El laboratorio en el idioma activo, sin las respuestas (``LabOut`` de la API).
+
+    Las preguntas de opción múltiple dan los textos (``options``) y sus ids (``option_ids``); la
+    corrección acepta cualquiera de los dos.
+    """
+    steps = [
+        {
+            "id": s.id,
+            "title": s.title,
+            "instruction": s.instruction,
+            "target": {"mode": s.target.mode, "tab": s.target.tab, "hint": s.target.hint},
+            "checks": [{"label": c.label, "fact": c.fact, "op": c.op} for c in s.checks],
+            "questions": [
+                {
+                    "id": q.id,
+                    "kind": q.kind,
+                    "prompt": q.prompt,
+                    "unit": q.unit,
+                    "options": q.options,
+                    "option_ids": q.option_ids,
+                }
+                for q in s.questions
+            ],
+        }
+        for s in spec.steps
+    ]
+    return {
+        "id": spec.id,
+        "chapter": spec.chapter,
+        "topic": spec.topic,
+        "level": spec.level,
+        "title": spec.title,
+        "summary": spec.summary,
+        "steps": len(spec.steps),
+        "start": spec.start,
+        "step_list": steps,
+        "closing": spec.closing,
+    }
 
 
 def labs(chapter: str | None = None, level: str | None = None) -> list[LabSpec]:
@@ -293,29 +475,35 @@ def _grade_question(q: Question, given: Any, f: dict[str, Any], reveal: bool) ->
     text = None if given is None else str(given)
     if given is None or str(given).strip() == "":
         return QuestionResult(
-            q.id, False if q.kind != "text" else None, text, None, "sin respuesta"
+            q.id, False if q.kind != "text" else None, text, None, t("sin respuesta")
         )
     if q.kind == "text":
-        return QuestionResult(q.id, None, text, None, "la corrige el docente")
+        return QuestionResult(q.id, None, text, None, t("la corrige el docente"))
     if q.kind == "choice":
-        ok = str(given).strip() == q.answer
+        chosen = q.option_for(given)
+        ok = chosen is not None and chosen.id == q.answer
         return QuestionResult(
-            q.id, ok, text, q.answer if reveal else None, "correcta" if ok else "no es esa"
+            q.id,
+            ok,
+            text,
+            q.answer_text() if reveal else None,
+            t("correcta") if ok else t("no es esa"),
         )
     expected = f.get(q.fact or "")
-    x = parse_number(given)
     if expected is None or not isinstance(expected, int | float) or not math.isfinite(expected):
-        return QuestionResult(q.id, False, text, None, "el caso no tiene ese dato")
-    if x is None:
-        return QuestionResult(q.id, False, text, None, "no es un número")
+        return QuestionResult(q.id, False, text, None, t("el caso no tiene ese dato"))
     y = float(expected)
+    readings = number_readings(given)
+    if not readings:
+        return QuestionResult(q.id, False, text, None, t("no es un número"))
+    x = min(readings, key=lambda r: abs(r - y))
     ok = abs(x - y) <= max(q.tol_abs, q.tol_rel * abs(y)) + 1e-12
     return QuestionResult(
         q.id,
         ok,
         text,
         fmt(y) if reveal else None,
-        "correcta" if ok else "no coincide con su caso",
+        t("correcta") if ok else t("no coincide con su caso"),
     )
 
 

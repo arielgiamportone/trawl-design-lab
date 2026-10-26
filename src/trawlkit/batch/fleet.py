@@ -8,6 +8,7 @@ from typing import Any
 from trawlkit.batch.columns import FLEET
 from trawlkit.batch.sheets import Parsed, RowIssue, Sheet, norm, parse_sheet
 from trawlkit.catalog import generic_vessel
+from trawlkit.i18n import t
 from trawlkit.io import PropellerType, Vessel
 from trawlkit.power import FRIDMAN_KF
 
@@ -60,7 +61,7 @@ class Fleet:
 def fleet_vessel(rec: dict[str, Any], used: set[str] | None = None) -> FleetVessel:
     """Buque de una fila ya interpretada; las medidas que faltan se escalan del de la A-3."""
     bhp = float(rec["bhp"])
-    name = str(rec.get("name") or f"Buque de {bhp:g} hp")
+    name = str(rec.get("name") or t("Buque de {hp:g} hp", hp=bhp))
     base = norm(name) or "buque"
     vid = base
     k = 2
@@ -76,7 +77,13 @@ def fleet_vessel(rec: dict[str, Any], used: set[str] | None = None) -> FleetVess
             dims[key] = float(rec[key])
         else:
             dims[key] = getattr(gen, key)
-            notes.append(f"{key} = {getattr(gen, key)} m escalado del buque de la A-3")
+            notes.append(
+                t(
+                    "{key} = {value} m escalado del buque de la A-3",
+                    key=key,
+                    value=getattr(gen, key),
+                )
+            )
     prop = PropellerType(rec.get("propeller", "fixed_pitch"))
     vessel = Vessel(
         id=vid,
@@ -89,8 +96,11 @@ def fleet_vessel(rec: dict[str, Any], used: set[str] | None = None) -> FleetVess
     )
     if prop not in FRIDMAN_KF:
         notes.append(
-            f"hélice {prop.value}: el tiro se calcula como paso fijo (el libro sólo tabula PF y "
-            "PV con tobera)"
+            t(
+                "hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y "
+                "PV con tobera)",
+                prop=prop.value,
+            )
         )
     return FleetVessel(
         vessel=vessel,

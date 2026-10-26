@@ -13,23 +13,22 @@ import html
 import math
 from typing import TYPE_CHECKING, Any
 
+from trawlkit.i18n import N_, fmt_num, get_lang, t
 from trawlkit.report.tables import Column, Table
 
 if TYPE_CHECKING:
     from trawlkit.construction import ConstructionGuide, CutPiece
 
-VARIANT_NAME = {"std": "estándar", "mod": "modificada"}
+VARIANT_NAME = {"std": N_("estándar"), "mod": N_("modificada")}
 
 
 def _fmt(v: Any, nd: int = 2) -> str:
     if v is None or v == "":
         return "—"
     if isinstance(v, bool):
-        return "sí" if v else "no"
+        return t("sí") if v else t("no")
     if isinstance(v, float):
-        if math.isnan(v):
-            return "—"
-        return f"{v:,.{nd}f}".replace(",", " ").replace(".", ",")
+        return fmt_num(v, nd)
     return str(v)
 
 
@@ -50,21 +49,21 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
     """Tablas de la guía, en el orden del taller."""
     cut = Table(
         "construccion_corte",
-        "Hoja de corte",
+        t("Hoja de corte"),
         (
-            Column("id", "Paño"),
-            Column("name", "Nombre"),
-            Column("planes", "Cara"),
-            Column("pieces", "Piezas"),
-            Column("material", "Material"),
-            Column("mesh", "Mallero", "mm"),
-            Column("twine", "Ø hilo", "mm"),
-            Column("mouth", "Mallas boca"),
-            Column("codend", "Mallas bolsa"),
-            Column("depth", "Mallas alto"),
-            Column("cut", "Corte de cada costado"),
-            Column("start", "Por dónde empezar"),
-            Column("weight", "Peso por pieza", "kg"),
+            Column("id", t("Paño")),
+            Column("name", t("Nombre")),
+            Column("planes", t("Cara")),
+            Column("pieces", t("Piezas")),
+            Column("material", t("Material")),
+            Column("mesh", t("Mallero"), "mm"),
+            Column("twine", t("Ø hilo"), "mm"),
+            Column("mouth", t("Mallas boca")),
+            Column("codend", t("Mallas bolsa")),
+            Column("depth", t("Mallas alto")),
+            Column("cut", t("Corte de cada costado")),
+            Column("start", t("Por dónde empezar")),
+            Column("weight", t("Peso por pieza"), "kg"),
         ),
         tuple(
             (
@@ -79,7 +78,7 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
                 p.meshes_codend,
                 p.meshes_depth,
                 " | ".join(
-                    f"{s.side}: {s.instruction}{' (inferido)' if s.inferred else ''}"
+                    f"{s.side}: {s.instruction}{t(' (inferido)') if s.inferred else ''}"
                     for s in p.sides
                 ),
                 p.start,
@@ -87,22 +86,24 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
             )
             for p in g.pieces
         ),
-        note="Mallas contadas a malla estirada. Las piezas de ala van de a pares (izquierda y "
-        "derecha, una el reflejo de la otra).",
+        note=t(
+            "Mallas contadas a malla estirada. Las piezas de ala van de a pares (izquierda y "
+            "derecha, una el reflejo de la otra)."
+        ),
     )
     stock = Table(
         "construccion_pano",
-        "Paño a comprar",
+        t("Paño a comprar"),
         (
-            Column("material", "Material"),
-            Column("mesh", "Mallero", "mm"),
-            Column("twine", "Ø hilo", "mm"),
+            Column("material", t("Material")),
+            Column("mesh", t("Mallero"), "mm"),
+            Column("twine", t("Ø hilo"), "mm"),
             Column("rtex", "Rtex"),
-            Column("pieces", "Piezas"),
-            Column("width", "Ancho", "mallas"),
-            Column("depth", "Alto", "mallas"),
-            Column("weight", "Peso del paño", "kg"),
-            Column("finished", "Peso cortado", "kg"),
+            Column("pieces", t("Piezas")),
+            Column("width", t("Ancho"), t("mallas")),
+            Column("depth", t("Alto"), t("mallas")),
+            Column("weight", t("Peso del paño"), "kg"),
+            Column("finished", t("Peso cortado"), "kg"),
         ),
         tuple(
             (
@@ -118,25 +119,27 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
             )
             for s in g.stock
         ),
-        note="Tira del ancho del paño más ancho de cada calidad, con el alto que junta el área "
-        "de todos los rectángulos de corte; el peso incluye el desperdicio de los cortes.",
+        note=t(
+            "Tira del ancho del paño más ancho de cada calidad, con el alto que junta el área "
+            "de todos los rectángulos de corte; el peso incluye el desperdicio de los cortes."
+        ),
     )
     joins = Table(
         "construccion_armado",
-        "Armado: uniones paso a paso",
+        t("Armado: uniones paso a paso"),
         (
-            Column("step", "Paso"),
-            Column("plane", "Cara"),
-            Column("a", "Paño A"),
-            Column("a_edge", "Borde A"),
-            Column("b", "Paño B"),
-            Column("b_edge", "Borde B"),
-            Column("meshes_a", "Mallas A"),
-            Column("meshes_b", "Mallas B"),
-            Column("times", "Veces"),
-            Column("ratio", "Relación"),
-            Column("rule", "Cómo unir"),
-            Column("note", "Nota"),
+            Column("step", t("Paso")),
+            Column("plane", t("Cara")),
+            Column("a", t("Paño A")),
+            Column("a_edge", t("Borde A")),
+            Column("b", t("Paño B")),
+            Column("b_edge", t("Borde B")),
+            Column("meshes_a", t("Mallas A")),
+            Column("meshes_b", t("Mallas B")),
+            Column("times", t("Veces")),
+            Column("ratio", t("Relación")),
+            Column("rule", t("Cómo unir")),
+            Column("note", t("Nota")),
         ),
         tuple(
             (
@@ -158,19 +161,19 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
     )
     hang = Table(
         "construccion_montaje",
-        "Montaje en relingas",
+        t("Montaje en relingas"),
         (
-            Column("rope", "Relinga"),
-            Column("part", "Tramo"),
-            Column("panels", "Paños"),
-            Column("times", "Veces"),
-            Column("rope_m", "Cabo", "m"),
-            Column("meshes", "Mallas a armar"),
-            Column("netting_m", "Paño estirado", "m"),
-            Column("hanging", "Coef. de armado E"),
-            Column("per_m", "Mallas por metro"),
-            Column("schedule", "Pauta"),
-            Column("warning", "Aviso"),
+            Column("rope", t("Relinga")),
+            Column("part", t("Tramo")),
+            Column("panels", t("Paños")),
+            Column("times", t("Veces")),
+            Column("rope_m", t("Cabo"), "m"),
+            Column("meshes", t("Mallas a armar")),
+            Column("netting_m", t("Paño estirado"), "m"),
+            Column("hanging", t("Coef. de armado E")),
+            Column("per_m", t("Mallas por metro")),
+            Column("schedule", t("Pauta")),
+            Column("warning", t("Aviso")),
         ),
         tuple(
             (
@@ -188,30 +191,32 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
             )
             for h in g.hanging
         ),
-        note="E = largo de cabo / largo del paño estirado. En las alas el paño se arma por su "
-        "costado (una malla por cada fila de alto).",
+        note=t(
+            "E = largo de cabo / largo del paño estirado. En las alas el paño se arma por su "
+            "costado (una malla por cada fila de alto)."
+        ),
     )
     floats = Table(
         "construccion_boyas",
-        f"Boyas sobre la lima (Ø {_fmt(g.float_diameter_mm, 0)} mm)",
+        t("Boyas sobre la lima (Ø {d} mm)", d=_fmt(g.float_diameter_mm, 0)),
         (
-            Column("n", "Boya"),
-            Column("x", "Desde el centro", "m"),
-            Column("zone", "Zona"),
+            Column("n", t("Boya")),
+            Column("x", t("Desde el centro"), "m"),
+            Column("zone", t("Zona")),
         ),
         tuple((f.number, _r(f.x_m, 2), f.zone) for f in g.floats),
-        note="Negativo: hacia el ala izquierda; positivo: hacia la derecha.",
+        note=t("Negativo: hacia el ala izquierda; positivo: hacia la derecha."),
     )
     ballast = Table(
         "construccion_lastre",
-        "Lastre del burlón",
+        t("Lastre del burlón"),
         (
-            Column("zone", "Zona"),
-            Column("where", "Dónde"),
-            Column("kg_min", "Lastre mínimo", "kg"),
-            Column("kg_m_min", "Mínimo", "kg/m"),
-            Column("kg_max", "Lastre máximo", "kg"),
-            Column("kg_m_max", "Máximo", "kg/m"),
+            Column("zone", t("Zona")),
+            Column("where", t("Dónde")),
+            Column("kg_min", t("Lastre mínimo"), "kg"),
+            Column("kg_m_min", t("Mínimo"), "kg/m"),
+            Column("kg_max", t("Lastre máximo"), "kg"),
+            Column("kg_m_max", t("Máximo"), "kg/m"),
         ),
         tuple(
             (
@@ -224,25 +229,27 @@ def guide_tables(g: ConstructionGuide) -> list[Table]:
             )
             for b in g.ballast
         ),
-        note="Mínimo para la red modificada a 1 kn y máximo para la estándar a 3 kn (libro, "
-        "hoja Flotación y Lastre).",
+        note=t(
+            "Mínimo para la red modificada a 1 kn y máximo para la estándar a 3 kn (libro, "
+            "hoja Flotación y Lastre)."
+        ),
     )
     ropes = Table(
         "construccion_cortes",
-        "Cortes de cabos, cables y cadenas",
+        t("Cortes de cabos, cables y cadenas"),
         (
-            Column("label", "Pieza"),
-            Column("material", "Material"),
-            Column("pieces", "Cantidad"),
-            Column("length", "Largo terminado", "m"),
-            Column("eyes", "Gazas"),
-            Column("cut", "Largo de corte", "m"),
+            Column("label", t("Pieza")),
+            Column("material", t("Material")),
+            Column("pieces", t("Cantidad")),
+            Column("length", t("Largo terminado"), "m"),
+            Column("eyes", t("Gazas")),
+            Column("cut", t("Largo de corte"), "m"),
         ),
         tuple(
             (r.label, r.material, r.pieces, _r(r.length_m, 2), r.eyes, _r(r.cut_m, 2))
             for r in g.ropes
         ),
-        note=f"Largo de corte = largo terminado + {_fmt(g.eye_allowance_m)} m por gaza.",
+        note=t("Largo de corte = largo terminado + {m} m por gaza.", m=_fmt(g.eye_allowance_m)),
     )
     return [cut, stock, joins, hang, floats, ballast, ropes]
 
@@ -304,7 +311,7 @@ def piece_svg(p: CutPiece) -> str:
     side = p.sides[0].code if p.sides else ""
     return (
         f"<svg viewBox='0 0 {w:.0f} {h:.0f}' xmlns='http://www.w3.org/2000/svg' role='img' "
-        f"aria-label='Croquis del paño {html.escape(p.id)}'>"
+        f"aria-label='{html.escape(t('Croquis del paño {id}', id=p.id))}'>"
         f"<polygon points='{poly}' fill='#e8eef7' stroke='#1c5cab' stroke-width='1.5'/>"
         f"<text x='{cx:.0f}' y='12' font-size='10' text-anchor='middle'>{p.meshes_mouth}</text>"
         f"<text x='{cx:.0f}' y='{y0 + hh + 13:.0f}' font-size='10' text-anchor='middle'>"
@@ -327,41 +334,56 @@ def _pieces_html(g: ConstructionGuide) -> str:
         cuts = "".join(
             f"<li><span class='check'></span><strong>{html.escape(s.side)}</strong>: "
             f"{html.escape(s.instruction)}"
-            f"{' <em>(inferido: verificar en el plano)</em>' if s.inferred else ''}</li>"
+            f"{t(' <em>(inferido: verificar en el plano)</em>') if s.inferred else ''}</li>"
             for s in p.sides
         )
         info = _kv(
             [
-                ("Cara y sección", html.escape(f"{p.planes} · {p.section}")),
+                (t("Cara y sección"), html.escape(f"{p.planes} · {p.section}")),
                 (
-                    "Piezas",
+                    t("Piezas"),
                     f"<span class='big'>{p.pieces}</span>"
-                    + (" (par izquierda/derecha)" if p.paired else ""),
+                    + (t(" (par izquierda/derecha)") if p.paired else ""),
                 ),
                 (
-                    "Paño",
+                    t("Paño"),
                     html.escape(
-                        f"{p.material}, mallero {_fmt(p.mesh_mm, 0)} mm, "
-                        f"hilo Ø {_fmt(p.twine_mm)} mm"
+                        t(
+                            "{material}, mallero {mesh} mm, hilo Ø {twine} mm",
+                            material=p.material,
+                            mesh=_fmt(p.mesh_mm, 0),
+                            twine=_fmt(p.twine_mm),
+                        )
                         + (f", R{_fmt(p.rtex, 0)} tex" if p.rtex else "")
                     ),
                 ),
                 (
-                    "Mallas",
+                    t("Mallas"),
                     html.escape(
-                        f"boca {p.meshes_mouth} · bolsa {p.meshes_codend} · alto {p.meshes_depth}"
+                        t(
+                            "boca {mouth} · bolsa {codend} · alto {depth}",
+                            mouth=p.meshes_mouth,
+                            codend=p.meshes_codend,
+                            depth=p.meshes_depth,
+                        )
                     ),
                 ),
                 (
-                    "Rectángulo de corte",
+                    t("Rectángulo de corte"),
                     html.escape(
-                        f"{p.stock_width} × {p.stock_depth} mallas{' por par' if p.paired else ''} "
-                        f"({_fmt(p.stretched_width_m)} × "
-                        f"{_fmt(p.stretched_length_m)} m estirado), "
-                        f"desperdicio {_fmt(100 * p.waste, 0)} %"
+                        t(
+                            "{w} × {d} mallas{pair} ({sw} × {sl} m estirado), "
+                            "desperdicio {waste} %",
+                            w=p.stock_width,
+                            d=p.stock_depth,
+                            pair=t(" por par") if p.paired else "",
+                            sw=_fmt(p.stretched_width_m),
+                            sl=_fmt(p.stretched_length_m),
+                            waste=_fmt(100 * p.waste, 0),
+                        )
                     ),
                 ),
-                ("Peso por pieza", _e(p.weight_kg) + " kg"),
+                (t("Peso por pieza"), _e(p.weight_kg) + " kg"),
             ]
         )
         out.append(
@@ -400,14 +422,25 @@ def _table_html(t: Table, nd: int = 2, wide: bool = False) -> str:
 def _steps_html(g: ConstructionGuide) -> str:
     items = []
     for j in g.joins:
-        times = f" · {j.times} veces" if j.times > 1 else ""
+        times = t(" · {n} veces", n=j.times) if j.times > 1 else ""
         note = f"<br><span class='small muted'>{html.escape(j.note)}</span>" if j.note else ""
         items.append(
-            f"<li><span class='check'></span><strong>Paso {j.step}</strong> ({html.escape(j.plane)}"
-            f"{times}): unir el {html.escape(j.a_edge)} de <strong>{html.escape(j.a)}</strong> "
-            f"({j.meshes_a} mallas) con el {html.escape(j.b_edge)} de "
-            f"<strong>{html.escape(j.b)}</strong> ({j.meshes_b} mallas). "
-            f"{html.escape(j.rule[:1].upper() + j.rule[1:])}.{note}</li>"
+            "<li><span class='check'></span>"
+            + t(
+                "<strong>Paso {step}</strong> ({plane}{times}): unir el {a_edge} de "
+                "<strong>{a}</strong> ({meshes_a} mallas) con el {b_edge} de "
+                "<strong>{b}</strong> ({meshes_b} mallas). ",
+                step=j.step,
+                plane=html.escape(j.plane),
+                times=times,
+                a_edge=html.escape(j.a_edge),
+                a=html.escape(j.a),
+                meshes_a=j.meshes_a,
+                b_edge=html.escape(j.b_edge),
+                b=html.escape(j.b),
+                meshes_b=j.meshes_b,
+            )
+            + f"{html.escape(j.rule[:1].upper() + j.rule[1:])}.{note}</li>"
         )
     return f"<ol class='steps'>{''.join(items)}</ol>"
 
@@ -418,33 +451,46 @@ def construction_html(
     """Guía de construcción en HTML autocontenido, para imprimir en A4 o pasar a PDF."""
     tables = {t.key: t for t in guide_tables(g)}
     date = (generated or _dt.date.today()).isoformat()
-    variant = VARIANT_NAME.get(g.variant, g.variant)
+    variant = t(VARIANT_NAME.get(g.variant, g.variant))
     total_pieces = sum(p.pieces for p in g.pieces)
     netting = sum(s.weight_kg for s in g.stock)
-    intro = (
-        f"<p>Red: <strong>{html.escape(g.net_name)}</strong> ({html.escape(variant)}). "
-        f"{len(g.pieces)} paños, {total_pieces} piezas a cortar, {len(g.joins)} uniones y "
-        f"{_fmt(netting, 1)} kg de paño a comprar (con desperdicio). Generada el {date} con "
-        "trawlkit.</p>"
+    intro = t(
+        "<p>Red: <strong>{net}</strong> ({variant}). {n_panels} paños, {n_pieces} piezas a "
+        "cortar, {n_joins} uniones y {kg} kg de paño a comprar (con desperdicio). Generada el "
+        "{date} con trawlkit.</p>",
+        net=html.escape(g.net_name),
+        variant=html.escape(variant),
+        n_panels=len(g.pieces),
+        n_pieces=total_pieces,
+        n_joins=len(g.joins),
+        kg=_fmt(netting, 1),
+        date=date,
     )
     if link:
-        intro += f"<p class='small'>Caso en la app: {html.escape(link)}</p>"
+        intro += f"<p class='small'>{t('Caso en la app: {link}', link=html.escape(link))}</p>"
     notes = "".join(f"<li>{html.escape(n)}</li>" for n in g.notes)
+    title = t("Guía de construcción")
     return (
-        "<!doctype html><html lang='es'><head><meta charset='utf-8'>"
-        f"<title>Guía de construcción · {html.escape(g.net_id)}</title><style>{_CSS}</style>"
+        f"<!doctype html><html lang='{get_lang()}'><head><meta charset='utf-8'>"
+        f"<title>{title} · {html.escape(g.net_id)}</title><style>{_CSS}</style>"
         "</head><body>"
-        f"<h1>Guía de construcción</h1>{intro}"
-        f"<h2>1. Paño a comprar</h2>{_table_html(tables['construccion_pano'], wide=True)}"
-        f"<h2>2. Hoja de corte</h2>{_pieces_html(g)}"
-        f"<h2>3. Armado paso a paso</h2>{_steps_html(g)}"
-        f"<h2>4. Montaje en relingas</h2>{_table_html(tables['construccion_montaje'], wide=True)}"
-        f"<h3>Boyas</h3>{_table_html(tables['construccion_boyas'])}"
-        f"<h3>Lastre</h3>{_table_html(tables['construccion_lastre'], wide=True)}"
-        f"<h2>5. Cortes de cabos, cables y cadenas</h2>{_table_html(tables['construccion_cortes'])}"
-        f"<h2>Supuestos</h2><ul class='small muted'>{notes}</ul>"
-        "<p class='small muted'>Resultados orientativos: verifique con el plano de la red y en "
-        "la prueba de mar antes de construir en serie.</p></body></html>"
+        f"<h1>{title}</h1>{intro}"
+        f"<h2>1. {t('Paño a comprar')}</h2>{_table_html(tables['construccion_pano'], wide=True)}"
+        f"<h2>2. {t('Hoja de corte')}</h2>{_pieces_html(g)}"
+        f"<h2>3. {t('Armado paso a paso')}</h2>{_steps_html(g)}"
+        f"<h2>4. {t('Montaje en relingas')}</h2>"
+        f"{_table_html(tables['construccion_montaje'], wide=True)}"
+        f"<h3>{t('Boyas')}</h3>{_table_html(tables['construccion_boyas'])}"
+        f"<h3>{t('Lastre')}</h3>{_table_html(tables['construccion_lastre'], wide=True)}"
+        f"<h2>5. {t('Cortes de cabos, cables y cadenas')}</h2>"
+        f"{_table_html(tables['construccion_cortes'])}"
+        f"<h2>{t('Supuestos')}</h2><ul class='small muted'>{notes}</ul>"
+        "<p class='small muted'>"
+        + t(
+            "Resultados orientativos: verifique con el plano de la red y en la prueba de mar "
+            "antes de construir en serie."
+        )
+        + "</p></body></html>"
     )
 
 
@@ -456,7 +502,7 @@ def construction_pdf(g: ConstructionGuide) -> bytes:
         from weasyprint import HTML
     except (ImportError, OSError) as exc:  # pragma: no cover - depende del entorno
         raise RuntimeError(
-            'el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)'
+            t('el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)')
         ) from exc
     out = HTML(string=flatten_css_vars(construction_html(g))).write_pdf()
     assert isinstance(out, bytes)
@@ -471,7 +517,7 @@ def construction_xlsx(g: ConstructionGuide) -> bytes:
         (t.title, [c.heading for c in t.columns], [list(r) for r in t.rows])
         for t in guide_tables(g)
     ]
-    sheets.append(("Supuestos", ["Supuesto"], [[n] for n in g.notes]))
+    sheets.append((t("Supuestos"), [t("Supuesto")], [[n] for n in g.notes]))
     return to_xlsx(sheets)
 
 
@@ -493,13 +539,13 @@ def bom_table(result: Any) -> Table:
     bom = bill_of_materials(result)
     return Table(
         "lista_materiales",
-        "Lista de materiales",
+        t("Lista de materiales"),
         (
-            Column("label", "Ítem"),
-            Column("component", "Componente"),
-            Column("quantity", "Cantidad"),
-            Column("unit", "Unidad"),
-            Column("cost", "Costo"),
+            Column("label", t("Ítem")),
+            Column("component", t("Componente")),
+            Column("quantity", t("Cantidad")),
+            Column("unit", t("Unidad")),
+            Column("cost", t("Costo")),
         ),
         tuple(
             (
@@ -511,7 +557,9 @@ def bom_table(result: Any) -> Table:
             )
             for ln in bom.lines
         ),
-        note="Precios orientativos del catálogo de componentes; sin precio la línea queda vacía.",
+        note=t(
+            "Precios orientativos del catálogo de componentes; sin precio la línea queda vacía."
+        ),
     )
 
 

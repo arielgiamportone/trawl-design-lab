@@ -21,6 +21,20 @@ exercises:
       R_N = {ss}·(0,00624 + 0,00475·{v}²)/(1 + 0,0641·{v}) = {rn_t} t = {rn_kgf} kgf.
     formats: {rn_t: 3}
     refs: [aberdeen]
+    en:
+      title: Design drag (Aberdeen demersal)
+      statement: >
+        A polyethylene bottom trawl has a solid area of {ss} m². With the Marine Laboratory
+        Aberdeen formula, R_N [t] = Ss·(0.00624 + 0.00475·v²)/(1 + 0.0641·v) with v in knots,
+        calculate the drag of the net at {v} kn in kgf.
+      vars:
+        ss: Solid area
+        v: Speed
+      answers:
+        rn_kgf: Net drag
+      hints:
+        - The formula gives tonnes; multiply by 1000.
+      explanation: R_N = {ss}·(0.00624 + 0.00475·{v}²)/(1 + 0.0641·{v}) = {rn_t} t = {rn_kgf} kgf.
 
   - id: resistencia.tauti
     chapter: 14_resistencia
@@ -43,6 +57,21 @@ exercises:
       v = {v}·0,5144 = {v_ms} m/s; R_N = 27·{dl}·{a}²·{v_ms}^1,45/1000 = {rn_t} t = {rn_kgf} kgf.
     formats: {rn_t: 3}
     refs: [tauti1974]
+    en:
+      title: Tauti–Nomura–Shu drag
+      statement: >
+        The Japanese school estimates R_N [t] = 27·(d/l)·a²·v^1.45/1000, with a the stretched
+        circumference [m] and v in m/s. For d/l = {dl}, a = {a} m and {v} kn, calculate the speed
+        in m/s and the drag in kgf.
+      vars:
+        dl: Index d/l
+        a: Stretched circumference
+        v: Speed
+      answers:
+        v_ms: Speed
+        rn_kgf: Drag
+      explanation: >
+        v = {v}·0.5144 = {v_ms} m/s; R_N = 27·{dl}·{a}²·{v_ms}^1.45/1000 = {rn_t} t = {rn_kgf} kgf.
 
   - id: resistencia.comparar
     chapter: 14_resistencia
@@ -69,6 +98,27 @@ exercises:
       Koyama: {koyama_kgf} kgf; Aberdeen: {aberdeen_kgf} kgf; diferencia {dif_pct} %. Cada fórmula
       se ajustó a otro tipo de redes: por eso el libro elige una de diseño y muestra el abanico.
     refs: [koyama1984, aberdeen]
+    en:
+      title: Two schools, two results
+      statement: >
+        For the same net (d/l = {dl}, circumference a = {a} m, length without the codend L = {l} m
+        and solid area Ss = {ss} m²) at {v} kn, calculate the drag with Koyama (1984), R_N [t] =
+        8·(d/l)·a·L·v²/1000 with v in knots, and with Aberdeen demersal. By what percentage does
+        Koyama differ from Aberdeen?
+      vars:
+        dl: Index d/l
+        a: Circumference
+        l: Length without the codend
+        ss: Solid area
+        v: Speed
+      answers:
+        koyama_kgf: Koyama 1984
+        aberdeen_kgf: Aberdeen demersal
+        dif_pct: Difference of Koyama over Aberdeen
+      explanation: >
+        Koyama: {koyama_kgf} kgf; Aberdeen: {aberdeen_kgf} kgf; difference {dif_pct} %. Each
+        formula was fitted to a different type of net: that is why the book picks one for design
+        and shows the range.
 
   - id: resistencia.reid
     chapter: 14_resistencia
@@ -87,6 +137,17 @@ exercises:
     explanation: "R_N = {v}²·{ss}/(54,72·{v} + 115,2) = {rn_t} t = {rn_kgf} kgf."
     formats: {rn_t: 3}
     refs: [reid1977]
+    en:
+      title: Drag of a midwater trawl (Reid)
+      statement: >
+        A midwater trawl with a solid area of {ss} m² is towed at {v} kn. With Reid (1977), R_N [t]
+        = v²·Ss/(54.72·v + 115.2) with v in knots, calculate the drag in kgf.
+      vars:
+        ss: Solid area
+        v: Speed
+      answers:
+        rn_kgf: Drag
+      explanation: R_N = {v}²·{ss}/(54.72·{v} + 115.2) = {rn_t} t = {rn_kgf} kgf.
 
   - id: resistencia.velocidad
     chapter: 14_resistencia
@@ -109,3 +170,19 @@ exercises:
       {r1_kgf} kgf a {v1} kn y {r2_kgf} kgf a {v2} kn: {aumento_pct} % más. La resistencia crece
       casi con el cuadrado de la velocidad, mientras que el tiro disponible baja.
     refs: [aberdeen]
+    en:
+      title: How much the drag rises with speed
+      statement: >
+        With Aberdeen demersal and Ss = {ss} m², calculate the drag of the net at {v1} kn and at
+        {v2} kn and by what percentage it increases.
+      vars:
+        ss: Solid area
+        v1: Speed 1
+        v2: Speed 2
+      answers:
+        r1_kgf: Drag at speed 1
+        r2_kgf: Drag at speed 2
+        aumento_pct: Increase
+      explanation: >
+        {r1_kgf} kgf at {v1} kn and {r2_kgf} kgf at {v2} kn: {aumento_pct} % more. The drag grows
+        almost with the square of the speed, while the available pull falls.

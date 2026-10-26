@@ -1,0 +1,708 @@
+# Catálogo inglés de los informes, láminas y exportaciones (Fase 18.1): «texto en español» →
+# traducción. Terminología de artes de arrastre según la FAO (lima → headrope, burlón →
+# footrope, portón → otter board, patentes → sweeps, bolsa → codend…). Los {campos} se
+# mantienen idénticos. tests/test_i18n.py exige una entrada por cada texto marcado.
+sí: 'yes'
+'no': 'no'
+error: error
+estándar: standard
+modificada: modified
+mallas: meshes
+Magnitud: Quantity
+Valor: Value
+Unidad: Unit
+Grupo: Group
+Clave: Key
+Nota: Note
+N.º: No.
+Resumen: Summary
+Velocidad: Speed
+Velocidad [kn]: Speed [kn]
+Promedio: Average
+Red: Net
+Buque: Vessel
+Portón: Otter board
+Cable: Warp
+Boya: Float
+Boyas: Floats
+Lastre: Ballast
+Lima: Headrope
+Burlón: Footrope
+Material: Material
+Mallero: Mesh size
+Ø hilo: Twine Ø
+Paño: Panel
+Paños: Panels
+Peso: Weight
+Ancho: Width
+Alto: Depth
+Cantidad: Quantity
+Costo: Cost
+Ítem: Item
+Componente: Component
+Supuestos: Assumptions
+Supuesto: Assumption
+Lista de materiales: Bill of materials
+Mínimo: Minimum
+Máximo: Maximum
+Lastre mínimo: Minimum ballast
+Lastre máximo: Maximum ballast
+Estado: Status
+Cumple: Meets
+Escala: Scale
+Total: Total
+Panel: Panel
+Plano: Plane
+Fila: Row
+Nombre: Name
+Caso: Case
+Moneda: Currency
+Parámetro: Parameter
+'Celdas del libro: {cells}': 'Workbook cells: {cells}'
+'el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)': 'PDF output needs WeasyPrint:
+  pip install "trawlkit[report]" (and Pango)'
+'el XLSX necesita openpyxl: pip install "trawlkit[excel]"': 'XLSX output needs openpyxl: pip install "trawlkit[excel]"'
+'La salida XLSX necesita openpyxl: pip install trawlkit[report]': 'XLSX output needs openpyxl: pip install
+  trawlkit[report]'
+'La salida PDF necesita WeasyPrint: pip install trawlkit[report]': 'PDF output needs WeasyPrint: pip install
+  trawlkit[report]'
+? 'WeasyPrint no pudo cargar sus bibliotecas del sistema (Pango); ver https://doc.courtbouillon.org/weasyprint/stable/first_steps.html.
+  Detalle: {exc}'
+: 'WeasyPrint could not load its system libraries (Pango); see https://doc.courtbouillon.org/weasyprint/stable/first_steps.html.
+  Detail: {exc}'
+'formatos desconocidos: {unknown} (use {formats})': 'unknown formats: {unknown} (use {formats})'
+Modo de compatibilidad: Compatibility mode
+Ángulo de ataque de los cortes (α): Angle of attack of the cuts (α)
+Índice de filtración (d/l): Filtration index (d/l)
+Superficie sólida (Ss): Solid (twine) area (Ss)
+Superficie de trabajo (St): Working area (St)
+Peso de la red: Net weight
+Abertura vertical (AV): Vertical opening (AV)
+Abertura horizontal (AH): Horizontal opening (AH)
+Profundidad de trabajo: Working depth
+Flotación total: Total buoyancy
+Dan leno: Dan leno
+Patentes: Sweeps
+Pies de gallo: Crowfoot
+Alargue de pies de gallo: Crowfoot extension
+Brida superior: Upper bridle
+Brida inferior: Lower bridle
+Ø cable de remolque: Warp Ø
+Cable filado: Warp length paid out
+Ø boya: Float Ø
+Cable seleccionado: Selected warp
+Rotura del cable seleccionado: Breaking load of selected warp
+Rotura mínima requerida: Required minimum breaking load
+Cable a comprar: Warp to purchase
+Velocidad máxima remolcable: Maximum towing speed
+RN estándar a {speed}: Standard RN at {speed}
+ROB a {speed}: ROB at {speed}
+Tauti (lima): Tauti (headrope)
+Tauti (burlón): Tauti (footrope)
+Nomura 150 HP (tiro): Nomura 150 HP (pull)
+Nomura 180 HP (tiro): Nomura 180 HP (pull)
+Aberdeen pelágica: Aberdeen pelagic
+Paso fijo (PF): Fixed pitch (PF)
+Paso fijo con tobera (PF+T): Fixed pitch with nozzle (PF+T)
+Paso variable (PV): Controllable pitch (PV)
+Paso variable con tobera (PV+T): Controllable pitch with nozzle (PV+T)
+superior: upper
+inferior: lower
+lateral: side
+punta de ala: wingtip
+ala: wing
+square: square
+vientre: belly
+cuerpo: body
+extensión: extension
+bolsa: codend
+documentada: documented
+reproducida: reproduced
+corregida: corrected
+'Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta.': 'No switch: Nomura
+  is actually computed; the workbook link is only documented.'
+Tabla de referencia copiada tal cual en ambos modos.: Reference table copied as-is in both modes.
+El código de corte se calcula en ambos modos.: The cut code is computed in both modes.
+La razón de corte usa N en ambos modos.: The cut ratio uses N in both modes.
+Cada paño busca con su propia razón.: Each panel looks up its own ratio.
+fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas.: fL/L = 0.216 in both modes; the
+  table value is recorded in the notes.
+Reproducida (EXCEL).: Reproduced (EXCEL).
+Corregida (CORRECTED).: Corrected (CORRECTED).
+baja abertura: low opening
+alta abertura: high opening
+mariscos: shellfish
+Resumen del diseño: Design summary
+Paños de la red {variant} ({net}): Netting panels of the {variant} net ({net})
+Sección: Section
+Mallas boca: Meshes (mouth)
+Mallas bolsa: Meshes (codend side)
+Mallas alto: Meshes (depth)
+Cant.: Qty
+Corte: Cut
+Ss y peso de la fila de 'Mecánica de la Red' repartidos por cantidad de paneles.: Ss and weight of the
+  'Mecánica de la Red' row split by number of panels.
+Tiro disponible por método ({vessel}) y FT de Fridman de la clase: Available pull by method ({vessel})
+  and Fridman FT of the vessel class
+Resistencia de la red {variant} por método: Drag of the {variant} net by method
+'RN de diseño: {method}. Las columnas de Nomura son tiro disponible, no resistencia.': 'Design RN: {method}.
+  The Nomura columns are available pull, not drag.'
+Portones: Otter boards
+Superficie del portón: Otter board area
+Distancia entre portones (Ds): Door spread (Ds)
+Semiángulo de divergencia (½φ): Half divergence angle (½φ)
+Distancia corregida: Corrected spread
+Ángulo de ataque de la polar: Polar angle of attack
+ROB = {pct} de FT a {v} kn: ROB = {pct} of FT at {v} kn
+ROB hidrodinámica de un portón a {v} kn: Hydrodynamic ROB of one otter board at {v} kn
+Superficie requerida (promedio 2–4 kn): Required area (2–4 kn average)
+Superficie requerida por portón: Required area per otter board
+Superficie requerida por portón (clase): Required area per otter board (class)
+Bridas: Bridles
+Cadena de ajuste: Adjustment chain
+Brida sin triángulo: Bridle without triangle
+Brida con triángulo: Bridle with triangle
+Patentes de diseño: Design sweeps
+Patentes + brida: Sweeps + bridle
+Patentes (Dremière): Sweeps (Dremière)
+Patentes (Martini): Sweeps (Martini)
+Patentes sin triángulo: Sweeps without triangle
+Patentes con triángulo: Sweeps with triangle
+Pie de gallo superior: Upper crowfoot
+Alargue: Extension
+Ángulo de ataque de bridas (δ): Bridle angle of attack (δ)
+DPA Fridman estándar a {v} kn: DPA Fridman standard at {v} kn
+DPA Fridman modificada a {v} kn: DPA Fridman modified at {v} kn
+DPA geométrica: Geometric DPA
+DPA geométrica con la red trabajando: Geometric DPA with the net working
+DPA por ángulo de corte: DPA from cut angle
+AV Baranov–Fridman estándar (promedio): AV Baranov–Fridman standard (average)
+AV Baranov–Fridman modificada (promedio): AV Baranov–Fridman modified (average)
+Portones, bridas, patentes y aberturas: Otter boards, bridles, sweeps and openings
+Flotación: Buoyancy
+Fridman (promedio 1–3 kn): Fridman (1–3 kn average)
+Flotación total de la clase (Ffz): Total buoyancy of the class (Ffz)
+Flotación de diseño (redondeada): Design buoyancy (rounded)
+Cabo de la lima: Headrope rope
+Peso de la lima en el agua: Headrope weight in water
+Cantidad de boyas: Number of floats
+Diámetro de boya: Float diameter
+Separación uniforme: Even spacing
+Boyas en alas: Floats on the wings
+Boyas en el centro (bosom): Floats on the bosom
+Separación en el centro: Spacing on the bosom
+Resistencia de las boyas (RB) a {v} kn: Float drag (RB) at {v} kn
+Cabo del burlón: Footrope rope
+Peso del burlón en el agua: Footrope weight in water
+Reparto uniforme: Even distribution
+'Mínimo: centro (bosom)': 'Minimum: bosom'
+'Mínimo: alas': 'Minimum: wings'
+'Máximo: centro (bosom)': 'Maximum: bosom'
+'Máximo: alas': 'Maximum: wings'
+Flotación, boyas y lastre: Buoyancy, floats and ballast
+Geometría: Geometry
+Cable filado (Ls): Warp length paid out (Ls)
+DPA (A, triángulos semejantes): DPA (A, similar triangles)
+DPA (B, triángulos semejantes): DPA (B, similar triangles)
+Ángulos: Angles
+Declinación (δ1): Declination (δ1)
+Divergencia (δ2): Divergence (δ2)
+Divergencia de bridas (δ3): Bridle divergence (δ3)
+Diámetro: Diameter
+Ø por EHP (regla práctica): Ø from EHP (rule of thumb)
+Ø Pérez Águila (buque de diseño): Ø Pérez Águila (design vessel)
+NHP de dimensionamiento: Sizing NHP
+Ø de diseño: Design Ø
+Hidrodinámica: Hydrodynamics
+CD del cable (Nomura–Yamazaki): Warp CD (Nomura–Yamazaki)
+Peso en aire: Weight in air
+Peso total en aire: Total weight in air
+Peso total en agua: Total weight in water
+Cargas: Loads
+Carga de trabajo: Working load
+Factor de seguridad: Safety factor
+Selección: Selection
+Construcción: Construction
+Ø seleccionado: Selected Ø
+Rotura del cable: Warp breaking load
+Cumple la rotura mínima: Meets minimum breaking load
+Cable de remolque: Warp
+La resistencia total incluye ROB (modo corregido).: Total drag includes ROB (corrected mode).
+'Modo EXCEL: la resistencia total omite ROB (errata warp_total_omits_doors).': 'EXCEL mode: total drag
+  omits ROB (erratum warp_total_omits_doors).'
+Resistencia total a remolcar por velocidad: Total towing drag by speed
+RN estándar: Standard RN
+RN modificada: Modified RN
+RB boyas: RB floats
+Rw cables: Rw warps
+ROB par de portones: ROB pair of otter boards
+Total estándar: Standard total
+Total modificada: Modified total
+FT disponible: Available FT
+ninguna: none
+Ventana de velocidad remolcable FT(v) ≥ R(v): Towing speed window FT(v) ≥ R(v)
+Propulsor: Propeller
+Velocidad máxima: Maximum speed
+Velocidades viables: Feasible speeds
+Diseño: Design
+'Velocidad máxima: cruce FT = R interpolado linealmente.': 'Maximum speed: FT = R crossing, linearly interpolated.'
+Erratas del libro original (modo {mode}): Errata of the original workbook ({mode} mode)
+Hoja: Sheet
+Celda: Cell
+Descripción: Description
+Tratamiento: Treatment
+Notas de la corrida: Run notes
+? '<p>Red: <strong>{net}</strong> ({variant}). {n_panels} paños, {n_pieces} piezas a cortar, {n_joins}
+  uniones y {kg} kg de paño a comprar (con desperdicio). Generada el {date} con trawlkit.</p>'
+: '<p>Net: <strong>{net}</strong> ({variant}). {n_panels} netting panels, {n_pieces} pieces to cut, {n_joins}
+  joins and {kg} kg of netting to purchase (including waste). Generated on {date} with trawlkit.</p>'
+Guía de construcción: Construction guide
+Hoja de corte: Cutting sheet
+Paño a comprar: Netting to purchase
+'Armado: uniones paso a paso': 'Assembly: joins step by step'
+Montaje en relingas: Hanging on the ropes
+Boyas sobre la lima (Ø {d} mm): Floats on the headrope (Ø {d} mm)
+Lastre del burlón: Footrope ballast
+Cortes de cabos, cables y cadenas: Rope, wire and chain cuts
+Mallas contadas a malla estirada. Las piezas de ala van de a pares (izquierda y derecha, una el reflejo de la otra).: Meshes
+  counted at stretched mesh. Wing pieces come in pairs (left and right, one the mirror image of the other).
+? Tira del ancho del paño más ancho de cada calidad, con el alto que junta el área de todos los rectángulos
+  de corte; el peso incluye el desperdicio de los cortes.
+: Strip as wide as the widest panel of each netting quality, deep enough to hold the area of all cutting
+  rectangles; the weight includes the cutting waste.
+E = largo de cabo / largo del paño estirado. En las alas el paño se arma por su costado (una malla por cada fila de alto).: E
+  = rope length / stretched netting length. On the wings the netting is hung along its side (one mesh
+  per row of depth).
+'Negativo: hacia el ala izquierda; positivo: hacia la derecha.': 'Negative: towards the left wing; positive:
+  towards the right.'
+Mínimo para la red modificada a 1 kn y máximo para la estándar a 3 kn (libro, hoja Flotación y Lastre).: Minimum
+  for the modified net at 1 kn and maximum for the standard net at 3 kn (workbook, 'Flotación y Lastre'
+  sheet).
+Largo de corte = largo terminado + {m} m por gaza.: Cut length = finished length + {m} m per eye.
+' · {n} veces': ' · {n} times'
+'Resultados orientativos: verifique con el plano de la red y en la prueba de mar antes de construir en serie.': 'Indicative
+  results: check against the net plan and in sea trials before series construction.'
+Precios orientativos del catálogo de componentes; sin precio la línea queda vacía.: Indicative prices
+  from the component catalogue; lines without a price are left empty.
+Cara: Face
+Piezas: Pieces
+Corte de cada costado: Cut of each side
+Por dónde empezar: Where to start
+Peso por pieza: Weight per piece
+Peso del paño: Netting weight
+Peso cortado: Cut weight
+Paso: Step
+Paño A: Panel A
+Borde A: Edge A
+Paño B: Panel B
+Borde B: Edge B
+Mallas A: Meshes A
+Mallas B: Meshes B
+Veces: Times
+Relación: Ratio
+Cómo unir: How to join
+Relinga: Rope
+Tramo: Section
+Cabo: Rope
+Mallas a armar: Meshes to hang
+Paño estirado: Stretched netting
+Coef. de armado E: Hanging ratio E
+Mallas por metro: Meshes per metre
+Pauta: Schedule
+Aviso: Warning
+Desde el centro: From the centre
+Zona: Zone
+Dónde: Where
+Pieza: Piece
+Largo terminado: Finished length
+Gazas: Eyes
+Largo de corte: Cut length
+Croquis del paño {id}: Sketch of panel {id}
+'Caso en la app: {link}': 'Case in the app: {link}'
+Cara y sección: Face and section
+Mallas: Meshes
+Rectángulo de corte: Cutting rectangle
+? '<strong>Paso {step}</strong> ({plane}{times}): unir el {a_edge} de <strong>{a}</strong> ({meshes_a}
+  mallas) con el {b_edge} de <strong>{b}</strong> ({meshes_b} mallas). '
+: '<strong>Step {step}</strong> ({plane}{times}): join the {a_edge} of <strong>{a}</strong> ({meshes_a}
+  meshes) to the {b_edge} of <strong>{b}</strong> ({meshes_b} meshes). '
+Armado paso a paso: Assembly step by step
+boca {mouth} · bolsa {codend} · alto {depth}: mouth {mouth} · codend side {codend} · depth {depth}
+'{w} × {d} mallas{pair} ({sw} × {sl} m estirado), desperdicio {waste} %': '{w} × {d} meshes{pair} ({sw}
+  × {sl} m stretched), waste {waste} %'
+' <em>(inferido: verificar en el plano)</em>': ' <em>(inferred: check against the plan)</em>'
+' (par izquierda/derecha)': ' (left/right pair)'
+'{material}, mallero {mesh} mm, hilo Ø {twine} mm': '{material}, mesh size {mesh} mm, twine Ø {twine}
+  mm'
+' por par': ' per pair'
+' (inferido)': ' (inferred)'
+? '{kind}. Generada el {date} con trawlkit. Los números usan coma decimal; las respuestas se aceptan dentro
+  de la tolerancia de cada ejercicio.'
+: '{kind}. Generated on {date} with trawlkit. Numbers use a decimal point; answers are accepted within
+  each exercise''s tolerance.'
+Guía de ejercicios: Exercise sheet
+Clave de respuestas: Answer key
+Enunciados: Problems
+semilla {seed}: seed {seed}
+la mayor red que el buque remolca: the largest net the vessel can tow
+menor trabajo por m² barrido: least work per m² swept
+armado más barato: cheapest rigging
+Área [m²/h]: Area [m²/h]
+Supuestos y avisos: Assumptions and warnings
+región {region}: region {region}
+sólo genéricos: generic only
+? 'Resultados orientativos: la escala sale de la semejanza por potencia refinada con el optimizador, y
+  el armado del catálogo de componentes. Verifique con el plano y la ficha de cada buque antes de construir.'
+: 'Indicative results: the scale comes from power similarity refined with the optimiser, and the rigging
+  from the component catalogue. Check against the plan and each vessel''s sheet before building.'
+Lote de flota: Fleet batch
+Proyección de la red a la flota: Net projection to the fleet
+Cumple tiro, apertura, cable, portón y profundidad.: Meets pull, opening, warp, otter board and depth.
+No se pudo dibujar la lámina.: The drawing sheet could not be drawn.
+'{n} buques: {ok} cumplen, {infeasible} no cumplen y {error} con error. Generado el {date} con trawlkit.': '{n}
+  vessels: {ok} feasible, {infeasible} infeasible and {error} with errors. Generated on {date} with trawlkit.'
+sin precio: no price
+'Red base: <strong>{net}</strong>. Objetivo: {objective}. Reserva de tiro: {margin} %. ': 'Base net: <strong>{net}</strong>.
+  Objective: {objective}. Pull reserve: {margin} %. '
+'Filtros: {filters}.': 'Filters: {filters}.'
+cumple: feasible
+no cumple: infeasible
+Gasoil por marea [L]: Fuel per trip [L]
+Captura por marea [kg]: Catch per trip [kg]
+Ingreso por marea: Revenue per trip
+Costo por marea: Cost per trip
+Costo por kg: Cost per kg
+Margen por marea: Margin per trip
+Margen por año: Margin per year
+Potencia [hp]: Power [hp]
+Escala por semejanza: Similarity scale
+Lima [m]: Headrope [m]
+Burlón [m]: Footrope [m]
+Abertura horizontal [m]: Horizontal opening [m]
+Abertura vertical [m]: Vertical opening [m]
+Resistencia total [kgf]: Total drag [kgf]
+Reserva de tiro: Pull reserve
+Área barrida [m²/h]: Swept area [m²/h]
+Superficie del portón [m²]: Otter board area [m²]
+Hilo: Twine
+Costo orientativo: Indicative cost
+Líneas sin precio: Lines without price
+No cumple: Fails
+Resistencia de la red a 3 kn [kgf]: Net drag at 3 kn [kgf]
+Velocidad máxima [kn]: Maximum speed [kn]
+Peso de la red [kg]: Net weight [kg]
+Paneles: Panels
+Errores del validador: Validator errors
+Avisos: Warnings
+Buque, caso o red: Vessel, case or net
+Observación: Remark
+Precio unitario: Unit price
+'Tiro: F_T ≥ (1 + m)·R_T': 'Pull: F_T ≥ (1 + m)·R_T'
+Red abierta (DPA de Fridman): Net open (Fridman DPA)
+Portón (superficie requerida): Otter board (required area)
+Rango de velocidad: Speed range
+'Mejor diseño: s = {s}, v = {v} kn': 'Best design: s = {s}, v = {v} kn'
+'{n_ok} de {n} combinaciones factibles; {label} entre {lo} y {hi} {unit}. Mejor diseño s = {s}, v = {v} kn.': '{n_ok}
+  of {n} combinations feasible; {label} between {lo} and {hi} {unit}. Best design s = {s}, v = {v} kn.'
+'{n} puntos no dominados; mejor diseño {area} m²/h.': '{n} non-dominated points; best design {area} m²/h.'
+Región factible en escala × velocidad: Feasible region in scale × speed
+'Frente de Pareto: área barrida vs trabajo por m² barrido': 'Pareto front: swept area vs work per m² swept'
+máxima área barrida por hora: maximum area swept per hour
+máximo volumen filtrado por hora: maximum volume filtered per hour
+mínimo trabajo de remolque por m² barrido: minimum towing work per m² swept
+Área barrida por hora [miles de m²/h]: Area swept per hour [thousand m²/h]
+Frente de Pareto: Pareto front
+Objetivo: Objective
+Factible: Feasible
+Red base: Base net
+Hélice: Propeller
+Escala de la red s: Net scale s
+Velocidad de arrastre: Towing speed
+Relinga superior (lima): Upper rope (headrope)
+Abertura horizontal AH: Horizontal opening AH
+Abertura vertical AV: Vertical opening AV
+Área barrida por hora: Area swept per hour
+Volumen filtrado por hora: Volume filtered per hour
+Resistencia total R_T: Total drag R_T
+Tiro disponible F_T: Available pull F_T
+Margen F_T/R_T − 1: Margin F_T/R_T − 1
+Trabajo por m² barrido R_T/AH: Work per m² swept R_T/AH
+Corridas del motor: Engine runs
+'Optimización: mejor diseño': 'Optimization: best design'
+'Optimización: restricciones del mejor diseño': 'Optimization: constraints of the best design'
+Área barrida: Swept area
+Volumen: Volume
+Margen: Margin
+'Optimización: frente de Pareto (área barrida vs trabajo por m²)': 'Optimization: Pareto front (swept
+  area vs work per m²)'
+'Optimización: malla escala × velocidad': 'Optimization: scale × speed grid'
+'{label} (más oscuro = mejor)': '{label} (darker = better)'
+no factible: infeasible
+mejor diseño: best design
+Velocidad de arrastre [kn]: Towing speed [kn]
+Frente de Pareto (factibles no dominados): Pareto front (feasible, non-dominated)
+Mejor diseño: Best design
+DPA de Fridman: Fridman DPA
+AV de Fridman: Fridman AV
+Resistencia de la red: Net drag
+Simulación de forma frente al motor y a DynamiT: Shape simulation vs the engine and DynamiT
+? Simulación cuasiestática (resolución {resolution}, C_N = {cn}, C_T = {ct}). La resistencia simulada
+  (hilos de Morison más rozamiento con el fondo) queda ≈ 50 % por debajo de DynamiT en la red FAO A-3;
+  las aberturas coinciden mucho mejor. DynamiT sólo está disponible para la red FAO A-3 estándar.
+: Quasi-static simulation (resolution {resolution}, C_N = {cn}, C_T = {ct}). The simulated drag (Morison
+  twines plus seabed friction) is ≈ 50 % below DynamiT for the FAO A-3 net; the openings agree much better.
+  DynamiT is only available for the standard FAO A-3 net.
+'Simulación de forma: resultados por velocidad': 'Shape simulation: results by speed'
+no (menor violación): no (least violation)
+ninguno del catálogo: none in the catalogue
+Escala s ∈ [{s0}, {s1}], velocidad v ∈ [{v0}, {v1}] kn, reserva de tiro {margin}, malla {n_s} × {n_v}: Scale
+  s ∈ [{s0}, {s1}], speed v ∈ [{v0}, {v1}] kn, pull reserve {margin}, grid {n_s} × {n_v}
+', refinado por evolución diferencial.': ', refined by differential evolution.'
+Restricción: Constraint
+Violación: Violation
+Simulación: Simulation
+Magnitud del motor: Engine quantity
+Motor: Engine
+Δ sim/motor: Δ sim/engine
+Δ sim/DynamiT: Δ sim/DynamiT
+Δ motor/DynamiT: Δ engine/DynamiT
+AH (lima): AH (headrope)
+AH (burlón): AH (footrope)
+Altura de la lima: Headrope height
+Área de la boca: Mouth area
+Arrastre del agua: Hydrodynamic drag
+Rozamiento con el fondo: Seabed friction
+Resistencia total de la red: Total net drag
+Distancia entre portones: Door spread
+Largo de la red: Net length
+Convergió: Converged
+Iteraciones: Iterations
+Residuo: Residual
+Tiempo: Time
+Vista a escala real reducida para la página; el archivo {file} conserva la escala.: True-scale view reduced
+  to fit the page; the file {file} keeps the scale.
+Informe de diseño — {net}: Design report — {net}
+Potencia y tiro disponible: Power and available pull
+Fridman; Prado y Dremière (FAO); Koyama; Nomura; Hamuro: Fridman; Prado and Dremière (FAO); Koyama; Nomura;
+  Hamuro
+Reparto de la potencia al freno y fuerza de tiro FT disponible por velocidad.: Brake power split and available
+  towing force FT by speed.
+Paños y cortes: Netting panels and cuts
+FAO (tabla de cortes); Prado: FAO (cutting table); Prado
+Largos estirados, superficie de trabajo de cada paño, códigos y ángulo de corte.: Stretched lengths, working
+  area of each panel, cut codes and cut angle.
+Mecánica de la red: Net mechanics
+Índice de filtración d/l, superficies sólida y de trabajo, solidez y pesos.: Filtration index d/l, solid
+  (twine) and working areas, solidity and weights.
+Dimensiones: Dimensions
+Martini (nivel 2); A. Fujiishi; Nomura: Martini (level 2); A. Fujiishi; Nomura
+Lima y burlón, largos, circunferencias, factor largo y proporciones de referencia.: Headrope and footrope,
+  lengths, circumferences, length factor and reference proportions.
+Tauti, Nomura y Shu; Koyama; Hamuro; Reid; Robertson; MacLennan; Marine Laboratory Aberdeen; Fridman; Dickson: Tauti,
+  Nomura and Shu; Koyama; Hamuro; Reid; Robertson; MacLennan; Marine Laboratory Aberdeen; Fridman; Dickson
+Trece fórmulas empíricas de RN; Aberdeen demersal es la RN de diseño.: Thirteen empirical RN formulas;
+  Aberdeen demersal is the design RN.
+Fridman; catálogos FAO y Morgère: Fridman; FAO and Morgère catalogues
+Separación entre portones, polar CL/CD, ROB como fracción de FT y superficie requerida.: Door spread,
+  CL/CD polar, ROB as a fraction of FT and required area.
+Bridas, patentes y pies de gallo: Bridles, sweeps and crowfoot
+Longitudes de bridas y patentes y ángulo de ataque δ del aparejo.: Bridle and sweep lengths and rigging
+  angle of attack δ.
+Aberturas: Openings
+Baranov y Fridman; N. Suzuki (JICA); Prado y Dremière; A. Izzo (INIDEP); Martini: Baranov and Fridman;
+  N. Suzuki (JICA); Prado and Dremière; A. Izzo (INIDEP); Martini
+DPA por Fridman, geométrica y por corte; abertura horizontal y vertical.: DPA by Fridman, geometric and
+  from cuts; horizontal and vertical opening.
+Flotación y lastre: Buoyancy and ballast
+Koyama; Prado y Dremière; Fridman; Hoerner (1975): Koyama; Prado and Dremière; Fridman; Hoerner (1975)
+Flotación de la lima, número y reparto de boyas, su resistencia y el lastre del burlón.: Headrope buoyancy,
+  number and distribution of floats, their drag and footrope ballast.
+Cables de remolque: Warps
+Nomura y Yamazaki; L. G. Pérez Águila; MacLennan; Kowalski y Gianotti: Nomura and Yamazaki; L. G. Pérez
+  Águila; MacLennan; Kowalski and Gianotti
+Ángulos, diámetro, CD, resistencia del cable, cargas y selección del catálogo.: Angles, diameter, CD,
+  warp drag, loads and catalogue selection.
+Ventana de velocidad: Speed window
+Velocidad máxima remolcable donde el tiro disponible iguala la resistencia total.: Maximum towing speed
+  where the available pull equals the total drag.
+Plano no disponible: Plan not available
+— (misma red que la estándar): — (same net as the standard one)
+Contenido: Contents
+FT ≥ R, red estándar: FT ≥ R, standard net
+Red estándar: Standard net
+Red modificada: Modified net
+Buque de diseño: Design vessel
+Buques de la clase: Vessels of the class
+Velocidades: Speeds
+Fecha: Date
+Versión de trawlkit: trawlkit version
+Planta: Plan view
+Perfil: Profile
+Frente: Front view
+'{view} de la red simulada a {v} kn': '{view} of the simulated net at {v} kn'
+Lámina de la red estándar: Standard net drawing sheet
+Lámina de la red modificada: Modified net drawing sheet
+Plano de paños de {net}.: Netting panel plan of {net}.
+Escala real: True scale
+Escala real — red estándar: True scale — standard net
+Escala real — red modificada: True scale — modified net
+Gráficos: Charts
+Tablas: Tables
+Erratas: Errata
+Notas: Notes
+Metodología: Methodology
+Créditos: Credits
+trawlkit.drawing no está disponible: trawlkit.drawing is not available
+RN a 3 kn: RN at 3 kn
+red estándar, Aberdeen: standard net, Aberdeen
+'rotura {load} t — ': 'breaking load {load} t — '
+no cumple la rotura mínima: does not meet the minimum breaking load
+Dimensionamiento de red, aparejo, flotación, lastre y cable de remolque a partir del modelo FAO A-3.: Sizing
+  of net, rigging, buoyancy, ballast and warp based on the FAO A-3 model.
+Optimización: Optimization
+? '<p>Lista de materiales y guía para el taller (red estándar): paño a comprar, hoja de corte, uniones,
+  montaje en relingas, boyas, lastre y cortes de cabos. La versión para imprimir en A4 sale de <code>trawlkit
+  build-guide</code> o de la pestaña «Construcción» de la app.</p>'
+: '<p>Bill of materials and workshop guide (standard net): netting to purchase, cutting sheet, joins,
+  hanging on the ropes, floats, ballast and rope cuts. The printable A4 version comes from <code>trawlkit
+  build-guide</code> or the “Construction” tab of the app.</p>'
+? <p>El motor reproduce, hoja por hoja, el libro <em>Calculos_Red_FAO_A3.xlsx</em> y encadena las etapas
+  en el orden en que el libro resuelve sus dependencias.</p>
+: <p>The engine reproduces, sheet by sheet, the workbook <em>Calculos_Red_FAO_A3.xlsx</em> and chains
+  the stages in the order in which the workbook resolves its dependencies.</p>
+? 'Repositorio: github.com/arielgiamportone/trawl-design-lab · Modelo original: github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel'
+: 'Repository: github.com/arielgiamportone/trawl-design-lab · Original model: github.com/arielgiamportone/Trawl_net_model_in_Advanced_Excel'
+Los valores de cada gráfico están en las tablas de la sección siguiente.: The values of each chart are
+  in the tables of the next section.
+La corrida no dejó notas.: The run left no notes.
+trawlkit · informe de diseño: trawlkit · design report
+Generado por trawlkit el {date}.: Generated by trawlkit on {date}.
+Informe de diseño · trawlkit: Design report · trawlkit
+? '<p>Modo de compatibilidad del caso: <strong>{mode}</strong>. En modo <em>excel</em> se reproducen las
+  erratas para validar la migración contra el libro; en modo <em>corrected</em> se aplican las fórmulas
+  correctas.</p>'
+: '<p>Compatibility mode of the case: <strong>{mode}</strong>. In <em>excel</em> mode the errata are reproduced
+  to validate the migration against the workbook; in <em>corrected</em> mode the correct formulas are
+  applied.</p>'
+Etapa: Stage
+Autores y fuentes: Authors and sources
+Qué calcula: What it computes
+? '<p>Modelo Excel original (<em>Calculos_Red_FAO_A3.xlsx</em>, 2014-2024): <strong>Ariel Luján Giamportone</strong>.</p><p>Documentación
+  y datos: licencia Creative Commons Atribución 4.0 (CC BY 4.0). Código de trawlkit: licencia MIT.</p>'
+: '<p>Original Excel model (<em>Calculos_Red_FAO_A3.xlsx</em>, 2014-2024): <strong>Ariel Luján Giamportone</strong>.</p><p>Documentation
+  and data: Creative Commons Attribution 4.0 licence (CC BY 4.0). trawlkit code: MIT licence.</p>'
+? 'Forma de equilibrio de la red remolcada (trawlkit.sim, experimental): paño de hilos con arrastre de
+  Morison, relingas, boyas, lastre, bridas, patentes y contacto con el fondo.'
+: 'Equilibrium shape of the towed net (trawlkit.sim, experimental): twine netting with Morison drag, ropes,
+  floats, ballast, bridles, sweeps and seabed contact.'
+Construcción y materiales: Construction and materials
+? Escala de la red (mismo mallero, s veces más mallas por borde) y velocidad de arrastre que mejor cumplen
+  el objetivo respetando tiro, apertura, cable y portón (trawlkit.optimize).
+: Net scale (same mesh size, s times more meshes per edge) and towing speed that best meet the objective
+  while respecting pull, opening, warp and otter board (trawlkit.optimize).
+Erratas del libro original: Errata of the original workbook
+Créditos y licencias: Credits and licences
+? 'Tiro disponible (Fridman, Prado–Dremière, Koyama, Nomura, Hamuro) del buque {vessel} y resistencia
+  total de la red estándar y modificada entre {v0} y {v1} kn. Velocidad máxima remolcable: {vmax} kn.'
+: 'Available pull (Fridman, Prado–Dremière, Koyama, Nomura, Hamuro) of vessel {vessel} and total drag
+  of the standard and modified net between {v0} and {v1} kn. Maximum towing speed: {vmax} kn.'
+Resistencia de la red {variant} según {n} métodos empíricos entre {v0} y {v1} kn; la RN de diseño es {method}.: Drag
+  of the {variant} net by {n} empirical methods between {v0} and {v1} kn; the design RN is {method}.
+RN red: RN net
+ROB portones: ROB otter boards
+Composición de la resistencia a {v} kn: Drag breakdown at {v} kn
+DPA y AV de Baranov–Fridman entre {v0} y {v1} kn. AH de diseño {ah} m, AV de Suzuki {av} m.: Baranov–Fridman
+  DPA and AV between {v0} and {v1} kn. Design AH {ah} m, Suzuki AV {av} m.
+Tiro disponible frente a resistencia total: Available pull vs total drag
+Resistencia de la red estándar por método: Drag of the standard net by method
+Resistencia de la red modificada por método: Drag of the modified net by method
+Composición de la resistencia total: Total drag breakdown
+Aberturas de la red (Fridman): Net openings (Fridman)
+Fuerza [kgf]: Force [kgf]
+R total {variant}: Total R ({variant})
+v máx = {v} kn: v max = {v} kn
+Red {variant}: '{variant} net'
+Aberturas de la red según Fridman: Net openings according to Fridman
+'{name}: {value} {unit} a {speed} kn': '{name}: {value} {unit} at {speed} kn'
+R total estándar: Total R (standard)
+R total modificada: Total R (modified)
+Ventana viable: Feasible window
+Tiro disponible y resistencia total — {vessel}: Available pull and total drag — {vessel}
+'RN de diseño: {method}': 'Design RN: {method}'
+Promedio de métodos: Method average
+Otros métodos ({n}): Other methods ({n})
+'{method} (diseño)': '{method} (design)'
+Composición de la resistencia total a {v} kn: Total drag breakdown at {v} kn
+Resistencia [kgf]: Drag [kgf]
+Valor de diseño: Design value
+DPA — distancia entre puntas de alas [m]: DPA — wing-end spread [m]
+AV — abertura vertical [m]: AV — vertical opening [m]
+Resistencia de la red RN [kgf]: Net drag RN [kgf]
+'Modo EXCEL: el total del libro (Rem!H118) omite ROB; aquí se muestra sumado.': 'EXCEL mode: the workbook
+  total (Rem!H118) omits ROB; it is shown added here.'
+Ventana viable hasta {v} kn: Feasible window up to {v} kn
+Velocidad máxima {v} kn: Maximum speed {v} kn
+red {variant}: '{variant} net'
+Largo total {length} m: Total length {length} m
+PLANO SUPERIOR (DORSO): UPPER PANEL (TOP)
+PLANO INFERIOR (VIENTRE): LOWER PANEL (BELLY)
+Dorso: Top
+Vientre: Belly
+Costado: Side
+Ancho sup.: Top width
+Ancho inf.: Bottom width
+Boca: Mouth
+Escala gráfica: Graphic scale
+1 m = {px} px · ≈ 1:{ratio} impreso en A3 (96 dpi): 1 m = {px} px · ≈ 1:{ratio} printed on A3 (96 dpi)
+? 'Vista a escala real — red relingada: ancho = mallas · mallero · U1, alto = N · mallero · U2 (U2 = √(1
+  − U1²)). Cuadrícula de 1 m.'
+: 'True-scale view — hung net: width = meshes · mesh size · U1, depth = N · mesh size · U2 (U2 = √(1 −
+  U1²)). 1 m grid.'
+COSTADOS (×2): SIDE PANELS (×2)
+Largos: Lengths
+estirado: stretched
+relingado: hung
+'Largo total (NetDimensions, estirado): {length} m': 'Total length (NetDimensions, stretched): {length}
+  m'
+'Ancho de boca relingado: {width} m': 'Hung mouth width: {width} m'
+Medidas relingadas por panel [m]: Hung dimensions per panel [m]
+'{net} — vista a escala real': '{net} — true-scale view'
+'Escalones en pegaduras (U1 distinto):': 'Steps at seams (different U1):'
+Ingeniería Pesquera · UTN Ushuaia: Fisheries Engineering · UTN Ushuaia
+Cadena de reglaje {length} m · {kg} kg: Adjustment chain {length} m · {kg} kg
+'{net} — lámina técnica': '{net} — technical drawing sheet'
+Nº de mallas: No. of meshes
+Largo: Length
+'Tipo de portón: {name}': 'Otter board type: {name}'
+'Dimensiones: {length} m × {height} m = {area} m²': 'Dimensions: {length} m × {height} m = {area} m²'
+'Peso: {weight} kg': 'Weight: {weight} kg'
+'Ángulo de ataque: {angle}°': 'Angle of attack: {angle}°'
+' · MALLA {mesh} mm': ' · MESH {mesh} mm'
+PARA {hp}HP: FOR {hp}HP
+PARA {hp0}HP A {hp1}HP: FOR {hp0}HP TO {hp1}HP
+corregido: corrected
+LARGO TOTAL {length} m: TOTAL LENGTH {length} m
+Sección de la red: Net section
+Superficie: Solid
+sólida [m²]: area [m²]
+Peso [kg]: Weight [kg]
+Paneles inferiores: Lower panels
+Paneles superiores: Upper panels
+Círculo de pesca: Fishing circle
+Cable de acero: Steel wire rope
+Patentes {length} m: Sweeps {length} m
+Pie de gallo {length} m: Crowfoot {length} m
+Malleta superior {length} m: Upper bridle {length} m
+Malleta inferior {length} m: Lower bridle {length} m
+'{n} boyas de Ø {d} mm': '{n} floats of Ø {d} mm'
+Flotación total = {kgf} kgf: Total buoyancy = {kgf} kgf
+Lastre total = {kg} kg: Total ballast = {kg} kg
+alas {wings} kg · bocana {bosom} kg · reglaje {adjust} kg: wings {wings} kg · bosom {bosom} kg · adjustment
+  {adjust} kg
+CON BOLSA ESTÁNDAR PARA PEQUEÑOS PECES: WITH STANDARD CODEND FOR SMALL FISH
+CON BOLSA MODIFICADA PARA CRUSTÁCEOS: WITH MODIFIED CODEND FOR CRUSTACEANS
+AÑO: YEAR
+Modo de cálculo: Calculation mode
+Refuerzo de puntas de ala {length} m: Wing-tip reinforcement {length} m
+Costados (×2): Side panels (×2)
+'{power} frente a {demand}': '{power} vs {demand}'

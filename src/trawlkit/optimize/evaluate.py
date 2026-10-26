@@ -30,6 +30,7 @@ from numpy.typing import NDArray
 
 from trawlkit import rigging
 from trawlkit.compat import Compat
+from trawlkit.i18n import t
 from trawlkit.io import Door, PropellerType, load_catalogue, load_doors
 from trawlkit.model import DesignCase, DesignResult, run
 from trawlkit.optimize.scaling import scale_count, scale_net
@@ -70,15 +71,15 @@ class Limits:
     def __post_init__(self) -> None:
         """Valida los rangos."""
         if not (math.isfinite(self.margin) and self.margin >= 0):
-            raise ValueError("margin debe ser ≥ 0")
+            raise ValueError(t("margin debe ser ≥ 0"))
         if not 0 < self.open_ratio <= 1.5:
-            raise ValueError("open_ratio debe estar en (0, 1.5]")
+            raise ValueError(t("open_ratio debe estar en (0, 1.5]"))
         if not 0 < self.v_min_kn < self.v_max_kn:
-            raise ValueError("se requiere 0 < v_min_kn < v_max_kn")
+            raise ValueError(t("se requiere 0 < v_min_kn < v_max_kn"))
         if self.door_tolerance < 0:
-            raise ValueError("door_tolerance debe ser ≥ 0")
+            raise ValueError(t("door_tolerance debe ser ≥ 0"))
         if self.warp_safety_factor is not None and self.warp_safety_factor <= 0:
-            raise ValueError("warp_safety_factor debe ser positivo")
+            raise ValueError(t("warp_safety_factor debe ser positivo"))
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -221,7 +222,7 @@ def _resolve_door(door: str | Door | None, case: DesignCase) -> Door:
         return door
     doors = {d.id: d for d in load_doors().doors}
     if door not in doors:
-        raise ValueError(f"portón desconocido: {door!r}")
+        raise ValueError(t("portón desconocido: {value!r}", value=door))
     return doors[door]
 
 
@@ -345,7 +346,9 @@ class Evaluator:
         try:
             result = run(case)
         except (ZeroDivisionError, IndexError, FloatingPointError) as exc:
-            raise ValueError(f"el motor no puede calcular la red escalada s = {s}: {exc}") from exc
+            raise ValueError(
+                t("el motor no puede calcular la red escalada s = {s}: {exc}", s=s, exc=exc)
+            ) from exc
         self.runs += 1
         req = result.doors.required_area_m2
         lo, hi = case.required_area_speed_range_kn
@@ -393,8 +396,12 @@ class Evaluator:
         v = float(v_kn)
         if not self.speeds[0] <= v <= self.speeds[-1]:
             raise ValueError(
-                f"v = {v} kn fuera de la malla de velocidades "
-                f"[{self.speeds[0]:g}, {self.speeds[-1]:g}] kn"
+                t(
+                    "v = {v} kn fuera de la malla de velocidades [{lo:g}, {hi:g}] kn",
+                    v=v,
+                    lo=self.speeds[0],
+                    hi=self.speeds[-1],
+                )
             )
         lim = self.limits
         case = self.case
@@ -431,21 +438,21 @@ class Evaluator:
                 dpa_f,
                 lim.open_ratio * c.dpa_geometric_m,
                 None,
-                f"DPA de Fridman ≥ {lim.open_ratio:g}·DPA geométrica",
+                t("DPA de Fridman ≥ {r:g}·DPA geométrica", r=lim.open_ratio),
             ),
             _constraint(
                 "warp",
                 best_bl,
                 safety * rt,
                 None,
-                f"rotura de algún cable del catálogo ≥ {safety:g}·R_T",
+                t("rotura de algún cable del catálogo ≥ {k:g}·R_T", k=safety),
             ),
             _constraint(
                 "door",
                 c.door_required_m2,
                 None,
                 door_area * (1.0 + lim.door_tolerance),
-                "superficie requerida por portón (Port!F215) ≤ superficie del portón",
+                t("superficie requerida por portón (Port!F215) ≤ superficie del portón"),
             ),
             _constraint(
                 "speed",

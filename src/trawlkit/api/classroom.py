@@ -15,9 +15,11 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import HTMLResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
+from trawlkit.i18n import N_, t
+
 router = APIRouter(prefix="/classroom", tags=["aula"])
 
-NOT_CONFIGURED = (
+NOT_CONFIGURED = N_(
     "El aula no está habilitada en este servidor: falta la base de datos (DATABASE_URL). "
     "Los ejercicios de práctica y los laboratorios funcionan igual."
 )
@@ -324,12 +326,12 @@ def _session() -> Iterator[Any]:
     try:
         from trawlkit.classroom import db
     except ImportError as exc:  # pragma: no cover - depende de los extras instalados
-        raise HTTPException(503, NOT_CONFIGURED) from exc
+        raise HTTPException(503, t(NOT_CONFIGURED)) from exc
     try:
         with db.session() as s:
             yield s
     except db.NotConfiguredError as exc:
-        raise HTTPException(503, NOT_CONFIGURED) from exc
+        raise HTTPException(503, t(NOT_CONFIGURED)) from exc
 
 
 Db = Annotated[Any, Depends(_session)]
@@ -371,10 +373,10 @@ def status() -> Any:
     try:
         from trawlkit.classroom import db
     except ImportError:  # pragma: no cover - depende de los extras instalados
-        return {"enabled": False, "detail": NOT_CONFIGURED}
+        return {"enabled": False, "detail": t(NOT_CONFIGURED)}
     if db.database_url() is None:
-        return {"enabled": False, "detail": NOT_CONFIGURED}
-    return {"enabled": True, "detail": "aula habilitada"}
+        return {"enabled": False, "detail": t(NOT_CONFIGURED)}
+    return {"enabled": True, "detail": t("aula habilitada")}
 
 
 @router.post("/auth/register", response_model=SessionOut)

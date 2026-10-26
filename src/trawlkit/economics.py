@@ -35,6 +35,7 @@ import dataclasses
 from dataclasses import asdict, dataclass, field
 from typing import TYPE_CHECKING, Any, Literal
 
+from trawlkit.i18n import N_, t
 from trawlkit.sim.core import DIESEL_KG_L, KW_PER_HP, SFC_KG_KWH, TOWING_EFFICIENCY
 
 if TYPE_CHECKING:
@@ -115,14 +116,17 @@ class EconomicInputs:
             (self.haul_hours > 0, "haul_hours > 0"),
             (self.trips_per_year > 0, "trips_per_year > 0"),
             (self.reference_speed_kn > 0, "reference_speed_kn > 0"),
-            (0 < self.towing_efficiency <= 1, "towing_efficiency en (0, 1]"),
+            (0 < self.towing_efficiency <= 1, N_("towing_efficiency en (0, 1]")),
             (self.gear_life_hours > 0, "gear_life_hours > 0"),
-            (self.crew_share is None or 0 <= self.crew_share <= 1, "crew_share en [0, 1]"),
-            (min(self.steaming_hours, self.handling_hours, self.trip_days) >= 0, "tiempos ≥ 0"),
+            (self.crew_share is None or 0 <= self.crew_share <= 1, N_("crew_share en [0, 1]")),
+            (
+                min(self.steaming_hours, self.handling_hours, self.trip_days) >= 0,
+                N_("tiempos ≥ 0"),
+            ),
         ]
         for ok, msg in checks:
             if not ok:
-                raise ValueError(msg)
+                raise ValueError(t(msg))
 
     @property
     def mean_price(self) -> float | None:
@@ -157,7 +161,7 @@ class EconomicInputs:
         names = {f.name for f in dataclasses.fields(cls)}
         unknown = set(data) - names
         if unknown:
-            raise ValueError(f"datos desconocidos: {', '.join(sorted(unknown))}")
+            raise ValueError(t("datos desconocidos: {names}", names=", ".join(sorted(unknown))))
         d = dict(data)
         d["species"] = tuple(
             s if isinstance(s, Species) else Species(**s) for s in d.get("species", ())
@@ -206,12 +210,12 @@ class TripEconomics:
 
 
 COST_LABELS: dict[str, str] = {
-    "fuel": "Combustible",
-    "lube": "Lubricante",
-    "crew": "Tripulación",
-    "gear": "Red y aparejo",
-    "trip": "Gastos de la marea",
-    "annual": "Fijos anuales (por marea)",
+    "fuel": N_("Combustible"),
+    "lube": N_("Lubricante"),
+    "crew": N_("Tripulación"),
+    "gear": N_("Red y aparejo"),
+    "trip": N_("Gastos de la marea"),
+    "annual": N_("Fijos anuales (por marea)"),
 }
 
 
@@ -248,24 +252,24 @@ def trip(
     missing: list[str] = []
     catch = None
     if inp.catch_kg_h is None:
-        missing.append("captura por hora")
+        missing.append(t("captura por hora"))
     elif reference_area_rate_m2_h > 0:
         catch = inp.catch_kg_h * area_rate_m2_h / reference_area_rate_m2_h * inp.towing_hours
     price = inp.mean_price
     if price is None:
-        missing.append("precio de la captura")
+        missing.append(t("precio de la captura"))
     revenue = None if catch is None or price is None else catch * price
 
     if inp.fuel_price_l is None:
-        missing.append("precio del gasoil")
+        missing.append(t("precio del gasoil"))
     if inp.lube_price_l is None:
-        missing.append("precio del lubricante")
+        missing.append(t("precio del lubricante"))
     fuel_cost = _mul(inp.fuel_price_l, fuel)
     lube_cost = _mul(inp.lube_price_l, fuel * inp.lube_ratio)
 
     hours_year = inp.towing_hours * inp.trips_per_year
     if inp.gear_cost is None:
-        missing.append("costo de la red y el aparejo")
+        missing.append(t("costo de la red y el aparejo"))
         gear = None
     else:
         per_hour = inp.gear_cost / inp.gear_life_hours + (
@@ -273,9 +277,9 @@ def trip(
         )
         gear = per_hour * inp.towing_hours
     if inp.trip_costs is None:
-        missing.append("gastos de la marea")
+        missing.append(t("gastos de la marea"))
     if inp.annual_costs is None:
-        missing.append("costos fijos anuales")
+        missing.append(t("costos fijos anuales"))
     annual = _mul(inp.annual_costs, 1.0 / inp.trips_per_year)
 
     # Los costos que se reparten antes de la parte: los que hay (el gasoil es obligatorio).
@@ -286,13 +290,13 @@ def trip(
         crew = 0.0
     elif inp.crew_mode == "wage":
         if inp.wage_day is None or inp.crew_size is None:
-            missing.append("jornal y cantidad de tripulantes")
+            missing.append(t("jornal y cantidad de tripulantes"))
             crew = None
         else:
             crew = inp.wage_day * inp.crew_size * inp.trip_days
     else:
         if inp.crew_share is None:
-            missing.append("parte de la tripulación")
+            missing.append(t("parte de la tripulación"))
             crew = None
         else:
             crew_rate = inp.crew_share
@@ -357,9 +361,9 @@ def trip(
 #: demás (apertura de la red, portón, rango) se informan como avisos.
 TOWING_CONSTRAINTS = ("thrust", "warp")
 CONSTRAINT_WARNINGS = {
-    "net_open": "la red queda poco abierta a esta velocidad",
-    "door": "el portón queda chico",
-    "speed": "fuera del rango operativo",
+    "net_open": N_("la red queda poco abierta a esta velocidad"),
+    "door": N_("el portón queda chico"),
+    "speed": N_("fuera del rango operativo"),
 }
 
 
@@ -460,14 +464,14 @@ def economics(
         n = int(round((lim.v_max_kn - lim.v_min_kn) / SPEED_STEP_KN))
         speeds = tuple(round(lim.v_min_kn + i * SPEED_STEP_KN, 6) for i in range(n + 1))
     speeds = tuple(sorted({min(max(float(v), lo), hi) for v in speeds}))
-    gear_source = "usuario"
+    gear_source = t("usuario")
     if inputs.gear_cost is None and prices:
         cost = bom_gear_cost(ev.case, prices, inputs.currency)
         if cost is not None:
             inputs = dataclasses.replace(inputs, gear_cost=cost)
-            gear_source = "lista de materiales"
+            gear_source = t("lista de materiales")
     if inputs.gear_cost is None:
-        gear_source = "sin dato"
+        gear_source = t("sin dato")
     ref_v = min(max(inputs.reference_speed_kn, lo), hi)
     ref: Evaluation = ev.from_curves(curves, ref_v)
     ref_area = ref.area_rate_m2_h if reference_area_rate_m2_h is None else reference_area_rate_m2_h
@@ -476,7 +480,7 @@ def economics(
         e = ev.from_curves(curves, v)
         ok = all(c.ok for c in e.constraints if c.name in TOWING_CONSTRAINTS)
         warns = tuple(
-            CONSTRAINT_WARNINGS.get(c.name, c.name)
+            t(CONSTRAINT_WARNINGS.get(c.name, c.name))
             for c in e.constraints
             if not c.ok and c.name not in TOWING_CONSTRAINTS
         )
@@ -509,16 +513,25 @@ def economics(
             "margin": _mul(pick.margin, per),
         }
     notes = [
-        "Captura proporcional al área barrida por hora (AH·v) desde la velocidad de referencia; "
-        "no se modela el escape ni el arreo.",
-        f"Consumo específico {inputs.sfc_kg_kwh:g} kg/kWh, rendimiento de remolque "
-        f"{inputs.towing_efficiency:g}, carga en navegación {inputs.steaming_load:g} y en "
-        f"maniobras {inputs.idle_load:g} (A VERIFICAR).",
+        t(
+            "Captura proporcional al área barrida por hora (AH·v) desde la velocidad de "
+            "referencia; no se modela el escape ni el arreo."
+        ),
+        t(
+            "Consumo específico {sfc:g} kg/kWh, rendimiento de remolque "
+            "{eff:g}, carga en navegación {steam:g} y en maniobras {idle:g} (A VERIFICAR).",
+            sfc=inputs.sfc_kg_kwh,
+            eff=inputs.towing_efficiency,
+            steam=inputs.steaming_load,
+            idle=inputs.idle_load,
+        ),
     ]
-    if not any(t.feasible for t in trips):
+    if not any(tr_.feasible for tr_ in trips):
         notes.append(
-            "A ninguna velocidad del rango el buque tiene tiro con reserva para esta red (o el "
-            "cable no alcanza)."
+            t(
+                "A ninguna velocidad del rango el buque tiene tiro con reserva para esta red (o "
+                "el cable no alcanza)."
+            )
         )
     return EconomicsResult(
         net_id=case.net.id,

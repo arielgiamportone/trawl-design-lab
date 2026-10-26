@@ -7,6 +7,7 @@ from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from trawlkit.i18n import t
 from trawlkit.report.html import default_sheet_svgs, render_html
 
 if TYPE_CHECKING:
@@ -49,7 +50,13 @@ def build_report(
     fmts = tuple(formats)
     unknown = set(fmts) - set(FORMATS)
     if unknown:
-        raise ValueError(f"formatos desconocidos: {sorted(unknown)} (use {FORMATS})")
+        raise ValueError(
+            t(
+                "formatos desconocidos: {unknown} (use {formats})",
+                unknown=sorted(unknown),
+                formats=FORMATS,
+            )
+        )
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []

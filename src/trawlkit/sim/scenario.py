@@ -28,6 +28,7 @@ from typing import Any
 
 import yaml
 
+from trawlkit.i18n import t
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.rigging.seabed import Range, Seabed, seabed, seabeds
 
@@ -92,7 +93,7 @@ def fouling(key: str) -> Fouling:
     for f in fouling_catalogue():
         if f.id == key:
             return f
-    raise KeyError(f"escenario de ensuciamiento desconocido: {key!r}")
+    raise KeyError(t("escenario de ensuciamiento desconocido: {key!r}", key=key))
 
 
 def fouling_coefficients() -> dict[str, float]:
@@ -144,34 +145,34 @@ class Scenario:
     def __post_init__(self) -> None:
         """Valida rangos físicos."""
         if self.catch_kg < 0:
-            raise ValueError("catch_kg debe ser ≥ 0")
+            raise ValueError(t("catch_kg debe ser ≥ 0"))
         if not 200.0 <= self.catch_bulk_density <= 1300.0:
-            raise ValueError("catch_bulk_density fuera de rango (200–1300 kg/m³)")
+            raise ValueError(t("catch_bulk_density fuera de rango (200–1300 kg/m³)"))
         if not 900.0 <= self.catch_body_density <= 2000.0:
-            raise ValueError("catch_body_density fuera de rango (900–2000 kg/m³)")
+            raise ValueError(t("catch_body_density fuera de rango (900–2000 kg/m³)"))
         if not 0.0 <= self.catch_cp <= 3.0:
-            raise ValueError("catch_cp fuera de rango (0–3)")
+            raise ValueError(t("catch_cp fuera de rango (0–3)"))
         for name in ("mu_gear", "mu_door"):
             v = getattr(self, name)
             if v is not None and not 0.0 <= v <= 1.5:
-                raise ValueError(f"{name} fuera de rango (0–1,5)")
+                raise ValueError(t("{name} fuera de rango (0–1,5)", name=name))
         if self.seabed is not None:
             seabed(self.seabed)  # KeyError si no existe
         if self.fouling is not None:
             fouling(self.fouling)
         if not 0.0 <= self.fouling_level <= 2.0:
-            raise ValueError("fouling_level fuera de rango (0–2)")
+            raise ValueError(t("fouling_level fuera de rango (0–2)"))
         if not -2.0 <= self.current_kn <= 2.0:
-            raise ValueError("current_kn fuera de rango (−2 a 2 kn)")
+            raise ValueError(t("current_kn fuera de rango (−2 a 2 kn)"))
         if self.warp_length_m is not None and not 20.0 <= self.warp_length_m <= 3000.0:
-            raise ValueError("warp_length_m fuera de rango (20–3000 m)")
+            raise ValueError(t("warp_length_m fuera de rango (20–3000 m)"))
         if not 0.1 <= self.haul_hours <= 24.0:
-            raise ValueError("haul_hours fuera de rango (0,1–24 h)")
+            raise ValueError(t("haul_hours fuera de rango (0,1–24 h)"))
         if not 0.0 <= self.mesh_bending_factor <= 20.0:
-            raise ValueError("mesh_bending_factor fuera de rango (0–20)")
+            raise ValueError(t("mesh_bending_factor fuera de rango (0–20)"))
         for name in ("door_cl_factor", "door_cd_factor"):
             if not 0.3 <= getattr(self, name) <= 2.0:
-                raise ValueError(f"{name} fuera de rango (0,3–2)")
+                raise ValueError(t("{name} fuera de rango (0,3–2)", name=name))
 
     def fouling_zones(self) -> dict[str, float]:
         """Nivel de ensuciamiento efectivo por zona (alas, cuerpo, copo)."""

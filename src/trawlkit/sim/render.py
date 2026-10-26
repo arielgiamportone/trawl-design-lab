@@ -18,6 +18,7 @@ import numpy.typing as npt
 
 from trawlkit.drawing import svg
 from trawlkit.drawing.sheet import fmt_es
+from trawlkit.i18n import t
 from trawlkit.sim.core import SimResult
 
 FloatArray = npt.NDArray[np.float64]
@@ -148,7 +149,7 @@ def plan_svg(r: SimResult, *, include_rigging: bool = False) -> str:
     def proj(p: FloatArray) -> FloatArray:
         return p[:, [0, 1]]
 
-    els: list[svg.Element] = _header("Planta (vista superior)", r)
+    els: list[svg.Element] = _header(t("Planta (vista superior)"), r)
     if include_rigging:
         els += _rigging(r, frame, proj)
     els += _net_lines(r, frame, proj)
@@ -159,7 +160,7 @@ def plan_svg(r: SimResult, *, include_rigging: bool = False) -> str:
     els += _dim_v(tl, tr, x_dim, f"AH = {fmt_es(r.ah_m, 2)} m")
     els.append(_legend(frame, plan=True))
     return svg.document(
-        _W, frame.height, els, title_text="Red simulada: planta", extra_style=SIM_STYLE
+        _W, frame.height, els, title_text=t("Red simulada: planta"), extra_style=SIM_STYLE
     )
 
 
@@ -178,13 +179,17 @@ def profile_svg(r: SimResult, *, exaggeration: float = 3.0) -> str:
         return p[:, [0, 2]]
 
     els: list[svg.Element] = _header(
-        "Perfil (vista lateral)", r, f" · escala vertical × {fmt_es(exaggeration, 0)}"
+        t("Perfil (vista lateral)"),
+        r,
+        t(" · escala vertical × {x}", x=fmt_es(exaggeration, 0)),
     )
     x0, x1 = float(np.min(pts[:, 0])) - 1.0, float(np.max(pts[:, 0])) + 1.0
     els.append(svg.line(frame.p(x0, 0.0), frame.p(x1, 0.0), cls="seabed"))
     els.append(
         svg.text(
-            (frame.p(x1, 0.0)[0] - 4, frame.p(x1, 0.0)[1] + 14), "fondo", cls="small end muted-text"
+            (frame.p(x1, 0.0)[0] - 4, frame.p(x1, 0.0)[1] + 14),
+            t("fondo"),
+            cls="small end muted-text",
         )
     )
     els += _net_lines(r, frame, proj)
@@ -197,7 +202,7 @@ def profile_svg(r: SimResult, *, exaggeration: float = 3.0) -> str:
     els += _dim_v(ph, pf, min(ph[0], pf[0]) - 26.0, f"AV = {fmt_es(r.av_m, 2)} m")
     els.append(_legend(frame, plan=False))
     return svg.document(
-        _W, frame.height, els, title_text="Red simulada: perfil", extra_style=SIM_STYLE
+        _W, frame.height, els, title_text=t("Red simulada: perfil"), extra_style=SIM_STYLE
     )
 
 
@@ -213,7 +218,7 @@ def front_svg(r: SimResult) -> str:
     def proj(p: FloatArray) -> FloatArray:
         return np.stack([-p[:, 1], p[:, 2]], axis=1)
 
-    els: list[svg.Element] = _header("Frente (vista desde proa)", r)
+    els: list[svg.Element] = _header(t("Frente (vista desde proa)"), r)
     y0, y1 = float(np.max(-pts[:, 1])) - 1.0, float(np.min(-pts[:, 1])) + 1.0
     els.append(svg.line(frame.p(y0, 0.0), frame.p(y1, 0.0), cls="seabed"))
     els += _net_lines(r, frame, proj)
@@ -231,17 +236,17 @@ def front_svg(r: SimResult) -> str:
     els += _dim_v(ph, pf, ph[0] + 40.0, f"AV = {fmt_es(r.av_m, 2)} m")
     els.append(_legend(frame, plan=False))
     return svg.document(
-        _W, frame.height, els, title_text="Red simulada: frente", extra_style=SIM_STYLE
+        _W, frame.height, els, title_text=t("Red simulada: frente"), extra_style=SIM_STYLE
     )
 
 
 def _legend(frame: _Frame, *, plan: bool) -> svg.Element:
     x, y = _W - 230.0, frame.height - _LEGEND + 6.0
     items: Sequence[tuple[str, str]] = (
-        ("head", "lima (relinga superior)"),
-        ("foot", "burlón (relinga inferior)"),
-        ("net-up", "paño del dorso"),
-        ("net-lo", "paño del vientre"),
+        ("head", t("lima (relinga superior)")),
+        ("foot", t("burlón (relinga inferior)")),
+        ("net-up", t("paño del dorso")),
+        ("net-lo", t("paño del vientre")),
     )
     g = svg.group()
     for k, (cls, label) in enumerate(items):

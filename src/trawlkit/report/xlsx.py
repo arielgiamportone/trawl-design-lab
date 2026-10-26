@@ -11,6 +11,7 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from trawlkit.i18n import get_lang, t
 from trawlkit.report.tables import Table, all_tables
 
 if TYPE_CHECKING:
@@ -19,13 +20,51 @@ if TYPE_CHECKING:
 #: Largo máximo del nombre de hoja en Excel.
 MAX_SHEET_NAME = 31
 
+#: Nombre de hoja en inglés de cada tabla (``Table.key``); en español la hoja es la clave.
+SHEET_NAMES_EN: dict[str, str] = {
+    "resumen": "summary",
+    "panos_std": "panels_std",
+    "panos_mod": "panels_mod",
+    "potencia": "power",
+    "resistencia_std": "drag_std",
+    "resistencia_mod": "drag_mod",
+    "demanda": "towing_demand",
+    "aparejo": "rigging",
+    "flotacion_lastre": "floats_ballast",
+    "cable": "warp",
+    "ventana_velocidad": "speed_window",
+    "erratas": "errata",
+    "notas": "notes",
+    "lista_materiales": "bill_of_materials",
+    "construccion_corte": "cutting_sheet",
+    "construccion_pano": "netting_to_buy",
+    "construccion_armado": "assembly",
+    "construccion_montaje": "hanging",
+    "construccion_boyas": "floats",
+    "construccion_lastre": "ballast",
+    "construccion_cortes": "rope_cuts",
+    "optimizacion": "optimization",
+    "optimizacion_restricciones": "optimization_constraints",
+    "optimizacion_pareto": "optimization_pareto",
+    "optimizacion_malla": "optimization_grid",
+    "simulacion": "simulation",
+    "simulacion_detalle": "simulation_detail",
+    "Caso": "Case",
+    "Notas": "Notes",
+}
+
+
+def localized_sheet(key: str) -> str:
+    """Nombre de hoja de la tabla ``key`` en el idioma activo."""
+    return SHEET_NAMES_EN.get(key, key) if get_lang() == "en" else key
+
 
 def _openpyxl() -> Any:
     try:
         import openpyxl
     except ImportError as exc:  # pragma: no cover - depende del entorno
         raise RuntimeError(
-            "La salida XLSX necesita openpyxl: pip install trawlkit[report]"
+            t("La salida XLSX necesita openpyxl: pip install trawlkit[report]")
         ) from exc
     return openpyxl
 
@@ -88,7 +127,7 @@ def _write_table(ws: Any, table: Table, font: Any) -> None:
         ws.cell(row=extra, column=1, value=table.note)
         extra += 1
     if table.source:
-        ws.cell(row=extra, column=1, value=f"Celdas del libro: {table.source}")
+        ws.cell(row=extra, column=1, value=t("Celdas del libro: {cells}", cells=table.source))
     for j, w in enumerate(widths, 1):
         ws.column_dimensions[get_column_letter(j)].width = min(max(w + 2, 8), 60)
     ws.freeze_panes = "B3"
@@ -111,14 +150,14 @@ def write_xlsx(result: DesignResult, path: str | Path, extra_tables: Sequence[Ta
     for table in tables:
         if first:
             ws = wb.active
-            ws.title = sheet_name(table.key, used)
+            ws.title = sheet_name(localized_sheet(table.key), used)
             first = False
         else:
-            ws = wb.create_sheet(sheet_name(table.key, used))
+            ws = wb.create_sheet(sheet_name(localized_sheet(table.key), used))
         _write_table(ws, table, Font)
 
-    ws = wb.create_sheet(sheet_name("Caso", used))
-    ws.append(["Parámetro", "Valor"])
+    ws = wb.create_sheet(sheet_name(localized_sheet("Caso"), used))
+    ws.append([t("Parámetro"), t("Valor")])
     for cell in ws[1]:
         cell.font = Font(bold=True)
     for key, value in flatten(result.case.to_dict()):
@@ -129,8 +168,8 @@ def write_xlsx(result: DesignResult, path: str | Path, extra_tables: Sequence[Ta
     ws.column_dimensions["B"].width = 40
     ws.freeze_panes = "A2"
 
-    ws = wb.create_sheet(sheet_name("Notas", used))
-    ws.append(["N.º", "Nota"])
+    ws = wb.create_sheet(sheet_name(localized_sheet("Notas"), used))
+    ws.append([t("N.º"), t("Nota")])
     for cell in ws[1]:
         cell.font = Font(bold=True)
     for i, note in enumerate(result.notes, 1):
@@ -144,4 +183,11 @@ def write_xlsx(result: DesignResult, path: str | Path, extra_tables: Sequence[Ta
     return out
 
 
-__all__ = ["flatten", "number_format", "sheet_name", "write_xlsx"]
+__all__ = [
+    "SHEET_NAMES_EN",
+    "flatten",
+    "localized_sheet",
+    "number_format",
+    "sheet_name",
+    "write_xlsx",
+]

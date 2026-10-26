@@ -27,6 +27,8 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Literal
 
+from trawlkit.i18n import t
+
 ColKind = Literal["float", "int", "str", "enum"]
 
 #: Unidad base → (sufijo normalizado → factor a la base).
@@ -165,7 +167,7 @@ def read_xlsx(data: bytes) -> list[Sheet]:
     try:
         import openpyxl
     except ImportError as exc:  # pragma: no cover - depende del entorno
-        raise RuntimeError('leer XLSX necesita openpyxl: pip install "trawlkit[excel]"') from exc
+        raise RuntimeError(t('leer XLSX necesita openpyxl: pip install "trawlkit[excel]"')) from exc
     wb = openpyxl.load_workbook(io.BytesIO(data), read_only=True, data_only=True)
     out: list[Sheet] = []
     for ws in wb.worksheets:
@@ -187,7 +189,7 @@ def read_book(data: bytes | str, filename: str = "planilla.csv") -> list[Sheet]:
     suffix = Path(filename).suffix.lower()
     if suffix in (".xlsx", ".xlsm"):
         if isinstance(data, str):
-            raise ValueError("un XLSX se lee como bytes")
+            raise ValueError(t("un XLSX se lee como bytes"))
         return read_xlsx(data)
     text = data.decode("utf-8-sig", errors="replace") if isinstance(data, bytes) else data
     return [read_csv(text, Path(filename).stem or "planilla")]
@@ -199,19 +201,19 @@ def read_book(data: bytes | str, filename: str = "planilla.csv") -> list[Sheet]:
 def number(value: Any, decimal_comma: bool = False) -> float:
     """Número de una celda: admite coma decimal y separador de miles."""
     if isinstance(value, bool):
-        raise ValueError("no es un número")
+        raise ValueError(t("no es un número"))
     if isinstance(value, (int, float)):
         return float(value)
-    t = str(value).strip().replace(" ", "").replace(" ", "")
-    if not t:
-        raise ValueError("vacío")
-    if "," in t and "." in t:
-        t = t.replace(".", "").replace(",", ".") if decimal_comma else t.replace(",", "")
-    elif "," in t:
-        t = t.replace(",", ".")
-    x = float(t)
+    txt = str(value).strip().replace(" ", "").replace(" ", "")
+    if not txt:
+        raise ValueError(t("vacío"))
+    if "," in txt and "." in txt:
+        txt = txt.replace(".", "").replace(",", ".") if decimal_comma else txt.replace(",", "")
+    elif "," in txt:
+        txt = txt.replace(",", ".")
+    x = float(txt)
     if not math.isfinite(x):
-        raise ValueError("no es finito")
+        raise ValueError(t("no es finito"))
     return x
 
 
@@ -235,7 +237,7 @@ def parse_sheet(sheet: Sheet, cols: Sequence[Col]) -> Parsed:
                 RowIssue(
                     "warning",
                     "duplicate_column",
-                    f"«{h}» repite «{seen[col.key]}»: se usa la primera",
+                    t("«{h}» repite «{first}»: se usa la primera", h=h, first=seen[col.key]),
                     column=h,
                     sheet=sheet.name,
                 )
@@ -250,7 +252,7 @@ def parse_sheet(sheet: Sheet, cols: Sequence[Col]) -> Parsed:
                 RowIssue(
                     "error",
                     "missing_column",
-                    f"falta la columna «{col.key}» ({col.help})",
+                    t("falta la columna «{key}» ({help})", key=col.key, help=t(col.help)),
                     column=col.key,
                     sheet=sheet.name,
                 )
@@ -270,7 +272,7 @@ def parse_sheet(sheet: Sheet, cols: Sequence[Col]) -> Parsed:
                     RowIssue(
                         "error",
                         "bad_value",
-                        f"«{cell}» no vale para {col.key}: {exc}",
+                        t("«{cell}» no vale para {key}: {exc}", cell=cell, key=col.key, exc=exc),
                         row=r,
                         column=header,
                         sheet=sheet.name,
@@ -285,7 +287,13 @@ def parse_sheet(sheet: Sheet, cols: Sequence[Col]) -> Parsed:
                     RowIssue(
                         "warning",
                         "out_of_range",
-                        f"{col.key} = {v:g} fuera del rango habitual ({col.low:g}–{col.high:g})",
+                        t(
+                            "{key} = {v:g} fuera del rango habitual ({low:g}–{high:g})",
+                            key=col.key,
+                            v=v,
+                            low=col.low,
+                            high=col.high,
+                        ),
                         row=r,
                         column=header,
                         sheet=sheet.name,
@@ -299,7 +307,7 @@ def parse_sheet(sheet: Sheet, cols: Sequence[Col]) -> Parsed:
                 RowIssue(
                     "error",
                     "missing_value",
-                    f"falta {key}",
+                    t("falta {key}", key=key),
                     row=r,
                     column=seen[key],
                     sheet=sheet.name,
@@ -319,20 +327,22 @@ def _value(col: Col, cell: Any, factor: float, decimal_comma: bool) -> Any:
             if key == name:
                 return value
         options = sorted({v for _, v in col.choices})
-        raise ValueError(f"opción desconocida (use {', '.join(options)})")
+        raise ValueError(t("opción desconocida (use {options})", options=", ".join(options)))
     if isinstance(cell, str):
         m = re.match(r"^\s*([-+]?[\d.,\u202f ]+?)\s*([A-Za-z/]+)\s*$", cell)
         if m and col.unit:
             unit = norm(m.group(2))
             table = UNITS[col.unit]
             if unit not in table:
-                raise ValueError(f"unidad «{m.group(2)}» desconocida para {col.unit}")
+                raise ValueError(
+                    t("unidad «{unit}» desconocida para {kind}", unit=m.group(2), kind=col.unit)
+                )
             factor = table[unit]
             cell = m.group(1)
     x = number(cell, decimal_comma) * factor
     if col.kind == "int":
         if abs(x - round(x)) > 1e-6:
-            raise ValueError("se espera un entero")
+            raise ValueError(t("se espera un entero"))
         return int(round(x))
     return x
 

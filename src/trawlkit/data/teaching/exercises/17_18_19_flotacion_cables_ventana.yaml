@@ -20,6 +20,21 @@ exercises:
       Koyama: 1,11·{lima} − 6,81 = {koyama_kgf} kgf; Prado: 0,2·{nhp} = {prado_kgf} kgf; promedio
       {promedio_kgf} kgf.
     refs: [koyama1974, prado1990]
+    en:
+      title: Buoyancy by Koyama and by Prado
+      statement: >
+        Estimate the headrope buoyancy of a net with a {lima} m headrope towed by a {nhp} HP
+        vessel: Koyama, F = 1.11·L − 6.81 kgf; Prado and Dremière, F = 0.2·NHP kgf. Average both.
+      vars:
+        lima: Headrope
+        nhp: Power
+      answers:
+        koyama_kgf: Koyama
+        prado_kgf: Prado
+        promedio_kgf: Average
+      explanation: >
+        Koyama: 1.11·{lima} − 6.81 = {koyama_kgf} kgf; Prado: 0.2·{nhp} = {prado_kgf} kgf; average
+        {promedio_kgf} kgf.
 
   - id: flotacion.boyas
     chapter: 17_flotacion_lastre
@@ -38,6 +53,19 @@ exercises:
       - {key: total_kgf, label: Flotación total, unit: kgf, decimals: 1, tol_rel: 0.01}
     explanation: "{flot}/{unitaria} → {boyas} boyas, que suman {total_kgf} kgf."
     refs: [prado1990]
+    en:
+      title: Number of floats
+      statement: >
+        The net needs {flot} kgf of buoyancy and each float gives {unitaria} kgf of net buoyancy.
+        How many floats must be fitted (rounding to the nearest whole number) and how much buoyancy
+        do they add up to?
+      vars:
+        flot: Required buoyancy
+        unitaria: Buoyancy of one float
+      answers:
+        boyas: Floats
+        total_kgf: Total buoyancy
+      explanation: '{flot}/{unitaria} → {boyas} floats, which add up to {total_kgf} kgf.'
 
   - id: flotacion.fridman
     chapter: 17_flotacion_lastre
@@ -67,6 +95,29 @@ exercises:
       β = atan(({av}/2)/{l_cuerpo}) = {beta}°; F1 = {f1_kgf} kgf → {f1v_kgf} kgf vertical;
       F2 = {f2_kgf} kgf → {f2v_kgf} kgf; F = {f_kgf} kgf.
     refs: [fridman1986]
+    en:
+      title: Fridman's vertical balance
+      statement: >
+        Fridman spreads over the headrope the vertical component of two forces: F1 = 0.8·F_T/4 with
+        the bridle angle α = {alfa}°, and F2 = R_N/4 with the angle β = atan((VO/2)/L_body). With
+        F_T = {ft} kgf, R_N = {rn} kgf, a vertical opening VO = {av} m, a {l_cuerpo} m body and a
+        headrope weighing {w_lima} kgf in water, calculate β, F1·sin α, F2·sin β and the buoyancy F
+        = F1·sin α + F2·sin β + W_headrope.
+      vars:
+        ft: Available pull
+        rn: Net drag
+        alfa: Bridle angle
+        av: Vertical opening
+        l_cuerpo: Body length
+        w_lima: Headrope weight in water
+      answers:
+        beta: β
+        f1v_kgf: F1·sin α
+        f2v_kgf: F2·sin β
+        f_kgf: Buoyancy
+      explanation: >
+        β = atan(({av}/2)/{l_cuerpo}) = {beta}°; F1 = {f1_kgf} kgf → {f1v_kgf} kgf vertical; F2 =
+        {f2_kgf} kgf → {f2v_kgf} kgf; F = {f_kgf} kgf.
 
   - id: flotacion.lastre
     chapter: 17_flotacion_lastre
@@ -91,6 +142,24 @@ exercises:
       Koyama: {koyama_kg} kg; Prado: {prado_kg} kg. Cadena de reglaje: {cadena_kg} kg; quedan
       ({prado_kg} − {cadena_kg})/{burlon} = {kg_m} kg/m.
     refs: [koyama1974, prado1990]
+    en:
+      title: Ballast and how to spread it
+      statement: >
+        Estimate the footrope ballast with Koyama (1.81·L_headrope − 4.54 kg, {lima} m headrope)
+        and with Prado (0.28·NHP, {nhp} HP vessel). With Prado's ballast, the adjusting chain
+        weighs 20 % of the ballast (rounded up) per 2 m of chain; spread the rest evenly over a
+        {burlon} m footrope.
+      vars:
+        lima: Headrope
+        nhp: Power
+        burlon: Footrope
+      answers:
+        koyama_kg: Koyama ballast
+        prado_kg: Prado ballast
+        kg_m: Ballast per metre of footrope
+      explanation: >
+        Koyama: {koyama_kg} kg; Prado: {prado_kg} kg. Adjusting chain: {cadena_kg} kg; what remains
+        is ({prado_kg} − {cadena_kg})/{burlon} = {kg_m} kg/m.
 
   - id: cables.por_profundidad
     chapter: 18_cables
@@ -114,6 +183,22 @@ exercises:
       2·{cable_m} + 0,5·{cable_m} = {a_comprar_m} m.
     formats: {relacion: 1}
     refs: [prado1990]
+    en:
+      title: Warp paid out for the depth
+      statement: >
+        With the chapter's warp/depth ratio table, how much warp is paid out to fish at {prof} m?
+        How much warp must be bought per side if a 50 % spare is added (2·Ls + 0.5·Ls for both
+        warps)?
+      vars:
+        prof: Depth
+      answers:
+        cable_m: Warp paid out
+        a_comprar_m: Warp to buy
+      hints:
+        - In shallow water the ratio is larger (5 to 1 or more); in deep water, smaller.
+      explanation: >
+        At {prof} m the table gives a ratio of {relacion}: {cable_m} m of warp. To buy: 2·{cable_m}
+        + 0.5·{cable_m} = {a_comprar_m} m.
 
   - id: cables.angulos
     chapter: 18_cables
@@ -138,6 +223,24 @@ exercises:
       δ1 = asin(({prof} + {puntal})/{cable}) = {delta1}°; δ2 = asin(0,5·({ds} − {pastecas})/{cable})
       = {delta2}°.
     refs: [fridman1986]
+    en:
+      title: Angles of the towing warp
+      statement: >
+        A vessel with a moulded depth of {puntal} m fishes at {prof} m with {cable} m of warp; the
+        otter boards are {ds} m apart and the towing blocks {pastecas} m. Calculate the declination
+        δ1 = asin((depth + moulded depth)/Ls) and the divergence δ2 = asin(0.5·(Ds − blocks)/Ls).
+      vars:
+        prof: Depth
+        puntal: Moulded depth
+        cable: Warp paid out
+        ds: Distance between otter boards
+        pastecas: Towing blocks
+      answers:
+        delta1: Declination δ1
+        delta2: Divergence δ2
+      explanation: >
+        δ1 = asin(({prof} + {puntal})/{cable}) = {delta1}°; δ2 = asin(0.5·({ds} −
+        {pastecas})/{cable}) = {delta2}°.
 
   - id: cables.diametro
     chapter: 18_cables
@@ -159,6 +262,21 @@ exercises:
       Dw = 5,6822·ln({nhp}) − 17,225 = {dw_mm} mm → {dw_redondo} mm; {cable} m pesan
       {peso_aire_kg} kg en el aire.
     refs: [perezaguila2010]
+    en:
+      title: Warp diameter and weight
+      statement: >
+        With Pérez Águila's rule, Dw = 5.6822·ln(NHP) − 17.225 mm, estimate the warp diameter for a
+        {nhp} HP vessel, round it to the millimetre and calculate the weight in air of {cable} m
+        with the weight per metre from the book's warp catalogue.
+      vars:
+        nhp: Power
+        cable: Warp
+      answers:
+        dw_mm: Calculated diameter
+        dw_redondo: Chosen diameter
+      explanation: >
+        Dw = 5.6822·ln({nhp}) − 17.225 = {dw_mm} mm → {dw_redondo} mm; {cable} m weigh
+        {peso_aire_kg} kg in air.
 
   - id: ventana.interpolada
     chapter: 19_ventana_velocidad
@@ -183,6 +301,24 @@ exercises:
       A 2,5 kn F_T = {ft_2_5} kgf y R_T = {rt_2_5} kgf; a 3,0 kn F_T = {ft_3_0} kgf y R_T =
       {rt_3_0} kgf. El cruce da v* = {v_max} kn.
     refs: [fridman1986, aberdeen]
+    en:
+      title: Maximum towable speed
+      statement: >
+        A {bhp} HP vessel with a fixed-pitch propeller (Fridman, K_F = 10) tows a net with Ss =
+        {ss} m² (Aberdeen demersal). Otter boards, warps and rigging add {aparejo} % on top of the
+        drag of the net. Build the table of pull and total drag from 1.5 to 4 kn every 0.5 kn and
+        find, by linear interpolation, the maximum speed the pull can sustain.
+      vars:
+        bhp: Power
+        ss: Solid area
+        aparejo: Rigging on top of the net
+      answers:
+        v_max: Maximum speed
+      hints:
+        - Look for the two speeds between which F_T − R_T changes sign.
+      explanation: >
+        At 2.5 kn F_T = {ft_2_5} kgf and R_T = {rt_2_5} kgf; at 3.0 kn F_T = {ft_3_0} kgf and R_T =
+        {rt_3_0} kgf. The crossing gives v* = {v_max} kn.
 
   - id: ventana.caso_a3
     chapter: 19_ventana_velocidad
@@ -202,3 +338,17 @@ exercises:
     explanation: >
       R_N(3 kn) = {rn3_kgf} kgf; v* = {v_max} kn. Por encima de esa velocidad la red pide más tiro
       del que el buque tiene.
+    en:
+      title: The A-3 with the full engine
+      statement: >
+        Use the app (or the CLI, "trawlkit run fao_a3_standard --vessel {buque}") to calculate the
+        FAO A-3 net with the vessel "{buque}". What is the drag of the net at 3 kn and what is the
+        maximum speed at which the vessel can tow it?
+      vars:
+        buque: Catalogue vessel
+      answers:
+        rn3_kgf: Net drag at 3 kn
+        v_max: Maximum speed
+      explanation: >
+        R_N(3 kn) = {rn3_kgf} kgf; v* = {v_max} kn. Above that speed the net demands more pull than
+        the vessel has.

@@ -38,6 +38,7 @@ from trawlkit.classroom.security import (
     token_hash,
     verify_password,
 )
+from trawlkit.i18n import t
 
 TOKEN_DAYS = 14
 MAX_FAILED = 10
@@ -73,13 +74,13 @@ def user_out(u: User) -> dict[str, Any]:
 def _check_new_user(s: Session, username: str, password: str, display_name: str) -> str:
     name = username.strip().lower()
     if not USERNAME.match(name):
-        raise _err(422, "usuario: 3 a 40 letras minúsculas, números, punto, guion o guion bajo")
+        raise _err(422, t("usuario: 3 a 40 letras minúsculas, números, punto, guion o guion bajo"))
     if len(password) < MIN_PASSWORD:
-        raise _err(422, f"la contraseña necesita al menos {MIN_PASSWORD} caracteres")
+        raise _err(422, t("la contraseña necesita al menos {n} caracteres", n=MIN_PASSWORD))
     if not display_name.strip():
-        raise _err(422, "falta el nombre para mostrar (nombre o legajo)")
+        raise _err(422, t("falta el nombre para mostrar (nombre o legajo)"))
     if s.scalar(select(User).where(User.username == name)) is not None:
-        raise _err(409, "ese usuario ya existe")
+        raise _err(409, t("ese usuario ya existe"))
     return name
 
 
@@ -119,18 +120,18 @@ def register(
 ) -> tuple[str, User]:
     """Alta con código de curso (alumno) o de invitación (docente); devuelve token y usuario."""
     if bool(course_code) == bool(invite_code):
-        raise _err(422, "use un código de curso (alumno) o uno de invitación (docente)")
+        raise _err(422, t("use un código de curso (alumno) o uno de invitación (docente)"))
     name = _check_new_user(s, username, password, display_name)
     course = None
     invite = None
     if course_code:
         course = s.scalar(select(Course).where(Course.code == normalise_code(course_code)))
         if course is None or course.archived:
-            raise _err(404, "no hay un curso abierto con ese código")
+            raise _err(404, t("no hay un curso abierto con ese código"))
     else:
         invite = s.get(Invite, normalise_code(invite_code or ""))
         if invite is None or invite.used_by is not None or invite.expires_at < utcnow():
-            raise _err(404, "la invitación no existe, ya se usó o venció")
+            raise _err(404, t("la invitación no existe, ya se usó o venció"))
     user = User(
         username=name,
         display_name=display_name.strip(),
@@ -153,7 +154,7 @@ def login(s: Session, username: str, password: str) -> tuple[str, User]:
     user = s.scalar(select(User).where(User.username == username.strip().lower()))
     now = utcnow()
     if user is not None and user.locked_until is not None and user.locked_until > now:
-        raise _err(429, "demasiados intentos: espere unos minutos")
+        raise _err(429, t("demasiados intentos: espere unos minutos"))
     if user is None or not verify_password(password, user.password_hash):
         if user is not None:
             user.failed_logins += 1
@@ -161,7 +162,7 @@ def login(s: Session, username: str, password: str) -> tuple[str, User]:
                 user.locked_until = now + dt.timedelta(minutes=LOCK_MINUTES)
                 user.failed_logins = 0
             s.commit()
-        raise _err(401, "usuario o contraseña incorrectos")
+        raise _err(401, t("usuario o contraseña incorrectos"))
     user.failed_logins = 0
     user.locked_until = None
     s.execute(delete(AuthToken).where(AuthToken.expires_at < now))
@@ -173,13 +174,13 @@ def login(s: Session, username: str, password: str) -> tuple[str, User]:
 def current_user(s: Session, token: str | None) -> User:
     """Usuario del token (401 si falta, es inválido o venció)."""
     if not token:
-        raise _err(401, "inicie sesión")
+        raise _err(401, t("inicie sesión"))
     row = s.get(AuthToken, token_hash(token))
     if row is None or row.expires_at < utcnow():
-        raise _err(401, "la sesión venció: vuelva a iniciar sesión")
+        raise _err(401, t("la sesión venció: vuelva a iniciar sesión"))
     user = s.get(User, row.user_id)
     if user is None:  # pragma: no cover - el token se borra con el usuario
-        raise _err(401, "inicie sesión")
+        raise _err(401, t("inicie sesión"))
     return user
 
 
@@ -194,9 +195,9 @@ def logout(s: Session, token: str) -> None:
 def change_password(s: Session, user: User, old: str, new: str) -> None:
     """Cambia la contraseña propia."""
     if not verify_password(old, user.password_hash):
-        raise _err(403, "la contraseña actual no coincide")
+        raise _err(403, t("la contraseña actual no coincide"))
     if len(new) < MIN_PASSWORD:
-        raise _err(422, f"la contraseña necesita al menos {MIN_PASSWORD} caracteres")
+        raise _err(422, t("la contraseña necesita al menos {n} caracteres", n=MIN_PASSWORD))
     user.password_hash = hash_password(new)
     s.commit()
 
@@ -204,9 +205,9 @@ def change_password(s: Session, user: User, old: str, new: str) -> None:
 def delete_account(s: Session, user: User, password: str) -> None:
     """Borra la cuenta propia con sus entregas (un administrador no puede borrarse así)."""
     if user.role == "admin":
-        raise _err(403, "un administrador no puede borrar su cuenta desde la app")
+        raise _err(403, t("un administrador no puede borrar su cuenta desde la app"))
     if not verify_password(password, user.password_hash):
-        raise _err(403, "la contraseña no coincide")
+        raise _err(403, t("la contraseña no coincide"))
     s.delete(user)
     s.commit()
 
@@ -223,14 +224,14 @@ def me(s: Session, user: User) -> dict[str, Any]:
 
 def _require(user: User, *roles: str) -> None:
     if user.role not in roles:
-        raise _err(403, "no tiene permiso para esto")
+        raise _err(403, t("no tiene permiso para esto"))
 
 
 def create_invites(s: Session, admin: User, count: int, days: int) -> list[dict[str, Any]]:
     """Códigos de invitación para docentes."""
     _require(admin, "admin")
     if not 1 <= count <= 50 or not 1 <= days <= 365:
-        raise _err(422, "entre 1 y 50 invitaciones, de 1 a 365 días")
+        raise _err(422, t("entre 1 y 50 invitaciones, de 1 a 365 días"))
     out = []
     for _ in range(count):
         inv = Invite(
@@ -275,12 +276,14 @@ def _membership(s: Session, user: User, course_id: int) -> Enrollment | None:
 def _course(s: Session, user: User, course_id: int, *, teacher: bool = False) -> Course:
     course = s.get(Course, course_id)
     if course is None:
-        raise _err(404, "curso desconocido")
+        raise _err(404, t("curso desconocido"))
     if user.role == "admin":
         return course
     m = _membership(s, user, course_id)
     if m is None or (teacher and m.role != "teacher"):
-        raise _err(403, "no es " + ("docente" if teacher else "miembro") + " de este curso")
+        raise _err(
+            403, t("no es docente de este curso") if teacher else t("no es miembro de este curso")
+        )
     return course
 
 
@@ -300,7 +303,7 @@ def course_out(s: Session, c: Course, role: str | None = None) -> dict[str, Any]
         "term": c.term,
         "archived": c.archived,
         "students": int(students or 0),
-        "teachers": [t.display_name for t in teachers],
+        "teachers": [u.display_name for u in teachers],
         "role": role,
         "code": c.code if role in ("teacher", "admin") else None,
     }
@@ -322,7 +325,7 @@ def create_course(s: Session, user: User, name: str, term: str = "") -> dict[str
     """Curso nuevo; quien lo crea es su docente."""
     _require(user, "teacher", "admin")
     if not name.strip():
-        raise _err(422, "falta el nombre del curso")
+        raise _err(422, t("falta el nombre del curso"))
     c = Course(name=name.strip(), term=term.strip(), code=new_code(8))
     s.add(c)
     s.flush()
@@ -353,7 +356,7 @@ def update_course(
     c = _course(s, user, course_id, teacher=True)
     if name is not None:
         if not name.strip():
-            raise _err(422, "falta el nombre del curso")
+            raise _err(422, t("falta el nombre del curso"))
         c.name = name.strip()
     if term is not None:
         c.term = term.strip()
@@ -370,7 +373,7 @@ def join_course(s: Session, user: User, code: str) -> dict[str, Any]:
     _require(user, "student")
     c = s.scalar(select(Course).where(Course.code == normalise_code(code)))
     if c is None or c.archived:
-        raise _err(404, "no hay un curso abierto con ese código")
+        raise _err(404, t("no hay un curso abierto con ese código"))
     if _membership(s, user, c.id) is None:
         s.add(Enrollment(course_id=c.id, user_id=user.id, role="student"))
         s.commit()
@@ -382,7 +385,7 @@ def add_teacher(s: Session, user: User, course_id: int, username: str) -> dict[s
     c = _course(s, user, course_id, teacher=True)
     other = s.scalar(select(User).where(User.username == username.strip().lower()))
     if other is None or other.role not in ("teacher", "admin"):
-        raise _err(404, "no hay un docente con ese usuario")
+        raise _err(404, t("no hay un docente con ese usuario"))
     m = _membership(s, other, course_id)
     if m is None:
         s.add(Enrollment(course_id=c.id, user_id=other.id, role="teacher"))
@@ -408,7 +411,7 @@ def _student_in(s: Session, course_id: int, student_id: int) -> User:
     st = s.get(User, student_id)
     m = None if st is None else _membership(s, st, course_id)
     if st is None or m is None or m.role != "student":
-        raise _err(404, "ese alumno no está en el curso")
+        raise _err(404, t("ese alumno no está en el curso"))
     return st
 
 
@@ -426,7 +429,7 @@ def reset_password(s: Session, user: User, course_id: int, student_id: int, pass
     _course(s, user, course_id, teacher=True)
     st = _student_in(s, course_id, student_id)
     if len(password) < MIN_PASSWORD:
-        raise _err(422, f"la contraseña necesita al menos {MIN_PASSWORD} caracteres")
+        raise _err(422, t("la contraseña necesita al menos {n} caracteres", n=MIN_PASSWORD))
     st.password_hash = hash_password(password)
     st.failed_logins = 0
     st.locked_until = None
@@ -451,9 +454,9 @@ def _check_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     from trawlkit.teaching.labs import load_labs
 
     if not items:
-        raise _err(422, "la tarea necesita al menos un ejercicio o laboratorio")
+        raise _err(422, t("la tarea necesita al menos un ejercicio o laboratorio"))
     if len(items) > 40:
-        raise _err(422, "hasta 40 ítems por tarea")
+        raise _err(422, t("hasta 40 ítems por tarea"))
     out = []
     for it in items:
         kind, ref = it.get("kind"), it.get("ref")
@@ -463,9 +466,9 @@ def _check_items(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
         elif kind == "lab" and ref in load_labs():
             pass
         else:
-            raise _err(422, f"ítem desconocido: {kind} {ref}")
+            raise _err(422, t("ítem desconocido: {kind} {ref}", kind=kind, ref=ref))
         if not 0 < points <= 100:
-            raise _err(422, "puntos entre 0 y 100")
+            raise _err(422, t("puntos entre 0 y 100"))
         out.append({"kind": kind, "ref": ref, "points": points})
     return out
 
@@ -509,7 +512,7 @@ def create_assignment(
     """Tarea nueva en el curso."""
     _course(s, user, course_id, teacher=True)
     if not str(data.get("title", "")).strip():
-        raise _err(422, "falta el título de la tarea")
+        raise _err(422, t("falta el título de la tarea"))
     a = Assignment(
         course_id=course_id,
         title=str(data["title"]).strip(),
@@ -529,23 +532,23 @@ def create_assignment(
 
 def _validate_assignment(a: Assignment) -> None:
     if a.feedback not in ("immediate", "after_due"):
-        raise _err(422, "feedback: immediate o after_due")
+        raise _err(422, t("feedback: immediate o after_due"))
     if not 1 <= a.max_attempts <= 20:
-        raise _err(422, "intentos entre 1 y 20")
+        raise _err(422, t("intentos entre 1 y 20"))
     if a.feedback == "after_due" and a.due_at is None:
-        raise _err(422, "la devolución al cierre necesita una fecha de cierre")
+        raise _err(422, t("la devolución al cierre necesita una fecha de cierre"))
     if a.opens_at and a.due_at and a.due_at <= a.opens_at:
-        raise _err(422, "el cierre tiene que ser posterior a la apertura")
+        raise _err(422, t("el cierre tiene que ser posterior a la apertura"))
 
 
 def _assignment(s: Session, user: User, assignment_id: int, *, teacher: bool = False) -> Assignment:
     a = s.get(Assignment, assignment_id)
     if a is None:
-        raise _err(404, "tarea desconocida")
+        raise _err(404, t("tarea desconocida"))
     _course(s, user, a.course_id, teacher=teacher)
     m = _membership(s, user, a.course_id)
     if not teacher and m is not None and m.role == "student" and not _is_open(a, utcnow()):
-        raise _err(404, "tarea desconocida")
+        raise _err(404, t("tarea desconocida"))
     return a
 
 
@@ -557,7 +560,7 @@ def update_assignment(
     if "items" in data and data["items"] is not None:
         has = s.scalar(select(func.count()).where(Submission.assignment_id == a.id))
         if has:
-            raise _err(409, "la tarea ya tiene entregas: no se pueden cambiar los ítems")
+            raise _err(409, t("la tarea ya tiene entregas: no se pueden cambiar los ítems"))
         a.items = _check_items(list(data["items"]))
     for key in ("title", "description", "max_attempts", "feedback", "per_student_data"):
         if key in data and data[key] is not None:
@@ -640,7 +643,7 @@ def _public_result(a: Assignment, sub: Submission, attempts_left: int) -> dict[s
         "comment": sub.comment,
     }
     if hidden:
-        return {**base, "score": None, "result": None, "message": "entrega recibida"}
+        return {**base, "score": None, "result": None, "message": t("entrega recibida")}
     result = dict(sub.result)
     if not reveal:
         result = _strip_solution(result)
@@ -713,15 +716,15 @@ def submit(
     a = _assignment(s, user, assignment_id)
     m = _membership(s, user, a.course_id)
     if m is None or m.role != "student":
-        raise _err(403, "sólo los alumnos del curso entregan")
+        raise _err(403, t("sólo los alumnos del curso entregan"))
     now = utcnow()
     if _is_closed(a, now):
-        raise _err(409, "la tarea ya cerró")
+        raise _err(409, t("la tarea ya cerró"))
     if not 0 <= item < len(a.items):
-        raise _err(404, "ítem desconocido")
+        raise _err(404, t("ítem desconocido"))
     used = len(_subs(s, a, user.id, item))
     if used >= a.max_attempts:
-        raise _err(409, "no le quedan intentos para este ítem")
+        raise _err(409, t("no le quedan intentos para este ítem"))
     it = a.items[item]
     seed = _seed(s, a, user.id, item)
     design = None
@@ -882,13 +885,13 @@ def submission_detail(s: Session, user: User, submission_id: int) -> dict[str, A
     """Una entrega completa: para el docente del curso o, según la política, para su alumno."""
     sub = s.get(Submission, submission_id)
     if sub is None:
-        raise _err(404, "entrega desconocida")
+        raise _err(404, t("entrega desconocida"))
     a = sub.assignment
     m = _membership(s, user, a.course_id)
     teacher = user.role == "admin" or (m is not None and m.role == "teacher")
     if not teacher:
         if sub.user_id != user.id:
-            raise _err(403, "no puede ver esa entrega")
+            raise _err(403, t("no puede ver esa entrega"))
         left = a.max_attempts - len(_subs(s, a, user.id, sub.item))
         return _public_result(a, sub, left)
     st = s.get(User, sub.user_id)
@@ -916,10 +919,10 @@ def review_submission(
     """El docente pone nota (0 a 1, reemplaza la automática) y comentario."""
     sub = s.get(Submission, submission_id)
     if sub is None:
-        raise _err(404, "entrega desconocida")
+        raise _err(404, t("entrega desconocida"))
     _course(s, user, sub.assignment.course_id, teacher=True)
     if teacher_score is not None and not 0 <= teacher_score <= 1:
-        raise _err(422, "la nota va de 0 a 1")
+        raise _err(422, t("la nota va de 0 a 1"))
     sub.teacher_score = teacher_score
     if comment is not None:
         sub.comment = comment
@@ -944,12 +947,12 @@ def sheet(
     course = s.get(Course, a.course_id)
     refs = [(n, it["ref"]) for n, it in enumerate(a.items) if it["kind"] == "exercise"]
     if not refs:
-        raise _err(422, "la tarea no tiene ejercicios para imprimir")
+        raise _err(422, t("la tarea no tiene ejercicios para imprimir"))
     targets: list[tuple[str, int | None]]
     if all_students:
         targets = [(u["display_name"], u["id"]) for u in students(s, user, a.course_id)]
         if not targets:
-            raise _err(422, "el curso todavía no tiene alumnos")
+            raise _err(422, t("el curso todavía no tiene alumnos"))
     elif student_id is not None:
         st = _student_in(s, a.course_id, student_id)
         targets = [(st.display_name, st.id)]

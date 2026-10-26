@@ -22,6 +22,23 @@ exercises:
     explanation: >
       Rendimiento = 1 000 000/{rtex} = {runnage} m/kg. Borde = {mallas}·{malla}/1000 = {borde_m} m.
     refs: [prado1990]
+    en:
+      title: Twine runnage and stretched edge
+      statement: >
+        A netting panel is made of {rtex} Rtex twine (grams per 1000 m of twine). Calculate (a) the
+        twine runnage in metres per kilogram and (b) the stretched length of an edge of {mallas}
+        meshes of {malla} mm.
+      vars:
+        rtex: Twine size
+        mallas: Meshes on the edge
+        malla: Stretched mesh size
+      answers:
+        runnage: Runnage
+        borde_m: Stretched edge
+      hints:
+        - Rtex = g/1000 m, so 1 kg of twine has 10⁶/Rtex metres.
+      explanation: >
+        Runnage = 1,000,000/{rtex} = {runnage} m/kg. Edge = {mallas}·{malla}/1000 = {borde_m} m.
 
   - id: panos.corte_simetrico
     chapter: 11_panos_y_cortes
@@ -48,6 +65,26 @@ exercises:
       Por costado se cortan ({t1} − {t2})/2 = {lado} mallas en {n} de alto: razón {lado}/{n} =
       {razon}, que en la tabla de cortes es {codigo_corte}.
     refs: [prado1990]
+    en:
+      title: Cutting a symmetric netting panel
+      statement: >
+        A body panel goes from {t1} meshes at the front to {t2} meshes at the back over {n} meshes
+        in depth, cut the same way on both sides. Calculate the meshes lost on each side, the taper
+        ratio (meshes across per mesh in depth) and the FAO cut code.
+      vars:
+        t1: Meshes on the wider edge (T1)
+        h: Meshes cut per side
+        codigo: Cut
+      answers:
+        lado: Meshes cut per side
+        razon: Taper ratio
+        codigo_corte: Cut code
+      hints:
+        - Each side loses half of the difference T1 − T2.
+        - '1N2B (one point, two bars) advances half a mesh across per mesh in depth: ratio 1/2.'
+      explanation: >
+        On each side ({t1} − {t2})/2 = {lado} meshes are cut over {n} meshes in depth: ratio
+        {lado}/{n} = {razon}, which in the cut table is {codigo_corte}.
 
   - id: panos.angulo_corte
     chapter: 11_panos_y_cortes
@@ -72,6 +109,23 @@ exercises:
       {theta}°.
     formats: {a: 0, d: 0}
     refs: [prado1990]
+    en:
+      title: Angle of attack of a cut
+      statement: >
+        A wing cut {codigo} works with a horizontal opening coefficient U1 = {u1}. With the
+        increments a (across) and d (in depth) from the cut table, calculate U2 = √(1 − U1²) and
+        the angle of attack of the cut θ = atan(a·U1/(d·U2)).
+      vars:
+        codigo: Cut
+        u1: U1
+      answers:
+        u2: U2
+        theta: Angle of attack θ
+      hints:
+        - 'Look up {codigo} in the cut table: the increment columns give a and d.'
+      explanation: >
+        For {codigo}, a = {a} and d = {d}. U2 = √(1 − {u1}²) = {u2}; θ = atan({a}·{u1}/({d}·{u2}))
+        = {theta}°.
 
   - id: panos.mallas_y_area
     chapter: 11_panos_y_cortes
@@ -97,3 +151,21 @@ exercises:
       {u1}·{u2}·(({t1} + {t2})/2)·{n}·({malla}/1000)² = {area_m2} m².
     formats: {u2: 3}
     refs: [prado1990]
+    en:
+      title: Meshes and working area of a netting panel
+      statement: >
+        A netting panel has T1 = {t1} and T2 = {t2} meshes on its edges, N = {n} meshes in depth, a
+        {malla} mm mesh and works with U1 = {u1}. Calculate the number of meshes, ((T1 + T2 − 1)·(N
+        − 0.5)) + 0.5, and the working area U1·U2·((T1 + T2)/2)·N·(m_L/1000)².
+      vars:
+        t1: T1
+        t2: T2
+        n: N
+        malla: Mesh size
+        u1: U1
+      answers:
+        mallas_total: Number of meshes
+        area_m2: Working area
+      explanation: >
+        Meshes = (({t1} + {t2} − 1)·({n} − 0.5)) + 0.5 = {mallas_total}. U2 = {u2}; area =
+        {u1}·{u2}·(({t1} + {t2})/2)·{n}·({malla}/1000)² = {area_m2} m².

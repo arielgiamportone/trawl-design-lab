@@ -26,6 +26,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
+from trawlkit.i18n import N_, t
 from trawlkit.sim.core import (
     DEFAULT_CN,
     DEFAULT_CT,
@@ -82,69 +83,71 @@ def default_inputs(
     """
     mu_g, mu_d = scenario.friction(0.5)
     out = [
-        Uncertain("cn", "C_N del hilo", 1.0, 1.6, cn, "", "Takagi et al. 2004; Priour 2013"),
-        Uncertain("ct", "C_T del hilo", 0.04, 0.12, ct, "", "Lee et al. 2005"),
+        Uncertain("cn", t("C_N del hilo"), 1.0, 1.6, cn, "", "Takagi et al. 2004; Priour 2013"),
+        Uncertain("ct", t("C_T del hilo"), 0.04, 0.12, ct, "", "Lee et al. 2005"),
     ]
     if scenario.seabed and scenario.mu_gear is None:
         sb = seabed(scenario.seabed)
         out.append(
             Uncertain(
                 "mu_gear",
-                "μ tren–fondo",
+                t("μ tren–fondo"),
                 sb.mu_gear.low,
                 sb.mu_gear.high,
                 mu_g,
                 "",
-                "catálogo de fondos",
+                t("catálogo de fondos"),
             )
         )
     else:
-        out.append(Uncertain("mu_gear", "μ tren–fondo", 0.7 * mu_g, 1.3 * mu_g, mu_g, "", "±30 %"))
+        out.append(
+            Uncertain("mu_gear", t("μ tren–fondo"), 0.7 * mu_g, 1.3 * mu_g, mu_g, "", "±30 %")
+        )
     if scenario.coupled_doors:
         if scenario.seabed and scenario.mu_door is None:
             sb = seabed(scenario.seabed)
             out.append(
                 Uncertain(
                     "mu_door",
-                    "μ portón–fondo",
+                    t("μ portón–fondo"),
                     sb.mu_door.low,
                     sb.mu_door.high,
                     mu_d,
                     "",
-                    "catálogo de fondos",
+                    t("catálogo de fondos"),
                 )
             )
         else:
             out.append(
-                Uncertain("mu_door", "μ portón–fondo", 0.7 * mu_d, 1.3 * mu_d, mu_d, "", "±30 %")
+                Uncertain("mu_door", t("μ portón–fondo"), 0.7 * mu_d, 1.3 * mu_d, mu_d, "", "±30 %")
             )
         out += [
             Uncertain(
-                "door_cl_factor", "C_L del portón", 0.9, 1.1, 1.0, "×", "±10 % (A VERIFICAR)"
+                "door_cl_factor", t("C_L del portón"), 0.9, 1.1, 1.0, "×", t("±10 % (A VERIFICAR)")
             ),
             Uncertain(
-                "door_cd_factor", "C_D del portón", 0.9, 1.1, 1.0, "×", "±10 % (A VERIFICAR)"
+                "door_cd_factor", t("C_D del portón"), 0.9, 1.1, 1.0, "×", t("±10 % (A VERIFICAR)")
             ),
         ]
     if scenario.catch_kg > 0:
         out += [
             Uncertain(
                 "catch_bulk_density",
-                "Densidad aparente de la captura",
+                t("Densidad aparente de la captura"),
                 650.0,
                 850.0,
                 scenario.catch_bulk_density,
                 "kg/m³",
-                "A VERIFICAR",
+                t("A VERIFICAR"),
             ),
             Uncertain(
                 "catch_cp",
-                "C_p de la captura",
+                t("C_p de la captura"),
                 0.8,
                 1.2,
                 scenario.catch_cp,
                 "",
-                "O'Neill y O'Donoghue 1997 (A VERIFICAR)",
+                t("O'Neill y O'Donoghue 1997 (A VERIFICAR)"),
             ),
         ]
     return out
@@ -152,14 +155,18 @@ def default_inputs(
 
 #: Salidas que se resumen: nombre → (etiqueta, unidad, función sobre el resultado).
 OUTPUTS: dict[str, tuple[str, str, Callable[[SimResult], float | None]]] = {
-    "door_spread_m": ("Separación de portones", "m", lambda r: r.door_spread_m),
-    "ah_m": ("Abertura horizontal", "m", lambda r: r.ah_m),
-    "av_m": ("Abertura vertical", "m", lambda r: r.av_m),
-    "towing_pull_kgf": ("Tiro en el buque", "kgf", lambda r: r.towing_pull_kgf or r.drag_kgf),
-    "warp_tension_kgf": ("Tensión del cable (portón)", "kgf", lambda r: r.warp_tension_kgf),
-    "fuel_l_h": ("Combustible", "L/h", lambda r: r.operation.get("fuel_l_h")),
+    "door_spread_m": (N_("Separación de portones"), "m", lambda r: r.door_spread_m),
+    "ah_m": (N_("Abertura horizontal"), "m", lambda r: r.ah_m),
+    "av_m": (N_("Abertura vertical"), "m", lambda r: r.av_m),
+    "towing_pull_kgf": (
+        N_("Tiro en el buque"),
+        "kgf",
+        lambda r: r.towing_pull_kgf or r.drag_kgf,
+    ),
+    "warp_tension_kgf": (N_("Tensión del cable (portón)"), "kgf", lambda r: r.warp_tension_kgf),
+    "fuel_l_h": (N_("Combustible"), "L/h", lambda r: r.operation.get("fuel_l_h")),
     "contact_width_m": (
-        "Ancho en contacto con el fondo",
+        N_("Ancho en contacto con el fondo"),
         "m",
         lambda r: r.operation.get("contact_width_m"),
     ),
@@ -210,7 +217,7 @@ class UncertaintyResult:
     def label(self, key: str) -> tuple[str, str]:
         """(etiqueta, unidad) de una salida."""
         if key in OUTPUTS:
-            return OUTPUTS[key][0], OUTPUTS[key][1]
+            return t(OUTPUTS[key][0]), OUTPUTS[key][1]
         return self.extra_labels.get(key, (key, ""))
 
     def nominal_value(self, key: str) -> float | None:
@@ -305,15 +312,21 @@ def uncertainty(
     L50 del copo de esas especies a las salidas.
     """
     if n < 2:
-        raise ValueError("n debe ser ≥ 2")
+        raise ValueError(t("n debe ser ≥ 2"))
     t0 = time.perf_counter()
     sc = scenario or Scenario()
     inps = tuple(inputs) if inputs is not None else tuple(default_inputs(sc, cn, ct))
     for inp in inps:
         if inp.name not in INPUTS:
-            raise ValueError(f"entrada desconocida: {inp.name!r} (use {', '.join(INPUTS)})")
+            raise ValueError(
+                t(
+                    "entrada desconocida: {name!r} (use {names})",
+                    name=inp.name,
+                    names=", ".join(INPUTS),
+                )
+            )
         if not inp.low <= inp.high:
-            raise ValueError(f"rango inválido para {inp.name}")
+            raise ValueError(t("rango inválido para {name}", name=inp.name))
     spec, rig, result = _resolve(case, None)
     base_case = result if result is not None else case
     model: NetModel | None = build_model(

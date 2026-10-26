@@ -1,28 +1,30 @@
-"""Resumen en Markdown (español) de un :class:`~trawlkit.optimize.OptimizationResult`."""
+"""Resumen en Markdown (idioma activo) de un :class:`~trawlkit.optimize.OptimizationResult`."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from trawlkit.i18n import N_, t
+
 if TYPE_CHECKING:
     from trawlkit.optimize.search import OptimizationResult
 
 _OBJECTIVE_NAMES = {
-    "area_rate": "máxima área barrida por hora",
-    "volume_rate": "máximo volumen filtrado por hora",
-    "energy": "mínimo trabajo de remolque por m² barrido",
+    "area_rate": N_("máxima área barrida por hora"),
+    "volume_rate": N_("máximo volumen filtrado por hora"),
+    "energy": N_("mínimo trabajo de remolque por m² barrido"),
 }
 _CONSTRAINT_NAMES = {
-    "thrust": "Tiro (F_T ≥ (1+m)·R_T)",
-    "net_open": "Red abierta (DPA Fridman)",
-    "warp": "Cable de remolque",
-    "door": "Portón",
-    "speed": "Rango de velocidad",
+    "thrust": N_("Tiro (F_T ≥ (1+m)·R_T)"),
+    "net_open": N_("Red abierta (DPA Fridman)"),
+    "warp": N_("Cable de remolque"),
+    "door": N_("Portón"),
+    "speed": N_("Rango de velocidad"),
 }
 
 
 def _ok(flag: bool) -> str:
-    return "sí" if flag else "NO"
+    return t("sí") if flag else t("NO")
 
 
 def summary_markdown(result: OptimizationResult, top: int = 5) -> str:
@@ -31,42 +33,61 @@ def summary_markdown(result: OptimizationResult, top: int = 5) -> str:
     st = result.settings
     lim = st["limits"]
     lines = [
-        f"## Optimización: {_OBJECTIVE_NAMES.get(result.objective, result.objective)}",
+        t(
+            "## Optimización: {objective}",
+            objective=t(_OBJECTIVE_NAMES.get(result.objective, result.objective)),
+        ),
         "",
-        f"Red base `{st['net_id']}`, buque `{st['vessel_id']}`, portón `{st['door_id']}`, "
-        f"hélice `{st['propeller']}`, margen de tiro {lim['margin']:.0%}, "
-        f"s ∈ [{st['bounds']['s'][0]:g}, {st['bounds']['s'][1]:g}], "
-        f"v ∈ [{st['bounds']['v_kn'][0]:g}, {st['bounds']['v_kn'][1]:g}] kn.",
+        t(
+            "Red base `{net}`, buque `{vessel}`, portón `{door}`, "
+            "hélice `{propeller}`, margen de tiro {margin:.0%}, "
+            "s ∈ [{s0:g}, {s1:g}], v ∈ [{v0:g}, {v1:g}] kn.",
+            net=st["net_id"],
+            vessel=st["vessel_id"],
+            door=st["door_id"],
+            propeller=st["propeller"],
+            margin=lim["margin"],
+            s0=st["bounds"]["s"][0],
+            s1=st["bounds"]["s"][1],
+            v0=st["bounds"]["v_kn"][0],
+            v1=st["bounds"]["v_kn"][1],
+        ),
         "",
     ]
     if not result.feasible:
         worst = max(b.constraints, key=lambda c: c.violation)
         lines += [
-            "**Ningún diseño factible** en el rango; se muestra el de menor violación "
-            f"(restricción dominante: {_CONSTRAINT_NAMES.get(worst.name, worst.name)}).",
+            t(
+                "**Ningún diseño factible** en el rango; se muestra el de menor violación "
+                "(restricción dominante: {name}).",
+                name=t(_CONSTRAINT_NAMES.get(worst.name, worst.name)),
+            ),
             "",
         ]
     lines += [
-        "### Mejor diseño",
+        t("### Mejor diseño"),
         "",
-        "| Magnitud | Valor | Unidad |",
+        t("| Magnitud | Valor | Unidad |"),
         "|---|---|---|",
-        f"| Escala de la red s | {b.s:.3f} | — |",
-        f"| Velocidad de arrastre | {b.v_kn:.2f} | kn |",
-        f"| Relinga superior (lima) | {b.headrope_m:.2f} | m |",
-        f"| Abertura horizontal AH (DPA Fridman) | {b.ah_m:.2f} | m |",
-        f"| Abertura vertical AV (Fridman) | {b.av_m:.2f} | m |",
-        f"| Área barrida por hora | {b.area_rate_m2_h:,.0f} | m²/h |",
-        f"| Volumen filtrado por hora | {b.volume_rate_m3_h:,.0f} | m³/h |",
-        f"| Resistencia total R_T | {b.demand_kgf:.0f} | kgf |",
-        f"| Tiro disponible F_T | {b.available_kgf:.0f} | kgf |",
-        f"| Margen F_T/R_T − 1 | {b.thrust_margin:.1%} | — |",
-        f"| Trabajo por m² barrido R_T/AH | {b.energy_kgf_m_per_m2:.1f} | kgf·m/m² |",
-        f"| Cable | {b.warp_id or 'ninguno del catálogo'} | — |",
-        f"| Portón: requerida / disponible | {b.door_required_m2:.2f} / {b.door_area_m2:.2f} "
-        "| m² |",
+        t("| Escala de la red s | {x:.3f} | — |", x=b.s),
+        t("| Velocidad de arrastre | {x:.2f} | kn |", x=b.v_kn),
+        t("| Relinga superior (lima) | {x:.2f} | m |", x=b.headrope_m),
+        t("| Abertura horizontal AH (DPA Fridman) | {x:.2f} | m |", x=b.ah_m),
+        t("| Abertura vertical AV (Fridman) | {x:.2f} | m |", x=b.av_m),
+        t("| Área barrida por hora | {x:,.0f} | m²/h |", x=b.area_rate_m2_h),
+        t("| Volumen filtrado por hora | {x:,.0f} | m³/h |", x=b.volume_rate_m3_h),
+        t("| Resistencia total R_T | {x:.0f} | kgf |", x=b.demand_kgf),
+        t("| Tiro disponible F_T | {x:.0f} | kgf |", x=b.available_kgf),
+        t("| Margen F_T/R_T − 1 | {x:.1%} | — |", x=b.thrust_margin),
+        t("| Trabajo por m² barrido R_T/AH | {x:.1f} | kgf·m/m² |", x=b.energy_kgf_m_per_m2),
+        t("| Cable | {x} | — |", x=b.warp_id or t("ninguno del catálogo")),
+        t(
+            "| Portón: requerida / disponible | {req:.2f} / {area:.2f} | m² |",
+            req=b.door_required_m2,
+            area=b.door_area_m2,
+        ),
         "",
-        "| Restricción | Cumple | Valor | Límite |",
+        t("| Restricción | Cumple | Valor | Límite |"),
         "|---|---|---|---|",
     ]
     for c in b.constraints:
@@ -78,14 +99,13 @@ def summary_markdown(result: OptimizationResult, top: int = 5) -> str:
             )
             if x
         )
-        lines.append(
-            f"| {_CONSTRAINT_NAMES.get(c.name, c.name)} | {_ok(c.ok)} | {c.value:.4g} | {bound} |"
-        )
+        name = t(_CONSTRAINT_NAMES.get(c.name, c.name))
+        lines.append(f"| {name} | {_ok(c.ok)} | {c.value:.4g} | {bound} |")
     lines += [
         "",
-        f"### Frente de Pareto (área barrida/h vs R_T/AH), primeros {top}",
+        t("### Frente de Pareto (área barrida/h vs R_T/AH), primeros {top}", top=top),
         "",
-        "| s | v [kn] | AH [m] | Área [m²/h] | R_T/AH [kgf·m/m²] | R_T [kgf] | Margen |",
+        t("| s | v [kn] | AH [m] | Área [m²/h] | R_T/AH [kgf·m/m²] | R_T [kgf] | Margen |"),
         "|---|---|---|---|---|---|---|",
     ]
     for e in result.pareto[:top]:
@@ -97,7 +117,11 @@ def summary_markdown(result: OptimizationResult, top: int = 5) -> str:
         lines.append("| — | — | — | — | — | — | — |")
     lines += [
         "",
-        f"{result.engine_runs} corridas del motor, {result.runtime_s:.1f} s.",
+        t(
+            "{runs} corridas del motor, {secs:.1f} s.",
+            runs=result.engine_runs,
+            secs=result.runtime_s,
+        ),
     ]
     return "\n".join(lines)
 

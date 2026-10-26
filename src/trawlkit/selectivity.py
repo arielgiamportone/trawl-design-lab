@@ -46,6 +46,7 @@ import numpy as np
 import numpy.typing as npt
 import yaml
 
+from trawlkit.i18n import t
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.io.schema import MeshOrientation, NetSpec, Panel, Section
 from trawlkit.netting import orientation_coefficients
@@ -145,7 +146,7 @@ def species(key: str) -> FishShape:
     for s in species_catalogue():
         if s.id == key:
             return s
-    raise KeyError(f"especie desconocida: {key!r}")
+    raise KeyError(t("especie desconocida: {key!r}", key=key))
 
 
 def species_source() -> str:
@@ -298,12 +299,12 @@ def retention_curve(
     """Curva de retención de ``shape`` con la forma de malla ``state`` (ver el módulo)."""
     sp = species(shape) if isinstance(shape, str) else shape
     if not 0.0 <= contact <= 1.0:
-        raise ValueError("contact debe estar entre 0 y 1")
+        raise ValueError(t("contact debe estar entre 0 y 1"))
     if not 1 <= attempts <= 50:
-        raise ValueError("attempts debe estar entre 1 y 50")
+        raise ValueError(t("attempts debe estar entre 1 y 50"))
     ls = sp.lengths() if lengths is None else np.asarray(lengths, dtype=float)
     if ls.size < 2 or np.any(ls <= 0) or np.any(np.diff(ls) <= 0):
-        raise ValueError("las tallas deben ser positivas y crecientes")
+        raise ValueError(t("las tallas deben ser positivas y crecientes"))
     zone = escape_zone(state, sections, zone_length_m)
     w = state.meshes * zone * (1.0 - np.clip(state.catch_fill, 0.0, 1.0))
     fit = np.full(state.meshes.size, np.nan)
@@ -353,7 +354,7 @@ def selectivity(
     """Curvas de retención de un :class:`~trawlkit.sim.SimResult` para varias especies."""
     state = result.mesh
     if state is None:
-        raise ValueError("el resultado no tiene estado de malla")
+        raise ValueError(t("el resultado no tiene estado de malla"))
     ids = [species_ids] if isinstance(species_ids, str) else list(species_ids)
     return [retention_curve(state, s, lengths, contact=contact, attempts=attempts) for s in ids]
 

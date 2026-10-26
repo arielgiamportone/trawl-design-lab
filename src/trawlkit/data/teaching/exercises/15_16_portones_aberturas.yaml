@@ -24,6 +24,25 @@ exercises:
       v = {v_ms} m/s; R_D = ½·104,4·{cd}·{area}·{v_ms}² = {rd_kgf} kgf y R_Y con C_L = {ry_kgf} kgf.
     formats: {v_ms: 3}
     refs: [fridman1986]
+    en:
+      title: Drag and spreading force of an otter board
+      statement: >
+        An otter board of {area} m² works with C_D = {cd} and C_L = {cl}. With F = ½·(ρ/g)·C·S·v²
+        (ρ = 1024 kg/m³, g = 9.81 m/s², v in m/s), calculate at {v} kn the drag and the spreading
+        force of one otter board, in kgf.
+      vars:
+        area: Otter board area
+        cd: C_D
+        cl: C_L
+        v: Speed
+      answers:
+        rd_kgf: Drag of one otter board
+        ry_kgf: Spreading force
+      hints:
+        - ρ/g = 1024/9.81 ≈ 104.4 kgf·s²/m⁴.
+      explanation: >
+        v = {v_ms} m/s; R_D = ½·104.4·{cd}·{area}·{v_ms}² = {rd_kgf} kgf, and R_Y with C_L =
+        {ry_kgf} kgf.
 
   - id: portones.separacion
     chapter: 15_portones_aparejo
@@ -47,6 +66,24 @@ exercises:
       Ds = ({por_metro} − {pastecas})·{cable} + {pastecas} = {ds_m} m y ½φ = {medio_phi}°. La
       regla es empírica: vale para buques chicos como los del libro, con pastecas a menos de 2,65 m.
     refs: [prado1990]
+    en:
+      title: Door spread "per metre" of warp
+      statement: >
+        With {cable} m of warp paid out, towing blocks {pastecas} m apart and a spread of
+        {por_metro} m per metre of warp (the chapter's rule of thumb), estimate the distance
+        between the otter boards Ds = (spread per metre − blocks)·Ls + blocks and the half-angle of
+        warp divergence ½φ = asin(0.5·(Ds − blocks)/Ls).
+      vars:
+        cable: Warp paid out
+        pastecas: Towing block spacing
+        por_metro: Spread per metre of warp
+      answers:
+        ds_m: Distance between otter boards
+        medio_phi: Half-angle of divergence
+      explanation: >
+        Ds = ({por_metro} − {pastecas})·{cable} + {pastecas} = {ds_m} m and ½φ = {medio_phi}°. The
+        rule is empirical: it holds for small vessels like the ones in the book, with towing blocks
+        less than 2.65 m apart.
 
   - id: portones.superficie
     chapter: 15_portones_aparejo
@@ -72,6 +109,25 @@ exercises:
       S = {s_total_m2} m² en total, {s_porton_m2} m² por portón.
     formats: {s_total_m2: 2}
     refs: [fridman1986]
+    en:
+      title: Required otter board area
+      statement: >
+        Fridman assigns the otter boards a drag ROB of {fraccion} % of the available pull. For a
+        {bhp} HP vessel with a fixed-pitch propeller at {v} kn, with otter boards of C_D = {cd},
+        calculate Fridman's pull, ROB and the area S = 2·ROB/((ρ/g)·C_D·v²), in total and per otter
+        board.
+      vars:
+        bhp: Power
+        v: Speed
+        fraccion: Share for the otter boards
+        cd: C_D
+      answers:
+        ft_kgf: Available pull
+        rob_kgf: Otter board drag
+        s_porton_m2: Area per otter board
+      explanation: >
+        F_T = {bhp}·(10 − 0.7·{v}) = {ft_kgf} kgf; ROB = {fraccion} % = {rob_kgf} kgf; S =
+        {s_total_m2} m² in total, {s_porton_m2} m² per otter board.
 
   - id: aberturas.dpa
     chapter: 16_aberturas
@@ -95,6 +151,23 @@ exercises:
       DPA = {ds}·{l_red}/({l_red} + {aparejo}) = {dpa_m} m, el {relacion} de la lima. Entre 0,4 y
       0,6 es lo habitual en una red de fondo.
     refs: [fridman1986]
+    en:
+      title: Wing-end spread by similar triangles
+      statement: >
+        The otter boards are {ds} m apart. The net is {l_red} m long and the rigging (sweeps and
+        bridles) {aparejo} m. Estimate the distance between the wing ends DPA = Ds·L/(L + rigging)
+        and compare it with the {lima} m headrope (DPA/headrope).
+      vars:
+        ds: Distance between otter boards
+        l_red: Net length
+        aparejo: Sweeps and bridles
+        lima: Headrope
+      answers:
+        dpa_m: DPA
+        relacion: DPA/headrope
+      explanation: >
+        DPA = {ds}·{l_red}/({l_red} + {aparejo}) = {dpa_m} m, {relacion} of the headrope. Between
+        0.4 and 0.6 is usual for a bottom trawl.
 
   - id: aberturas.vertical
     chapter: 16_aberturas
@@ -115,3 +188,18 @@ exercises:
       - {key: prado_m, label: AV de Prado, unit: m, decimals: 2}
     explanation: "a = {mallas}·{malla}/1000 = {a_m} m; Suzuki {suzuki_m} m; Prado {prado_m} m."
     refs: [suzuki1982, prado1990]
+    en:
+      title: Vertical opening from the circumference
+      statement: >
+        The mouth of the net has {mallas} meshes of {malla} mm around its circumference. Calculate
+        the stretched circumference and the vertical opening by Suzuki (4/90) and by Prado ({pct}
+        %).
+      vars:
+        mallas: Meshes around the circumference
+        malla: Mesh size
+        pct: Prado's percentage
+      answers:
+        a_m: Stretched circumference
+        suzuki_m: Vertical opening (Suzuki)
+        prado_m: Vertical opening (Prado)
+      explanation: a = {mallas}·{malla}/1000 = {a_m} m; Suzuki {suzuki_m} m; Prado {prado_m} m.

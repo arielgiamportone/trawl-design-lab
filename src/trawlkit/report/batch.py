@@ -14,11 +14,12 @@ from typing import Any
 
 from trawlkit.batch.export import STATUS_LABEL, SUMMARY_COLUMNS
 from trawlkit.batch.run import BatchResult, BatchRow
+from trawlkit.i18n import N_, fmt_num, get_lang, t
 
 OBJECTIVE_LABEL = {
-    "area": "la mayor red que el buque remolca",
-    "energy": "menor trabajo por m² barrido",
-    "cost": "armado más barato",
+    "area": N_("la mayor red que el buque remolca"),
+    "energy": N_("menor trabajo por m² barrido"),
+    "cost": N_("armado más barato"),
 }
 
 _CSS = """
@@ -48,9 +49,10 @@ def _fmt(v: Any, nd: int = 2) -> str:
     if v is None or v == "":
         return "—"
     if isinstance(v, bool):
-        return "sí" if v else "no"
+        return t("sí") if v else t("no")
     if isinstance(v, float):
-        return f"{v:,.{nd}f}".replace(",", " ").replace(".", ",")
+        # Miles con espacio fino (U+202F) en español; coma de miles en inglés.
+        return fmt_num(v, nd).replace(" ", "\u202f")
     if isinstance(v, list | tuple):
         return "; ".join(str(x) for x in v) or "—"
     return str(v)
@@ -63,22 +65,22 @@ def _e(v: Any, nd: int = 2) -> str:
 def _summary_table(result: BatchResult) -> str:
     keys = [
         ("bhp", "hp", 0),
-        ("s", "Escala", 3),
+        ("s", t("Escala"), 3),
         ("speed_kn", "v [kn]", 2),
         ("demand_kgf", "R_T [kgf]", 0),
-        ("area_rate_m2_h", "Área [m²/h]", 0),
-        ("door", "Portón", 0),
-        ("warp", "Cable", 0),
-        ("cost", "Costo", 0),
+        ("area_rate_m2_h", t("Área [m²/h]"), 0),
+        ("door", t("Portón"), 0),
+        ("warp", t("Cable"), 0),
+        ("cost", t("Costo"), 0),
     ]
     head = "".join(f"<th>{html.escape(h)}</th>" for _, h, _ in keys)
     rows = []
     for r in result.rows:
-        status = STATUS_LABEL[r.status]
+        status = t(STATUS_LABEL[r.status])
         cls = "ok" if r.status == "ok" else "bad"
         if r.status == "error":
             rows.append(
-                f"<tr><td>{html.escape(r.name)}</td><td class='bad'>error</td>"
+                f"<tr><td>{html.escape(r.name)}</td><td class='bad'>{t('error')}</td>"
                 f"<td colspan='{len(keys)}'>{html.escape(r.error or '')}</td></tr>"
             )
             continue
@@ -92,7 +94,7 @@ def _summary_table(result: BatchResult) -> str:
             f"<tr><td>{html.escape(r.name)}</td><td class='{cls}'>{status}</td>{cells}</tr>"
         )
     return (
-        f"<table><thead><tr><th>Buque</th><th>Estado</th>{head}</tr></thead>"
+        f"<table><thead><tr><th>{t('Buque')}</th><th>{t('Estado')}</th>{head}</tr></thead>"
         f"<tbody>{''.join(rows)}</tbody></table>"
     )
 
@@ -107,7 +109,7 @@ def _sheet_svg(row: BatchRow) -> str:
 
         return net_sheet_svg(run(p.case), "std")
     except (ValueError, KeyError, ZeroDivisionError, IndexError):
-        return "<p class='muted'>No se pudo dibujar la lámina.</p>"
+        return f"<p class='muted'>{t('No se pudo dibujar la lámina.')}</p>"
 
 
 def _card(row: BatchRow) -> str:
@@ -116,10 +118,10 @@ def _card(row: BatchRow) -> str:
     for key, label in SUMMARY_COLUMNS["fleet"]:
         if key in ("vessel", "failed"):
             continue
-        lines.append(f"<tr><th>{html.escape(label)}</th><td>{_e(s.get(key), 3)}</td></tr>")
+        lines.append(f"<tr><th>{html.escape(t(label))}</th><td>{_e(s.get(key), 3)}</td></tr>")
     failed = s.get("failed") or []
     cons = (
-        "<p class='ok'>Cumple tiro, apertura, cable, portón y profundidad.</p>"
+        f"<p class='ok'>{t('Cumple tiro, apertura, cable, portón y profundidad.')}</p>"
         if not failed
         else "<ul>" + "".join(f"<li class='bad'>{html.escape(f)}</li>" for f in failed) + "</ul>"
     )
@@ -130,19 +132,20 @@ def _card(row: BatchRow) -> str:
             f"<tr><td>{html.escape(ln.label)}</td>"
             f"<td>{html.escape(ln.component_name or ln.component_id or '—')}</td>"
             f"<td class='num'>{_e(ln.quantity, 1)} {html.escape(ln.unit)}</td>"
-            f"<td class='num'>{'sin precio' if ln.cost is None else _e(ln.cost, 0)}</td></tr>"
+            f"<td class='num'>{t('sin precio') if ln.cost is None else _e(ln.cost, 0)}</td></tr>"
             for ln in p.assembly.bom.lines
         )
         bom = (
-            "<h3>Lista de materiales</h3><table><thead><tr><th>Ítem</th><th>Componente</th>"
-            f"<th>Cantidad</th><th>Costo</th></tr></thead><tbody>{trs}</tbody></table>"
+            f"<h3>{t('Lista de materiales')}</h3><table><thead><tr><th>{t('Ítem')}</th>"
+            f"<th>{t('Componente')}</th><th>{t('Cantidad')}</th><th>{t('Costo')}</th></tr>"
+            f"</thead><tbody>{trs}</tbody></table>"
         )
     notes = "".join(f"<li>{html.escape(n)}</li>" for n in row.notes)
     return (
         f"<section class='card'><h2>{html.escape(row.name)}</h2>"
         f"<div class='sheet'>{_sheet_svg(row)}</div>"
         f"<table class='small'>{''.join(lines)}</table>{cons}{bom}"
-        f"<h3>Supuestos y avisos</h3><ul class='small muted'>{notes}</ul></section>"
+        f"<h3>{t('Supuestos y avisos')}</h3><ul class='small muted'>{notes}</ul></section>"
     )
 
 
@@ -153,26 +156,44 @@ def batch_html(result: BatchResult, generated: _dt.date | None = None) -> str:
     c = result.counts
     filters = []
     if st.get("region"):
-        filters.append(f"región {st['region']}")
+        filters.append(t("región {region}", region=st["region"]))
     if st.get("generic_only"):
-        filters.append("sólo genéricos")
+        filters.append(t("sólo genéricos"))
+    objective = OBJECTIVE_LABEL.get(st.get("objective", ""))
+    margin = _e(st.get("margin", 0.1) * 100 if st.get("margin") is not None else None, 0)
     intro = (
-        f"<p>Red base: <strong>{html.escape(str(st.get('net_name') or st.get('net') or '—'))}"
-        f"</strong>. Objetivo: {html.escape(OBJECTIVE_LABEL.get(st.get('objective', ''), '—'))}. "
-        "Reserva de tiro: "
-        f"{_e(st.get('margin', 0.1) * 100 if st.get('margin') is not None else None, 0)} %. "
-        f"{'Filtros: ' + ', '.join(filters) + '.' if filters else ''}</p>"
-        f"<p>{len(result.rows)} buques: {c['ok']} cumplen, {c['infeasible']} no cumplen y "
-        f"{c['error']} con error. Generado el {date} con trawlkit.</p>"
-        "<p class='muted small'>Resultados orientativos: la escala sale de la semejanza por "
-        "potencia refinada con el optimizador, y el armado del catálogo de componentes. "
-        "Verifique con el plano y la ficha de cada buque antes de construir.</p>"
+        "<p>"
+        + t(
+            "Red base: <strong>{net}</strong>. Objetivo: {objective}. "
+            "Reserva de tiro: {margin} %. ",
+            net=html.escape(str(st.get("net_name") or st.get("net") or "—")),
+            objective=html.escape(t(objective) if objective else "—"),
+            margin=margin,
+        )
+        + (t("Filtros: {filters}.", filters=", ".join(filters)) if filters else "")
+        + "</p><p>"
+        + t(
+            "{n} buques: {ok} cumplen, {infeasible} no cumplen y {error} con error. "
+            "Generado el {date} con trawlkit.",
+            n=len(result.rows),
+            ok=c["ok"],
+            infeasible=c["infeasible"],
+            error=c["error"],
+            date=date,
+        )
+        + "</p><p class='muted small'>"
+        + t(
+            "Resultados orientativos: la escala sale de la semejanza por potencia refinada con "
+            "el optimizador, y el armado del catálogo de componentes. Verifique con el plano y "
+            "la ficha de cada buque antes de construir."
+        )
+        + "</p>"
     )
     cards = "".join(_card(r) for r in result.rows if r.status != "error")
     return (
-        "<!doctype html><html lang='es'><head><meta charset='utf-8'>"
-        f"<title>Lote de flota</title><style>{_CSS}</style></head><body>"
-        f"<h1>Proyección de la red a la flota</h1>{intro}<h2>Resumen</h2>"
+        f"<!doctype html><html lang='{get_lang()}'><head><meta charset='utf-8'>"
+        f"<title>{t('Lote de flota')}</title><style>{_CSS}</style></head><body>"
+        f"<h1>{t('Proyección de la red a la flota')}</h1>{intro}<h2>{t('Resumen')}</h2>"
         f"{_summary_table(result)}{cards}</body></html>"
     )
 
@@ -185,7 +206,7 @@ def batch_pdf(result: BatchResult) -> bytes:
         from weasyprint import HTML
     except (ImportError, OSError) as exc:  # pragma: no cover - depende del entorno
         raise RuntimeError(
-            'el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)'
+            t('el PDF necesita WeasyPrint: pip install "trawlkit[report]" (y Pango)')
         ) from exc
     out = HTML(string=flatten_css_vars(batch_html(result))).write_pdf()
     assert isinstance(out, bytes)

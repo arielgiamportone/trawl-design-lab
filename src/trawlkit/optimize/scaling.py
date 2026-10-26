@@ -12,6 +12,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
+from trawlkit.i18n import t
 from trawlkit.io.schema import Door, NetSpec, Panel
 
 #: Extras de un panel que son números de mallas (T1/T2 del Excel) y se escalan con los bordes.
@@ -52,7 +53,7 @@ def scale_net(spec: NetSpec, s: float) -> NetSpec:
     * ``id`` lleva el sufijo ``_s{s:.2f}``.
     """
     if not math.isfinite(s) or s <= 0:
-        raise ValueError(f"el factor de escala debe ser positivo y finito (s = {s!r})")
+        raise ValueError(t("el factor de escala debe ser positivo y finito (s = {s!r})", s=s))
     data: dict[str, Any] = spec.model_dump()
     data["panels"] = [_scale_panel(p, s).model_dump() for p in spec.panels]
     for rope in ("headrope", "footrope"):
@@ -79,9 +80,9 @@ def scale_door(door: Door, area_m2: float) -> Door:
     (Port!F215) cuando el del catálogo queda chico para el buque.
     """
     if door.area_m2 is None or door.area_m2 <= 0:
-        raise ValueError(f"el portón {door.id!r} no tiene superficie")
+        raise ValueError(t("el portón {door!r} no tiene superficie", door=door.id))
     if not math.isfinite(area_m2) or area_m2 <= 0:
-        raise ValueError("area_m2 debe ser positiva")
+        raise ValueError(t("area_m2 debe ser positiva"))
     k = area_m2 / float(door.area_m2)
     lin = math.sqrt(k)
     data: dict[str, Any] = door.model_dump()

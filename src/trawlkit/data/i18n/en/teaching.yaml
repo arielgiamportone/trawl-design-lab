@@ -1,0 +1,32 @@
+# Catálogo inglés del modo docente (Fase 18.1): niveles, unidades, datos derivados y mensajes de
+# corrección de trawlkit.teaching. Los enunciados y laboratorios traen su inglés en el bloque «en:»
+# de cada ejercicio (data/teaching/exercises) y laboratorio (data/teaching/labs).
+
+# Niveles
+Básico: Basic
+Intermedio: Intermediate
+Avanzado: Advanced
+
+# Unidades escritas con palabras
+mallas: meshes
+mallas/m: meshes/m
+
+# Datos que agregan los solvers
+Mallas del borde menor (T2): Meshes on the narrower edge (T2)
+Mallas de alto (N): Meshes in depth (N)
+Largo de la relinga: Framing rope length
+Mallas del paño B: Meshes of panel B
+
+# Corrección de ejercicios
+correcta: correct
+sin respuesta: no answer
+no es un número: not a number
+revise las unidades (difiere en un factor 1000): check the units (off by a factor of 1000)
+fuera de la tolerancia: outside the tolerance
+no coincide: does not match
+
+# Corrección de laboratorios
+la corrige el docente: graded by the teacher
+no es esa: not that one
+el caso no tiene ese dato: the case does not have that value
+no coincide con su caso: does not match your case

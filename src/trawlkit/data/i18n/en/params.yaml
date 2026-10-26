@@ -1,0 +1,58 @@
+# Catálogo inglés de los comentarios de GET /params (Fase 18.1): comentario de cada campo de
+# DesignCase (service._field_comments) → traducción. Las referencias a celdas del libro no cambian.
+Especie Blanco!E5 (None → net.species.depth_m): Especie Blanco!E5 (None → net.species.depth_m)
+Port!D6 = Tipo de buques!B5 (None → vessel.beam_m): Port!D6 = Tipo de buques!B5 (None → vessel.beam_m)
+Rem!E33 usa Tipo de buques!B6 (None → vessel.depth_m): Rem!E33 uses Tipo de buques!B6 (None → vessel.depth_m)
+PotOK!D10/F10 (None → según hélice del buque): PotOK!D10/F10 (None → according to the vessel's propeller)
+PotOK!C170 = M165 (None → power.koyama_k(bhp)): PotOK!C170 = M165 (None → power.koyama_k(bhp))
+PotOK!E216 = MID(L208,1,4) = 0.17: PotOK!E216 = MID(L208,1,4) = 0.17
+Res!D130:E130 (150 / 180): Res!D130:E130 (150 / 180)
+Port!D7 (apertura por metro de cable): Port!D7 (spread per metre of warp)
+Port!D28: Port!D28
+Port!C134 (fila seleccionada de la polar): Port!C134 (selected row of the polar)
+Port!D210 = F146 (ROB = 20 % de FT): Port!D210 = F146 (ROB = 20 % of FT)
+Port!F212 = AVERAGE(E212:E216): Port!F212 = AVERAGE(E212:E216)
+Port!E277: Port!E277
+Port!F39: Port!F39
+Dim!F64 = Port!F56 = Mec!O262: Dim!F64 = Port!F56 = Mec!O262
+Port!D46: Port!D46
+Dim!F65 = Mec!E213 (patentes de diseño): Dim!F65 = Mec!E213 (design sweeps)
+Port!E99: Port!E99
+Port!B68: Port!B68
+Port!H65: Port!H65
+Port!C83: Port!C83
+Mec!E184 (U2 de la red trabajando; E183 = U1 = 0.5): Mec!E184 (U2 of the net while fishing; E183 = U1 = 0.5)
+Mec!F179 (Lsh = 0.95·Ls): Mec!F179 (Lsh = 0.95·Ls)
+Mec!F180: Mec!F180
+Mec!O266 (0.216, fijo): Mec!O266 (0.216, fixed)
+Mec!E270 = 3·4: Mec!E270 = 3·4
+Mec!E272: Mec!E272
+Mec!E272 usa P!B156 (None → mallero del cuerpo): Mec!E272 uses P!B156 (None → mesh size of the body)
+Flot!I14: Flot!I14
+Flot!G168 / G176: Flot!G168 / G176
+'Flot!N43 = AVERAGE(L42:M46): 1–3 kn': 'Flot!N43 = AVERAGE(L42:M46): 1–3 kn'
+Flot!F84 (12, elegido a mano; None → spec o catálogo): Flot!F84 (12, chosen by hand; None → spec or catalogue)
+Flot!F92 (None → LOOKUP sobre el catálogo): Flot!F92 (None → LOOKUP in the catalogue)
+Flot!F103: Flot!F103
+Flot!G106: Flot!G106
+Cab!D3 (None → spec o COMBINADO 12): Cab!D3 (None → spec or COMBINADO 12)
+Cab!D4 (None → spec o COMBINADO 14): Cab!D4 (None → spec or COMBINADO 14)
+cable del catálogo de componentes (None → selección automática): warp from the component catalogue (None → automatic selection)
+boya del catálogo de componentes: float from the component catalogue
+hilo de todos los paños salvo el copo: twine of all netting panels except the codend
+cadena de lastre y reglaje (lista de materiales): ballast and adjusting chain (bill of materials)
+marcas para la selección automática: brands for the automatic selection
+región del puerto para la selección automática: port region for the automatic selection
+sólo componentes genéricos en la selección automática: only generic components in the automatic selection
+'Flot!F225 = ROUNDDOWN(M197): modificada a 1 kn': 'Flot!F225 = ROUNDDOWN(M197): modified net at 1 kn'
+'Flot!F226 = ROUNDUP(L201): estándar a 3 kn': 'Flot!F226 = ROUNDUP(L201): standard net at 3 kn'
+Flot!F224: Flot!F224
+Rem!E78 "180 HP" (None → mayor BHP de la clase): Rem!E78 "180 HP" (None → largest BHP in the class)
+Rem!D271: Rem!D271
+Rem!E267 = H123 (resistencia total a 3.5 kn): Rem!E267 = H123 (total drag at 3.5 kn)
+Cab!D12 = 2·Ls + 0.5·Ls: Cab!D12 = 2·Ls + 0.5·Ls
+Rem!E191:H199: Rem!E191:H199
+'"otter" o "pair" (None → net.rig o "otter")': '"otter" or "pair" (None → net.rig or "otter")'
+'pareja: separación de puntas de ala (None → ½ lima)': 'pair trawl: wingtip spread (None → ½ headrope)'
+tipo de fondo (data/seabed.yaml); None = sin rozamiento extra: seabed type (data/seabed.yaml); None = no extra friction
+velocidades de la RN en summary(): RN speeds in summary()

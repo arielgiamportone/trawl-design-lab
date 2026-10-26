@@ -17,84 +17,86 @@ from trawlkit.batch.columns import CASES, FLEET, NETS, PANELS
 from trawlkit.batch.nets import PANEL_HEADERS, net_rows
 from trawlkit.batch.run import BatchResult
 from trawlkit.batch.sheets import Col
+from trawlkit.i18n import N_, get_lang, t
 from trawlkit.io import load_net
 
 Table = tuple[str, list[str], list[list[Any]]]
 
-#: Columnas del resumen por modo: (clave de ``BatchRow.summary``, encabezado).
+#: Columnas del resumen por modo: (clave de ``BatchRow.summary``, encabezado en español; se
+#: traduce con :func:`trawlkit.i18n.t` al exportar).
 SUMMARY_COLUMNS: dict[str, tuple[tuple[str, str], ...]] = {
     "fleet": (
-        ("vessel", "Buque"),
-        ("bhp", "Potencia [hp]"),
-        ("base_net", "Red base"),
-        ("s0", "Escala por semejanza"),
-        ("s", "Escala"),
-        ("speed_kn", "Velocidad [kn]"),
-        ("feasible", "Cumple"),
-        ("headrope_m", "Lima [m]"),
-        ("footrope_m", "Burlón [m]"),
-        ("ah_m", "Abertura horizontal [m]"),
-        ("av_m", "Abertura vertical [m]"),
-        ("demand_kgf", "Resistencia total [kgf]"),
-        ("thrust_margin", "Reserva de tiro"),
-        ("area_rate_m2_h", "Área barrida [m²/h]"),
-        ("door", "Portón"),
-        ("door_area_m2", "Superficie del portón [m²]"),
-        ("warp", "Cable"),
-        ("float", "Boya"),
-        ("float_count", "Boyas"),
-        ("twine", "Hilo"),
-        ("cost", "Costo orientativo"),
-        ("currency", "Moneda"),
-        ("missing_prices", "Líneas sin precio"),
-        ("failed", "No cumple"),
+        ("vessel", N_("Buque")),
+        ("bhp", N_("Potencia [hp]")),
+        ("base_net", N_("Red base")),
+        ("s0", N_("Escala por semejanza")),
+        ("s", N_("Escala")),
+        ("speed_kn", N_("Velocidad [kn]")),
+        ("feasible", N_("Cumple")),
+        ("headrope_m", N_("Lima [m]")),
+        ("footrope_m", N_("Burlón [m]")),
+        ("ah_m", N_("Abertura horizontal [m]")),
+        ("av_m", N_("Abertura vertical [m]")),
+        ("demand_kgf", N_("Resistencia total [kgf]")),
+        ("thrust_margin", N_("Reserva de tiro")),
+        ("area_rate_m2_h", N_("Área barrida [m²/h]")),
+        ("door", N_("Portón")),
+        ("door_area_m2", N_("Superficie del portón [m²]")),
+        ("warp", N_("Cable")),
+        ("float", N_("Boya")),
+        ("float_count", N_("Boyas")),
+        ("twine", N_("Hilo")),
+        ("cost", N_("Costo orientativo")),
+        ("currency", N_("Moneda")),
+        ("missing_prices", N_("Líneas sin precio")),
+        ("failed", N_("No cumple")),
     ),
     "cases": (
-        ("case", "Caso"),
-        ("net_id", "Red"),
-        ("vessel_id", "Buque"),
-        ("door_id", "Portón"),
-        ("headrope_m", "Lima [m]"),
-        ("footrope_m", "Burlón [m]"),
-        ("vertical_opening_m", "Abertura vertical [m]"),
-        ("horizontal_opening_m", "Abertura horizontal [m]"),
-        ("rn_std_3kn_kgf", "Resistencia de la red a 3 kn [kgf]"),
-        ("max_speed_kn", "Velocidad máxima [kn]"),
-        ("warp_selected", "Cable"),
-        ("float_count", "Boyas"),
-        ("net_weight_kg", "Peso de la red [kg]"),
+        ("case", N_("Caso")),
+        ("net_id", N_("Red")),
+        ("vessel_id", N_("Buque")),
+        ("door_id", N_("Portón")),
+        ("headrope_m", N_("Lima [m]")),
+        ("footrope_m", N_("Burlón [m]")),
+        ("vertical_opening_m", N_("Abertura vertical [m]")),
+        ("horizontal_opening_m", N_("Abertura horizontal [m]")),
+        ("rn_std_3kn_kgf", N_("Resistencia de la red a 3 kn [kgf]")),
+        ("max_speed_kn", N_("Velocidad máxima [kn]")),
+        ("warp_selected", N_("Cable")),
+        ("float_count", N_("Boyas")),
+        ("net_weight_kg", N_("Peso de la red [kg]")),
     ),
     "nets": (
-        ("net_id", "Red"),
-        ("panels", "Paneles"),
-        ("errors", "Errores del validador"),
-        ("warnings", "Avisos"),
-        ("headrope_m", "Lima [m]"),
-        ("footrope_m", "Burlón [m]"),
-        ("vertical_opening_m", "Abertura vertical [m]"),
-        ("horizontal_opening_m", "Abertura horizontal [m]"),
-        ("rn_std_3kn_kgf", "Resistencia de la red a 3 kn [kgf]"),
-        ("max_speed_kn", "Velocidad máxima [kn]"),
+        ("net_id", N_("Red")),
+        ("panels", N_("Paneles")),
+        ("errors", N_("Errores del validador")),
+        ("warnings", N_("Avisos")),
+        ("headrope_m", N_("Lima [m]")),
+        ("footrope_m", N_("Burlón [m]")),
+        ("vertical_opening_m", N_("Abertura vertical [m]")),
+        ("horizontal_opening_m", N_("Abertura horizontal [m]")),
+        ("rn_std_3kn_kgf", N_("Resistencia de la red a 3 kn [kgf]")),
+        ("max_speed_kn", N_("Velocidad máxima [kn]")),
     ),
 }
 
 #: Columnas económicas del lote de flota (Fase 16), si se pidió la economía.
 ECONOMIC_COLUMNS: tuple[tuple[str, str], ...] = (
-    ("fuel_l_trip", "Gasoil por marea [L]"),
-    ("catch_kg_trip", "Captura por marea [kg]"),
-    ("revenue_trip", "Ingreso por marea"),
-    ("cost_trip", "Costo por marea"),
-    ("cost_per_kg", "Costo por kg"),
-    ("margin_trip", "Margen por marea"),
-    ("margin_year", "Margen por año"),
+    ("fuel_l_trip", N_("Gasoil por marea [L]")),
+    ("catch_kg_trip", N_("Captura por marea [kg]")),
+    ("revenue_trip", N_("Ingreso por marea")),
+    ("cost_trip", N_("Costo por marea")),
+    ("cost_per_kg", N_("Costo por kg")),
+    ("margin_trip", N_("Margen por marea")),
+    ("margin_year", N_("Margen por año")),
 )
 
-STATUS_LABEL = {"ok": "cumple", "infeasible": "no cumple", "error": "error"}
+STATUS_LABEL = {"ok": N_("cumple"), "infeasible": N_("no cumple"), "error": N_("error")}
 
 
 def _cell(value: Any) -> Any:
     if isinstance(value, bool):
-        return "sí" if value else "no"
+        return t("sí") if value else t("no")
     if isinstance(value, list | tuple):
         return "; ".join(str(x) for x in value)
     if isinstance(value, float):
@@ -102,19 +104,38 @@ def _cell(value: Any) -> Any:
     return "" if value is None else value
 
 
+#: Nombres de hoja del XLSX del lote en inglés (en español, la clave misma).
+SHEET_NAMES_EN: dict[str, str] = {
+    "resumen": "summary",
+    "materiales": "materials",
+    "red": "net",
+    "observaciones": "notes",
+}
+
+
+def _sheet(name: str) -> str:
+    """Nombre de hoja del lote en el idioma activo."""
+    return SHEET_NAMES_EN.get(name, name) if get_lang() == "en" else name
+
+
 def tables(result: BatchResult) -> list[Table]:
     """Hojas del lote: resumen, materiales (flota), redes escaladas y observaciones."""
     cols = SUMMARY_COLUMNS[result.mode]
     if result.mode == "fleet" and any("fuel_l_trip" in r.summary for r in result.rows):
         cols = cols[:-1] + ECONOMIC_COLUMNS + cols[-1:]
-    head = ["Fila", "Nombre", "Estado"] + [h for _, h in cols]
+    head = [t("Fila"), t("Nombre"), t("Estado")] + [t(h) for _, h in cols]
     rows = [
-        [r.index + 1, r.name, STATUS_LABEL[r.status], *(_cell(r.summary.get(k)) for k, _ in cols)]
+        [
+            r.index + 1,
+            r.name,
+            t(STATUS_LABEL[r.status]),
+            *(_cell(r.summary.get(k)) for k, _ in cols),
+        ]
         if r.status != "error"
-        else [r.index + 1, r.name, "error", r.error or ""]
+        else [r.index + 1, r.name, t("error"), r.error or ""]
         for r in result.rows
     ]
-    out: list[Table] = [("resumen", head, rows)]
+    out: list[Table] = [(_sheet("resumen"), head, rows)]
     if result.mode == "fleet":
         mat: list[list[Any]] = []
         for r in result.rows:
@@ -131,21 +152,21 @@ def tables(result: BatchResult) -> list[Table]:
                         ln.unit,
                         _cell(ln.unit_price),
                         ln.currency or "",
-                        "sin precio" if ln.cost is None else ln.cost,
+                        t("sin precio") if ln.cost is None else ln.cost,
                     ]
                 )
         out.append(
             (
-                "materiales",
+                _sheet("materiales"),
                 [
-                    "Buque",
-                    "Ítem",
-                    "Componente",
-                    "Cantidad",
-                    "Unidad",
-                    "Precio unitario",
-                    "Moneda",
-                    "Costo",
+                    t("Buque"),
+                    t("Ítem"),
+                    t("Componente"),
+                    t("Cantidad"),
+                    t("Unidad"),
+                    t("Precio unitario"),
+                    t("Moneda"),
+                    t("Costo"),
                 ],
                 mat,
             )
@@ -153,7 +174,11 @@ def tables(result: BatchResult) -> list[Table]:
         for r in result.rows:
             if r.projection is not None:
                 out.append(
-                    (f"red {r.name}", [h for _, h in PANEL_HEADERS], net_rows(r.projection.net))
+                    (
+                        f"{_sheet('red')} {r.name}",
+                        [h for _, h in PANEL_HEADERS],
+                        net_rows(r.projection.net),
+                    )
                 )
     notes = [[r.index + 1, r.name, n] for r in result.rows for n in r.notes]
     notes += [
@@ -164,12 +189,14 @@ def tables(result: BatchResult) -> list[Table]:
         ]
         for i in result.issues
     ]
-    out.append(("observaciones", ["Fila", "Buque, caso o red", "Observación"], notes))
+    out.append(
+        (_sheet("observaciones"), [t("Fila"), t("Buque, caso o red"), t("Observación")], notes)
+    )
     return out
 
 
 def to_csv(result: BatchResult) -> str:
-    """Hoja de resumen en CSV (``;``, coma decimal)."""
+    """Hoja de resumen en CSV (``;``; coma decimal en español, punto en inglés)."""
     name, head, rows = tables(result)[0]
     return _csv(head, rows)
 
@@ -177,9 +204,10 @@ def to_csv(result: BatchResult) -> str:
 def _csv(head: Sequence[str], rows: Sequence[Sequence[Any]]) -> str:
     buf = io.StringIO()
     w = csv.writer(buf, delimiter=";", lineterminator="\n")
+    sep = "," if get_lang() == "es" else "."  # separador decimal del idioma
     w.writerow(head)
     for row in rows:
-        w.writerow([str(v).replace(".", ",") if isinstance(v, float) else v for v in row])
+        w.writerow([str(v).replace(".", sep) if isinstance(v, float) else v for v in row])
     return buf.getvalue()
 
 
@@ -190,7 +218,7 @@ def to_xlsx(sheets: Sequence[Table]) -> bytes:
         from openpyxl.styles import Font
         from openpyxl.utils import get_column_letter
     except ImportError as exc:  # pragma: no cover - depende del entorno
-        raise RuntimeError('el XLSX necesita openpyxl: pip install "trawlkit[excel]"') from exc
+        raise RuntimeError(t('el XLSX necesita openpyxl: pip install "trawlkit[excel]"')) from exc
     from trawlkit.report.xlsx import sheet_name
 
     wb = openpyxl.Workbook()

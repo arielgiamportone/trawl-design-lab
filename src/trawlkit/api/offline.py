@@ -34,11 +34,11 @@ from trawlkit import __version__
 from trawlkit.api import schemas as sc
 from trawlkit.api import service
 from trawlkit.compat import ERRATA
-from trawlkit.i18n import use_lang
+from trawlkit.i18n import N_, t, use_lang
 from trawlkit.io.schema import Door, NetSpec, Vessel
 
 #: Mensaje de las rutas que necesitan el servidor.
-NEEDS_SERVER = (
+NEEDS_SERVER = N_(
     "Esta función necesita conexión con la API: los PDF, el refinamiento de la optimización y el "
     "aula del curso no corren en el teléfono. El cálculo, la simulación, los planos y el informe "
     "HTML sí."
@@ -130,7 +130,7 @@ def _net(m: re.Match[str], _q_: Query, _b: Any) -> Any:
     presets = service.net_presets()
     net_id = unquote(m["id"])
     if net_id not in presets:
-        raise _HTTPError(404, f"red desconocida: {net_id!r}")
+        raise _HTTPError(404, t("red desconocida: {net!r}", net=net_id))
     return _dump(NetSpec, presets[net_id])
 
 
@@ -223,7 +223,7 @@ def _layout(_m: re.Match[str], query: Query, body: Any) -> Any:
     variant = _q(query, "variant", "std")
     mode = _q(query, "mode", "schematic") or "schematic"
     if variant == "mod" and req.net_modified is None:
-        raise _HTTPError(422, "variant 'mod' requiere net_modified")
+        raise _HTTPError(422, t("variant 'mod' requiere net_modified"))
     net = req.net_modified if variant == "mod" else req.net
     assert net is not None
     return _dump(sc.LayoutResponse, service.layout_of(net, mode))
@@ -234,7 +234,7 @@ def _guide_args(query: Query) -> tuple[str, float]:
     try:
         eye = float(_q(query, "eye_allowance_m", "0.5") or 0.5)
     except ValueError as exc:
-        raise _HTTPError(422, "eye_allowance_m debe ser un número") from exc
+        raise _HTTPError(422, t("eye_allowance_m debe ser un número")) from exc
     return variant, eye
 
 
@@ -251,7 +251,7 @@ def _construction_export(_m: re.Match[str], query: Query, body: Any) -> Any:
     variant, eye = _guide_args(query)
     fmt = _q(query, "format", "pdf") or "pdf"
     if fmt == "pdf":
-        raise _HTTPError(503, "el PDF de la guía necesita conexión: use format=html e imprímalo")
+        raise _HTTPError(503, t("el PDF de la guía necesita conexión: use format=html e imprímalo"))
     with service.user_items(req.components):
         data, media, name = service.construction_export(_build(req), variant, eye, fmt)
     return Binary(data, media, name)
@@ -312,7 +312,7 @@ def _optimize(_m: re.Match[str], _q_: Query, body: Any) -> Any:
     req = _body(sc.OptimizeRequest, body)
     if req.refine:
         # La evolución diferencial usa scipy, que no se descarga en el teléfono.
-        raise _HTTPError(422, "sin conexión se optimiza sólo con la malla (refine = false)")
+        raise _HTTPError(422, t("sin conexión se optimiza sólo con la malla (refine = false)"))
     out = service.optimize_case(
         net=req.net,
         vessel=req.vessel,
@@ -351,7 +351,7 @@ def _batch_export(_m: re.Match[str], query: Query, body: Any) -> Any:
     fmt = _q(query, "format", "xlsx") or "xlsx"
     if fmt == "pdf":
         # WeasyPrint sólo corre en el servidor; sin conexión, el informe HTML se imprime.
-        raise _HTTPError(503, "el PDF del lote necesita conexión: use format=html e imprímalo")
+        raise _HTTPError(503, t("el PDF del lote necesita conexión: use format=html e imprímalo"))
     data, media, name = service.batch_export(req.model_dump(mode="json"), fmt)
     return Binary(data, media, name)
 
@@ -360,7 +360,7 @@ def _batch_template(_m: re.Match[str], query: Query, _b: Any) -> Any:
     kind = _q(query, "kind", "fleet") or "fleet"
     fmt = _q(query, "format", "xlsx") or "xlsx"
     if kind not in ("fleet", "nets", "cases") or fmt not in ("xlsx", "csv"):
-        raise _HTTPError(422, "kind: fleet, nets o cases; format: xlsx o csv")
+        raise _HTTPError(422, t("kind: fleet, nets o cases; format: xlsx o csv"))
     data, media, name = service.batch_template(kind, fmt)
     return Binary(data, media, name)
 
@@ -368,7 +368,7 @@ def _batch_template(_m: re.Match[str], query: Query, _b: Any) -> Any:
 def _teaching_exercises(_m: re.Match[str], query: Query, _b: Any) -> Any:
     level = _q(query, "level")
     if level is not None and level not in ("basico", "intermedio", "avanzado"):
-        raise _HTTPError(422, "level: basico, intermedio o avanzado")
+        raise _HTTPError(422, t("level: basico, intermedio o avanzado"))
     out = service.teaching_exercises(_q(query, "chapter"), level, _q(query, "topic"))
     return _dump(list[sc.ExerciseSummaryOut], out)
 
@@ -378,9 +378,9 @@ def _teaching_exercise(m: re.Match[str], query: Query, _b: Any) -> Any:
     try:
         seed = int(raw)
     except ValueError:
-        raise _HTTPError(422, "seed: entero") from None
+        raise _HTTPError(422, t("seed: entero")) from None
     if not 0 <= seed <= 2**31 - 1:
-        raise _HTTPError(422, "seed: entre 0 y 2³¹ − 1")
+        raise _HTTPError(422, t("seed: entre 0 y 2³¹ − 1"))
     return _dump(sc.ExerciseInstanceOut, service.teaching_exercise(unquote(m["id"]), seed))
 
 
@@ -392,7 +392,7 @@ def _teaching_grade(_m: re.Match[str], _q_: Query, body: Any) -> Any:
 def _teaching_labs(_m: re.Match[str], query: Query, _b: Any) -> Any:
     level = _q(query, "level")
     if level is not None and level not in ("basico", "intermedio", "avanzado"):
-        raise _HTTPError(422, "level: basico, intermedio o avanzado")
+        raise _HTTPError(422, t("level: basico, intermedio o avanzado"))
     return _dump(list[sc.LabSummaryOut], service.teaching_labs(_q(query, "chapter"), level))
 
 
@@ -426,9 +426,9 @@ def _plan(_m: re.Match[str], query: Query, body: Any) -> Any:
     view = _q(query, "view", "sheet") or "sheet"
     variant = _q(query, "variant", "std") or "std"
     if view not in ("sheet", "scale") or variant not in ("std", "mod"):
-        raise _HTTPError(422, "view: sheet|scale; variant: std|mod")
+        raise _HTTPError(422, t("view: sheet|scale; variant: std|mod"))
     if variant == "mod" and req.net_modified is None:
-        raise _HTTPError(422, "variant 'mod' requiere net_modified")
+        raise _HTTPError(422, t("variant 'mod' requiere net_modified"))
     with service.user_items(req.components):
         result = service.run_case(_build(req))
     svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
@@ -450,9 +450,9 @@ def _report(_m: re.Match[str], query: Query, body: Any) -> Any:
     req = _body(sc.DesignRequest, body)
     fmt = _q(query, "format", "html") or "html"
     if fmt == "pdf":
-        raise _HTTPError(503, "el informe PDF necesita conexión: use format=html e imprímalo")
+        raise _HTTPError(503, t("el informe PDF necesita conexión: use format=html e imprímalo"))
     if fmt not in _REPORT_MEDIA:
-        raise _HTTPError(422, "format: html, pdf o xlsx")
+        raise _HTTPError(422, t("format: html, pdf o xlsx"))
     with service.user_items(req.components):
         result = service.run_case(_build(req))
     with tempfile.TemporaryDirectory() as tmp:
@@ -694,7 +694,7 @@ def _handle(method: str, parts: Any, query: Query, body: Any) -> tuple[int, Any]
             return 422, {"detail": str(exc)}
     if any(p.fullmatch(parts.path) for _, p, _ in ROUTES):
         return 405, {"detail": "Method Not Allowed"}
-    return 503, {"detail": NEEDS_SERVER}
+    return 503, {"detail": t(NEEDS_SERVER)}
 
 
 def handle_json(method: str, path: str, body: str | None = None) -> str:

@@ -12,6 +12,7 @@ import numpy as np
 from numpy.typing import NDArray
 
 from trawlkit.compat import Compat
+from trawlkit.i18n import t
 from trawlkit.io import Door, PropellerType
 from trawlkit.model import DesignCase
 from trawlkit.optimize.evaluate import (
@@ -34,7 +35,7 @@ def _objective_key(name: str) -> str:
     key = OBJECTIVE_ALIASES.get(name, name)
     if key not in OBJECTIVES:
         valid = sorted(set(OBJECTIVE_ALIASES) | set(OBJECTIVES))
-        raise ValueError(f"objetivo desconocido: {name!r} (use {valid})")
+        raise ValueError(t("objetivo desconocido: {name!r} (use {names})", name=name, names=valid))
     return key
 
 
@@ -133,7 +134,7 @@ def grid_search(
 ) -> GridResult:
     """Evalúa la malla ``s_values × v_values`` con una corrida del motor por escala."""
     if not len(s_values) or not len(v_values):
-        raise ValueError("s_values y v_values no pueden estar vacíos")
+        raise ValueError(t("s_values y v_values no pueden estar vacíos"))
     ev = _make_evaluator(base_case, door_id, door_angle, propeller, limits, compat)
     return _grid(ev, s_values, v_values)
 
@@ -153,7 +154,7 @@ def pareto_front(
     """
     keys = [_objective_key(o) for o in objectives]
     if not keys:
-        raise ValueError("hace falta al menos un objetivo")
+        raise ValueError(t("hace falta al menos un objetivo"))
     pts = [e for e in evaluations if e.feasible or not feasible_only]
     if not pts:
         return []
@@ -294,12 +295,12 @@ def optimise(
     key = _objective_key(objective)
     (s_lo, s_hi), (v_lo, v_hi) = bounds
     if not 0 < s_lo < s_hi:
-        raise ValueError("bounds de s: se requiere 0 < s_min < s_max")
+        raise ValueError(t("bounds de s: se requiere 0 < s_min < s_max"))
     if not 0 < v_lo < v_hi:
-        raise ValueError("bounds de v: se requiere 0 < v_min < v_max")
+        raise ValueError(t("bounds de v: se requiere 0 < v_min < v_max"))
     n_s, n_v = grid
     if n_s < 2 or n_v < 2:
-        raise ValueError("la malla necesita al menos 2 × 2 puntos")
+        raise ValueError(t("la malla necesita al menos 2 × 2 puntos"))
     base_limits = limits or Limits(margin=margin)
     lim = dataclasses.replace(base_limits, v_min_kn=float(v_lo), v_max_kn=float(v_hi))
     ev = _make_evaluator(base_case, door_id, door_angle, propeller, lim, compat, S_STEP)
@@ -325,7 +326,7 @@ def optimise(
             from scipy.optimize import differential_evolution
         except ImportError as exc:  # pragma: no cover - depende del entorno
             raise RuntimeError(
-                'la optimización necesita scipy: pip install "trawlkit[optimize]"'
+                t('la optimización necesita scipy: pip install "trawlkit[optimize]"')
             ) from exc
         scale = abs(best.objective(key)) or 1.0
 

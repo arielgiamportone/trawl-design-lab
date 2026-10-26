@@ -11,6 +11,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
+from trawlkit.i18n import t
 from trawlkit.io.schema import NetSpec
 from trawlkit.model import DesignCase, DesignResult, run
 from trawlkit.sim.mesh import NetModel, Rigging, build_model, interpolate_shape
@@ -343,7 +344,7 @@ def _resolve(
             case_or_spec,
         )
     if door_spread_m is None:
-        raise ValueError("con una NetSpec sola hay que indicar door_spread_m")
+        raise ValueError(t("con una NetSpec sola hay que indicar door_spread_m"))
     return case_or_spec, rigging_from_spec(case_or_spec, door_spread_m), None
 
 
@@ -677,8 +678,11 @@ def simulate(
     water_kn = speed_kn - current
     if water_kn < 0.2:
         raise ValueError(
-            f"velocidad relativa al agua muy baja ({water_kn:.2f} kn): la corriente a favor "
-            "no puede igualar a la velocidad de arrastre"
+            t(
+                "velocidad relativa al agua muy baja ({v:.2f} kn): la corriente a favor "
+                "no puede igualar a la velocidad de arrastre",
+                v=water_kn,
+            )
         )
     p = Params(
         speed_ms=water_kn * KNOT_MS,
@@ -779,7 +783,7 @@ def sweep(
     else:
         dps = [float(d) for d in door_spread_m]
         if len(dps) != len(speeds):
-            raise ValueError("door_spread_m debe tener un valor por velocidad")
+            raise ValueError(t("door_spread_m debe tener un valor por velocidad"))
     out: list[SimResult] = []
     prev: FloatArray | None = None
     model: NetModel | None = None
@@ -845,7 +849,13 @@ def explore(
     nodos), así que la forma puede interpolarse entre ellos para animarla.
     """
     if variable not in EXPLORE_VARIABLES:
-        raise ValueError(f"variable desconocida: {variable!r} (use {', '.join(EXPLORE_VARIABLES)})")
+        raise ValueError(
+            t(
+                "variable desconocida: {v!r} (use {names})",
+                v=variable,
+                names=", ".join(EXPLORE_VARIABLES),
+            )
+        )
     if isinstance(case, DesignCase):
         case = run(case)
     base = scenario or Scenario()

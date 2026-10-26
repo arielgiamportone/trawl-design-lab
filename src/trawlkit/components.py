@@ -32,6 +32,7 @@ from typing import Annotated, Any, Literal
 import yaml
 from pydantic import Field, TypeAdapter
 
+from trawlkit.i18n import N_, t
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.io.schema import (
     Door,
@@ -49,14 +50,14 @@ COMPONENTS_DIR = DATA_DIR / "components"
 ComponentKind = Literal["twine", "wire", "rope", "door", "float", "chain"]
 KINDS: tuple[ComponentKind, ...] = ("twine", "wire", "rope", "door", "float", "chain")
 
-#: Nombre de cada tipo en castellano.
+#: Nombre de cada tipo en castellano (se traduce con ``t`` al usarlo).
 KIND_LABEL: dict[str, str] = {
-    "twine": "Paño e hilo",
-    "wire": "Cable de acero",
-    "rope": "Cabo",
-    "door": "Portón",
-    "float": "Boya",
-    "chain": "Cadena",
+    "twine": N_("Paño e hilo"),
+    "wire": N_("Cable de acero"),
+    "rope": N_("Cabo"),
+    "door": N_("Portón"),
+    "float": N_("Boya"),
+    "chain": N_("Cadena"),
 }
 
 Status = Literal["published", "user", "draft"]
@@ -294,7 +295,13 @@ def load_components(
     ``user`` admitido.
     """
     if kind not in MODELS:
-        raise KeyError(f"tipo de componente desconocido: {kind!r} (use {', '.join(KINDS)})")
+        raise KeyError(
+            t(
+                "tipo de componente desconocido: {kind!r} (use {kinds})",
+                kind=kind,
+                kinds=", ".join(KINDS),
+            )
+        )
     enabled = _USER_ITEMS.get()
     allowed = set(statuses) | ({"user"} if enabled else set())
     extra = (*extra, *enabled)
@@ -324,7 +331,7 @@ def get_component(kind: str, item_id: str) -> ComponentBase:
     for item in load_components(kind, statuses=("published", "draft", "user")):
         if item.id == item_id:
             return item
-    raise KeyError(f"componente desconocido: {kind}/{item_id}")
+    raise KeyError(t("componente desconocido: {kind}/{id}", kind=kind, id=item_id))
 
 
 def generic_for(item: ComponentBase) -> ComponentBase | None:
@@ -382,7 +389,18 @@ def _range(
     lo, hi = rng
     if lo <= value <= hi:
         return None
-    return _issue(item, "warning", code, f"{what} = {value:.4g} fuera del rango {lo:g}–{hi:g}")
+    return _issue(
+        item,
+        "warning",
+        code,
+        t(
+            "{what} = {value:.4g} fuera del rango {lo:g}–{hi:g}",
+            what=what,
+            value=value,
+            lo=lo,
+            hi=hi,
+        ),
+    )
 
 
 def check(item: ComponentBase) -> list[Issue]:
@@ -391,15 +409,15 @@ def check(item: ComponentBase) -> list[Issue]:
     if isinstance(item, WireItem):
         d2 = item.diameter_mm**2
         issues.append(
-            _range(item, item.weight_kg_per_m / d2, WIRE_WEIGHT_K, "weight", "kg/m por mm²")
+            _range(item, item.weight_kg_per_m / d2, WIRE_WEIGHT_K, "weight", t("kg/m por mm²"))
         )
-        issues.append(_range(item, item.breaking_load_t / d2, WIRE_MBL_K, "mbl", "t por mm²"))
+        issues.append(_range(item, item.breaking_load_t / d2, WIRE_MBL_K, "mbl", t("t por mm²")))
     elif isinstance(item, RopeItem):
         mat = item.material.upper()
         if mat in DENSITY_KG_M3:
             area = math.pi / 4.0 * (item.diameter_mm / 1000.0) ** 2
             fill = item.weight_kg_per_m / (area * DENSITY_KG_M3[mat])
-            issues.append(_range(item, fill, ROPE_FILL, "weight", "llenado del cabo"))
+            issues.append(_range(item, fill, ROPE_FILL, "weight", t("llenado del cabo")))
     elif isinstance(item, TwineItem):
         if item.rtex and item.runnage_m_per_kg:
             expect = 1e6 / item.rtex
@@ -409,8 +427,13 @@ def check(item: ComponentBase) -> list[Issue]:
                         item,
                         "warning",
                         "runnage",
-                        f"rendimiento {item.runnage_m_per_kg:g} m/kg y Rtex {item.rtex:g} no "
-                        f"concuerdan (10⁶/Rtex = {expect:.0f} m/kg)",
+                        t(
+                            "rendimiento {runnage:g} m/kg y Rtex {rtex:g} no "
+                            "concuerdan (10⁶/Rtex = {expect:.0f} m/kg)",
+                            runnage=item.runnage_m_per_kg,
+                            rtex=item.rtex,
+                            expect=expect,
+                        ),
                     )
                 )
         rtex = item.rtex or (1e6 / item.runnage_m_per_kg if item.runnage_m_per_kg else None)
@@ -421,7 +444,7 @@ def check(item: ComponentBase) -> list[Issue]:
                     item.breaking_load_kgf * 1000.0 / rtex,
                     TWINE_TENACITY,
                     "tenacity",
-                    "tenacidad [gf/tex]",
+                    t("tenacidad [gf/tex]"),
                 )
             )
         if (
@@ -434,7 +457,7 @@ def check(item: ComponentBase) -> list[Issue]:
                     item,
                     "warning",
                     "knot",
-                    "la rotura con nudo supera en más de 50 % a la rotura sin nudo",
+                    t("la rotura con nudo supera en más de 50 % a la rotura sin nudo"),
                 )
             )
     elif isinstance(item, ChainItem):
@@ -444,13 +467,15 @@ def check(item: ComponentBase) -> list[Issue]:
                 item.weight_kg_per_m / item.link_diameter_mm**2,
                 CHAIN_WEIGHT_K,
                 "weight",
-                "kg/m por mm²",
+                t("kg/m por mm²"),
             )
         )
     elif isinstance(item, FloatItem):
         sphere = math.pi / 6.0 * (item.diameter_mm / 10.0) ** 3 / 1000.0 * 1.025
         issues.append(
-            _range(item, item.buoyancy_kgf / sphere, FLOAT_FRACTION, "buoyancy", "flotación/esfera")
+            _range(
+                item, item.buoyancy_kgf / sphere, FLOAT_FRACTION, "buoyancy", t("flotación/esfera")
+            )
         )
     elif isinstance(item, DoorItem):
         shape = item.area_m2 / (item.length_m * item.height_m)
@@ -460,8 +485,12 @@ def check(item: ComponentBase) -> list[Issue]:
                     item,
                     "warning",
                     "area",
-                    f"superficie {item.area_m2:g} m² y medidas {item.length_m:g} × "
-                    f"{item.height_m:g} m no concuerdan",
+                    t(
+                        "superficie {area:g} m² y medidas {length:g} × {height:g} m no concuerdan",
+                        area=item.area_m2,
+                        length=item.length_m,
+                        height=item.height_m,
+                    ),
                 )
             )
         if item.weight_air_kg:
@@ -470,7 +499,7 @@ def check(item: ComponentBase) -> list[Issue]:
             )
         usable = [c for c in item.coefficients if c.cl is not None and c.cd is not None]
         if not usable:
-            issues.append(_issue(item, "error", "polar", "sin coeficientes CL/CD"))
+            issues.append(_issue(item, "error", "polar", t("sin coeficientes CL/CD")))
         for c in usable:
             assert c.cl is not None and c.cd is not None
             if not (0.0 < c.cl <= 2.6 and 0.0 < c.cd <= 1.6):
@@ -479,13 +508,21 @@ def check(item: ComponentBase) -> list[Issue]:
                         item,
                         "warning",
                         "polar",
-                        f"CL {c.cl:g} / CD {c.cd:g} a {c.angle_deg:g}° fuera de lo plausible",
+                        t(
+                            "CL {cl:g} / CD {cd:g} a {angle:g}° fuera de lo plausible",
+                            cl=c.cl,
+                            cd=c.cd,
+                            angle=c.angle_deg,
+                        ),
                     )
                 )
     if item.generic_of is not None and generic_for(item) is None:
         issues.append(
             _issue(
-                item, "warning", "generic", f"genérico equivalente desconocido: {item.generic_of}"
+                item,
+                "warning",
+                "generic",
+                t("genérico equivalente desconocido: {id}", id=item.generic_of),
             )
         )
     return [i for i in issues if i is not None]
@@ -515,7 +552,9 @@ def apply_twine(spec: NetSpec, twine: TwineItem, *, codend: bool = False) -> Net
                 }
             )
         )
-    note = f"Paño reemplazado por {twine.name} ({twine.id})" + ("" if codend else ", salvo el copo")
+    note = t("Paño reemplazado por {name} ({id})", name=twine.name, id=twine.id) + (
+        "" if codend else t(", salvo el copo")
+    )
     return spec.model_copy(update={"panels": panels, "notes": [*spec.notes, note]})
 
 

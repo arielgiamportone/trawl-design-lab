@@ -10,6 +10,8 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from trawlkit.i18n import t
+
 _STYLE_RE = re.compile(r"(<style[^>]*>)(.*?)(</style>)", re.DOTALL | re.IGNORECASE)
 _DEF_RE = re.compile(r"--([\w-]+)\s*:\s*([^;}]+)")
 _VAR_RE = re.compile(r"var\(\s*--([\w-]+)\s*(?:,\s*([^()]*))?\)")
@@ -64,13 +66,16 @@ def html_to_pdf(html: str, path: str | Path) -> Path:
         from weasyprint import HTML
     except ImportError as exc:  # pragma: no cover - depende del entorno
         raise RuntimeError(
-            "La salida PDF necesita WeasyPrint: pip install trawlkit[report]"
+            t("La salida PDF necesita WeasyPrint: pip install trawlkit[report]")
         ) from exc
     except OSError as exc:  # pragma: no cover - faltan las bibliotecas de Pango
         raise RuntimeError(
-            "WeasyPrint no pudo cargar sus bibliotecas del sistema (Pango); "
-            "ver https://doc.courtbouillon.org/weasyprint/stable/first_steps.html. "
-            f"Detalle: {exc}"
+            t(
+                "WeasyPrint no pudo cargar sus bibliotecas del sistema (Pango); "
+                "ver https://doc.courtbouillon.org/weasyprint/stable/first_steps.html. "
+                "Detalle: {exc}",
+                exc=exc,
+            )
         ) from exc
     out = Path(path)
     out.parent.mkdir(parents=True, exist_ok=True)

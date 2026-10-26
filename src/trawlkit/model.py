@@ -51,6 +51,7 @@ from trawlkit.compat import Compat
 from trawlkit.dimensions import NetDimensions
 from trawlkit.drag import DragAverage, DragInputs, DragTable
 from trawlkit.excel import excel_round
+from trawlkit.i18n import t
 from trawlkit.io import Door, NetSpec, PropellerType, Vessel, load_catalogue
 from trawlkit.net import NetGeometry
 from trawlkit.performance import SpeedWindow, speed_window
@@ -152,7 +153,7 @@ class Pair(Generic[T]):
             return self.std
         if name == "mod":
             return self.mod
-        raise ValueError(f"variante desconocida: {name!r} (use 'std' o 'mod')")
+        raise ValueError(t("variante desconocida: {name!r} (use 'std' o 'mod')", name=name))
 
     def to_dict(self, include_mod: bool | None = None) -> dict[str, Any]:
         """Representación serializable ``{"std": …, "mod": …}``.
@@ -284,7 +285,7 @@ class DesignCase:
         """Normaliza y valida las entradas."""
         speeds = tuple(float(v) for v in self.speeds_kn)
         if not speeds or any(v <= 0 for v in speeds) or any(np.diff(speeds) <= 0):
-            raise ValueError("speeds_kn debe ser un vector no vacío, positivo y creciente")
+            raise ValueError(t("speeds_kn debe ser un vector no vacío, positivo y creciente"))
         object.__setattr__(self, "speeds_kn", speeds)
         object.__setattr__(self, "class_vessels", tuple(self.class_vessels))
         object.__setattr__(self, "compat", Compat(self.compat))
@@ -303,21 +304,25 @@ class DesignCase:
             if self.net_modified is not None:
                 object.__setattr__(self, "net_modified", apply_twine(self.net_modified, twine))
         if self.working_depth_m <= 0:
-            raise ValueError("hace falta la profundidad de trabajo (depth_m o net.species.depth_m)")
+            raise ValueError(
+                t("hace falta la profundidad de trabajo (depth_m o net.species.depth_m)")
+            )
         if self.gallows_spacing_m <= 0:
-            raise ValueError("hace falta la distancia entre pastecas (gallows_m o vessel.beam_m)")
+            raise ValueError(
+                t("hace falta la distancia entre pastecas (gallows_m o vessel.beam_m)")
+            )
         if self.hull_depth_m <= 0:
-            raise ValueError("hace falta el puntal (vessel_depth_m o vessel.depth_m)")
+            raise ValueError(t("hace falta el puntal (vessel_depth_m o vessel.depth_m)"))
         if not 0.0 < self.rob_share < 1.0:
-            raise ValueError("rob_share debe estar entre 0 y 1")
+            raise ValueError(t("rob_share debe estar entre 0 y 1"))
         if self.door_spread_rule not in ("excel", "fridman"):
-            raise ValueError("door_spread_rule debe ser 'excel' o 'fridman'")
+            raise ValueError(t("door_spread_rule debe ser 'excel' o 'fridman'"))
         if self.rig_kind not in ("otter", "pair"):
-            raise ValueError(f"rig debe ser 'otter' o 'pair', no {self.rig_kind!r}")
+            raise ValueError(t("rig debe ser 'otter' o 'pair', no {rig!r}", rig=self.rig_kind))
         if self.pair_wing_spread_m is not None and self.pair_wing_spread_m <= 0:
-            raise ValueError("pair_wing_spread_m debe ser positivo")
+            raise ValueError(t("pair_wing_spread_m debe ser positivo"))
         if self.door.area_m2 is None or self.door.length_m is None:
-            raise ValueError(f"el portón {self.door.id!r} necesita area_m2 y length_m")
+            raise ValueError(t("el portón {door!r} necesita area_m2 y length_m", door=self.door.id))
         try:
             rigging.door_polar(
                 self.door,
@@ -328,13 +333,16 @@ class DesignCase:
             raise ValueError(str(exc)) from exc
         if self.ft_propeller not in power_mod.FRIDMAN_KF:
             raise ValueError(
-                f"ft_propeller {self.ft_propeller.value!r} no tiene KF de Fridman tabulado"
+                t(
+                    "ft_propeller {prop!r} no tiene KF de Fridman tabulado",
+                    prop=self.ft_propeller.value,
+                )
             )
         if self.warp_design_speed_kn not in speeds:
-            raise ValueError("warp_design_speed_kn debe pertenecer a speeds_kn")
+            raise ValueError(t("warp_design_speed_kn debe pertenecer a speeds_kn"))
         for v in (self.ballast_min_speed_kn, self.ballast_max_speed_kn):
             if v not in speeds:
-                raise ValueError("ballast_min/max_speed_kn deben pertenecer a speeds_kn")
+                raise ValueError(t("ballast_min/max_speed_kn deben pertenecer a speeds_kn"))
         if self.seabed is not None:
             try:
                 rigging.seabed(self.seabed)
@@ -405,7 +413,7 @@ class DesignCase:
         """Posición de una velocidad en ``speeds_kn``."""
         matches = np.flatnonzero(np.isclose(self.speeds, speed_kn))
         if matches.size == 0:
-            raise ValueError(f"velocidad {speed_kn} kn no está en speeds_kn")
+            raise ValueError(t("velocidad {v} kn no está en speeds_kn", v=speed_kn))
         return int(matches[0])
 
     def to_dict(self) -> dict[str, Any]:
@@ -1120,8 +1128,12 @@ def _stage_floats(
     ffz = rigging.fridman_flotation_total_kgf(*class_avg.values(), *class_prado.values())  # O261
     if case.compat is Compat.EXCEL and first_block.id != v.id:
         notes.append(
-            "flotation_rounding_inconsistent: la máscara de Flot!M43:M50 se aplica al primer "
-            f"bloque de la hoja ({first_block.id}), no al buque de diseño ({v.id})"
+            t(
+                "flotation_rounding_inconsistent: la máscara de Flot!M43:M50 se aplica al primer "
+                "bloque de la hoja ({first}), no al buque de diseño ({vessel})",
+                first=first_block.id,
+                vessel=v.id,
+            )
         )
 
     design = class_avg[v.id]  # F70 = N43
@@ -1130,19 +1142,33 @@ def _stage_floats(
     count = case.float_count
     if count is None and case.float_id is not None:
         count = int(counts[0])
-        notes.append(f"float_count = {count} boyas {case.float_id} (catálogo de componentes)")
+        notes.append(
+            t(
+                "float_count = {count} boyas {id} (catálogo de componentes)",
+                count=count,
+                id=case.float_id,
+            )
+        )
     if count is None and case.net.floats is not None:
         count = int(case.net.floats.count)
-        notes.append(f"float_count tomado de la spec ({count} boyas)")
+        notes.append(t("float_count tomado de la spec ({count} boyas)", count=count))
     if count is None:
         target = (
             DEFAULT_FLOAT_DIAMETER_MM if case.float_diameter_mm is None else case.float_diameter_mm
         )
         idx = [i for i, d in enumerate(diameters) if d == target]
         if not idx:
-            raise ValueError(f"no hay boyas de {target} mm en el catálogo; fije float_count")
+            raise ValueError(
+                t("no hay boyas de {target} mm en el catálogo; fije float_count", target=target)
+            )
         count = int(counts[idx[-1]])
-        notes.append(f"float_count = {count} boyas de {target:g} mm del catálogo (Flot!F72:F82)")
+        notes.append(
+            t(
+                "float_count = {count} boyas de {target:g} mm del catálogo (Flot!F72:F82)",
+                count=count,
+                target=target,
+            )
+        )
     if case.float_diameter_mm is not None:
         diameter = float(case.float_diameter_mm)
     elif case.float_id is not None:
@@ -1241,8 +1267,13 @@ def _stage_spread(
     ratio_table = rigging.catenary_ratio(dpa_over_l)
     if ratio_table != case.catenary_ratio:
         notes.append(
-            f"catenary_ratio_hardcoded: fL/L = {case.catenary_ratio} (Mec!O266) frente a "
-            f"{ratio_table} de la tabla para DPA/L = {dpa_over_l:.2f}; se conserva el valor fijo"
+            t(
+                "catenary_ratio_hardcoded: fL/L = {fixed} (Mec!O266) frente a "
+                "{table} de la tabla para DPA/L = {ratio:.2f}; se conserva el valor fijo",
+                fixed=case.catenary_ratio,
+                table=ratio_table,
+                ratio=dpa_over_l,
+            )
         )
     circ = d_std.max_circumference_m  # F243
     body = next(
@@ -1527,11 +1558,14 @@ def run(case: DesignCase) -> DesignResult:
     notes: list[str] = []
     if case.net_modified is None:
         notes.append(
-            "net_modified no indicado: la columna modificada (G) usa la misma red que la estándar"
+            t(
+                "net_modified no indicado: la columna modificada (G) usa la misma red que la "
+                "estándar"
+            )
         )
     if case.compat is Compat.EXCEL:
         notes.append(
-            "Compat.EXCEL: se reproducen las erratas registradas en trawlkit.compat.ERRATA"
+            t("Compat.EXCEL: se reproducen las erratas registradas en trawlkit.compat.ERRATA")
         )
     notes.extend(f"catalog: {a}" for a in case.assumptions)
     geometry = _stage_geometry(case)
@@ -1556,41 +1590,60 @@ def run(case: DesignCase) -> DesignResult:
     performance = _stage_performance(case, power, warps, ballast)
     if case.compat is Compat.CORRECTED:
         notes.append(
-            "warp_total_omits_doors: la resistencia total incluye ROB de los dos portones "
-            "(Rem!H118 + 2·D190)"
+            t(
+                "warp_total_omits_doors: la resistencia total incluye ROB de los dos portones "
+                "(Rem!H118 + 2·D190)"
+            )
         )
         notes.append(
-            f"warp_cd_horizontal_angle: CD del cable {warps.cd:.4f} con α = acos(cos δ1·cos δ2) = "
-            f"{warps.cd_angle_deg:.2f}° interpolado (Rem!E106 usa δ2 → 0.02)"
+            t(
+                "warp_cd_horizontal_angle: CD del cable {cd:.4f} con α = acos(cos δ1·cos δ2) = "
+                "{angle:.2f}° interpolado (Rem!E106 usa δ2 → 0.02)",
+                cd=warps.cd,
+                angle=warps.cd_angle_deg,
+            )
         )
     if case.net.family == "pelagic":
         notes.append(
-            "pelagic_not_applicable: red pelágica; el lastre de Koyama, el rozamiento del burlón "
-            "con el fondo y los ratios de Nomura están pensados para redes de fondo y no se "
-            "aplican (el rozamiento con el fondo vale 0)"
+            t(
+                "pelagic_not_applicable: red pelágica; el lastre de Koyama, el rozamiento del "
+                "burlón con el fondo y los ratios de Nomura están pensados para redes de fondo y "
+                "no se aplican (el rozamiento con el fondo vale 0)"
+            )
         )
     if case.is_pair:
         notes.append(
-            f"pair_trawl: arrastre de pareja sin portones; puntas de ala a "
-            f"{pair_wing_spread_m(case):.1f} m"
+            t(
+                "pair_trawl: arrastre de pareja sin portones; puntas de ala a {wings:.1f} m",
+                wings=pair_wing_spread_m(case),
+            )
             + (
-                " (supuesto: ½ lima; cambiar con pair_wing_spread_m)"
+                t(" (supuesto: ½ lima; cambiar con pair_wing_spread_m)")
                 if case.pair_wing_spread_m is None
                 else ""
             )
-            + f", puntos de remolque a {doors.spread_m:.1f} m; el tiro disponible es el de dos "
-            "buques"
+            + t(
+                ", puntos de remolque a {tow:.1f} m; el tiro disponible es el de dos buques",
+                tow=doors.spread_m,
+            )
         )
     if case.door_spread_rule == "fridman" and not case.is_pair:
         notes.append(
-            f"door_spread_fridman: separación de portones {doors.spread_m:.1f} m de la DPA de "
-            "Fridman con el portón del caso (la regla al metro de Port!E13 vale para la A-3)"
+            t(
+                "door_spread_fridman: separación de portones {spread:.1f} m de la DPA de "
+                "Fridman con el portón del caso (la regla al metro de Port!E13 vale para la A-3)",
+                spread=doors.spread_m,
+            )
         )
     if not warps.selection.satisfies_breaking_load:
         notes.append(
-            f"warp_undersized: cable de {warps.selection.diameter_mm:g} mm "
-            f"({warps.selection.breaking_load_t} t) por debajo de la rotura mínima "
-            f"{warps.loads.min_breaking_load_kgf / 1000:.2f} t"
+            t(
+                "warp_undersized: cable de {d:g} mm ({mbl} t) por debajo de la rotura mínima "
+                "{need:.2f} t",
+                d=warps.selection.diameter_mm,
+                mbl=warps.selection.breaking_load_t,
+                need=warps.loads.min_breaking_load_kgf / 1000,
+            )
         )
     return DesignResult(
         case=case,

@@ -24,6 +24,24 @@ exercises:
       por fila, no ponderado por la superficie de cada paño.
     formats: {suma_d: 2}
     refs: [prado1990]
+    en:
+      title: Filtration index d/l
+      statement: >
+        A net has three rows of netting panels: wings of {m1} mm with {d1} mm twine, body of {m2}
+        mm with {d2} mm twine and codend of {m3} mm with {d3} mm twine. Calculate the filtration
+        index of the net as Σd/Σl (sum of twine diameters over sum of mesh sizes).
+      vars:
+        m1: Wing mesh size
+        d1: Wing twine
+        m2: Body mesh size
+        d2: Body twine
+        m3: Codend mesh size
+        d3: Codend twine
+      answers:
+        dl: Index d/l
+      explanation: >
+        Σd = {suma_d} mm and Σl = {suma_l} mm, so d/l = {suma_d}/{suma_l} = {dl}. It is an average
+        per row, not weighted by the area of each panel.
 
   - id: mecanica.superficie_solida
     chapter: 12_mecanica_red
@@ -48,6 +66,24 @@ exercises:
       L = {n}·{malla}/1000 = {largo_m} m; Ss = {largo_m}·{d}·({t1} + {t2})/1000·{paneles} =
       {ss_m2} m².
     refs: [prado1990]
+    en:
+      title: Solid area of a netting panel
+      statement: >
+        Calculate the solid area (the area taken up by the twine) of {paneles} body panels with a
+        {malla} mm mesh, {d} mm twine, T1 = {t1}, T2 = {t2} and N = {n} meshes, with Ss = L·d·(T1 +
+        T2)/1000 per panel, where L = N·m_L/1000 is the length of the panel.
+      vars:
+        paneles: Identical panels
+        malla: Mesh size
+        d: Twine diameter
+        t1: T1
+        t2: T2
+        n: N
+      answers:
+        ss_m2: Solid area
+      explanation: >
+        L = {n}·{malla}/1000 = {largo_m} m; Ss = {largo_m}·{d}·({t1} + {t2})/1000·{paneles} =
+        {ss_m2} m².
 
   - id: mecanica.solidez
     chapter: 12_mecanica_red
@@ -74,6 +110,26 @@ exercises:
       Ss = {ss_m2} m², St = {st_m2} m²; solidez = {solidez} y filtrado = {filtrado}. Un hilo más
       grueso o una malla más chica suben la solidez y con ella la resistencia.
     refs: [perezaguila2010]
+    en:
+      title: Solidity and filtering coefficient
+      statement: >
+        For a netting panel with a {malla} mm mesh, {d} mm twine, T1 = {t1}, T2 = {t2}, N = {n} and
+        U1 = {u1}, calculate the solid area, the working area 0.5·U1·U2·m_L²·(T1 + T2)·N, the
+        solidity Ss/St and the filtering coefficient 1 − Ss/St.
+      vars:
+        malla: Mesh size
+        d: Twine
+        t1: T1
+        t2: T2
+        n: N
+        u1: U1
+      answers:
+        st_m2: Working area
+        solidez: Solidity
+        filtrado: Filtering coefficient
+      explanation: >
+        Ss = {ss_m2} m², St = {st_m2} m²; solidity = {solidez} and filtering = {filtrado}. Thicker
+        twine or a smaller mesh raise the solidity and, with it, the drag.
 
   - id: dimensiones.lima_por_piezas
     chapter: 13_dimensiones
@@ -109,6 +165,34 @@ exercises:
       {lima_m} m.
     formats: {ala_corr_m: 3, bocana_corr_m: 2}
     refs: [martini]
+    en:
+      title: Headrope length by pieces (Martini)
+      statement: >
+        The wing piece of the headrope is the stretched depth of the wing tip ({n_punta} meshes)
+        and of the wing ({n_ala} meshes) of {malla_ala} mm. The bosom is half of what the edge of
+        the square ({t_square} meshes of {malla_square} mm) exceeds the two wing edges ({t_ala}
+        meshes of {malla_ala} mm each). With hanging ratios of {e_ala} on the wings and {e_bocana}
+        on the bosom, calculate the length of the headrope.
+      vars:
+        n_punta: Wing tip depth
+        n_ala: Wing depth
+        malla_ala: Wing mesh size
+        t_square: Square edge
+        malla_square: Square mesh size
+        t_ala: Wing joining edge
+        e_ala: Wing hanging ratio
+        e_bocana: Bosom hanging ratio
+      answers:
+        ala_m: Wing piece
+        bocana_m: Bosom
+        lima_m: Headrope
+      hints:
+        - Headrope = 2·E_wing·wing + E_bosom·bosom.
+        - If the bosom comes out negative, the square is narrower than the wings and the design does not close.
+      explanation: >
+        Wing = ({n_punta} + {n_ala})·{malla_ala}/1000 = {ala_m} m; bosom =
+        ({t_square}·{malla_square} − 2·{t_ala}·{malla_ala})/2000 = {bocana_m} m. Headrope =
+        2·{ala_corr_m} + {bocana_corr_m} = {lima_m} m.
 
   - id: dimensiones.circunferencia
     chapter: 13_dimensiones
@@ -133,3 +217,21 @@ exercises:
       FC = ({t_dorso} + {t_vientre})·{malla}/1000 = {fc_m} m; Suzuki: 4/90·{fc_m} = {av_suzuki_m} m;
       Prado: {pct} %·{fc_m} = {av_pct_m} m.
     refs: [suzuki1982, prado1990]
+    en:
+      title: Fishing circle and estimated vertical opening
+      statement: >
+        The top and belly panels have {t_dorso} and {t_vientre} meshes of {malla} mm at the mouth.
+        Calculate the fishing circle, Suzuki's vertical opening (4/90 of the fishing circle) and
+        Prado's as {pct} % of the fishing circle.
+      vars:
+        t_dorso: Top panel meshes
+        t_vientre: Belly meshes
+        malla: Mesh size
+        pct: Prado's percentage
+      answers:
+        fc_m: Fishing circle
+        av_suzuki_m: Vertical opening (Suzuki)
+        av_pct_m: Vertical opening (Prado)
+      explanation: >
+        FC = ({t_dorso} + {t_vientre})·{malla}/1000 = {fc_m} m; Suzuki: 4/90·{fc_m} = {av_suzuki_m}
+        m; Prado: {pct} %·{fc_m} = {av_pct_m} m.

@@ -28,6 +28,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
+from trawlkit.i18n import N_, t
 from trawlkit.io.schema import NetSpec, Panel
 
 Level = Literal["error", "warning"]
@@ -64,6 +65,10 @@ class Issue:
         }
 
 
+#: Nombre de cada plano en los mensajes.
+_PLANE_LABEL = {"upper": N_("dorso"), "lower": N_("vientre"), "side": N_("costado")}
+
+
 def _m(panel: Panel) -> float:
     return panel.mesh_mm / 1000.0
 
@@ -82,9 +87,21 @@ def _seam(prev: Panel, nxt: Panel, where: str) -> Issue | None:
     return Issue(
         level,
         "seam",
-        f"{where}: el borde de bolsa de {prev.id} ({prev.meshes_bottom} × {prev.mesh_mm:g} mm = "
-        f"{a:.2f} m) no empalma con el borde de boca de {nxt.id} ({nxt.meshes_top} × "
-        f"{nxt.mesh_mm:g} mm = {b:.2f} m): {100 * d:.0f} % de diferencia",
+        t(
+            "{where}: el borde de bolsa de {prev} ({prev_n} × {prev_mm:g} mm = "
+            "{a:.2f} m) no empalma con el borde de boca de {nxt} ({nxt_n} × "
+            "{nxt_mm:g} mm = {b:.2f} m): {pct:.0f} % de diferencia",
+            where=where,
+            prev=prev.id,
+            prev_n=prev.meshes_bottom,
+            prev_mm=prev.mesh_mm,
+            a=a,
+            nxt=nxt.id,
+            nxt_n=nxt.meshes_top,
+            nxt_mm=nxt.mesh_mm,
+            b=b,
+            pct=100 * d,
+        ),
         (prev.id, nxt.id),
     )
 
@@ -116,9 +133,17 @@ def _cut_issue(panel: Panel, paired: bool) -> Issue | None:
     return Issue(
         "warning",
         "cut",
-        f"panel {panel.id}: el corte {cut} en {n} mallas de alto da un cambio de ancho de "
-        f"{best:.0f} mallas, pero el paño pasa de {panel.meshes_top} a {panel.meshes_bottom} "
-        f"({taper} mallas)",
+        t(
+            "panel {id}: el corte {cut} en {n} mallas de alto da un cambio de ancho de "
+            "{best:.0f} mallas, pero el paño pasa de {top} a {bottom} ({taper} mallas)",
+            id=panel.id,
+            cut=cut,
+            n=n,
+            best=best,
+            top=panel.meshes_top,
+            bottom=panel.meshes_bottom,
+            taper=taper,
+        ),
         (panel.id,),
     )
 
@@ -131,15 +156,18 @@ def check(spec: NetSpec) -> list[Issue]:
     for p in spec.panels:
         if p.hanging_ratio is None and str(p.mesh_orientation) != "square":
             issues.append(
-                Issue("error", "data", f"panel {p.id}: falta U1 (hanging_ratio)", (p.id,))
+                Issue("error", "data", t("panel {id}: falta U1 (hanging_ratio)", id=p.id), (p.id,))
             )
         if p.rtex is None and p.runnage_m_per_kg is None:
             issues.append(
                 Issue(
                     "warning",
                     "data",
-                    f"panel {p.id}: sin Rtex ni rendimiento; el peso del hilo se estima del "
-                    "diámetro",
+                    t(
+                        "panel {id}: sin Rtex ni rendimiento; el peso del hilo se estima del "
+                        "diámetro",
+                        id=p.id,
+                    ),
                     (p.id,),
                 )
             )
@@ -158,17 +186,17 @@ def check(spec: NetSpec) -> list[Issue]:
     try:
         lay = layout_net(spec, mode="schematic")
     except (ValueError, KeyError) as exc:
-        issues.append(Issue("error", "structure", f"no se puede disponer la red: {exc}"))
+        issues.append(Issue("error", "structure", t("no se puede disponer la red: {exc}", exc=exc)))
         return issues
     for plane in lay.planes:
         central = [s.panel for s in lay.central(plane)]
         wings = [s.panel for s in lay.side_chain(plane, "right")]
-        label = {"upper": "dorso", "lower": "vientre", "side": "costado"}.get(plane, plane)
+        label = t(_PLANE_LABEL.get(plane, plane))
         for a, b in zip(central, central[1:], strict=False):
             if (i := _seam(a, b, label)) is not None:
                 issues.append(i)
         for a, b in zip(wings, wings[1:], strict=False):
-            if (i := _seam(a, b, f"{label}, ala")) is not None:
+            if (i := _seam(a, b, t("{plane}, ala", plane=label))) is not None:
                 issues.append(i)
         if central and wings:
             first, wing = central[0], wings[-1]
@@ -178,14 +206,23 @@ def check(spec: NetSpec) -> list[Issue]:
                     Issue(
                         "error",
                         "mouth",
-                        f"{label}: las alas ({wing.id}, {wing.meshes_bottom} mallas) son más "
-                        f"anchas que el borde de boca de {first.id} ({first.meshes_top} mallas): "
-                        "no queda bocana",
+                        t(
+                            "{plane}: las alas ({wing}, {wing_n} mallas) son más "
+                            "anchas que el borde de boca de {first} ({first_n} mallas): "
+                            "no queda bocana",
+                            plane=label,
+                            wing=wing.id,
+                            wing_n=wing.meshes_bottom,
+                            first=first.id,
+                            first_n=first.meshes_top,
+                        ),
                         (first.id, wing.id),
                     )
                 )
         if not central:
-            issues.append(Issue("error", "structure", f"{label}: no hay paños centrales"))
+            issues.append(
+                Issue("error", "structure", t("{plane}: no hay paños centrales", plane=label))
+            )
     # Costados (redes de 4 paneles): estación por estación con el dorso, desde el copo.
     if "side" in lay.planes and "upper" in lay.planes:
         sides = [s.panel for s in lay.central("side")]
@@ -195,7 +232,11 @@ def check(spec: NetSpec) -> list[Issue]:
                 Issue(
                     "error",
                     "side",
-                    f"el costado tiene {len(sides)} estaciones y el dorso sólo {len(body)}",
+                    t(
+                        "el costado tiene {sides} estaciones y el dorso sólo {body}",
+                        sides=len(sides),
+                        body=len(body),
+                    ),
                     tuple(p.id for p in sides),
                 )
             )
@@ -205,8 +246,16 @@ def check(spec: NetSpec) -> list[Issue]:
                     Issue(
                         "error",
                         "side",
-                        f"costado {s_.id} ({s_.meshes_depth} mallas de {s_.mesh_mm:g} mm) no "
-                        f"cose con el dorso {b.id} ({b.meshes_depth} mallas de {b.mesh_mm:g} mm)",
+                        t(
+                            "costado {side} ({side_n} mallas de {side_mm:g} mm) no "
+                            "cose con el dorso {top} ({top_n} mallas de {top_mm:g} mm)",
+                            side=s_.id,
+                            side_n=s_.meshes_depth,
+                            side_mm=s_.mesh_mm,
+                            top=b.id,
+                            top_n=b.meshes_depth,
+                            top_mm=b.mesh_mm,
+                        ),
                         (s_.id, b.id),
                     )
                 )
@@ -223,8 +272,15 @@ def check(spec: NetSpec) -> list[Issue]:
                         Issue(
                             "warning",
                             "side_seam",
-                            f"franja {u.panel.id}/{lo.panel.id}: dorso {la:.2f} m y vientre "
-                            f"{lb:.2f} m de largo estirado ({100 * _rel(la, lb):.0f} %)",
+                            t(
+                                "franja {up}/{low}: dorso {la:.2f} m y vientre "
+                                "{lb:.2f} m de largo estirado ({pct:.0f} %)",
+                                up=u.panel.id,
+                                low=lo.panel.id,
+                                la=la,
+                                lb=lb,
+                                pct=100 * _rel(la, lb),
+                            ),
                             (u.panel.id, lo.panel.id),
                         )
                     )

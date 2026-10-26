@@ -46,6 +46,7 @@ from trawlkit.components import (
     load_components,
 )
 from trawlkit.cost import BillOfMaterials, bill_of_materials
+from trawlkit.i18n import N_, t
 from trawlkit.io import Door
 from trawlkit.io.schema import Section
 from trawlkit.model import DesignCase, _case_warps, component_filters, run
@@ -53,9 +54,9 @@ from trawlkit.optimize.evaluate import Constraint, Evaluation, Evaluator, Limits
 
 #: Objetivos del armado: nombre → descripción.
 COMPONENT_OBJECTIVES = {
-    "drag": "mínima resistencia total R_T",
-    "efficiency": "mínimo R_T/AH (máxima área barrida por litro)",
-    "cost": "mínimo costo de la lista de materiales",
+    "drag": N_("mínima resistencia total R_T"),
+    "efficiency": N_("mínimo R_T/AH (máxima área barrida por litro)"),
+    "cost": N_("mínimo costo de la lista de materiales"),
 }
 
 #: Diámetro de boya de referencia para elegir candidatas [mm] (el del libro, Flot!F70).
@@ -290,7 +291,13 @@ def optimise_components(
     ``doors``/``floats``/``twines`` fijan la lista de candidatos por id (``None`` = automática).
     """
     if objective not in COMPONENT_OBJECTIVES:
-        raise ValueError(f"objetivo desconocido: {objective!r} ({sorted(COMPONENT_OBJECTIVES)})")
+        raise ValueError(
+            t(
+                "objetivo desconocido: {name!r} ({names})",
+                name=objective,
+                names=sorted(COMPONENT_OBJECTIVES),
+            )
+        )
     lim = limits or Limits()
     v_base = float(base_case.warp_design_speed_kn if speed_kn is None else speed_kn)
     v_base = min(max(v_base, lim.v_min_kn), lim.v_max_kn)
@@ -304,7 +311,7 @@ def optimise_components(
     ref_kgf = _reference_twine_kgf(base_case)
     twine_list = _twine_candidates(base_case, twines, max_twines, ref_kgf)
     if ref_kgf is None and twines is None:
-        notes.append("hilo: el plano no da material y diámetro; se usa el del plano")
+        notes.append(t("hilo: el plano no da material y diámetro; se usa el del plano"))
 
     float_counts: dict[str | None, int | None] = {None: base_case.float_count}
     for fid in float_list:
@@ -321,7 +328,15 @@ def optimise_components(
             evaluator = Evaluator(case, limits=lim, warps=warps)
             ev = _at_best_speed(evaluator, objective, speed_kn)
         except (KeyError, ValueError) as exc:
-            notes.append(f"{door.id} / {fid} / {tid}: no se puede calcular ({exc})")
+            notes.append(
+                t(
+                    "{door} / {float} / {twine}: no se puede calcular ({exc})",
+                    door=door.id,
+                    float=fid,
+                    twine=tid,
+                    exc=exc,
+                )
+            )
             continue
         result = evaluator.curves(1.0).result
         extra: list[Constraint] = []
@@ -335,7 +350,7 @@ def optimise_components(
                         item.max_depth_m,
                         case.depth_m,
                         None,
-                        "profundidad máxima de la boya ≥ profundidad de pesca",
+                        t("profundidad máxima de la boya ≥ profundidad de pesca"),
                     )
                 )
         if tid is not None and ref_kgf is not None:
@@ -348,7 +363,10 @@ def optimise_components(
                         tw.breaking_load_kgf,
                         TWINE_STRENGTH_RATIO * ref_kgf,
                         None,
-                        f"rotura del hilo ≥ {TWINE_STRENGTH_RATIO:g}·la del hilo del plano",
+                        t(
+                            "rotura del hilo ≥ {k:g}·la del hilo del plano",
+                            k=TWINE_STRENGTH_RATIO,
+                        ),
                     )
                 )
         bom = bill_of_materials(result, prices, warp_id=ev.warp_id)
@@ -381,7 +399,7 @@ def optimise_components(
             )
         )
     if not assemblies:
-        raise ValueError("ningún armado del catálogo se puede calcular")
+        raise ValueError(t("ningún armado del catálogo se puede calcular"))
 
     def key(a: Assembly) -> tuple[float, ...]:
         ev = a.evaluation
@@ -402,7 +420,7 @@ def optimise_components(
         if gen is not None and gen not in alts:
             alts.append(gen)
     if not best.feasible:
-        notes.append("ningún armado cumple todas las restricciones; se da el de menor violación")
+        notes.append(t("ningún armado cumple todas las restricciones; se da el de menor violación"))
     return ComponentOptimization(
         best=best,
         alternatives=tuple(alts),

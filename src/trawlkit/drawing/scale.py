@@ -15,6 +15,7 @@ from typing import Literal
 from trawlkit.drawing import svg
 from trawlkit.drawing.layout import NetLayout, PanelShape, layout_net
 from trawlkit.drawing.sheet import SHEET_H, SHEET_W, fmt_es, spec_for, text_width
+from trawlkit.i18n import N_, t
 from trawlkit.model import DesignResult
 
 #: Resolución de la lámina: 96 px por pulgada → mm por unidad de usuario.
@@ -103,13 +104,13 @@ def _plane(
     # Anchos superior e inferior (paneles centrales y alas del lado anotado).
     # Un ancho superior igual al inferior del panel de arriba (misma cadena) se acota una vez;
     # el del primer panel central es la boca, acotada aparte.
-    annotated: list[PanelShape] = [t for t in shapes if t.side in ("center", side)]
+    annotated: list[PanelShape] = [sh for sh in shapes if sh.side in ("center", side)]
     central = layout.central(plane)
     for s in annotated:
         xt = (px.x(s.x_top[0]) + 1, px.x(s.x_top[1]) - 1)
         xb = (px.x(s.x_bottom[0]) + 1, px.x(s.x_bottom[1]) - 1)
         yt, yb = px.y(s.y_top), px.y(s.y_bottom)
-        chain = [t for t in annotated if t.side == s.side]
+        chain = [sh for sh in annotated if sh.side == s.side]
         i = chain.index(s)
         above = chain[i - 1] if i > 0 else None
         repeated = above is not None and math.isclose(above.width_bottom, s.width_top)
@@ -132,7 +133,9 @@ def _plane(
     for b in bands:
         out += _vdim(x_chain, px.y(b.y_top), px.y(b.y_bottom), fmt_es(b.y_bottom - b.y_top), left)
     total = layout.length(plane)
-    out += _vdim(x_total, px.y(ymin), px.y(ymax), f"Largo total {fmt_es(total)} m", left)
+    out += _vdim(
+        x_total, px.y(ymin), px.y(ymax), t("Largo total {length} m", length=fmt_es(total)), left
+    )
 
     # Ancho de boca: borde superior del primer panel central.
     if central:
@@ -141,13 +144,13 @@ def _plane(
         xa, xb2 = px.x(m.x_top[0]), px.x(m.x_top[1])
         out.append(svg.line((xa, y_cota), (xa, px.y(m.y_top)), cls="dim-ext"))
         out.append(svg.line((xb2, y_cota), (xb2, px.y(m.y_top)), cls="dim-ext"))
-        name = "Ancho" if plane == "side" else "Boca"
+        name = t("Ancho") if plane == "side" else t("Boca")
         out += _hdim(xa, xb2, y_cota, f"{name} {fmt_es(m.width_top)} m", above=True)
     return out
 
 
 def _scale_bar(x: float, y: float, k: float, metres: int = 5) -> list[svg.Element]:
-    out: list[svg.Element] = [svg.text((x, y - 10), "Escala gráfica", cls="bold")]
+    out: list[svg.Element] = [svg.text((x, y - 10), t("Escala gráfica"), cls="bold")]
     for i in range(metres):
         out.append(svg.rect(x + i * k, y, k, 6, cls="bar-fill" if i % 2 == 0 else "bar-empty"))
     for i in range(metres + 1):
@@ -157,7 +160,11 @@ def _scale_bar(x: float, y: float, k: float, metres: int = 5) -> list[svg.Elemen
     out.append(
         svg.text(
             (x, y + 34),
-            f"1 m = {fmt_es(k, 1)} px · ≈ 1:{round(ratio):d} impreso en A3 (96 dpi)",
+            t(
+                "1 m = {px} px · ≈ 1:{ratio} impreso en A3 (96 dpi)",
+                px=fmt_es(k, 1),
+                ratio=f"{round(ratio):d}",
+            ),
             cls="small",
         )
     )
@@ -191,29 +198,31 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
         svg.text((margin + 16, margin + 28), spec.name, cls="title"),
         svg.text(
             (margin + 16, margin + 46),
-            "Vista a escala real — red relingada: ancho = mallas · mallero · U1, "
-            "alto = N · mallero · U2 (U2 = √(1 − U1²)). Cuadrícula de 1 m.",
+            t(
+                "Vista a escala real — red relingada: ancho = mallas · mallero · U1, "
+                "alto = N · mallero · U2 (U2 = √(1 − U1²)). Cuadrícula de 1 m."
+            ),
             cls="muted-text",
         ),
     ]
-    children += _plane(hung, "upper", px_up, "right", "PLANO SUPERIOR (DORSO)")
-    children += _plane(hung, "lower", px_lo, "left", "PLANO INFERIOR (VIENTRE)")
+    children += _plane(hung, "upper", px_up, "right", t("PLANO SUPERIOR (DORSO)"))
+    children += _plane(hung, "lower", px_lo, "left", t("PLANO INFERIOR (VIENTRE)"))
     if has_side:
-        children += _plane(hung, "side", _Px(cx_side, top + k, k), "left", "COSTADOS (×2)")
+        children += _plane(hung, "side", _Px(cx_side, top + k, k), "left", t("COSTADOS (×2)"))
     planes = ("upper", "lower", "side") if has_side else ("upper", "lower")
-    plane_name = {"upper": "Dorso", "lower": "Vientre", "side": "Costado"}
+    plane_name = {"upper": N_("Dorso"), "lower": N_("Vientre"), "side": N_("Costado")}
 
     # Leyenda.
     lx = max(cx_lo + half * k + 90, SHEET_W - margin - 420)
     ly = top + 10
     children += _scale_bar(lx, ly, k)
     ly += 70
-    children.append(svg.text((lx, ly), "Largos", cls="bold"))
+    children.append(svg.text((lx, ly), t("Largos"), cls="bold"))
     rows = [
-        ("Plano", "estirado", "relingado"),
+        (t("Plano"), t("estirado"), t("relingado")),
         *[
             (
-                plane_name[p],
+                t(plane_name[p]),
                 f"{fmt_es(stretched.length(p))} m",
                 f"{fmt_es(hung.length(p))} m",
             )
@@ -232,7 +241,10 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     children.append(
         svg.text(
             (lx, ly),
-            f"Largo total (NetDimensions, estirado): {fmt_es(dims.total_length_m)} m",
+            t(
+                "Largo total (NetDimensions, estirado): {length} m",
+                length=fmt_es(dims.total_length_m),
+            ),
             cls="small",
         )
     )
@@ -240,15 +252,18 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     children.append(
         svg.text(
             (lx, ly),
-            f"Ancho de boca relingado: {fmt_es(hung.central('upper')[0].width_top)} m",
+            t(
+                "Ancho de boca relingado: {width} m",
+                width=fmt_es(hung.central("upper")[0].width_top),
+            ),
             cls="small",
         )
     )
 
     # Tabla de medidas por panel.
     ly += 30
-    children.append(svg.text((lx, ly), "Medidas relingadas por panel [m]", cls="bold"))
-    heads = ("Panel", "U1", "U2", "Ancho sup.", "Ancho inf.", "Alto")
+    children.append(svg.text((lx, ly), t("Medidas relingadas por panel [m]"), cls="bold"))
+    heads = (t("Panel"), "U1", "U2", t("Ancho sup."), t("Ancho inf."), t("Alto"))
     cols = (lx, lx + 70, lx + 110, lx + 175, lx + 240, lx + 290)
     ly += 18
     for h, cx in zip(heads, cols, strict=True):
@@ -284,16 +299,16 @@ def net_scale_svg(result: DesignResult, variant: str = "std") -> str:
     if steps:
         ly += 28
         children.append(
-            svg.text((lx, ly), "Escalones en pegaduras (U1 distinto):", cls="small bold")
+            svg.text((lx, ly), t("Escalones en pegaduras (U1 distinto):"), cls="small bold")
         )
-        for t in steps:
+        for step in steps:
             ly += 13
-            children.append(svg.text((lx + 8, ly), t, cls="small"))
+            children.append(svg.text((lx + 8, ly), step, cls="small"))
 
     return svg.document(
         SHEET_W,
         SHEET_H,
         children,
-        title_text=f"{spec.name} — vista a escala real",
+        title_text=t("{net} — vista a escala real", net=spec.name),
         extra_style=SCALE_STYLE,
     )

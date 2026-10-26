@@ -26,6 +26,7 @@ from trawlkit.batch.project import Projection, ProjectOptions, estimated_runs, p
 from trawlkit.batch.sheets import RowIssue, Sheet, norm, number, parse_sheet, read_book
 from trawlkit.catalog import catalog_case
 from trawlkit.compat import Compat
+from trawlkit.i18n import t
 from trawlkit.io import Door, NetSpec, Vessel, load_doors, load_net, load_vessels
 from trawlkit.model import DesignCase, DesignResult, run
 
@@ -115,7 +116,9 @@ def _kind(sheet: Sheet, mode: Mode, single: bool) -> str:
 def read_input(data: bytes | str, filename: str, mode: Mode) -> BatchInput:
     """Lee la planilla para el modo pedido (las hojas se reconocen por su nombre)."""
     if mode not in MODES:
-        raise ValueError(f"modo desconocido: {mode!r} (use {', '.join(MODES)})")
+        raise ValueError(
+            t("modo desconocido: {mode!r} (use {modes})", mode=mode, modes=", ".join(MODES))
+        )
     sheets = read_book(data, filename)
     single = len(sheets) == 1
     out = BatchInput(mode=mode)
@@ -142,11 +145,17 @@ def read_input(data: bytes | str, filename: str, mode: Mode) -> BatchInput:
         out.issues += issues
     if out.size == 0:
         out.issues.append(
-            RowIssue("error", "empty", f"la planilla no tiene filas para el modo «{mode}»")
+            RowIssue(
+                "error", "empty", t("la planilla no tiene filas para el modo «{mode}»", mode=mode)
+            )
         )
     if out.size > MAX_ROWS:
         out.issues.append(
-            RowIssue("error", "too_many", f"{out.size} filas: el máximo es {MAX_ROWS}")
+            RowIssue(
+                "error",
+                "too_many",
+                t("{n} filas: el máximo es {max}", n=out.size, max=MAX_ROWS),
+            )
         )
     return out
 
@@ -160,24 +169,24 @@ def _param_types() -> dict[str, str]:
 
 
 def _param(type_name: str, cell: Any, decimal_comma: bool) -> Any:
-    t = type_name.replace(" ", "").removesuffix("|None")
-    if t == "bool":
+    tn = type_name.replace(" ", "").removesuffix("|None")
+    if tn == "bool":
         v = norm(str(cell))
         if v in ("si", "s", "yes", "true", "1", "x"):
             return True
         if v in ("no", "n", "false", "0"):
             return False
-        raise ValueError("se espera sí o no")
-    if t == "float":
+        raise ValueError(t("se espera sí o no"))
+    if tn == "float":
         return number(cell, decimal_comma)
-    if t == "int":
+    if tn == "int":
         x = number(cell, decimal_comma)
         if abs(x - round(x)) > 1e-9:
-            raise ValueError("se espera un entero")
+            raise ValueError(t("se espera un entero"))
         return int(round(x))
-    if t.startswith("tuple[float"):
+    if tn.startswith("tuple[float"):
         return tuple(number(x, decimal_comma) for x in str(cell).replace("|", ";").split(";"))
-    if t.startswith("tuple[str"):
+    if tn.startswith("tuple[str"):
         return tuple(x.strip() for x in str(cell).split(";") if x.strip())
     return str(cell).strip()
 
@@ -198,7 +207,7 @@ def read_cases(sheet: Sheet) -> tuple[list[dict[str, Any]], list[RowIssue]]:
                     RowIssue(
                         "warning",
                         "unknown_column",
-                        f"columna «{h}» no reconocida (no es un parámetro de GET /params)",
+                        t("columna «{h}» no reconocida (no es un parámetro de GET /params)", h=h),
                         column=h,
                         sheet=sheet.name,
                     )
@@ -223,7 +232,7 @@ def read_cases(sheet: Sheet) -> tuple[list[dict[str, Any]], list[RowIssue]]:
                     RowIssue(
                         "error",
                         "bad_value",
-                        f"«{cell}» no vale para {key}: {exc}",
+                        t("«{cell}» no vale para {key}: {exc}", cell=cell, key=key, exc=exc),
                         row=r,
                         column=sheet.headers[i],
                         sheet=sheet.name,
@@ -387,7 +396,7 @@ def _add_economics(rows: list[BatchRow], spec: NetSpec, inputs: Any) -> None:
         ):
             if not s.get("missing_prices"):
                 inp = dataclasses.replace(inp, gear_cost=float(s["cost"]))
-        t = trip(
+        tp = trip(
             inp,
             speed_kn=float(s["speed_kn"]),
             demand_kgf=float(s["demand_kgf"]),
@@ -399,16 +408,16 @@ def _add_economics(rows: list[BatchRow], spec: NetSpec, inputs: Any) -> None:
         n = inp.trips_per_year
         s.update(
             {
-                "fuel_l_trip": t.fuel_l,
-                "catch_kg_trip": t.catch_kg,
-                "revenue_trip": t.revenue,
-                "cost_trip": t.total_cost,
-                "cost_per_kg": t.cost_per_kg,
-                "margin_trip": t.margin,
-                "margin_year": None if t.margin is None else t.margin * n,
+                "fuel_l_trip": tp.fuel_l,
+                "catch_kg_trip": tp.catch_kg,
+                "revenue_trip": tp.revenue,
+                "cost_trip": tp.total_cost,
+                "cost_per_kg": tp.cost_per_kg,
+                "margin_trip": tp.margin,
+                "margin_year": None if tp.margin is None else tp.margin * n,
             }
         )
-        row.notes.extend(f"economía: falta {m}" for m in t.missing[:3])
+        row.notes.extend(t("economía: falta {item}", item=m) for m in tp.missing[:3])
 
 
 def _case_summary(result: DesignResult) -> dict[str, Any]:
@@ -443,7 +452,7 @@ def build_case(
         try:
             spec = load_net(rec["net"])
         except FileNotFoundError as exc:
-            raise KeyError(f"red desconocida: {rec['net']!r}") from exc
+            raise KeyError(t("red desconocida: {net!r}", net=rec["net"])) from exc
     params = dict(rec.get("params") or {})
     compat = Compat(rec.get("compat", "corrected"))
     vessel_name = rec.get("vessel")
@@ -457,7 +466,7 @@ def build_case(
     else:
         found = vessels.get(norm(vessel_name)) or catalogue.get(str(vessel_name))
         if found is None:
-            raise KeyError(f"buque desconocido: {vessel_name!r}")
+            raise KeyError(t("buque desconocido: {value!r}", value=vessel_name))
         vessel = found
     door = _door(door_id or "fao_flat_wood_a3")
     return DesignCase(net=spec, vessel=vessel, door=door, compat=compat, **params)
@@ -542,12 +551,12 @@ def run_input(
     """Corre el lote de una planilla leída con :func:`read_input`."""
     if inp.mode == "fleet":
         if inp.fleet is None:
-            raise ValueError("la planilla no tiene flota")
+            raise ValueError(t("la planilla no tiene flota"))
         if net is None:
             if len(inp.nets) == 1:
                 net = inp.nets[0].spec
             else:
-                raise ValueError("elija la red a proyectar (net)")
+                raise ValueError(t("elija la red a proyectar (net)"))
         res = run_fleet(inp.fleet.vessels, net, options, progress)
     elif inp.mode == "cases":
         res = run_cases(inp.cases, inp.nets, inp.fleet.vessels if inp.fleet else (), progress)

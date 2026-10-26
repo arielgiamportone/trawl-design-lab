@@ -1,0 +1,536 @@
+# Catálogo inglés del motor y de la API (Fase 18.1): «texto en español» → traducción.
+# Lo verifica tests/test_i18n.py; las {variables} se mantienen iguales.
+variant 'mod' requiere net_modified: variant 'mod' requires net_modified
+Buque de {hp:g} hp: '{hp:g} hp vessel'
+'{key} = {value} m escalado del buque de la A-3': '{key} = {value} m scaled from the A-3 vessel'
+'hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y PV con tobera)': 'propeller {prop}: the pull is computed as fixed pitch (the book only tabulates PF and PV with nozzle)'
+planilla del usuario: user spreadsheet
+Red cargada desde una planilla del usuario (sin verificar).: Net loaded from a user spreadsheet (not verified).
+escala por semejanza s₀ = √({hp:g} / {design:g}) = {s0:.3f} (superficie de paño ∝ potencia): similarity scale s₀ = √({hp:g} / {design:g}) = {s0:.3f} (netting area ∝ power)
+'red sin potencia de diseño: caso base del libro (buque y portón de la A-3)': 'net without design power: the book''s base case (A-3 vessel and otter board)'
+'caso base: {note}': 'base case: {note}'
+'la escala llegó al tope del rango (1,3·s₀): el buque podría con una red mayor': 'the scale reached the top of the range (1.3·s₀): the vessel could tow a larger net'
+ninguna escala de la malla cumple todas las restricciones: no scale in the grid meets all the constraints
+'{net} × {s:.2f} para {vessel}': '{net} × {s:.2f} for {vessel}'
+'armado con componentes: {exc}': 'rigging with components: {exc}'
+se espera sí o no: yes or no expected
+'economía: falta {item}': 'economics: missing {item}'
+'modo desconocido: {mode!r} (use {modes})': 'unknown mode: {mode!r} (use {modes})'
+la planilla no tiene filas para el modo «{mode}»: the spreadsheet has no rows for mode «{mode}»
+'{n} filas: el máximo es {max}': '{n} rows: the maximum is {max}'
+columna «{h}» no reconocida (no es un parámetro de GET /params): column «{h}» not recognised (it is not a GET /params parameter)
+la planilla no tiene flota: the spreadsheet has no fleet
+elija la red a proyectar (net): choose the net to project (net)
+pedido: request
+'PA, PE, PP, PES (vacío: PA)': 'PA, PE, PP, PES (empty: PA)'
+T1 del Excel (borde mayor; opcional): Excel T1 (larger edge; optional)
+T2 del Excel (borde menor; opcional): Excel T2 (smaller edge; optional)
+burlón [m]: footrope [m]
+'cara: superior, inferior o lateral': 'face: upper, lower or side'
+caras que cubre un panel compartido (superior+inferior): faces covered by a shared panel (upper+lower)
+coeficiente de armado U1 (0–1): hanging ratio U1 (0–1)
+corregido o excel: corrected or excel
+corte (1N2B, AB…): cut (1N2B, AB…)
+diámetro de las boyas [mm]: float diameter [mm]
+diámetro del hilo [mm]: twine diameter [mm]
+eslora [m]: length overall [m]
+especie objetivo: target species
+fondo, semipelágica, pelágica: bottom, semipelagic, pelagic
+'hélice: PF, PF+T, PV, PV+T': 'propeller: PF (fixed pitch), PF+T (fixed pitch + nozzle), PV (variable pitch), PV+T (variable pitch + nozzle)'
+id de un buque del catálogo o nombre de uno de la flota: id of a catalogue vessel or name of one in the fleet
+id de una red del catálogo o nombre de una red cargada: id of a catalogue net or name of an uploaded net
+id del portón (catálogo o componentes): otter board id (catalogue or components)
+letra o nombre del panel: panel letter or name
+lima [m]: headrope [m]
+malla estirada [mm]: stretched mesh size [mm]
+mallas de alto: meshes deep
+mallas del borde hacia el copo: meshes along the codend edge
+mallas del borde hacia la boca: meshes along the mouth edge
+manga [m]: beam [m]
+'nombre de la red (vacío: el de la hoja o el archivo)': 'net name (empty: that of the sheet or the file)'
+nombre de la red: net name
+nombre del caso: case name
+nombre o matrícula del buque: vessel name or registration
+número de boyas: number of floats
+paneles iguales (2 en las alas): identical panels (2 on the wings)
+portones o pareja: otter or pair
+potencia de diseño máxima [hp]: maximum design power [hp]
+potencia de diseño mínima [hp]: minimum design power [hp]
+potencia del motor (hp; admite kW): engine power (hp; kW accepted)
+profundidad de diseño [m]: design depth [m]
+profundidad de pesca [m]: fishing depth [m]
+puntal [m]: depth (hull) [m]
+región del puerto para elegir componentes: port region for choosing components
+rendimiento del hilo [m/kg]: twine runnage [m/kg]
+'sección: punta de ala, ala, cielo, vientre, cuerpo, túnel, copo': 'section: wing tip, wing, square, belly, body, extension, codend'
+segundo corte del costado (opcional): second side cut (optional)
+sólo componentes genéricos (sí/no): generic components only (yes/no)
+'tipo de fondo: fango, arena, mixto, grava, roca': 'seabed type: mud, sand, mixed, gravel, rock'
+título del hilo [Rtex]: twine size [Rtex]
+'velocidad de arrastre prevista [kn] (vacío: la mejor)': 'planned towing speed [kn] (empty: the best one)'
+vacío: empty
+no es finito: not finite
+no es un número: not a number
+'leer XLSX necesita openpyxl: pip install "trawlkit[excel]"': 'reading XLSX needs openpyxl: pip install "trawlkit[excel]"'
+un XLSX se lee como bytes: an XLSX file is read as bytes
+'«{h}» repite «{first}»: se usa la primera': '«{h}» repeats «{first}»: the first one is used'
+falta la columna «{key}» ({help}): column «{key}» is missing ({help})
+'«{cell}» no vale para {key}: {exc}': '«{cell}» is not valid for {key}: {exc}'
+'{key} = {v:g} fuera del rango habitual ({low:g}–{high:g})': '{key} = {v:g} outside the usual range ({low:g}–{high:g})'
+falta {key}: '{key} is missing'
+opción desconocida (use {options}): unknown option (use {options})
+unidad «{unit}» desconocida para {kind}: unknown unit «{unit}» for {kind}
+se espera un entero: an integer is expected
+Buque genérico de {hp:g} hp (escalado del de 150 hp de la A-3): Generic {hp:g} hp vessel (scaled from the A-3's 150 hp vessel)
+'la red no da potencia de diseño: buque genérico de 150 hp': 'the net gives no design power: generic 150 hp vessel'
+eslora del documento: length from the document
+raíz cúbica de la potencia: cube root of the power
+? 'buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y puntal {depth} m escalados del de 150 hp de la A-3 ({rule})'
+: 'generic {hp:g} hp vessel: length {length} m, beam {beam} m and depth {depth} m scaled from the A-3''s 150 hp vessel ({rule})'
+Portón plano del plano de {net}: Flat otter board from the plan of {net}
+portón del plano ({length:g} × {height:g} m) con la polar del portón plano de la A-3: otter board from the plan ({length:g} × {height:g} m) with the polar of the A-3's flat otter board
+'el plano no da portón: el de la A-3 escalado a {area:.2f} m² (superficie proporcional a la potencia)': 'the plan gives no otter board: the A-3''s scaled to {area:.2f} m² (area proportional to power)'
+'arrastre de pareja: el portón del caso no se usa': 'pair trawling: the case''s otter board is not used'
+'la fuente no da profundidad: {depth:g} m por familia ({family})': 'the source gives no depth: {depth:g} m by family ({family})'
+? 'El aula no está habilitada en este servidor: falta la base de datos (DATABASE_URL). Los ejercicios de práctica y los laboratorios funcionan igual.'
+: 'The classroom is not enabled on this server: the database (DATABASE_URL) is not configured. Practice exercises and labs work as usual.'
+aula habilitada: classroom enabled
+curso desconocido: unknown course
+'demasiados intentos: espere unos minutos': 'too many attempts: wait a few minutes'
+el cierre tiene que ser posterior a la apertura: the closing date must be after the opening date
+el curso todavía no tiene alumnos: the course has no students yet
+entre 1 y 50 invitaciones, de 1 a 365 días: between 1 and 50 invitations, valid for 1 to 365 days
+entrega desconocida: unknown submission
+ese alumno no está en el curso: that student is not in the course
+ese usuario ya existe: that username already exists
+falta el nombre del curso: the course name is missing
+falta el nombre para mostrar (nombre o legajo): the display name is missing (name or student ID)
+falta el título de la tarea: the assignment title is missing
+'feedback: immediate o after_due': 'feedback: immediate or after_due'
+hasta 40 ítems por tarea: up to 40 items per assignment
+inicie sesión: please sign in
+intentos entre 1 y 20: attempts between 1 and 20
+la contraseña actual no coincide: the current password does not match
+la contraseña necesita al menos {n} caracteres: the password needs at least {n} characters
+la contraseña no coincide: the password does not match
+la devolución al cierre necesita una fecha de cierre: feedback after closing needs a closing date
+la invitación no existe, ya se usó o venció: the invitation does not exist, was already used or has expired
+la nota va de 0 a 1: the score goes from 0 to 1
+'la sesión venció: vuelva a iniciar sesión': 'the session has expired: sign in again'
+la tarea necesita al menos un ejercicio o laboratorio: the assignment needs at least one exercise or lab
+la tarea no tiene ejercicios para imprimir: the assignment has no exercises to print
+la tarea ya cerró: the assignment is already closed
+'la tarea ya tiene entregas: no se pueden cambiar los ítems': 'the assignment already has submissions: its items cannot be changed'
+no es docente de este curso: you are not a teacher of this course
+no es miembro de este curso: you are not a member of this course
+no hay un curso abierto con ese código: there is no open course with that code
+no hay un docente con ese usuario: there is no teacher with that username
+no le quedan intentos para este ítem: you have no attempts left for this item
+no puede ver esa entrega: you cannot view that submission
+no tiene permiso para esto: you do not have permission for this
+puntos entre 0 y 100: points between 0 and 100
+sólo los alumnos del curso entregan: only the course's students can submit
+tarea desconocida: unknown assignment
+un administrador no puede borrar su cuenta desde la app: an administrator cannot delete their account from the app
+use un código de curso (alumno) o uno de invitación (docente): use a course code (student) or an invitation code (teacher)
+usuario o contraseña incorrectos: incorrect username or password
+'usuario: 3 a 40 letras minúsculas, números, punto, guion o guion bajo': 'username: 3 to 40 lowercase letters, digits, dot, hyphen or underscore'
+ítem desconocido: unknown item
+'ítem desconocido: {kind} {ref}': 'unknown item: {kind} {ref}'
+entrega recibida: submission received
+Paño e hilo: Netting and twine
+Cable de acero: Steel wire rope
+Cabo: Rope
+Portón: Otter board
+Boya: Float
+Cadena: Chain
+'tipo de componente desconocido: {kind!r} (use {kinds})': 'unknown component type: {kind!r} (use {kinds})'
+'componente desconocido: {kind}/{id}': 'unknown component: {kind}/{id}'
+'{what} = {value:.4g} fuera del rango {lo:g}–{hi:g}': '{what} = {value:.4g} outside the range {lo:g}–{hi:g}'
+kg/m por mm²: kg/m per mm²
+t por mm²: t per mm²
+llenado del cabo: rope fill
+rendimiento {runnage:g} m/kg y Rtex {rtex:g} no concuerdan (10⁶/Rtex = {expect:.0f} m/kg): runnage {runnage:g} m/kg and Rtex {rtex:g} do not agree (10⁶/Rtex = {expect:.0f} m/kg)
+tenacidad [gf/tex]: tenacity [gf/tex]
+la rotura con nudo supera en más de 50 % a la rotura sin nudo: the knot breaking strength exceeds the unknotted breaking strength by more than 50 %
+flotación/esfera: buoyancy/sphere
+superficie {area:g} m² y medidas {length:g} × {height:g} m no concuerdan: area {area:g} m² and dimensions {length:g} × {height:g} m do not agree
+sin coeficientes CL/CD: no CL/CD coefficients
+CL {cl:g} / CD {cd:g} a {angle:g}° fuera de lo plausible: CL {cl:g} / CD {cd:g} at {angle:g}° outside the plausible range
+'genérico equivalente desconocido: {id}': 'unknown generic equivalent: {id}'
+Paño reemplazado por {name} ({id}): Netting replaced with {name} ({id})
+', salvo el copo': ', except the codend'
+dorso: top panel
+vientre: belly
+costado: side panel
+punta de ala: wingtip
+ala: wing
+vientre (2ª sección de ala): belly (2nd wing section)
+cuerpo: body
+extensión: extension
+bolsa: codend
+'código de corte no reconocido: {code!r}': 'unrecognised cut code: {code!r}'
+'{n} punta': '{n} point'
+'{n} puntas': '{n} points'
+'{n} transversal': '{n} mesh (T)'
+'{n} transversales': '{n} meshes (T)'
+'{n} malleta': '{n} bar'
+'{n} malletas': '{n} bars'
+'recto, todo puntas (AN): {points}': 'straight, all points (AN): {points}'
+todo transversales (AT): all meshes (AT)
+'todo malletas (AB): {bars} malletas seguidas': 'all bars (AB): {bars} bars in a row'
+'{code}: {parts} por ciclo; repetir {cycles} veces': '{code}: {parts} per cycle; repeat {cycles} times'
+' y ': ' and '
+ambos costados: both sides
+costado de la relinga: rope side
+costado interior: inner side
+'{code}: ciclo no reconocido, cortar según el plano': '{code}: unrecognised cycle, cut according to the plan'
+'lados rectos: cortar a la medida': 'straight sides: cut to size'
+empezar por el borde de boca ({n} mallas) y bajar hacia la bolsa: start at the mouth edge ({n} meshes) and work towards the codend
+empezar por el borde de bolsa ({n} mallas) y subir hacia la boca: start at the codend edge ({n} meshes) and work towards the mouth
+sin mallas para unir: no meshes to join
+malla a malla: mesh to mesh
+malla a malla, tomando 2 mallas juntas de {big} cada {every} mallas ({extra} tomas en total): mesh to mesh, taking up 2 meshes of {big} together every {every} meshes ({extra} take-ups in total)
+tomar {per} mallas de {big} por cada malla del otro paño: take {per} meshes of {big} for each mesh of the other netting panel
+borde de bolsa: codend edge
+borde de boca: mouth edge
+una vez en cada ala (izquierda y derecha): once on each wing (left and right)
+borde de boca, desde cada esquina: mouth edge, from each corner
+? 'una ala en cada esquina de {body}; quedan libres {bosom} mallas en el centro: la bocana, que se arma directamente en la relinga'
+: 'one wing at each corner of {body}; {bosom} meshes remain free in the centre: the bosom, which is hung directly on the rope'
+costado hacia el {face}: side towards the {face}
+a cada lado de la red, desde el copo hacia la boca: on each side of the net, from the codend towards the mouth
+dorso y vientre: top panel and belly
+? 'costura lateral a cada lado, de la bolsa hacia la punta de ala: dorso {upper} m y vientre {lower} m estirados; se suele reforzar con un cabo de costado'
+: 'side seam on each side, from the codend towards the wingtip: top panel {upper} m and belly {lower} m stretched; usually reinforced with a selvedge rope'
+? 'el cabo es más largo que el paño estirado: el paño no se arma directo en él (va a una relinga de armado o línea de pesca, y el cabo se une con colgantes o cadenas); revisar el plano'
+: 'the rope is longer than the stretched netting: the netting is not hung directly on it (it goes on a hanging line or fishing line, and the rope is joined with droppers or chains); check the plan'
+≈ {step} mallas cada {cm:.0f} cm: ≈ {step} meshes every {cm:.0f} cm
+lima: headrope
+burlón: footrope
+bocana: bosom
+ala, primer quinto: wing, first fifth
+Lima (relinga superior): Headrope (upper rope)
+Burlón (relinga inferior): Footrope (lower rope)
+Refuerzo de punta de ala: Wingtip reinforcement
+Malleta superior (brida): Upper bridle leg
+Malleta inferior (brida): Lower bridle leg
+cable de bridas: bridle wire
+Patentes: Sweeps
+cable de patentes: sweep wire
+Pie de gallo: Crowfoot
+cadena o cable: chain or wire
+Cadena de reglaje de bridas: Bridle adjusting chain
+cadena: chain
+Cadena de reglaje del burlón: Footrope adjusting chain
+Cable de remolque (por banda): Warp (per side)
+cable de remolque: warp
+reglaje: adjusting chain
+cadena en el centro del burlón: chain at the centre of the footrope
+'{w} m centrales del burlón': central {w} m of the footrope
+alas: wings
+resto del burlón, parejo en las dos alas: rest of the footrope, evenly over both wings
+el caso no tiene red modificada: the case has no modified net
+el sobrante por gaza no puede ser negativo: the eye allowance cannot be negative
+Mallas a malla estirada; los largos de cabo incluyen el armado (embando) del motor.: Meshes counted at stretched mesh; rope lengths include the engine's hanging ratio.
+'Sobrante por gaza o empalme: {eye} m (A VERIFICAR según el cabo y el empalme).': 'Allowance per eye or splice: {eye} m (TO BE VERIFIED for the rope and splice).'
+? La posición de las boyas sigue la regla selectiva del libro (70 % en las alas, 60 % de ellas en el primer quinto); ajustar en la prueba de mar.
+: Float positions follow the book's selective rule (70 % on the wings, 60 % of them in the first fifth); adjust during sea trials.
+'Los cortes marcados como inferidos no vienen del plano: salen del cambio de ancho del paño.': 'Cuts marked as inferred do not come from the plan: they are derived from the change in width of the netting panel.'
+'Hay cortes inferidos: verificarlos contra el plano antes de cortar.': 'There are inferred cuts: check them against the plan before cutting.'
+Paño de {material}: '{material} netting'
+Paño {material} del plano: '{material} netting from the plan'
+Malletas (superior e inferior, dos lados): Bridle legs (upper and lower, both sides)
+Patentes (dos): Sweeps (two)
+Cable de remolque: Warp
+2 cables del largo filado más 50 % de reserva (Cab!D12): 2 warps of the paid-out length plus a 50 % reserve (Cab!D12)
+Boyas de {d:g} mm: '{d:g} mm floats'
+Boya Ø{d:g} mm: Float Ø{d:g} mm
+Portones (par): Otter boards (pair)
+Cadena de lastre y reglaje: Ballast and adjusting chain
+'{kg:.0f} kg de lastre máximo a {kgm:g} kg/m': '{kg:.0f} kg of maximum ballast at {kgm:g} kg/m'
+Lastre (cadena o plomos): Ballast (chain or leads)
+Lastre: Ballast
+elija una cadena del catálogo para pasarlo a metros: choose a chain from the catalogue to convert it to metres
+towing_efficiency en (0, 1]: towing_efficiency in (0, 1]
+crew_share en [0, 1]: crew_share in [0, 1]
+tiempos ≥ 0: times ≥ 0
+'datos desconocidos: {names}': 'unknown fields: {names}'
+Combustible: Fuel
+Lubricante: Lubricant
+Tripulación: Crew
+Red y aparejo: Net and rigging
+Gastos de la marea: Trip expenses
+Fijos anuales (por marea): Annual fixed costs (per trip)
+captura por hora: catch per hour
+precio de la captura: catch price
+precio del gasoil: diesel price
+precio del lubricante: lubricant price
+costo de la red y el aparejo: cost of the net and rigging
+gastos de la marea: trip expenses
+costos fijos anuales: annual fixed costs
+jornal y cantidad de tripulantes: daily wage and crew size
+parte de la tripulación: crew share
+la red queda poco abierta a esta velocidad: the net is not open enough at this speed
+el portón queda chico: the otter board is too small
+fuera del rango operativo: outside the operating range
+usuario: user
+lista de materiales: bill of materials
+sin dato: no data
+Captura proporcional al área barrida por hora (AH·v) desde la velocidad de referencia; no se modela el escape ni el arreo.: Catch proportional to the area swept per hour (AH·v) from the reference speed; escape and herding are not modelled.
+? Consumo específico {sfc:g} kg/kWh, rendimiento de remolque {eff:g}, carga en navegación {steam:g} y en maniobras {idle:g} (A VERIFICAR).
+: Specific consumption {sfc:g} kg/kWh, towing efficiency {eff:g}, load while steaming {steam:g} and while handling {idle:g} (TO BE VERIFIED).
+A ninguna velocidad del rango el buque tiene tiro con reserva para esta red (o el cable no alcanza).: At no speed in the range does the vessel have pull with reserve for this net (or the warp is not long enough).
+'variante desconocida: {name!r} (use ''std'' o ''mod'')': 'unknown variant: {name!r} (use ''std'' or ''mod'')'
+speeds_kn debe ser un vector no vacío, positivo y creciente: speeds_kn must be a non-empty, positive, increasing vector
+hace falta la profundidad de trabajo (depth_m o net.species.depth_m): the working depth is required (depth_m or net.species.depth_m)
+hace falta la distancia entre pastecas (gallows_m o vessel.beam_m): the gallows (towing block) spacing is required (gallows_m or vessel.beam_m)
+hace falta el puntal (vessel_depth_m o vessel.depth_m): the hull depth is required (vessel_depth_m or vessel.depth_m)
+rob_share debe estar entre 0 y 1: rob_share must be between 0 and 1
+door_spread_rule debe ser 'excel' o 'fridman': door_spread_rule must be 'excel' or 'fridman'
+rig debe ser 'otter' o 'pair', no {rig!r}: rig must be 'otter' or 'pair', not {rig!r}
+pair_wing_spread_m debe ser positivo: pair_wing_spread_m must be positive
+el portón {door!r} necesita area_m2 y length_m: otter board {door!r} needs area_m2 and length_m
+ft_propeller {prop!r} no tiene KF de Fridman tabulado: ft_propeller {prop!r} has no tabulated Fridman KF
+warp_design_speed_kn debe pertenecer a speeds_kn: warp_design_speed_kn must be one of speeds_kn
+ballast_min/max_speed_kn deben pertenecer a speeds_kn: ballast_min/max_speed_kn must be among speeds_kn
+velocidad {v} kn no está en speeds_kn: speed {v} kn is not in speeds_kn
+? 'flotation_rounding_inconsistent: la máscara de Flot!M43:M50 se aplica al primer bloque de la hoja ({first}), no al buque de diseño ({vessel})'
+: 'flotation_rounding_inconsistent: the Flot!M43:M50 mask applies to the first block of the sheet ({first}), not to the design vessel ({vessel})'
+float_count = {count} boyas {id} (catálogo de componentes): float_count = {count} floats {id} (component catalogue)
+float_count tomado de la spec ({count} boyas): float_count taken from the spec ({count} floats)
+no hay boyas de {target} mm en el catálogo; fije float_count: there are no {target} mm floats in the catalogue; set float_count
+float_count = {count} boyas de {target:g} mm del catálogo (Flot!F72:F82): float_count = {count} floats of {target:g} mm from the catalogue (Flot!F72:F82)
+? 'catenary_ratio_hardcoded: fL/L = {fixed} (Mec!O266) frente a {table} de la tabla para DPA/L = {ratio:.2f}; se conserva el valor fijo'
+: 'catenary_ratio_hardcoded: fL/L = {fixed} (Mec!O266) versus {table} from the table for DPA/L = {ratio:.2f}; the fixed value is kept'
+'net_modified no indicado: la columna modificada (G) usa la misma red que la estándar': 'net_modified not given: the modified column (G) uses the same net as the standard one'
+'Compat.EXCEL: se reproducen las erratas registradas en trawlkit.compat.ERRATA': 'Compat.EXCEL: the errata recorded in trawlkit.compat.ERRATA are reproduced'
+'warp_total_omits_doors: la resistencia total incluye ROB de los dos portones (Rem!H118 + 2·D190)': 'warp_total_omits_doors: the total drag includes the ROB of both otter boards (Rem!H118 + 2·D190)'
+? 'warp_cd_horizontal_angle: CD del cable {cd:.4f} con α = acos(cos δ1·cos δ2) = {angle:.2f}° interpolado (Rem!E106 usa δ2 → 0.02)'
+: 'warp_cd_horizontal_angle: warp CD {cd:.4f} with α = acos(cos δ1·cos δ2) = {angle:.2f}° interpolated (Rem!E106 uses δ2 → 0.02)'
+? 'pelagic_not_applicable: red pelágica; el lastre de Koyama, el rozamiento del burlón con el fondo y los ratios de Nomura están pensados para redes de fondo y no se aplican (el rozamiento con el fondo vale 0)'
+: 'pelagic_not_applicable: pelagic net; Koyama ballast, footrope friction on the seabed and the Nomura ratios are meant for bottom trawls and are not applied (seabed friction is 0)'
+'pair_trawl: arrastre de pareja sin portones; puntas de ala a {wings:.1f} m': 'pair_trawl: pair trawling without otter boards; wingtips {wings:.1f} m apart'
+' (supuesto: ½ lima; cambiar con pair_wing_spread_m)': ' (assumption: ½ headrope; change with pair_wing_spread_m)'
+', puntos de remolque a {tow:.1f} m; el tiro disponible es el de dos buques': ', towing points {tow:.1f} m apart; the available pull is that of two vessels'
+? 'door_spread_fridman: separación de portones {spread:.1f} m de la DPA de Fridman con el portón del caso (la regla al metro de Port!E13 vale para la A-3)'
+: 'door_spread_fridman: otter board spread {spread:.1f} m from the Fridman DPA with the case''s otter board (the per-metre rule of Port!E13 holds for the A-3)'
+'warp_undersized: cable de {d:g} mm ({mbl} t) por debajo de la rotura mínima {need:.2f} t': 'warp_undersized: {d:g} mm warp ({mbl} t) below the minimum breaking load {need:.2f} t'
+'panel {id}: hace falta rtex o runnage_m_per_kg': 'panel {id}: rtex or runnage_m_per_kg is required'
+'panel {id}: hace falta hanging_ratio (U1)': 'panel {id}: hanging_ratio (U1) is required'
+'{code}: bolsas I/J con T2 := N (Mec!K36:K37)': '{code}: codends I/J with T2 := N (Mec!K36:K37)'
+? '{where}: el borde de bolsa de {prev} ({prev_n} × {prev_mm:g} mm = {a:.2f} m) no empalma con el borde de boca de {nxt} ({nxt_n} × {nxt_mm:g} mm = {b:.2f} m): {pct:.0f} % de diferencia'
+: '{where}: the codend edge of {prev} ({prev_n} × {prev_mm:g} mm = {a:.2f} m) does not match the mouth edge of {nxt} ({nxt_n} × {nxt_mm:g} mm = {b:.2f} m): {pct:.0f} % difference'
+? 'panel {id}: el corte {cut} en {n} mallas de alto da un cambio de ancho de {best:.0f} mallas, pero el paño pasa de {top} a {bottom} ({taper} mallas)'
+: 'panel {id}: cut {cut} over {n} meshes deep gives a width change of {best:.0f} meshes, but the netting panel goes from {top} to {bottom} ({taper} meshes)'
+'panel {id}: falta U1 (hanging_ratio)': 'panel {id}: U1 (hanging_ratio) is missing'
+'panel {id}: sin Rtex ni rendimiento; el peso del hilo se estima del diámetro': 'panel {id}: no Rtex or runnage; the twine weight is estimated from the diameter'
+'no se puede disponer la red: {exc}': 'the net cannot be laid out: {exc}'
+'{plane}, ala': '{plane}, wing'
+? '{plane}: las alas ({wing}, {wing_n} mallas) son más anchas que el borde de boca de {first} ({first_n} mallas): no queda bocana'
+: '{plane}: the wings ({wing}, {wing_n} meshes) are wider than the mouth edge of {first} ({first_n} meshes): no bosom is left'
+'{plane}: no hay paños centrales': '{plane}: there are no central netting panels'
+el costado tiene {sides} estaciones y el dorso sólo {body}: the side panel has {sides} stations and the top panel only {body}
+costado {side} ({side_n} mallas de {side_mm:g} mm) no cose con el dorso {top} ({top_n} mallas de {top_mm:g} mm): side panel {side} ({side_n} meshes of {side_mm:g} mm) does not join the top panel {top} ({top_n} meshes of {top_mm:g} mm)
+'franja {up}/{low}: dorso {la:.2f} m y vientre {lb:.2f} m de largo estirado ({pct:.0f} %)': 'band {up}/{low}: top panel {la:.2f} m and belly {lb:.2f} m stretched length ({pct:.0f} %)'
+? 'Esta función necesita conexión con la API: los PDF, el refinamiento de la optimización y el aula del curso no corren en el teléfono. El cálculo, la simulación, los planos y el informe HTML sí.'
+: 'This feature needs a connection to the API: PDFs, optimisation refinement and the course classroom do not run on the phone. Calculation, simulation, plans and the HTML report do.'
+eye_allowance_m debe ser un número: eye_allowance_m must be a number
+'el PDF de la guía necesita conexión: use format=html e imprímalo': 'the guide PDF needs a connection: use format=html and print it'
+sin conexión se optimiza sólo con la malla (refine = false): offline, optimisation uses the grid only (refine = false)
+'el PDF del lote necesita conexión: use format=html e imprímalo': 'the batch PDF needs a connection: use format=html and print it'
+'kind: fleet, nets o cases; format: xlsx o csv': 'kind: fleet, nets or cases; format: xlsx or csv'
+'level: basico, intermedio o avanzado': 'level: basico, intermedio or avanzado'
+'seed: entero': 'seed: integer'
+'seed: entre 0 y 2³¹ − 1': 'seed: between 0 and 2³¹ − 1'
+'view: sheet|scale; variant: std|mod': 'view: sheet|scale; variant: std|mod'
+'el informe PDF necesita conexión: use format=html e imprímalo': 'the PDF report needs a connection: use format=html and print it'
+'format: html, pdf o xlsx': 'format: html, pdf or xlsx'
+margin debe ser ≥ 0: margin must be ≥ 0
+open_ratio debe estar en (0, 1.5]: open_ratio must be in (0, 1.5]
+se requiere 0 < v_min_kn < v_max_kn: 0 < v_min_kn < v_max_kn is required
+door_tolerance debe ser ≥ 0: door_tolerance must be ≥ 0
+warp_safety_factor debe ser positivo: warp_safety_factor must be positive
+'el motor no puede calcular la red escalada s = {s}: {exc}': 'the engine cannot compute the scaled net s = {s}: {exc}'
+v = {v} kn fuera de la malla de velocidades [{lo:g}, {hi:g}] kn: v = {v} kn outside the speed grid [{lo:g}, {hi:g}] kn
+DPA de Fridman ≥ {r:g}·DPA geométrica: Fridman DPA ≥ {r:g}·geometric DPA
+rotura de algún cable del catálogo ≥ {k:g}·R_T: breaking load of some catalogue warp ≥ {k:g}·R_T
+superficie requerida por portón (Port!F215) ≤ superficie del portón: required area per otter board (Port!F215) ≤ otter board area
+mínima resistencia total R_T: minimum total drag R_T
+mínimo R_T/AH (máxima área barrida por litro): minimum R_T/AH (maximum area swept per litre)
+mínimo costo de la lista de materiales: minimum bill-of-materials cost
+'objetivo desconocido: {name!r} ({names})': 'unknown objective: {name!r} ({names})'
+'hilo: el plano no da material y diámetro; se usa el del plano': 'twine: the plan gives no material and diameter; the plan''s twine is used'
+'{door} / {float} / {twine}: no se puede calcular ({exc})': '{door} / {float} / {twine}: cannot be computed ({exc})'
+profundidad máxima de la boya ≥ profundidad de pesca: float maximum depth ≥ fishing depth
+rotura del hilo ≥ {k:g}·la del hilo del plano: twine breaking strength ≥ {k:g}·that of the plan's twine
+ningún armado del catálogo se puede calcular: no catalogue rigging can be computed
+ningún armado cumple todas las restricciones; se da el de menor violación: no rigging meets all the constraints; the one with the smallest violation is given
+el factor de escala debe ser positivo y finito (s = {s!r}): the scale factor must be positive and finite (s = {s!r})
+el portón {door!r} no tiene superficie: otter board {door!r} has no area
+area_m2 debe ser positiva: area_m2 must be positive
+'objetivo desconocido: {name!r} (use {names})': 'unknown objective: {name!r} (use {names})'
+s_values y v_values no pueden estar vacíos: s_values and v_values cannot be empty
+hace falta al menos un objetivo: at least one objective is required
+'bounds de s: se requiere 0 < s_min < s_max': 's bounds: 0 < s_min < s_max is required'
+'bounds de v: se requiere 0 < v_min < v_max': 'v bounds: 0 < v_min < v_max is required'
+la malla necesita al menos 2 × 2 puntos: the grid needs at least 2 × 2 points
+'la optimización necesita scipy: pip install "trawlkit[optimize]"': 'optimisation needs scipy: pip install "trawlkit[optimize]"'
+máxima área barrida por hora: maximum area swept per hour
+máximo volumen filtrado por hora: maximum volume filtered per hour
+mínimo trabajo de remolque por m² barrido: minimum towing work per m² swept
+Tiro (F_T ≥ (1+m)·R_T): Pull (F_T ≥ (1+m)·R_T)
+Red abierta (DPA Fridman): Net open (Fridman DPA)
+Rango de velocidad: Speed range
+sí: 'yes'
+'NO': 'NO'
+'## Optimización: {objective}': '## Optimisation: {objective}'
+? Red base `{net}`, buque `{vessel}`, portón `{door}`, hélice `{propeller}`, margen de tiro {margin:.0%}, s ∈ [{s0:g}, {s1:g}], v ∈ [{v0:g}, {v1:g}] kn.
+: Base net `{net}`, vessel `{vessel}`, otter board `{door}`, propeller `{propeller}`, pull margin {margin:.0%}, s ∈ [{s0:g}, {s1:g}], v ∈ [{v0:g}, {v1:g}] kn.
+'**Ningún diseño factible** en el rango; se muestra el de menor violación (restricción dominante: {name}).': '**No feasible design** in the range; the one with the smallest violation is shown (dominant constraint: {name}).'
+'### Mejor diseño': '### Best design'
+'| Magnitud | Valor | Unidad |': '| Quantity | Value | Unit |'
+'| Escala de la red s | {x:.3f} | — |': '| Net scale s | {x:.3f} | — |'
+'| Velocidad de arrastre | {x:.2f} | kn |': '| Towing speed | {x:.2f} | kn |'
+'| Relinga superior (lima) | {x:.2f} | m |': '| Headrope | {x:.2f} | m |'
+'| Abertura horizontal AH (DPA Fridman) | {x:.2f} | m |': '| Horizontal opening AH (Fridman DPA) | {x:.2f} | m |'
+'| Abertura vertical AV (Fridman) | {x:.2f} | m |': '| Vertical opening AV (Fridman) | {x:.2f} | m |'
+'| Área barrida por hora | {x:,.0f} | m²/h |': '| Area swept per hour | {x:,.0f} | m²/h |'
+'| Volumen filtrado por hora | {x:,.0f} | m³/h |': '| Volume filtered per hour | {x:,.0f} | m³/h |'
+'| Resistencia total R_T | {x:.0f} | kgf |': '| Total drag R_T | {x:.0f} | kgf |'
+'| Tiro disponible F_T | {x:.0f} | kgf |': '| Available pull F_T | {x:.0f} | kgf |'
+'| Margen F_T/R_T − 1 | {x:.1%} | — |': '| Margin F_T/R_T − 1 | {x:.1%} | — |'
+'| Trabajo por m² barrido R_T/AH | {x:.1f} | kgf·m/m² |': '| Work per m² swept R_T/AH | {x:.1f} | kgf·m/m² |'
+'| Cable | {x} | — |': '| Warp | {x} | — |'
+ninguno del catálogo: none in the catalogue
+'| Portón: requerida / disponible | {req:.2f} / {area:.2f} | m² |': '| Otter board: required / available | {req:.2f} / {area:.2f} | m² |'
+'| Restricción | Cumple | Valor | Límite |': '| Constraint | Met | Value | Limit |'
+'### Frente de Pareto (área barrida/h vs R_T/AH), primeros {top}': '### Pareto front (area swept/h vs R_T/AH), first {top}'
+'| s | v [kn] | AH [m] | Área [m²/h] | R_T/AH [kgf·m/m²] | R_T [kgf] | Margen |': '| s | v [kn] | AH [m] | Area [m²/h] | R_T/AH [kgf·m/m²] | R_T [kgf] | Margin |'
+'{runs} corridas del motor, {secs:.1f} s.': '{runs} engine runs, {secs:.1f} s.'
+'especie desconocida: {key!r}': 'unknown species: {key!r}'
+contact debe estar entre 0 y 1: contact must be between 0 and 1
+attempts debe estar entre 1 y 50: attempts must be between 1 and 50
+las tallas deben ser positivas y crecientes: the lengths must be positive and increasing
+el resultado no tiene estado de malla: the result has no mesh state
+el archivo no tiene encabezado y datos: the file has no header and data
+ninguna columna reconocida (ver los nombres admitidos en la ayuda): no recognised column (see the accepted names in the help)
+tensión de un cable = promedio de babor y estribor: warp tension = mean of port and starboard
+'sin columna de velocidad: los tramos se arman por tiempo': 'no speed column: windows are built by time'
+width debe ser positivo: width must be positive
+para agrupar por velocidad hace falta una columna de velocidad: grouping by speed needs a speed column
+para agrupar por tiempo hace falta una columna de tiempo: grouping by time needs a time column
+by debe ser 'speed' o 'time': by must be 'speed' or 'time'
+'red desconocida: {net!r}': 'unknown net: {net!r}'
+'buque desconocido: {value!r}': 'unknown vessel: {value!r}'
+'portón desconocido: {value!r}': 'unknown otter board: {value!r}'
+'parámetros desconocidos: {names}': 'unknown parameters: {names}'
+'{k}: valor no admitido {item!r}': '{k}: value not allowed {item!r}'
+'{k}: debe ser un número finito y no negativo ({item!r})': '{k}: must be a finite, non-negative number ({item!r})'
+'el caso no se puede calcular: {exc}': 'the case cannot be computed: {exc}'
+'malla de optimización demasiado grande: {a} × {b} (máximo {limit} × {limit} en este servidor)': 'optimisation grid too large: {a} × {b} (maximum {limit} × {limit} on this server)'
+el refinado (evolución diferencial) está desactivado en este servidor; optimice sólo con la malla (refine = false): refinement (differential evolution) is disabled on this server; optimise with the grid only (refine = false)
+'no se puede optimizar el caso: {exc}': 'the case cannot be optimised: {exc}'
+'componente en línea inválido: {msg}': 'invalid inline component: {msg}'
+'componente desconocido: {exc}': 'unknown component: {exc}'
+'no se puede armar el caso: {exc}': 'the case cannot be built: {exc}'
+? 'simulación demasiado costosa: ~{estimate:.0f} s estimados para {n} velocidades a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o la cantidad de velocidades'
+: 'simulation too costly: ~{estimate:.0f} s estimated for {n} speeds at resolution {resolution} (maximum {max_cost:.0f} s); lower the resolution or the number of speeds'
+'no se puede simular el caso: {exc}': 'the case cannot be simulated: {exc}'
+'escenario inválido: {exc}': 'invalid scenario: {exc}'
+? 'lance demasiado costoso: ~{estimate:.0f} s estimados para {n} pasos a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o los pasos'
+: 'haul too costly: ~{estimate:.0f} s estimated for {n} steps at resolution {resolution} (maximum {max_cost:.0f} s); lower the resolution or the steps'
+'no se puede simular el lance: {exc}': 'the haul cannot be simulated: {exc}'
+? 'exploración demasiado costosa: ~{estimate:.0f} s estimados para {n} estados a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o la cantidad de estados'
+: 'exploration too costly: ~{estimate:.0f} s estimated for {n} states at resolution {resolution} (maximum {max_cost:.0f} s); lower the resolution or the number of states'
+'no se puede explorar: {exc}': 'cannot explore: {exc}'
+? 'selectividad demasiado costosa: ~{estimate:.0f} s estimados para {n} variantes a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o la cantidad de variantes'
+: 'selectivity too costly: ~{estimate:.0f} s estimated for {n} variants at resolution {resolution} (maximum {max_cost:.0f} s); lower the resolution or the number of variants'
+'no se puede simular la variante {v}: {exc}': 'variant {v} cannot be simulated: {exc}'
+Rombo: Diamond
+Cuadrada: Square
+? 'incertidumbre demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); baje la resolución, las muestras o las evaluaciones'
+: 'uncertainty too costly: ~{estimate:.0f} s estimated (maximum {limit:.0f} s); lower the resolution, the samples or the evaluations'
+? 'calibración demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); baje la resolución, las muestras o las evaluaciones'
+: 'calibration too costly: ~{estimate:.0f} s estimated (maximum {limit:.0f} s); lower the resolution, the samples or the evaluations'
+rango inválido para {name}: invalid range for {name}
+'no se puede calcular la incertidumbre: {exc}': 'the uncertainty cannot be computed: {exc}'
+'observación inválida: {exc}': 'invalid observation: {exc}'
+la referencia DynamiT es de la red FAO A-3 estándar sin editar: the DynamiT reference applies only to the unedited standard FAO A-3 net
+hacen falta observaciones o reference = 'dynamit': observations or reference = 'dynamit' are required
+'no se puede calibrar: {exc}': 'cannot calibrate: {exc}'
+'registro inválido: {exc}': 'invalid log: {exc}'
+el archivo no es base64 válido: the file is not valid base64
+'no se pudo leer la planilla: {exc}': 'the spreadsheet could not be read: {exc}'
+'lote demasiado grande: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); pártalo en tramos más chicos': 'batch too large: ~{estimate:.0f} s estimated (maximum {limit:.0f} s); split it into smaller chunks'
+el informe PDF es para lotes de flota: the PDF report is for fleet batches
+'formato: csv, xlsx, pdf o html': 'format: csv, xlsx, pdf or html'
+'variant: std o mod': 'variant: std or mod'
+'eye_allowance_m: entre 0 y 5 m': 'eye_allowance_m: between 0 and 5 m'
+'formato: html, pdf o xlsx': 'format: html, pdf or xlsx'
+'ejercicio desconocido: {id!r}': 'unknown exercise: {id!r}'
+'laboratorio desconocido: {id!r}': 'unknown lab: {id!r}'
+'paso desconocido: {id!r}': 'unknown step: {id!r}'
+Separación de portones: Otter board spread
+Abertura horizontal: Horizontal opening
+Abertura vertical: Vertical opening
+Altura de la relinga superior: Headrope height
+Resistencia de la red: Net drag
+Tiro en el buque: Pull at the vessel
+Tensión del cable (portón): Warp tension (otter board)
+C_N del hilo: Twine C_N
+C_T del hilo: Twine C_T
+Factor de C_L del portón: Otter board C_L factor
+Factor de C_D del portón: Otter board C_D factor
+μ tren–fondo: μ gear–seabed
+μ portón–fondo: μ otter board–seabed
+'magnitud desconocida: {q!r} (use {names})': 'unknown quantity: {q!r} (use {names})'
+el valor observado debe ser positivo: the observed value must be positive
+speed_kn fuera de rango (0,3–6 kn): speed_kn out of range (0.3–6 kn)
+catch_kg debe ser ≥ 0 y weight > 0: catch_kg must be ≥ 0 and weight > 0
+DynamiT no tiene {v} kn: DynamiT has no {v} kn
+hacen falta observaciones: observations are required
+hay que elegir al menos un parámetro: at least one parameter must be chosen
+'parámetro desconocido: {p!r} (use {names})': 'unknown parameter: {p!r} (use {names})'
+parámetros repetidos: repeated parameters
+catálogo de fondos: seabed catalogue
+C_L del portón: Otter board C_L
+C_D del portón: Otter board C_D
+±10 % (A VERIFICAR): ±10 % (TO BE VERIFIED)
+Densidad aparente de la captura: Catch bulk density
+A VERIFICAR: TO BE VERIFIED
+C_p de la captura: Catch C_p
+O'Neill y O'Donoghue 1997 (A VERIFICAR): O'Neill and O'Donoghue 1997 (TO BE VERIFIED)
+Ancho en contacto con el fondo: Width in contact with the seabed
+n debe ser ≥ 2: n must be ≥ 2
+'entrada desconocida: {name!r} (use {names})': 'unknown input: {name!r} (use {names})'
+'escenario de ensuciamiento desconocido: {key!r}': 'unknown fouling scenario: {key!r}'
+catch_kg debe ser ≥ 0: catch_kg must be ≥ 0
+catch_bulk_density fuera de rango (200–1300 kg/m³): catch_bulk_density out of range (200–1300 kg/m³)
+catch_body_density fuera de rango (900–2000 kg/m³): catch_body_density out of range (900–2000 kg/m³)
+catch_cp fuera de rango (0–3): catch_cp out of range (0–3)
+'{name} fuera de rango (0–1,5)': '{name} out of range (0–1.5)'
+fouling_level fuera de rango (0–2): fouling_level out of range (0–2)
+current_kn fuera de rango (−2 a 2 kn): current_kn out of range (−2 to 2 kn)
+warp_length_m fuera de rango (20–3000 m): warp_length_m out of range (20–3000 m)
+haul_hours fuera de rango (0,1–24 h): haul_hours out of range (0.1–24 h)
+mesh_bending_factor fuera de rango (0–20): mesh_bending_factor out of range (0–20)
+'{name} fuera de rango (0,3–2)': '{name} out of range (0.3–2)'
+con una NetSpec sola hay que indicar door_spread_m: with a bare NetSpec, door_spread_m must be given
+'velocidad relativa al agua muy baja ({v:.2f} kn): la corriente a favor no puede igualar a la velocidad de arrastre': 'speed through the water too low ({v:.2f} kn): a following current cannot match the towing speed'
+door_spread_m debe tener un valor por velocidad: door_spread_m must have one value per speed
+'variable desconocida: {v!r} (use {names})': 'unknown variable: {v!r} (use {names})'
+resolution debe ser ≥ 2: resolution must be ≥ 2
+la simulación necesita una red de dos caras (planos upper y lower): the simulation needs a two-faced net (upper and lower planes)
+Planta (vista superior): Plan (top view)
+'Red simulada: planta': 'Simulated net: plan'
+Perfil (vista lateral): Profile (side view)
+' · escala vertical × {x}': ' · vertical scale × {x}'
+fondo: seabed
+'Red simulada: perfil': 'Simulated net: profile'
+Frente (vista desde proa): Front (view from ahead)
+'Red simulada: frente': 'Simulated net: front'
+lima (relinga superior): headrope (upper rope)
+burlón (relinga inferior): footrope (lower rope)
+paño del dorso: top panel netting
+paño del vientre: belly netting

@@ -31,6 +31,7 @@ from dataclasses import asdict, dataclass, field
 from fractions import Fraction
 from typing import TYPE_CHECKING, Any, Literal
 
+from trawlkit.i18n import N_, dec, t
 from trawlkit.io.schema import NetSpec, Panel
 from trawlkit.net import panel_edges, panel_planes, panel_weight_air_kg
 
@@ -49,15 +50,16 @@ EYE_ALLOWANCE_M = 0.5
 #: Tramo de la pauta de armado sobre la relinga [m].
 SCHEDULE_STEP_M = 0.5
 
-PLANE_NAMES: dict[str, str] = {"upper": "dorso", "lower": "vientre", "side": "costado"}
+#: Nombre de cada plano y de cada sección en los textos de taller (se traducen con ``t``).
+PLANE_NAMES: dict[str, str] = {"upper": N_("dorso"), "lower": N_("vientre"), "side": N_("costado")}
 SECTION_NAMES: dict[str, str] = {
-    "wing_tip": "punta de ala",
-    "wing": "ala",
+    "wing_tip": N_("punta de ala"),
+    "wing": N_("ala"),
     "square": "square",
-    "belly": "vientre (2ª sección de ala)",
-    "body": "cuerpo",
-    "extension": "extensión",
-    "codend": "bolsa",
+    "belly": N_("vientre (2ª sección de ala)"),
+    "body": N_("cuerpo"),
+    "extension": N_("extensión"),
+    "codend": N_("bolsa"),
 }
 
 _TOKEN = re.compile(r"(\d*)([NTB])")
@@ -85,21 +87,22 @@ def cut_cycle(code: str) -> tuple[int, int, int]:
         counts[m.group(2)] += int(m.group(1) or 1)
         pos = m.end()
     if pos != len(c) or pos == 0:
-        raise ValueError(f"código de corte no reconocido: {code!r}")
+        raise ValueError(t("código de corte no reconocido: {code!r}", code=code))
     return counts["N"], counts["T"], counts["B"]
 
 
 def _plural(n: int, one: str, many: str) -> str:
-    return f"{n} {one if n == 1 else many}"
+    """``one`` o ``many`` (textos con ``{n}``, ya marcados con ``N_``) en el idioma activo."""
+    return t(one if n == 1 else many, n=n)
 
 
 def cut_ratio_of(code: str) -> float:
     """Mallas de ancho que gana o pierde el costado por malla de alto (``AB`` = 1, ``AN`` = 0)."""
-    n, t, b = cut_cycle(code)
+    n, tv, b = cut_cycle(code)
     deep = n + b / 2.0
     if deep == 0:
         return math.inf
-    return (t + b / 2.0) / deep
+    return (tv + b / 2.0) / deep
 
 
 def nearest_cut_code(ratio: float) -> str:
@@ -131,25 +134,31 @@ class CutSide:
 
 def describe_cut(code: str, depth: int) -> tuple[int, str]:
     """Ciclos y texto de taller de un corte a lo largo de ``depth`` mallas de alto."""
-    n, t, b = cut_cycle(code)
+    n, tv, b = cut_cycle(code)
     deep = n + b / 2.0
     c = code.strip().upper()
     if c == "AN":
-        return depth, f"recto, todo puntas (AN): {_plural(depth, 'punta', 'puntas')}"
+        points = _plural(depth, N_("{n} punta"), N_("{n} puntas"))
+        return depth, t("recto, todo puntas (AN): {points}", points=points)
     if c == "AT":
-        return depth, "todo transversales (AT)"
+        return depth, t("todo transversales (AT)")
     if c == "AB":
         bars = 2 * depth
-        return bars, f"todo malletas (AB): {bars} malletas seguidas"
+        return bars, t("todo malletas (AB): {bars} malletas seguidas", bars=bars)
     cycles = max(1, round(depth / deep)) if deep > 0 else depth
     parts = []
     if n:
-        parts.append(_plural(n, "punta", "puntas"))
-    if t:
-        parts.append(_plural(t, "transversal", "transversales"))
+        parts.append(_plural(n, N_("{n} punta"), N_("{n} puntas")))
+    if tv:
+        parts.append(_plural(tv, N_("{n} transversal"), N_("{n} transversales")))
     if b:
-        parts.append(_plural(b, "malleta", "malletas"))
-    return cycles, f"{c}: {' y '.join(parts)} por ciclo; repetir {cycles} veces"
+        parts.append(_plural(b, N_("{n} malleta"), N_("{n} malletas")))
+    return cycles, t(
+        "{code}: {parts} por ciclo; repetir {cycles} veces",
+        code=c,
+        parts=t(" y ").join(parts),
+        cycles=cycles,
+    )
 
 
 # ---------------------------------------------------------------------------------------------
@@ -207,7 +216,9 @@ def _paired_ids(spec: NetSpec) -> set[str]:
 
 
 def _planes_label(panel: Panel) -> str:
-    return " y ".join(PLANE_NAMES.get(str(p.value), str(p.value)) for p in panel_planes(panel))
+    return t(" y ").join(
+        t(PLANE_NAMES.get(str(p.value), str(p.value))) for p in panel_planes(panel)
+    )
 
 
 def _cut_sides(panel: Panel, paired: bool) -> tuple[CutSide, ...]:
@@ -218,9 +229,9 @@ def _cut_sides(panel: Panel, paired: bool) -> tuple[CutSide, ...]:
     sides: list[tuple[str, str, bool]] = []
     if not paired:
         if code1:
-            sides = [("ambos costados", code1, False)]
+            sides = [(t("ambos costados"), code1, False)]
         else:
-            sides = [("ambos costados", nearest_cut_code(taper / 2.0 / depth), True)]
+            sides = [(t("ambos costados"), nearest_cut_code(taper / 2.0 / depth), True)]
     else:
         # Un costado de ala cambia r·N mallas de ancho; los dos juntos dan |T_boca − T_bolsa|,
         # sumando o restando (``netcheck``). Al costado que falta se le da lo que queda.
@@ -240,13 +251,16 @@ def _cut_sides(panel: Panel, paired: bool) -> tuple[CutSide, ...]:
             c1, inferred1 = nearest_cut_code(rest(c2)), True
         else:
             c1, c2, inferred1, inferred2 = nearest_cut_code(taper / depth), "AN", True, True
-        sides = [("costado de la relinga", c2, inferred2), ("costado interior", c1, inferred1)]
+        sides = [
+            (t("costado de la relinga"), c2, inferred2),
+            (t("costado interior"), c1, inferred1),
+        ]
     out = []
     for side, code, inferred in sides:
         try:
             cycles, text = describe_cut(code, depth)
         except ValueError:
-            cycles, text = 0, f"{code}: ciclo no reconocido, cortar según el plano"
+            cycles, text = 0, t("{code}: ciclo no reconocido, cortar según el plano", code=code)
         out.append(CutSide(side, code, cycles, text, inferred))
     return tuple(out)
 
@@ -277,12 +291,15 @@ def cutting_sheet(spec: NetSpec, geometry: NetGeometry) -> tuple[CutPiece, ...]:
         if is_pair:
             stock /= 2.0
         if p.meshes_top == p.meshes_bottom:
-            start = "lados rectos: cortar a la medida"
+            start = t("lados rectos: cortar a la medida")
         elif p.meshes_top > p.meshes_bottom:
-            start = f"empezar por el borde de boca ({p.meshes_top} mallas) y bajar hacia la bolsa"
+            start = t(
+                "empezar por el borde de boca ({n} mallas) y bajar hacia la bolsa", n=p.meshes_top
+            )
         else:
-            start = (
-                f"empezar por el borde de bolsa ({p.meshes_bottom} mallas) y subir hacia la boca"
+            start = t(
+                "empezar por el borde de bolsa ({n} mallas) y subir hacia la boca",
+                n=p.meshes_bottom,
             )
         m = p.mesh_mm / 1000.0
         out.append(
@@ -290,7 +307,7 @@ def cutting_sheet(spec: NetSpec, geometry: NetGeometry) -> tuple[CutPiece, ...]:
                 id=p.id,
                 name=p.name or p.id,
                 planes=_planes_label(p),
-                section=SECTION_NAMES.get(str(p.section.value), str(p.section.value)),
+                section=t(SECTION_NAMES.get(str(p.section.value), str(p.section.value))),
                 pieces=p.count,
                 paired=p.id in paired,
                 material=p.material,
@@ -398,29 +415,29 @@ class Join:
         return asdict(self)
 
 
-def _dec(x: float, nd: int = 1) -> str:
-    """Número con coma decimal para los textos de taller."""
-    return f"{x:.{nd}f}".replace(".", ",")
-
-
 def join_rule(a: str, na: int, b: str, nb: int) -> tuple[str, str]:
     """Relación ``a:b`` simplificada y regla de toma para unir ``na`` mallas con ``nb``."""
     if na <= 0 or nb <= 0:
-        return "—", "sin mallas para unir"
+        return "—", t("sin mallas para unir")
     frac = Fraction(na, nb).limit_denominator(8)
     ratio = f"{frac.numerator}:{frac.denominator}"
     if na == nb:
-        return "1:1", "malla a malla"
+        return "1:1", t("malla a malla")
     big, n_big, n_small = (a, na, nb) if na > nb else (b, nb, na)
     extra = n_big - n_small
     if extra <= n_small:
         every = n_small / extra
-        return ratio, (
-            f"malla a malla, tomando 2 mallas juntas de {big} cada {_dec(every)} mallas "
-            f"({extra} tomas en total)"
+        return ratio, t(
+            "malla a malla, tomando 2 mallas juntas de {big} cada {every} mallas "
+            "({extra} tomas en total)",
+            big=big,
+            every=dec(every),
+            extra=extra,
         )
     per = n_big / n_small
-    return ratio, f"tomar {_dec(per)} mallas de {big} por cada malla del otro paño"
+    return ratio, t(
+        "tomar {per} mallas de {big} por cada malla del otro paño", per=dec(per), big=big
+    )
 
 
 def _m(p: Panel) -> float:
@@ -444,7 +461,7 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
         joins.append(Join(step=len(joins) + 1, ratio=ratio, rule=rule, **kw))
 
     for plane in lay.planes:
-        name = PLANE_NAMES.get(plane, plane)
+        name = t(PLANE_NAMES.get(plane, plane))
         central = [s.panel for s in lay.central(plane)]
         wings = [s.panel for s in lay.side_chain(plane, "right")]
         for a, b in zip(central, central[1:], strict=False):
@@ -452,9 +469,9 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
                 plane=name,
                 kind="seam",
                 a=a.id,
-                a_edge="borde de bolsa",
+                a_edge=t("borde de bolsa"),
                 b=b.id,
-                b_edge="borde de boca",
+                b_edge=t("borde de boca"),
                 meshes_a=a.meshes_bottom,
                 meshes_b=b.meshes_top,
                 times=1,
@@ -464,13 +481,13 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
                 plane=name,
                 kind="seam",
                 a=a.id,
-                a_edge="borde de bolsa",
+                a_edge=t("borde de bolsa"),
                 b=b.id,
-                b_edge="borde de boca",
+                b_edge=t("borde de boca"),
                 meshes_a=a.meshes_bottom,
                 meshes_b=b.meshes_top,
                 times=2,
-                note="una vez en cada ala (izquierda y derecha)",
+                note=t("una vez en cada ala (izquierda y derecha)"),
             )
         if wings and central:
             wing, body = wings[-1], central[0]
@@ -480,15 +497,17 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
                 plane=name,
                 kind="wing_to_body",
                 a=wing.id,
-                a_edge="borde de bolsa",
+                a_edge=t("borde de bolsa"),
                 b=body.id,
-                b_edge="borde de boca, desde cada esquina",
+                b_edge=t("borde de boca, desde cada esquina"),
                 meshes_a=wing.meshes_bottom,
                 meshes_b=on_body,
                 times=2,
-                note=(
-                    f"una ala en cada esquina de {body.id}; quedan libres {bosom} mallas en el "
-                    "centro: la bocana, que se arma directamente en la relinga"
+                note=t(
+                    "una ala en cada esquina de {body}; quedan libres {bosom} mallas en el "
+                    "centro: la bocana, que se arma directamente en la relinga",
+                    body=body.id,
+                    bosom=bosom,
                 ),
             )
     if "side" in lay.planes:
@@ -499,16 +518,16 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
             face_panels = [sh.panel for sh in lay.central(face)][::-1]
             for sp, fp in zip(side_panels, face_panels, strict=False):
                 add(
-                    plane="costado",
+                    plane=t("costado"),
                     kind="side_panel",
                     a=sp.id,
-                    a_edge=f"costado hacia el {PLANE_NAMES[face]}",
+                    a_edge=t("costado hacia el {face}", face=t(PLANE_NAMES[face])),
                     b=fp.id,
-                    b_edge="costado",
+                    b_edge=t("costado"),
                     meshes_a=sp.meshes_depth,
                     meshes_b=fp.meshes_depth,
                     times=2,
-                    note="a cada lado de la red, desde el copo hacia la boca",
+                    note=t("a cada lado de la red, desde el copo hacia la boca"),
                 )
     elif "upper" in lay.planes and "lower" in lay.planes:
 
@@ -524,19 +543,21 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
         nu, lu = edge("upper")
         nl, ll = edge("lower")
         add(
-            plane="dorso y vientre",
+            plane=t("dorso y vientre"),
             kind="side_seam",
-            a="dorso",
-            a_edge="costado",
-            b="vientre",
-            b_edge="costado",
+            a=t("dorso"),
+            a_edge=t("costado"),
+            b=t("vientre"),
+            b_edge=t("costado"),
             meshes_a=nu,
             meshes_b=nl,
             times=2,
-            note=(
-                f"costura lateral a cada lado, de la bolsa hacia la punta de ala: dorso "
-                f"{_dec(lu, 2)} m y vientre {_dec(ll, 2)} m estirados; se suele reforzar con "
-                "un cabo de costado"
+            note=t(
+                "costura lateral a cada lado, de la bolsa hacia la punta de ala: dorso "
+                "{upper} m y vientre {lower} m estirados; se suele reforzar con "
+                "un cabo de costado",
+                upper=dec(lu, 2),
+                lower=dec(ll, 2),
             ),
         )
     return tuple(joins)
@@ -581,9 +602,11 @@ def _section(
     step = per_m * SCHEDULE_STEP_M
     e = rope_m / netting if netting > 0 else math.nan
     warning = (
-        "el cabo es más largo que el paño estirado: el paño no se arma directo en él (va a una "
-        "relinga de armado o línea de pesca, y el cabo se une con colgantes o cadenas); revisar "
-        "el plano"
+        t(
+            "el cabo es más largo que el paño estirado: el paño no se arma directo en él (va a "
+            "una relinga de armado o línea de pesca, y el cabo se une con colgantes o cadenas); "
+            "revisar el plano"
+        )
         if e > MAX_HANGING
         else ""
     )
@@ -597,7 +620,7 @@ def _section(
         netting_m=netting,
         hanging=e,
         meshes_per_m=per_m,
-        schedule=f"≈ {_dec(step)} mallas cada {100 * SCHEDULE_STEP_M:.0f} cm",
+        schedule=t("≈ {step} mallas cada {cm:.0f} cm", step=dec(step), cm=100 * SCHEDULE_STEP_M),
         warning=warning,
     )
 
@@ -617,8 +640,8 @@ def hanging(spec: NetSpec, dims: NetDimensions) -> tuple[HangingSection, ...]:
     lay = layout_net(equivalent_two_panel(spec), mode="schematic")
     out: list[HangingSection] = []
     for plane, rope_name, pieces in (
-        ("upper", "lima", dims.headrope),
-        ("lower", "burlón", dims.footrope),
+        ("upper", t("lima"), dims.headrope),
+        ("lower", t("burlón"), dims.footrope),
     ):
         if plane not in lay.planes:
             continue
@@ -627,12 +650,16 @@ def hanging(spec: NetSpec, dims: NetDimensions) -> tuple[HangingSection, ...]:
         if wings:
             meshes = sum(p.meshes_depth for p in wings)
             mesh = sum(p.meshes_depth * _m(p) for p in wings) / meshes
-            out.append(_section(rope_name, "ala", wings, 2, pieces.wing_corrected_m, meshes, mesh))
+            out.append(
+                _section(rope_name, t("ala"), wings, 2, pieces.wing_corrected_m, meshes, mesh)
+            )
         if central:
             body = central[0]
             free = body.meshes_top - (2 * wing_meshes_on_body(wings[-1], body) if wings else 0)
             out.append(
-                _section(rope_name, "bocana", [body], 1, pieces.bosom_corrected_m, free, _m(body))
+                _section(
+                    rope_name, t("bocana"), [body], 1, pieces.bosom_corrected_m, free, _m(body)
+                )
             )
     return tuple(out)
 
@@ -670,15 +697,16 @@ def float_positions(
     front = max(0, min(front, per_wing))
     half = bosom_m / 2.0
     xs: list[tuple[float, str]] = []
+    bosom, first_fifth, wing = t("bocana"), t("ala, primer quinto"), t("ala")
     for k in range(on_bosom):
-        xs.append((-half + (k + 0.5) * bosom_m / on_bosom, "bocana"))
+        xs.append((-half + (k + 0.5) * bosom_m / on_bosom, bosom))
     zone1 = wing_m / 5.0
     rest = per_wing - front
     for sign in (-1.0, 1.0):
         for k in range(front):
-            xs.append((sign * (half + (k + 0.5) * zone1 / front), "ala, primer quinto"))
+            xs.append((sign * (half + (k + 0.5) * zone1 / front), first_fifth))
         for k in range(rest):
-            xs.append((sign * (half + zone1 + (k + 0.5) * (wing_m - zone1) / rest), "ala"))
+            xs.append((sign * (half + zone1 + (k + 0.5) * (wing_m - zone1) / rest), wing))
     xs.sort()
     return tuple(FloatPosition(i + 1, round(x, 3), z) for i, (x, z) in enumerate(xs))
 
@@ -722,14 +750,14 @@ def rope_cuts(result: DesignResult, dims: NetDimensions, eye_m: float) -> tuple[
     fr = result.ballast.footrope_rope.description
     b = result.bridles
     items = [
-        ("headrope", "Lima (relinga superior)", hr, 1, dims.headrope_m, 2),
-        ("footrope", "Burlón (relinga inferior)", fr, 1, dims.footrope_m, 2),
+        ("headrope", t("Lima (relinga superior)"), hr, 1, dims.headrope_m, 2),
+        ("footrope", t("Burlón (relinga inferior)"), fr, 1, dims.footrope_m, 2),
     ]
     if dims.wingtip_reinforcement_m > 0:
         items.append(
             (
                 "wingtip",
-                "Refuerzo de punta de ala",
+                t("Refuerzo de punta de ala"),
                 hr,
                 4,
                 dims.wingtip_reinforcement_m,
@@ -740,26 +768,26 @@ def rope_cuts(result: DesignResult, dims: NetDimensions, eye_m: float) -> tuple[
         items += [
             (
                 "bridle_upper",
-                "Malleta superior (brida)",
-                "cable de bridas",
+                t("Malleta superior (brida)"),
+                t("cable de bridas"),
                 2,
                 b.lengths.upper_m,
                 2,
             ),
             (
                 "bridle_lower",
-                "Malleta inferior (brida)",
-                "cable de bridas",
+                t("Malleta inferior (brida)"),
+                t("cable de bridas"),
                 2,
                 b.lengths.lower_m,
                 2,
             ),
-            ("sweeps", "Patentes", "cable de patentes", 2, b.sweeps_m, 2),
-            ("crowfoot", "Pie de gallo", "cadena o cable", 4, b.crowfoot.length_m, 2),
+            ("sweeps", t("Patentes"), t("cable de patentes"), 2, b.sweeps_m, 2),
+            ("crowfoot", t("Pie de gallo"), t("cadena o cable"), 4, b.crowfoot.length_m, 2),
             (
                 "bridle_chain",
-                "Cadena de reglaje de bridas",
-                "cadena",
+                t("Cadena de reglaje de bridas"),
+                t("cadena"),
                 2,
                 b.lengths.adjust_chain_m,
                 0,
@@ -768,13 +796,20 @@ def rope_cuts(result: DesignResult, dims: NetDimensions, eye_m: float) -> tuple[
     items += [
         (
             "ballast_chain",
-            "Cadena de reglaje del burlón",
-            "cadena",
+            t("Cadena de reglaje del burlón"),
+            t("cadena"),
             1,
             result.case.adjust_chain_m,
             0,
         ),
-        ("warp", "Cable de remolque (por banda)", "cable de remolque", 2, result.warps.warp_m, 1),
+        (
+            "warp",
+            t("Cable de remolque (por banda)"),
+            t("cable de remolque"),
+            2,
+            result.warps.warp_m,
+            1,
+        ),
     ]
     return tuple(
         RopeCut(key, label, mat, n, length, eyes, length + eyes * eye_m)
@@ -836,24 +871,24 @@ def _ballast_zones(result: DesignResult) -> tuple[BallastZone, ...]:
     hi = result.ballast.distribution_max
     return (
         BallastZone(
-            "reglaje",
-            "cadena en el centro del burlón",
+            t("reglaje"),
+            t("cadena en el centro del burlón"),
             lo.adjust_kg,
             hi.adjust_kg,
             lo.adjust_kg_m,
             hi.adjust_kg_m,
         ),
         BallastZone(
-            "bocana",
-            "2,5 m centrales del burlón",
+            t("bocana"),
+            t("{w} m centrales del burlón", w=dec(2.5)),
             lo.bosom_kg,
             hi.bosom_kg,
             lo.bosom_kg_m,
             hi.bosom_kg_m,
         ),
         BallastZone(
-            "alas",
-            "resto del burlón, parejo en las dos alas",
+            t("alas"),
+            t("resto del burlón, parejo en las dos alas"),
             lo.wings_kg,
             hi.wings_kg,
             lo.wings_kg_m,
@@ -868,7 +903,7 @@ def guide(
     """Guía de construcción de la red estándar (``std``) o de la modificada (``mod``)."""
     if variant == "mod":
         if result.case.net_modified is None:
-            raise ValueError("el caso no tiene red modificada")
+            raise ValueError(t("el caso no tiene red modificada"))
         spec, geometry, dims = (
             result.case.net_modified,
             result.geometry.mod,
@@ -877,7 +912,7 @@ def guide(
     else:
         spec, geometry, dims = result.case.net, result.geometry.std, result.dimensions.std
     if eye_allowance_m < 0:
-        raise ValueError("el sobrante por gaza no puede ser negativo")
+        raise ValueError(t("el sobrante por gaza no puede ser negativo"))
     pieces = cutting_sheet(spec, geometry)
     fd = result.floats.distribution
     floats = float_positions(
@@ -888,16 +923,22 @@ def guide(
         dims.headrope.wing_corrected_m,
     )
     notes = [
-        "Mallas a malla estirada; los largos de cabo incluyen el armado (embando) del motor.",
-        f"Sobrante por gaza o empalme: {_dec(eye_allowance_m, 2)} m (A VERIFICAR según el cabo "
-        "y el empalme).",
-        "La posición de las boyas sigue la regla selectiva del libro (70 % en las alas, 60 % de "
-        "ellas en el primer quinto); ajustar en la prueba de mar.",
-        "Los cortes marcados como inferidos no vienen del plano: salen del cambio de ancho del "
-        "paño.",
+        t("Mallas a malla estirada; los largos de cabo incluyen el armado (embando) del motor."),
+        t(
+            "Sobrante por gaza o empalme: {eye} m (A VERIFICAR según el cabo y el empalme).",
+            eye=dec(eye_allowance_m, 2),
+        ),
+        t(
+            "La posición de las boyas sigue la regla selectiva del libro (70 % en las alas, 60 % "
+            "de ellas en el primer quinto); ajustar en la prueba de mar."
+        ),
+        t(
+            "Los cortes marcados como inferidos no vienen del plano: salen del cambio de ancho "
+            "del paño."
+        ),
     ]
     if any(s.inferred for p in pieces for s in p.sides):
-        notes.append("Hay cortes inferidos: verificarlos contra el plano antes de cortar.")
+        notes.append(t("Hay cortes inferidos: verificarlos contra el plano antes de cortar."))
     sections = hanging(spec, dims)
     for h in sections:
         if h.warning:

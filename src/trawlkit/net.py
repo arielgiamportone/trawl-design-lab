@@ -19,6 +19,7 @@ import numpy as np
 import numpy.typing as npt
 
 from trawlkit.compat import ERRATA_BY_KEY, Compat
+from trawlkit.i18n import t
 from trawlkit.io.loader import load_catalogue
 from trawlkit.io.schema import NetSpec, Panel, Plane, Section
 from trawlkit.materials import (
@@ -328,7 +329,7 @@ def _runnage(panel: Panel) -> float:
     if panel.rtex is not None:
         return 1_000_000.0 / float(panel.rtex)
     if panel.runnage_m_per_kg is None:
-        raise ValueError(f"panel {panel.id}: hace falta rtex o runnage_m_per_kg")
+        raise ValueError(t("panel {id}: hace falta rtex o runnage_m_per_kg", id=panel.id))
     return float(panel.runnage_m_per_kg)
 
 
@@ -358,7 +359,7 @@ def group_rows(spec: NetSpec) -> tuple[NettingRow, ...]:
                 if pl not in planes:
                     planes.append(pl)
         if first.hanging_ratio is None:
-            raise ValueError(f"panel {first.id}: hace falta hanging_ratio (U1)")
+            raise ValueError(t("panel {id}: hace falta hanging_ratio (U1)", id=first.id))
         t1, t2 = panel_edges(first)
         rows.append(
             NettingRow(
@@ -544,7 +545,12 @@ def analyse(
     notes: list[str] = []
     if compat is Compat.EXCEL:
         rows = apply_excel_codend_quirk(rows)
-        notes.append(f"{ERRATUM_CODEND_MINOR_SIDE}: bolsas I/J con T2 := N (Mec!K36:K37)")
+        notes.append(
+            t(
+                "{code}: bolsas I/J con T2 := N (Mec!K36:K37)",
+                code=ERRATUM_CODEND_MINOR_SIDE,
+            )
+        )
 
     mats: Sequence[Material] | None = materials
     if compat is Compat.CORRECTED and mats is None:

@@ -16,6 +16,7 @@ import yaml
 from pydantic import ValidationError
 
 from trawlkit.compat import Compat
+from trawlkit.i18n import N_, t
 from trawlkit.io import load_doors, load_net, load_vessels
 from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignCase, DesignResult, run
@@ -151,7 +152,7 @@ def net_preset(net_id: str) -> NetSpec:
     """Red del catálogo por id (``NotFoundError`` si no existe)."""
     presets = net_presets()
     if net_id not in presets:
-        raise NotFoundError(f"red desconocida: {net_id!r}")
+        raise NotFoundError(t("red desconocida: {net!r}", net=net_id))
     return presets[net_id]
 
 
@@ -179,7 +180,7 @@ def component_kinds() -> list[dict[str, Any]]:
         out.append(
             {
                 "kind": kind,
-                "label": comp.KIND_LABEL[kind],
+                "label": t(comp.KIND_LABEL[kind]),
                 "items": sm["items"],
                 "generic": sm["generic"],
                 "brands": sm["brands"],
@@ -305,7 +306,7 @@ def _net(value: str | NetSpec | None) -> NetSpec | None:
         return normalise_inline_net(value)
     presets = net_presets()
     if value not in presets:
-        raise NotFoundError(f"red desconocida: {value!r}")
+        raise NotFoundError(t("red desconocida: {net!r}", net=value))
     # load_net sólo con ids validados: nunca rutas provistas por el cliente.
     return load_net(value)
 
@@ -351,12 +352,19 @@ def layout_of(net: str | NetSpec, mode: str = "schematic") -> dict[str, Any]:
     return {"net_id": lay.net_id, "mode": lay.mode, "bbox": list(lay.bbox), "planes": planes}
 
 
+#: Mensaje de id desconocido por tipo de catálogo.
+_UNKNOWN = {
+    "buque": N_("buque desconocido: {value!r}"),
+    "portón": N_("portón desconocido: {value!r}"),
+}
+
+
 def _pick(value: Any, presets: dict[str, Any], kind: str) -> Any:
     if value is None:
         return next(iter(presets.values()))
     if isinstance(value, str):
         if value not in presets:
-            raise NotFoundError(f"{kind} desconocido: {value!r}")
+            raise NotFoundError(t(_UNKNOWN[kind], value=value))
         return presets[value]
     return value
 
@@ -369,7 +377,7 @@ def _pick_door(value: str | Door | None) -> Door:
         try:
             item = get_component("door", value)
         except KeyError as exc:
-            raise NotFoundError(f"portón desconocido: {value!r}") from exc
+            raise NotFoundError(t("portón desconocido: {value!r}", value=value)) from exc
         assert isinstance(item, DoorItem)
         return item.to_door()
     picked: Door = _pick(value, door_presets(), "portón")
@@ -387,7 +395,10 @@ def _field_comments() -> dict[str, str]:
 
 
 def params_info() -> list[dict[str, Any]]:
-    """Parámetros sobrescribibles de ``DesignCase`` con tipo, valor por defecto y celda."""
+    """Parámetros sobrescribibles de ``DesignCase`` con tipo, valor por defecto y celda.
+
+    El comentario sale en el idioma del pedido (catálogo ``data/i18n/en/params.yaml``).
+    """
     comments = _field_comments()
     out = []
     for f in dataclasses.fields(DesignCase):
@@ -399,7 +410,7 @@ def params_info() -> list[dict[str, Any]]:
                 "name": f.name,
                 "type": str(f.type),
                 "default": to_jsonable(default),
-                "comment": comments.get(f.name, ""),
+                "comment": t(comments[f.name]) if comments.get(f.name) else "",
             }
         )
     return out
@@ -410,19 +421,21 @@ def _coerce_params(params: dict[str, Any]) -> dict[str, Any]:
     allowed = set(info)
     unknown = set(params) - allowed
     if unknown:
-        raise BadRequestError(f"parámetros desconocidos: {sorted(unknown)}")
+        raise BadRequestError(t("parámetros desconocidos: {names}", names=sorted(unknown)))
     out: dict[str, Any] = {}
     for k, v in params.items():
         values = v if isinstance(v, list) else [v]
         for item in values:
             if isinstance(item, bool):
                 if info[k] != "bool":
-                    raise BadRequestError(f"{k}: valor no admitido {item!r}")
+                    raise BadRequestError(t("{k}: valor no admitido {item!r}", k=k, item=item))
                 continue
             if not isinstance(item, (int, float, str)):
-                raise BadRequestError(f"{k}: valor no admitido {item!r}")
+                raise BadRequestError(t("{k}: valor no admitido {item!r}", k=k, item=item))
             if isinstance(item, (int, float)) and (not math.isfinite(item) or item < 0):
-                raise BadRequestError(f"{k}: debe ser un número finito y no negativo ({item!r})")
+                raise BadRequestError(
+                    t("{k}: debe ser un número finito y no negativo ({item!r})", k=k, item=item)
+                )
         out[k] = tuple(v) if isinstance(v, list) else v
     return out
 
@@ -487,9 +500,9 @@ def run_case(case: DesignCase) -> DesignResult:
     try:
         return run(case)
     except KeyError as exc:
-        raise BadRequestError(f"el caso no se puede calcular: {exc.args[0]}") from exc
+        raise BadRequestError(t("el caso no se puede calcular: {exc}", exc=exc.args[0])) from exc
     except (ValueError, ZeroDivisionError, IndexError) as exc:
-        raise BadRequestError(f"el caso no se puede calcular: {exc}") from exc
+        raise BadRequestError(t("el caso no se puede calcular: {exc}", exc=exc)) from exc
 
 
 def optimize_case(
@@ -514,13 +527,20 @@ def optimize_case(
     limit = opt_max_grid()
     if max(grid) > limit:
         raise BadRequestError(
-            f"malla de optimización demasiado grande: {grid[0]} × {grid[1]} "
-            f"(máximo {limit} × {limit} en este servidor)"
+            t(
+                "malla de optimización demasiado grande: {a} × {b} "
+                "(máximo {limit} × {limit} en este servidor)",
+                a=grid[0],
+                b=grid[1],
+                limit=limit,
+            )
         )
     if refine and not refine_allowed():
         raise BadRequestError(
-            "el refinado (evolución diferencial) está desactivado en este servidor; "
-            "optimice sólo con la malla (refine = false)"
+            t(
+                "el refinado (evolución diferencial) está desactivado en este servidor; "
+                "optimice sólo con la malla (refine = false)"
+            )
         )
     case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels)
     try:
@@ -536,7 +556,7 @@ def optimize_case(
             door_angle=door_angle,
         )
     except (ValueError, ZeroDivisionError, IndexError) as exc:
-        raise BadRequestError(f"no se puede optimizar el caso: {exc}") from exc
+        raise BadRequestError(t("no se puede optimizar el caso: {exc}", exc=exc)) from exc
     out: dict[str, Any] = to_jsonable(result.to_dict())
     return out
 
@@ -552,7 +572,9 @@ def user_items(items: list[dict[str, Any]] | None) -> Iterator[None]:
         ctx = user_components(items or [])
         ctx.__enter__()
     except PydValidationError as exc:
-        raise BadRequestError(f"componente en línea inválido: {exc.errors()[0]['msg']}") from exc
+        raise BadRequestError(
+            t("componente en línea inválido: {msg}", msg=exc.errors()[0]["msg"])
+        ) from exc
     try:
         yield
     finally:
@@ -603,9 +625,9 @@ def optimize_components_case(
             max_twines=max_twines,
         )
     except KeyError as exc:
-        raise NotFoundError(f"componente desconocido: {exc}") from exc
+        raise NotFoundError(t("componente desconocido: {exc}", exc=exc)) from exc
     except (ValueError, ZeroDivisionError, IndexError) as exc:
-        raise BadRequestError(f"no se puede armar el caso: {exc}") from exc
+        raise BadRequestError(t("no se puede armar el caso: {exc}", exc=exc)) from exc
     out: dict[str, Any] = to_jsonable(result.to_dict())
     return out
 
@@ -739,9 +761,15 @@ def simulate_case(
     max_cost = sim_max_cost_s()
     if estimate > max_cost:
         raise BadRequestError(
-            f"simulación demasiado costosa: ~{estimate:.0f} s estimados para "
-            f"{len(speeds_kn)} velocidades a resolución {resolution} (máximo "
-            f"{max_cost:.0f} s); baje la resolución o la cantidad de velocidades"
+            t(
+                "simulación demasiado costosa: ~{estimate:.0f} s estimados para "
+                "{n} velocidades a resolución {resolution} (máximo "
+                "{max_cost:.0f} s); baje la resolución o la cantidad de velocidades",
+                estimate=estimate,
+                n=len(speeds_kn),
+                resolution=resolution,
+                max_cost=max_cost,
+            )
         )
     result = run_case(case)
     order = sorted(range(len(speeds_kn)), key=lambda i: speeds_kn[i])
@@ -759,7 +787,7 @@ def simulate_case(
             scenario=sc,
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-        raise BadRequestError(f"no se puede simular el caso: {exc}") from exc
+        raise BadRequestError(t("no se puede simular el caso: {exc}", exc=exc)) from exc
     by_speed = dict(zip(ordered, sims, strict=True))
     sims_req = [by_speed[float(v)] for v in speeds_kn]
 
@@ -859,7 +887,7 @@ def make_scenario(data: dict[str, Any] | None) -> Any:
     try:
         return Scenario(**data)
     except (ValueError, KeyError) as exc:
-        raise BadRequestError(f"escenario inválido: {exc}") from exc
+        raise BadRequestError(t("escenario inválido: {exc}", exc=exc)) from exc
 
 
 def seabed_catalogue() -> list[dict[str, Any]]:
@@ -906,8 +934,15 @@ def haul_case(
     max_cost = sim_max_cost_s()
     if estimate > max_cost:
         raise BadRequestError(
-            f"lance demasiado costoso: ~{estimate:.0f} s estimados para {len(catches_kg)} pasos "
-            f"a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o los pasos"
+            t(
+                "lance demasiado costoso: ~{estimate:.0f} s estimados para {n} pasos "
+                "a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución o "
+                "los pasos",
+                estimate=estimate,
+                n=len(catches_kg),
+                resolution=resolution,
+                max_cost=max_cost,
+            )
         )
     result = run_case(case)
     try:
@@ -921,7 +956,7 @@ def haul_case(
             ct=DEFAULT_CT if ct is None else ct,
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-        raise BadRequestError(f"no se puede simular el lance: {exc}") from exc
+        raise BadRequestError(t("no se puede simular el lance: {exc}", exc=exc)) from exc
     ref = dataclasses.replace(case, speeds_kn=tuple(sorted({*case.speeds_kn, float(speed_kn)})))
     try:
         eng = run(ref)
@@ -1048,9 +1083,15 @@ def explore_case(
     max_cost = sim_max_cost_s()
     if estimate > max_cost:
         raise BadRequestError(
-            f"exploración demasiado costosa: ~{estimate:.0f} s estimados para {len(values)} "
-            f"estados a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
-            "o la cantidad de estados"
+            t(
+                "exploración demasiado costosa: ~{estimate:.0f} s estimados para {n} "
+                "estados a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
+                "o la cantidad de estados",
+                estimate=estimate,
+                n=len(values),
+                resolution=resolution,
+                max_cost=max_cost,
+            )
         )
     result = run_case(case)
     try:
@@ -1065,7 +1106,7 @@ def explore_case(
             ct=DEFAULT_CT if ct is None else ct,
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-        raise BadRequestError(f"no se puede explorar: {exc}") from exc
+        raise BadRequestError(t("no se puede explorar: {exc}", exc=exc)) from exc
     geometry = frames = None
     if include_geometry and sims:
         model = build_model(
@@ -1215,9 +1256,15 @@ def selectivity_case(
     max_cost = sim_max_cost_s()
     if estimate > max_cost:
         raise BadRequestError(
-            f"selectividad demasiado costosa: ~{estimate:.0f} s estimados para {len(vars_)} "
-            f"variantes a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
-            "o la cantidad de variantes"
+            t(
+                "selectividad demasiado costosa: ~{estimate:.0f} s estimados para {n} "
+                "variantes a resolución {resolution} (máximo {max_cost:.0f} s); baje la resolución "
+                "o la cantidad de variantes",
+                estimate=estimate,
+                n=len(vars_),
+                resolution=resolution,
+                max_cost=max_cost,
+            )
         )
     out_vars = []
     for v in vars_:
@@ -1238,7 +1285,9 @@ def selectivity_case(
                 scenario=sc,
             )
         except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-            raise BadRequestError(f"no se puede simular la variante {v}: {exc}") from exc
+            raise BadRequestError(
+                t("no se puede simular la variante {v}: {exc}", v=v, exc=exc)
+            ) from exc
         assert r.mesh is not None
         curves = [
             retention_curve(
@@ -1301,11 +1350,11 @@ def selectivity_case(
     return jsonable
 
 
-_ORIENTATION_LABEL = {"diamond": "Rombo", "t90": "T90", "square": "Cuadrada"}
+_ORIENTATION_LABEL = {"diamond": N_("Rombo"), "t90": "T90", "square": N_("Cuadrada")}
 
 
 def _variant_label(orientation: str, mesh_mm: float) -> str:
-    return f"{_ORIENTATION_LABEL.get(orientation, orientation)} {mesh_mm:g} mm"
+    return f"{t(_ORIENTATION_LABEL.get(orientation, orientation))} {mesh_mm:g} mm"
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1326,13 +1375,23 @@ def batch_max_cost_s() -> float:
 WARM_FACTOR = 0.5
 
 
+#: Mensaje de :func:`_guard` por cálculo por lotes.
+_TOO_COSTLY = {
+    "incertidumbre": N_(
+        "incertidumbre demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
+        "baje la resolución, las muestras o las evaluaciones"
+    ),
+    "calibración": N_(
+        "calibración demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
+        "baje la resolución, las muestras o las evaluaciones"
+    ),
+}
+
+
 def _guard(estimate: float, what: str) -> None:
     limit = batch_max_cost_s()
     if estimate > limit:
-        raise BadRequestError(
-            f"{what} demasiado costosa: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
-            "baje la resolución, las muestras o las evaluaciones"
-        )
+        raise BadRequestError(t(_TOO_COSTLY[what], estimate=estimate, limit=limit))
 
 
 def _case_for(
@@ -1390,8 +1449,8 @@ def uncertainty_case(
             if inp.name in by_name:
                 lo, hi = float(by_name[inp.name]["low"]), float(by_name[inp.name]["high"])
                 if not lo <= hi:
-                    raise BadRequestError(f"rango inválido para {inp.name}")
-                inps[k] = dataclasses.replace(inp, low=lo, high=hi, source="pedido")
+                    raise BadRequestError(t("rango inválido para {name}", name=inp.name))
+                inps[k] = dataclasses.replace(inp, low=lo, high=hi, source=t("pedido"))
     estimate = estimate_sim_cost(
         1 + int(WARM_FACTOR * samples), resolution, case.net, coupled=sc.coupled_doors
     )
@@ -1411,7 +1470,7 @@ def uncertainty_case(
             species=species or [],
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-        raise BadRequestError(f"no se puede calcular la incertidumbre: {exc}") from exc
+        raise BadRequestError(t("no se puede calcular la incertidumbre: {exc}", exc=exc)) from exc
     out = {
         "result": u.to_dict(),
         "settings": {
@@ -1457,13 +1516,15 @@ def calibrate_case(
     try:
         obs = [Observation(**o) for o in (observations or [])]
     except (TypeError, ValueError) as exc:
-        raise BadRequestError(f"observación inválida: {exc}") from exc
+        raise BadRequestError(t("observación inválida: {exc}", exc=exc)) from exc
     if reference == "dynamit":
         if not _is_fao_a3_standard(case.net):
-            raise BadRequestError("la referencia DynamiT es de la red FAO A-3 estándar sin editar")
+            raise BadRequestError(
+                t("la referencia DynamiT es de la red FAO A-3 estándar sin editar")
+            )
         obs = dynamit_observations() + obs
     if not obs:
-        raise BadRequestError("hacen falta observaciones o reference = 'dynamit'")
+        raise BadRequestError(t("hacen falta observaciones o reference = 'dynamit'"))
     states = len({(o.speed_kn, o.catch_kg) for o in obs})
     estimate = estimate_sim_cost(
         states * (1 + int(WARM_FACTOR * max_evals)), resolution, case.net, coupled=sc.coupled_doors
@@ -1480,7 +1541,7 @@ def calibrate_case(
             max_evals=max_evals,
         )
     except (ValueError, ZeroDivisionError, IndexError, FloatingPointError) as exc:
-        raise BadRequestError(f"no se puede calibrar: {exc}") from exc
+        raise BadRequestError(t("no se puede calibrar: {exc}", exc=exc)) from exc
     out = {
         "result": c.to_dict(),
         "settings": {
@@ -1510,7 +1571,7 @@ def parse_sensors(
         log = parse_log(csv)
         ws = windows(log, by=by, width=width, min_rows=min_rows)
     except ValueError as exc:
-        raise BadRequestError(f"registro inválido: {exc}") from exc
+        raise BadRequestError(t("registro inválido: {exc}", exc=exc)) from exc
     return {
         "log": log.to_dict(),
         "windows": [w.to_dict() for w in ws],
@@ -1538,7 +1599,7 @@ def _batch_bytes(file: dict[str, Any]) -> bytes | str:
         try:
             return base64.b64decode(file["content"], validate=True)
         except (binascii.Error, ValueError) as exc:
-            raise BadRequestError("el archivo no es base64 válido") from exc
+            raise BadRequestError(t("el archivo no es base64 válido")) from exc
     return str(file["content"])
 
 
@@ -1552,7 +1613,7 @@ def batch_read(file: dict[str, Any], mode: str) -> Any:
     # openpyxl falla con excepciones propias (zip dañado, archivo que no es XLSX): cualquier
     # error de lectura es un archivo inválido del cliente.
     except Exception as exc:
-        raise BadRequestError(f"no se pudo leer la planilla: {exc}") from exc
+        raise BadRequestError(t("no se pudo leer la planilla: {exc}", exc=exc)) from exc
 
 
 def _batch_options(req: dict[str, Any]) -> Any:
@@ -1594,8 +1655,12 @@ def batch_compute(req: dict[str, Any]) -> Any:
     limit = batch_max_cost_s()
     if estimate > limit:
         raise BadRequestError(
-            f"lote demasiado grande: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
-            "pártalo en tramos más chicos"
+            t(
+                "lote demasiado grande: ~{estimate:.0f} s estimados (máximo {limit:.0f} s); "
+                "pártalo en tramos más chicos",
+                estimate=estimate,
+                limit=limit,
+            )
         )
     net = req.get("net")
     if isinstance(net, str):
@@ -1632,13 +1697,13 @@ def batch_export(req: dict[str, Any], fmt: str) -> tuple[bytes, str, str]:
         from trawlkit.report.batch import batch_pdf
 
         if res.mode != "fleet":
-            raise BadRequestError("el informe PDF es para lotes de flota")
+            raise BadRequestError(t("el informe PDF es para lotes de flota"))
         return batch_pdf(res), "application/pdf", "lote.pdf"
     if fmt == "html":
         from trawlkit.report.batch import batch_html
 
         return batch_html(res).encode("utf-8"), "text/html; charset=utf-8", "lote.html"
-    raise BadRequestError("formato: csv, xlsx, pdf o html")
+    raise BadRequestError(t("formato: csv, xlsx, pdf o html"))
 
 
 def batch_template(kind: str, fmt: str) -> tuple[bytes, str, str]:
@@ -1668,9 +1733,9 @@ def _guide(case: DesignCase, variant: str, eye_allowance_m: float) -> Any:
     from trawlkit.construction import guide
 
     if variant not in ("std", "mod"):
-        raise BadRequestError("variant: std o mod")
+        raise BadRequestError(t("variant: std o mod"))
     if not 0.0 <= eye_allowance_m <= 5.0:
-        raise BadRequestError("eye_allowance_m: entre 0 y 5 m")
+        raise BadRequestError(t("eye_allowance_m: entre 0 y 5 m"))
     try:
         return guide(run_case(case), variant, eye_allowance_m)  # type: ignore[arg-type]
     except ValueError as exc:
@@ -1703,7 +1768,7 @@ def construction_export(
         )
     if fmt == "pdf":
         return rc.construction_pdf(g), "application/pdf", f"{name}.pdf"
-    raise BadRequestError("formato: html, pdf o xlsx")
+    raise BadRequestError(t("formato: html, pdf o xlsx"))
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1777,7 +1842,7 @@ def _exercise_or_404(exercise_id: str) -> Any:
     try:
         return exercise(exercise_id)
     except UnknownExerciseError:
-        raise NotFoundError(f"ejercicio desconocido: {exercise_id!r}") from None
+        raise NotFoundError(t("ejercicio desconocido: {id!r}", id=exercise_id)) from None
 
 
 def teaching_exercises(
@@ -1823,7 +1888,7 @@ def _lab_or_404(lab_id: str) -> Any:
     try:
         return lab(lab_id)
     except UnknownLabError:
-        raise NotFoundError(f"laboratorio desconocido: {lab_id!r}") from None
+        raise NotFoundError(t("laboratorio desconocido: {id!r}", id=lab_id)) from None
 
 
 def _lab_summary(x: Any) -> dict[str, Any]:
@@ -1846,29 +1911,10 @@ def teaching_labs(chapter: str | None = None, level: str | None = None) -> list[
 
 
 def teaching_lab(lab_id: str) -> dict[str, Any]:
-    """Un laboratorio con sus pasos, sin las respuestas (``LabOut``)."""
-    x = _lab_or_404(lab_id)
-    steps = [
-        {
-            "id": s.id,
-            "title": s.title,
-            "instruction": s.instruction,
-            "target": s.target.model_dump(),
-            "checks": [{"label": c.label, "fact": c.fact, "op": c.op} for c in s.checks],
-            "questions": [
-                {
-                    "id": q.id,
-                    "kind": q.kind,
-                    "prompt": q.prompt,
-                    "unit": q.unit,
-                    "options": q.options,
-                }
-                for q in s.questions
-            ],
-        }
-        for s in x.steps
-    ]
-    return {**_lab_summary(x), "start": x.start, "step_list": steps, "closing": x.closing}
+    """Un laboratorio con sus pasos, sin las respuestas, en el idioma activo (``LabOut``)."""
+    from trawlkit.teaching.labs import lab_view
+
+    return lab_view(_lab_or_404(lab_id))
 
 
 def teaching_lab_check(
@@ -1883,7 +1929,7 @@ def teaching_lab_check(
 
     spec = _lab_or_404(lab_id)
     if step_id not in {s.id for s in spec.steps}:
-        raise NotFoundError(f"paso desconocido: {step_id!r}")
+        raise NotFoundError(t("paso desconocido: {id!r}", id=step_id))
     try:
         out: dict[str, Any] = to_jsonable(
             lab_check(lab_id, step_id, design, answers, reveal=reveal).to_dict()

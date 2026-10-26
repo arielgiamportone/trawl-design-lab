@@ -27,6 +27,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
+from trawlkit.i18n import N_, t
 from trawlkit.sim.core import DEFAULT_CN, DEFAULT_CT, CaseLike, SimResult, _resolve, simulate
 from trawlkit.sim.mesh import NetModel, build_model
 from trawlkit.sim.scenario import Scenario
@@ -35,23 +36,31 @@ FloatArray = npt.NDArray[np.float64]
 
 #: Magnitudes observables: nombre → (etiqueta, unidad, función sobre el resultado).
 QUANTITIES: dict[str, tuple[str, str, Callable[[SimResult], float]]] = {
-    "door_spread_m": ("Separación de portones", "m", lambda r: r.door_spread_m),
-    "ah_m": ("Abertura horizontal", "m", lambda r: r.ah_m),
-    "av_m": ("Abertura vertical", "m", lambda r: r.av_m),
-    "headrope_height_m": ("Altura de la relinga superior", "m", lambda r: r.headrope_height_m),
-    "drag_kgf": ("Resistencia de la red", "kgf", lambda r: r.drag_kgf),
-    "towing_pull_kgf": ("Tiro en el buque", "kgf", lambda r: r.towing_pull_kgf or r.drag_kgf),
-    "warp_tension_kgf": ("Tensión del cable (portón)", "kgf", lambda r: r.warp_tension_kgf),
+    "door_spread_m": (N_("Separación de portones"), "m", lambda r: r.door_spread_m),
+    "ah_m": (N_("Abertura horizontal"), "m", lambda r: r.ah_m),
+    "av_m": (N_("Abertura vertical"), "m", lambda r: r.av_m),
+    "headrope_height_m": (
+        N_("Altura de la relinga superior"),
+        "m",
+        lambda r: r.headrope_height_m,
+    ),
+    "drag_kgf": (N_("Resistencia de la red"), "kgf", lambda r: r.drag_kgf),
+    "towing_pull_kgf": (
+        N_("Tiro en el buque"),
+        "kgf",
+        lambda r: r.towing_pull_kgf or r.drag_kgf,
+    ),
+    "warp_tension_kgf": (N_("Tensión del cable (portón)"), "kgf", lambda r: r.warp_tension_kgf),
 }
 
 #: Parámetros calibrables: nombre → (etiqueta, mínimo, máximo).
 PARAMETERS: dict[str, tuple[str, float, float]] = {
-    "cn": ("C_N del hilo", 0.8, 2.0),
-    "ct": ("C_T del hilo", 0.01, 0.2),
-    "door_cl_factor": ("Factor de C_L del portón", 0.5, 1.5),
-    "door_cd_factor": ("Factor de C_D del portón", 0.5, 1.5),
-    "mu_gear": ("μ tren–fondo", 0.05, 1.2),
-    "mu_door": ("μ portón–fondo", 0.05, 1.2),
+    "cn": (N_("C_N del hilo"), 0.8, 2.0),
+    "ct": (N_("C_T del hilo"), 0.01, 0.2),
+    "door_cl_factor": (N_("Factor de C_L del portón"), 0.5, 1.5),
+    "door_cd_factor": (N_("Factor de C_D del portón"), 0.5, 1.5),
+    "mu_gear": (N_("μ tren–fondo"), 0.05, 1.2),
+    "mu_door": (N_("μ portón–fondo"), 0.05, 1.2),
 }
 
 
@@ -70,14 +79,18 @@ class Observation:
         """Valida la magnitud y el valor."""
         if self.quantity not in QUANTITIES:
             raise ValueError(
-                f"magnitud desconocida: {self.quantity!r} (use {', '.join(QUANTITIES)})"
+                t(
+                    "magnitud desconocida: {q!r} (use {names})",
+                    q=self.quantity,
+                    names=", ".join(QUANTITIES),
+                )
             )
         if not self.value > 0:
-            raise ValueError("el valor observado debe ser positivo")
+            raise ValueError(t("el valor observado debe ser positivo"))
         if not 0.3 <= self.speed_kn <= 6.0:
-            raise ValueError("speed_kn fuera de rango (0,3–6 kn)")
+            raise ValueError(t("speed_kn fuera de rango (0,3–6 kn)"))
         if self.catch_kg < 0 or self.weight <= 0:
-            raise ValueError("catch_kg debe ser ≥ 0 y weight > 0")
+            raise ValueError(t("catch_kg debe ser ≥ 0 y weight > 0"))
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -95,7 +108,7 @@ def dynamit_observations(
     out = []
     for v in speeds_kn:
         if v not in DYNAMIT["v_kn"]:
-            raise ValueError(f"DynamiT no tiene {v} kn")
+            raise ValueError(t("DynamiT no tiene {v} kn", v=v))
         k = DYNAMIT["v_kn"].index(v)
         for q in quantities:
             out.append(Observation(q, float(DYNAMIT[col[q]][k]), float(v), source="DynamiT"))
@@ -125,7 +138,7 @@ class CalibrationResult:
             "params": [
                 {
                     "name": p,
-                    "label": PARAMETERS[p][0],
+                    "label": t(PARAMETERS[p][0]),
                     "initial": float(self.initial[i]),
                     "fitted": float(self.fitted[i]),
                     "std": None if not math.isfinite(self.std[i]) else float(self.std[i]),
@@ -137,7 +150,7 @@ class CalibrationResult:
             "observations": [
                 {
                     **o.to_dict(),
-                    "label": QUANTITIES[o.quantity][0],
+                    "label": t(QUANTITIES[o.quantity][0]),
                     "unit": QUANTITIES[o.quantity][1],
                     "before": float(self.before[k]),
                     "after": float(self.after[k]),
@@ -186,15 +199,21 @@ def calibrate(
     """
     t0 = time.perf_counter()
     if not observations:
-        raise ValueError("hacen falta observaciones")
+        raise ValueError(t("hacen falta observaciones"))
     names = tuple(params)
     if not names:
-        raise ValueError("hay que elegir al menos un parámetro")
+        raise ValueError(t("hay que elegir al menos un parámetro"))
     for p in names:
         if p not in PARAMETERS:
-            raise ValueError(f"parámetro desconocido: {p!r} (use {', '.join(PARAMETERS)})")
+            raise ValueError(
+                t(
+                    "parámetro desconocido: {p!r} (use {names})",
+                    p=p,
+                    names=", ".join(PARAMETERS),
+                )
+            )
     if len(set(names)) != len(names):
-        raise ValueError("parámetros repetidos")
+        raise ValueError(t("parámetros repetidos"))
     obs = tuple(observations)
     sc = scenario or Scenario()
     spec, rig, result = _resolve(case, None)

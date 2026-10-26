@@ -73,6 +73,7 @@ import numpy as np
 import numpy.typing as npt
 
 from trawlkit.drawing.layout import Band, NetLayout, PanelShape, layout_net
+from trawlkit.i18n import t
 from trawlkit.io.schema import NetSpec, Panel
 from trawlkit.netting import orientation_coefficients
 from trawlkit.topology import equivalent_two_panel
@@ -422,13 +423,13 @@ def build_model(
     el largo filado.
     """
     if resolution < 2:
-        raise ValueError("resolution debe ser ≥ 2")
+        raise ValueError(t("resolution debe ser ≥ 2"))
     # Las redes de 4 paneles se simulan con su equivalente de 2 (trawlkit.topology).
     spec = equivalent_two_panel(spec)
     layout = layout_net(spec, mode="true_scale")
     planes = [p for p in ("upper", "lower") if p in layout.shapes]
     if planes != ["upper", "lower"]:
-        raise ValueError("la simulación necesita una red de dos caras (planos upper y lower)")
+        raise ValueError(t("la simulación necesita una red de dos caras (planos upper y lower)"))
     n_w = max(2, resolution // 2)
     n_b = max(2, 2 * math.ceil(resolution / 6))
 

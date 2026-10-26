@@ -27,6 +27,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
+from trawlkit.i18n import t
+
 #: Magnitud → (nombres reconocidos, unidad interna). Los nombres se comparan sin acentos, en
 #: minúsculas y con espacios/guiones como ``_``.
 ALIASES: dict[str, tuple[tuple[str, ...], str]] = {
@@ -212,7 +214,7 @@ def parse_log(text: str, *, max_rows: int = 200_000) -> SensorLog:
     """Lee un CSV de sensores (ver el docstring del módulo)."""
     lines = [ln for ln in text.splitlines() if ln.strip() and not ln.lstrip().startswith("#")]
     if len(lines) < 2:
-        raise ValueError("el archivo no tiene encabezado y datos")
+        raise ValueError(t("el archivo no tiene encabezado y datos"))
     head = lines[0]
     delim = max((";", "\t", ","), key=head.count)
     if head.count(delim) == 0:
@@ -231,7 +233,7 @@ def parse_log(text: str, *, max_rows: int = 200_000) -> SensorLog:
         mapping[h] = m[0]
         factors[k] = m
     if not factors:
-        raise ValueError("ninguna columna reconocida (ver los nombres admitidos en la ayuda)")
+        raise ValueError(t("ninguna columna reconocida (ver los nombres admitidos en la ayuda)"))
     cols: dict[str, list[float]] = {q: [] for q, _ in factors.values()}
     n = 0
     for row in reader:
@@ -253,9 +255,9 @@ def parse_log(text: str, *, max_rows: int = 200_000) -> SensorLog:
         ]
         if "warp_tension" not in cols:
             cols["warp_tension"] = mean
-            warnings.append("tensión de un cable = promedio de babor y estribor")
+            warnings.append(t("tensión de un cable = promedio de babor y estribor"))
     if "speed" not in cols:
-        warnings.append("sin columna de velocidad: los tramos se arman por tiempo")
+        warnings.append(t("sin columna de velocidad: los tramos se arman por tiempo"))
     return SensorLog(cols, mapping, tuple(ignored), n, tuple(warnings))
 
 
@@ -322,7 +324,7 @@ def windows(
     de ``speed_kn``. Se descartan tramos con menos de ``min_rows`` filas.
     """
     if width <= 0:
-        raise ValueError("width debe ser positivo")
+        raise ValueError(t("width debe ser positivo"))
     n = log.rows
     speed = log.columns.get("speed")
     catch = log.columns.get("catch", [0.0] * n)
@@ -330,15 +332,15 @@ def windows(
     keys: list[float | None] = []
     if by == "speed":
         if speed is None:
-            raise ValueError("para agrupar por velocidad hace falta una columna de velocidad")
+            raise ValueError(t("para agrupar por velocidad hace falta una columna de velocidad"))
         keys = [round(v / width) * width if math.isfinite(v) and v > 0.3 else None for v in speed]
     elif by == "time":
         if tcol is None:
-            raise ValueError("para agrupar por tiempo hace falta una columna de tiempo")
-        t0 = min((t for t in tcol if math.isfinite(t)), default=0.0)
-        keys = [math.floor((t - t0) / (60 * width)) if math.isfinite(t) else None for t in tcol]
+            raise ValueError(t("para agrupar por tiempo hace falta una columna de tiempo"))
+        t0 = min((tv for tv in tcol if math.isfinite(tv)), default=0.0)
+        keys = [math.floor((tv - t0) / (60 * width)) if math.isfinite(tv) else None for tv in tcol]
     else:
-        raise ValueError("by debe ser 'speed' o 'time'")
+        raise ValueError(t("by debe ser 'speed' o 'time'"))
     groups: dict[float, list[int]] = {}
     for i, k in enumerate(keys):
         if k is not None:

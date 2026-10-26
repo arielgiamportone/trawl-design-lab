@@ -24,6 +24,24 @@ exercises:
       K_F = {kf}; F_T = {bhp}·({kf} − 0,7·{v}) = {ft_kgf} kgf. A más velocidad, menos tiro: la
       hélice gasta potencia en mover el buque.
     refs: [fridman1986]
+    en:
+      title: Fridman's available towing pull
+      statement: >
+        A trawler of {bhp} HP with a {helice} propeller tows at {v} kn. Calculate the available
+        towing pull F_T according to Fridman, F_T = BHP·(K_F − 0.7·v), with K_F = 10 for a
+        fixed-pitch propeller (PF) and 15 for a controllable-pitch propeller in a nozzle (PV+T).
+      vars:
+        bhp: Brake power
+        helice: Propeller
+        v: Towing speed
+      answers:
+        ft_kgf: Available towing pull F_T
+      hints:
+        - With a {helice} propeller, K_F is 10 (PF) or 15 (PV+T).
+        - Speed goes in knots, without converting it.
+      explanation: >
+        K_F = {kf}; F_T = {bhp}·({kf} − 0.7·{v}) = {ft_kgf} kgf. The faster the tow, the lower the
+        pull: the propeller spends power moving the vessel.
 
   - id: potencia.prado_bollard
     chapter: 10_potencia
@@ -43,6 +61,19 @@ exercises:
     explanation: "pct = {pct}; BP = {bhp}·0,9·({pct}/100)·1000 = {bp_kgf} kgf ({bp_t} t)."
     formats: {pct: 2, bp_t: 3}
     refs: [prado1990]
+    en:
+      title: Prado and Dremière's bollard pull
+      statement: >
+        Estimate the bollard pull of a {bhp} HP vessel with a {helice} propeller using Prado and
+        Dremière's rule: BP = BHP·0.9·(pct/100)·1000 kgf, with pct = 1.10 (PF, fixed pitch), 1.20
+        (PF+T, fixed pitch in a nozzle), 1.25 (PV, controllable pitch) and 1.40 (PV+T, controllable
+        pitch in a nozzle).
+      vars:
+        bhp: Brake power
+        helice: Propeller
+      answers:
+        bp_kgf: Bollard pull
+      explanation: pct = {pct}; BP = {bhp}·0.9·({pct}/100)·1000 = {bp_kgf} kgf ({bp_t} t).
 
   - id: potencia.prado_arrastre
     chapter: 10_potencia
@@ -74,6 +105,30 @@ exercises:
       BPF = 150·{p_hp}/{v} = {bpf_kgf} kgf.
     formats: {k_bp: 1}
     refs: [prado1990]
+    en:
+      title: Towing power and pull while fishing (Prado)
+      statement: >
+        For a {bhp} HP vessel with a {helice} propeller: (a) average the bollard pull by percentage
+        with the bollard pull by the K factor from Prado's table; (b) calculate the apparent
+        nominal power APN = 0.09·BP; (c) the towing power P = 0.75·K·APN with K = {k}; (d) the pull
+        while fishing at {v} kn, BPF = 150·P/v.
+      vars:
+        bhp: Brake power
+        helice: Propeller
+        k: K of the towing power
+        v: Speed
+      answers:
+        bp_avg_kgf: Average bollard pull
+        apn_hp: Apparent nominal power
+        p_hp: Towing power
+        bpf_kgf: Pull while fishing
+      hints:
+        - The table's K factor for the bollard pull depends on the propeller and on the power.
+        - The 150 in BPF = 150·P/v is a conversion constant, not the vessel's power.
+      explanation: >
+        BP by percentage = {bp_kgf} kgf; by K factor ({k_bp}) = {bp_k_kgf} kgf; average
+        {bp_avg_kgf} kgf. APN = 0.09·{bp_avg_kgf} = {apn_hp} HP; P = 0.75·{k}·{apn_hp} = {p_hp} HP;
+        BPF = 150·{p_hp}/{v} = {bpf_kgf} kgf.
 
   - id: potencia.koyama_tiro
     chapter: 10_potencia
@@ -98,3 +153,20 @@ exercises:
       F = 75·{ehp_hp}/{v_ms} = {pull_kgf} kgf.
     formats: {k: 2, v_ms: 3}
     refs: [koyama1974]
+    en:
+      title: Koyama's pull at constant power
+      statement: >
+        Koyama assumes that 60 % of the brake power reaches the propeller and that a fraction K of
+        it is effective towing power: F = 75·K·0.6·BHP/v, with v in m/s and K = 0.15 for vessels
+        below 600 BHP. Calculate the pull of a {bhp} HP vessel at {v} kn.
+      vars:
+        bhp: Brake power
+        v: Speed
+      answers:
+        ehp_hp: Effective power EHP
+        pull_kgf: Pull
+      hints:
+        - 1 kn = 0.5144 m/s; 1 HP = 75 kgf·m/s.
+      explanation: >
+        BHP_F = 0.6·{bhp} = {bhp_f} HP; EHP = {k}·{bhp_f} = {ehp_hp} HP; v = {v_ms} m/s; F =
+        75·{ehp_hp}/{v_ms} = {pull_kgf} kgf.

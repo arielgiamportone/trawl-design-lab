@@ -23,6 +23,7 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
+from trawlkit.i18n import t
 from trawlkit.io import Door, NetSpec, Vessel, load_doors, load_net, load_vessels
 from trawlkit.model import DEFAULT_SPEEDS_KN, DesignCase
 
@@ -67,7 +68,7 @@ def generic_vessel(bhp: float, length_m: float | None = None) -> Vessel:
         k = length_m / float(ref.length_m or 9.0)
     return Vessel(
         id=f"generic_{bhp:g}hp",
-        name=f"Buque genérico de {bhp:g} hp (escalado del de 150 hp de la A-3)",
+        name=t("Buque genérico de {hp:g} hp (escalado del de 150 hp de la A-3)", hp=bhp),
         bhp=bhp,
         length_m=round(float(ref.length_m or 9.0) * k, 2),
         beam_m=round(float(ref.beam_m or 2.5) * k, 2),
@@ -119,11 +120,18 @@ def catalog_case(
     length = design.get("vessel_length_m")
     vessel = generic_vessel(hp, None if length is None else float(length))
     if spec.vessel_hp is None:
-        notes.append("la red no da potencia de diseño: buque genérico de 150 hp")
-    rule = "eslora del documento" if length is not None else "raíz cúbica de la potencia"
+        notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
+    rule = t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
     notes.append(
-        f"buque genérico de {hp:g} hp: eslora {vessel.length_m} m, manga {vessel.beam_m} m y "
-        f"puntal {vessel.depth_m} m escalados del de 150 hp de la A-3 ({rule})"
+        t(
+            "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "
+            "puntal {depth} m escalados del de 150 hp de la A-3 ({rule})",
+            hp=hp,
+            length=vessel.length_m,
+            beam=vessel.beam_m,
+            depth=vessel.depth_m,
+            rule=rule,
+        )
     )
     rig = overrides.get("rig") or spec.rig or "otter"
     if "door_length_m" in design and "door_height_m" in design:
@@ -132,11 +140,15 @@ def catalog_case(
             float(design["door_length_m"]),
             float(design["door_height_m"]),
             None if weight is None else float(weight),
-            f"Portón plano del plano de {spec.id}",
+            t("Portón plano del plano de {net}", net=spec.id),
         )
         notes.append(
-            f"portón del plano ({door.length_m:g} × {door.height_m:g} m) con la polar del "
-            "portón plano de la A-3"
+            t(
+                "portón del plano ({length:g} × {height:g} m) con la polar del "
+                "portón plano de la A-3",
+                length=door.length_m,
+                height=door.height_m,
+            )
         )
     else:
         from trawlkit.optimize.scaling import scale_door
@@ -145,15 +157,24 @@ def catalog_case(
         door = scale_door(ref, float(ref.area_m2 or 1.805) * hp / 150.0)
         if rig != "pair":
             notes.append(
-                f"el plano no da portón: el de la A-3 escalado a {door.area_m2:.2f} m² "
-                "(superficie proporcional a la potencia)"
+                t(
+                    "el plano no da portón: el de la A-3 escalado a {area:.2f} m² "
+                    "(superficie proporcional a la potencia)",
+                    area=door.area_m2,
+                )
             )
     if rig == "pair":
-        notes.append("arrastre de pareja: el portón del caso no se usa")
+        notes.append(t("arrastre de pareja: el portón del caso no se usa"))
     depth = design.get("depth_m")
     if depth is None:
         depth = DEFAULT_DEPTH_M.get(spec.family or "bottom", 30.0)
-        notes.append(f"la fuente no da profundidad: {depth:g} m por familia ({spec.family})")
+        notes.append(
+            t(
+                "la fuente no da profundidad: {depth:g} m por familia ({family})",
+                depth=depth,
+                family=spec.family,
+            )
+        )
     # La regla «al metro» del libro (Port!E13) está calibrada para las pastecas de la A-3: con
     # otro buque la separación sale de la DPA de Fridman con el portón del caso.
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}

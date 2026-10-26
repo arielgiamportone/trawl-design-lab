@@ -23,6 +23,24 @@ exercises:
     explanation: >
       A: {ah1}·{v1}·1852 = {a1_m2_h} m²/h; B: {ah2}·{v2}·1852 = {a2_m2_h} m²/h ({ganancia_pct} %).
       Una red más chica que se arrastra más rápido puede pescar más.
+    en:
+      title: Area swept per hour
+      statement: >
+        Net A spreads {ah1} m between the wing ends and is towed at {v1} kn; net B, smaller,
+        spreads {ah2} m but the vessel can tow it at {v2} kn. Calculate the area swept per hour by
+        each one (horizontal opening × speed, with 1 kn = 1852 m/h) and how much more B sweeps.
+      vars:
+        ah1: Opening of A
+        v1: Speed of A
+        ah2: Opening of B
+        v2: Speed of B
+      answers:
+        a1_m2_h: Area of A
+        a2_m2_h: Area of B
+        ganancia_pct: Gain of B
+      explanation: >
+        A: {ah1}·{v1}·1852 = {a1_m2_h} m²/h; B: {ah2}·{v2}·1852 = {a2_m2_h} m²/h ({ganancia_pct}
+        %). A smaller net towed faster can catch more.
 
   - id: mar.corriente
     chapter: 23_mar_real
@@ -46,6 +64,26 @@ exercises:
       - La red siente la velocidad relativa al agua, no al fondo.
     explanation: >
       Agua a {v_agua} kn: la resistencia pasa de {r0_kgf} a {r1_kgf} kgf ({cambio_pct} %).
+    en:
+      title: Towing with or against the current
+      statement: >
+        The vessel tows at {v_fondo} kn over the ground with a current of {corriente} kn {sentido}.
+        At what speed does the water flow through the net, and how much does the drag (Aberdeen
+        demersal, Ss = {ss} m²) change compared with no current?
+      vars:
+        v_fondo: Speed over the ground
+        corriente: Current
+        sentido: Direction
+        ss: Solid area
+      answers:
+        v_agua: Speed through the water
+        cambio_pct: Change in drag
+      choices:
+        sentido: {en contra: against the tow, a favor: with the tow}
+      hints:
+        - The net feels the speed relative to the water, not to the ground.
+      explanation: >
+        Water at {v_agua} kn: the drag goes from {r0_kgf} to {r1_kgf} kgf ({cambio_pct} %).
 
   - id: selectividad.logistica
     chapter: 24_malla_selectividad
@@ -72,6 +110,27 @@ exercises:
     explanation: >
       L50 = {fs}·{malla}/10 = {l50_cm} cm; L25 = {l25_cm} cm y L75 = {l75_cm} cm. Un pez de {talla}
       cm queda retenido con probabilidad {r_pct} %.
+    en:
+      title: Logistic retention curve
+      statement: >
+        A {malla} mm codend has a selection factor SF = {fs} and a selection range SR = {sr} cm.
+        With the logistic curve r(L) = 1/(1 + exp(−ln 9·(L − L50)/SR)), calculate L50 = SF·mesh
+        size, L25 and L75, and the fraction of {talla} cm fish retained.
+      vars:
+        malla: Codend mesh size
+        fs: Selection factor
+        sr: Selection range
+        talla: Fish length
+      answers:
+        l50_cm: L50
+        l75_cm: L75
+        r_pct: Retention
+      hints:
+        - 'The mesh size is in mm: divide by 10 to get L50 in cm.'
+        - L25 = L50 − SR/2 and L75 = L50 + SR/2.
+      explanation: >
+        L50 = {fs}·{malla}/10 = {l50_cm} cm; L25 = {l25_cm} cm and L75 = {l75_cm} cm. A {talla} cm
+        fish is retained with probability {r_pct} %.
 
   - id: construccion.ciclo
     chapter: 36_construccion
@@ -97,6 +156,24 @@ exercises:
       {ciclos} ciclos y se pierden {mallas_ancho} mallas de ancho.
     formats: {alto_ciclo: 1}
     refs: [klust1982]
+    en:
+      title: Reading a cutting cycle
+      statement: >
+        An edge is cut {codigo} along {alto} meshes in depth. What is the taper ratio (T + B/2)/(N
+        + B/2), how many meshes in depth does each cycle advance, how many cycles are repeated and
+        how many meshes across are lost on that edge?
+      vars:
+        codigo: Cut
+        alto: Panel depth
+      answers:
+        razon: Taper ratio
+        ciclos: Cycles
+        mallas_ancho: Meshes lost across
+      hints:
+        - A point (N) goes down one mesh; a bar (B) advances half a mesh in depth and half a mesh across.
+      explanation: >
+        Ratio {razon}; each cycle goes down {alto_ciclo} meshes, so there are {alto}/{alto_ciclo} =
+        {ciclos} cycles and {mallas_ancho} meshes across are lost.
 
   - id: construccion.embande
     chapter: 36_construccion
@@ -120,6 +197,23 @@ exercises:
       Paño estirado = {mallas}·{malla}/1000 = {estirado_m} m; E = {relinga}/{estirado_m} = {e};
       {mallas}/{relinga} = {mallas_m} mallas/m, es decir {cada_50cm} cada 50 cm.
     refs: [klust1982]
+    en:
+      title: Hanging ratio and meshes per metre
+      statement: >
+        An edge of {mallas} meshes of {malla} mm is hung on {relinga} m of framing rope. Calculate
+        the stretched length of the edge, the hanging ratio E = rope/stretched netting, the meshes
+        per metre of rope and how many meshes go every 50 cm.
+      vars:
+        mallas: Meshes on the edge
+        malla: Mesh size
+        e_obj: Target hanging ratio
+      answers:
+        e: Hanging ratio E
+        mallas_m: Meshes per metre
+        cada_50cm: Meshes every 50 cm
+      explanation: >
+        Stretched netting = {mallas}·{malla}/1000 = {estirado_m} m; E = {relinga}/{estirado_m} =
+        {e}; {mallas}/{relinga} = {mallas_m} meshes/m, that is {cada_50cm} every 50 cm.
 
   - id: construccion.toma
     chapter: 36_construccion
@@ -141,6 +235,21 @@ exercises:
       Relación {a}:{b}; sobran {tomas} mallas en el borde largo, así que va una toma cada {cada}
       mallas del borde corto.
     formats: {a: 0, b: 0}
+    en:
+      title: Joining panels with different numbers of meshes
+      statement: >
+        An edge of {na} meshes has to be sewn to another of {nb} meshes. Express the ratio as a
+        simplified a:b, say how many take-ups (2 meshes of the longer edge sewn together) are
+        needed and after how many meshes of the shorter edge each take-up goes.
+      vars:
+        na: Meshes of panel A
+        razon_b: Ratio B/A
+      answers:
+        tomas: Take-ups
+        cada: One take-up every
+      explanation: >
+        Ratio {a}:{b}; the long edge has {tomas} meshes too many, so one take-up goes every {cada}
+        meshes of the short edge.
 
   - id: economia.gasoil
     chapter: 37_economia
@@ -167,6 +276,26 @@ exercises:
       P = {r}·9,807·({v}·0,5144)/{eta}/1000 = {p_kw} kW; consumo = {p_kw}·0,22/0,84 = {l_h} L/h;
       en {horas} h, {l_lance} L.
     refs: [parker2015]
+    en:
+      title: Fuel for towing
+      statement: >
+        The net and the rigging demand {r} kgf at {v} kn. With a towing efficiency η = {eta}, a
+        specific consumption of 0.22 kg/kWh and diesel at 0.84 kg/L, calculate the brake power P =
+        R·g·v/η (v in m/s), the litres per hour and the fuel for a {horas} h haul.
+      vars:
+        r: Total drag
+        v: Speed
+        eta: Towing efficiency
+        horas: Haul duration
+      answers:
+        p_kw: Brake power
+        l_h: Consumption
+        l_lance: Fuel per haul
+      hints:
+        - R in N = kgf·9.807; 1 kn = 1852/3600 m/s.
+      explanation: >
+        P = {r}·9.807·({v}·0.5144)/{eta}/1000 = {p_kw} kW; consumption = {p_kw}·0.22/0.84 = {l_h}
+        L/h; in {horas} h, {l_lance} L.
 
   - id: economia.equilibrio
     chapter: 37_economia
@@ -189,6 +318,23 @@ exercises:
     hints:
       - "Ingreso − F − c·(Ingreso − G) = 0, con Ingreso = p·C."
     explanation: "p* = ({f} − {parte} %·{g})/((1 − {parte} %)·{captura}) = {p} $/kg."
+    en:
+      title: Break-even price with a crew share
+      statement: >
+        On a fishing trip the costs that do not depend on the price add up to F = {f} $, of which G
+        = {g} $ are shared expenses (fuel, lubricant and provisions) deducted before the crew
+        share, which is {parte} % of what remains. The catch is {captura} kg. At what price per kg
+        does the trip break even? p* = (F − c·G)/((1 − c)·C).
+      vars:
+        f: Costs without the crew
+        g: Shared expenses
+        parte: Crew share
+        captura: Catch of the trip
+      answers:
+        p: Break-even price
+      hints:
+        - Revenue − F − c·(Revenue − G) = 0, with Revenue = p·C.
+      explanation: p* = ({f} − {parte} %·{g})/((1 − {parte} %)·{captura}) = {p} $/kg.
 
   - id: economia.red_por_hora
     chapter: 37_economia
@@ -214,3 +360,23 @@ exercises:
     explanation: >
       Amortización {costo}/{vida} = {amort_h} $/h; reparación {reparacion} %·{costo}/{horas_anio} h
       = {rep_h} $/h; total {total_h} $/h.
+    en:
+      title: What the net costs per towing hour
+      statement: >
+        A net and its rigging cost {costo} $ and last {vida} towing hours; every year {reparacion}
+        % of their cost is spent on repairs. The vessel tows {horas_marea} h per trip and makes
+        {mareas} trips per year. Calculate the depreciation per hour, the repairs per hour and the
+        total per towing hour.
+      vars:
+        costo: Cost of the net and rigging
+        vida: Service life
+        reparacion: Yearly repairs
+        horas_marea: Towing hours per trip
+        mareas: Trips per year
+      answers:
+        amort_h: Depreciation
+        rep_h: Repairs
+        total_h: Total
+      explanation: >
+        Depreciation {costo}/{vida} = {amort_h} $/h; repairs {reparacion} %·{costo}/{horas_anio} h
+        = {rep_h} $/h; total {total_h} $/h.

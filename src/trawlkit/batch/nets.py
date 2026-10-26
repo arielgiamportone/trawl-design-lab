@@ -18,6 +18,7 @@ from pydantic import ValidationError
 
 from trawlkit.batch.columns import NETS, PANELS
 from trawlkit.batch.sheets import RowIssue, Sheet, norm, parse_sheet
+from trawlkit.i18n import t
 from trawlkit.io import NetSpec
 from trawlkit.netcheck import Issue, check
 
@@ -140,9 +141,9 @@ def _spec(key: str, name: str, rows: list[dict[str, Any]], meta: dict[str, Any])
         "id": f"user_{key}",
         "name": name,
         "description": meta.get("description"),
-        "source": "planilla del usuario",
+        "source": t("planilla del usuario"),
         "panels": panels,
-        "notes": ["Red cargada desde una planilla del usuario (sin verificar)."],
+        "notes": [t("Red cargada desde una planilla del usuario (sin verificar).")],
     }
     if meta.get("family"):
         data["family"] = meta["family"]

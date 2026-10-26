@@ -24,6 +24,7 @@ from typing import Literal
 
 from trawlkit.drawing import svg
 from trawlkit.drawing.layout import NetLayout, PanelShape, Point, layout_net
+from trawlkit.i18n import N_, dec, t
 from trawlkit.io.schema import NetSpec, Section
 from trawlkit.model import DesignResult
 
@@ -32,7 +33,7 @@ SHEET_W: float = 1587.0
 SHEET_H: float = 1123.0
 
 AUTHOR = "Ariel Luján Giamportone"
-INSTITUTION = "Ingeniería Pesquera · UTN Ushuaia"
+INSTITUTION = N_("Ingeniería Pesquera · UTN Ushuaia")
 
 #: Abreviaturas de material de los planos (PA = poliamida = nylon, "NY").
 MATERIAL_ES: dict[str, str] = {"PA": "NY", "NY": "NY", "PE": "PE", "PP": "PP", "PES": "PES"}
@@ -60,11 +61,14 @@ Variant = Literal["std", "mod"]
 
 
 def fmt_es(x: float, decimals: int = 2) -> str:
-    """Número con coma decimal y sin separador de miles: ``fmt_es(28.698) == "28,70"``."""
-    s = f"{float(x):.{decimals}f}"
-    if s.startswith("-") and float(s) == 0.0:
+    """Número sin separador de miles con el decimal del idioma activo.
+
+    En español coma decimal (``fmt_es(28.698) == "28,70"``); en inglés punto (``"28.70"``).
+    """
+    s = dec(float(x), decimals)
+    if s.startswith("-") and float(s.replace(",", ".")) == 0.0:
         s = s[1:]
-    return s.replace(".", ",")
+    return s
 
 
 def fmt_mm(x: float) -> str:
@@ -219,10 +223,10 @@ def _plane_elements(
         bot_px = (fr.x(s.x_bottom[0]), fr.x(s.x_bottom[1]))
         yt, yb = fr.y(s.y_top), fr.y(s.y_bottom)
         # Pegadura con el mismo número de mallas y mallero: se escribe sólo el borde de abajo.
-        t = str(s.meshes_top)
+        n_txt = str(s.meshes_top)
         mx = (top_px[0] + top_px[1]) / 2
-        narrow = top_px[1] - top_px[0] < text_width(t, 9) + 6
-        labels.append(svg.text((mx, yt - 3 if narrow else yt + 10), t, cls="num mid"))
+        narrow = top_px[1] - top_px[0] < text_width(n_txt, 9) + 6
+        labels.append(svg.text((mx, yt - 3 if narrow else yt + 10), n_txt, cls="num mid"))
         below_same = [
             c for c in shapes if c.side == s.side and c.y_top == s.y_bottom and c is not s
         ]
@@ -232,10 +236,10 @@ def _plane_elements(
             and below_same[0].mesh_mm == s.mesh_mm
         )
         if not hide_bottom:
-            t = str(s.meshes_bottom)
+            n_txt = str(s.meshes_bottom)
             mx = (bot_px[0] + bot_px[1]) / 2
-            narrow = bot_px[1] - bot_px[0] < text_width(t, 9) + 6
-            labels.append(svg.text((mx, yb + 10 if narrow else yb - 3), t, cls="num mid"))
+            narrow = bot_px[1] - bot_px[0] < text_width(n_txt, 9) + 6
+            labels.append(svg.text((mx, yb + 10 if narrow else yb - 3), n_txt, cls="num mid"))
 
         # --- códigos de corte ---------------------------------------------------------------
         # Centrales: afuera, del lado que mira al centro de la lámina. Laterales: X1 afuera del
@@ -365,7 +369,7 @@ def _side_view(
     half = max(max(abs(v) for v in (*sh.x_top, *sh.x_bottom)) for sh in shapes) or 1.0
     sy = (y1 - y0) / length if length > 0 else 1.0
     fr = _Frame(cx, y0 - top * sy, half_px / half, sy)
-    out: list[svg.Element] = [svg.text((cx, y0 - 22), "COSTADOS (×2)", cls="big mid bold")]
+    out: list[svg.Element] = [svg.text((cx, y0 - 22), t("COSTADOS (×2)"), cls="big mid bold")]
     labels: list[svg.Element] = []
     for sh in shapes:
         out.append(svg.polygon([fr.p(pt) for pt in sh.points], cls="net-panel", id_=None))
@@ -385,13 +389,13 @@ def _side_view(
 # ---------------------------------------------------------------------------------------------
 
 _COLUMNS: tuple[tuple[str, str, float], ...] = (
-    ("Material", "", 0.0),
+    (N_("Material"), "", 0.0),
     ("Runnage", "[m/kg]", 42.0),
-    ("Nº de mallas", "", 88.0),
+    (N_("Nº de mallas"), "", 88.0),
     ("", "", 116.0),  # rombo (malla)
-    ("Mallero", "[mm]", 140.0),
-    ("Ø hilo", "[mm]", 180.0),
-    ("Largo", "[m]", 222.0),
+    (N_("Mallero"), "[mm]", 140.0),
+    (N_("Ø hilo"), "[mm]", 180.0),
+    (N_("Largo"), "[m]", 222.0),
 )
 _TABLE_W = 250.0
 
@@ -403,7 +407,7 @@ def _side_table(
     out: list[svg.Element] = []
     bands = layout.bands[plane]
     top = fr.y(bands[0].y_top)
-    cols = [(name, unit, x0 + 14 + dx) for name, unit, dx in _COLUMNS]
+    cols = [(t(name) if name else "", unit, x0 + 14 + dx) for name, unit, dx in _COLUMNS]
     for name, unit, x in cols:
         if name:
             out.append(svg.text((x + 3, top - 20), name, cls="", rotate=-90))
@@ -451,7 +455,7 @@ def _side_table(
     out.append(
         svg.text(
             ((table_l + table_r) / 2, fr.y(bands[-1].y_bottom) + 20),
-            f"LARGO TOTAL {fmt_es(total)} m",
+            t("LARGO TOTAL {length} m", length=fmt_es(total)),
             cls="big mid",
         )
     )
@@ -468,20 +472,20 @@ def _surface_box(result: DesignResult, variant: str, x: float, y: float) -> list
     ss, wt = geo.solid_surface_by_plane, geo.weight_by_plane
     c1, c2, c3, w = x + 8, x + 165, x + 238, 270.0
     out: list[svg.Element] = [
-        svg.text((c1, y + 22), "Sección de la red"),
-        svg.text((c2, y + 10), "Superficie", cls="mid"),
-        svg.text((c2, y + 22), "sólida [m²]", cls="mid"),
-        svg.text((c3, y + 22), "Peso [kg]", cls="mid"),
+        svg.text((c1, y + 22), t("Sección de la red")),
+        svg.text((c2, y + 10), t("Superficie"), cls="mid"),
+        svg.text((c2, y + 22), t("sólida [m²]"), cls="mid"),
+        svg.text((c3, y + 22), t("Peso [kg]"), cls="mid"),
         svg.line((x, y + 30), (x + w, y + 30), cls="thin"),
         svg.line((x + 128, y), (x + 128, y + 110), cls="thin"),
         svg.line((x + 204, y), (x + 204, y + 110), cls="thin"),
     ]
     rows = [
-        ("Paneles inferiores", ss["lower"], wt["lower"]),
-        ("Paneles superiores", ss["upper"], wt["upper"]),
+        (t("Paneles inferiores"), ss["lower"], wt["lower"]),
+        (t("Paneles superiores"), ss["upper"], wt["upper"]),
     ]
     if "side" in ss:  # red de 4 paneles
-        rows.append(("Costados (×2)", ss["side"], wt["side"]))
+        rows.append((t("Costados (×2)"), ss["side"], wt["side"]))
     step = 22 if len(rows) == 2 else 16
     for i, (name, a, b) in enumerate(rows):
         yy = y + (50 if len(rows) == 2 else 46) + i * step
@@ -492,7 +496,7 @@ def _surface_box(result: DesignResult, variant: str, x: float, y: float) -> list
         ]
     out += [
         svg.line((x, y + 88), (x + w, y + 88), cls="thin"),
-        svg.text((c1, y + 103), "Total", cls="bold"),
+        svg.text((c1, y + 103), t("Total"), cls="bold"),
         svg.text((c2, y + 103), fmt_es(geo.solid_surface_m2), cls="mid bold"),
         svg.text((c3, y + 103), fmt_es(geo.weight_air_kg), cls="mid bold"),
     ]
@@ -514,7 +518,7 @@ def _fishing_circle(result: DesignResult, variant: str, x: float, y: float) -> l
         )
     )
     out.append(svg.text((x + 16, y - 2), f"{fmt_es(fc)} m", cls="big"))
-    out.append(svg.text((x + 16, y + 10), "Círculo de pesca", cls="small muted-text"))
+    out.append(svg.text((x + 16, y + 10), t("Círculo de pesca"), cls="small muted-text"))
     return out
 
 
@@ -530,16 +534,19 @@ def _rigging(result: DesignResult, x0: float, y0: float, x_max: float) -> list[s
     out: list[svg.Element] = []
 
     info = [
-        f"Tipo de portón: {door.name}",
-        "Dimensiones: "
-        + f"{fmt_es(door.length_m or 0)} m × {fmt_es(door.height_m or 0)} m = "
-        + f"{fmt_es(door.area_m2 or 0)} m²",
-        f"Peso: {fmt_es(door.weight_air_kg or 0, 0)} kg",
+        t("Tipo de portón: {name}", name=door.name),
+        t(
+            "Dimensiones: {length} m × {height} m = {area} m²",
+            length=fmt_es(door.length_m or 0),
+            height=fmt_es(door.height_m or 0),
+            area=fmt_es(door.area_m2 or 0),
+        ),
+        t("Peso: {weight} kg", weight=fmt_es(door.weight_air_kg or 0, 0)),
         f"CD: {fmt_es(polar.cd)}    CL: {fmt_es(polar.cl)}",
-        f"Ángulo de ataque: {fmt_es(polar.angle_deg, 0)}°",
+        t("Ángulo de ataque: {angle}°", angle=fmt_es(polar.angle_deg, 0)),
     ]
-    for i, t in enumerate(info):
-        out.append(svg.text((x0 + 70, y0 + i * 13), t))
+    for i, line in enumerate(info):
+        out.append(svg.text((x0 + 70, y0 + i * 13), line))
 
     ya = y0 + 112  # eje del aparejo
     door_x = x0 + 96
@@ -551,7 +558,7 @@ def _rigging(result: DesignResult, x0: float, y0: float, x_max: float) -> list[s
 
     # Cable de remolque.
     out.append(svg.line((x0 + 50, ya - 34), (door_x, ya - 4), cls="line"))
-    out.append(svg.text((x0, ya - 4), "Cable de acero", cls="small"))
+    out.append(svg.text((x0, ya - 4), t("Cable de acero"), cls="small"))
     out.append(svg.text((x0, ya + 8), f"Ø {fmt_mm(warp.diameter_mm)} mm", cls="small"))
     out.append(svg.text((x0, ya + 20), f"{fmt_es(result.warps.warp_m, 0)} m", cls="small"))
     # Portón.
@@ -564,10 +571,18 @@ def _rigging(result: DesignResult, x0: float, y0: float, x_max: float) -> list[s
     out.append(svg.line((x_sw0 + 22, ya), (x_sw1, ya), cls="line"))
     out.append(svg.circle((x_sw1, ya), 2.2, cls="line"))
     out.append(
-        svg.text(((x_sw0 + x_sw1) / 2, ya - 5), f"Patentes {fmt_es(br.sweeps_m)} m", cls="mid")
+        svg.text(
+            ((x_sw0 + x_sw1) / 2, ya - 5),
+            t("Patentes {length} m", length=fmt_es(br.sweeps_m)),
+            cls="mid",
+        )
     )
     out.append(
-        svg.text((x_sw0 + 2, ya + 16), f"Pie de gallo {fmt_es(br.crowfoot.length_m)} m", cls="tiny")
+        svg.text(
+            (x_sw0 + 2, ya + 16),
+            t("Pie de gallo {length} m", length=fmt_es(br.crowfoot.length_m)),
+            cls="tiny",
+        )
     )
     # Malletas superior e inferior; cadena de reglaje al final de la inferior.
     out.append(svg.line((x_sw1, ya), (x_net, y_up), cls="line"))
@@ -578,19 +593,21 @@ def _rigging(result: DesignResult, x0: float, y0: float, x_max: float) -> list[s
     out.append(
         svg.text(
             ((x_sw1 + x_net) / 2, y_up - 6),
-            f"Malleta superior {fmt_es(br.lengths.upper_m)} m",
+            t("Malleta superior {length} m", length=fmt_es(br.lengths.upper_m)),
             cls="small mid",
         )
     )
     out.append(
         svg.text(
             ((x_sw1 + x_net) / 2 - 30, y_lo + 12),
-            f"Malleta inferior {fmt_es(br.lengths.lower_m)} m",
+            t("Malleta inferior {length} m", length=fmt_es(br.lengths.lower_m)),
             cls="small mid",
         )
     )
-    chain_txt = (
-        f"Cadena de reglaje {fmt_es(result.case.adjust_chain_m)} m · {fmt_es(dist.adjust_kg, 0)} kg"
+    chain_txt = t(
+        "Cadena de reglaje {length} m · {kg} kg",
+        length=fmt_es(result.case.adjust_chain_m),
+        kg=fmt_es(dist.adjust_kg, 0),
     )
     out.extend(_arrow((chain_x - 30, y_lo + 34), (chain_x + 12, chain_y + 5)))
     out.append(svg.text((chain_x - 30, y_lo + 45), chain_txt, cls="small mid"))
@@ -614,17 +631,29 @@ def _rigging(result: DesignResult, x0: float, y0: float, x_max: float) -> list[s
         out.append(svg.path(f"M {bx - 4:.2f} {by:.2f} A 4 4 0 0 0 {bx + 4:.2f} {by:.2f}"))
     xm = (x_net + x_end) / 2
     out += [
-        svg.text((xm, y_up - 24), f"{fl.count} boyas de Ø {fmt_mm(fl.diameter_mm)} mm", cls="mid"),
         svg.text(
-            (xm, y_up - 13),
-            f"Flotación total = {fmt_es(fl.flotation_rounded_kgf, 0)} kgf",
+            (xm, y_up - 24),
+            t("{n} boyas de Ø {d} mm", n=fl.count, d=fmt_mm(fl.diameter_mm)),
             cls="mid",
         ),
-        svg.text((xm, y_lo + 22), f"Lastre total = {fmt_es(bal.limits.max_kg, 0)} kg", cls="mid"),
+        svg.text(
+            (xm, y_up - 13),
+            t("Flotación total = {kgf} kgf", kgf=fmt_es(fl.flotation_rounded_kgf, 0)),
+            cls="mid",
+        ),
+        svg.text(
+            (xm, y_lo + 22),
+            t("Lastre total = {kg} kg", kg=fmt_es(bal.limits.max_kg, 0)),
+            cls="mid",
+        ),
         svg.text(
             (xm, y_lo + 34),
-            f"alas {fmt_es(dist.wings_kg, 0)} kg · bocana {fmt_es(dist.bosom_kg, 0)} kg · "
-            f"reglaje {fmt_es(dist.adjust_kg, 0)} kg",
+            t(
+                "alas {wings} kg · bocana {bosom} kg · reglaje {adjust} kg",
+                wings=fmt_es(dist.wings_kg, 0),
+                bosom=fmt_es(dist.bosom_kg, 0),
+                adjust=fmt_es(dist.adjust_kg, 0),
+            ),
             cls="small mid muted-text",
         ),
     ]
@@ -637,19 +666,19 @@ def _title_block(
     case = result.case
     base = case.net.name.split(" (")[0].upper()
     codend = [p for p in spec.panels if p.section is Section.CODEND]
-    mesh = f" · MALLA {fmt_mm(codend[0].mesh_mm)} mm" if codend else ""
+    mesh = t(" · MALLA {mesh} mm", mesh=fmt_mm(codend[0].mesh_mm)) if codend else ""
     sub = (
-        "CON BOLSA ESTÁNDAR PARA PEQUEÑOS PECES"
+        t("CON BOLSA ESTÁNDAR PARA PEQUEÑOS PECES")
         if variant == "std"
-        else "CON BOLSA MODIFICADA PARA CRUSTÁCEOS"
+        else t("CON BOLSA MODIFICADA PARA CRUSTÁCEOS")
     ) + mesh
     bhps = sorted({float(v.bhp) for v in case.vessel_class})
     power = (
-        f"PARA {fmt_es(bhps[0], 0)}HP"
+        t("PARA {hp}HP", hp=fmt_es(bhps[0], 0))
         if len(bhps) == 1
-        else f"PARA {fmt_es(bhps[0], 0)}HP A {fmt_es(bhps[-1], 0)}HP"
+        else t("PARA {hp0}HP A {hp1}HP", hp0=fmt_es(bhps[0], 0), hp1=fmt_es(bhps[-1], 0))
     )
-    compat = "corregido" if case.compat.value == "corrected" else "Excel 2014"
+    compat = t("corregido") if case.compat.value == "corrected" else "Excel 2014"
     h1, h2, h3 = 70.0, 32.0, 34.0
     xm = x + w - 110
     out: list[svg.Element] = [
@@ -661,10 +690,10 @@ def _title_block(
         svg.text((x + w / 2, y + 36), sub, cls="small mid"),
         svg.text((x + w / 2, y + 56), power, cls="big mid bold"),
         svg.text((x + 10, y + h1 + 21), AUTHOR, cls="big"),
-        svg.text((xm + 55, y + h1 + 13), "AÑO", cls="small mid"),
+        svg.text((xm + 55, y + h1 + 13), t("AÑO"), cls="small mid"),
         svg.text((xm + 55, y + h1 + 26), str(year), cls="mid"),
-        svg.text((x + 10, y + h1 + h2 + 22), INSTITUTION, cls="big"),
-        svg.text((xm + 55, y + h1 + h2 + 14), "Modo de cálculo", cls="tiny mid"),
+        svg.text((x + 10, y + h1 + h2 + 22), t(INSTITUTION), cls="big"),
+        svg.text((xm + 55, y + h1 + h2 + 14), t("Modo de cálculo"), cls="tiny mid"),
         svg.text((xm + 55, y + h1 + h2 + 27), compat, cls="small mid"),
     ]
     return out
@@ -706,14 +735,14 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
         svg.rect(margin, margin, SHEET_W - 2 * margin, SHEET_H - 2 * margin, cls="frame")
     ]
 
-    children.append(svg.text((fr_up.cx, 62), "PLANO SUPERIOR (DORSO)", cls="big mid bold"))
-    children.append(svg.text((fr_lo.cx, 62), "PLANO INFERIOR (VIENTRE)", cls="big mid bold"))
+    children.append(svg.text((fr_up.cx, 62), t("PLANO SUPERIOR (DORSO)"), cls="big mid bold"))
+    children.append(svg.text((fr_lo.cx, 62), t("PLANO INFERIOR (VIENTRE)"), cls="big mid bold"))
     children += _plane_elements(
         layout,
         "upper",
         fr_up,
         "right",
-        ("Lima", dims.headrope_m),
+        (t("Lima"), dims.headrope_m),
         (dims.headrope.wing_corrected_m, dims.headrope.bosom_corrected_m),
         head_rope,
         dims.wingtip_reinforcement_m,
@@ -723,7 +752,7 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
         "lower",
         fr_lo,
         "left",
-        ("Burlón", dims.footrope_m),
+        (t("Burlón"), dims.footrope_m),
         (dims.footrope.wing_corrected_m, dims.footrope.bosom_corrected_m),
         foot_rope,
         dims.wingtip_reinforcement_m,
@@ -745,7 +774,10 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
     children.append(
         svg.text(
             ((pa[0] + pb[0]) / 2, ytop - 5),
-            f"Refuerzo de puntas de ala {fmt_es(dims.wingtip_reinforcement_rope_m, 1)} m",
+            t(
+                "Refuerzo de puntas de ala {length} m",
+                length=fmt_es(dims.wingtip_reinforcement_rope_m, 1),
+            ),
             cls="small mid",
         )
     )
@@ -759,5 +791,5 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
         result, variant, spec, year, SHEET_W - margin - tb_w, SHEET_H - margin - 136.0, tb_w
     )
 
-    title = f"{spec.name} — lámina técnica"
+    title = t("{net} — lámina técnica", net=spec.name)
     return svg.document(SHEET_W, SHEET_H, children, title_text=title, extra_style=SHEET_STYLE)

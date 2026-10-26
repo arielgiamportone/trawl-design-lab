@@ -1,6 +1,11 @@
 # Laboratorios guiados sobre la app (Fase 17). Cada paso se comprueba con hechos que el motor
 # calcula para el caso del alumno (ver trawlkit.teaching.labs). Caso de partida: FAO A-3 con el
 # buque de 150 HP.
+#
+# Idiomas (Fase 18.1): cada laboratorio, paso, indicación, comprobación y pregunta trae su
+# traducción en un bloque «en:». Las opciones de las preguntas de opción múltiple tienen un id
+# estable ({id, es, en}) y «answer» es el id de la correcta: se corrige por id o por el texto de la
+# opción en cualquier idioma.
 labs:
   - id: lab.pano_y_resistencia
     chapter: 14_resistencia
@@ -10,6 +15,14 @@ labs:
     summary: >
       Cambiar la malla del copo y el hilo del cuerpo y ver qué pasa con la superficie sólida, la
       resistencia y la velocidad máxima.
+    en:
+      title: Netting and drag
+      summary: >
+        Change the codend mesh size and the body twine and see what happens to the solid area, the
+        drag and the maximum speed.
+      closing: >
+        The drag of the net depends above all on how much twine faces the water (solid area), not
+        on the mesh size itself.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp}
     steps:
       - id: base
@@ -17,49 +30,73 @@ labs:
         instruction: >
           Abra la pestaña «Resumen» con la red FAO A-3 y el buque de 150 HP. Anote la superficie
           sólida y la resistencia de la red a 3 kn.
+        en:
+          title: The starting case
+          instruction: >
+            Open the "Summary" tab with the FAO A-3 net and the 150 HP vessel. Write down the solid
+            area and the drag of the net at 3 kn.
         target: {tab: resumen}
         checks:
-          - {fact: net.id, op: "==", value: fao_a3_standard, label: La red es la FAO A-3}
-          - {fact: vessel.bhp, op: "==", value: 150, label: El buque es el de 150 HP}
+          - {fact: net.id, op: "==", value: fao_a3_standard, label: La red es la FAO A-3, en: {label: "The net is the FAO A-3"}}
+          - {fact: vessel.bhp, op: "==", value: 150, label: El buque es el de 150 HP, en: {label: "The vessel is the 150 HP one"}}
         questions:
-          - {id: ss, kind: number, prompt: "Superficie sólida de la red", unit: m², fact: summary.solid_surface_m2}
-          - {id: rn, kind: number, prompt: "Resistencia de la red a 3 kn", unit: kgf, fact: summary.rn_std_3kn_kgf}
+          - {id: ss, kind: number, prompt: "Superficie sólida de la red", unit: m², fact: summary.solid_surface_m2, en: {prompt: "Solid area of the net"}}
+          - {id: rn, kind: number, prompt: "Resistencia de la red a 3 kn", unit: kgf, fact: summary.rn_std_3kn_kgf, en: {prompt: "Drag of the net at 3 kn"}}
       - id: copo
         title: Agrandar la malla del copo
         instruction: >
           En la pestaña «Paneles», cambie la malla de los dos paños del copo (I y J) de 40 a 50 mm,
           sin tocar el número de mallas, y vuelva a calcular.
-        target: {tab: paneles, hint: Editar los paños de la sección copo}
+        en:
+          title: A larger codend mesh
+          instruction: >
+            In the "Panels" tab, change the mesh size of the two codend panels (I and J) from 40 to
+            50 mm, without changing the number of meshes, and calculate again.
+        target: {tab: paneles, hint: Editar los paños de la sección copo, en: {hint: Edit the panels of the codend section}}
         checks:
-          - {fact: net.codend_mesh_mm, op: ">=", value: 50, label: El copo tiene malla de 50 mm o más}
+          - {fact: net.codend_mesh_mm, op: ">=", value: 50, label: El copo tiene malla de 50 mm o más, en: {label: "The codend mesh is 50 mm or more"}}
         questions:
           - id: rn
             kind: number
             prompt: "Resistencia de la red a 3 kn con el copo nuevo"
+            en: {prompt: "Drag of the net at 3 kn with the new codend"}
             unit: kgf
             fact: summary.rn_std_3kn_kgf
           - id: porque
             kind: choice
             prompt: "¿Por qué cambió la resistencia así?"
+            en: {prompt: "Why did the drag change like that?"}
             options:
-              - "Bajó: una malla más grande deja pasar más agua"
-              - "Subió: con las mismas mallas, el copo es más largo y tiene más hilo"
-              - "No cambió: el copo no influye en la resistencia"
-            answer: "Subió: con las mismas mallas, el copo es más largo y tiene más hilo"
+              - id: bajo_pasa_agua
+                es: "Bajó: una malla más grande deja pasar más agua"
+                en: "It fell: a larger mesh lets more water through"
+              - id: subio_mas_hilo
+                es: "Subió: con las mismas mallas, el copo es más largo y tiene más hilo"
+                en: "It rose: with the same number of meshes, the codend is longer and has more twine"
+              - id: no_cambio
+                es: "No cambió: el copo no influye en la resistencia"
+                en: "It did not change: the codend has no effect on the drag"
+            answer: subio_mas_hilo
       - id: hilo
         title: Afinar el hilo del cuerpo
         instruction: >
           Ahora baje el diámetro del hilo de los paños del cuerpo, el square y el vientre (E, F, G y
           H) a 0,9 mm. ¿Qué pasa con la velocidad máxima?
+        en:
+          title: A thinner body twine
+          instruction: >
+            Now reduce the twine diameter of the body, square and belly panels (E, F, G and H) to
+            0.9 mm. What happens to the maximum speed?
         target: {tab: paneles}
         checks:
-          - {fact: net.body_twine_max_mm, op: "<=", value: 0.9, label: "Todo el cuerpo con hilo de 0,9 mm o menos"}
-          - {fact: summary.rn_std_3kn_kgf, op: "<", baseline_factor: 1.0, label: La resistencia quedó por debajo de la del caso de partida}
+          - {fact: net.body_twine_max_mm, op: "<=", value: 0.9, label: "Todo el cuerpo con hilo de 0,9 mm o menos", en: {label: "The whole body with 0.9 mm twine or less"}}
+          - {fact: summary.rn_std_3kn_kgf, op: "<", baseline_factor: 1.0, label: La resistencia quedó por debajo de la del caso de partida, en: {label: "The drag is below that of the starting case"}}
         questions:
-          - {id: vmax, kind: number, prompt: "Velocidad máxima remolcable", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima remolcable", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum towable speed"}}
           - id: costo
             kind: text
             prompt: "¿Qué se pierde con un hilo más fino? Piense en la resistencia a la rotura y el desgaste."
+            en: {prompt: "What is lost with a thinner twine? Think about breaking strength and wear."}
     closing: >
       La resistencia de la red depende sobre todo de cuánto hilo enfrenta al agua (superficie
       sólida), no del tamaño de malla en sí.
@@ -70,30 +107,46 @@ labs:
     level: basico
     title: Más potencia, más velocidad
     summary: Cambiar el buque y ver cómo se mueve la ventana de velocidad.
+    en:
+      title: More power, more speed
+      summary: Change the vessel and see how the speed window moves.
+      closing: >
+        The power moves the pull curve; the net sets the drag curve. The window is the stretch where
+        the first stays above the second.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp}
     steps:
       - id: base
         title: Velocidad máxima con 150 HP
         instruction: En la pestaña «Gráficos», mire dónde se cruzan el tiro y la resistencia total.
+        en:
+          title: Maximum speed with 150 HP
+          instruction: In the "Charts" tab, look at where the pull and the total drag cross.
         target: {tab: graficos}
         checks:
-          - {fact: vessel.bhp, op: "==", value: 150, label: Buque de 150 HP}
+          - {fact: vessel.bhp, op: "==", value: 150, label: Buque de 150 HP, en: {label: "150 HP vessel"}}
         questions:
-          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed"}}
       - id: buque
         title: Cambiar al buque de 180 HP
         instruction: En el panel del caso, elija el buque de 180 HP y vuelva a calcular.
-        target: {tab: graficos, hint: Selector «Buque» del panel del caso}
+        en:
+          title: Switch to the 180 HP vessel
+          instruction: In the case panel, choose the 180 HP vessel and calculate again.
+        target: {tab: graficos, hint: Selector «Buque» del panel del caso, en: {hint: '"Vessel" selector in the case panel'}}
         checks:
-          - {fact: vessel.bhp, op: ">=", value: 180, label: Buque de 180 HP o más}
-          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.0, label: La velocidad máxima subió}
+          - {fact: vessel.bhp, op: ">=", value: 180, label: Buque de 180 HP o más, en: {label: "Vessel of 180 HP or more"}}
+          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.0, label: La velocidad máxima subió, en: {label: "The maximum speed went up"}}
         questions:
-          - {id: vmax, kind: number, prompt: "Velocidad máxima con 180 HP", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima con 180 HP", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed with 180 HP"}}
           - id: rn
             kind: choice
             prompt: "¿Cambió la resistencia de la red a 3 kn?"
-            options: ["Sí, subió", "Sí, bajó", "No: la red es la misma"]
-            answer: "No: la red es la misma"
+            en: {prompt: "Did the drag of the net at 3 kn change?"}
+            options:
+              - {id: subio, es: "Sí, subió", en: "Yes, it rose"}
+              - {id: bajo, es: "Sí, bajó", en: "Yes, it fell"}
+              - {id: misma_red, es: "No: la red es la misma", en: "No: the net is the same"}
+            answer: misma_red
     closing: >
       La potencia mueve la curva de tiro; la red fija la curva de resistencia. La ventana es el
       tramo en que la primera queda por encima de la segunda.
@@ -104,28 +157,40 @@ labs:
     level: intermedio
     title: Otro portón, otra boca
     summary: Comparar el portón plano de madera de la A-3 con un portón oval y su efecto en la abertura.
+    en:
+      title: Another otter board, another mouth
+      summary: >
+        Compare the flat wooden otter board of the A-3 with an oval otter board and its effect on
+        the opening.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp, door: fao_flat_wood_a3}
     steps:
       - id: base
         title: Abertura con el portón plano
         instruction: En «Resumen», anote la abertura horizontal y la velocidad máxima.
+        en:
+          title: Opening with the flat otter board
+          instruction: In "Summary", write down the horizontal opening and the maximum speed.
         target: {tab: resumen}
         checks:
-          - {fact: door.id, op: "==", value: fao_flat_wood_a3, label: Portón plano de madera de la A-3}
+          - {fact: door.id, op: "==", value: fao_flat_wood_a3, label: Portón plano de madera de la A-3, en: {label: "Flat wooden otter board of the A-3"}}
         questions:
-          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening"}}
       - id: oval
         title: Portón oval
         instruction: Elija el portón oval del catálogo en el panel del caso y vuelva a calcular.
-        target: {tab: resumen, hint: Selector «Portón»}
+        en:
+          title: Oval otter board
+          instruction: Choose the oval otter board from the catalogue in the case panel and calculate again.
+        target: {tab: resumen, hint: Selector «Portón», en: {hint: '"Otter board" selector'}}
         checks:
-          - {fact: door.id, op: "!=", value: fao_flat_wood_a3, label: Otro portón}
+          - {fact: door.id, op: "!=", value: fao_flat_wood_a3, label: Otro portón, en: {label: "Another otter board"}}
         questions:
-          - {id: ah, kind: number, prompt: "Abertura horizontal con el portón nuevo", unit: m, fact: summary.horizontal_opening_m}
-          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: ah, kind: number, prompt: "Abertura horizontal con el portón nuevo", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening with the new otter board"}}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed"}}
           - id: balance
             kind: text
             prompt: "¿Conviene el cambio? Compare lo que se gana en velocidad con lo que se pierde en abertura."
+            en: {prompt: "Is the change worth it? Compare what is gained in speed with what is lost in opening."}
 
   - id: lab.profundidad
     chapter: 18_cables
@@ -133,30 +198,44 @@ labs:
     level: intermedio
     title: Pescar más hondo
     summary: Cambiar la profundidad de trabajo y seguir el cable, los ángulos y la abertura.
+    en:
+      title: Fishing deeper
+      summary: Change the fishing depth and follow the warp, the angles and the opening.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp}
     steps:
       - id: base
         title: A 40 m
         instruction: En «Resumen», anote el largo de cable filado y la abertura horizontal a 40 m.
+        en:
+          title: At 40 m
+          instruction: In "Summary", write down the length of warp paid out and the horizontal opening at 40 m.
         target: {tab: resumen}
         questions:
-          - {id: cable, kind: number, prompt: "Cable filado", unit: m, fact: summary.warp_length_m}
+          - {id: cable, kind: number, prompt: "Cable filado", unit: m, fact: summary.warp_length_m, en: {prompt: "Warp paid out"}}
       - id: hondo
         title: A 80 m
         instruction: >
           En los parámetros del caso, ponga la profundidad de trabajo (depth_m) en 80 m y vuelva a
           calcular.
-        target: {tab: diseno, hint: Parámetro «depth_m»}
+        en:
+          title: At 80 m
+          instruction: >
+            In the case parameters, set the fishing depth (depth_m) to 80 m and calculate again.
+        target: {tab: diseno, hint: Parámetro «depth_m», en: {hint: '"depth_m" parameter'}}
         checks:
-          - {fact: case.depth_m, op: ">=", value: 80, label: Profundidad de 80 m o más}
+          - {fact: case.depth_m, op: ">=", value: 80, label: Profundidad de 80 m o más, en: {label: "Depth of 80 m or more"}}
         questions:
-          - {id: cable, kind: number, prompt: "Cable filado a 80 m", unit: m, fact: summary.warp_length_m}
-          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+          - {id: cable, kind: number, prompt: "Cable filado a 80 m", unit: m, fact: summary.warp_length_m, en: {prompt: "Warp paid out at 80 m"}}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening"}}
           - id: relacion
             kind: choice
             prompt: "¿La relación cable/profundidad es la misma que a 40 m?"
-            options: ["Sí, siempre 5 a 1", "No: a más profundidad la relación baja", "No: a más profundidad la relación sube"]
-            answer: "No: a más profundidad la relación baja"
+            en: {prompt: "Is the warp/depth ratio the same as at 40 m?"}
+            options:
+              - {id: siempre_5, es: "Sí, siempre 5 a 1", en: "Yes, always 5 to 1"}
+              - {id: baja, es: "No: a más profundidad la relación baja", en: "No: the deeper, the lower the ratio"}
+              - {id: sube, es: "No: a más profundidad la relación sube", en: "No: the deeper, the higher the ratio"}
+            answer: baja
 
   - id: lab.red_chica
     chapter: 20_optimizacion
@@ -164,30 +243,42 @@ labs:
     level: avanzado
     title: Una red a la medida del buque
     summary: Probar una red más chica del catálogo en el buque de 150 HP y comparar.
+    en:
+      title: A net sized for the vessel
+      summary: Try a smaller net from the catalogue on the 150 HP vessel and compare.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp}
     steps:
       - id: base
         title: La A-3 en 150 HP
         instruction: Fije el caso actual con «Fijar A» en la pestaña «Comparar».
+        en:
+          title: The A-3 on 150 HP
+          instruction: Pin the current case with "Pin A" in the "Compare" tab.
         target: {tab: comparar}
         questions:
-          - {id: vmax, kind: number, prompt: "Velocidad máxima de la A-3", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima de la A-3", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed of the A-3"}}
       - id: chica
         title: Red del Workbook de 2 paneles
         instruction: >
           En el panel del caso elija la red de fondo de 2 paneles del Fisherman's Workbook (60 hp) y
           mantenga el buque de 150 HP. Compare con la A-3.
-        target: {tab: comparar, hint: Selector «Red»}
+        en:
+          title: Two-panel Workbook net
+          instruction: >
+            In the case panel choose the two-panel bottom trawl from the Fisherman's Workbook
+            (60 hp) and keep the 150 HP vessel. Compare it with the A-3.
+        target: {tab: comparar, hint: Selector «Red», en: {hint: '"Net" selector'}}
         checks:
-          - {fact: net.id, op: "!=", value: fao_a3_standard, label: Otra red}
-          - {fact: vessel.bhp, op: "==", value: 150, label: El mismo buque de 150 HP}
-          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.2, label: La velocidad máxima subió más de un 20 %}
+          - {fact: net.id, op: "!=", value: fao_a3_standard, label: Otra red, en: {label: "Another net"}}
+          - {fact: vessel.bhp, op: "==", value: 150, label: El mismo buque de 150 HP, en: {label: "The same 150 HP vessel"}}
+          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.2, label: La velocidad máxima subió más de un 20 %, en: {label: "The maximum speed rose by more than 20 %"}}
         questions:
-          - {id: vmax, kind: number, prompt: "Velocidad máxima con la red nueva", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
-          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima con la red nueva", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0, en: {prompt: "Maximum speed with the new net"}}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening"}}
           - id: conclusion
             kind: text
             prompt: "Con la economía de la marea (capítulo 37), ¿cuál de las dos redes pescaría más por hora? Justifique con el área barrida."
+            en: {prompt: "With the economics of the fishing trip (chapter 37), which of the two nets would catch more per hour? Justify it with the swept area."}
 
   - id: lab.taller
     chapter: 36_construccion
@@ -195,23 +286,38 @@ labs:
     level: basico
     title: Del plano al taller
     summary: Recorrer la guía de construcción de la A-3 y entender la hoja de corte y el armado.
+    en:
+      title: From the plan to the net loft
+      summary: >
+        Go through the construction guide of the A-3 and understand the cutting sheet and the
+        assembly.
     start: {net: fao_a3_standard, vessel: fao_a3_150hp}
     steps:
       - id: corte
         title: Hoja de corte
         instruction: Abra la pestaña «Construcción», vista «Hoja de corte».
+        en:
+          title: Cutting sheet
+          instruction: Open the "Construction" tab, "Cutting sheet" view.
         target: {tab: construccion}
         questions:
-          - {id: piezas, kind: number, prompt: "¿Cuántas piezas distintas hay que cortar?", fact: construction.pieces, tol_rel: 0}
+          - {id: piezas, kind: number, prompt: "¿Cuántas piezas distintas hay que cortar?", fact: construction.pieces, tol_rel: 0, en: {prompt: "How many different pieces have to be cut?"}}
           - id: ala
             kind: choice
             prompt: "Las alas superior e inferior se cortan…"
-            options: ["Por separado, cada una en su paño", "Encastradas de a pares en el mismo paño", "Del mismo paño que el cuerpo"]
-            answer: "Encastradas de a pares en el mismo paño"
+            en: {prompt: "The upper and lower wings are cut…"}
+            options:
+              - {id: separadas, es: "Por separado, cada una en su paño", en: "Separately, each from its own sheet of netting"}
+              - {id: encastradas, es: "Encastradas de a pares en el mismo paño", en: "Nested in pairs from the same sheet of netting"}
+              - {id: con_cuerpo, es: "Del mismo paño que el cuerpo", en: "From the same sheet of netting as the body"}
+            answer: encastradas
       - id: armado
         title: Armado paso a paso
         instruction: Pase a «Armado paso a paso» y recorra las uniones de la bolsa a las alas.
+        en:
+          title: Step-by-step assembly
+          instruction: Switch to "Step-by-step assembly" and go through the joins from the codend to the wings.
         target: {tab: construccion}
         questions:
-          - {id: uniones, kind: number, prompt: "¿Cuántas uniones tiene el armado?", fact: construction.joins, tol_rel: 0}
-          - {id: pano, kind: number, prompt: "¿Cuántos kg de paño hay que comprar?", unit: kg, fact: construction.stock_kg, tol_rel: 0.05}
+          - {id: uniones, kind: number, prompt: "¿Cuántas uniones tiene el armado?", fact: construction.joins, tol_rel: 0, en: {prompt: "How many joins does the assembly have?"}}
+          - {id: pano, kind: number, prompt: "¿Cuántos kg de paño hay que comprar?", unit: kg, fact: construction.stock_kg, tol_rel: 0.05, en: {prompt: "How many kg of netting have to be bought?"}}

@@ -78,7 +78,7 @@ from trawlkit.api.schemas import (
     Variant,
 )
 from trawlkit.compat import ERRATA
-from trawlkit.i18n import normalize_lang, reset_lang, set_lang
+from trawlkit.i18n import normalize_lang, reset_lang, set_lang, t
 from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignResult
 
@@ -155,7 +155,7 @@ def get_net(net_id: str) -> NetSpec:
     """Especificación completa de una red predefinida (paneles, relingas, boyas)."""
     presets = service.net_presets()
     if net_id not in presets:
-        raise HTTPException(404, f"red desconocida: {net_id!r}")
+        raise HTTPException(404, t("red desconocida: {net!r}", net=net_id))
     return presets[net_id]
 
 
@@ -311,7 +311,7 @@ def design_plan(req: DesignRequest, view: PlanView = "sheet", variant: Variant =
     from trawlkit.drawing import net_scale_svg, net_sheet_svg
 
     if variant == "mod" and req.net_modified is None:
-        raise HTTPException(422, "variant 'mod' requiere net_modified")
+        raise HTTPException(422, t("variant 'mod' requiere net_modified"))
     result = _run(req)
     svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
     return Response(svg, media_type="image/svg+xml")
@@ -442,7 +442,7 @@ def design_layout(
     (``true_scale``, relingada); no corre el caso completo.
     """
     if variant == "mod" and req.net_modified is None:
-        raise HTTPException(422, "variant 'mod' requiere net_modified")
+        raise HTTPException(422, t("variant 'mod' requiere net_modified"))
     net = req.net_modified if variant == "mod" else req.net
     assert net is not None
     return service.layout_of(net, mode)

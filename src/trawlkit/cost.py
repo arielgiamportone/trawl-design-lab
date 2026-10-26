@@ -23,6 +23,7 @@ from dataclasses import asdict, dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from trawlkit.components import ComponentBase, Price, get_component
+from trawlkit.i18n import t
 
 if TYPE_CHECKING:
     from trawlkit.model import DesignResult
@@ -149,54 +150,61 @@ def bill_of_materials(
     for mat, kg in by_mat.items():
         add(
             f"netting_{mat.lower()}",
-            f"Paño de {mat}",
+            t("Paño de {material}", material=mat),
             kg,
             "kg",
             "twine" if twine else None,
             twine,
-            name=None if twine else f"Paño {mat} del plano",
+            name=None if twine else t("Paño {material} del plano", material=mat),
         )
 
     # Relingas.
     head = result.floats.headrope_rope
     foot = result.ballast.footrope_rope
-    add("headrope", "Lima (relinga superior)", dims.headrope_m, "m", "rope", head.id)
-    add("footrope", "Burlón (relinga inferior)", dims.footrope_m, "m", "rope", foot.id)
+    add("headrope", t("Lima (relinga superior)"), dims.headrope_m, "m", "rope", head.id)
+    add("footrope", t("Burlón (relinga inferior)"), dims.footrope_m, "m", "rope", foot.id)
 
     # Bridas y patentes (dos lados).
     br = result.bridles
     wire_id = warp_id or result.warps.selection.id
     bridles_m = 2.0 * (br.lengths.upper_m + br.lengths.lower_m)
-    add("bridles", "Malletas (superior e inferior, dos lados)", bridles_m, "m", "wire", wire_id)
+    add(
+        "bridles",
+        t("Malletas (superior e inferior, dos lados)"),
+        bridles_m,
+        "m",
+        "wire",
+        wire_id,
+    )
     if not case.is_pair and br.sweeps_m > 0:
-        add("sweeps", "Patentes (dos)", 2.0 * br.sweeps_m, "m", "wire", wire_id)
+        add("sweeps", t("Patentes (dos)"), 2.0 * br.sweeps_m, "m", "wire", wire_id)
     add(
         "warps",
-        "Cable de remolque",
+        t("Cable de remolque"),
         float(result.warps.quantity_m),
         "m",
         "wire",
         wire_id,
-        note="2 cables del largo filado más 50 % de reserva (Cab!D12)",
+        note=t("2 cables del largo filado más 50 % de reserva (Cab!D12)"),
     )
 
     # Boyas.
     fl = result.floats
     add(
         "floats",
-        f"Boyas de {fl.diameter_mm:g} mm",
+        t("Boyas de {d:g} mm", d=fl.diameter_mm),
         float(fl.count),
         "unit",
         "float" if case.float_id else None,
         case.float_id,
-        name=None if case.float_id else f"Boya Ø{fl.diameter_mm:g} mm",
+        name=None if case.float_id else t("Boya Ø{d:g} mm", d=fl.diameter_mm),
     )
 
     # Portones.
     if not case.is_pair:
         add(
             "doors",
-            "Portones (par)",
+            t("Portones (par)"),
             2.0,
             "unit",
             "door",
@@ -211,23 +219,23 @@ def bill_of_materials(
         kgm = float(chain.weight_kg_per_m)  # type: ignore[attr-defined]
         add(
             "chain",
-            "Cadena de lastre y reglaje",
+            t("Cadena de lastre y reglaje"),
             ballast_kg / kgm,
             "m",
             "chain",
             chain.id,
-            note=f"{ballast_kg:.0f} kg de lastre máximo a {kgm:g} kg/m",
+            note=t("{kg:.0f} kg de lastre máximo a {kgm:g} kg/m", kg=ballast_kg, kgm=kgm),
         )
     else:
         add(
             "ballast",
-            "Lastre (cadena o plomos)",
+            t("Lastre (cadena o plomos)"),
             ballast_kg,
             "kg",
             None,
             None,
-            name="Lastre",
-            note="elija una cadena del catálogo para pasarlo a metros",
+            name=t("Lastre"),
+            note=t("elija una cadena del catálogo para pasarlo a metros"),
         )
 
     totals: dict[str, float] = {}

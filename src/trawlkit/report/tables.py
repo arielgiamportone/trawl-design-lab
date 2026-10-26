@@ -13,12 +13,14 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
+from trawlkit.i18n import N_, t
+
 Cell = float | int | str | None
 
 
 @dataclass(frozen=True)
 class Column:
-    """Columna de una tabla: clave estable, encabezado en español y unidad."""
+    """Columna de una tabla: clave estable, encabezado (en el idioma activo) y unidad."""
 
     key: str
     header: str
@@ -78,18 +80,18 @@ if TYPE_CHECKING:
 #: Nombres en español de las columnas de 'Resistencia de la RED' (``drag.SUMMARY_COLUMNS``).
 METHOD_LABELS: dict[str, str] = {
     "tauti_nomura_shu": "Tauti–Nomura–Shu (1974)",
-    "tauti_headrope": "Tauti (lima)",
-    "tauti_footrope": "Tauti (burlón)",
+    "tauti_headrope": N_("Tauti (lima)"),
+    "tauti_footrope": N_("Tauti (burlón)"),
     "koyama_1974": "Koyama (1974)",
     "koyama_1984": "Koyama (1984)",
     "hamuro": "Hamuro",
-    "nomura_150": "Nomura 150 HP (tiro)",
-    "nomura_180": "Nomura 180 HP (tiro)",
+    "nomura_150": N_("Nomura 150 HP (tiro)"),
+    "nomura_180": N_("Nomura 180 HP (tiro)"),
     "reid": "Reid (1977)",
     "robertson": "Robertson (1981)",
     "maclennan": "MacLennan (1981)",
     "aberdeen_demersal": "Aberdeen demersal",
-    "aberdeen_pelagic": "Aberdeen pelágica",
+    "aberdeen_pelagic": N_("Aberdeen pelágica"),
     "fridman": "Fridman (1973)",
     "dickson": "Dickson",
 }
@@ -103,39 +105,52 @@ PULL_METHODS: tuple[tuple[str, str], ...] = (
     ("hamuro_kgf", "Hamuro"),
 )
 
-VARIANT_LABELS: dict[str, str] = {"std": "estándar", "mod": "modificada"}
+VARIANT_LABELS: dict[str, str] = {"std": N_("estándar"), "mod": N_("modificada")}
 
 PROPELLER_LABELS: dict[str, str] = {
-    "fixed_pitch": "Paso fijo (PF)",
-    "fixed_pitch_nozzle": "Paso fijo con tobera (PF+T)",
-    "variable_pitch": "Paso variable (PV)",
-    "variable_pitch_nozzle": "Paso variable con tobera (PV+T)",
+    "fixed_pitch": N_("Paso fijo (PF)"),
+    "fixed_pitch_nozzle": N_("Paso fijo con tobera (PF+T)"),
+    "variable_pitch": N_("Paso variable (PV)"),
+    "variable_pitch_nozzle": N_("Paso variable con tobera (PV+T)"),
 }
 
-PLANE_LABELS: dict[str, str] = {"upper": "superior", "lower": "inferior", "side": "lateral"}
+PLANE_LABELS: dict[str, str] = {
+    "upper": N_("superior"),
+    "lower": N_("inferior"),
+    "side": N_("lateral"),
+}
 SECTION_LABELS: dict[str, str] = {
-    "wing_tip": "punta de ala",
-    "wing": "ala",
-    "square": "square",
-    "belly": "vientre",
-    "body": "cuerpo",
-    "extension": "extensión",
-    "codend": "bolsa",
+    "wing_tip": N_("punta de ala"),
+    "wing": N_("ala"),
+    "square": N_("square"),
+    "belly": N_("vientre"),
+    "body": N_("cuerpo"),
+    "extension": N_("extensión"),
+    "codend": N_("bolsa"),
 }
 
 #: Erratas cuyo tratamiento no depende del modo (ver ``docs/erratas.md``).
 ERRATA_FIXED_TREATMENT: dict[str, tuple[str, str]] = {
     "nomura_column_links_hamuro": (
-        "documentada",
-        "Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta.",
+        N_("documentada"),
+        N_("Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta."),
     ),
-    "nomura_ratio_typo": ("reproducida", "Tabla de referencia copiada tal cual en ambos modos."),
-    "panel_f_cut_na": ("corregida", "El código de corte se calcula en ambos modos."),
-    "panel_b_cut_uses_plan_coef": ("corregida", "La razón de corte usa N en ambos modos."),
-    "panel_b_cut_code_lookup_a": ("corregida", "Cada paño busca con su propia razón."),
+    "nomura_ratio_typo": (
+        N_("reproducida"),
+        N_("Tabla de referencia copiada tal cual en ambos modos."),
+    ),
+    "panel_f_cut_na": (
+        N_("corregida"),
+        N_("El código de corte se calcula en ambos modos."),
+    ),
+    "panel_b_cut_uses_plan_coef": (
+        N_("corregida"),
+        N_("La razón de corte usa N en ambos modos."),
+    ),
+    "panel_b_cut_code_lookup_a": (N_("corregida"), N_("Cada paño busca con su propia razón.")),
     "catenary_ratio_hardcoded": (
-        "reproducida",
-        "fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas.",
+        N_("reproducida"),
+        N_("fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas."),
     ),
 }
 
@@ -159,10 +174,10 @@ def _speeds(result: DesignResult) -> list[float]:
 
 def _kv_columns() -> tuple[Column, ...]:
     return (
-        Column("group", "Grupo"),
-        Column("name", "Magnitud"),
-        Column("value", "Valor"),
-        Column("unit", "Unidad"),
+        Column("group", t("Grupo")),
+        Column("name", t("Magnitud")),
+        Column("value", t("Valor")),
+        Column("unit", t("Unidad")),
     )
 
 
@@ -188,12 +203,12 @@ def summary_table(result: DesignResult) -> Table:
         )
     return Table(
         key="resumen",
-        title="Resumen del diseño",
+        title=t("Resumen del diseño"),
         columns=(
-            Column("key", "Clave"),
-            Column("name", "Magnitud"),
-            Column("value", "Valor"),
-            Column("unit", "Unidad"),
+            Column("key", t("Clave")),
+            Column("name", t("Magnitud")),
+            Column("value", t("Valor")),
+            Column("unit", t("Unidad")),
         ),
         rows=tuple(rows),
         source="'Dimensiones de la Red'!F45:F71; 'Resistencia de la RED'!N302:N310; "
@@ -225,8 +240,8 @@ def panels_table(result: DesignResult, variant: str = "std") -> Table:
         rows.append(
             (
                 p.id,
-                PLANE_LABELS.get(p.plane.value, p.plane.value),
-                SECTION_LABELS.get(p.section.value, p.section.value),
+                t(PLANE_LABELS.get(p.plane.value, p.plane.value)),
+                t(SECTION_LABELS.get(p.section.value, p.section.value)),
                 p.material,
                 float(p.mesh_mm),
                 float(p.twine_diameter_mm),
@@ -244,27 +259,29 @@ def panels_table(result: DesignResult, variant: str = "std") -> Table:
         )
     return Table(
         key=f"panos_{variant}",
-        title=f"Paños de la red {VARIANT_LABELS[variant]} ({spec.id})",
+        title=t(
+            "Paños de la red {variant} ({net})", variant=t(VARIANT_LABELS[variant]), net=spec.id
+        ),
         columns=(
-            Column("id", "Paño"),
-            Column("plane", "Plano"),
-            Column("section", "Sección"),
-            Column("material", "Material"),
-            Column("mesh_mm", "Mallero", "mm"),
-            Column("twine_mm", "Ø hilo", "mm"),
+            Column("id", t("Paño")),
+            Column("plane", t("Plano")),
+            Column("section", t("Sección")),
+            Column("material", t("Material")),
+            Column("mesh_mm", t("Mallero"), "mm"),
+            Column("twine_mm", t("Ø hilo"), "mm"),
             Column("rtex", "Rtex", "tex"),
             Column("runnage", "Runnage", "m/kg"),
-            Column("meshes_top", "Mallas boca"),
-            Column("meshes_bottom", "Mallas bolsa"),
-            Column("meshes_depth", "Mallas alto"),
+            Column("meshes_top", t("Mallas boca")),
+            Column("meshes_bottom", t("Mallas bolsa")),
+            Column("meshes_depth", t("Mallas alto")),
             Column("u1", "U1"),
-            Column("count", "Cant."),
-            Column("cut", "Corte"),
+            Column("count", t("Cant.")),
+            Column("cut", t("Corte")),
             Column("ss_m2", "Ss", "m²"),
-            Column("weight_kg", "Peso", "kg"),
+            Column("weight_kg", t("Peso"), "kg"),
         ),
         rows=tuple(rows),
-        note="Ss y peso de la fila de 'Mecánica de la Red' repartidos por cantidad de paneles.",
+        note=t("Ss y peso de la fila de 'Mecánica de la Red' repartidos por cantidad de paneles."),
         source="'Paños de red y cortes'!N269:W291; 'Mecánica de la Red'!C29:L37, N29, O107",
         meta={"variant": variant},
     )
@@ -274,8 +291,8 @@ def power_table(result: DesignResult) -> Table:
     """Tiro disponible por método y velocidad; FT de Fridman PF y PV+T de la clase."""
     curves = result.power.curves
     bhp = f"{result.case.vessel.bhp:g} HP"
-    cols = [Column("speed_kn", "Velocidad", "kn")]
-    cols += [Column(attr, f"{name} {bhp}", "kgf") for attr, name in PULL_METHODS]
+    cols = [Column("speed_kn", t("Velocidad"), "kn")]
+    cols += [Column(attr, f"{t(name)} {bhp}", "kgf") for attr, name in PULL_METHODS]
     series: list[Any] = [getattr(curves, attr) for attr, _ in PULL_METHODS]
     for vid, s in result.power.class_fridman.items():
         tag = f"{s.bhp:g} HP"
@@ -285,7 +302,10 @@ def power_table(result: DesignResult) -> Table:
     rows = tuple((v, *(_f(s[i]) for s in series)) for i, v in enumerate(_speeds(result)))
     return Table(
         key="potencia",
-        title=f"Tiro disponible por método ({result.case.vessel.id}) y FT de Fridman de la clase",
+        title=t(
+            "Tiro disponible por método ({vessel}) y FT de Fridman de la clase",
+            vessel=result.case.vessel.id,
+        ),
         columns=tuple(cols),
         rows=rows,
         source="'Potencia Disponible Arrastre OK'!L11:O19, B10:G30, A160:L280",
@@ -300,9 +320,9 @@ def drag_table(result: DesignResult, variant: str = "std") -> Table:
     cols_data = table.variant(variant)
     avg = average(table, result.case.compat)
     avg_v = avg.std if variant == "std" else avg.mod
-    cols = [Column("speed_kn", "Velocidad", "kn")]
-    cols += [Column(c, METHOD_LABELS.get(c, c), "kgf") for c in table.columns]
-    cols.append(Column("average", "Promedio", "kgf"))
+    cols = [Column("speed_kn", t("Velocidad"), "kn")]
+    cols += [Column(c, t(METHOD_LABELS.get(c, c)), "kgf") for c in table.columns]
+    cols.append(Column("average", t("Promedio"), "kgf"))
     rows = tuple(
         (float(v), *(_f(cols_data[c][i]) for c in table.columns), _f(avg_v[i]))
         for i, v in enumerate(table.speed_kn)
@@ -310,11 +330,13 @@ def drag_table(result: DesignResult, variant: str = "std") -> Table:
     first, last = ("A398", "S406") if variant == "std" else ("A413", "S421")
     return Table(
         key=f"resistencia_{variant}",
-        title=f"Resistencia de la red {VARIANT_LABELS[variant]} por método",
+        title=t("Resistencia de la red {variant} por método", variant=t(VARIANT_LABELS[variant])),
         columns=tuple(cols),
         rows=rows,
-        note=f"RN de diseño: {METHOD_LABELS[result.drag.design_method]}. Las columnas de Nomura "
-        "son tiro disponible, no resistencia.",
+        note=t(
+            "RN de diseño: {method}. Las columnas de Nomura son tiro disponible, no resistencia.",
+            method=t(METHOD_LABELS[result.drag.design_method]),
+        ),
         source=f"'Resistencia de la RED'!{first}:{last}",
         meta={"variant": variant},
     )
@@ -327,101 +349,115 @@ def rigging_table(result: DesignResult) -> Table:
     s = result.spread
     case = result.case
     rows: list[tuple[Cell, ...]] = [
-        _kv("Portones", "Portón", case.door.name),
-        _kv("Portones", "Superficie del portón", case.door.area_m2, "m²"),
-        _kv("Portones", "Distancia entre portones (Ds)", d.spread_m, "m"),
-        _kv("Portones", "Semiángulo de divergencia (½φ)", d.half_divergence_deg, "°"),
-        _kv("Portones", "Distancia corregida", d.spread_corrected_m, "m"),
-        _kv("Portones", "Ángulo de ataque de la polar", d.polar.angle_deg, "°"),
-        _kv("Portones", "CL", d.polar.cl),
-        _kv("Portones", "CD", d.polar.cd),
-        _kv("Portones", "CL/CD", d.polar.cl_cd),
+        _kv(t("Portones"), t("Portón"), case.door.name),
+        _kv(t("Portones"), t("Superficie del portón"), case.door.area_m2, "m²"),
+        _kv(t("Portones"), t("Distancia entre portones (Ds)"), d.spread_m, "m"),
+        _kv(t("Portones"), t("Semiángulo de divergencia (½φ)"), d.half_divergence_deg, "°"),
+        _kv(t("Portones"), t("Distancia corregida"), d.spread_corrected_m, "m"),
+        _kv(t("Portones"), t("Ángulo de ataque de la polar"), d.polar.angle_deg, "°"),
+        _kv(t("Portones"), "CL", d.polar.cl),
+        _kv(t("Portones"), "CD", d.polar.cd),
+        _kv(t("Portones"), "CL/CD", d.polar.cl_cd),
     ]
     speeds = case.report_speeds_kn
     for share, arr in d.rob_shares_kgf.items():
         pct = share.replace("pct", " %")
         for v in speeds:
             i = case.speed_index(v)
-            rows.append(_kv("Portones", f"ROB = {pct} de FT a {v:g} kn", arr[i], "kgf"))
+            name = t("ROB = {pct} de FT a {v} kn", pct=pct, v=f"{v:g}")
+            rows.append(_kv(t("Portones"), name, arr[i], "kgf"))
     for v in speeds:
         i = case.speed_index(v)
         rows.append(
             _kv(
-                "Portones",
-                f"ROB hidrodinámica de un portón a {v:g} kn",
+                t("Portones"),
+                t("ROB hidrodinámica de un portón a {v} kn", v=f"{v:g}"),
                 _at(d.forces.drag_kgf, i),
                 "kgf",
             )
         )
     rows += [
         _kv(
-            "Portones",
-            "Superficie requerida (promedio 2–4 kn)",
+            t("Portones"),
+            t("Superficie requerida (promedio 2–4 kn)"),
             d.required_area.average_total_m2,
             "m²",
         ),
-        _kv("Portones", "Superficie requerida por portón", d.required_area.per_door_m2, "m²"),
+        _kv(t("Portones"), t("Superficie requerida por portón"), d.required_area.per_door_m2, "m²"),
         _kv(
-            "Portones",
-            "Superficie requerida por portón (clase)",
+            t("Portones"),
+            t("Superficie requerida por portón (clase)"),
             d.required_area_per_door_class_m2,
             "m²",
         ),
-        _kv("Bridas", "Brida superior", b.lengths.upper_m, "m"),
-        _kv("Bridas", "Brida inferior", b.lengths.lower_m, "m"),
-        _kv("Bridas", "Cadena de ajuste", b.lengths.adjust_chain_m, "m"),
-        _kv("Bridas", "Brida sin triángulo", b.lengths.no_triangle_m, "m"),
-        _kv("Bridas", "Brida con triángulo", b.lengths.triangle_m, "m"),
-        _kv("Patentes", "Patentes de diseño", b.sweeps_m, "m"),
-        _kv("Patentes", "Patentes + brida", b.sweeps_plus_bridle_m, "m"),
-        _kv("Patentes", "Patentes (Dremière)", b.sweeps_dremiere_m, "m"),
-        _kv("Patentes", "Patentes (Martini)", b.sweeps_martini_m, "m"),
-        _kv("Patentes", "Patentes sin triángulo", b.sweeps_no_triangle_m, "m"),
-        _kv("Patentes", "Patentes con triángulo", b.sweeps_triangle_m, "m"),
-        _kv("Pies de gallo", "Pies de gallo", b.crowfoot.length_m, "m"),
-        _kv("Pies de gallo", "Pie de gallo superior", b.crowfoot.upper_m, "m"),
-        _kv("Pies de gallo", "Alargue", b.crowfoot.extension_m, "m"),
-        _kv("Pies de gallo", "Ángulo de ataque de bridas (δ)", b.attack_angle_deg, "°"),
+        _kv(t("Bridas"), t("Brida superior"), b.lengths.upper_m, "m"),
+        _kv(t("Bridas"), t("Brida inferior"), b.lengths.lower_m, "m"),
+        _kv(t("Bridas"), t("Cadena de ajuste"), b.lengths.adjust_chain_m, "m"),
+        _kv(t("Bridas"), t("Brida sin triángulo"), b.lengths.no_triangle_m, "m"),
+        _kv(t("Bridas"), t("Brida con triángulo"), b.lengths.triangle_m, "m"),
+        _kv(t("Patentes"), t("Patentes de diseño"), b.sweeps_m, "m"),
+        _kv(t("Patentes"), t("Patentes + brida"), b.sweeps_plus_bridle_m, "m"),
+        _kv(t("Patentes"), t("Patentes (Dremière)"), b.sweeps_dremiere_m, "m"),
+        _kv(t("Patentes"), t("Patentes (Martini)"), b.sweeps_martini_m, "m"),
+        _kv(t("Patentes"), t("Patentes sin triángulo"), b.sweeps_no_triangle_m, "m"),
+        _kv(t("Patentes"), t("Patentes con triángulo"), b.sweeps_triangle_m, "m"),
+        _kv(t("Pies de gallo"), t("Pies de gallo"), b.crowfoot.length_m, "m"),
+        _kv(t("Pies de gallo"), t("Pie de gallo superior"), b.crowfoot.upper_m, "m"),
+        _kv(t("Pies de gallo"), t("Alargue"), b.crowfoot.extension_m, "m"),
+        _kv(t("Pies de gallo"), t("Ángulo de ataque de bridas (δ)"), b.attack_angle_deg, "°"),
     ]
     for v in speeds:
         i = case.speed_index(v)
         rows.append(
-            _kv("DPA", f"DPA Fridman estándar a {v:g} kn", _at(s.fridman.dpa_std_m, i), "m")
+            _kv(
+                "DPA",
+                t("DPA Fridman estándar a {v} kn", v=f"{v:g}"),
+                _at(s.fridman.dpa_std_m, i),
+                "m",
+            )
         )
         rows.append(
-            _kv("DPA", f"DPA Fridman modificada a {v:g} kn", _at(s.fridman.dpa_mod_m, i), "m")
+            _kv(
+                "DPA",
+                t("DPA Fridman modificada a {v} kn", v=f"{v:g}"),
+                _at(s.fridman.dpa_mod_m, i),
+                "m",
+            )
         )
     rows += [
-        _kv("DPA", "DPA geométrica", s.dpa_geometric_m, "m"),
-        _kv("DPA", "DPA geométrica con la red trabajando", s.dpa_working_m, "m"),
-        _kv("DPA", "DPA por ángulo de corte", s.dpa_cut_angle_m, "m"),
-        _kv("AH", "Abertura horizontal (AH)", s.horizontal_opening_m, "m"),
+        _kv("DPA", t("DPA geométrica"), s.dpa_geometric_m, "m"),
+        _kv("DPA", t("DPA geométrica con la red trabajando"), s.dpa_working_m, "m"),
+        _kv("DPA", t("DPA por ángulo de corte"), s.dpa_cut_angle_m, "m"),
+        _kv("AH", t("Abertura horizontal (AH)"), s.horizontal_opening_m, "m"),
         _kv("AV", "AV Suzuki", s.vertical.suzuki_m, "m"),
     ]
     prado_names = {
-        "low_opening": "baja abertura",
-        "high_opening": "alta abertura",
-        "shellfish": "mariscos",
+        "low_opening": N_("baja abertura"),
+        "high_opening": N_("alta abertura"),
+        "shellfish": N_("mariscos"),
     }
     for k, v in s.vertical.prado_m.items():
-        rows.append(_kv("AV", f"AV Prado–Dremière ({prado_names.get(k, k)})", v, "m"))
+        rows.append(_kv("AV", f"AV Prado–Dremière ({t(prado_names.get(k, k))})", v, "m"))
     for j, v in enumerate(s.vertical.izzo_m, 1):
         rows.append(_kv("AV", f"AV Izzo ({j})", v, "m"))
     rows += [
         _kv("AV", "AV Martini", s.vertical.martini_m, "m"),
         _kv(
-            "AV", "AV Baranov–Fridman estándar (promedio)", s.vertical.fridman.std.av_average_m, "m"
+            "AV",
+            t("AV Baranov–Fridman estándar (promedio)"),
+            s.vertical.fridman.std.av_average_m,
+            "m",
         ),
         _kv(
             "AV",
-            "AV Baranov–Fridman modificada (promedio)",
+            t("AV Baranov–Fridman modificada (promedio)"),
             s.vertical.fridman.mod.av_average_m,
             "m",
         ),
     ]
     return Table(
         key="aparejo",
-        title="Portones, bridas, patentes y aberturas",
+        title=t("Portones, bridas, patentes y aberturas"),
         columns=_kv_columns(),
         rows=tuple(rows),
         source="'Portones y aparejamiento'!A1:H289; 'Mecánica de la Red'!B162:P282; "
@@ -435,44 +471,45 @@ def floats_ballast_table(result: DesignResult) -> Table:
     bl = result.ballast
     dist = f.distribution
     rows: list[tuple[Cell, ...]] = [
-        _kv("Flotación", "Koyama", f.koyama_kgf, "kgf"),
-        _kv("Flotación", "Prado–Dremière", f.prado_kgf, "kgf"),
-        _kv("Flotación", "Fridman (promedio 1–3 kn)", f.fridman_average_kgf, "kgf"),
+        _kv(t("Flotación"), "Koyama", f.koyama_kgf, "kgf"),
+        _kv(t("Flotación"), "Prado–Dremière", f.prado_kgf, "kgf"),
+        _kv(t("Flotación"), t("Fridman (promedio 1–3 kn)"), f.fridman_average_kgf, "kgf"),
     ]
     for vid, v in f.class_fridman_average_kgf.items():
-        rows.append(_kv("Flotación", f"Fridman {vid}", v, "kgf"))
+        rows.append(_kv(t("Flotación"), f"Fridman {vid}", v, "kgf"))
     rows += [
-        _kv("Flotación", "Flotación total de la clase (Ffz)", f.flotation_total_kgf, "kgf"),
-        _kv("Flotación", "Flotación de diseño (redondeada)", f.flotation_rounded_kgf, "kgf"),
-        _kv("Flotación", "Cabo de la lima", f.headrope_rope.id),
-        _kv("Flotación", "Peso de la lima en el agua", f.headrope_weight_water_kgf, "kgf"),
-        _kv("Boyas", "Cantidad de boyas", f.count, "u"),
-        _kv("Boyas", "Diámetro de boya", f.diameter_mm, "mm"),
-        _kv("Boyas", "Separación uniforme", dist.spacing_even_m, "m"),
-        _kv("Boyas", "Boyas en alas", dist.on_wings, "u"),
-        _kv("Boyas", "Boyas en el centro (bosom)", dist.on_bosom, "u"),
-        _kv("Boyas", "Separación en el centro", dist.spacing_bosom_m, "m"),
+        _kv(t("Flotación"), t("Flotación total de la clase (Ffz)"), f.flotation_total_kgf, "kgf"),
+        _kv(t("Flotación"), t("Flotación de diseño (redondeada)"), f.flotation_rounded_kgf, "kgf"),
+        _kv(t("Flotación"), t("Cabo de la lima"), f.headrope_rope.id),
+        _kv(t("Flotación"), t("Peso de la lima en el agua"), f.headrope_weight_water_kgf, "kgf"),
+        _kv(t("Boyas"), t("Cantidad de boyas"), f.count, "u"),
+        _kv(t("Boyas"), t("Diámetro de boya"), f.diameter_mm, "mm"),
+        _kv(t("Boyas"), t("Separación uniforme"), dist.spacing_even_m, "m"),
+        _kv(t("Boyas"), t("Boyas en alas"), dist.on_wings, "u"),
+        _kv(t("Boyas"), t("Boyas en el centro (bosom)"), dist.on_bosom, "u"),
+        _kv(t("Boyas"), t("Separación en el centro"), dist.spacing_bosom_m, "m"),
     ]
     for v in result.case.report_speeds_kn:
         i = result.case.speed_index(v)
-        rows.append(_kv("Boyas", f"Resistencia de las boyas (RB) a {v:g} kn", f.drag_kgf[i], "kgf"))
+        name = t("Resistencia de las boyas (RB) a {v} kn", v=f"{v:g}")
+        rows.append(_kv(t("Boyas"), name, f.drag_kgf[i], "kgf"))
     rows += [
-        _kv("Lastre", "Koyama", bl.koyama_kg, "kg"),
-        _kv("Lastre", "Prado–Dremière", bl.prado_kg, "kg"),
-        _kv("Lastre", "Cabo del burlón", bl.footrope_rope.id),
-        _kv("Lastre", "Peso del burlón en el agua", bl.footrope_weight_water_kgf, "kgf"),
-        _kv("Lastre", "Lastre mínimo", bl.limits.min_kg, "kg"),
-        _kv("Lastre", "Lastre máximo", bl.limits.max_kg, "kg"),
-        _kv("Lastre", "Cadena de ajuste", bl.adjust_chain_weight_kg, "kg"),
-        _kv("Lastre", "Reparto uniforme", bl.even_kg_m, "kg/m"),
-        _kv("Lastre", "Mínimo: centro (bosom)", bl.distribution_min.bosom_kg, "kg"),
-        _kv("Lastre", "Mínimo: alas", bl.distribution_min.wings_kg, "kg"),
-        _kv("Lastre", "Máximo: centro (bosom)", bl.distribution_max.bosom_kg, "kg"),
-        _kv("Lastre", "Máximo: alas", bl.distribution_max.wings_kg, "kg"),
+        _kv(t("Lastre"), "Koyama", bl.koyama_kg, "kg"),
+        _kv(t("Lastre"), "Prado–Dremière", bl.prado_kg, "kg"),
+        _kv(t("Lastre"), t("Cabo del burlón"), bl.footrope_rope.id),
+        _kv(t("Lastre"), t("Peso del burlón en el agua"), bl.footrope_weight_water_kgf, "kgf"),
+        _kv(t("Lastre"), t("Lastre mínimo"), bl.limits.min_kg, "kg"),
+        _kv(t("Lastre"), t("Lastre máximo"), bl.limits.max_kg, "kg"),
+        _kv(t("Lastre"), t("Cadena de ajuste"), bl.adjust_chain_weight_kg, "kg"),
+        _kv(t("Lastre"), t("Reparto uniforme"), bl.even_kg_m, "kg/m"),
+        _kv(t("Lastre"), t("Mínimo: centro (bosom)"), bl.distribution_min.bosom_kg, "kg"),
+        _kv(t("Lastre"), t("Mínimo: alas"), bl.distribution_min.wings_kg, "kg"),
+        _kv(t("Lastre"), t("Máximo: centro (bosom)"), bl.distribution_max.bosom_kg, "kg"),
+        _kv(t("Lastre"), t("Máximo: alas"), bl.distribution_max.wings_kg, "kg"),
     ]
     return Table(
         key="flotacion_lastre",
-        title="Flotación, boyas y lastre",
+        title=t("Flotación, boyas y lastre"),
         columns=_kv_columns(),
         rows=tuple(rows),
         source="'Flotación y Lastre'!E2:J146, D153:I245",
@@ -484,34 +521,38 @@ def warp_table(result: DesignResult) -> Table:
     w = result.warps
     sel = w.selection
     rows: list[tuple[Cell, ...]] = [
-        _kv("Geometría", "Cable filado (Ls)", w.warp_m, "m"),
-        _kv("Geometría", "Patentes + brida", w.sweeps_plus_bridle_m, "m"),
-        _kv("Geometría", "DPA (A, triángulos semejantes)", w.dpa_a_m, "m"),
-        _kv("Geometría", "DPA (B, triángulos semejantes)", w.dpa_b_m, "m"),
-        _kv("Ángulos", "Declinación (δ1)", w.angles.declination_deg, "°"),
-        _kv("Ángulos", "Divergencia (δ2)", w.angles.divergence_deg, "°"),
-        _kv("Ángulos", "Divergencia de bridas (δ3)", w.angles.bridle_divergence_deg, "°"),
-        _kv("Diámetro", "Ø por EHP (regla práctica)", w.diameter_ehp_mm, "mm"),
-        _kv("Diámetro", "Ø Pérez Águila (buque de diseño)", w.diameter_aguila_mm, "mm"),
-        _kv("Diámetro", "NHP de dimensionamiento", w.sizing_nhp_hp, "HP"),
-        _kv("Diámetro", "Ø de diseño", w.diameter_mm, "mm"),
-        _kv("Hidrodinámica", "CD del cable (Nomura–Yamazaki)", w.cd),
-        _kv("Peso", "Peso en aire", w.weight.air_kg_m, "kg/m"),
-        _kv("Peso", "Peso total en aire", w.weight.total_air_kg, "kg"),
-        _kv("Peso", "Peso total en agua", w.weight.total_water_kg, "kg"),
-        _kv("Cargas", "Carga de trabajo", w.loads.working_load_kgf, "kgf"),
-        _kv("Cargas", "Factor de seguridad", w.loads.safety_factor),
-        _kv("Cargas", "Rotura mínima requerida", w.loads.min_breaking_load_kgf, "kgf"),
-        _kv("Selección", "Cable seleccionado", sel.id),
-        _kv("Selección", "Construcción", sel.construction),
-        _kv("Selección", "Ø seleccionado", sel.diameter_mm, "mm"),
-        _kv("Selección", "Rotura del cable", sel.breaking_load_t, "t"),
-        _kv("Selección", "Cumple la rotura mínima", "sí" if sel.satisfies_breaking_load else "no"),
-        _kv("Selección", "Cable a comprar", w.quantity_m, "m"),
+        _kv(t("Geometría"), t("Cable filado (Ls)"), w.warp_m, "m"),
+        _kv(t("Geometría"), t("Patentes + brida"), w.sweeps_plus_bridle_m, "m"),
+        _kv(t("Geometría"), t("DPA (A, triángulos semejantes)"), w.dpa_a_m, "m"),
+        _kv(t("Geometría"), t("DPA (B, triángulos semejantes)"), w.dpa_b_m, "m"),
+        _kv(t("Ángulos"), t("Declinación (δ1)"), w.angles.declination_deg, "°"),
+        _kv(t("Ángulos"), t("Divergencia (δ2)"), w.angles.divergence_deg, "°"),
+        _kv(t("Ángulos"), t("Divergencia de bridas (δ3)"), w.angles.bridle_divergence_deg, "°"),
+        _kv(t("Diámetro"), t("Ø por EHP (regla práctica)"), w.diameter_ehp_mm, "mm"),
+        _kv(t("Diámetro"), t("Ø Pérez Águila (buque de diseño)"), w.diameter_aguila_mm, "mm"),
+        _kv(t("Diámetro"), t("NHP de dimensionamiento"), w.sizing_nhp_hp, "HP"),
+        _kv(t("Diámetro"), t("Ø de diseño"), w.diameter_mm, "mm"),
+        _kv(t("Hidrodinámica"), t("CD del cable (Nomura–Yamazaki)"), w.cd),
+        _kv(t("Peso"), t("Peso en aire"), w.weight.air_kg_m, "kg/m"),
+        _kv(t("Peso"), t("Peso total en aire"), w.weight.total_air_kg, "kg"),
+        _kv(t("Peso"), t("Peso total en agua"), w.weight.total_water_kg, "kg"),
+        _kv(t("Cargas"), t("Carga de trabajo"), w.loads.working_load_kgf, "kgf"),
+        _kv(t("Cargas"), t("Factor de seguridad"), w.loads.safety_factor),
+        _kv(t("Cargas"), t("Rotura mínima requerida"), w.loads.min_breaking_load_kgf, "kgf"),
+        _kv(t("Selección"), t("Cable seleccionado"), sel.id),
+        _kv(t("Selección"), t("Construcción"), sel.construction),
+        _kv(t("Selección"), t("Ø seleccionado"), sel.diameter_mm, "mm"),
+        _kv(t("Selección"), t("Rotura del cable"), sel.breaking_load_t, "t"),
+        _kv(
+            t("Selección"),
+            t("Cumple la rotura mínima"),
+            t("sí") if sel.satisfies_breaking_load else t("no"),
+        ),
+        _kv(t("Selección"), t("Cable a comprar"), w.quantity_m, "m"),
     ]
     return Table(
         key="cable",
-        title="Cable de remolque",
+        title=t("Cable de remolque"),
         columns=_kv_columns(),
         rows=tuple(rows),
         source="'Cables de Remolque'!A1:H272; 'Cables Y Cabulleria'!D11:D12",
@@ -536,23 +577,23 @@ def demand_table(result: DesignResult) -> Table:
         for i, v in enumerate(_speeds(result))
     )
     rob_note = (
-        "La resistencia total incluye ROB (modo corregido)."
+        t("La resistencia total incluye ROB (modo corregido).")
         if result.case.compat.value == "corrected"
-        else "Modo EXCEL: la resistencia total omite ROB (errata warp_total_omits_doors)."
+        else t("Modo EXCEL: la resistencia total omite ROB (errata warp_total_omits_doors).")
     )
     return Table(
         key="demanda",
-        title="Resistencia total a remolcar por velocidad",
+        title=t("Resistencia total a remolcar por velocidad"),
         columns=(
-            Column("speed_kn", "Velocidad", "kn"),
-            Column("rn_std", "RN estándar", "kgf"),
-            Column("rn_mod", "RN modificada", "kgf"),
-            Column("rb", "RB boyas", "kgf"),
-            Column("rw", "Rw cables", "kgf"),
-            Column("rob", "ROB par de portones", "kgf"),
-            Column("total_std", "Total estándar", "kgf"),
-            Column("total_mod", "Total modificada", "kgf"),
-            Column("ft", "FT disponible", "kgf"),
+            Column("speed_kn", t("Velocidad"), "kn"),
+            Column("rn_std", t("RN estándar"), "kgf"),
+            Column("rn_mod", t("RN modificada"), "kgf"),
+            Column("rb", t("RB boyas"), "kgf"),
+            Column("rw", t("Rw cables"), "kgf"),
+            Column("rob", t("ROB par de portones"), "kgf"),
+            Column("total_std", t("Total estándar"), "kgf"),
+            Column("total_mod", t("Total modificada"), "kgf"),
+            Column("ft", t("FT disponible"), "kgf"),
         ),
         rows=rows,
         note=rob_note,
@@ -568,26 +609,30 @@ def speed_window_table(result: DesignResult) -> Table:
         feas = win.feasible_speeds_kn
         rows.append(
             (
-                PROPELLER_LABELS.get(prop, prop),
-                VARIANT_LABELS.get(variant, variant),
+                t(PROPELLER_LABELS.get(prop, prop)),
+                t(VARIANT_LABELS.get(variant, variant)),
                 _f(win.max_speed_kn),
-                ", ".join(f"{v:g}" for v in feas) if feas else "ninguna",
-                "sí" if key == result.performance.design_key else "",
+                ", ".join(f"{v:g}" for v in feas) if feas else t("ninguna"),
+                t("sí") if key == result.performance.design_key else "",
             )
         )
     return Table(
         key="ventana_velocidad",
-        title="Ventana de velocidad remolcable FT(v) ≥ R(v)",
+        title=t("Ventana de velocidad remolcable FT(v) ≥ R(v)"),
         columns=(
-            Column("propeller", "Propulsor"),
-            Column("variant", "Red"),
-            Column("max_speed_kn", "Velocidad máxima", "kn"),
-            Column("feasible", "Velocidades viables", "kn"),
-            Column("design", "Diseño"),
+            Column("propeller", t("Propulsor")),
+            Column("variant", t("Red")),
+            Column("max_speed_kn", t("Velocidad máxima"), "kn"),
+            Column("feasible", t("Velocidades viables"), "kn"),
+            Column("design", t("Diseño")),
         ),
         rows=tuple(rows),
-        note="Velocidad máxima: cruce FT = R interpolado linealmente.",
-        source="'Potencia Disponible Arrastre OK'!L11:O19 frente a 'Cables de Remolque'!H118:I126",
+        note=t("Velocidad máxima: cruce FT = R interpolado linealmente."),
+        source=t(
+            "{power} frente a {demand}",
+            power="'Potencia Disponible Arrastre OK'!L11:O19",
+            demand="'Cables de Remolque'!H118:I126",
+        ),
     )
 
 
@@ -601,20 +646,20 @@ def errata_table(result: DesignResult) -> Table:
         if e.key in ERRATA_FIXED_TREATMENT:
             status, how = ERRATA_FIXED_TREATMENT[e.key]
         elif excel:
-            status, how = "reproducida", "Reproducida (EXCEL)."
+            status, how = N_("reproducida"), N_("Reproducida (EXCEL).")
         else:
-            status, how = "corregida", "Corregida (CORRECTED)."
-        rows.append((e.key, e.sheet, e.cell, e.description, status, how))
+            status, how = N_("corregida"), N_("Corregida (CORRECTED).")
+        rows.append((e.key, e.sheet, e.cell, e.description, t(status), t(how)))
     return Table(
         key="erratas",
-        title=f"Erratas del libro original (modo {result.case.compat.value})",
+        title=t("Erratas del libro original (modo {mode})", mode=result.case.compat.value),
         columns=(
-            Column("key", "Clave"),
-            Column("sheet", "Hoja"),
-            Column("cell", "Celda"),
-            Column("description", "Descripción"),
-            Column("status", "Estado"),
-            Column("treatment", "Tratamiento"),
+            Column("key", t("Clave")),
+            Column("sheet", t("Hoja")),
+            Column("cell", t("Celda")),
+            Column("description", t("Descripción")),
+            Column("status", t("Estado")),
+            Column("treatment", t("Tratamiento")),
         ),
         rows=tuple(rows),
         source="trawlkit.compat.ERRATA; docs/erratas.md",
@@ -625,8 +670,8 @@ def notes_table(result: DesignResult) -> Table:
     """Notas de la corrida (``DesignResult.notes``)."""
     return Table(
         key="notas",
-        title="Notas de la corrida",
-        columns=(Column("n", "N.º"), Column("note", "Nota")),
+        title=t("Notas de la corrida"),
+        columns=(Column("n", t("N.º")), Column("note", t("Nota"))),
         rows=tuple((i, n) for i, n in enumerate(result.notes, 1)),
     )
 
