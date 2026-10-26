@@ -1,2 +1,79 @@
-/** Textos de «selectivity» (se completan en la extracción de la Fase 18.3). */
-export const selectivity = {};
+/** Selectividad del copo y zoom por malla. */
+export const selectivity = {
+  orientations: {
+    diamond: {
+      label: 'Rombo',
+      help: 'Malla rómbica clásica: la tensión a lo largo del copo la cierra.',
+    },
+    t90: {
+      label: 'T90',
+      help: 'El mismo paño girado 90°: el nudo tiende a mantener la malla abierta a lo ancho.',
+    },
+    square: {
+      label: 'Cuadrada',
+      help: 'Hilos a lo largo y a lo ancho: la malla no se cierra con la tensión.',
+    },
+  },
+  intro:
+    'Simula el copo con la captura y el fondo elegidos, mide la forma de cada malla y calcula qué tallas retiene: un pez escapa si la sección más resistente de su cuerpo entra en la luz de la malla deformada (modelo geométrico tipo FISHSELECT). Compare el copo de rombo con T90 o malla cuadrada del mismo ancho y largo.',
+  formLabel: 'Especies y copo',
+  species: 'Especies',
+  escapeModel: 'Modelo de escape',
+  codends: 'Copos a comparar',
+  meshOrientation: 'Orientación de la malla',
+  upTo3: 'Hasta 3; cada copo es una simulación.',
+  mesh: 'Mallero del copo',
+  meshPlaceholder: 'el de la red',
+  run: 'Calcular selectividad',
+  running: (n: number) => `Simulando ${n} copos…`,
+  done: (n: number, s: string) => `${n} copos en ${s} s.`,
+  curveOf: 'Curva de',
+  mapCodend: 'Copo del mapa 3D',
+  colorLabel: 'Color del paño',
+  colors: { opening: 'Apertura de malla', values: 'Talla que pasa', tension: 'Tensión' },
+  mapLabel: (v: string) => `Mapa de mallas del copo ${v}`,
+  valuesLabel: (unit: string) => `Talla máxima que pasa por la malla [${unit}]`,
+  help: (zone: string) =>
+    `Escape geométrico: cada pez prueba 3 mallas de la franja de ${zone} delante de la captura; la forma de la sección de cada especie es una estimación (A VERIFICAR). Rigidez de apertura de la malla activada en todos los copos. Capítulo 24 del libro.`,
+  empty:
+    'Elija especies y copos y pulse «Calcular selectividad». Con resolución rápida cada copo tarda unos segundos.',
+  table: {
+    captionA: 'Selectividad del copo · L50',
+    captionB: '· SR',
+    captionC: '· SF = L50 / mallero',
+    selectionRange: 'Rango de selección',
+    codend: 'Copo',
+    meanOpening: 'Apertura media',
+  },
+  retention: (name: string, measure: string) => `Retención de ${name} según la talla (${measure}, `,
+  retentionAria: (name: string, keys: string) => `Curvas de retención de ${name} para ${keys}`,
+  zoom: {
+    sections: {
+      codend: 'copo',
+      extension: 'extensión',
+      body: 'cuerpo',
+      belly: 'vientre',
+      square: 'cielo',
+      wing: 'ala',
+      wing_tip: 'punta de ala',
+    },
+    title: (section: string, tri: number) => `Malla del ${section} (triángulo ${tri})`,
+    close: 'Cerrar zoom',
+    fish: 'pez',
+    aria: (n: number, deg: string, fish: string, length: string, passes: boolean) =>
+      `Parche de ${n}×${n} mallas con apertura de ${deg}°; un ${fish} de ${length} ${passes ? 'pasa' : 'no pasa'}`,
+    orientation: 'Orientación',
+    angle: 'Ángulo entre hilos',
+    legs: 'Patas (deformadas)',
+    clear: 'Luz entre hilos',
+    freeArea: 'Área libre',
+    opening: 'Apertura',
+    openShare: (pct: string) => `${pct} % de la malla abierta`,
+    species: 'Especie',
+    length: (measure: string, length: string) => `Talla (${measure}): ${length}`,
+    passes: 'Pasa por la malla',
+    retained: 'Queda retenido',
+    maxPass: 'talla máxima que pasa:',
+    help: 'Azul y rosa: las dos familias de hilos, con el grosor del hilo a escala. Dentro de un elemento del simulador todas las mallas tienen la misma forma. La elipse es la sección más resistente del pez, girada para pasar; con su compresión de tejidos (A VERIFICAR).',
+  },
+};

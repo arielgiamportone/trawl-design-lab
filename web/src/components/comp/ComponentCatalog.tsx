@@ -1,24 +1,29 @@
 import { useQuery } from '@tanstack/react-query';
 import { useId, useMemo, useState } from 'react';
 import { api } from '../../api/client';
+import { useT } from '../../i18n';
 import { KIND_LABEL as PROV_LABEL, type ProvenanceKind } from '../../lib/catalog';
 import {
   applyComponent,
+  bomUnitLabel,
   brands,
   cellText,
-  COLUMNS,
+  columns,
   COMPONENT_KINDS,
   COMPONENT_LABEL,
   DEFAULT_COMPONENT_FILTERS,
   filterComponents,
   inCase,
   isGeneric,
+  priceToDisplay,
   REGION_LABEL,
   STATUS_LABEL,
   type Component,
   type ComponentFilters,
   type ComponentKind,
 } from '../../lib/components';
+import { getUnits, unitLabel } from '../../lib/units';
+import { fmt } from '../../lib/format';
 import { useCase } from '../../state/useCase';
 
 /** Catálogo de componentes: tabla por tipo con filtros, ficha con procedencia y genérico. */
@@ -41,11 +46,13 @@ export function ComponentCatalog() {
   const brandList = useMemo(() => brands(items), [items]);
   const item = items.find((i) => i.id === selected) ?? shown[0];
   const set = (patch: Partial<ComponentFilters>) => setF((old) => ({ ...old, ...patch }));
-  const cols = COLUMNS[kind];
+  const cols = columns(kind);
+  const T = useT().components;
+  const L = useT().common;
 
   return (
     <div className="components-catalog">
-      <div className="segmented" role="group" aria-label="Tipo de componente">
+      <div className="segmented" role="group" aria-label={T.kindLabel}>
         {COMPONENT_KINDS.map((k) => (
           <button
             key={k}
@@ -61,17 +68,17 @@ export function ComponentCatalog() {
           </button>
         ))}
       </div>
-      <div className="catalog-filters" role="search" aria-label="Filtros de componentes">
+      <div className="catalog-filters" role="search" aria-label={T.filters}>
         <input
           type="search"
-          aria-label="Buscar componente"
-          placeholder="Buscar (nombre, marca, material)…"
+          aria-label={T.search}
+          placeholder={T.searchPlaceholder}
           value={f.text}
           onChange={(e) => set({ text: e.target.value })}
         />
-        <select aria-label="Marca" value={f.brand} onChange={(e) => set({ brand: e.target.value })}>
-          <option value="">Todas las marcas</option>
-          <option value="-">Sólo genéricos y aportes</option>
+        <select aria-label={T.brand} value={f.brand} onChange={(e) => set({ brand: e.target.value })}>
+          <option value="">{T.allBrands}</option>
+          <option value="-">{T.genericAndOwn}</option>
           {brandList.map((b) => (
             <option key={b} value={b}>
               {b}
@@ -79,11 +86,11 @@ export function ComponentCatalog() {
           ))}
         </select>
         <select
-          aria-label="Región"
+          aria-label={T.regionLabel}
           value={f.region}
           onChange={(e) => set({ region: e.target.value })}
         >
-          <option value="">Todas las regiones</option>
+          <option value="">{T.allRegions}</option>
           {Object.entries(REGION_LABEL).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
@@ -96,24 +103,24 @@ export function ComponentCatalog() {
             checked={f.genericOnly}
             onChange={(e) => set({ genericOnly: e.target.checked })}
           />
-          Sólo genéricos
+          {T.genericOnly}
         </label>
       </div>
-      {q.isLoading && <p className="empty">Cargando…</p>}
+      {q.isLoading && <p className="empty">{L.loading}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
           {q.error.message}
         </p>
       )}
       <div className="table-wrap">
-        <table className="data" aria-label={`Componentes: ${COMPONENT_LABEL[kind]}`}>
+        <table className="data" aria-label={T.table(COMPONENT_LABEL[kind])}>
           <thead>
             <tr>
-              <th scope="col">Componente</th>
+              <th scope="col">{T.colComponent}</th>
               {cols.map((c) => (
                 <th key={c.field} scope="col" className={c.unit ? 'num' : undefined}>
                   {c.label}
-                  {c.unit ? ` [${c.unit}]` : ''}
+                  {c.unit ? ` [${unitLabel(c.unit)}]` : ''}
                 </th>
               ))}
             </tr>
@@ -134,7 +141,7 @@ export function ComponentCatalog() {
                 </td>
                 {cols.map((c) => (
                   <td key={c.field} className={c.unit ? 'num' : undefined}>
-                    {cellText(it, c.field)}
+                    {cellText(it, c.field, c.unit)}
                   </td>
                 ))}
               </tr>
@@ -142,7 +149,7 @@ export function ComponentCatalog() {
             {!q.isLoading && shown.length === 0 && (
               <tr>
                 <td colSpan={cols.length + 1} className="empty">
-                  Ningún componente cumple los filtros.
+                  {T.noMatch}
                 </td>
               </tr>
             )}
@@ -155,22 +162,24 @@ export function ComponentCatalog() {
 }
 
 export function ComponentBadges({ item, active }: { item: Component; active?: boolean }) {
+  const T = useT().components;
   return (
     <>
       {item.status === 'user' ? (
         <span className="badge warn">{STATUS_LABEL.user}</span>
       ) : isGeneric(item) ? (
-        <span className="badge good">genérico</span>
+        <span className="badge good">{T.generic}</span>
       ) : (
         <span className="badge">{item.brand}</span>
       )}
-      {active && <span className="badge accent">en el caso</span>}
+      {active && <span className="badge accent">{T.inCase}</span>}
     </>
   );
 }
 
 function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: string) => void }) {
   const { state, update } = useCase();
+  const T = useT().components;
   const ids = useId();
   const own = item.status === 'user';
   const detail = useQuery({
@@ -200,7 +209,7 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
       </p>
       {item.sources?.map((s) => (
         <p key={s.key} className="help">
-          Fuente:{' '}
+          {T.source}{' '}
           {s.url ? (
             <a href={s.url} target="_blank" rel="noreferrer">
               {s.title}
@@ -212,7 +221,12 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
       ))}
       {item.price && (
         <p className="help">
-          Precio orientativo: {item.price.value} {item.price.currency}/{item.price.unit} (
+          {T.indicativePrice}{' '}
+          {getUnits() === 'imperial'
+            ? fmt(priceToDisplay(item.price.value, item.price.unit))
+            : item.price.value}{' '}
+          {item.price.currency}/
+          {item.price.unit === 'unit' ? T.perUnit : bomUnitLabel(item.price.unit)} (
           {item.price.date}, {item.price.source})
         </p>
       )}
@@ -224,14 +238,14 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
               className="btn primary"
               onClick={() => update((s) => applyComponent(s, item, 'headrope_rope'))}
             >
-              Usar en la lima
+              {T.useHeadrope}
             </button>
             <button
               type="button"
               className="btn"
               onClick={() => update((s) => applyComponent(s, item, 'footrope_rope'))}
             >
-              Usar en el burlón
+              {T.useFootrope}
             </button>
           </>
         ) : (
@@ -241,17 +255,17 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
             disabled={active || (own && !state.useContributions)}
             onClick={() => update((s) => applyComponent(s, item))}
           >
-            {active ? 'Es el del caso' : 'Usar en el caso'}
+            {active ? T.isCase : T.useInCase}
           </button>
         )}
         {generic && (
           <button type="button" className="btn" onClick={() => onSelect(generic.id)}>
-            Ver genérico equivalente: {generic.name}
+            {T.seeGeneric(generic.name)}
           </button>
         )}
         {own && !state.useContributions && (
           <span className="alert warn" role="note">
-            Para usar un aporte, habilite «Usar mis aportes» en la sección Aportar.
+            {T.enableOwn}
           </span>
         )}
       </div>
@@ -271,22 +285,22 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
       ))}
       {prov.length > 0 && (
         <div className="table-wrap prov-table">
-          <table className="data" aria-label="Procedencia de los valores">
+          <table className="data" aria-label={T.provTable}>
             <thead>
               <tr>
-                <th scope="col">Valor</th>
+                <th scope="col">{T.colValue}</th>
                 <th scope="col" className="num">
-                  Dato
+                  {T.colData}
                 </th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Nota</th>
+                <th scope="col">{T.colKind}</th>
+                <th scope="col">{T.colNote}</th>
               </tr>
             </thead>
             <tbody>
               {prov.map(([field, p]) => (
                 <tr key={field}>
                   <td>{field}</td>
-                  <td className="num">{cellText(item, field)}</td>
+                  <td className="num">{cellText(item, field, undefined, true)}</td>
                   <td className="kind">
                     <span className={`prov-dot prov-${p.kind}`} aria-hidden="true" />{' '}
                     {PROV_LABEL[p.kind as ProvenanceKind] ?? p.kind}

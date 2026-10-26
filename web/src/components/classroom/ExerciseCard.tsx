@@ -1,5 +1,6 @@
 import { useId, useState, type FormEvent } from 'react';
-import { chapterLabel, LEVEL_LABEL, pct } from '../../lib/classroom';
+import { useT } from '../../i18n';
+import { chapterLabel, levelLabel, pct } from '../../lib/classroom';
 
 /** Lo que se muestra de un ejercicio (instancia del banco, sin respuestas). */
 export interface ExerciseLike {
@@ -30,7 +31,7 @@ export interface GradeLike {
 interface Props {
   ex: ExerciseLike;
   onSubmit: (answers: Record<string, string>) => Promise<GradeLike>;
-  /** Texto del botón (por defecto, «Corregir»). */
+  /** Texto del botón (por defecto, «Corregir» en el idioma activo). */
   submitLabel?: string;
   disabled?: boolean;
   /** Nota al pie (intentos, fechas). */
@@ -43,11 +44,12 @@ interface Props {
 export function ExerciseCard({
   ex,
   onSubmit,
-  submitLabel = 'Corregir',
+  submitLabel,
   disabled,
   footer,
   showChapter = true,
 }: Props) {
+  const T = useT().classroom.exercise;
   const ids = useId();
   const [values, setValues] = useState<Record<string, string>>({});
   const [grade, setGrade] = useState<GradeLike | null>(null);
@@ -73,13 +75,13 @@ export function ExerciseCard({
     <article className="aula-ex card card-pad" data-testid="exercise" aria-labelledby={`${ids}-t`}>
       <header className="aula-ex-head">
         <h3 id={`${ids}-t`}>{ex.title}</h3>
-        <span className="badge">{LEVEL_LABEL[ex.level] ?? ex.level}</span>
+        <span className="badge">{levelLabel(ex.level)}</span>
         {showChapter && <span className="badge accent">{chapterLabel(ex.chapter)}</span>}
       </header>
       <p className="aula-statement">{ex.statement}</p>
       {ex.data.length > 0 && (
         <table className="data aula-data">
-          <caption className="sr-only">Datos del ejercicio</caption>
+          <caption className="sr-only">{T.dataCaption}</caption>
           <tbody>
             {ex.data.map((d) => (
               <tr key={d.key}>
@@ -107,7 +109,7 @@ export function ExerciseCard({
                   value={values[a.key] ?? ''}
                   onChange={(e) => setValues({ ...values, [a.key]: e.target.value })}
                 >
-                  <option value="">Elegir…</option>
+                  <option value="">{T.choose}</option>
                   {a.options.map((o) => (
                     <option key={o}>{o}</option>
                   ))}
@@ -123,8 +125,8 @@ export function ExerciseCard({
               )}
               {g && (
                 <span className="aula-mark" role="status">
-                  {g.ok ? '✓ correcta' : `✗ ${g.message}`}
-                  {!g.ok && g.expected_text ? ` · era ${g.expected_text} ${a.unit}` : ''}
+                  {g.ok ? T.correct : `✗ ${g.message}`}
+                  {!g.ok && g.expected_text ? T.expected(g.expected_text, a.unit) : ''}
                 </span>
               )}
             </div>
@@ -132,11 +134,11 @@ export function ExerciseCard({
         })}
         <div className="calc-row">
           <button type="submit" className="btn primary" disabled={busy || disabled}>
-            {busy ? 'Corrigiendo…' : submitLabel}
+            {busy ? T.grading : (submitLabel ?? T.submit)}
           </button>
           {ex.hints.length > 0 && hints < ex.hints.length && (
             <button type="button" className="btn ghost" onClick={() => setHints(hints + 1)}>
-              Ver una pista
+              {T.hint}
             </button>
           )}
         </div>
@@ -161,9 +163,7 @@ export function ExerciseCard({
         >
           <div>
             <strong>
-              {grade.score === null
-                ? (grade.message ?? 'Entrega recibida')
-                : `Puntaje ${pct(grade.score)}`}
+              {grade.score === null ? (grade.message ?? T.received) : T.score(pct(grade.score))}
             </strong>
             {grade.explanation && <p className="aula-expl">{grade.explanation}</p>}
           </div>

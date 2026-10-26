@@ -1,2 +1,106 @@
-/** Textos de «uncertainty» (se completan en la extracción de la Fase 18.3). */
-export const uncertainty = {};
+/** Bandas de incertidumbre y calibración con mediciones. */
+export const uncertainty = {
+  calParams: {
+    cn: { label: 'C_N del hilo', help: 'Arrastre normal de los hilos: resistencia y forma.' },
+    ct: { label: 'C_T del hilo', help: 'Roce del agua a lo largo de los hilos.' },
+    door_cl_factor: {
+      label: 'Sustentación del portón',
+      help: 'Factor sobre el C_L de la polar: abre los portones.',
+    },
+    door_cd_factor: {
+      label: 'Arrastre del portón',
+      help: 'Factor sobre el C_D de la polar: tiro y tensión del cable.',
+    },
+    mu_gear: { label: 'Rozamiento del tren', help: 'μ del burlón y el paño con el fondo.' },
+    mu_door: { label: 'Rozamiento de los portones', help: 'μ de las zapatas con el fondo.' },
+  },
+  quantities: {
+    door_spread_m: 'Separación de portones',
+    ah_m: 'Abertura horizontal',
+    av_m: 'Abertura vertical',
+    headrope_height_m: 'Altura de la relinga superior',
+    drag_kgf: 'Resistencia de la red',
+    towing_pull_kgf: 'Tiro en el buque',
+    warp_tension_kgf: 'Tensión del cable',
+  },
+  subLabel: 'Incertidumbre o calibración',
+  bands: 'Bandas de incertidumbre',
+  calibration: 'Calibración con mediciones',
+  // Bandas
+  bandsIntro:
+    'Varios datos del simulador no se conocen con precisión: los coeficientes del hilo, el rozamiento con el fondo, la polar del portón y la densidad de la captura. Se simulan muestras dentro de sus rangos (hipercubo latino) y se muestra la banda P10–P90 de cada resultado y qué dato la mueve más.',
+  scenario: 'Escenario',
+  samples: 'Muestras',
+  l50Of: 'L50 de',
+  runBands: 'Calcular bandas',
+  runningBands: (n: number) => `Simulando ${n} muestras…`,
+  doneBands: (n: number, converged: number, s: string) =>
+    `${n} muestras (${converged} convergidas) en ${s} s.`,
+  inputRanges: 'Rangos de las entradas',
+  input: 'Entrada',
+  nominal: 'Nominal',
+  range: 'Rango',
+  source: 'Fuente',
+  emptyBands:
+    'Pulse «Calcular bandas». Cada muestra parte de la forma nominal; con 10 muestras en resolución muy rápida tarda del orden de un minuto en la API en línea.',
+  bandCaptionA: 'Banda P10–P90',
+  bandCaptionB: (span: number) =>
+    `· escala ± ${span} % respecto del nominal (línea punteada); trazo negro = P50, puntos = muestras`,
+  result: 'Resultado',
+  band: 'Banda',
+  spread: 'Dispersión',
+  stripAria: (label: string, p10: string, p90: string) => `${label}: P10 ${p10}, P90 ${p90}`,
+  tornadoTitle: (output: string) => `¿Qué dato mueve más «${output}»?`,
+  sensitivity: 'Sensibilidad',
+  tornadoAria: (output: string, list: string) =>
+    `Correlación de cada entrada con ${output}: ${list}`,
+  tornadoHelp:
+    'Correlación de rangos (Spearman) entre cada entrada y el resultado: azul = al subir la entrada sube el resultado; naranja = baja. Con pocas muestras es orientativa.',
+  // Calibración
+  calIntro:
+    'Ajusta parámetros inciertos del simulador para que reproduzca mediciones: un registro de sensores del lance (CSV) o la simulación DynamiT de la red FAO A-3. Levenberg–Marquardt sobre los errores relativos.',
+  calHelpTopic: 'Calibración',
+  sourceLabel: 'Datos para calibrar',
+  sensors: 'Registro de sensores (CSV)',
+  dynamit: 'Referencia DynamiT (FAO A-3)',
+  sensorLog: 'Registro de sensores',
+  csvFile: 'Archivo CSV',
+  windowsBy: 'Tramos por',
+  time: 'Tiempo',
+  speed: 'Velocidad',
+  width: (unit: string) => `Ancho del tramo [${unit}]`,
+  haulSeabed: 'Fondo del lance',
+  useExample: 'Usar el registro de ejemplo',
+  exampleName: 'registro_sensores_ejemplo.csv (sintético)',
+  reread: 'Volver a leer',
+  reading: 'Leyendo el registro…',
+  paramsLegend: 'Parámetros a ajustar (hasta 3)',
+  fitLabel: 'Ajuste',
+  maxEvals: 'Evaluaciones máximas',
+  calibrate: 'Calibrar',
+  fitting: (n: number) => `Ajustando (hasta ${n} evaluaciones)…`,
+  doneCal: (n: number, s: string) => `${n} evaluaciones en ${s} s.`,
+  rmse: 'Error cuadrático medio',
+  beforeAfter: 'antes → después del ajuste',
+  fittedParams: 'Parámetros ajustados',
+  param: 'Parámetro',
+  initial: 'Inicial',
+  fitted: 'Ajustado',
+  atLimit: 'en el límite',
+  atLimitTitle: 'El ajuste pide salir del rango',
+  obsCaption: 'Mediciones y simulación antes y después del ajuste',
+  quantity: 'Magnitud',
+  speedCatch: 'Velocidad · captura',
+  measured: 'Medido',
+  before: 'Antes',
+  after: 'Después',
+  calHelp:
+    'El desvío ± sale de la curvatura del ajuste y es orientativo. Un parámetro «en el límite» indica que el modelo no alcanza a reproducir las mediciones con valores físicos: la diferencia es estructural (capítulo 25 del libro).',
+  // Resumen del registro
+  rows: (n: number) => `${n} filas`,
+  recognised: 'columnas reconocidas:',
+  ignored: (list: string) => ` · ignoradas: ${list}`,
+  windowsCaption: 'Tramos estacionarios (mediana de cada tramo)',
+  catch: 'Captura',
+  rowsCol: 'Filas',
+};

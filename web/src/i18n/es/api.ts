@@ -1,2 +1,3 @@
-/** Textos de «api» (se completan en la extracción de la Fase 18.3). */
-export const api = {};
+/** Textos de «api». */
+export const api = {
+};

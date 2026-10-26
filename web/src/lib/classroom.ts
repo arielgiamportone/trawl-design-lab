@@ -2,6 +2,8 @@
 import { useSyncExternalStore } from 'react';
 import { classroomRequest } from '../api/client';
 import type { components } from '../api/schema';
+import { msg } from '../i18n';
+import { fmtDate as fmtDateTime } from './format';
 import { loadJson, removeKey, saveJson } from './storage';
 
 type S = components['schemas'];
@@ -192,48 +194,31 @@ function tok(): string | null {
   return loadSession()?.token ?? null;
 }
 
-export const LEVEL_LABEL: Record<string, string> = {
-  basico: 'Básico',
-  intermedio: 'Intermedio',
-  avanzado: 'Avanzado',
-};
+/** Etiquetas de los niveles en el idioma activo (``basico`` → «Básico»). */
+export function levelLabels(): Record<string, string> {
+  return msg().classroom.levels;
+}
 
-const CHAPTERS: Record<string, string> = {
-  '10': 'Potencia',
-  '11': 'Paños y cortes',
-  '12': 'Mecánica de la red',
-  '13': 'Dimensiones',
-  '14': 'Resistencia',
-  '15': 'Portones y aparejo',
-  '16': 'Aberturas',
-  '17': 'Flotación y lastre',
-  '18': 'Cables',
-  '19': 'Ventana de velocidad',
-  '20': 'Optimización',
-  '21': 'Simulación',
-  '22': 'Simulación realista',
-  '23': 'Mar real',
-  '24': 'Malla y selectividad',
-  '25': 'Incertidumbre',
-  '36': 'Construcción',
-  '37': 'Economía',
-};
+/** Etiqueta de un nivel en el idioma activo (o el id si no se conoce). */
+export function levelLabel(level: string): string {
+  return msg().classroom.levels[level] ?? level;
+}
 
 /** Capítulo del libro legible: ``14_resistencia`` → ``14 · Resistencia``. */
 export function chapterLabel(chapter: string): string {
   const [num = '', ...rest] = chapter.split('_');
-  const text = CHAPTERS[num] ?? rest.join(' ');
+  const text = msg().classroom.chapters[num] ?? rest.join(' ');
   return `${num} · ${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 }
 
-/** Fecha y hora local corta (es-AR) de una fecha ISO de la API (UTC sin zona). */
+/** Fecha y hora local corta (en el idioma activo) de una fecha ISO de la API (UTC sin zona). */
 export function fmtDate(iso: string | null | undefined): string {
   if (!iso) return '—';
   const d = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(iso) ? iso : `${iso}Z`);
-  return d.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
+  return fmtDateTime(d, { dateStyle: 'short', timeStyle: 'short' });
 }
 
 /** Puntaje 0–1 como porcentaje. */
 export function pct(x: number | null | undefined): string {
-  return x == null ? '—' : `${Math.round(x * 100)} %`;
+  return x == null ? '—' : `${Math.round(x * 100)}${msg().classroom.pctSuffix}`;
 }

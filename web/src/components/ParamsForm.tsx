@@ -1,6 +1,13 @@
 import { useId, useMemo, useState } from 'react';
+import { useT } from '../i18n';
 import { checkRange, HELP } from '../lib/help';
-import { defaultText, paramLabel, parseParam, type ParamMeta } from '../lib/params';
+import {
+  defaultText,
+  paramLabel,
+  parseParam,
+  useUnitText,
+  type ParamMeta,
+} from '../lib/params';
 import { useCase } from '../state/useCase';
 import { HelpTip } from './HelpTip';
 
@@ -8,6 +15,7 @@ export function ParamsForm() {
   const { state, update, catalogs, errors } = useCase();
   const [filter, setFilter] = useState('');
   const ids = useId();
+  const T = useT().expert.params;
   const metas = catalogs.params;
   const changed = Object.entries(state.params).filter(([, v]) => v.trim() !== '').length;
   const nErr = Object.keys(errors).filter((k) => k.startsWith('param.')).length;
@@ -35,31 +43,31 @@ export function ParamsForm() {
   return (
     <details className="accordion" open={nErr > 0 ? true : undefined}>
       <summary>
-        <span>Parámetros avanzados</span>
+        <span>{T.title}</span>
         <span style={{ display: 'inline-flex', gap: 6 }}>
-          {nErr > 0 && <span className="badge crit">{nErr} con error</span>}
-          {changed > 0 && <span className="badge accent">{changed} cambiados</span>}
+          {nErr > 0 && <span className="badge crit">{T.withError(nErr)}</span>}
+          {changed > 0 && <span className="badge accent">{T.changed(changed)}</span>}
         </span>
       </summary>
       <div className="accordion-body">
         <p className="help" style={{ marginBottom: 8 }}>
-          Vacío = valor por defecto (en gris). Admite coma decimal; las listas se separan con «;».
+          {T.intro}
         </p>
         <div className="param-row" style={{ marginBottom: 6 }}>
           <input
             type="search"
-            placeholder="Buscar parámetro o celda…"
-            aria-label="Buscar parámetro"
+            placeholder={T.searchPlaceholder}
+            aria-label={T.searchLabel}
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
           {changed > 0 && (
             <button type="button" className="btn small" onClick={() => update({ params: {} })}>
-              Restablecer todos
+              {T.resetAll}
             </button>
           )}
         </div>
-        {metas.length === 0 && <p className="help">Cargando parámetros…</p>}
+        {metas.length === 0 && <p className="help">{T.loading}</p>}
         {shown.map((m) => (
           <ParamField
             key={m.name}
@@ -86,6 +94,8 @@ interface FieldProps {
 }
 
 export function ParamField({ meta, idBase, value, error, onChange, onReset }: FieldProps) {
+  const T = useT().expert.params;
+  const [text, setText] = useUnitText(value, meta.unit ?? '', onChange);
   const parsed = parseParam(meta, value);
   const isChanged = value.trim() !== '' && parsed?.ok === true;
   const range = parsed?.ok ? checkRange(meta.name, parsed.value) : { ok: true as const };
@@ -110,7 +120,7 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
             onChange={(e) => onChange(e.target.value)}
             aria-describedby={describedBy}
           >
-            <option value="">Por defecto ({defaultText(meta)})</option>
+            <option value="">{T.byDefault(defaultText(meta))}</option>
             {meta.options?.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
@@ -125,10 +135,10 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
             autoComplete="off"
             spellCheck={false}
             placeholder={defaultText(meta)}
-            value={value}
+            value={text}
             aria-invalid={error ? true : undefined}
             aria-describedby={describedBy}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => setText(e.target.value)}
           />
         )}
         <button
@@ -136,8 +146,8 @@ export function ParamField({ meta, idBase, value, error, onChange, onReset }: Fi
           className="btn small ghost"
           onClick={onReset}
           disabled={value === ''}
-          aria-label={`Restablecer ${paramLabel(meta.name)} al valor por defecto`}
-          title="Restablecer al valor por defecto"
+          aria-label={T.resetOne(paramLabel(meta.name))}
+          title={T.resetTitle}
         >
           ↺
         </button>

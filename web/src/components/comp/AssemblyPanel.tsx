@@ -7,24 +7,17 @@ import {
   type ComponentOptimizeRequest,
   type ComponentOptimizeResponse,
 } from '../../api/client';
+import { useT } from '../../i18n';
 import { applyAssembly, loadPrices, REGION_LABEL } from '../../lib/components';
 import { fmt, fmtFixed } from '../../lib/format';
+import { toDisplay, unitLabel } from '../../lib/units';
 import { useCase } from '../../state/useCase';
 
 type Objective = ComponentOptimizeRequest['objective'];
 
-const OBJECTIVE_LABEL: Record<NonNullable<Objective>, string> = {
-  drag: 'Menor resistencia (menos combustible por hora)',
-  efficiency: 'Más área barrida por litro',
-  cost: 'Menor costo de armado',
-};
+const OBJECTIVES: NonNullable<Objective>[] = ['drag', 'efficiency', 'cost'];
 
-const COMPONENT_ROW: [string, string][] = [
-  ['door', 'Portón'],
-  ['warp', 'Cable'],
-  ['float', 'Boyas'],
-  ['twine', 'Hilo del paño'],
-];
+const COMPONENT_ROW = ['door', 'warp', 'float', 'twine'];
 
 /**
  * «Armar con el catálogo»: el optimizador elige portón, cable, boyas e hilo entre los
@@ -32,6 +25,7 @@ const COMPONENT_ROW: [string, string][] = [
  */
 export function AssemblyPanel() {
   const { committed, design, update } = useCase();
+  const T = useT().components;
   const [objective, setObjective] = useState<NonNullable<Objective>>('drag');
   const [region, setRegion] = useState('');
   const [genericOnly, setGenericOnly] = useState(false);
@@ -68,34 +62,26 @@ export function AssemblyPanel() {
 
   return (
     <div className="assembly" data-testid="assembly">
-      <p className="section-sub">
-        Elige portón, cable, boyas e hilo entre los componentes del catálogo que cumplen el tiro del
-        buque, la apertura de la red, la rotura del cable y la profundidad, y propone alternativas
-        genéricas. Para ordenar por costo, cargue precios en la lista de materiales.
-      </p>
+      <p className="section-sub">{T.asmIntro}</p>
       <div className="catalog-filters">
         <label className="inline-field">
-          Objetivo
+          {T.objectiveLabel}
           <select
-            aria-label="Objetivo del armado"
+            aria-label={T.objectiveAria}
             value={objective}
             onChange={(e) => setObjective(e.target.value as NonNullable<Objective>)}
           >
-            {Object.entries(OBJECTIVE_LABEL).map(([k, v]) => (
+            {OBJECTIVES.map((k) => (
               <option key={k} value={k}>
-                {v}
+                {T.objective[k]}
               </option>
             ))}
           </select>
         </label>
         <label className="inline-field">
-          ¿Qué se consigue en su puerto?
-          <select
-            aria-label="Región del puerto"
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-          >
-            <option value="">Cualquier región</option>
+          {T.port}
+          <select aria-label={T.portAria} value={region} onChange={(e) => setRegion(e.target.value)}>
+            <option value="">{T.anyRegion}</option>
             {Object.entries(REGION_LABEL).map(([k, v]) => (
               <option key={k} value={k}>
                 {v}
@@ -109,7 +95,7 @@ export function AssemblyPanel() {
             checked={genericOnly}
             onChange={(e) => setGenericOnly(e.target.checked)}
           />
-          Sólo genéricos
+          {T.genericOnly}
         </label>
         <button
           type="button"
@@ -117,22 +103,19 @@ export function AssemblyPanel() {
           disabled={!committed || run.isPending}
           onClick={start}
         >
-          {run.isPending ? 'Armando…' : 'Armar con el catálogo'}
+          {run.isPending ? T.assembling : T.assemble}
         </button>
       </div>
       {run.error && (
         <p className="alert crit" role="alert">
-          {run.error instanceof ApiError && run.error.status ? `Error ${run.error.status}: ` : ''}
+          {run.error instanceof ApiError && run.error.status ? T.errorStatus(run.error.status) : ''}
           {run.error.message}
         </p>
       )}
       {res && (
         <>
           <p className="help">
-            {res.evaluated} armados evaluados.{' '}
-            {res.feasible
-              ? 'El recomendado cumple todas las restricciones.'
-              : 'Ninguno cumple todo: se muestra el de menor violación.'}
+            {T.evaluated(res.evaluated)} {res.feasible ? T.feasible : T.infeasible}
           </p>
           {res.notes.length > 0 && (
             <ul className="issues">
@@ -144,14 +127,12 @@ export function AssemblyPanel() {
             </ul>
           )}
           <div className="assembly-grid">
-            <AssemblyCard a={res.best} title="Recomendado" onApply={apply} primary />
+            <AssemblyCard a={res.best} title={T.recommended} onApply={apply} primary />
             {res.alternatives.map((a, k) => (
               <AssemblyCard
                 key={k}
                 a={a}
-                title={
-                  a.generic && !res.best.generic ? 'Alternativa genérica' : `Alternativa ${k + 1}`
-                }
+                title={a.generic && !res.best.generic ? T.genericAlt : T.alt(k + 1)}
                 onApply={apply}
               />
             ))}
@@ -173,47 +154,52 @@ function AssemblyCard({
   onApply: (a: AssemblyOut) => void;
   primary?: boolean;
 }) {
+  const T = useT().components;
   const failed = a.constraints.filter((c) => !c.ok);
   return (
     <section className="card card-pad" data-testid="assembly-card">
       <h4>
-        {title} {a.generic && <span className="badge good">genérico</span>}{' '}
-        {!a.feasible && <span className="badge crit">no cumple</span>}
+        {title} {a.generic && <span className="badge good">{T.generic}</span>}{' '}
+        {!a.feasible && <span className="badge crit">{T.fails}</span>}
       </h4>
       <dl className="kv">
-        {COMPONENT_ROW.map(([k, label]) => (
+        {COMPONENT_ROW.map((k) => (
           <div key={k}>
-            <dt>{label}</dt>
-            <dd>{a.components[k] ?? 'el del plano'}</dd>
+            <dt>{T.slot[k]}</dt>
+            <dd>{a.components[k] ?? T.fromPlan}</dd>
           </div>
         ))}
         {a.float_count != null && (
           <div>
-            <dt>Número de boyas</dt>
+            <dt>{T.floatCount}</dt>
             <dd>{a.float_count}</dd>
           </div>
         )}
         <div>
-          <dt>Velocidad</dt>
+          <dt>{T.speed}</dt>
           <dd>{fmtFixed(a.speed_kn, 2)} kn</dd>
         </div>
         <div>
-          <dt>Resistencia total</dt>
-          <dd>{fmt(Math.round(a.demand_kgf))} kgf</dd>
+          <dt>{T.drag}</dt>
+          <dd>
+            {fmt(Math.round(toDisplay(a.demand_kgf, 'kgf')))} {unitLabel('kgf')}
+          </dd>
         </div>
         <div>
-          <dt>Reserva de tiro</dt>
+          <dt>{T.margin}</dt>
           <dd>{fmtFixed(a.thrust_margin * 100, 0)} %</dd>
         </div>
         <div>
-          <dt>Área barrida</dt>
-          <dd>{fmt(Math.round(a.area_rate_m2_h))} m²/h</dd>
+          <dt>{T.area}</dt>
+          <dd>
+            {fmt(Math.round(toDisplay(a.area_rate_m2_h, 'm²')))} {unitLabel('m²')}/h
+          </dd>
         </div>
         <div>
-          <dt>Costo orientativo</dt>
+          <dt>{T.cost}</dt>
           <dd>
-            {a.cost != null ? `${fmt(a.cost)} ${a.currency ?? ''}` : 'sin precios'}
-            {a.missing_prices > 0 && a.cost != null && ` (${a.missing_prices} sin precio)`}
+            {a.cost != null ? `${fmt(a.cost)} ${a.currency ?? ''}` : T.noPrices}
+            {a.missing_prices > 0 && a.cost != null && T.missingPrices(a.missing_prices)}
           </dd>
         </div>
       </dl>
@@ -231,7 +217,7 @@ function AssemblyCard({
         className={`btn${primary ? ' primary' : ''}`}
         onClick={() => onApply(a)}
       >
-        Aplicar al caso
+        {T.apply}
       </button>
     </section>
   );

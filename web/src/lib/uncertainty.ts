@@ -10,6 +10,7 @@ import type {
   UncertaintyRequest,
   UncertaintyResponse,
 } from '../api/client';
+import { msg } from '../i18n';
 import { scenarioIn } from './scenario';
 
 // --- incertidumbre --------------------------------------------------------------------------
@@ -123,32 +124,45 @@ export function relativeSpan(outputs: UncOutput[]): number {
 
 export type CalParam = NonNullable<CalibrateRequest['params']>[number];
 
+const calParam = (id: CalParam) => ({
+  id,
+  get label() {
+    return msg().uncertainty.calParams[id].label;
+  },
+  get help() {
+    return msg().uncertainty.calParams[id].help;
+  },
+});
+
+/** Parámetros calibrables (textos en el idioma activo). */
 export const CAL_PARAMS: { id: CalParam; label: string; help: string }[] = [
-  { id: 'cn', label: 'C_N del hilo', help: 'Arrastre normal de los hilos: resistencia y forma.' },
-  { id: 'ct', label: 'C_T del hilo', help: 'Roce del agua a lo largo de los hilos.' },
-  {
-    id: 'door_cl_factor',
-    label: 'Sustentación del portón',
-    help: 'Factor sobre el C_L de la polar: abre los portones.',
-  },
-  {
-    id: 'door_cd_factor',
-    label: 'Arrastre del portón',
-    help: 'Factor sobre el C_D de la polar: tiro y tensión del cable.',
-  },
-  { id: 'mu_gear', label: 'Rozamiento del tren', help: 'μ del burlón y el paño con el fondo.' },
-  { id: 'mu_door', label: 'Rozamiento de los portones', help: 'μ de las zapatas con el fondo.' },
+  calParam('cn'),
+  calParam('ct'),
+  calParam('door_cl_factor'),
+  calParam('door_cd_factor'),
+  calParam('mu_gear'),
+  calParam('mu_door'),
 ];
 
-export const QUANTITY_LABELS: Record<string, string> = {
-  door_spread_m: 'Separación de portones',
-  ah_m: 'Abertura horizontal',
-  av_m: 'Abertura vertical',
-  headrope_height_m: 'Altura de la relinga superior',
-  drag_kgf: 'Resistencia de la red',
-  towing_pull_kgf: 'Tiro en el buque',
-  warp_tension_kgf: 'Tensión del cable',
+const QUANTITY_UNITS: Record<string, string> = {
+  door_spread_m: 'm',
+  ah_m: 'm',
+  av_m: 'm',
+  headrope_height_m: 'm',
+  drag_kgf: 'kgf',
+  towing_pull_kgf: 'kgf',
+  warp_tension_kgf: 'kgf',
 };
+
+/** Nombre de una magnitud medida (``door_spread_m`` → «Separación de portones»). */
+export function quantityLabel(key: string): string {
+  return (msg().uncertainty.quantities as Record<string, string>)[key] ?? key;
+}
+
+/** Unidad del motor de una magnitud medida (por la clave o su sufijo). */
+export function quantityUnit(key: string): string {
+  return QUANTITY_UNITS[key] ?? (key.endsWith('_kgf') ? 'kgf' : key.endsWith('_m') ? 'm' : '');
+}
 
 export interface CalForm {
   source: 'dynamit' | 'sensors';

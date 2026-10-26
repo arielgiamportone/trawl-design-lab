@@ -1,13 +1,25 @@
 /** Optimización de escala y velocidad (``POST /optimize``): formulario, malla y etiquetas. */
 import type { Evaluation, OptimizeRequest, OptimizeResponse } from '../api/client';
-import { parseNumber } from './format';
+import { msg } from '../i18n';
+import { fmtNum, parseNumber, toInput } from './format';
 
 export type Objective = OptimizeRequest['objective'];
 
+const objective = (id: Objective) => ({
+  id,
+  get label() {
+    return msg().optimize.objectives[id].label;
+  },
+  get help() {
+    return msg().optimize.objectives[id].help;
+  },
+});
+
+/** Objetivos de la optimización (textos en el idioma activo). */
 export const OBJECTIVES: { id: Objective; label: string; help: string }[] = [
-  { id: 'area', label: 'Área barrida', help: 'Máxima área barrida por hora (AH·v).' },
-  { id: 'volume', label: 'Volumen', help: 'Máximo volumen filtrado por hora (AH·AV·v).' },
-  { id: 'energy', label: 'Energía', help: 'Mínimo trabajo de remolque por m² barrido (R_T/AH).' },
+  objective('area'),
+  objective('volume'),
+  objective('energy'),
 ];
 
 /** Clave del objetivo en la respuesta (``area_rate``…) → atributo de la evaluación y sentido. */
@@ -17,18 +29,30 @@ export const OBJECTIVE_ATTR: Record<string, { attr: keyof Evaluation; sense: 1 |
   energy: { attr: 'energy_kgf_m_per_m2', sense: -1 },
 };
 
-export const OBJECTIVE_UNITS: Record<string, { label: string; unit: string }> = {
-  area_rate: { label: 'Área barrida', unit: 'm²/h' },
-  volume_rate: { label: 'Volumen filtrado', unit: 'm³/h' },
-  energy: { label: 'Trabajo por m² barrido', unit: 'kgf·m/m²' },
+const OBJECTIVE_UNIT: Record<string, string> = {
+  area_rate: 'm²/h',
+  volume_rate: 'm³/h',
+  energy: 'kgf·m/m²',
 };
 
-export const CONSTRAINT_LABELS: Record<string, string> = {
-  thrust: 'Tiro: F_T ≥ (1 + m)·R_T',
-  net_open: 'Red abierta (DPA de Fridman)',
-  warp: 'Cable de remolque',
-  door: 'Portón (superficie requerida)',
-  speed: 'Rango de velocidad',
+/** Nombre y unidad del motor (métrica) de un objetivo de la respuesta (``area_rate``…). */
+export function objectiveUnit(key: string): { label: string; unit: string } {
+  const labels = msg().optimize.objectiveUnits as Record<string, string>;
+  return { label: labels[key] ?? key, unit: OBJECTIVE_UNIT[key] ?? '' };
+}
+
+/** Nombre de una restricción (``thrust``…) en el idioma activo. */
+export function constraintLabel(name: string): string {
+  return (msg().optimize.constraints as Record<string, string>)[name] ?? name;
+}
+
+/** Unidad del motor del valor y los límites de cada restricción. */
+export const CONSTRAINT_UNITS: Record<string, string> = {
+  thrust: 'kgf',
+  net_open: 'm',
+  warp: 'kgf',
+  door: 'm²',
+  speed: 'kn',
 };
 
 /** Valores del formulario (texto, como los escribe el usuario). */
@@ -58,6 +82,11 @@ export const DEFAULT_FORM: OptimizeForm = {
   refine: false,
 };
 
+/** Formulario por defecto con el separador decimal del idioma activo. */
+export function defaultOptimizeForm(): OptimizeForm {
+  return { ...DEFAULT_FORM, sMin: toInput(0.6), sMax: toInput(1.4), vMin: toInput(1.5) };
+}
+
 export interface BuiltOptimize {
   /** Campos del pedido que dependen del formulario. */
   body: Pick<
@@ -70,18 +99,19 @@ export interface BuiltOptimize {
 /** Valida el formulario con los mismos límites que la API (``OptimizeRequest``). */
 export function buildOptimize(f: OptimizeForm): BuiltOptimize {
   const errors: BuiltOptimize['errors'] = {};
+  const T = msg().optimize.errors;
   const num = (k: keyof OptimizeForm, lo: number, hi: number, int = false): number | null => {
     const v = parseNumber(String(f[k]));
     if (v === null) {
-      errors[k] = 'Ingrese un número';
+      errors[k] = T.number;
       return null;
     }
     if (int && !Number.isInteger(v)) {
-      errors[k] = 'Debe ser entero';
+      errors[k] = T.integer;
       return null;
     }
     if (v < lo || v > hi) {
-      errors[k] = `Entre ${String(lo).replace('.', ',')} y ${String(hi).replace('.', ',')}`;
+      errors[k] = T.range(fmtNum(lo), fmtNum(hi));
       return null;
     }
     return v;
@@ -93,8 +123,8 @@ export function buildOptimize(f: OptimizeForm): BuiltOptimize {
   const vMax = num('vMax', 0.5, 6);
   const nS = num('nS', 2, 25, true);
   const nV = num('nV', 2, 25, true);
-  if (sMin !== null && sMax !== null && sMin >= sMax) errors.sMax = 'Debe ser mayor que el mínimo';
-  if (vMin !== null && vMax !== null && vMin >= vMax) errors.vMax = 'Debe ser mayor que el mínimo';
+  if (sMin !== null && sMax !== null && sMin >= sMax) errors.sMax = T.aboveMin;
+  if (vMin !== null && vMax !== null && vMin >= vMax) errors.vMax = T.aboveMin;
   if (Object.keys(errors).length) return { body: null, errors };
   return {
     body: {

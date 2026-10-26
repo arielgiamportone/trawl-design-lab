@@ -1,9 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useId, useMemo, useState } from 'react';
 import { api, type CatalogItem } from '../api/client';
+import { useT } from '../i18n';
 import {
   DEFAULT_FILTERS,
   FAMILY_LABEL,
+  fieldUnit,
   filterNets,
   hpLabel,
   isDraft,
@@ -11,6 +13,7 @@ import {
   kindShares,
   KINDS,
   pathLabel,
+  provValueText,
   RIG_LABEL,
   sources,
   type CatalogFilters,
@@ -29,6 +32,7 @@ export function Catalog() {
   const srcs = useMemo(() => sources(items), [items]);
   const net = items.find((n) => n.id === selected) ?? shown[0];
   const set = (patch: Partial<CatalogFilters>) => setF((old) => ({ ...old, ...patch }));
+  const T = useT().catalog;
 
   const use = (id: string) =>
     update((s) => ({
@@ -44,33 +48,29 @@ export function Catalog() {
 
   return (
     <div className="catalog" data-testid="catalog">
-      <p className="section-sub">
-        Redes de documentos públicos de la FAO digitalizadas con la procedencia de cada valor. Al
-        usar una red del catálogo se calcula con su propio caso: un buque de su potencia de diseño,
-        el portón y la profundidad del plano.
-      </p>
-      <div className="catalog-filters" role="search" aria-label="Filtros del catálogo">
+      <p className="section-sub">{T.intro}</p>
+      <div className="catalog-filters" role="search" aria-label={T.filters}>
         <input
           type="search"
-          aria-label="Buscar red"
-          placeholder="Buscar (nombre, especie, documento)…"
+          aria-label={T.search}
+          placeholder={T.searchPlaceholder}
           value={f.text}
           onChange={(e) => set({ text: e.target.value })}
         />
         <select
-          aria-label="Familia"
+          aria-label={T.familyLabel}
           value={f.family}
           onChange={(e) => set({ family: e.target.value })}
         >
-          <option value="">Todas las familias</option>
+          <option value="">{T.allFamilies}</option>
           {Object.entries(FAMILY_LABEL).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
             </option>
           ))}
         </select>
-        <select aria-label="Aparejo" value={f.rig} onChange={(e) => set({ rig: e.target.value })}>
-          <option value="">Todos los aparejos</option>
+        <select aria-label={T.rigLabel} value={f.rig} onChange={(e) => set({ rig: e.target.value })}>
+          <option value="">{T.allRigs}</option>
           {Object.entries(RIG_LABEL).map(([k, v]) => (
             <option key={k} value={k}>
               {v}
@@ -78,11 +78,11 @@ export function Catalog() {
           ))}
         </select>
         <select
-          aria-label="Fuente"
+          aria-label={T.sourceLabel}
           value={f.source}
           onChange={(e) => set({ source: e.target.value })}
         >
-          <option value="">Todas las fuentes</option>
+          <option value="">{T.allSources}</option>
           {srcs.map((s) => (
             <option key={s.key} value={s.key}>
               {s.title.split(',')[0]}
@@ -90,12 +90,12 @@ export function Catalog() {
           ))}
         </select>
         <label className="inline-field">
-          Buque de
+          {T.vesselOf}
           <input
             type="number"
             min={0}
             step={5}
-            aria-label="Potencia del buque [hp]"
+            aria-label={T.vesselHp}
             value={f.hp ?? ''}
             placeholder="—"
             onChange={(e) => set({ hp: e.target.value === '' ? null : Number(e.target.value) })}
@@ -108,22 +108,22 @@ export function Catalog() {
             checked={f.drafts}
             onChange={(e) => set({ drafts: e.target.checked })}
           />
-          Mostrar borradores
+          {T.showDrafts}
         </label>
       </div>
 
       <div className="table-wrap">
-        <table className="data" aria-label="Redes del catálogo">
+        <table className="data" aria-label={T.table}>
           <thead>
             <tr>
-              <th scope="col">Red</th>
-              <th scope="col">Familia</th>
-              <th scope="col">Aparejo</th>
-              <th scope="col">Potencia</th>
+              <th scope="col">{T.colNet}</th>
+              <th scope="col">{T.colFamily}</th>
+              <th scope="col">{T.colRig}</th>
+              <th scope="col">{T.colPower}</th>
               <th scope="col" className="num">
-                Paños
+                {T.colPanels}
               </th>
-              <th scope="col">Fuente</th>
+              <th scope="col">{T.colSource}</th>
             </tr>
           </thead>
           <tbody>
@@ -140,17 +140,17 @@ export function Catalog() {
                   </button>{' '}
                   <Badges n={n} />
                 </td>
-                <td>{n.family ? FAMILY_LABEL[n.family] : 'Fondo'}</td>
+                <td>{n.family ? FAMILY_LABEL[n.family] : FAMILY_LABEL.bottom}</td>
                 <td>{RIG_LABEL[n.rig ?? 'otter']}</td>
                 <td>{hpLabel(n)}</td>
                 <td className="num">{n.panels ?? '—'}</td>
-                <td>{n.source?.title.split(',')[0] ?? 'Libro Excel FAO A-3'}</td>
+                <td>{n.source?.title.split(',')[0] ?? T.defaultSource}</td>
               </tr>
             ))}
             {shown.length === 0 && (
               <tr>
                 <td colSpan={6} className="empty">
-                  Ninguna red cumple los filtros.
+                  {T.noMatch}
                 </td>
               </tr>
             )}
@@ -163,31 +163,24 @@ export function Catalog() {
   );
 }
 
-function pct(share: number): string {
-  return share > 0 && share < 0.01 ? '< 1 %' : `${Math.round(share * 100)} %`;
-}
-
-function fmtValue(v: unknown): string {
-  return typeof v === 'number'
-    ? v.toLocaleString('es-AR', { maximumFractionDigits: 3 })
-    : String(v);
+function pct(share: number, T: ReturnType<typeof useT>['catalog']): string {
+  return share > 0 && share < 0.01 ? T.lessThan1 : T.pct(Math.round(share * 100));
 }
 
 function Badges({ n }: { n: CatalogItem }) {
+  const T = useT().catalog;
   return (
     <>
-      {isDraft(n) && <span className="badge warn">borrador</span>}
-      {n.rig === 'pair' && <span className="badge accent">pareja</span>}
-      {n.four_panel && <span className="badge accent">4 paneles</span>}
-      {n.family === 'pelagic' && <span className="badge accent">pelágica</span>}
+      {isDraft(n) && <span className="badge warn">{T.draft}</span>}
+      {n.rig === 'pair' && <span className="badge accent">{T.pair}</span>}
+      {n.four_panel && <span className="badge accent">{T.fourPanel}</span>}
+      {n.family === 'pelagic' && <span className="badge accent">{T.pelagic}</span>}
       {n.check && n.check.errors > 0 && (
-        <span className="badge crit">
-          {n.check.errors} {n.check.errors === 1 ? 'error' : 'errores'}
-        </span>
+        <span className="badge crit">{T.errors(n.check.errors)}</span>
       )}
       {n.check && n.check.errors === 0 && n.check.warnings > 0 && (
-        <span className="badge" title="Avisos del validador de consistencia">
-          {n.check.warnings} {n.check.warnings === 1 ? 'aviso' : 'avisos'}
+        <span className="badge" title={T.warningsTitle}>
+          {T.warnings(n.check.warnings)}
         </span>
       )}
     </>
@@ -205,6 +198,8 @@ function NetCard({
   onUse: (id: string) => void;
   ids: string;
 }) {
+  const L = useT().common;
+  const T = useT().catalog;
   const [kind, setKind] = useState<ProvenanceKind | ''>('');
   const prov = useQuery({
     queryKey: ['provenance', n.id],
@@ -230,25 +225,24 @@ function NetCard({
       <p className="help">
         {n.source ? (
           <>
-            Fuente:{' '}
+            {T.source}{' '}
             <a href={n.source.url} target="_blank" rel="noreferrer">
               {n.source.title}
             </a>
             {n.source.page ? ` · ${n.source.page}` : ''}
           </>
         ) : (
-          'Fuente: libro Excel original de la red FAO A-3 (celda por celda).'
+          T.sourceA3
         )}
-        {n.target_species ? ` · Especies: ${n.target_species}` : ''}
+        {n.target_species ? T.species(n.target_species) : ''}
       </p>
       <div className="catalog-actions">
         <button type="button" className="btn primary" disabled={active} onClick={() => onUse(n.id)}>
-          {active ? 'Es la red del caso' : 'Usar esta red'}
+          {active ? T.isCaseNet : T.useNet}
         </button>
         {isDraft(n) && (
           <span className="alert warn" role="note">
-            Borrador: hay valores supuestos o el validador encontró errores; revíselo antes de
-            usarla.
+            {T.draftNote}
           </span>
         )}
       </div>
@@ -256,16 +250,15 @@ function NetCard({
       {shares.length > 0 && (
         <figure className="prov-bar-wrap">
           <figcaption>
-            Procedencia de {n.coverage?.values ?? 0} valores (
-            {Math.round((n.coverage?.fraction ?? 0) * 100)} % con fuente)
+            {T.provCaption(n.coverage?.values ?? 0, Math.round((n.coverage?.fraction ?? 0) * 100))}
           </figcaption>
-          <div className="prov-bar" role="img" aria-label="Procedencia por tipo">
+          <div className="prov-bar" role="img" aria-label={T.provByKind}>
             {shares.map((s) => (
               <span
                 key={s.kind}
                 className={`prov prov-${s.kind}`}
                 style={{ width: `${s.share * 100}%` }}
-                title={`${KIND_LABEL[s.kind as ProvenanceKind] ?? s.kind}: ${Math.round(s.share * 100)} %`}
+                title={`${KIND_LABEL[s.kind as ProvenanceKind] ?? s.kind}: ${T.pct(Math.round(s.share * 100))}`}
               />
             ))}
           </div>
@@ -273,18 +266,18 @@ function NetCard({
             {shares.map((s) => (
               <li key={s.kind}>
                 <span className={`prov-dot prov-${s.kind}`} aria-hidden="true" />
-                {KIND_LABEL[s.kind as ProvenanceKind] ?? s.kind} {pct(s.share)}
+                {KIND_LABEL[s.kind as ProvenanceKind] ?? s.kind} {pct(s.share, T)}
               </li>
             ))}
           </ul>
         </figure>
       )}
 
-      <h4>Validador de consistencia</h4>
-      {check.isLoading && <p className="empty">Cargando…</p>}
+      <h4>{T.validator}</h4>
+      {check.isLoading && <p className="empty">{L.loading}</p>}
       {check.data && check.data.issues.length === 0 && (
         <p className="alert good" role="status">
-          La red cierra: empalmes, bocana, cortes y costados sin observaciones.
+          {T.closes}
         </p>
       )}
       {check.data && check.data.issues.length > 0 && (
@@ -292,7 +285,7 @@ function NetCard({
           {check.data.issues.map((i, k) => (
             <li key={k} className={i.level === 'error' ? 'crit' : 'warn'}>
               <span className={`badge ${i.level === 'error' ? 'crit' : 'warn'}`}>
-                {i.level === 'error' ? 'error' : 'aviso'}
+                {i.level === 'error' ? T.levelError : T.levelWarn}
               </span>{' '}
               {i.message}
             </li>
@@ -300,10 +293,10 @@ function NetCard({
         </ul>
       )}
 
-      <h4>Procedencia valor por valor</h4>
-      <div className="segmented" role="group" aria-label="Tipo de procedencia">
+      <h4>{T.provTitle}</h4>
+      <div className="segmented" role="group" aria-label={T.provKind}>
         <button type="button" aria-pressed={kind === ''} onClick={() => setKind('')}>
-          Todos
+          {T.all}
         </button>
         {KINDS.map((k) => (
           <button key={k} type="button" aria-pressed={kind === k} onClick={() => setKind(k)}>
@@ -311,18 +304,18 @@ function NetCard({
           </button>
         ))}
       </div>
-      {prov.isLoading && <p className="empty">Cargando…</p>}
+      {prov.isLoading && <p className="empty">{L.loading}</p>}
       {prov.data && (
         <div className="table-wrap prov-table">
-          <table className="data" aria-label="Procedencia de los valores" data-testid="provenance">
+          <table className="data" aria-label={T.provTable} data-testid="provenance">
             <thead>
               <tr>
-                <th scope="col">Valor</th>
+                <th scope="col">{T.colValue}</th>
                 <th scope="col" className="num">
-                  Dato
+                  {T.colData}
                 </th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Nota</th>
+                <th scope="col">{T.colKind}</th>
+                <th scope="col">{T.colNote}</th>
               </tr>
             </thead>
             <tbody>
@@ -331,7 +324,7 @@ function NetCard({
                 return (
                   <tr key={r.path} data-path={r.path}>
                     <td>{pathLabel(r.path)}</td>
-                    <td className="num">{fmtValue(r.value)}</td>
+                    <td className="num">{provValueText(r.value, fieldUnit(r.path))}</td>
                     <td className="kind">
                       {k ? (
                         <>
@@ -339,7 +332,7 @@ function NetCard({
                           {KIND_LABEL[k]}
                         </>
                       ) : (
-                        <span className="badge crit">sin fuente</span>
+                        <span className="badge crit">{T.noSource}</span>
                       )}
                     </td>
                     <td className="note">{(r.provenance?.note as string | undefined) ?? ''}</td>

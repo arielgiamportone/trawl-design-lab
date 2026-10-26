@@ -1,3 +1,60 @@
 import type { Messages } from '../es';
 
-export const expert: Messages['expert'] = {};
+export const expert: Messages['expert'] = {
+  helpTip: {
+    aria: (label: string) => `Help: ${label}`,
+    unit: (unit: string) => `Unit: ${unit}. `,
+    range: (range: string) => `Usual range: ${range}.`,
+    read: 'Read in the book ↗',
+  },
+  kpisLabel: 'Key indicators',
+  resultsLabel: 'Results detail',
+  sectionsLabel: 'Results sections',
+  tabs: {
+    resumen: 'Summary',
+    graficos: 'Charts',
+    diseno: 'Interactive design',
+    paneles: 'Panel editor',
+    plano: 'Plan',
+    comparar: 'Compare',
+    optimizar: 'Optimize',
+    simulacion: 'Simulation',
+    descargas: 'Downloads',
+    catalogo: 'FAO catalogue',
+    componentes: 'Components',
+    construccion: 'Construction',
+    economia: 'Economics',
+    lotes: 'Batches and fleet',
+    notas: 'Notes and errata',
+  },
+  summary: {
+    calculating: 'Calculating…',
+    noResults: 'No results yet.',
+    groups: {
+      case: 'Case',
+      net: 'Net',
+      drag: 'Drag and speed',
+      rigging: 'Rigging',
+      flotation: 'Buoyancy and ballast',
+      warp: 'Warp',
+      other: 'Other',
+    },
+    quantity: 'Quantity',
+    value: 'Value',
+    unit: 'Unit',
+  },
+  params: {
+    title: 'Advanced parameters',
+    withError: (n: number) => (n === 1 ? '1 with an error' : `${n} with errors`),
+    changed: (n: number) => `${n} changed`,
+    intro:
+      'Empty = default value (in grey). Decimal point or comma accepted; list items are separated by «;».',
+    searchPlaceholder: 'Search parameter or cell…',
+    searchLabel: 'Search parameter',
+    resetAll: 'Reset all',
+    loading: 'Loading parameters…',
+    byDefault: (v: string) => `Default (${v})`,
+    resetOne: (name: string) => `Reset ${name} to the default value`,
+    resetTitle: 'Reset to the default value',
+  },
+};

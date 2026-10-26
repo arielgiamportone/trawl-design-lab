@@ -1,20 +1,24 @@
+import { useT } from '../i18n';
 import { tiles } from '../lib/kpis';
 import { useCase } from '../state/useCase';
+
+const KEYS = [
+  'vertical_opening_m',
+  'horizontal_opening_m',
+  'rn_std_3kn_kgf',
+  'max_speed_kn',
+  'warp_selected',
+  'solid_surface_m2',
+] as const;
 
 export function Kpis() {
   const { design } = useCase();
   const d = design.data;
+  const T = useT();
   if (!d) {
     return (
-      <section className="kpis" aria-label="Indicadores clave" aria-busy={design.isFetching}>
-        {[
-          'Abertura vertical',
-          'Abertura horizontal',
-          'RN a 3 kn',
-          'Vel. máx. remolcable',
-          'Cable seleccionado',
-          'Superficie sólida',
-        ].map((l) => (
+      <section className="kpis" aria-label={T.expert.kpisLabel} aria-busy={design.isFetching}>
+        {KEYS.map((k) => T.labels.kpis[k]).map((l) => (
           <div className="card kpi" key={l}>
             <span className="kpi-label">{l}</span>
             <span className="kpi-value" aria-hidden="true">
@@ -29,7 +33,7 @@ export function Kpis() {
   return (
     <section
       className={`kpis${stale ? ' stale' : ''}`}
-      aria-label="Indicadores clave"
+      aria-label={T.expert.kpisLabel}
       aria-busy={stale}
     >
       {tiles(d).map((t) => (

@@ -1,18 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { api } from '../../api/client';
+import { useT } from '../../i18n';
 import { downloadBlob } from '../../lib/download';
 import {
   bomCsv,
+  bomQuantity,
+  bomUnitLabel,
   loadPrices,
   priceKey,
+  priceToCanonical,
+  priceToDisplay,
   savePrices,
-  UNIT_LABEL,
   type Bom,
   type BomLine,
   type Price,
 } from '../../lib/components';
-import { fmt, parseNumber } from '../../lib/format';
+import { fmt, parseNumber, toInput } from '../../lib/format';
 import { useCase } from '../../state/useCase';
 
 /**
@@ -21,6 +25,7 @@ import { useCase } from '../../state/useCase';
  */
 export function BillOfMaterials() {
   const { committed } = useCase();
+  const T = useT().components;
   const [prices, setPrices] = useState<Record<string, Price>>(() => loadPrices());
   const [currency, setCurrency] = useState<string>(
     () => Object.values(loadPrices())[0]?.currency ?? 'USD',
@@ -35,7 +40,10 @@ export function BillOfMaterials() {
 
   const setPrice = (line: BomLine, text: string) => {
     const key = priceKey(line);
-    const value = parseNumber(text);
+    const shown = parseNumber(text);
+    // Se escribe por unidad del sistema activo (por lb, por ft); se guarda por kg o por m.
+    const value =
+      shown === null ? null : Number(priceToCanonical(shown, line.unit).toPrecision(10));
     const next = { ...prices };
     if (value === null || value < 0) delete next[key];
     else
@@ -44,7 +52,7 @@ export function BillOfMaterials() {
         currency,
         unit: line.unit as Price['unit'],
         date: new Date().toISOString().slice(0, 7),
-        source: 'usuario',
+        source: T.priceSource,
       };
     setPrices(next);
     savePrices(next);
@@ -53,16 +61,12 @@ export function BillOfMaterials() {
   const bom = q.data;
   return (
     <div className="bom" data-testid="bom">
-      <p className="section-sub">
-        Cantidades del armado calculado. Cargue el precio que le dan en su puerto: queda guardado en
-        este navegador y se usa en el armado por costo. Sin precio, la línea dice «sin precio» (no
-        se cuenta como cero).
-      </p>
+      <p className="section-sub">{T.bomIntro}</p>
       <div className="catalog-actions no-print">
         <label className="inline-field">
-          Moneda
+          {T.currency}
           <input
-            aria-label="Moneda"
+            aria-label={T.currency}
             value={currency}
             maxLength={3}
             size={4}
@@ -77,17 +81,17 @@ export function BillOfMaterials() {
             bom &&
             downloadBlob(
               new Blob([bomCsv(bom)], { type: 'text/csv;charset=utf-8' }),
-              'lista_de_materiales.csv',
+              T.csv.file,
             )
           }
         >
-          Descargar CSV
+          {T.downloadCsv}
         </button>
         <button type="button" className="btn" disabled={!bom} onClick={() => window.print()}>
-          Imprimir o guardar PDF
+          {T.print}
         </button>
       </div>
-      {!committed && <p className="empty">Complete el caso para ver la lista de materiales.</p>}
+      {!committed && <p className="empty">{T.bomEmpty}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
           {q.error.message}
@@ -95,19 +99,19 @@ export function BillOfMaterials() {
       )}
       {bom && (
         <div className="table-wrap">
-          <table className="data" aria-label="Lista de materiales">
+          <table className="data" aria-label={T.bomTable}>
             <thead>
               <tr>
-                <th scope="col">Ítem</th>
-                <th scope="col">Componente</th>
+                <th scope="col">{T.colItem}</th>
+                <th scope="col">{T.colComponent}</th>
                 <th scope="col" className="num">
-                  Cantidad
+                  {T.colQuantity}
                 </th>
                 <th scope="col" className="num">
-                  Precio unitario
+                  {T.colUnitPrice}
                 </th>
                 <th scope="col" className="num">
-                  Costo
+                  {T.colCost}
                 </th>
               </tr>
             </thead>
@@ -120,15 +124,17 @@ export function BillOfMaterials() {
                   </td>
                   <td>{l.component_name ?? l.component_id ?? '—'}</td>
                   <td className="num">
-                    {fmt(l.quantity)} {UNIT_LABEL[l.unit] ?? l.unit}
+                    {fmt(bomQuantity(l))} {bomUnitLabel(l.unit)}
                   </td>
                   <td className="num">
                     <input
                       className="price-input"
                       inputMode="decimal"
-                      aria-label={`Precio de ${l.label} por ${UNIT_LABEL[l.unit] ?? l.unit}`}
-                      defaultValue={prices[priceKey(l)]?.value ?? ''}
-                      placeholder={l.unit_price != null ? fmt(l.unit_price) : '—'}
+                      aria-label={T.priceOf(l.label, bomUnitLabel(l.unit))}
+                      defaultValue={priceText(prices[priceKey(l)]?.value, l.unit)}
+                      placeholder={
+                        l.unit_price != null ? fmt(priceToDisplay(l.unit_price, l.unit)) : '—'
+                      }
                       onBlur={(e) => setPrice(l, e.target.value)}
                     />
                   </td>
@@ -136,7 +142,7 @@ export function BillOfMaterials() {
                     {l.cost != null ? (
                       `${fmt(l.cost)} ${l.currency ?? ''}`
                     ) : (
-                      <span className="badge">sin precio</span>
+                      <span className="badge">{T.noPrice}</span>
                     )}
                   </td>
                 </tr>
@@ -146,7 +152,7 @@ export function BillOfMaterials() {
               {Object.entries(bom.totals).map(([cur, v]) => (
                 <tr key={cur}>
                   <th scope="row" colSpan={4}>
-                    Total orientativo
+                    {T.total}
                   </th>
                   <td className="num" data-testid={`bom-total-${cur}`}>
                     {fmt(v)} {cur}
@@ -156,8 +162,7 @@ export function BillOfMaterials() {
               {bom.missing_prices > 0 && (
                 <tr>
                   <td colSpan={5} className="help">
-                    {bom.missing_prices} {bom.missing_prices === 1 ? 'línea' : 'líneas'} sin precio:
-                    el total no las incluye.
+                    {T.missingLines(bom.missing_prices)}
                   </td>
                 </tr>
               )}
@@ -167,4 +172,12 @@ export function BillOfMaterials() {
       )}
     </div>
   );
+}
+
+/** Precio guardado (por kg o por m) en el campo, por unidad del sistema activo. */
+function priceText(value: number | undefined, unit: string): string | number {
+  if (value === undefined) return '';
+  const shown = priceToDisplay(value, unit);
+  // En métrico, el número tal cual (como siempre); convertido, con 6 cifras significativas.
+  return shown === value ? value : toInput(Number(shown.toPrecision(6)));
 }

@@ -1,5 +1,8 @@
 /** Simulación de forma (``POST /simulate``): velocidades, resolución y tabla de comparación. */
 import type { SimulateResponse } from '../api/client';
+import { msg } from '../i18n';
+import { fmt, fmtFixed, fmtNum } from './format';
+import { CONVERSIONS, fmtU, getUnits, toDisplay, unitLabel, type FmtUOptions } from './units';
 
 /** Velocidades ofrecidas [kn] (las de la tabla de DynamiT). */
 export const SIM_SPEEDS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
@@ -7,10 +10,16 @@ export const MAX_SIM_SPEEDS = 3;
 
 export type SimQuality = 'fast' | 'normal';
 export const SIM_RESOLUTION: Record<SimQuality, number> = { fast: 3, normal: 6 };
-export const SIM_QUALITY_LABEL: Record<SimQuality, string> = {
-  fast: 'Rápida',
-  normal: 'Normal',
-};
+/** Nombre de la calidad en el idioma activo («Rápida», «Normal»). */
+export function simQualityLabel(q: SimQuality): string {
+  return msg().simulate.quality[q];
+}
+/** Nombre de una resolución del simulador con su número («Rápida (3)»). */
+export function resolutionLabel(n: number): string {
+  const r = msg().simulate.resolutions;
+  const name = n <= 2 ? r.veryFast : n === 3 ? r.fast : r.normal;
+  return `${name} (${n})`;
+}
 /** Segundos aproximados por velocidad (para el aviso de espera). */
 export const SIM_SECONDS_PER_SPEED: Record<SimQuality, number> = { fast: 1, normal: 4.5 };
 
@@ -35,10 +44,22 @@ export function pctDiff(x: number | null | undefined, ref: number | null | undef
 
 export type SimQuantity = 'ah_m' | 'av_m' | 'drag_kgf';
 
+const quantity = (key: SimQuantity, unit: string) => ({
+  key,
+  unit,
+  get label() {
+    return msg().simulate.quantities[key].label;
+  },
+  get engine() {
+    return msg().simulate.quantities[key].engine;
+  },
+});
+
+/** Magnitudes comparadas (los textos se leen en el idioma activo al usarlos). */
 export const SIM_QUANTITIES: { key: SimQuantity; label: string; unit: string; engine: string }[] = [
-  { key: 'ah_m', label: 'Abertura horizontal AH', unit: 'm', engine: 'DPA de Fridman' },
-  { key: 'av_m', label: 'Abertura vertical AV', unit: 'm', engine: 'AV de Fridman' },
-  { key: 'drag_kgf', label: 'Resistencia de la red', unit: 'kgf', engine: 'RN Aberdeen' },
+  quantity('ah_m', 'm'),
+  quantity('av_m', 'm'),
+  quantity('drag_kgf', 'kgf'),
 ];
 
 export interface CompareRow {
@@ -92,11 +113,60 @@ export function unconverged(r: SimulateResponse): number[] {
   return r.results.filter((x) => x.converged === false).map((x) => Number(x.speed_kn));
 }
 
-/** Velocidad con un decimal y coma (``2,0``, ``2,5``). */
+/** Velocidad con un decimal en el formato del idioma (``2,0`` / ``2.0``). */
 export function speedLabel(v: number): string {
-  return v.toFixed(1).replace('.', ',');
+  return fmtNum(v, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
 /** Vista de la pestaña «Simulación» (memoria de la sesión). */
 export const SIM_VIEW_KEY = 'simulate:view';
 export type SimView = 'speeds' | 'haul' | 'explore' | 'selectivity' | 'uncertainty';
+
+// --- unidades compuestas de la simulación y la optimización ---------------------------------
+
+const C = (u: string) => (CONVERSIONS[u] as { factor: number }).factor;
+
+/**
+ * Unidades del motor que ``lib/units`` no conoce (tasas y cocientes): unidad imperial y factor
+ * (valor imperial = métrico × factor).
+ */
+const EXTRA: Record<string, { unit: string; factor: number }> = {
+  'm²/h': { unit: 'ft²/h', factor: C('m²') },
+  'm³/h': { unit: 'ft³/h', factor: C('m³') },
+  'km²/h': { unit: 'nmi²/h', factor: C('km²') },
+  // kgf·m/m² = kgf/m → lbf·ft/ft² = lbf/ft
+  'kgf·m/m²': { unit: 'lbf·ft/ft²', factor: C('kg/m') },
+  'L/kg': { unit: 'gal/lb', factor: C('L') / C('kg') },
+};
+
+const extra = (unit: string) => (getUnits() === 'imperial' ? (EXTRA[unit] ?? null) : null);
+
+/** ``unitLabel`` con las unidades compuestas de la simulación. */
+export function simUnit(unit: string): string {
+  return extra(unit)?.unit ?? unitLabel(unit);
+}
+
+/** ``toDisplay`` con las unidades compuestas de la simulación. */
+export function simValue(value: number, unit: string): number {
+  const e = extra(unit);
+  return e ? value * e.factor : toDisplay(value, unit);
+}
+
+/** ``simValue`` que deja pasar ``null``. */
+export function simValueOpt(value: number | null | undefined, unit: string): number | null {
+  return value === null || value === undefined ? null : simValue(value, unit);
+}
+
+/** ``fmtU`` con las unidades compuestas de la simulación. */
+export function fmtSim(
+  value: number | null | undefined,
+  unit: string,
+  opts: Omit<FmtUOptions, 'system'> = {},
+): string {
+  const e = extra(unit);
+  if (!e) return fmtU(value, unit, opts);
+  if (value === null || value === undefined || !Number.isFinite(value)) return '—';
+  const v = value * e.factor;
+  const shown = opts.digits === undefined ? fmt(v) : fmtFixed(v, opts.digits);
+  return opts.unit === false ? shown : `${shown} ${e.unit}`;
+}

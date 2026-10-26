@@ -1,20 +1,23 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState, type FormEvent } from 'react';
 import { api } from '../../api/client';
+import { useT } from '../../i18n';
 import {
   chapterLabel,
   classroom,
   fmtDate,
-  LEVEL_LABEL,
+  levelLabel,
   pct,
   type Assignment,
   type Course,
   type ItemIn,
 } from '../../lib/classroom';
 import { downloadBlob } from '../../lib/download';
+import { fmtNum, parseNumber } from '../../lib/format';
 
 /** El aula del docente: cursos, alumnos, tareas, notas y revisión de entregas. */
 export function TeacherView({ courses, admin }: { courses: Course[]; admin: boolean }) {
+  const T = useT().classroom.teacher;
   const [courseId, setCourseId] = useState<number | null>(courses[0]?.id ?? null);
   const course = courses.find((c) => c.id === courseId) ?? null;
   return (
@@ -30,7 +33,8 @@ export function TeacherView({ courses, admin }: { courses: Course[]; admin: bool
           >
             <strong>{c.name}</strong>
             <span>
-              {c.term} · {c.students} alumnos{c.archived ? ' · archivado' : ''}
+              {c.term} · {T.students(c.students)}
+              {c.archived ? T.archived : ''}
             </span>
           </button>
         ))}
@@ -47,6 +51,7 @@ function errText(err: unknown): string {
 }
 
 function NewCourse({ onCreated }: { onCreated: (id: number) => void }) {
+  const T = useT().classroom.teacher;
   const qc = useQueryClient();
   const [name, setName] = useState('');
   const [term, setTerm] = useState('');
@@ -66,22 +71,22 @@ function NewCourse({ onCreated }: { onCreated: (id: number) => void }) {
   };
   return (
     <form className="aula-join" onSubmit={send}>
-      <label htmlFor="aula-new-course">Curso nuevo</label>
+      <label htmlFor="aula-new-course">{T.newCourse}</label>
       <input
         id="aula-new-course"
-        placeholder="Nombre (p. ej. Tecnología de Artes de Pesca)"
+        placeholder={T.namePlaceholder}
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
       <div className="calc-row">
         <input
-          aria-label="Cuatrimestre"
-          placeholder="Cuatrimestre (2026-2C)"
+          aria-label={T.term}
+          placeholder={T.termPlaceholder}
           value={term}
           onChange={(e) => setTerm(e.target.value)}
         />
         <button type="submit" className="btn small" disabled={!name.trim()}>
-          Crear
+          {T.create}
         </button>
       </div>
       {error && <p className="alert error">{error}</p>}
@@ -90,6 +95,7 @@ function NewCourse({ onCreated }: { onCreated: (id: number) => void }) {
 }
 
 function CoursePanel({ course }: { course: Course }) {
+  const T = useT().classroom.teacher;
   const qc = useQueryClient();
   const [view, setView] = useState<'tareas' | 'alumnos'>('tareas');
   const regen = async () => {
@@ -97,22 +103,23 @@ function CoursePanel({ course }: { course: Course }) {
     await qc.invalidateQueries({ queryKey: ['aula'] });
   };
   return (
-    <section className="card card-pad aula-course-panel" aria-label={`Curso ${course.name}`}>
+    <section className="card card-pad aula-course-panel" aria-label={T.courseLabel(course.name)}>
       <h3 className="section-title">
         {course.name}
         <span className="aula-code" data-testid="course-code">
-          Código para los alumnos: <strong>{course.code}</strong>{' '}
+          {T.codeForStudents}
+          <strong>{course.code}</strong>{' '}
           <button type="button" className="btn ghost small" onClick={() => void regen()}>
-            Cambiar código
+            {T.changeCode}
           </button>
         </span>
       </h3>
-      <div className="segmented" role="group" aria-label="Sección del curso">
+      <div className="segmented" role="group" aria-label={T.courseSection}>
         <button type="button" aria-pressed={view === 'tareas'} onClick={() => setView('tareas')}>
-          Tareas
+          {T.assignments}
         </button>
         <button type="button" aria-pressed={view === 'alumnos'} onClick={() => setView('alumnos')}>
-          Alumnos ({course.students})
+          {T.studentsTab(course.students)}
         </button>
       </div>
       {view === 'tareas' ? <Assignments courseId={course.id} /> : <Students courseId={course.id} />}
@@ -121,6 +128,7 @@ function CoursePanel({ course }: { course: Course }) {
 }
 
 function Students({ courseId }: { courseId: number }) {
+  const T = useT().classroom.teacher;
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ['aula', 'students', courseId],
@@ -128,31 +136,30 @@ function Students({ courseId }: { courseId: number }) {
   });
   const [msg, setMsg] = useState<string | null>(null);
   const reset = async (id: number, name: string) => {
-    const pw = window.prompt(`Contraseña nueva para ${name} (8 caracteres o más):`);
+    const pw = window.prompt(T.newPassword(name));
     if (!pw) return;
     try {
       await classroom.resetPassword(courseId, id, pw);
-      setMsg(`Contraseña de ${name} cambiada: désela en persona.`);
+      setMsg(T.passwordChanged(name));
     } catch (err) {
       setMsg(errText(err));
     }
   };
   const remove = async (id: number, name: string) => {
-    if (!window.confirm(`¿Quitar a ${name} del curso? Sus entregas quedan guardadas.`)) return;
+    if (!window.confirm(T.confirmRemove(name))) return;
     await classroom.removeStudent(courseId, id);
     await qc.invalidateQueries({ queryKey: ['aula'] });
   };
   if (q.error) return <p className="alert error">{q.error.message}</p>;
-  if (!q.data) return <p className="empty">Cargando…</p>;
-  if (!q.data.length)
-    return <p className="empty">Todavía no hay alumnos: comparta el código del curso.</p>;
+  if (!q.data) return <p className="empty">{T.loading}</p>;
+  if (!q.data.length) return <p className="empty">{T.noStudents}</p>;
   return (
     <>
       <table className="data">
         <thead>
           <tr>
-            <th>Nombre o legajo</th>
-            <th>Usuario</th>
+            <th>{T.name}</th>
+            <th>{T.username}</th>
             <th />
           </tr>
         </thead>
@@ -167,14 +174,14 @@ function Students({ courseId }: { courseId: number }) {
                   className="btn ghost small"
                   onClick={() => void reset(u.id, u.display_name)}
                 >
-                  Nueva contraseña
+                  {T.resetPassword}
                 </button>
                 <button
                   type="button"
                   className="btn ghost small"
                   onClick={() => void remove(u.id, u.display_name)}
                 >
-                  Quitar
+                  {T.remove}
                 </button>
               </td>
             </tr>
@@ -187,6 +194,7 @@ function Students({ courseId }: { courseId: number }) {
 }
 
 function Assignments({ courseId }: { courseId: number }) {
+  const T = useT().classroom.teacher;
   const q = useQuery({
     queryKey: ['aula', 'assignments', courseId],
     queryFn: () => classroom.assignments(courseId),
@@ -199,22 +207,22 @@ function Assignments({ courseId }: { courseId: number }) {
     <div className="aula-assignments">
       {!editing && !current && (
         <>
-          <ul className="aula-list" aria-label="Tareas del curso">
+          <ul className="aula-list" aria-label={T.courseAssignments}>
             {(q.data ?? []).map((a) => (
               <li key={a.id}>
                 <button type="button" className="aula-row" onClick={() => setOpen(a.id)}>
                   <span className="aula-row-title">{a.title}</span>
-                  <span className="badge">{a.items.length} ítems</span>
+                  <span className="badge">{T.items(a.items.length)}</span>
                   <span className="aula-row-sub">
-                    {a.opens_at ? `abre ${fmtDate(a.opens_at)} · ` : ''}
-                    {a.due_at ? `cierra ${fmtDate(a.due_at)}` : 'sin cierre'}
+                    {a.opens_at ? T.opens(fmtDate(a.opens_at)) : ''}
+                    {a.due_at ? T.closes(fmtDate(a.due_at)) : T.noDue}
                   </span>
                 </button>
               </li>
             ))}
           </ul>
           <button type="button" className="btn primary" onClick={() => setEditing(true)}>
-            Nueva tarea
+            {T.newAssignment}
           </button>
         </>
       )}
@@ -225,6 +233,7 @@ function Assignments({ courseId }: { courseId: number }) {
 }
 
 function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () => void }) {
+  const T = useT().classroom.teacher.editor;
   const qc = useQueryClient();
   const exercises = useQuery({
     queryKey: ['teaching', 'exercises'],
@@ -277,7 +286,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
   return (
     <form className="aula-editor" onSubmit={send} data-testid="assignment-editor">
       <div className="field">
-        <label htmlFor="aula-a-title">Título</label>
+        <label htmlFor="aula-a-title">{T.title}</label>
         <input
           id="aula-a-title"
           value={title}
@@ -286,7 +295,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
         />
       </div>
       <div className="field">
-        <label htmlFor="aula-a-desc">Consigna (opcional)</label>
+        <label htmlFor="aula-a-desc">{T.description}</label>
         <textarea
           id="aula-a-desc"
           rows={2}
@@ -296,7 +305,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
       </div>
       <div className="aula-filters">
         <div className="field">
-          <label htmlFor="aula-a-due">Cierre</label>
+          <label htmlFor="aula-a-due">{T.due}</label>
           <input
             id="aula-a-due"
             type="datetime-local"
@@ -305,7 +314,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
           />
         </div>
         <div className="field">
-          <label htmlFor="aula-a-att">Intentos por ítem</label>
+          <label htmlFor="aula-a-att">{T.attempts}</label>
           <input
             id="aula-a-att"
             type="number"
@@ -316,24 +325,22 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
           />
         </div>
         <div className="field">
-          <label htmlFor="aula-a-fb">Devolución</label>
+          <label htmlFor="aula-a-fb">{T.feedback}</label>
           <select
             id="aula-a-fb"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value as 'immediate' | 'after_due')}
           >
-            <option value="immediate">Al entregar</option>
-            <option value="after_due">Al cierre (examen)</option>
+            <option value="immediate">{T.immediate}</option>
+            <option value="after_due">{T.afterDue}</option>
           </select>
         </div>
       </div>
-      <p className="help">
-        Cada alumno recibe sus propios datos en cada ejercicio. Elegidos: {items.length}.
-      </p>
+      <p className="help">{T.chosen(items.length)}</p>
       <div className="field">
-        <label htmlFor="aula-a-ch">Capítulo</label>
+        <label htmlFor="aula-a-ch">{T.chapter}</label>
         <select id="aula-a-ch" value={chapter} onChange={(e) => setChapter(e.target.value)}>
-          <option value="">Todos</option>
+          <option value="">{T.all}</option>
           {chapters.map((c) => (
             <option key={c} value={c}>
               {chapterLabel(c)}
@@ -342,7 +349,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
         </select>
       </div>
       <fieldset className="aula-pick">
-        <legend>Ejercicios</legend>
+        <legend>{T.exercises}</legend>
         {(exercises.data ?? [])
           .filter((e) => !chapter || e.chapter === chapter)
           .map((e) => (
@@ -352,12 +359,12 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
                 checked={has('exercise', e.id)}
                 onChange={() => toggle('exercise', e.id)}
               />
-              {e.title} <span className="badge">{LEVEL_LABEL[e.level]}</span>
+              {e.title} <span className="badge">{levelLabel(e.level)}</span>
             </label>
           ))}
       </fieldset>
       <fieldset className="aula-pick">
-        <legend>Laboratorios</legend>
+        <legend>{T.labs}</legend>
         {(labs.data ?? [])
           .filter((l) => !chapter || l.chapter === chapter)
           .map((l) => (
@@ -367,16 +374,16 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
                 checked={has('lab', l.id)}
                 onChange={() => toggle('lab', l.id)}
               />
-              {l.title} <span className="badge accent">{l.steps} pasos</span>
+              {l.title} <span className="badge accent">{T.steps(l.steps)}</span>
             </label>
           ))}
       </fieldset>
       <div className="calc-row">
         <button type="submit" className="btn primary" disabled={!title.trim() || !items.length}>
-          Crear tarea
+          {T.create}
         </button>
         <button type="button" className="btn ghost" onClick={onDone}>
-          Cancelar
+          {T.cancel}
         </button>
       </div>
       {error && <p className="alert error">{error}</p>}
@@ -385,6 +392,7 @@ function AssignmentEditor({ courseId, onDone }: { courseId: number; onDone: () =
 }
 
 function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
+  const T = useT().classroom.teacher.grades;
   const qc = useQueryClient();
   const q = useQuery({ queryKey: ['aula', 'grades', a.id], queryFn: () => classroom.grades(a.id) });
   const [review, setReview] = useState<number | null>(null);
@@ -398,7 +406,7 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
     }
   };
   const remove = async () => {
-    if (!window.confirm(`¿Borrar la tarea «${a.title}» con todas sus entregas?`)) return;
+    if (!window.confirm(T.confirmDelete(a.title))) return;
     await classroom.deleteAssignment(a.id);
     await qc.invalidateQueries({ queryKey: ['aula', 'assignments', a.course_id] });
     onBack();
@@ -407,7 +415,7 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
   return (
     <div className="aula-grades" data-testid="grades">
       <button type="button" className="btn ghost small" onClick={onBack}>
-        ← Tareas del curso
+        {T.back}
       </button>
       <h4>{a.title}</h4>
       <div className="calc-row">
@@ -415,10 +423,10 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
           type="button"
           className="btn small"
           onClick={() =>
-            void download(() => classroom.gradesExport(a.id, 'xlsx'), `notas-${a.id}.xlsx`)
+            void download(() => classroom.gradesExport(a.id, 'xlsx'), T.excelFile(a.id))
           }
         >
-          Notas (Excel)
+          {T.excel}
         </button>
         <button
           type="button"
@@ -426,11 +434,11 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
           onClick={() =>
             void download(
               () => classroom.sheet(a.id, { format: 'pdf', key: false, allStudents: true }),
-              `tarea-${a.id}-enunciados.pdf`,
+              T.sheetsFile(a.id),
             )
           }
         >
-          Enunciados por alumno (PDF)
+          {T.sheets}
         </button>
         <button
           type="button"
@@ -438,14 +446,14 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
           onClick={() =>
             void download(
               () => classroom.sheet(a.id, { format: 'pdf', key: true, allStudents: true }),
-              `tarea-${a.id}-clave.pdf`,
+              T.keyFile(a.id),
             )
           }
         >
-          Clave por alumno (PDF)
+          {T.key}
         </button>
         <button type="button" className="btn ghost small" onClick={() => void remove()}>
-          Borrar tarea
+          {T.delete}
         </button>
       </div>
       {(q.error || error) && <p className="alert error">{q.error?.message ?? error}</p>}
@@ -454,13 +462,15 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
           <table className="data">
             <thead>
               <tr>
-                <th>Alumno</th>
+                <th>{T.student}</th>
                 {g.assignment.items.map((it, i) => (
                   <th key={i} className="num" title={it.title}>
-                    {i + 1}. {it.kind === 'lab' ? 'Lab.' : 'Ej.'}
+                    {i + 1}. {it.kind === 'lab' ? T.lab : T.exercise}
                   </th>
                 ))}
-                <th className="num">Puntos (de {g.total_points})</th>
+                <th className="num">
+                  {T.points(fmtNum(g.total_points, { maximumFractionDigits: 2 }))}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -473,11 +483,7 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
                         <button
                           type="button"
                           className={`btn ghost small${c.needs_review ? ' aula-review' : ''}`}
-                          title={
-                            c.needs_review
-                              ? 'Tiene respuestas abiertas para corregir'
-                              : 'Ver la entrega'
-                          }
+                          title={c.needs_review ? T.needsReview : T.view}
                           onClick={() => setReview(c.submission_id)}
                         >
                           {pct(c.score)}
@@ -488,14 +494,12 @@ function GradesView({ a, onBack }: { a: Assignment; onBack: () => void }) {
                       )}
                     </td>
                   ))}
-                  <td className="num">
-                    {r.points.toLocaleString('es-AR', { maximumFractionDigits: 2 })}
-                  </td>
+                  <td className="num">{fmtNum(r.points, { maximumFractionDigits: 2 })}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {!g.rows.length && <p className="empty">Todavía no hay alumnos en el curso.</p>}
+          {!g.rows.length && <p className="empty">{T.noStudents}</p>}
         </div>
       )}
       {review !== null && (
@@ -521,6 +525,7 @@ interface Answer {
 }
 
 function Review({ id, onClose }: { id: number; onClose: () => void }) {
+  const T = useT().classroom.teacher.review;
   const q = useQuery({
     queryKey: ['aula', 'submission', id],
     queryFn: () => classroom.submission(id),
@@ -532,7 +537,8 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
   const save = async () => {
     setError(null);
     try {
-      const v = score.trim() === '' ? null : Number(score.replace(',', '.')) / 100;
+      const n = score.trim() === '' ? null : parseNumber(score);
+      const v = n === null ? null : n / 100;
       await classroom.review(id, v, comment ?? s?.comment ?? '');
       onClose();
     } catch (err) {
@@ -544,25 +550,19 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
     steps?: Record<string, { done: boolean; questions: Answer[] }>;
   };
   return (
-    <div
-      className="card card-pad aula-review-box"
-      role="dialog"
-      aria-label="Revisión de la entrega"
-    >
+    <div className="card card-pad aula-review-box" role="dialog" aria-label={T.label}>
       {q.error && <p className="alert error">{q.error.message}</p>}
       {s && (
         <>
           <h4>
-            {s.student?.display_name} · {s.item_info.title} · intento {s.attempt}
+            {s.student?.display_name} · {s.item_info.title} · {T.attempt(s.attempt)}
           </h4>
-          <p className="help">
-            Automática: {pct(s.auto_score)} · entregada {fmtDate(s.created_at)}
-          </p>
+          <p className="help">{T.auto(pct(s.auto_score), fmtDate(s.created_at))}</p>
           {result.answers && (
             <ul className="lab-checks">
               {result.answers.map((x) => (
                 <li key={x.key} className={x.ok ? 'ok' : 'bad'}>
-                  {x.ok ? '✓' : '✗'} {x.key}: {x.given ?? '—'} (esperado {x.expected_text})
+                  {x.ok ? '✓' : '✗'} {x.key}: {x.given ?? '—'} {T.expected(x.expected_text ?? '')}
                 </li>
               ))}
             </ul>
@@ -571,7 +571,7 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
             Object.entries(result.steps).map(([step, v]) => (
               <div key={step} className="aula-step">
                 <strong>
-                  {v.done ? '✓' : '✗'} Paso «{step}»
+                  {v.done ? '✓' : '✗'} {T.step(step)}
                 </strong>
                 <ul className="lab-checks">
                   {v.questions.map((x) => (
@@ -584,7 +584,7 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
             ))}
           <div className="aula-filters">
             <div className="field">
-              <label htmlFor="aula-rev-score">Nota del docente [%] (vacía = la automática)</label>
+              <label htmlFor="aula-rev-score">{T.score}</label>
               <input
                 id="aula-rev-score"
                 inputMode="decimal"
@@ -597,7 +597,7 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
             </div>
           </div>
           <div className="field">
-            <label htmlFor="aula-rev-comment">Comentario para el alumno</label>
+            <label htmlFor="aula-rev-comment">{T.comment}</label>
             <textarea
               id="aula-rev-comment"
               rows={2}
@@ -607,10 +607,10 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
           </div>
           <div className="calc-row">
             <button type="button" className="btn primary" onClick={() => void save()}>
-              Guardar
+              {T.save}
             </button>
             <button type="button" className="btn ghost" onClick={onClose}>
-              Cerrar
+              {T.close}
             </button>
           </div>
           {error && <p className="alert error">{error}</p>}
@@ -621,6 +621,7 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
 }
 
 function Invites() {
+  const T = useT().classroom.teacher.invites;
   const qc = useQueryClient();
   const q = useQuery({ queryKey: ['aula', 'invites'], queryFn: () => classroom.invites() });
   const [error, setError] = useState<string | null>(null);
@@ -634,18 +635,18 @@ function Invites() {
     }
   };
   return (
-    <section className="card card-pad" aria-label="Invitaciones para docentes">
+    <section className="card card-pad" aria-label={T.title}>
       <h3 className="section-title">
-        Invitaciones para docentes
+        {T.title}
         <button type="button" className="btn small" onClick={() => void create()}>
-          Nueva invitación
+          {T.create}
         </button>
       </h3>
       <ul className="aula-invites">
         {(q.data ?? []).map((i) => (
           <li key={i.code}>
             <code>{i.code}</code>{' '}
-            {i.used_by ? `usada por ${i.used_by}` : `vence ${fmtDate(i.expires_at)}`}
+            {i.used_by ? T.usedBy(i.used_by) : T.expires(fmtDate(i.expires_at))}
           </li>
         ))}
       </ul>

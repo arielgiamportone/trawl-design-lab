@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { useId, useState } from 'react';
 import { api, type ComponentCheckOut } from '../../api/client';
+import { useT } from '../../i18n';
 import { downloadBlob } from '../../lib/download';
 import {
   COMPONENT_KINDS,
   COMPONENT_LABEL,
-  CONTRIB_FIELDS,
+  contribFields,
   draftComponent,
   issueUrl,
   type Component,
@@ -21,6 +22,7 @@ import { ComponentBadges } from './ComponentCatalog';
  */
 export function ContributeForm() {
   const { state, update } = useCase();
+  const T = useT().components;
   const ids = useId();
   const [kind, setKind] = useState<ComponentKind>('wire');
   const [values, setValues] = useState<Record<string, string>>({});
@@ -60,11 +62,7 @@ export function ContributeForm() {
 
   return (
     <div className="contribute" data-testid="contribute">
-      <p className="section-sub">
-        ¿Usa un cable, un cabo o una boya que no está en el catálogo? Cárguelo con los datos de la
-        etiqueta o la ficha del proveedor. Queda guardado sólo en este navegador, marcado como
-        aporte sin verificar, y entra en el cálculo sólo si lo habilita abajo.
-      </p>
+      <p className="section-sub">{T.contribIntro}</p>
       <form
         className="contribute-form"
         onSubmit={(e) => {
@@ -73,9 +71,9 @@ export function ContributeForm() {
         }}
       >
         <label className="field">
-          <span>Tipo</span>
+          <span>{T.type}</span>
           <select
-            aria-label="Tipo de componente del aporte"
+            aria-label={T.contribKind}
             value={kind}
             onChange={(e) => {
               setKind(e.target.value as ComponentKind);
@@ -89,17 +87,17 @@ export function ContributeForm() {
             ))}
           </select>
         </label>
-        {field('name', 'Nombre (como lo conoce en el puerto)')}
-        {field('brand', 'Marca (vacío si no tiene)')}
-        {field('country', 'País (código, p. ej. AR)')}
-        {CONTRIB_FIELDS[kind].map((f) => field(f.field, f.label, f.num))}
-        {field('source', 'Fuente del dato (etiqueta, ficha, proveedor)')}
+        {field('name', T.name)}
+        {field('brand', T.brandField)}
+        {field('country', T.country)}
+        {contribFields(kind).map((f) => field(f.field, f.label, f.num))}
+        {field('source', T.sourceField)}
         <div className="catalog-actions">
           <button type="submit" className="btn" disabled={!draft.name || check.isPending}>
-            {check.isPending ? 'Validando…' : 'Validar'}
+            {check.isPending ? T.validating : T.validate}
           </button>
           <button type="button" className="btn primary" disabled={!check.data?.ok} onClick={save}>
-            Guardar en este navegador
+            {T.saveBrowser}
           </button>
         </div>
       </form>
@@ -111,14 +109,14 @@ export function ContributeForm() {
       {check.data && (
         <div role="status" data-testid="contribution-check">
           {check.data.ok && check.data.issues.length === 0 && (
-            <p className="alert good">Los datos son coherentes con el tipo de componente.</p>
+            <p className="alert good">{T.coherent}</p>
           )}
           {check.data.issues.length > 0 && (
             <ul className="issues">
               {check.data.issues.map((i, k) => (
                 <li key={k} className={i.level === 'error' ? 'crit' : 'warn'}>
                   <span className={`badge ${i.level === 'error' ? 'crit' : 'warn'}`}>
-                    {i.level === 'error' ? 'error' : 'aviso'}
+                    {i.level === 'error' ? T.levelError : T.levelWarn}
                   </span>{' '}
                   {i.message}
                 </li>
@@ -127,22 +125,22 @@ export function ContributeForm() {
           )}
           {check.data.generic && (
             <p className="help">
-              Genérico equivalente: {(check.data.generic as { name?: string }).name}
+              {T.genericEq(String((check.data.generic as { name?: string }).name ?? ''))}
             </p>
           )}
         </div>
       )}
 
-      <h4>Mis aportes</h4>
+      <h4>{T.mine}</h4>
       <label className="check">
         <input
           type="checkbox"
           checked={state.useContributions}
           onChange={(e) => update({ useContributions: e.target.checked })}
         />
-        Usar mis aportes en el cálculo y en el armado
+        {T.useMine}
       </label>
-      {state.contributions.length === 0 && <p className="empty">Todavía no cargó aportes.</p>}
+      {state.contributions.length === 0 && <p className="empty">{T.noneYet}</p>}
       <ul className="contrib-list">
         {state.contributions.map((c) => (
           <li key={c.id} data-contribution={c.id}>
@@ -158,13 +156,13 @@ export function ContributeForm() {
                   )
                 }
               >
-                Exportar
+                {T.export}
               </button>
               <a className="btn small" href={issueUrl(c)} target="_blank" rel="noreferrer">
-                Proponer al catálogo
+                {T.propose}
               </a>
               <button type="button" className="btn small ghost" onClick={() => remove(c.id)}>
-                Borrar
+                {T.remove}
               </button>
             </span>
           </li>

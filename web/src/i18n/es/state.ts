@@ -1,2 +1,3 @@
-/** Textos de «state» (se completan en la extracción de la Fase 18.3). */
-export const state = {};
+/** Textos de «state». */
+export const state = {
+};

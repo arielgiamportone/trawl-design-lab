@@ -1,10 +1,12 @@
 import { useId, useState, type FormEvent } from 'react';
+import { useT } from '../../i18n';
 import { classroom } from '../../lib/classroom';
 
 type Mode = 'login' | 'student' | 'teacher';
 
 /** Inicio de sesión y alta (alumno con código de curso, docente con código de invitación). */
 export function Login() {
+  const T = useT().classroom.login;
   const ids = useId();
   const [mode, setMode] = useState<Mode>('login');
   const [form, setForm] = useState({ username: '', password: '', name: '', code: '' });
@@ -36,18 +38,14 @@ export function Login() {
   return (
     <section className="card card-pad aula-login" aria-labelledby={`${ids}-t`}>
       <h3 className="section-title" id={`${ids}-t`}>
-        {mode === 'login'
-          ? 'Ingresar al aula'
-          : mode === 'student'
-            ? 'Crear cuenta de alumno'
-            : 'Crear cuenta de docente'}
+        {mode === 'login' ? T.titleLogin : mode === 'student' ? T.titleStudent : T.titleTeacher}
       </h3>
-      <div className="segmented" role="group" aria-label="Ingreso o alta">
+      <div className="segmented" role="group" aria-label={T.modeLabel}>
         {(
           [
-            ['login', 'Ingresar'],
-            ['student', 'Soy alumno'],
-            ['teacher', 'Soy docente'],
+            ['login', T.login],
+            ['student', T.imStudent],
+            ['teacher', T.imTeacher],
           ] as const
         ).map(([m, label]) => (
           <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)}>
@@ -57,7 +55,7 @@ export function Login() {
       </div>
       <form onSubmit={send}>
         <div className="field">
-          <label htmlFor={`${ids}-u`}>Usuario</label>
+          <label htmlFor={`${ids}-u`}>{T.username}</label>
           <input
             id={`${ids}-u`}
             autoComplete="username"
@@ -67,7 +65,7 @@ export function Login() {
           />
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-p`}>Contraseña</label>
+          <label htmlFor={`${ids}-p`}>{T.password}</label>
           <input
             id={`${ids}-p`}
             type="password"
@@ -81,7 +79,7 @@ export function Login() {
         {mode !== 'login' && (
           <>
             <div className="field">
-              <label htmlFor={`${ids}-n`}>Nombre o legajo</label>
+              <label htmlFor={`${ids}-n`}>{T.name}</label>
               <input
                 id={`${ids}-n`}
                 value={form.name}
@@ -90,9 +88,7 @@ export function Login() {
               />
             </div>
             <div className="field">
-              <label htmlFor={`${ids}-c`}>
-                {mode === 'student' ? 'Código del curso' : 'Código de invitación'}
-              </label>
+              <label htmlFor={`${ids}-c`}>{mode === 'student' ? T.courseCode : T.inviteCode}</label>
               <input
                 id={`${ids}-c`}
                 autoComplete="off"
@@ -101,16 +97,12 @@ export function Login() {
                 required
               />
             </div>
-            <p className="help">
-              {mode === 'student'
-                ? 'El código se lo da su docente. Usuario: 3 a 40 letras minúsculas, números, punto o guion; la contraseña, de 8 caracteres o más. No se pide correo: si la olvida, su docente le pone una nueva.'
-                : 'Las invitaciones para docentes las genera la administración del aula.'}
-            </p>
+            <p className="help">{mode === 'student' ? T.helpStudent : T.helpTeacher}</p>
           </>
         )}
         <div className="calc-row">
           <button type="submit" className="btn primary" disabled={busy}>
-            {mode === 'login' ? 'Ingresar' : 'Crear cuenta'}
+            {mode === 'login' ? T.login : T.create}
           </button>
         </div>
       </form>

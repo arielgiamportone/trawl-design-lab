@@ -1,13 +1,120 @@
 /** Formulario de parámetros avanzados generado desde ``GET /params``. */
+import { useState } from 'react';
 import type { ParamInfo } from '../api/client';
-import { fmt, parseNumber } from './format';
+import { msg } from '../i18n';
+import { fmt, parseNumber, toInput } from './format';
 import { REGION_LABEL } from './components';
-import { PROPELLER_LABELS, SEABED_LABELS } from './labels';
+import { localized, PROPELLER_LABELS, SEABED_LABELS } from './labels';
+import { toCanonical, toDisplay, unitLabel } from './units';
 
-const BOOL_OPTIONS = [
-  { value: 'true', label: 'Sí' },
-  { value: 'false', label: 'No' },
+function boolOptions() {
+  return [
+    { value: 'true', label: msg().common.yes },
+    { value: 'false', label: msg().common.no },
+  ];
+}
+
+/**
+ * Unidad métrica (del motor) de cada parámetro con unidad. Los de largo, masa y fuerza se
+ * muestran e ingresan en el sistema activo (``toDisplay``/``toCanonical``); el texto guardado en
+ * el caso y lo que se envía a la API quedan siempre en métrico. Las mallas siguen en mm.
+ */
+export const PARAM_UNITS: Record<string, string> = {
+  speeds_kn: 'kn',
+  depth_m: 'm',
+  gallows_m: 'm',
+  vessel_depth_m: 'm',
+  nomura_nhp: 'HP',
+  spread_per_m: '',
+  door_attack_angle_deg: '°',
+  required_area_speed_range_kn: 'kn',
+  sweep_lever_m: 'm',
+  bridle_angle_deg: '°',
+  dan_leno_m: 'm',
+  sweeps_m: 'm',
+  crowfoot_extension_m: 'm',
+  sweeps_martini_delta_deg: '°',
+  martini_mesh_mm: 'mesh_mm',
+  flotation_max_speed_kn: 'kn',
+  float_diameter_mm: 'mm',
+  ballast_min_speed_kn: 'kn',
+  ballast_max_speed_kn: 'kn',
+  adjust_chain_m: 'm',
+  warp_nhp_hp: 'HP',
+  warp_design_speed_kn: 'kn',
+  report_speeds_kn: 'kn',
+};
+
+const SUFFIX_UNITS: [RegExp, string][] = [
+  [/_kn$/, 'kn'],
+  [/_deg$/, '°'],
+  [/_mm$/, 'mm'],
+  [/_m$/, 'm'],
+  [/_kgf$/, 'kgf'],
+  [/_kg$/, 'kg'],
+  [/_hp$/, 'HP'],
 ];
+
+/** Unidad métrica de un parámetro (``''`` = adimensional). */
+export function paramUnit(name: string): string {
+  const known = PARAM_UNITS[name];
+  if (known !== undefined) return known;
+  return SUFFIX_UNITS.find(([re]) => re.test(name))?.[1] ?? '';
+}
+
+/** ¿La unidad cambia de valor en el sistema activo (m → ft…)? */
+export function converts(unit: string): boolean {
+  return !!unit && toDisplay(1, unit) !== 1;
+}
+
+const round = (v: number) => Number(v.toPrecision(6));
+
+/** Texto a mostrar (sistema activo) de un texto guardado en métrico; si no se entiende, tal cual. */
+export function displayText(unit: string, canonical: string): string {
+  if (!converts(unit) || !canonical.trim()) return canonical;
+  const parts = canonical.split(/[;\s]+/).filter(Boolean);
+  const nums = parts.map(parseNumber);
+  if (nums.some((n) => n === null)) return canonical;
+  return nums.map((n) => toInput(round(toDisplay(n as number, unit)))).join('; ');
+}
+
+/** Texto a guardar (métrico) a partir del ingresado en el sistema activo. */
+export function canonicalText(unit: string, text: string): string {
+  if (!converts(unit) || !text.trim()) return text;
+  const parts = text.split(/[;\s]+/).filter(Boolean);
+  const nums = parts.map(parseNumber);
+  if (nums.some((n) => n === null)) return text;
+  return nums.map((n) => String(round(toCanonical(n as number, unit)))).join('; ');
+}
+
+/**
+ * Campo de texto de un valor con unidad: muestra el texto en el sistema activo y entrega a
+ * ``onChange`` el texto en métrico. Si el valor guardado cambia desde afuera (restablecer,
+ * deshacer), el borrador se rehace.
+ */
+export function useUnitText(
+  value: string,
+  unit: string,
+  onChange: (canonical: string) => void,
+): [string, (text: string) => void] {
+  const conv = converts(unit);
+  const [draft, setDraft] = useState(() => displayText(unit, value));
+  const [synced, setSynced] = useState(value);
+  if (conv && value !== synced) {
+    setSynced(value);
+    setDraft(displayText(unit, value));
+  }
+  if (!conv) return [value, onChange];
+  return [
+    draft,
+    (text: string) => {
+      const canon = canonicalText(unit, text);
+      setDraft(text);
+      setSynced(canon);
+      onChange(canon);
+    },
+  ];
+}
 
 export type ParamKind = 'float' | 'int' | 'tuple' | 'enum' | 'string' | 'bool' | 'strlist';
 
@@ -20,6 +127,8 @@ export interface ParamMeta {
   options?: { value: string; label: string }[];
   default: unknown;
   comment: string;
+  /** Unidad métrica del motor (``''`` o ausente = sin unidad). */
+  unit?: string;
 }
 
 /** Valores crudos (texto) del formulario por nombre de parámetro. */
@@ -36,12 +145,13 @@ export function paramMeta(p: ParamInfo): ParamMeta {
     tupleLen: null,
     default: p.default,
     comment: p.comment ?? '',
+    unit: paramUnit(p.name),
   };
   if (base === 'float') meta.kind = 'float';
   else if (base === 'int') meta.kind = 'int';
   else if (base === 'bool') {
     meta.kind = 'bool';
-    meta.options = BOOL_OPTIONS;
+    meta.options = boolOptions();
   } else if (base === 'tuple[str,...]') meta.kind = 'strlist';
   else if (p.name === 'component_region') {
     meta.kind = 'enum';
@@ -60,15 +170,17 @@ export function paramMeta(p: ParamInfo): ParamMeta {
   return meta;
 }
 
-/** Texto del valor por defecto (para el placeholder). */
+/** Texto del valor por defecto (para el placeholder), en el sistema de unidades activo. */
 export function defaultText(meta: ParamMeta): string {
   const d = meta.default;
-  if (meta.name === 'seabed' && d == null) return 'sin rozamiento de fondo';
-  if (meta.kind === 'bool') return d ? 'Sí' : 'No';
-  if (meta.kind === 'strlist' && d == null) return 'todas';
-  if (d === null || d === undefined) return 'automático';
-  if (Array.isArray(d)) return d.map((x) => fmt(x as number)).join('; ');
-  if (typeof d === 'number') return fmt(d);
+  const M = msg();
+  const unit = meta.unit ?? '';
+  if (meta.name === 'seabed' && d == null) return M.labels.paramDefaults.noSeabed;
+  if (meta.kind === 'bool') return d ? M.common.yes : M.common.no;
+  if (meta.kind === 'strlist' && d == null) return M.labels.paramDefaults.all;
+  if (d === null || d === undefined) return M.labels.paramDefaults.auto;
+  if (Array.isArray(d)) return d.map((x) => fmt(toDisplay(x as number, unit))).join('; ');
+  if (typeof d === 'number') return fmt(toDisplay(d, unit));
   if (meta.kind === 'enum')
     return (
       PROPELLER_LABELS[String(d)] ??
@@ -85,43 +197,44 @@ export type ParseResult = { ok: true; value: unknown } | { ok: false; error: str
 export function parseParam(meta: ParamMeta, text: string): ParseResult | null {
   const t = text.trim();
   if (!t) return null;
+  const E = msg().labels.paramErrors;
   switch (meta.kind) {
     case 'float': {
       const n = parseNumber(t);
-      return n === null ? { ok: false, error: 'Ingrese un número' } : { ok: true, value: n };
+      return n === null ? { ok: false, error: E.number } : { ok: true, value: n };
     }
     case 'int': {
       const n = parseNumber(t);
       if (n === null || !Number.isInteger(n))
-        return { ok: false, error: 'Ingrese un número entero' };
+        return { ok: false, error: E.integer };
       return { ok: true, value: n };
     }
     case 'tuple': {
       const parts = t.split(/[;\s]+/).filter(Boolean);
       const nums = parts.map(parseNumber);
       if (nums.some((n) => n === null)) {
-        return { ok: false, error: 'Lista de números separados por «;»' };
+        return { ok: false, error: E.list };
       }
       if (meta.tupleLen !== null && nums.length !== meta.tupleLen) {
-        return { ok: false, error: `Se esperan ${meta.tupleLen} valores separados por «;»` };
+        return { ok: false, error: E.tupleLen(meta.tupleLen) };
       }
-      if (nums.length === 0) return { ok: false, error: 'Lista vacía' };
+      if (nums.length === 0) return { ok: false, error: E.empty };
       return { ok: true, value: nums };
     }
     case 'bool':
       if (t === 'true' || t === 'false') return { ok: true, value: t === 'true' };
-      return { ok: false, error: 'Elija Sí o No' };
+      return { ok: false, error: E.yesNo };
     case 'strlist': {
       const parts = t
         .split(/[;,]/)
         .map((x) => x.trim())
         .filter(Boolean);
-      return parts.length ? { ok: true, value: parts } : { ok: false, error: 'Lista vacía' };
+      return parts.length ? { ok: true, value: parts } : { ok: false, error: E.empty };
     }
     case 'enum':
       return meta.options?.some((o) => o.value === t)
         ? { ok: true, value: t }
-        : { ok: false, error: 'Opción no válida' };
+        : { ok: false, error: E.option };
     default:
       return { ok: true, value: t };
   }
@@ -147,19 +260,11 @@ export function buildParams(
 
 /** Nombre legible de un parámetro (``door_attack_angle_deg`` → «door attack angle [°]»). */
 export function paramTitle(name: string): string {
-  const units: [RegExp, string][] = [
-    [/_kn$/, ' [kn]'],
-    [/_deg$/, ' [°]'],
-    [/_mm$/, ' [mm]'],
-    [/_m$/, ' [m]'],
-    [/_kg$/, ' [kg]'],
-    [/_hp$/, ' [HP]'],
-  ];
   let unit = '';
   let base = name;
-  for (const [re, u] of units) {
+  for (const [re, u] of SUFFIX_UNITS) {
     if (re.test(base)) {
-      unit = u;
+      unit = ` [${unitLabel(u)}]`;
       base = base.replace(re, '');
       break;
     }
@@ -167,58 +272,15 @@ export function paramTitle(name: string): string {
   return base.replace(/_/g, ' ') + unit;
 }
 
-/** Nombres en español de los parámetros de ``DesignCase``. */
-export const PARAM_LABELS: Record<string, string> = {
-  speeds_kn: 'Velocidades de arrastre [kn]',
-  depth_m: 'Profundidad de trabajo [m]',
-  gallows_m: 'Separación de pastecas [m]',
-  vessel_depth_m: 'Puntal del buque [m]',
-  ft_propeller: 'Hélice para el tiro (Fridman)',
-  fridman_kf: 'Coeficiente kf de Fridman',
-  koyama_k: 'Coeficiente k de Koyama',
-  nomura_k3: 'Coeficiente k3 de Nomura',
-  nomura_nhp: 'Potencias de Nomura [HP]',
-  spread_per_m: 'Apertura por metro de cable',
-  spread_correction_factor: 'Factor de corrección de la apertura',
-  door_attack_angle_deg: 'Ángulo de ataque del portón [°]',
-  rob_share: 'Fracción ROB del tiro',
-  required_area_speed_range_kn: 'Rango de velocidades para el área del portón [kn]',
-  sweep_lever_m: 'Brazo de palanca de las patentes [m]',
-  bridle_angle_deg: 'Ángulo de las bridas [°]',
-  dan_leno_m: 'Dan leno [m]',
-  bridle_chain_ratio: 'Razón cadena/brida',
-  sweeps_m: 'Patentes [m]',
-  crowfoot_extension_m: 'Alargue de pies de gallo [m]',
-  dremiere_ratio: 'Razón de Dremière',
-  sweeps_martini_delta_deg: 'Δ ángulo de patentes (Martini) [°]',
-  sweeps_factor: 'Factor de patentes',
-  working_u2: 'U2 de la red trabajando',
-  warp_shallow_factor: 'Factor de cable, aguas someras',
-  warp_deep_factor: 'Factor de cable, aguas profundas',
-  catenary_ratio: 'Razón de catenaria fL/L',
-  martini_mr_meshes: 'Mallas MR (Martini)',
-  martini_factor: 'Factor de Martini',
-  martini_mesh_mm: 'Mallero para Martini [mm]',
-  prado_flotation_k: 'k de flotación (Prado)',
-  prado_ballast_k: 'k de lastre (Prado)',
-  flotation_max_speed_kn: 'Velocidad máxima para flotación [kn]',
-  float_count: 'Cantidad de boyas',
-  float_diameter_mm: 'Diámetro de boya [mm]',
-  float_wing_share: 'Fracción de boyas en las alas',
-  float_front_fifth_share: 'Fracción en el primer quinto del ala',
-  headrope_rope: 'Cabo de la lima (id)',
-  footrope_rope: 'Cabo del burlón (id)',
-  ballast_min_speed_kn: 'Velocidad para lastre mínimo [kn]',
-  ballast_max_speed_kn: 'Velocidad para lastre máximo [kn]',
-  adjust_chain_m: 'Cadena de ajuste [m]',
-  warp_nhp_hp: 'Potencia para dimensionar el cable [HP]',
-  warp_safety_factor: 'Factor de seguridad del cable',
-  warp_design_speed_kn: 'Velocidad de diseño del cable [kn]',
-  warp_spare_fraction: 'Fracción de cable de repuesto',
-  warp_drag_shares: 'Fracciones de resistencia del cable',
-  report_speeds_kn: 'Velocidades de RN en el resumen [kn]',
-  seabed: 'Tipo de fondo (rozamiento del tren y portones)',
-};
+/** Nombres (idioma activo) de los parámetros de ``DesignCase``, con la unidad que se muestra. */
+export const PARAM_LABELS: Record<string, string> = localized(() => {
+  const out: Record<string, string> = {};
+  for (const [k, name] of Object.entries(msg().labels.params)) {
+    const unit = paramUnit(k);
+    out[k] = unit ? `${name} [${unitLabel(unit)}]` : name;
+  }
+  return out;
+});
 
 export function paramLabel(name: string): string {
   return PARAM_LABELS[name] ?? paramTitle(name);

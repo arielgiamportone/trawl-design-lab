@@ -1,12 +1,35 @@
 /** Lance progresivo (``POST /simulate/haul``): pedido, filas de los gráficos y resumen. */
 import type { DesignRequest, HaulRequest, HaulResponse } from '../api/client';
-import { fmt, fmtFixed } from './format';
+import { msg } from '../i18n';
+import { fmtFixed } from './format';
+import { fmtU } from './units';
 
 /** Tipos de captura: densidad aparente en el copo y de los organismos [kg/m³] (A VERIFICAR). */
 export const CATCH_TYPES = [
-  { id: 'fish', label: 'Peces', bulk: 750, body: 1070 },
-  { id: 'crustacean', label: 'Crustáceos (langostilla, camarón)', bulk: 850, body: 1150 },
-  { id: 'mixed', label: 'Mezcla con fango o conchilla', bulk: 1000, body: 1300 },
+  {
+    id: 'fish',
+    get label() {
+      return msg().haul.catchTypes.fish;
+    },
+    bulk: 750,
+    body: 1070,
+  },
+  {
+    id: 'crustacean',
+    get label() {
+      return msg().haul.catchTypes.crustacean;
+    },
+    bulk: 850,
+    body: 1150,
+  },
+  {
+    id: 'mixed',
+    get label() {
+      return msg().haul.catchTypes.mixed;
+    },
+    bulk: 1000,
+    body: 1300,
+  },
 ] as const;
 export type CatchType = (typeof CATCH_TYPES)[number]['id'];
 
@@ -113,36 +136,32 @@ export function haulRows(r: HaulResponse): HaulRow[] {
   });
 }
 
-/** Frase con el efecto de la captura entre el primer y el último paso. */
+/** Frase con el efecto de la captura entre el primer y el último paso (idioma y unidades activos). */
 export function haulSummary(rows: HaulRow[]): string | null {
   const a = rows[0];
   const b = rows[rows.length - 1];
   if (!a || !b || rows.length < 2 || b.catchKg === a.catchKg) return null;
+  const T = msg().haul.summary;
   const parts: string[] = [];
   const diff = (x: number | null, y: number | null) => (x === null || y === null ? null : y - x);
   const pct = (x: number | null, d: number | null) =>
     x === null || d === null || x === 0
       ? ''
-      : ` (${d > 0 ? '+' : ''}${fmtFixed((d / x) * 100, 0)} %)`;
+      : T.pct(`${d > 0 ? '+' : ''}${fmtFixed((d / x) * 100, 0)}`);
   const dDp = diff(a.doorSpread, b.doorSpread);
   if (dDp !== null)
     parts.push(
-      `la separación de portones ${dDp < 0 ? 'baja' : 'sube'} ${fmtFixed(Math.abs(dDp), 1)} m${pct(a.doorSpread, dDp)}`,
+      T.doors(dDp < 0, fmtU(Math.abs(dDp), 'm', { digits: 1 }), pct(a.doorSpread, dDp)),
     );
   const dPull = diff(a.pull, b.pull);
   if (dPull !== null)
-    parts.push(
-      `el tiro en el buque ${dPull > 0 ? 'sube' : 'baja'} ${fmt(Math.round(Math.abs(dPull)))} kgf${pct(a.pull, dPull)}`,
-    );
+    parts.push(T.pull(dPull > 0, fmtU(Math.abs(dPull), 'kgf', { digits: 0 }), pct(a.pull, dPull)));
   const dAh = diff(a.ah, b.ah);
-  if (dAh !== null)
-    parts.push(
-      `la abertura horizontal ${dAh < 0 ? 'baja' : 'sube'} ${fmtFixed(Math.abs(dAh), 1)} m`,
-    );
+  if (dAh !== null) parts.push(T.ah(dAh < 0, fmtU(Math.abs(dAh), 'm', { digits: 1 })));
   if (!parts.length) return null;
   const last = parts.pop() as string;
-  const text = parts.length ? `${parts.join(', ')} y ${last}` : last;
-  return `De ${fmt(a.catchKg)} a ${fmt(b.catchKg)} kg de captura, ${text}.`;
+  const text = parts.length ? `${parts.join(', ')}${T.and}${last}` : last;
+  return T.sentence(fmtU(a.catchKg, 'kg', { unit: false }), fmtU(b.catchKg, 'kg'), text);
 }
 
 /** Marcas "redondas" (1, 2, 2,5 o 5 × 10ⁿ) que cubren [lo, hi] con unas ``count`` divisiones. */

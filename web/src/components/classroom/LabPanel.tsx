@@ -1,35 +1,40 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { api, type Lab, type LabStep } from '../../api/client';
+import { useT } from '../../i18n';
 import { classroom, pct } from '../../lib/classroom';
 import { labSubmission, saveLab, useActiveLab, type ActiveLab } from '../../lib/lab';
 import { goToMode } from '../../lib/mode';
 import { goToTab } from '../../lib/tabs';
 import { useCase } from '../../state/useCase';
 
-const TAB_NAMES: Record<string, string> = {
-  resumen: 'Resumen',
-  graficos: 'Gráficos',
-  diseno: 'Diseño interactivo',
-  paneles: 'Editor de paneles',
-  plano: 'Plano',
-  comparar: 'Comparar',
-  optimizar: 'Optimizar',
-  simulacion: 'Simulación',
-  descargas: 'Descargas',
-  catalogo: 'Catálogo FAO',
-  componentes: 'Componentes',
-  construccion: 'Construcción',
-  economia: 'Economía',
-  lotes: 'Lotes y flota',
-  notas: 'Notas y erratas',
-};
+/**
+ * Opciones de una pregunta de opción múltiple como pares (valor, texto). El valor es el id estable
+ * de la opción cuando la API lo da (``option_ids``), así la respuesta guardada sirve en los dos
+ * idiomas; la corrección de ``/teaching/labs/check`` acepta el id o el texto en cualquier idioma.
+ */
+function choiceOptions(q: {
+  options?: string[] | null;
+  option_ids?: string[] | null;
+}): { value: string; text: string }[] {
+  const texts = q.options ?? [];
+  const ids = q.option_ids && q.option_ids.length === texts.length ? q.option_ids : null;
+  return texts.map((text, i) => ({ value: ids ? ids[i]! : text, text }));
+}
+
+/** Valor del selector para una respuesta guardada (también si se guardó el texto de la opción). */
+function choiceValue(opts: { value: string; text: string }[], saved: string | undefined): string {
+  if (!saved) return '';
+  if (opts.some((o) => o.value === saved)) return saved;
+  return opts.find((o) => o.text === saved)?.value ?? '';
+}
 
 /**
  * Panel del laboratorio en curso, sobre el modo experto: el paso, dónde hacerlo, la comprobación
  * con el caso abierto y las preguntas. Desde una tarea del aula, entrega los pasos comprobados.
  */
 export function LabPanel() {
+  const T = useT().classroom.lab;
   const active = useActiveLab();
   const q = useQuery({
     queryKey: ['teaching', 'lab', active?.labId],
@@ -43,18 +48,18 @@ export function LabPanel() {
   return (
     <aside
       className={`lab-panel card${collapsed ? ' collapsed' : ''}`}
-      aria-label="Laboratorio guiado"
+      aria-label={T.panelLabel}
       data-testid="lab-panel"
     >
       <header className="lab-head">
-        <strong>{lab ? lab.title : 'Laboratorio'}</strong>
+        <strong>{lab ? lab.title : T.fallbackTitle}</strong>
         <button
           type="button"
           className="btn ghost small"
           aria-expanded={!collapsed}
           onClick={() => setCollapsed(!collapsed)}
         >
-          {collapsed ? 'Abrir' : 'Achicar'}
+          {collapsed ? T.open : T.collapse}
         </button>
       </header>
       {q.error && (
@@ -68,6 +73,7 @@ export function LabPanel() {
 }
 
 function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
+  const T = useT().classroom.lab;
   const { committed, design, dirty } = useCase();
   const n = lab.step_list.length;
   const idx = Math.min(active.step, n);
@@ -116,7 +122,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
       const r = await classroom.submit(active.source.assignmentId, active.source.item, {
         steps: labSubmission(active),
       });
-      setSent(r.score === null ? r.message || 'Entrega recibida' : `Entregado: ${pct(r.score)}`);
+      setSent(r.score === null ? r.message || T.received : T.submitted(pct(r.score)));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -130,7 +136,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
     return (
       <div className="lab-body">
         <p>
-          <strong>Fin del laboratorio.</strong> {done} de {n} pasos cumplidos.
+          <strong>{T.finished}</strong> {T.doneOf(done, n)}
         </p>
         {lab.closing && <p className="help">{lab.closing}</p>}
         {active.source.kind === 'assignment' && (
@@ -140,7 +146,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
             disabled={busy}
             onClick={() => void submit()}
           >
-            Entregar al docente
+            {T.submit}
           </button>
         )}
         {sent && (
@@ -155,10 +161,10 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
         )}
         <div className="calc-row">
           <button type="button" className="btn small" onClick={() => go(n - 1)}>
-            ← Volver
+            {T.back}
           </button>
           <button type="button" className="btn ghost small" onClick={leave}>
-            Salir del laboratorio
+            {T.leaveLab}
           </button>
         </div>
       </div>
@@ -175,15 +181,13 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
 
   return (
     <div className="lab-body">
-      <p className="lab-progress">
-        Paso {idx + 1} de {n} · {done} cumplidos
-      </p>
+      <p className="lab-progress">{T.progress(idx + 1, n, done)}</p>
       <h4>{step.title}</h4>
       <p>{step.instruction}</p>
       {step.target.tab && (
         <p className="help">
           <button type="button" className="btn small" onClick={() => goToTab(step.target.tab!)}>
-            Ir a «{TAB_NAMES[step.target.tab] ?? step.target.tab}»
+            {T.goTo(T.tabs[step.target.tab] ?? step.target.tab)}
           </button>{' '}
           {step.target.hint}
         </p>
@@ -203,6 +207,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
       {step.questions.map((qq) => {
         const r = qres.get(qq.id);
         const fid = `lab-${step.id}-${qq.id}`;
+        const opts = qq.kind === 'choice' ? choiceOptions(qq) : [];
         return (
           <div
             className={`field${r ? (r.ok === false ? ' bad' : r.ok ? ' ok' : '') : ''}`}
@@ -215,12 +220,14 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
             {qq.kind === 'choice' ? (
               <select
                 id={fid}
-                value={st.answers[qq.id] ?? ''}
+                value={choiceValue(opts, st.answers[qq.id])}
                 onChange={(e) => setAnswer(qq.id, e.target.value)}
               >
-                <option value="">Elegir…</option>
-                {(qq.options ?? []).map((o) => (
-                  <option key={o}>{o}</option>
+                <option value="">{T.choose}</option>
+                {opts.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.text}
+                  </option>
                 ))}
               </select>
             ) : qq.kind === 'text' ? (
@@ -241,8 +248,8 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
             )}
             {r && (
               <span className="aula-mark">
-                {r.ok === null ? r.message : r.ok ? '✓ correcta' : `✗ ${r.message}`}
-                {r.ok === false && r.expected_text ? ` · su caso da ${r.expected_text}` : ''}
+                {r.ok === null ? r.message : r.ok ? T.correct : `✗ ${r.message}`}
+                {r.ok === false && r.expected_text ? T.yourCase(r.expected_text) : ''}
               </span>
             )}
           </div>
@@ -255,7 +262,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
       )}
       {res && (
         <p className={`alert ${res.done ? 'good' : 'warn'}`} role="status">
-          {res.done ? 'Paso cumplido.' : 'Todavía falta algo: revise las marcas.'}
+          {res.done ? T.stepDone : T.stepMissing}
         </p>
       )}
       <div className="calc-row">
@@ -265,7 +272,7 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
           disabled={busy || !committed || dirty || design.isFetching}
           onClick={() => void check(step)}
         >
-          {busy ? 'Comprobando…' : 'Comprobar con mi caso'}
+          {busy ? T.checking : T.check}
         </button>
       </div>
       <div className="calc-row">
@@ -275,13 +282,13 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
           disabled={idx === 0}
           onClick={() => go(idx - 1)}
         >
-          ← Anterior
+          {T.prev}
         </button>
         <button type="button" className="btn small" onClick={() => go(idx + 1)}>
-          {idx + 1 < n ? 'Siguiente →' : 'Terminar'}
+          {idx + 1 < n ? T.next : T.finish}
         </button>
         <button type="button" className="btn ghost small" onClick={leave}>
-          Salir
+          {T.leave}
         </button>
       </div>
     </div>

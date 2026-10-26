@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useT } from '../../i18n';
 import { classroom, useSession } from '../../lib/classroom';
 import { loadJson, saveJson } from '../../lib/storage';
 import { Login } from './Login';
@@ -9,17 +10,13 @@ import { TeacherView } from './TeacherView';
 
 type View = 'practica' | 'aula';
 const VIEW_KEY = 'trawl-design-lab:aula-view';
-const ROLE: Record<string, string> = {
-  student: 'alumno',
-  teacher: 'docente',
-  admin: 'administración',
-};
 
 /**
  * Modo «Aula UTN» (Fase 17): práctica libre con el banco de ejercicios y los laboratorios (sin
  * cuenta, también sin conexión) y el aula del curso (alumnos y docentes, en línea).
  */
 export function Classroom() {
+  const T = useT().classroom;
   const session = useSession();
   const [view, setViewState] = useState<View>(() => loadJson<View>(VIEW_KEY) ?? 'practica');
   const setView = (v: View) => {
@@ -29,28 +26,28 @@ export function Classroom() {
   return (
     <div className="aula" data-testid="aula">
       <div className="aula-top">
-        <h2 className="section-title">Aula UTN</h2>
-        <div className="segmented" role="group" aria-label="Sección del aula">
+        <h2 className="section-title">{T.shell.title}</h2>
+        <div className="segmented" role="group" aria-label={T.shell.sectionLabel}>
           <button
             type="button"
             aria-pressed={view === 'practica'}
             onClick={() => setView('practica')}
           >
-            Práctica libre
+            {T.shell.practice}
           </button>
           <button type="button" aria-pressed={view === 'aula'} onClick={() => setView('aula')}>
-            {session ? 'Mis cursos' : 'Cursos (ingresar)'}
+            {session ? T.shell.myCourses : T.shell.coursesLogin}
           </button>
         </div>
         {session && (
           <span className="aula-who">
-            {`${session.user.display_name} (${ROLE[session.user.role] ?? session.user.role})`}
+            {`${session.user.display_name} (${T.roles[session.user.role] ?? session.user.role})`}
             <button
               type="button"
               className="btn ghost small"
               onClick={() => void classroom.logout()}
             >
-              Salir
+              {T.shell.logout}
             </button>
           </span>
         )}
@@ -61,6 +58,7 @@ export function Classroom() {
 }
 
 function ClassArea() {
+  const T = useT().classroom;
   const session = useSession();
   const status = useQuery({
     queryKey: ['aula', 'status'],
@@ -77,10 +75,11 @@ function ClassArea() {
   if (status.error)
     return (
       <p className="alert warn" role="status">
-        El aula necesita conexión con la API: {status.error.message}
+        {T.shell.needsApi}
+        {status.error.message}
       </p>
     );
-  if (!status.data) return <p className="empty">Consultando el aula…</p>;
+  if (!status.data) return <p className="empty">{T.shell.checking}</p>;
   if (!status.data.enabled)
     return (
       <p className="alert info" role="status">
@@ -95,12 +94,12 @@ function ClassArea() {
           {me.error.message}
         </p>
         <button type="button" className="btn" onClick={() => void classroom.logout()}>
-          Volver a ingresar
+          {T.shell.loginAgain}
         </button>
       </div>
     );
   }
-  if (!me.data) return <p className="empty">Cargando…</p>;
+  if (!me.data) return <p className="empty">{T.shell.loading}</p>;
   const courses = me.data.courses;
   return me.data.role === 'student' ? (
     <StudentView courses={courses} />

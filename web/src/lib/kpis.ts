@@ -1,6 +1,8 @@
 /** Indicadores clave (KPI) del caso. */
 import type { DesignData } from '../api/result';
+import { msg } from '../i18n';
 import { fmt, fmtFixed } from './format';
+import { fmtU, toDisplay, unitLabel } from './units';
 import { at, designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
 
 export interface Tile {
@@ -26,57 +28,61 @@ export function tiles(d: DesignData): Tile[] {
   const sel = d.result.warps?.selection;
   const req = num(d, 'warp_min_breaking_load_kgf');
   const rnMod3 = mod ? at(d.result.drag.rn.mod, d.case.speeds_kn.indexOf(3)) : null;
+  const K = msg().labels.kpis;
+  const m2 = (v: number | null) => fmtFixed(v === null ? null : toDisplay(v, 'm'), 2);
+  const kgf = (v: number) => `${fmt(Math.round(toDisplay(v, 'kgf')))} ${unitLabel('kgf')}`;
+  const ss = num(d, 'solid_surface_m2');
   return [
     {
       key: 'vertical_opening_m',
-      label: 'Abertura vertical',
-      value: fmtFixed(num(d, 'vertical_opening_m'), 2),
-      unit: 'm',
-      sub: 'AV de diseño (Suzuki)',
+      label: K.vertical_opening_m,
+      value: m2(num(d, 'vertical_opening_m')),
+      unit: unitLabel('m'),
+      sub: K.avSub,
     },
     {
       key: 'horizontal_opening_m',
-      label: 'Abertura horizontal',
-      value: fmtFixed(num(d, 'horizontal_opening_m'), 2),
-      unit: 'm',
-      sub: 'AH entre puntas de ala',
+      label: K.horizontal_opening_m,
+      value: m2(num(d, 'horizontal_opening_m')),
+      unit: unitLabel('m'),
+      sub: K.ahSub,
     },
     {
       key: 'rn_std_3kn_kgf',
-      label: 'RN a 3 kn',
-      value: fmt(Math.round(num(d, 'rn_std_3kn_kgf') ?? NaN)),
-      unit: 'kgf',
-      sub: rnMod3 != null ? `modificada: ${fmt(Math.round(rnMod3))} kgf` : 'resistencia de la red',
+      label: K.rn_std_3kn_kgf,
+      value: fmt(Math.round(toDisplay(num(d, 'rn_std_3kn_kgf') ?? NaN, 'kgf'))),
+      unit: unitLabel('kgf'),
+      sub: rnMod3 != null ? K.modified(kgf(rnMod3)) : K.rnSub,
     },
     {
       key: 'max_speed_kn',
-      label: 'Vel. máx. remolcable',
+      label: K.max_speed_kn,
       value: fmtFixed(num(d, 'max_speed_kn'), 2),
       unit: 'kn',
       sub:
-        maxMod != null ? `modificada: ${fmtFixed(maxMod, 2)} kn` : 'tiro disponible = resistencia',
+        maxMod != null ? K.modified(`${fmtFixed(maxMod, 2)} kn`) : K.maxSpeedSub,
     },
     {
       key: 'warp_selected',
-      label: 'Cable seleccionado',
+      label: K.warp_selected,
       value: sel
-        ? `Ø ${fmt(sel.diameter_mm)} mm · ${fmt(sel.breaking_load_t)} t`
+        ? `Ø ${fmtU(sel.diameter_mm, 'mm')} · ${fmtU(sel.breaking_load_t, 't')}`
         : String(d.summary.warp_selected ?? '—'),
       text: true,
-      sub: req != null ? `rotura mínima requerida ${fmt(Math.round(req))} kgf` : undefined,
+      sub: req != null ? K.warpReq(kgf(req)) : undefined,
       badge:
         meets === null
           ? undefined
           : meets
-            ? { tone: 'good', text: '✓ Cumple la rotura' }
-            : { tone: 'crit', text: '⚠ No cumple la rotura' },
+            ? { tone: 'good', text: K.meets }
+            : { tone: 'crit', text: K.fails },
     },
     {
       key: 'solid_surface_m2',
-      label: 'Superficie sólida',
-      value: fmtFixed(num(d, 'solid_surface_m2'), 2),
-      unit: 'm²',
-      sub: 'Ss de los paños',
+      label: K.solid_surface_m2,
+      value: fmtFixed(ss === null ? null : toDisplay(ss, 'm²'), 2),
+      unit: unitLabel('m²'),
+      sub: K.ssSub,
     },
   ];
 }

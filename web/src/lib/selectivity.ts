@@ -9,26 +9,26 @@ import type {
   SelectivityResponse,
   SpeciesOut,
 } from '../api/client';
+import { msg } from '../i18n';
 import type { Frame, Geometry } from './explore';
 
 export type Orientation = 'diamond' | 't90' | 'square';
 
+const orientation = (id: Orientation) => ({
+  id,
+  get label() {
+    return msg().selectivity.orientations[id].label;
+  },
+  get help() {
+    return msg().selectivity.orientations[id].help;
+  },
+});
+
+/** Orientaciones de la malla del copo (textos en el idioma activo). */
 export const ORIENTATIONS: { id: Orientation; label: string; help: string }[] = [
-  {
-    id: 'diamond',
-    label: 'Rombo',
-    help: 'Malla rómbica clásica: la tensión a lo largo del copo la cierra.',
-  },
-  {
-    id: 't90',
-    label: 'T90',
-    help: 'El mismo paño girado 90°: el nudo tiende a mantener la malla abierta a lo ancho.',
-  },
-  {
-    id: 'square',
-    label: 'Cuadrada',
-    help: 'Hilos a lo largo y a lo ancho: la malla no se cierra con la tensión.',
-  },
+  orientation('diamond'),
+  orientation('t90'),
+  orientation('square'),
 ];
 
 export const orientationLabel = (o: string): string =>

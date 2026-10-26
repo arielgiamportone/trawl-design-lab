@@ -1,3 +1,4 @@
 import type { Messages } from '../es';
 
-export const api: Messages['api'] = {};
+export const api: Messages['api'] = {
+};

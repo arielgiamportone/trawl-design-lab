@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { api, type ExerciseSummary, type LabSummary } from '../../api/client';
-import { chapterLabel, LEVEL_LABEL } from '../../lib/classroom';
+import { useT } from '../../i18n';
+import { chapterLabel, levelLabel, levelLabels } from '../../lib/classroom';
 import { ExerciseCard } from './ExerciseCard';
 import { useBeginLab } from './useBeginLab';
 
@@ -15,6 +16,7 @@ function newSeed(): number {
  * laboratorios guiados sobre el caso abierto.
  */
 export function Practice() {
+  const T = useT().classroom.practice;
   const exercises = useQuery({
     queryKey: ['teaching', 'exercises'],
     queryFn: ({ signal }) => api.exercises(signal),
@@ -39,16 +41,12 @@ export function Practice() {
 
   return (
     <div className="aula-practice" data-testid="practice">
-      <p className="section-sub">
-        Ejercicios de los capítulos del libro con datos que cambian en cada intento y corrección
-        inmediata, y laboratorios que se recorren paso a paso sobre la app. Funciona sin cuenta y
-        sin conexión.
-      </p>
+      <p className="section-sub">{T.intro}</p>
       <div className="aula-filters">
         <div className="field">
-          <label htmlFor="aula-ch">Capítulo</label>
+          <label htmlFor="aula-ch">{T.chapter}</label>
           <select id="aula-ch" value={chapter} onChange={(e) => setChapter(e.target.value)}>
-            <option value="">Todos</option>
+            <option value="">{T.all}</option>
             {chapters.map((c) => (
               <option key={c} value={c}>
                 {chapterLabel(c)}
@@ -57,10 +55,10 @@ export function Practice() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor="aula-lv">Nivel</label>
+          <label htmlFor="aula-lv">{T.level}</label>
           <select id="aula-lv" value={level} onChange={(e) => setLevel(e.target.value)}>
-            <option value="">Todos</option>
-            {Object.entries(LEVEL_LABEL).map(([k, v]) => (
+            <option value="">{T.all}</option>
+            {Object.entries(levelLabels()).map(([k, v]) => (
               <option key={k} value={k}>
                 {v}
               </option>
@@ -85,7 +83,7 @@ export function Practice() {
       ) : (
         <ExerciseList items={shown} onOpen={(id) => setOpen({ id, seed: newSeed() })} />
       )}
-      <h3 className="section-title aula-h">Laboratorios guiados</h3>
+      <h3 className="section-title aula-h">{T.labsTitle}</h3>
       <LabList items={(labs.data ?? []).filter((l) => !chapter || l.chapter === chapter)} />
     </div>
   );
@@ -98,14 +96,15 @@ function ExerciseList({
   items: ExerciseSummary[];
   onOpen: (id: string) => void;
 }) {
-  if (!items.length) return <p className="empty">No hay ejercicios con esos filtros.</p>;
+  const T = useT().classroom.practice;
+  if (!items.length) return <p className="empty">{T.noExercises}</p>;
   return (
-    <ul className="aula-list" aria-label="Ejercicios">
+    <ul className="aula-list" aria-label={T.exercisesLabel}>
       {items.map((e) => (
         <li key={e.id}>
           <button type="button" className="aula-row" onClick={() => onOpen(e.id)}>
             <span className="aula-row-title">{e.title}</span>
-            <span className="badge">{LEVEL_LABEL[e.level]}</span>
+            <span className="badge">{levelLabel(e.level)}</span>
             <span className="aula-row-sub">{chapterLabel(e.chapter)}</span>
           </button>
         </li>
@@ -127,6 +126,7 @@ function OpenExercise({
   onBook: () => void;
   onBack: () => void;
 }) {
+  const T = useT().classroom.practice;
   const q = useQuery({
     queryKey: ['teaching', 'exercise', id, seed],
     queryFn: ({ signal }) => api.exercise(id, seed, signal),
@@ -136,13 +136,13 @@ function OpenExercise({
     <div className="aula-open">
       <div className="calc-row">
         <button type="button" className="btn ghost small" onClick={onBack}>
-          ← Todos los ejercicios
+          {T.allExercises}
         </button>
         <button type="button" className="btn small" onClick={onNew}>
-          Otros datos
+          {T.newData}
         </button>
         <button type="button" className="btn small" onClick={onBook} disabled={seed === 0}>
-          Datos del libro
+          {T.bookData}
         </button>
       </div>
       {q.error && (
@@ -154,7 +154,7 @@ function OpenExercise({
         <ExerciseCard
           ex={q.data}
           onSubmit={(answers) => api.grade(id, seed, answers)}
-          footer={seed === 0 ? 'Datos del libro (semilla 0).' : `Datos de la semilla ${seed}.`}
+          footer={seed === 0 ? T.bookSeed : T.seed(seed)}
         />
       )}
     </div>
@@ -162,6 +162,7 @@ function OpenExercise({
 }
 
 function LabList({ items }: { items: LabSummary[] }) {
+  const T = useT().classroom.practice;
   const beginLab = useBeginLab();
   const [error, setError] = useState<string | null>(null);
   const begin = async (id: string) => {
@@ -174,18 +175,18 @@ function LabList({ items }: { items: LabSummary[] }) {
   };
   return (
     <>
-      <ul className="aula-list" aria-label="Laboratorios">
+      <ul className="aula-list" aria-label={T.labsLabel}>
         {items.map((l) => (
           <li key={l.id} className="aula-lab">
             <div>
               <span className="aula-row-title">{l.title}</span>{' '}
-              <span className="badge">{LEVEL_LABEL[l.level]}</span>
+              <span className="badge">{levelLabel(l.level)}</span>
               <p className="aula-row-sub">
-                {l.summary} {l.steps} pasos · {chapterLabel(l.chapter)}
+                {l.summary} {T.steps(l.steps)} · {chapterLabel(l.chapter)}
               </p>
             </div>
             <button type="button" className="btn small" onClick={() => void begin(l.id)}>
-              Empezar
+              {T.start}
             </button>
           </li>
         ))}

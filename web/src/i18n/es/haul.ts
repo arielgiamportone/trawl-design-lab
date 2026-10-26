@@ -1,2 +1,61 @@
-/** Textos de «haul» (se completan en la extracción de la Fase 18.3). */
-export const haul = {};
+/** Lance progresivo (captura creciente y fondo). */
+export const haul = {
+  catchTypes: {
+    fish: 'Peces',
+    crustacean: 'Crustáceos (langostilla, camarón)',
+    mixed: 'Mezcla con fango o conchilla',
+  },
+  summary: {
+    doors: (down: boolean, amount: string, pct: string) =>
+      `la separación de portones ${down ? 'baja' : 'sube'} ${amount}${pct}`,
+    pull: (up: boolean, amount: string, pct: string) =>
+      `el tiro en el buque ${up ? 'sube' : 'baja'} ${amount}${pct}`,
+    ah: (down: boolean, amount: string) =>
+      `la abertura horizontal ${down ? 'baja' : 'sube'} ${amount}`,
+    pct: (v: string) => ` (${v} %)`,
+    and: ' y ',
+    sentence: (from: string, to: string, text: string) => `De ${from} a ${to} de captura, ${text}.`,
+  },
+  intro:
+    'Simula el lance mientras entra la captura: la «bola» de captura llena el copo, lo infla y lo frena; los portones se acomodan al equilibrio (cable hasta el buque, sustentación de su polar y roce con el fondo elegido).',
+  formLabel: 'Escenario del lance',
+  finalCatch: 'Captura final',
+  steps: (list: string) => `Pasos: ${list}`,
+  catchType: 'Tipo de captura',
+  seabedType: 'Tipo de fondo',
+  mu: (gear: string, door: string) => `μ tren ${gear} · μ portón ${door} (estimados, con rango)`,
+  coupled: 'Portones acoplados (separación por equilibrio)',
+  run: 'Simular lance',
+  running: (s: string) => `Simulando el lance… (≈ ${s} s)`,
+  done: (n: number, s: string) => `${n} pasos en ${s} s.`,
+  unconverged: 'Algún paso no convergió del todo: tome esos valores con cautela.',
+  animate: '▶ Animar este lance en el explorador',
+  charts: {
+    dp: 'Separación de portones',
+    pull: 'Tiro en el buque',
+    ah: 'Abertura horizontal',
+    av: 'Abertura vertical',
+  },
+  chartTip: (catchKg: string) => `${catchKg} de captura`,
+  chartAria: (title: string) => `${title} según la captura`,
+  showTable: 'Ver tabla del lance',
+  tableCaption: 'Lance progresivo',
+  cols: {
+    catchKg: 'Captura',
+    doorSpread: 'DP',
+    ah: 'AH',
+    av: 'AV',
+    pull: 'Tiro',
+    netDrag: 'Red',
+    catchDrag: 'Captura',
+    friction: 'Roce',
+    catchLength: 'Largo captura',
+    codendDiameter: 'Ø copo',
+  },
+  shape3dRegion: 'Forma 3D del lance',
+  shape3d: 'Forma 3D',
+  step3d: 'Paso del lance en 3D',
+  refs: "Modelo de la captura: O'Neill y O'Donoghue (1997); tendencias de referencia: Priour y de la Prada (2015). Los rozamientos por tipo de fondo son estimaciones con rango (A VERIFICAR). Ver el capítulo 22 del libro.",
+  empty:
+    'Elija la captura final, el fondo y pulse «Simular lance». Cada paso tarda unos segundos.',
+};

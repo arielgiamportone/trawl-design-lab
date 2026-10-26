@@ -1,37 +1,28 @@
 /** Catálogo de componentes (Fase 13): tipos, columnas, filtros, lista de materiales y aportes. */
+import { getLang, msg } from '../i18n';
 import type { CaseState } from '../state/model';
-import { parseNumber } from './format';
+import { fieldUnit, provValueText } from './catalog';
+import { fmtNum, parseNumber } from './format';
+import { liveRecord } from './liveRecord';
 import { loadJson, saveJson } from './storage';
+import { getUnits, toCanonical, toDisplay, unitLabel } from './units';
 
 export type ComponentKind = 'twine' | 'wire' | 'rope' | 'door' | 'float' | 'chain';
 
 export const COMPONENT_KINDS: ComponentKind[] = ['twine', 'wire', 'rope', 'door', 'float', 'chain'];
 
-export const COMPONENT_LABEL: Record<ComponentKind, string> = {
-  twine: 'Paño e hilo',
-  wire: 'Cable de acero',
-  rope: 'Cabo',
-  door: 'Portón',
-  float: 'Boya',
-  chain: 'Cadena',
-};
+/** Tipos de componente en el idioma activo (objeto vivo: se lee al usarlo). */
+export const COMPONENT_LABEL: Record<ComponentKind, string> = liveRecord(
+  () => msg().components.kind,
+);
 
-/** Regiones del catálogo (``trawlkit.components.REGIONS``). */
-export const REGION_LABEL: Record<string, string> = {
-  global: 'Todo el mundo',
-  latam: 'Latinoamérica',
-  europe: 'Europa',
-  africa: 'África',
-  south_asia: 'Asia del Sur',
-  southeast_asia: 'Sudeste asiático',
-  north_america: 'Norteamérica',
-};
+/**
+ * Regiones del catálogo (``trawlkit.components.REGIONS``) en el idioma activo. Objeto vivo con
+ * la misma forma de siempre: lo importan también ``lib/params`` y el asistente.
+ */
+export const REGION_LABEL: Record<string, string> = liveRecord(() => msg().components.region);
 
-export const STATUS_LABEL: Record<string, string> = {
-  published: 'publicado',
-  draft: 'borrador',
-  user: 'aporte, sin verificar',
-};
+export const STATUS_LABEL: Record<string, string> = liveRecord(() => msg().components.status);
 
 export interface Price {
   value: number;
@@ -66,65 +57,57 @@ export interface Component {
   [field: string]: unknown;
 }
 
-/** Columna de la tabla de un tipo: campo, título y unidad. */
+/** Columna de la tabla de un tipo: campo, título y unidad (la métrica del motor). */
 export interface Column {
   field: string;
   label: string;
   unit?: string;
 }
 
-export const COLUMNS: Record<ComponentKind, Column[]> = {
+/** Campos y unidades métricas de las columnas de cada tipo (los títulos van en ``columns``). */
+const COLUMN_FIELDS: Record<ComponentKind, [string, string?][]> = {
   twine: [
-    { field: 'material', label: 'Material' },
-    { field: 'rtex', label: 'Rtex', unit: 'tex' },
-    { field: 'diameter_mm', label: 'Ø', unit: 'mm' },
-    { field: 'breaking_load_kgf', label: 'Rotura', unit: 'kgf' },
-    { field: 'runnage_m_per_kg', label: 'Rendimiento', unit: 'm/kg' },
+    ['material'],
+    ['rtex', 'tex'],
+    ['diameter_mm', 'mm'],
+    ['breaking_load_kgf', 'kgf'],
+    ['runnage_m_per_kg', 'm/kg'],
   ],
-  wire: [
-    { field: 'construction', label: 'Construcción' },
-    { field: 'diameter_mm', label: 'Ø', unit: 'mm' },
-    { field: 'weight_kg_per_m', label: 'Peso', unit: 'kg/m' },
-    { field: 'breaking_load_t', label: 'Rotura', unit: 't' },
-  ],
-  rope: [
-    { field: 'material', label: 'Material' },
-    { field: 'diameter_mm', label: 'Ø', unit: 'mm' },
-    { field: 'weight_kg_per_m', label: 'Peso', unit: 'kg/m' },
-    { field: 'breaking_load_t', label: 'Rotura', unit: 't' },
-  ],
-  door: [
-    { field: 'type', label: 'Tipo' },
-    { field: 'area_m2', label: 'Superficie', unit: 'm²' },
-    { field: 'weight_air_kg', label: 'Peso', unit: 'kg' },
-    { field: 'hp_range', label: 'Buque', unit: 'hp' },
-  ],
-  float: [
-    { field: 'material', label: 'Material' },
-    { field: 'diameter_mm', label: 'Ø', unit: 'mm' },
-    { field: 'buoyancy_kgf', label: 'Flotación', unit: 'kgf' },
-    { field: 'max_depth_m', label: 'Prof. máx.', unit: 'm' },
-  ],
+  wire: [['construction'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
+  rope: [['material'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
+  door: [['type'], ['area_m2', 'm²'], ['weight_air_kg', 'kg'], ['hp_range', 'hp']],
+  float: [['material'], ['diameter_mm', 'mm'], ['buoyancy_kgf', 'kgf'], ['max_depth_m', 'm']],
   chain: [
-    { field: 'link', label: 'Eslabón' },
-    { field: 'link_diameter_mm', label: 'Ø', unit: 'mm' },
-    { field: 'weight_kg_per_m', label: 'Peso', unit: 'kg/m' },
-    { field: 'breaking_load_t', label: 'Rotura', unit: 't' },
+    ['link'],
+    ['link_diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
   ],
 };
 
-export const DOOR_TYPE_LABEL: Record<string, string> = {
-  flat: 'plano',
-  flat_wood: 'plano de madera',
-  v: 'en V',
-  oval: 'oval',
-  cambered: 'cambado',
-  suberkrub: 'Süberkrüb',
-  shrimp: 'camaronero',
-};
+/** Columnas de la tabla de un tipo, con los títulos en el idioma activo. */
+export function columns(kind: ComponentKind): Column[] {
+  const labels = msg().components.col;
+  return COLUMN_FIELDS[kind].map(([field, unit]) =>
+    unit ? { field, label: labels[field] ?? field, unit } : { field, label: labels[field] ?? field },
+  );
+}
 
-/** Valor legible de una celda. */
-export function cellText(item: Component, field: string): string {
+export const DOOR_TYPE_LABEL: Record<string, string> = liveRecord(
+  () => msg().components.doorType,
+);
+
+/**
+ * Valor legible de una celda. Con ``unit`` (la métrica de la columna) el número se convierte al
+ * sistema activo, sin la unidad (va en el título); con ``withUnit``, la unidad se deduce del
+ * nombre del campo y se agrega en imperial (tablas de procedencia, sin unidad en el título).
+ */
+export function cellText(
+  item: Component,
+  field: string,
+  unit?: string,
+  withUnit = false,
+): string {
   const v = item[field];
   if (v === undefined || v === null || v === '') return '—';
   if (field === 'hp_range' && Array.isArray(v)) {
@@ -132,7 +115,10 @@ export function cellText(item: Component, field: string): string {
     return lo === hi ? `${lo}` : `${lo}–${hi}`;
   }
   if (field === 'type' && typeof v === 'string') return DOOR_TYPE_LABEL[v] ?? v;
-  if (typeof v === 'number') return v.toLocaleString('es-AR', { maximumFractionDigits: 3 });
+  if (typeof v === 'number') {
+    if (withUnit) return provValueText(v, fieldUnit(field));
+    return fmtNum(unit ? toDisplay(v, unit) : v, { maximumFractionDigits: 3 });
+  }
   return String(v);
 }
 
@@ -202,34 +188,74 @@ export interface Bom {
   missing_prices: number;
 }
 
-export const UNIT_LABEL: Record<string, string> = { kg: 'kg', m: 'm', unit: 'u.' };
+/** Unidades de cantidad de la lista de materiales (objeto vivo, en el idioma activo). */
+export const UNIT_LABEL: Record<string, string> = liveRecord(() => msg().components.unit);
 
-function csvCell(v: unknown): string {
-  const s = v === null || v === undefined ? '' : String(v);
-  return /[";\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+/**
+ * Unidad métrica del motor de la cantidad de una línea (``kg``, ``m``) y la de su precio por
+ * unidad (``$/kg``, ``$/m``); ``null`` para las piezas («u.»), que no se convierten.
+ */
+const QTY_UNIT: Record<string, { qty: string; price: string }> = {
+  kg: { qty: 'kg', price: '$/kg' },
+  m: { qty: 'm', price: '$/m' },
+};
+
+/** Unidad de la cantidad de una línea en el sistema activo («kg»/«lb», «m»/«ft», «u.»). */
+export function bomUnitLabel(unit: string): string {
+  const u = QTY_UNIT[unit];
+  return u ? unitLabel(u.qty) : (UNIT_LABEL[unit] ?? unit);
+}
+
+/** Cantidad de una línea en el sistema activo. */
+export function bomQuantity(line: Pick<BomLine, 'quantity' | 'unit'>): number {
+  const u = QTY_UNIT[line.unit];
+  return u ? toDisplay(line.quantity, u.qty) : line.quantity;
+}
+
+/** Precio por unidad de cantidad en el sistema activo (por lb, por ft) desde el del motor. */
+export function priceToDisplay(value: number, unit: string): number {
+  const u = QTY_UNIT[unit];
+  return u ? toDisplay(value, u.price) : value;
+}
+
+/** Precio por unidad de cantidad del motor (por kg, por m) desde el que escribió el usuario. */
+export function priceToCanonical(value: number, unit: string): number {
+  const u = QTY_UNIT[unit];
+  return u ? toCanonical(value, u.price) : value;
 }
 
 /**
- * Lista de materiales en CSV (separador «;», coma decimal: abre bien en planillas en castellano).
+ * Lista de materiales en CSV. En español, separador «;» y coma decimal (abre bien en planillas
+ * en castellano); en inglés, «,» y punto decimal. Encabezados en el idioma activo y cantidades y
+ * precios por unidad en el sistema de unidades activo.
  */
 export function bomCsv(bom: Bom): string {
+  const T = msg().components.csv;
+  const es = getLang() === 'es';
+  const sep = es ? ';' : ',';
   const num = (n: number | null | undefined) =>
-    n === null || n === undefined ? '' : String(n).replace('.', ',');
+    n === null || n === undefined ? '' : es ? String(n).replace('.', ',') : String(n);
+  // En métrico, los números del motor tal cual; convertidos, con 6 decimales como mucho.
+  const round = (n: number) => (getUnits() === 'imperial' ? Math.round(n * 1e6) / 1e6 : n);
+  const cell = (v: unknown): string => {
+    const s = v === null || v === undefined ? '' : String(v);
+    return s.includes(sep) || /["\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
   const rows = [
-    ['Ítem', 'Componente', 'Cantidad', 'Unidad', 'Precio unitario', 'Moneda', 'Costo', 'Nota'],
+    T.head,
     ...bom.lines.map((l) => [
       l.label,
       l.component_name ?? l.component_id ?? '',
-      num(l.quantity),
-      UNIT_LABEL[l.unit] ?? l.unit,
-      num(l.unit_price),
+      num(round(bomQuantity(l))),
+      bomUnitLabel(l.unit),
+      num(l.unit_price == null ? l.unit_price : round(priceToDisplay(l.unit_price, l.unit))),
       l.currency ?? '',
-      l.cost === null || l.cost === undefined ? 'sin precio' : num(l.cost),
+      l.cost === null || l.cost === undefined ? T.noPrice : num(l.cost),
       l.note ?? '',
     ]),
-    ...Object.entries(bom.totals).map(([cur, v]) => ['Total', '', '', '', '', cur, num(v), '']),
+    ...Object.entries(bom.totals).map(([cur, v]) => [T.total, '', '', '', '', cur, num(v), '']),
   ];
-  return rows.map((r) => r.map(csvCell).join(';')).join('\n') + '\n';
+  return rows.map((r) => r.map(cell).join(sep)).join('\n') + '\n';
 }
 
 /** Clave con la que se guarda el precio de una línea: el componente, o la línea si no hay. */
@@ -247,7 +273,11 @@ export function loadPrices(): Record<string, Price> {
   const out: Record<string, Price> = {};
   for (const [k, p] of Object.entries(raw)) {
     if (p && typeof p.value === 'number' && p.value >= 0 && typeof p.currency === 'string') {
-      out[k] = { ...p, date: String(p.date ?? ''), source: String(p.source ?? 'usuario') };
+      out[k] = {
+        ...p,
+        date: String(p.date ?? ''),
+        source: String(p.source ?? msg().components.priceSource),
+      };
     }
   }
   return out;
@@ -259,48 +289,45 @@ export function savePrices(prices: Record<string, Price>): void {
 
 // -- Aportes de usuarios ----------------------------------------------------------------------
 
-/** Campos del formulario de aporte por tipo (además de nombre, marca, país y fuente). */
-export const CONTRIB_FIELDS: Record<
-  ComponentKind,
-  { field: string; label: string; num: boolean }[]
-> = {
-  twine: [
-    { field: 'material', label: 'Material (PA, PE, PP, PES, UHMWPE)', num: false },
-    { field: 'diameter_mm', label: 'Diámetro [mm]', num: true },
-    { field: 'rtex', label: 'Rtex [tex]', num: true },
-    { field: 'breaking_load_kgf', label: 'Rotura [kgf]', num: true },
-  ],
+export interface ContribField {
+  field: string;
+  /** Rótulo en el idioma activo, con la unidad del sistema activo entre corchetes. */
+  label: string;
+  num: boolean;
+  /** Unidad métrica del motor (lo escrito se convierte a ella antes de validar). */
+  unit?: string;
+}
+
+/** Campos y unidades métricas del formulario de aporte por tipo. */
+const CONTRIB_UNITS: Record<ComponentKind, [string, string?][]> = {
+  twine: [['material'], ['diameter_mm', 'mm'], ['rtex', 'tex'], ['breaking_load_kgf', 'kgf']],
   wire: [
-    { field: 'construction', label: 'Construcción (6x19, 6x24…)', num: false },
-    { field: 'diameter_mm', label: 'Diámetro [mm]', num: true },
-    { field: 'weight_kg_per_m', label: 'Peso [kg/m]', num: true },
-    { field: 'breaking_load_t', label: 'Rotura [t]', num: true },
+    ['construction'],
+    ['diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
   ],
-  rope: [
-    { field: 'material', label: 'Material (PP, PE, PA, combinado…)', num: false },
-    { field: 'diameter_mm', label: 'Diámetro [mm]', num: true },
-    { field: 'weight_kg_per_m', label: 'Peso [kg/m]', num: true },
-    { field: 'breaking_load_t', label: 'Rotura [t]', num: true },
-  ],
-  door: [
-    { field: 'type', label: 'Tipo (flat, v, oval, suberkrub…)', num: false },
-    { field: 'length_m', label: 'Largo [m]', num: true },
-    { field: 'height_m', label: 'Alto [m]', num: true },
-    { field: 'weight_air_kg', label: 'Peso en aire [kg]', num: true },
-  ],
-  float: [
-    { field: 'material', label: 'Material', num: false },
-    { field: 'diameter_mm', label: 'Diámetro [mm]', num: true },
-    { field: 'buoyancy_kgf', label: 'Flotación [kgf]', num: true },
-    { field: 'max_depth_m', label: 'Profundidad máxima [m]', num: true },
-  ],
+  rope: [['material'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
+  door: [['type'], ['length_m', 'm'], ['height_m', 'm'], ['weight_air_kg', 'kg']],
+  float: [['material'], ['diameter_mm', 'mm'], ['buoyancy_kgf', 'kgf'], ['max_depth_m', 'm']],
   chain: [
-    { field: 'link', label: 'Eslabón (corto, largo)', num: false },
-    { field: 'link_diameter_mm', label: 'Diámetro del eslabón [mm]', num: true },
-    { field: 'weight_kg_per_m', label: 'Peso [kg/m]', num: true },
-    { field: 'breaking_load_t', label: 'Rotura [t]', num: true },
+    ['link'],
+    ['link_diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
   ],
 };
+
+/** Campos del formulario de aporte por tipo (además de nombre, marca, país y fuente). */
+export function contribFields(kind: ComponentKind): ContribField[] {
+  const labels = msg().components.contrib[kind] ?? {};
+  return CONTRIB_UNITS[kind].map(([field, unit]) => {
+    const text = labels[field] ?? field;
+    return unit
+      ? { field, label: `${text} [${unitLabel(unit)}]`, num: true, unit }
+      : { field, label: text, num: false };
+  });
+}
 
 /** Normaliza los aportes leídos de un proyecto o de localStorage (descarta los inválidos). */
 export function sanitizeContributions(raw: unknown): Component[] {
@@ -329,11 +356,17 @@ export function draftComponent(
   };
   if (values.brand?.trim()) out.brand = values.brand.trim();
   if (values.country?.trim()) out.country = values.country.trim().toUpperCase();
-  if (values.source?.trim()) out.notes = [`Fuente: ${values.source.trim()}`];
-  for (const f of CONTRIB_FIELDS[kind]) {
+  if (values.source?.trim()) out.notes = [msg().components.sourceNote(values.source.trim())];
+  for (const f of contribFields(kind)) {
     const t = (values[f.field] ?? '').trim();
     if (!t) continue;
-    out[f.field] = f.num ? (parseNumber(t) ?? t) : t;
+    if (!f.num) {
+      out[f.field] = t;
+      continue;
+    }
+    // Lo escrito está en el sistema activo; el motor recibe siempre métrico.
+    const n = parseNumber(t);
+    out[f.field] = n === null ? t : f.unit ? Number(toCanonical(n, f.unit).toPrecision(10)) : n;
   }
   if (kind === 'door' && typeof out.length_m === 'number' && typeof out.height_m === 'number') {
     out.area_m2 = Math.round(out.length_m * out.height_m * 1000) / 1000;
@@ -357,9 +390,10 @@ export const REPO_URL = 'https://github.com/arielgiamportone/trawl-design-lab';
 
 /** Enlace a un *issue* nuevo con la plantilla de componentes y el aporte en JSON. */
 export function issueUrl(item: Component): string {
+  const T = msg().components.issue;
   const body = [
-    `Tipo: ${COMPONENT_LABEL[item.kind]}`,
-    `Fuente: ${String(item.notes?.[0] ?? '')}`,
+    T.kind(COMPONENT_LABEL[item.kind]),
+    T.source(String(item.notes?.[0] ?? '')),
     '',
     '```json',
     JSON.stringify(item, null, 2),
@@ -367,7 +401,7 @@ export function issueUrl(item: Component): string {
   ].join('\n');
   const q = new URLSearchParams({
     template: 'componente.yml',
-    title: `Componente: ${item.name}`,
+    title: T.title(item.name),
     labels: 'componente',
     datos: body,
   });

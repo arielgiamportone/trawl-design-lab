@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
+import { useT } from '../i18n';
 import { HEAVY_TABS, useLowData } from '../lib/lowdata';
 import { loadJson, saveJson } from '../lib/storage';
 import { TAB_EVENT, TAB_IDS, TAB_KEY } from '../lib/tabs';
@@ -50,29 +51,31 @@ export function Results() {
     return () => window.removeEventListener(TAB_EVENT, on);
   }, []);
   const lowData = useLowData();
+  const T = useT();
+  const L = T.expert.tabs;
   const data = design.data;
   const notes = data?.notes.length ?? 0;
   const allTabs: TabDef[] = [
-    { id: 'resumen', label: 'Resumen' },
-    { id: 'graficos', label: 'Gráficos' },
-    { id: 'diseno', label: 'Diseño interactivo' },
-    { id: 'paneles', label: 'Editor de paneles' },
-    { id: 'plano', label: 'Plano' },
+    { id: 'resumen', label: L.resumen },
+    { id: 'graficos', label: L.graficos },
+    { id: 'diseno', label: L.diseno },
+    { id: 'paneles', label: L.paneles },
+    { id: 'plano', label: L.plano },
     {
       id: 'comparar',
-      label: <>Comparar {pinned && <span className="badge accent">A</span>}</>,
+      label: <>{L.comparar} {pinned && <span className="badge accent">A</span>}</>,
     },
-    { id: 'optimizar', label: 'Optimizar' },
-    { id: 'simulacion', label: 'Simulación' },
-    { id: 'descargas', label: 'Descargas' },
-    { id: 'catalogo', label: 'Catálogo FAO' },
-    { id: 'componentes', label: 'Componentes' },
-    { id: 'construccion', label: 'Construcción' },
-    { id: 'economia', label: 'Economía' },
-    { id: 'lotes', label: 'Lotes y flota' },
+    { id: 'optimizar', label: L.optimizar },
+    { id: 'simulacion', label: L.simulacion },
+    { id: 'descargas', label: L.descargas },
+    { id: 'catalogo', label: L.catalogo },
+    { id: 'componentes', label: L.componentes },
+    { id: 'construccion', label: L.construccion },
+    { id: 'economia', label: L.economia },
+    { id: 'lotes', label: L.lotes },
     {
       id: 'notas',
-      label: <>Notas y erratas {notes > 0 && <span className="badge">{notes}</span>}</>,
+      label: <>{L.notas} {notes > 0 && <span className="badge">{notes}</span>}</>,
     },
   ];
   const tabs = lowData ? allTabs.filter((t) => !HEAVY_TABS.includes(t.id)) : allTabs;
@@ -81,10 +84,10 @@ export function Results() {
   return (
     <>
       <Kpis />
-      <section className="card" aria-label="Detalle de resultados">
-        <Tabs tabs={tabs} active={active} onChange={setTab} label="Secciones de resultados">
+      <section className="card" aria-label={T.expert.resultsLabel}>
+        <Tabs tabs={tabs} active={active} onChange={setTab} label={T.expert.sectionsLabel}>
           {active === 'resumen' && <SummaryTable />}
-          <Suspense fallback={<p className="empty">Cargando…</p>}>
+          <Suspense fallback={<p className="empty">{T.common.loading}</p>}>
             {active === 'graficos' && <Charts />}
             {active === 'comparar' && <Compare />}
             {active === 'optimizar' && <Optimize onApplied={() => setTab('resumen')} />}

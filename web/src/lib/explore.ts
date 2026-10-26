@@ -3,6 +3,7 @@
  * cuadros para la animación e indicadores del tablero.
  */
 import type { DesignRequest, ExploreRequest, ExploreResponse, ScenarioIn } from '../api/client';
+import { msg } from '../i18n';
 
 export type ExploreVariable = ExploreRequest['variable'];
 
@@ -21,7 +22,9 @@ export interface VariableDef {
 export const VARIABLES: VariableDef[] = [
   {
     id: 'catch_kg',
-    label: 'Captura en el copo',
+    get label() {
+      return msg().explore.variables.catch_kg;
+    },
     unit: 'kg',
     from: 0,
     to: 1500,
@@ -32,7 +35,9 @@ export const VARIABLES: VariableDef[] = [
   },
   {
     id: 'speed_kn',
-    label: 'Velocidad de arrastre',
+    get label() {
+      return msg().explore.variables.speed_kn;
+    },
     unit: 'kn',
     from: 2,
     to: 4,
@@ -43,7 +48,9 @@ export const VARIABLES: VariableDef[] = [
   },
   {
     id: 'warp_length_m',
-    label: 'Cable filado',
+    get label() {
+      return msg().explore.variables.warp_length_m;
+    },
     unit: 'm',
     from: 120,
     to: 320,
@@ -54,8 +61,12 @@ export const VARIABLES: VariableDef[] = [
   },
   {
     id: 'fouling_level',
-    label: 'Ensuciamiento de la red',
-    unit: '× escenario',
+    get label() {
+      return msg().explore.variables.fouling_level;
+    },
+    get unit() {
+      return msg().explore.scenarioFactor;
+    },
     from: 0,
     to: 1,
     min: 0,
@@ -65,7 +76,9 @@ export const VARIABLES: VariableDef[] = [
   },
   {
     id: 'current_kn',
-    label: 'Corriente (+ a favor)',
+    get label() {
+      return msg().explore.variables.current_kn;
+    },
     unit: 'kn',
     from: -0.8,
     to: 0.8,
@@ -76,7 +89,9 @@ export const VARIABLES: VariableDef[] = [
   },
   {
     id: 'mu_gear',
-    label: 'Rozamiento del tren con el fondo',
+    get label() {
+      return msg().explore.variables.mu_gear;
+    },
     unit: 'μ',
     from: 0.3,
     to: 0.8,
@@ -276,7 +291,9 @@ const op = (key: string) => (r: Record<string, unknown>) =>
 export const INDICATORS: Indicator[] = [
   {
     key: 'dp',
-    label: 'Separación de portones',
+    get label() {
+      return msg().explore.indicators.dp;
+    },
     unit: 'm',
     digits: 1,
     better: 'higher',
@@ -284,7 +301,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'ah',
-    label: 'Abertura horizontal',
+    get label() {
+      return msg().explore.indicators.ah;
+    },
     unit: 'm',
     digits: 1,
     better: 'higher',
@@ -292,7 +311,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'av',
-    label: 'Abertura vertical',
+    get label() {
+      return msg().explore.indicators.av;
+    },
     unit: 'm',
     digits: 2,
     better: 'higher',
@@ -300,7 +321,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'pull',
-    label: 'Tiro en el buque',
+    get label() {
+      return msg().explore.indicators.pull;
+    },
     unit: 'kgf',
     digits: 0,
     better: 'lower',
@@ -308,7 +331,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'warp',
-    label: 'Tensión del cable (buque)',
+    get label() {
+      return msg().explore.indicators.warp;
+    },
     unit: 'kgf',
     digits: 0,
     better: 'lower',
@@ -316,7 +341,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'angle',
-    label: 'Ángulo del cable',
+    get label() {
+      return msg().explore.indicators.angle;
+    },
     unit: '°',
     digits: 1,
     better: null,
@@ -324,7 +351,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'fuel',
-    label: 'Combustible',
+    get label() {
+      return msg().explore.indicators.fuel;
+    },
     unit: 'L/h',
     digits: 1,
     better: 'lower',
@@ -332,7 +361,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'fuel_kg',
-    label: 'Combustible por kg',
+    get label() {
+      return msg().explore.indicators.fuel_kg;
+    },
     unit: 'L/kg',
     digits: 3,
     better: 'lower',
@@ -340,7 +371,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'swept',
-    label: 'Área barrida',
+    get label() {
+      return msg().explore.indicators.swept;
+    },
     unit: 'km²/h',
     digits: 3,
     better: 'higher',
@@ -348,7 +381,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'opening',
-    label: 'Apertura de malla del copo',
+    get label() {
+      return msg().explore.indicators.opening;
+    },
     unit: '°',
     digits: 0,
     better: 'higher',
@@ -356,7 +391,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'l50',
-    label: 'L50 del copo',
+    get label() {
+      return msg().explore.indicators.l50;
+    },
     unit: 'talla',
     digits: 1,
     better: null,
@@ -364,7 +401,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'sr',
-    label: 'Rango de selección (SR)',
+    get label() {
+      return msg().explore.indicators.sr;
+    },
     unit: 'talla',
     digits: 1,
     better: null,
@@ -372,7 +411,9 @@ export const INDICATORS: Indicator[] = [
   },
   {
     key: 'contact',
-    label: 'Área en contacto con el fondo',
+    get label() {
+      return msg().explore.indicators.contact;
+    },
     unit: 'km²/h',
     digits: 3,
     better: 'lower',

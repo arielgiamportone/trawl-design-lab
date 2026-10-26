@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useT } from '../i18n';
 import { chapterUrl } from '../lib/docs';
-import { HELP } from '../lib/help';
+import { HELP, rangeText } from '../lib/help';
+import { unitLabel } from '../lib/units';
 
 interface Props {
   /** Clave de ``HELP``. */
@@ -15,6 +17,7 @@ export function HelpTip({ topic, label }: Props) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const ref = useRef<HTMLSpanElement>(null);
+  const T = useT().expert.helpTip;
 
   useEffect(() => {
     if (!open) return;
@@ -34,7 +37,7 @@ export function HelpTip({ topic, label }: Props) {
 
   if (!entry) return null;
   const url = entry.chapter ? chapterUrl(entry.chapter) : null;
-  const f = (n: number) => n.toLocaleString('es-AR');
+  const range = rangeText(topic);
   return (
     <span className="helptip" ref={ref}>
       <button
@@ -42,7 +45,7 @@ export function HelpTip({ topic, label }: Props) {
         className="helptip-btn"
         aria-expanded={open}
         aria-controls={id}
-        aria-label={`Ayuda: ${label}`}
+        aria-label={T.aria(label)}
         onClick={() => setOpen((o) => !o)}
       >
         ?
@@ -52,18 +55,13 @@ export function HelpTip({ topic, label }: Props) {
           {entry.text}
           {(entry.unit || entry.range) && (
             <span className="helptip-meta">
-              {entry.unit && <>Unidad: {entry.unit}. </>}
-              {entry.range && (
-                <>
-                  Rango habitual: {f(entry.range[0])}–{f(entry.range[1])}
-                  {entry.unit ? ` ${entry.unit}` : ''}.
-                </>
-              )}
+              {entry.unit && T.unit(unitLabel(entry.unit))}
+              {range && T.range(range)}
             </span>
           )}
           {url && (
             <a className="helptip-link" href={url} target="_blank" rel="noreferrer">
-              Leer en el libro ↗
+              {T.read}
             </a>
           )}
         </span>

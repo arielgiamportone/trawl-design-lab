@@ -1,25 +1,19 @@
 /** Catálogo de redes FAO: filtros, etiquetas y procedencia (Fase 12). */
 import type { CatalogItem } from '../api/client';
+import { msg } from '../i18n';
+import { fmtNum } from './format';
+import { liveRecord } from './liveRecord';
+import { CONVERSIONS, fmtU, getUnits } from './units';
 
 export type ProvenanceKind = 'excel' | 'transcribed' | 'derived' | 'assumed';
 
-export const FAMILY_LABEL: Record<string, string> = {
-  bottom: 'Fondo',
-  semi_pelagic: 'Semipelágica',
-  pelagic: 'Pelágica',
-};
+/** Familias de red en el idioma activo (objeto vivo: se lee al usarlo). */
+export const FAMILY_LABEL: Record<string, string> = liveRecord(() => msg().catalog.family);
 
-export const RIG_LABEL: Record<string, string> = {
-  otter: 'Portones',
-  pair: 'Pareja',
-};
+/** Aparejos en el idioma activo (lo importa también el asistente: ``wizard/StepNet``). */
+export const RIG_LABEL: Record<string, string> = liveRecord(() => msg().catalog.rig);
 
-export const KIND_LABEL: Record<ProvenanceKind, string> = {
-  excel: 'Libro Excel',
-  transcribed: 'Transcripto',
-  derived: 'Derivado',
-  assumed: 'Supuesto',
-};
+export const KIND_LABEL: Record<ProvenanceKind, string> = liveRecord(() => msg().catalog.kind);
 
 /** Orden de los tipos de procedencia (de más a menos directo). */
 export const KINDS: ProvenanceKind[] = ['excel', 'transcribed', 'derived', 'assumed'];
@@ -104,35 +98,9 @@ export function kindShares(byKind: Record<string, number>): { kind: string; shar
 }
 
 /** Etiqueta legible de una ruta de valor (``panels.C.meshes_top`` → «C · mallas de boca»). */
-const FIELD_LABEL: Record<string, string> = {
-  mesh_mm: 'mallero',
-  twine_diameter_mm: 'Ø hilo',
-  rtex: 'Rtex',
-  meshes_top: 'mallas de boca',
-  meshes_bottom: 'mallas de bolsa',
-  meshes_depth: 'alto (mallas)',
-  hanging_ratio: 'U1',
-  count: 'cantidad',
-  cut_code: 'corte',
-  length_m: 'largo',
-  diameter_mm: 'diámetro',
-  depth_m: 'profundidad',
-  sweeps_m: 'patentes',
-  door_length_m: 'largo del portón',
-  door_height_m: 'alto del portón',
-  door_weight_air_kg: 'peso del portón',
-  vessel_length_m: 'eslora del buque',
-};
-
-const GROUP_LABEL: Record<string, string> = {
-  headrope: 'Lima',
-  footrope: 'Burlón',
-  floats: 'Boyas',
-  design: 'Caso de diseño',
-  ballast_kg: 'Lastre',
-};
-
 export function pathLabel(path: string): string {
+  const FIELD_LABEL = msg().catalog.field;
+  const GROUP_LABEL = msg().catalog.group;
   const parts = path.split('.');
   if (parts[0] === 'panels' && parts.length === 3) {
     return `${parts[1]} · ${FIELD_LABEL[parts[2] ?? ''] ?? parts[2]}`;
@@ -140,4 +108,34 @@ export function pathLabel(path: string): string {
   const group = GROUP_LABEL[parts[0] ?? ''] ?? parts[0];
   if (parts.length === 1) return group ?? path;
   return `${group} · ${FIELD_LABEL[parts[1] ?? ''] ?? parts[1]}`;
+}
+
+/**
+ * Unidad métrica del motor que se deduce del nombre de un campo (``length_m`` → ``'m'``,
+ * ``weight_kg_per_m`` → ``'kg/m'``, ``mesh_mm`` → ``'mesh_mm'``); ``''`` si no tiene.
+ */
+export function fieldUnit(field: string): string {
+  const f = field.split('.').at(-1) ?? field;
+  if (f.endsWith('_kg_per_m')) return 'kg/m';
+  if (f.endsWith('_m_per_kg')) return 'm/kg';
+  if (f === 'mesh_mm' || f.endsWith('mesh_mm')) return 'mesh_mm';
+  if (f.endsWith('_mm')) return 'mm';
+  if (f.endsWith('_m2')) return 'm²';
+  if (f.endsWith('_m')) return 'm';
+  if (f.endsWith('_kgf')) return 'kgf';
+  if (f.endsWith('_kg')) return 'kg';
+  if (f.endsWith('_t')) return 't';
+  return '';
+}
+
+/**
+ * Valor de una tabla de procedencia: en métrico, el número como siempre (sin unidad, hasta 3
+ * decimales); en imperial, convertido y con su unidad para que no se confunda.
+ */
+export function provValueText(value: unknown, unit: string): string {
+  if (typeof value !== 'number') return String(value);
+  if (unit && getUnits() === 'imperial' && (unit === 'mesh_mm' || CONVERSIONS[unit])) {
+    return fmtU(value, unit, { digits: 3 });
+  }
+  return fmtNum(value, { maximumFractionDigits: 3 });
 }
