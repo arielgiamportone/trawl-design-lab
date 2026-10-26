@@ -111,7 +111,7 @@ def test_paired_wings_nest_without_waste() -> None:
 def test_join_rule() -> None:
     assert join_rule("A", 57, "C", 57) == ("1:1", "malla a malla")
     ratio, rule = join_rule("G", 162, "H", 243)
-    assert ratio == "2:3" and "2 mallas juntas de H cada 2.0" in rule and "81 tomas" in rule
+    assert ratio == "2:3" and "2 mallas juntas de H cada 2,0" in rule and "81 tomas" in rule
     assert "por cada malla" in join_rule("X", 10, "Y", 35)[1]
 
 

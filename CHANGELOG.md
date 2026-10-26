@@ -15,6 +15,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   gaza. Salidas: `trawlkit build-guide` (PDF, HTML, XLSX, JSON), `POST /design/construction` y
   `/design/construction/export` (también sin conexión, salvo el PDF) y una sección
   «Construcción y materiales» en el informe del caso, con la lista de materiales.
+- App web, pestaña **«Construcción»**: hoja de corte con casillas por pieza, armado paso a paso
+  (una unión por vez en letra grande, «Hecho, siguiente →» y el plano con los dos paños
+  resaltados), montaje en relingas con la línea de boyas y el lastre, cortes de cabos con el
+  sobrante por gaza ajustable, avance del taller guardado en el navegador y descargas (PDF, XLSX,
+  imprimir). En el modo guiado, «¿Cómo la armo? Guía para el taller». Funciona sin conexión salvo
+  el PDF.
+- Libro: capítulo 36 «Del diseño al taller: guía de construcción» (ciclos de corte, tomas,
+  coeficiente de armado, boyas, lastre y cortes; la guía de todo el catálogo) y referencia Klust
+  (1982), verificada.
 - DOI de Zenodo (10.5281/zenodo.23657981, todas las versiones) en el README, `CITATION.cff`, la
   página «Cómo citar» y la introducción del libro.
 

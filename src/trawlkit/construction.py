@@ -398,6 +398,11 @@ class Join:
         return asdict(self)
 
 
+def _dec(x: float, nd: int = 1) -> str:
+    """Número con coma decimal para los textos de taller."""
+    return f"{x:.{nd}f}".replace(".", ",")
+
+
 def join_rule(a: str, na: int, b: str, nb: int) -> tuple[str, str]:
     """Relación ``a:b`` simplificada y regla de toma para unir ``na`` mallas con ``nb``."""
     if na <= 0 or nb <= 0:
@@ -411,11 +416,11 @@ def join_rule(a: str, na: int, b: str, nb: int) -> tuple[str, str]:
     if extra <= n_small:
         every = n_small / extra
         return ratio, (
-            f"malla a malla, tomando 2 mallas juntas de {big} cada {every:.1f} mallas "
+            f"malla a malla, tomando 2 mallas juntas de {big} cada {_dec(every)} mallas "
             f"({extra} tomas en total)"
         )
     per = n_big / n_small
-    return ratio, f"tomar {per:.1f} mallas de {big} por cada malla del otro paño"
+    return ratio, f"tomar {_dec(per)} mallas de {big} por cada malla del otro paño"
 
 
 def _m(p: Panel) -> float:
@@ -530,8 +535,8 @@ def assembly(spec: NetSpec) -> tuple[Join, ...]:
             times=2,
             note=(
                 f"costura lateral a cada lado, de la bolsa hacia la punta de ala: dorso "
-                f"{lu:.2f} m y vientre {ll:.2f} m estirados; se suele reforzar con un cabo de "
-                "costado"
+                f"{_dec(lu, 2)} m y vientre {_dec(ll, 2)} m estirados; se suele reforzar con "
+                "un cabo de costado"
             ),
         )
     return tuple(joins)
@@ -592,7 +597,7 @@ def _section(
         netting_m=netting,
         hanging=e,
         meshes_per_m=per_m,
-        schedule=f"≈ {step:.1f} mallas cada {100 * SCHEDULE_STEP_M:.0f} cm",
+        schedule=f"≈ {_dec(step)} mallas cada {100 * SCHEDULE_STEP_M:.0f} cm",
         warning=warning,
     )
 
@@ -884,8 +889,8 @@ def guide(
     )
     notes = [
         "Mallas a malla estirada; los largos de cabo incluyen el armado (embando) del motor.",
-        f"Sobrante por gaza o empalme: {eye_allowance_m:g} m (A VERIFICAR según el cabo y el "
-        "empalme).",
+        f"Sobrante por gaza o empalme: {_dec(eye_allowance_m, 2)} m (A VERIFICAR según el cabo "
+        "y el empalme).",
         "La posición de las boyas sigue la regla selectiva del libro (70 % en las alas, 60 % de "
         "ellas en el primer quinto); ajustar en la prueba de mar.",
         "Los cortes marcados como inferidos no vienen del plano: salen del cambio de ancho del "
