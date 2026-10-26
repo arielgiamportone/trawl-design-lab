@@ -71,7 +71,10 @@ const FIELD_RULES: Record<PanelField, Omit<FieldRule, 'label' | 'short'>> = {
 export const PANEL_FIELDS: Record<PanelField, FieldRule> = localized(() => {
   const L = msg().labels.panelFields;
   const out = {} as Record<PanelField, FieldRule>;
-  for (const [f, rule] of Object.entries(FIELD_RULES) as [PanelField, (typeof FIELD_RULES)[PanelField]][])
+  for (const [f, rule] of Object.entries(FIELD_RULES) as [
+    PanelField,
+    (typeof FIELD_RULES)[PanelField],
+  ][])
     out[f] = { ...L[f], ...rule };
   return out;
 });

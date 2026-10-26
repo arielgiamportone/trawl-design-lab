@@ -3,11 +3,11 @@ import type { DesignData } from '../api/result';
 import { useT } from '../i18n';
 import { diffSummaries } from '../lib/diff';
 import { fmt, fmtDelta, fmtPct } from '../lib/format';
-import { at } from '../lib/series';
+import { at, displayRows } from '../lib/series';
 import { useChartColors } from '../lib/theme';
 import { fmtU, toDisplay, unitLabel } from '../lib/units';
 import { useCase } from '../state/useCase';
-import { ChartCard, DataTable, displayRows, type SeriesDef } from './charts/ChartParts';
+import { ChartCard, DataTable, type SeriesDef } from './charts/ChartParts';
 import { SpeedLineChart } from './charts/SpeedLineChart';
 
 /** Valor de una celda (número en el sistema de unidades activo, o texto). */
@@ -173,7 +173,11 @@ export function Compare() {
                 <td className="num">{val(r.a, r.unit)}</td>
                 <td className="num">{val(r.b, r.unit)}</td>
                 <td className="num col-abs">
-                  {r.abs === null ? (r.changed ? C.changes : '') : fmtDelta(toDisplay(r.abs, r.unit))}
+                  {r.abs === null
+                    ? r.changed
+                      ? C.changes
+                      : ''
+                    : fmtDelta(toDisplay(r.abs, r.unit))}
                 </td>
                 <td className="num">
                   {r.pct === null ? (
@@ -240,12 +244,7 @@ export function Compare() {
             />
           }
         >
-          <SpeedLineChart
-            rows={rn}
-            series={series}
-            yUnit={kgf}
-            ariaLabel={C.rnAria}
-          />
+          <SpeedLineChart rows={rn} series={series} yUnit={kgf} ariaLabel={C.rnAria} />
         </ChartCard>
         <ChartCard
           id="cmp-av"
@@ -254,11 +253,7 @@ export function Compare() {
           table={
             <DataTable
               caption={C.avCaption}
-              columns={[
-                speedCol,
-                { key: 'a', label: `A [${m}]` },
-                { key: 'b', label: `B [${m}]` },
-              ]}
+              columns={[speedCol, { key: 'a', label: `A [${m}]` }, { key: 'b', label: `B [${m}]` }]}
               rows={av}
             />
           }

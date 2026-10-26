@@ -43,12 +43,7 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
           {T.panel(panel.id)}
           {panel.name && <span className="pname"> · {panel.name}</span>}
         </h3>
-        <button
-          type="button"
-          className="btn small ghost"
-          onClick={onClose}
-          aria-label={T.close}
-        >
+        <button type="button" className="btn small ghost" onClick={onClose} aria-label={T.close}>
           ✕
         </button>
       </div>
@@ -127,11 +122,7 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
               ))}
             </select>
           </div>
-          {orientation === 'square' && (
-            <p className="help">
-              {T.squareHelp}
-            </p>
-          )}
+          {orientation === 'square' && <p className="help">{T.squareHelp}</p>}
         </div>
       )}
       <button type="button" className="btn small" onClick={onReset} disabled={!anyEdited}>

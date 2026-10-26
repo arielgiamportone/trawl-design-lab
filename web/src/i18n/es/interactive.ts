@@ -34,8 +34,7 @@ export const interactive = {
     minus: (field: string) => `Restar 1 a ${field}`,
     plus: (field: string) => `Sumar 1 a ${field}`,
     orientation: 'Orientación de la malla',
-    squareHelp:
-      'En malla cuadrada las mallas cuentan cuadrados de una pata (mallero / 2) de lado.',
+    squareHelp: 'En malla cuadrada las mallas cuentan cuadrados de una pata (mallero / 2) de lado.',
     reset: 'Restablecer este panel',
   },
   impact: {

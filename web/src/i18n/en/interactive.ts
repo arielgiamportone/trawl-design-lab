@@ -9,7 +9,8 @@ export const interactive: Messages['interactive'] = {
     n === 0
       ? 'No changes from the base net.'
       : `${n} ${n === 1 ? 'value' : 'values'} edited (panels highlighted). The dashed line is the original net.`,
-  stretched: 'The plan is drawn at stretched mesh: width = meshes × mesh size; depth = N × mesh size.',
+  stretched:
+    'The plan is drawn at stretched mesh: width = meshes × mesh size; depth = N × mesh size.',
   canvasLabel:
     'Editable net plan. Tab moves through the panels; Enter selects; arrow keys adjust meshes (Shift ×10); +/− zoom; 0 full view; Esc deselects.',
   planeTitle: (plane: string) => `${plane.charAt(0).toUpperCase()}${plane.slice(1)} plane`,
@@ -35,8 +36,7 @@ export const interactive: Messages['interactive'] = {
     minus: (field: string) => `Subtract 1 from ${field}`,
     plus: (field: string) => `Add 1 to ${field}`,
     orientation: 'Mesh orientation',
-    squareHelp:
-      'In square mesh, meshes count squares whose side is one bar (mesh size / 2).',
+    squareHelp: 'In square mesh, meshes count squares whose side is one bar (mesh size / 2).',
     reset: 'Reset this panel',
   },
   impact: {

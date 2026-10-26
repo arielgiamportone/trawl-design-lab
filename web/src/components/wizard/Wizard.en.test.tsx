@@ -34,9 +34,7 @@ describe('guided mode in English', () => {
     renderApp();
     expect(screen.getByRole('heading', { name: 'Step 1 of 4: Vessel' })).toBeInTheDocument();
     await userEvent.click(await screen.findByRole('radio', { name: /180 BHP/ }));
-    await userEvent.click(
-      screen.getByRole('radio', { name: /Controllable pitch with nozzle/ }),
-    );
+    await userEvent.click(screen.getByRole('radio', { name: /Controllable pitch with nozzle/ }));
     await next();
 
     expect(screen.getByRole('heading', { name: 'Step 2 of 4: Net' })).toBeInTheDocument();
@@ -90,7 +88,9 @@ describe('guided mode in English', () => {
     // Rango habitual en pies y captura en libras.
     await userEvent.clear(depth);
     await userEvent.type(depth, '5000');
-    expect(await screen.findByText(/Outside the usual range \(32\.808–2,624\.7 ft\)/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Outside the usual range \(32\.808–2,624\.7 ft\)/),
+    ).toBeInTheDocument();
     expect(screen.getByRole('spinbutton', { name: /Expected catch per haul \[lb\]/ })).toHaveValue(
       1102,
     );

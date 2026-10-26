@@ -335,6 +335,24 @@ El tercer modo de la cabecera, **«Aula UTN»** (Fase 17, {doc}`38_docentes`), t
 
 Sin la base de datos en el servidor, «Cursos» lo avisa y la práctica libre sigue funcionando.
 
+## Idioma y unidades
+
+La cabecera tiene dos selectores más: **ES/EN** (idioma) y **Métrico/Imperial** (unidades).
+Los dos se recuerdan en el navegador; la primera vez el idioma sale del navegador (inglés si no
+es español).
+
+- **Idioma.** Los textos de la app viven en `web/src/i18n/es/*.ts` (la fuente) y
+  `web/src/i18n/en/*.ts`, tipado contra el español: si al inglés le falta una clave, `npm run
+  typecheck` falla. La app manda `lang=en` a la API y al motor del teléfono, así las notas, los
+  avisos, los ejercicios, los laboratorios y los informes descargados llegan en el mismo idioma.
+  Los nombres de redes, buques y portones son datos y no se traducen. Los números usan coma o
+  punto decimal según el idioma; los campos aceptan los dos.
+- **Unidades.** El motor calcula siempre en métrico. En imperial la app sólo convierte para
+  mostrar y para leer lo que se escribe (m → ft, mm → in, kgf → lbf, kg → lb, m² → ft²,
+  L → gal, $/L → $/gal, $/kg → $/lb); lo que se guarda en el proyecto y se manda al motor sigue
+  en métrico. Las mallas quedan en mm con la pulgada entre paréntesis, como en el oficio. Los
+  ejercicios del aula se corrigen en las unidades de su enunciado.
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,

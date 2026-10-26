@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { setLang } from '../i18n';
 import {
   backoffDelay,
   docsUrl,
@@ -25,6 +26,10 @@ describe('backoff y transiciones', () => {
     expect(statusLabel('ok', '0.1.0')).toBe('API conectada · v0.1.0');
     expect(statusLabel('ok')).toBe('API conectada');
     expect(statusLabel('down')).toBe('API no disponible');
+    setLang('en');
+    expect(statusLabel('ok', '0.1.0')).toBe('API connected · v0.1.0');
+    expect(statusLabel('ok', undefined, false, true)).toBe('Offline · on-device engine');
+    setLang('es');
   });
 
   it('enlace a la documentación', () => {

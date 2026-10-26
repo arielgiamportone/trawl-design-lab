@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { setLang } from '../i18n';
 import { chapterUrl } from './docs';
+import { setUnits } from './units';
 import { checkRange, HELP } from './help';
 
 describe('ayuda contextual', () => {
@@ -36,5 +38,15 @@ describe('ayuda contextual', () => {
     expect(chapterUrl('18_cables', '../')).toBe('../18_cables.html');
     expect(chapterUrl('18_cables', 'https://x.io/libro')).toBe('https://x.io/libro/18_cables.html');
     expect(chapterUrl('18_cables', null)).toBeNull();
+  });
+  it('en inglés apunta al libro en inglés y muestra el rango en pies', () => {
+    setLang('en');
+    setUnits('imperial');
+    expect(chapterUrl('18_cables', '../')).toBe('../en/18_cables.html');
+    expect(HELP.depth_m?.text).toMatch(/^Depth of the fishing ground/);
+    const r = checkRange('depth_m', 2000);
+    expect(!r.ok && r.message).toBe(
+      'Outside the usual range (32.808–2,624.7 ft). It is computed anyway; check the value.',
+    );
   });
 });

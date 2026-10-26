@@ -11,7 +11,8 @@ export const wizard: Messages['wizard'] = {
     pullFriction: (v: string) => ` (including ${v} of seabed friction)`,
     pullWhyCrit:
       'With that shortfall the vessel cannot reach that speed: lower the speed, use a smaller net or a more powerful vessel.',
-    pullWhyWarn: 'It is enough, but with little margin for current, hard ground or catch in the codend.',
+    pullWhyWarn:
+      'It is enough, but with little margin for current, hard ground or catch in the codend.',
     pullWhyOk: 'There is margin for current, ground and catch.',
     pullNoData: 'No data at that speed',
     pullNoDataWhy:
@@ -29,7 +30,8 @@ export const wizard: Messages['wizard'] = {
     warpFail:
       'Its breaking load does not cover the required one with the safety factor: choose a thicker warp.',
     openingTitle: 'Net mouth',
-    openingWhy: 'Width between wingtips × height of the mouth, estimated for the net while fishing.',
+    openingWhy:
+      'Width between wingtips × height of the mouth, estimated for the net while fishing.',
     sweptTitle: 'Area swept per hour',
     swept: (thousands: string, unit: string) => `${thousands} thousand ${unit}/h`,
     sweptWhy: (width: string, speed: string) =>

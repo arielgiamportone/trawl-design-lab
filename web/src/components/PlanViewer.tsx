@@ -73,9 +73,7 @@ export function PlanViewer() {
         alt={P.alt(view === 'sheet' ? P.sheetLower : P.scaleLower, T.labels.variants[variant])}
         label={P.stageLabel}
         testId="plan-image"
-        placeholder={
-          <p className="empty">{plan.isFetching ? P.generating : P.none}</p>
-        }
+        placeholder={<p className="empty">{plan.isFetching ? P.generating : P.none}</p>}
       />
       <p className="help" style={{ marginTop: 8 }}>
         {P.help}

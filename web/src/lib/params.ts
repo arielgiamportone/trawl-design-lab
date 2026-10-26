@@ -205,8 +205,7 @@ export function parseParam(meta: ParamMeta, text: string): ParseResult | null {
     }
     case 'int': {
       const n = parseNumber(t);
-      if (n === null || !Number.isInteger(n))
-        return { ok: false, error: E.integer };
+      if (n === null || !Number.isInteger(n)) return { ok: false, error: E.integer };
       return { ok: true, value: n };
     }
     case 'tuple': {

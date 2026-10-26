@@ -63,7 +63,11 @@ export function Results() {
     { id: 'plano', label: L.plano },
     {
       id: 'comparar',
-      label: <>{L.comparar} {pinned && <span className="badge accent">A</span>}</>,
+      label: (
+        <>
+          {L.comparar} {pinned && <span className="badge accent">A</span>}
+        </>
+      ),
     },
     { id: 'optimizar', label: L.optimizar },
     { id: 'simulacion', label: L.simulacion },
@@ -75,7 +79,11 @@ export function Results() {
     { id: 'lotes', label: L.lotes },
     {
       id: 'notas',
-      label: <>{L.notas} {notes > 0 && <span className="badge">{notes}</span>}</>,
+      label: (
+        <>
+          {L.notas} {notes > 0 && <span className="badge">{notes}</span>}
+        </>
+      ),
     },
   ];
   const tabs = lowData ? allTabs.filter((t) => !HEAVY_TABS.includes(t.id)) : allTabs;

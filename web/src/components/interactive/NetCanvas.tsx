@@ -49,7 +49,6 @@ interface Pan {
 }
 type View = { x: number; y: number; w: number; h: number };
 
-
 /** Tirador sobre un polígono de 4 vértices (sup-izq, sup-der, inf-der, inf-izq). */
 function handleOnPolygon(
   pts: [number, number][],
@@ -337,10 +336,20 @@ export function NetCanvas({
         </div>
       )}
       <div className="plan-zoom">
-        <button type="button" className="btn small" onClick={() => zoom(1.25)} aria-label={T.zoomIn}>
+        <button
+          type="button"
+          className="btn small"
+          onClick={() => zoom(1.25)}
+          aria-label={T.zoomIn}
+        >
           +
         </button>
-        <button type="button" className="btn small" onClick={() => zoom(0.8)} aria-label={T.zoomOut}>
+        <button
+          type="button"
+          className="btn small"
+          onClick={() => zoom(0.8)}
+          aria-label={T.zoomOut}
+        >
           −
         </button>
         <button

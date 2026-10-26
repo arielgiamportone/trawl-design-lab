@@ -107,4 +107,21 @@ describe('404 de una ruta que la API no tiene', () => {
     expect((err as Error).message).toBe('red desconocida: x');
     vi.unstubAllGlobals();
   });
+  it('en inglés, el aviso sale en inglés', async () => {
+    const { api } = await import('./client');
+    const { setLang } = await import('../i18n');
+    setLang('en');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ detail: 'Not Found' }), {
+            status: 404,
+            headers: { 'Content-Type': 'application/json' },
+          }),
+      ),
+    );
+    await expect(api.seabeds()).rejects.toThrow(/^The online API is older than this version/);
+    vi.unstubAllGlobals();
+  });
 });

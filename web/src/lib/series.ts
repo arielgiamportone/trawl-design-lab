@@ -2,6 +2,7 @@
 import type { DesignData, PerformanceWindow, Series } from '../api/result';
 import { msg } from '../i18n';
 import { DRAG_METHODS, PULL_METHODS } from './labels';
+import { toDisplay } from './units';
 
 export const at = (s: Series | null | undefined, i: number): number | null => {
   const v = s?.[i];
@@ -160,4 +161,21 @@ export function nearestIndex(speeds: number[], kn: number): number {
     if (Math.abs(s - kn) < Math.abs((speeds[best] ?? Infinity) - kn)) best = i;
   });
   return best;
+}
+
+/**
+ * Filas con los valores de ``units`` (clave → unidad métrica del motor) pasados al sistema de
+ * unidades activo, para gráficos y tablas. Los gráficos (``SpeedLineChart``, ``TooltipBox``,
+ * ``DataTable``) muestran los valores tal como llegan: convierta antes con esta función y rotule
+ * con ``unitLabel``.
+ */
+export function displayRows<T extends object>(rows: T[], units: Record<string, string>): T[] {
+  return rows.map((r) => {
+    const out: Record<string, unknown> = { ...(r as Record<string, unknown>) };
+    for (const [k, unit] of Object.entries(units)) {
+      const v = (r as Record<string, unknown>)[k];
+      if (typeof v === 'number') out[k] = toDisplay(v, unit);
+    }
+    return out as T;
+  });
 }

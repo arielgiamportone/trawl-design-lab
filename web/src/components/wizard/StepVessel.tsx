@@ -17,9 +17,7 @@ export function StepVessel({ onBatch }: { onBatch?: () => void }) {
   const propeller = state.params.ft_propeller || propDefault;
   return (
     <>
-      <p className="wizard-lead">
-        {T.lead}
-      </p>
+      <p className="wizard-lead">{T.lead}</p>
       {catalogs.loading && catalogs.vessels.length === 0 ? (
         <p className="help">{T.loading}</p>
       ) : (

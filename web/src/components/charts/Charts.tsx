@@ -6,6 +6,7 @@ import { DRAG_METHODS, PROPELLER_LABELS, PULL_METHODS, dragMethodLabel } from '.
 import {
   composition,
   designPropeller,
+  displayRows,
   dragRows,
   feasibleWindow,
   hasModified,
@@ -18,13 +19,7 @@ import {
 import { useChartColors, type ChartColors } from '../../lib/theme';
 import { toDisplay, unitLabel } from '../../lib/units';
 import { useCase } from '../../state/useCase';
-import {
-  ChartCard,
-  DataTable,
-  displayRows,
-  type LegendItem,
-  type SeriesDef,
-} from './ChartParts';
+import { ChartCard, DataTable, type LegendItem, type SeriesDef } from './ChartParts';
 import { COMPONENTS } from './components';
 import { CompositionChart } from './CompositionChart';
 import { SpeedLineChart } from './SpeedLineChart';
@@ -214,13 +209,7 @@ function DragCard({ d, c, variant }: { d: DesignData; c: ChartColors; variant: '
         />
       }
     >
-      <SpeedLineChart
-        rows={rows}
-        series={series}
-        yUnit={u}
-        sortTooltip
-        ariaLabel={C.aria}
-      />
+      <SpeedLineChart rows={rows} series={series} yUnit={u} sortTooltip ariaLabel={C.aria} />
     </ChartCard>
   );
 }

@@ -46,7 +46,8 @@ export const expert = {
     title: 'Parámetros avanzados',
     withError: (n: number) => `${n} con error`,
     changed: (n: number) => `${n} cambiados`,
-    intro: 'Vacío = valor por defecto (en gris). Admite coma decimal; las listas se separan con «;».',
+    intro:
+      'Vacío = valor por defecto (en gris). Admite coma decimal; las listas se separan con «;».',
     searchPlaceholder: 'Buscar parámetro o celda…',
     searchLabel: 'Buscar parámetro',
     resetAll: 'Restablecer todos',

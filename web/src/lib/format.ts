@@ -37,7 +37,10 @@ export function fmtFixed(value: number | null | undefined, digits = 1): string {
 }
 
 /** Número con el formato del idioma activo y opciones de ``Intl`` (reemplaza ``toLocaleString``). */
-export function fmtNum(value: number | null | undefined, opts: Intl.NumberFormatOptions = {}): string {
+export function fmtNum(
+  value: number | null | undefined,
+  opts: Intl.NumberFormatOptions = {},
+): string {
   if (value === null || value === undefined || !Number.isFinite(value)) return '—';
   return nf(opts).format(value);
 }

@@ -42,11 +42,7 @@ export function LiveImpact({ now, base, variant, speed, stale, hasEdits }: Props
               {shown(r.now)} <span className="unit">{unit}</span>
             </span>
             <span className="impact-delta">
-              {showDelta
-                ? `${sign}${shown(r.delta)} ${unit}`
-                : hasEdits
-                  ? T.noChange
-                  : T.baseNet}
+              {showDelta ? `${sign}${shown(r.delta)} ${unit}` : hasEdits ? T.noChange : T.baseNet}
             </span>
           </div>
         );

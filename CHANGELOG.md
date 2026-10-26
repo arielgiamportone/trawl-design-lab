@@ -6,6 +6,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **App en inglés y en unidades imperiales (Fase 18.3)**: selector ES/EN y Métrico/Imperial en
+  la cabecera (se recuerdan; el idioma inicial sale del navegador). Catálogos propios sin
+  dependencias (`web/src/i18n/`), con el inglés tipado contra el español: falta una clave y el
+  `typecheck` falla. Todos los modos, pestañas, el modo guiado, el aula y los laboratorios en
+  inglés; la app pide a la API (y al motor del teléfono) con `lang=en`, así notas, avisos,
+  ejercicios e informes llegan en el mismo idioma. Números con punto o coma según el idioma.
+  Imperial sólo para mostrar e ingresar (pies, pulgadas, libras, lbf, galones; las mallas siguen
+  en mm con la pulgada entre paréntesis): lo que se guarda y se manda al motor sigue en métrico.
+  Las respuestas de opción múltiple de los laboratorios se guardan por `id` y se corrigen en
+  cualquier idioma. Pruebas Vitest en inglés e imperial por área y E2E en inglés.
 - **Motor, informes y banco docente en inglés (Fase 18.1)**: `trawlkit.i18n` (el texto en
   español es la clave; catálogos `data/i18n/en/*.yaml`, idioma por pedido con `ContextVar` y
   números con punto o coma según el idioma). La API lee `?lang=en` o `Accept-Language` y responde

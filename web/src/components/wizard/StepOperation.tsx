@@ -114,9 +114,7 @@ export function StepOperation() {
             })
           }
         />
-        <p className="help">
-          {T.catchHelp}
-        </p>
+        <p className="help">{T.catchHelp}</p>
       </div>
       <fieldset className="field">
         <legend>{T.portLegend}</legend>
@@ -148,13 +146,9 @@ export function StepOperation() {
           />
           {T.genericOnly}
         </label>
-        <p className="help">
-          {T.regionHelp}
-        </p>
+        <p className="help">{T.regionHelp}</p>
       </fieldset>
-      <p className="help">
-        {T.restHelp}
-      </p>
+      <p className="help">{T.restHelp}</p>
     </>
   );
 }

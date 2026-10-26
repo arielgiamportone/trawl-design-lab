@@ -59,8 +59,7 @@ export function tiles(d: DesignData): Tile[] {
       label: K.max_speed_kn,
       value: fmtFixed(num(d, 'max_speed_kn'), 2),
       unit: 'kn',
-      sub:
-        maxMod != null ? K.modified(`${fmtFixed(maxMod, 2)} kn`) : K.maxSpeedSub,
+      sub: maxMod != null ? K.modified(`${fmtFixed(maxMod, 2)} kn`) : K.maxSpeedSub,
     },
     {
       key: 'warp_selected',

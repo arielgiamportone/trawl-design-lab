@@ -50,7 +50,8 @@ export function pullAt(w: PerformanceWindow | undefined, speed: number) {
 
 const kgf = (v: number) => `${fmt(Math.round(toDisplay(v, 'kgf')))} ${unitLabel('kgf')}`;
 const kn = (v: number) => `${fmtFixed(v, 2)} kn`;
-const len = (v: number, digits: number) => `${fmtFixed(toDisplay(v, 'm'), digits)} ${unitLabel('m')}`;
+const len = (v: number, digits: number) =>
+  `${fmtFixed(toDisplay(v, 'm'), digits)} ${unitLabel('m')}`;
 
 export function assess(d: DesignData, targetSpeed: number): Check[] {
   const V = msg().wizard.verdict;
@@ -123,9 +124,7 @@ export function assess(d: DesignData, targetSpeed: number): Check[] {
       meets === null
         ? V.warpNone
         : meets
-          ? V.warpOk(
-              `${fmt(toDisplay(sel?.breaking_load_t ?? NaN, 't'))} ${unitLabel('t')}`,
-            )
+          ? V.warpOk(`${fmt(toDisplay(sel?.breaking_load_t ?? NaN, 't'))} ${unitLabel('t')}`)
           : V.warpFail,
     chapter: '18_cables',
   });

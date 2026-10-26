@@ -1,13 +1,7 @@
 import { useId, useMemo, useState } from 'react';
 import { useT } from '../i18n';
 import { checkRange, HELP } from '../lib/help';
-import {
-  defaultText,
-  paramLabel,
-  parseParam,
-  useUnitText,
-  type ParamMeta,
-} from '../lib/params';
+import { defaultText, paramLabel, parseParam, useUnitText, type ParamMeta } from '../lib/params';
 import { useCase } from '../state/useCase';
 import { HelpTip } from './HelpTip';
 

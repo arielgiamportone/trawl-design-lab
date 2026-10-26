@@ -9,11 +9,11 @@ import {
   YAxis,
 } from 'recharts';
 import { useT } from '../../i18n';
-import type { CompositionRow } from '../../lib/series';
+import { displayRows, type CompositionRow } from '../../lib/series';
 import { fmt, fmtAxis, fmtFixed } from '../../lib/format';
 import { unitLabel } from '../../lib/units';
 import { useChartColors, useMediaQuery } from '../../lib/theme';
-import { displayRows, TooltipBox } from './ChartParts';
+import { TooltipBox } from './ChartParts';
 import { COMPONENTS } from './components';
 
 interface TipProps {
@@ -61,11 +61,7 @@ export function CompositionChart({
 
   const height = 64 + rows.length * 56;
   return (
-    <div
-      style={{ width: '100%', height }}
-      role="img"
-      aria-label={T.compositionAria(speedLabel)}
-    >
+    <div style={{ width: '100%', height }} role="img" aria-label={T.compositionAria(speedLabel)}>
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
           data={rows}

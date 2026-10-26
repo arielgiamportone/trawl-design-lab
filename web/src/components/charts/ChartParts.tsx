@@ -1,24 +1,6 @@
 import type { ReactNode } from 'react';
 import { useT } from '../../i18n';
 import { fmt } from '../../lib/format';
-import { toDisplay } from '../../lib/units';
-
-/**
- * Filas con los valores de ``units`` (clave → unidad métrica del motor) pasados al sistema de
- * unidades activo, para gráficos y tablas. Los gráficos (``SpeedLineChart``, ``TooltipBox``,
- * ``DataTable``) muestran los valores tal como llegan: convierta antes con esta función y rotule
- * con ``unitLabel``.
- */
-export function displayRows<T extends object>(rows: T[], units: Record<string, string>): T[] {
-  return rows.map((r) => {
-    const out: Record<string, unknown> = { ...(r as Record<string, unknown>) };
-    for (const [k, unit] of Object.entries(units)) {
-      const v = (r as Record<string, unknown>)[k];
-      if (typeof v === 'number') out[k] = toDisplay(v, unit);
-    }
-    return out as T;
-  });
-}
 
 export interface SeriesDef {
   key: string;

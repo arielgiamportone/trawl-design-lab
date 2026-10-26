@@ -90,8 +90,7 @@ function getWorker(): Worker {
       if (m.code === 'download') p.reject(new Error(O.downloadFailed(m.arg ?? '')));
       else if (m.code === 'notStarted') p.reject(new Error(O.notStarted));
       else p.reject(new Error(m.message));
-    }
-    else p.resolve(m.out);
+    } else p.resolve(m.out);
   };
   return worker;
 }

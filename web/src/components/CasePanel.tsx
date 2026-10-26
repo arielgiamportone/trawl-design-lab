@@ -186,7 +186,9 @@ export function CasePanel() {
             {C.area(
               `${fmtNum(toDisplay(door.area_m2, 'm²'), { maximumFractionDigits: 2 })} ${unitLabel('m²')}`,
             )}
-            {door.weight_air_kg != null ? ` · ${C.weightInAir(fmtU(door.weight_air_kg, 'kg'))}` : ''}
+            {door.weight_air_kg != null
+              ? ` · ${C.weightInAir(fmtU(door.weight_air_kg, 'kg'))}`
+              : ''}
           </p>
         )}
       </div>

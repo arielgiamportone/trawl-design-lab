@@ -64,9 +64,7 @@ export function OfflinePanel() {
         {conn.local && <span className="badge accent">{T.local}</span>}
       </summary>
       <div className="accordion-body">
-        <p className="help">
-          {T.intro}
-        </p>
+        <p className="help">{T.intro}</p>
         {!info ? (
           <button
             type="button"

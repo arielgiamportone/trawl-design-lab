@@ -72,7 +72,10 @@ const METRIC_DEFS: Omit<Metric, 'label'>[] = [
 
 /** Indicadores con el rótulo en el idioma activo. */
 export const METRICS: Metric[] = localized(() =>
-  METRIC_DEFS.map((m) => ({ ...m, label: (msg().labels.impact as Record<string, string>)[m.key] ?? m.key })),
+  METRIC_DEFS.map((m) => ({
+    ...m,
+    label: (msg().labels.impact as Record<string, string>)[m.key] ?? m.key,
+  })),
 );
 
 export interface ImpactRow {
