@@ -35,6 +35,9 @@ parts:
       - file: 36_construccion
       - file: 37_economia
       - file: erratas
+  - caption: Docencia
+    chapters:
+      - file: 38_docentes
   - caption: Software
     chapters:
       - file: motor

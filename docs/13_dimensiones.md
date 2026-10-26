@@ -259,8 +259,8 @@ lima ({doc}`16_aberturas`).
 
 ## Ejercicios
 
-Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
-con otros datos y se corrigen.
+Del banco del modo docente, con los datos del libro. En la app, el modo «Aula UTN» los genera con
+otros datos y los corrige ({doc}`38_docentes`).
 
 ```{code-cell} ipython3
 :tags: [remove-input]

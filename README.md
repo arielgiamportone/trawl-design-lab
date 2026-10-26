@@ -75,6 +75,8 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
 | **Construcción**: hoja de corte, uniones y montaje | **Guía para el taller** en el teléfono, paso a paso |
 | ![Economía: margen por velocidad y reparto del costo](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-economia.png) | ![Optimizar: mejor diseño, región factible y frente de Pareto](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-claro-optimizar.png) |
 | **Economía**: margen, costo por kg y velocidad más rentable | **Optimizar**: escala de la red y velocidad |
+| ![Aula UTN: planilla de notas del docente](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-aula-docente.png) | ![Laboratorio guiado sobre la app](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-aula-laboratorio.png) |
+| **Aula UTN**: cursos, tareas con datos por alumno y notas | **Laboratorio guiado**: cada paso se comprueba con el caso abierto |
 
 ## Qué hace
 
@@ -101,6 +103,9 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
 - **Economía de la operación**: gasoil, captura, costos por rubro y margen de la marea a cada
   velocidad, con los precios del puerto; la velocidad más rentable, la comparación entre redes y
   el repago de una red nueva, también en los lotes de flota.
+- **Aula UTN**: ejercicios de los capítulos con datos que cambian y corrección automática,
+  laboratorios guiados sobre la app y un aula con cursos, tareas, entregas y notas para la
+  tecnicatura y el grado.
 - **Sin conexión**: la app se instala y el mismo motor corre en el teléfono (Pyodide).
 
 ## Arquitectura
@@ -125,7 +130,7 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 75](https://img.shields.io/badge/rutas%20API-75-1c5cab) ![capítulos: 37](https://img.shields.io/badge/cap%C3%ADtulos-37-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 75](https://img.shields.io/badge/rutas%20API-75-1c5cab) ![capítulos: 38](https://img.shields.io/badge/cap%C3%ADtulos-38-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
@@ -137,7 +142,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 75 |
-| Capítulos del libro | 37 · 69 referencias |
+| Capítulos del libro | 38 · 69 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->
@@ -157,6 +162,7 @@ trawlkit batch flota.xlsx --net fao_wb_bt2p_60hp -o lote.xlsx         # una red 
 trawlkit batch --template plantilla.xlsx        # plantilla de flota con su hoja de ayuda
 trawlkit build-guide fao_a3_standard -o guia.pdf    # guía de construcción para el taller
 trawlkit economics fao_a3_standard --fuel-price 1200 --catch-kg-h 150 --price-kg 1000
+trawlkit exercises sheet --chapter 14_resistencia --key -o clave.pdf
 trawlkit serve                                  # API en http://127.0.0.1:8000/docs
 trawlkit errata                                 # erratas del Excel original
 ```
@@ -204,7 +210,7 @@ El despliegue (GitHub Pages para el libro y la app, Render para la API) está en
 
 ## Hoja de ruta
 
-![Fases 0 a 14 del proyecto](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/docs/_static/img/fases.svg)
+![Fases 0 a 17 del proyecto](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/docs/_static/img/fases.svg)
 
 | Fase | Qué agregó |
 |---|---|
@@ -218,6 +224,7 @@ El despliegue (GitHub Pages para el libro y la app, Render para la API) está en
 | 14 | Planillas de flota, cálculo por lotes y proyección de una red a cada buque |
 | 15 | Guía de construcción para el taller: corte, armado, montaje en relingas y cortes de cabos |
 | 16 | Economía de la operación: costo, margen y velocidad más rentable; comparación y repago |
+| 17 | Modo docente «Aula UTN»: banco de ejercicios, laboratorios guiados, cursos, tareas y notas |
 
 El detalle de cada versión está en el [CHANGELOG](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CHANGELOG.md).
 

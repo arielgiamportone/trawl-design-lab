@@ -6,6 +6,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- Libro: capítulo 38 **«Guía para docentes»** (nueva parte «Docencia»): cómo usar la práctica
+  libre, los laboratorios y el aula en clase, el banco por capítulo y nivel, cómo se corrige,
+  una planificación de 16 semanas para tecnicatura y grado, ejemplos de parcial con datos por
+  alumno y de trabajo práctico con rúbrica, privacidad y cómo sumar ejercicios. web.md, utn.md,
+  intro, README es/en y hoja de ruta con la fase 17.
 - App web, modo **«Aula UTN»** (Fase 17.3): práctica libre con el banco de ejercicios (filtros
   por capítulo y nivel, datos nuevos o los del libro, pistas, corrección por respuesta y
   explicación; sin cuenta y sin conexión) y laboratorios guiados en un panel sobre el modo

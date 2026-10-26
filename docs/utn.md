@@ -45,6 +45,9 @@ está dedicado a las tres:
 | **FRCh** · Chubut | Puerto Madryn | <https://www.frch.utn.edu.ar/> |
 | **FRMDP** · Mar del Plata | Mar del Plata | <https://mdp.utn.edu.ar/> |
 
+Para sus cátedras, la app tiene un modo **«Aula UTN»**: ejercicios con corrección, laboratorios
+guiados sobre la app y un aula con cursos, tareas y notas ({doc}`38_docentes`).
+
 Las tres están sobre puertos pesqueros: Mar del Plata, sobre la plataforma bonaerense; Puerto
 Madryn, sobre el golfo Nuevo; Ushuaia, sobre el Canal Beagle. Este libro, el motor y sus datos
 son abiertos (MIT y CC BY 4.0) para que se usen en sus cátedras, prácticas y proyectos finales.

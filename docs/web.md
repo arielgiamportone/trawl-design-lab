@@ -313,6 +313,28 @@ una marea con la red del caso:
 - En **Lotes y flota**, «Sumar la economía de la marea» agrega gasoil, captura, costo por kg y
   margen por buque. En el modo guiado, «¿Cuánto deja la marea?».
 
+## Aula UTN
+
+El tercer modo de la cabecera, **«Aula UTN»** (Fase 17, {doc}`38_docentes`), tiene dos partes:
+
+- **Práctica libre** (sin cuenta, también sin conexión): el banco de ejercicios
+  (`GET /teaching/exercises`) filtrado por capítulo y nivel; cada ejercicio se abre con datos
+  nuevos o con los del libro, con pistas, corrección por respuesta (`POST /teaching/grade`) y la
+  explicación. Los **laboratorios** se empiezan desde la misma lista: cargan su caso de partida y
+  abren el modo experto con un panel (`components/classroom/LabPanel.tsx`) que muestra el paso, lleva
+  a su pestaña («Ir a…»), comprueba el caso abierto (`POST /teaching/labs/check`) y corrige las
+  preguntas. El avance queda en `localStorage` (`trawl-design-lab:lab:v1`).
+- **Cursos** (en línea, con el aula habilitada en el servidor): ingreso y alta con código de curso o
+  de invitación; la sesión es un token *bearer* guardado en `trawl-design-lab:aula:v1`. El alumno ve
+  las tareas abiertas de sus cursos, resuelve cada ejercicio con sus propios datos y entrega; los
+  laboratorios de una tarea se hacen con el panel y al terminar se entregan con el caso de cada
+  paso. El docente crea cursos y tareas eligiendo ejercicios y laboratorios del banco, comparte el
+  código, ve la planilla de notas, abre cada entrega para ponerle nota y comentario, resetea
+  contraseñas de sus alumnos y descarga las notas (Excel) y los enunciados o la clave de cada alumno
+  (PDF). La administración genera las invitaciones para docentes.
+
+Sin la base de datos en el servidor, «Cursos» lo avisa y la práctica libre sigue funcionando.
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,
@@ -387,6 +409,10 @@ consumo de datos** oculta «Diseño interactivo» y «Simulación», que descarg
 ![Construcción: armado paso a paso con el plano resaltado](../web/docs/screenshots/escritorio-construccion.png)
 
 ![Economía: margen por velocidad y reparto del costo](../web/docs/screenshots/escritorio-economia.png)
+
+![Aula UTN: planilla de notas del docente](../web/docs/screenshots/escritorio-aula-docente.png)
+
+![Laboratorio guiado sobre el modo experto](../web/docs/screenshots/escritorio-aula-laboratorio.png)
 
 ## Arquitectura
 

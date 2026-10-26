@@ -49,7 +49,10 @@ minuto si estaba dormida (plan gratuito; ver {doc}`despliegue`).
    ({doc}`33_catalogo_fao`), los componentes y el costo ({doc}`34_componentes`), los lotes y la
    proyección de redes a una flota ({doc}`35_lotes_proyeccion`), la guía de construcción para el
    taller ({doc}`36_construccion`), la economía de la operación ({doc}`37_economia`) y las erratas del modelo original.
-4. **Software**: motor, informes y planos, aplicación web, API, despliegue en línea y cómo citar.
+4. **Docencia**: la guía para usar el libro y la app en clase, con el banco de ejercicios, los
+   laboratorios guiados y el aula del curso ({doc}`38_docentes`). Los capítulos de teoría cierran
+   con una sección de ejercicios.
+5. **Software**: motor, informes y planos, aplicación web, API, despliegue en línea y cómo citar.
 
 Los capítulos son notebooks ejecutables: el código y los números que muestran se recalculan cada vez
 que se construye el libro.
