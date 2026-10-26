@@ -199,7 +199,7 @@ assert abs(c8.av_m / c6.av_m - 1) < 0.08
 ```
 
 A 3 kn, AH y la resistencia cambian menos de 2 % entre las resoluciones 6 y 8, y menos de 10 %
-desde la 3. La abertura vertical converge más lento y **decrece** al refinar: 1,96 / 1,72 / 1,63 m
+desde la 3. La abertura vertical converge más lento y **decrece** al refinar: 1,96 / 1,70 / 1,64 m
 con resoluciones 3, 6 y 8, y según `tests/test_sim_slow.py` 1,48 y 1,40 m con 10 y 12. Una malla
 gruesa no puede representar la curvatura de la lima entre boyas y la sobrestima; el valor
 convergido está más cerca de los 1,4 m de DynamiT que el de resolución 6. El costo crece con el

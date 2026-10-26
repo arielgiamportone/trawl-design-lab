@@ -202,7 +202,7 @@ assert abs(c8.av_m / c6.av_m - 1) < 0.08
 
 At 3 kn, AH and the drag change by less than 2 % between resolutions 6 and 8, and by less than
 10 % from resolution 3. The vertical opening converges more slowly and **decreases** as the mesh is
-refined: 1.96 / 1.72 / 1.63 m with resolutions 3, 6 and 8, and according to
+refined: 1.96 / 1.70 / 1.64 m with resolutions 3, 6 and 8, and according to
 `tests/test_sim_slow.py` 1.48 and 1.40 m with 10 and 12. A coarse mesh cannot represent the
 curvature of the headrope between floats and overestimates it; the converged value is closer to the
 1.4 m of DynamiT than the one at resolution 6. The cost grows with the number of nodes (≈ 1 s per
