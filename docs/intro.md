@@ -63,7 +63,7 @@ corregidas, recomendado para diseñar). Cada capítulo indica qué modo usa.
 
 > Giamportone, A. L. (2026). *Trawl Design Lab (trawlkit): diseño y dimensionamiento de redes de
 > arrastre*. Universidad Tecnológica Nacional, Facultad Regional Tierra del Fuego.
-> https://github.com/arielgiamportone/trawl-design-lab
+> Zenodo. https://doi.org/10.5281/zenodo.23657981
 
 Los metadatos completos y el DOI de cada versión están en {doc}`citar`.
 

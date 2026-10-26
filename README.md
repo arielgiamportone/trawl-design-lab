@@ -11,6 +11,7 @@
   <a href="https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE-docs"><img src="https://img.shields.io/badge/docs%20y%20datos-CC%20BY%204.0-blue" alt="Docs y datos: CC BY 4.0"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/"><img src="https://img.shields.io/badge/libro-Jupyter%20Book-c35a1b" alt="Libro"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/app/"><img src="https://img.shields.io/badge/app-funciona%20sin%20conexi%C3%B3n-2e7d32" alt="App: funciona sin conexión"></a>
+  <a href="https://doi.org/10.5281/zenodo.23657981"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23657981.svg" alt="DOI 10.5281/zenodo.23657981"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/citar.html"><img src="https://img.shields.io/badge/c%C3%B3mo-citar-6a4c93" alt="Cómo citar"></a>
 </p>
 
@@ -210,8 +211,8 @@ El detalle de cada versión está en el [CHANGELOG](https://github.com/arielgiam
 
 Ver [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff)
 (GitHub ofrece «Cite this repository») y la página
-[Cómo citar](https://arielgiamportone.github.io/trawl-design-lab/citar.html) del libro, con el DOI de
-Zenodo de cada versión.
+[Cómo citar](https://arielgiamportone.github.io/trawl-design-lab/citar.html) del libro. DOI de Zenodo
+(todas las versiones): [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981).
 
 ## Licencias
 

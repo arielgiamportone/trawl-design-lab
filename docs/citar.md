@@ -3,8 +3,14 @@
 ## Citar
 
 Si usás `trawlkit`, la aplicación o este libro en un trabajo, citá la versión que usaste. Cada
-versión publicada tiene un DOI propio en [Zenodo](https://zenodo.org/) (además hay un DOI
-«concepto» que siempre apunta a la última). Los metadatos están en
+versión publicada tiene un DOI propio en [Zenodo](https://zenodo.org/), y el DOI «concepto»
+[10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981) siempre apunta a la última:
+
+| Versión | DOI |
+|---|---|
+| Todas (concepto) | [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981) |
+| 1.1.0 | [10.5281/zenodo.23657982](https://doi.org/10.5281/zenodo.23657982) |
+ Los metadatos están en
 [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff); en
 GitHub, el botón **Cite this repository** los da en APA y BibTeX.
 
@@ -17,7 +23,7 @@ GitHub, el botón **Cite this repository** los da en APA y BibTeX.
   year      = {2026},
   publisher = {Zenodo},
   url       = {https://github.com/arielgiamportone/trawl-design-lab},
-  note      = {Completar con el DOI de Zenodo de la versión usada}
+  doi       = {10.5281/zenodo.23657982}
 }
 ```
 

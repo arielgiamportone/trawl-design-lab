@@ -5,6 +5,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+### Agregado
+- DOI de Zenodo (10.5281/zenodo.23657981, todas las versiones) en el README, `CITATION.cff`, la
+  página «Cómo citar» y la introducción del libro.
+
 ## [1.1.0] - 2026-10-26
 
 Primera versión publicada en PyPI y archivada en Zenodo.

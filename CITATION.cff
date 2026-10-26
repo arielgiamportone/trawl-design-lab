@@ -18,6 +18,14 @@ date-released: "2026-10-26"
 license: MIT
 repository-code: "https://github.com/arielgiamportone/trawl-design-lab"
 url: "https://arielgiamportone.github.io/trawl-design-lab/"
+doi: 10.5281/zenodo.23657981
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.23657981
+    description: DOI concepto (todas las versiones)
+  - type: doi
+    value: 10.5281/zenodo.23657982
+    description: DOI de la versión 1.1.0
 keywords:
   - fisheries
   - trawl

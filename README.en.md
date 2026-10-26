@@ -11,6 +11,7 @@
   <a href="https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE-docs"><img src="https://img.shields.io/badge/docs%20%26%20data-CC%20BY%204.0-blue" alt="Docs and data: CC BY 4.0"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/"><img src="https://img.shields.io/badge/book-Jupyter%20Book-c35a1b" alt="Book"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/app/"><img src="https://img.shields.io/badge/app-works%20offline-2e7d32" alt="App: works offline"></a>
+  <a href="https://doi.org/10.5281/zenodo.23657981"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23657981.svg" alt="DOI 10.5281/zenodo.23657981"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/citar.html"><img src="https://img.shields.io/badge/how%20to-cite-6a4c93" alt="How to cite"></a>
 </p>
 
@@ -210,8 +211,8 @@ Each release is detailed in the [CHANGELOG](https://github.com/arielgiamportone/
 
 See [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff)
 (GitHub offers "Cite this repository") and the book's
-[How to cite](https://arielgiamportone.github.io/trawl-design-lab/citar.html) page, with the
-Zenodo DOI of each release.
+[How to cite](https://arielgiamportone.github.io/trawl-design-lab/citar.html) page. Zenodo DOI
+(all versions): [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981).
 
 ## Licences
 
