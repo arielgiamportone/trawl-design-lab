@@ -8,6 +8,8 @@ quedan por debajo de 3:1 de contraste, por lo que las series llevan etiqueta dir
 
 from __future__ import annotations
 
+from _lang import LANG
+
 import html
 from collections.abc import Sequence
 
@@ -99,8 +101,9 @@ def end_label(
 
 
 def fmt(x: float, nd: int = 2) -> str:
-    """Número con coma decimal (estilo del libro)."""
-    return f"{x:,.{nd}f}".replace(",", "\u202f").replace(".", ",")
+    """Número con el separador decimal del libro (coma en español, punto en inglés)."""
+    s = f"{x:,.{nd}f}".replace(",", "\u202f")
+    return s if LANG == "en" else s.replace(".", ",")
 
 
 def md_table(headers: Sequence[str], rows: Sequence[Sequence[object]]) -> None:

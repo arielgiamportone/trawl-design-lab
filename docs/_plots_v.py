@@ -119,7 +119,7 @@ def pct_s(new: float, ref: float, nd: int = 1) -> str:
     """:func:`pct` formateado con signo y coma decimal."""
     p = pct(new, ref)
     s = fmt(abs(p), nd)
-    if s.strip("0,") == "":
+    if s.strip("0,.") == "":
         return fmt(0.0, nd)
     return ("+" if p > 0 else "−") + s
 
@@ -127,7 +127,7 @@ def pct_s(new: float, ref: float, nd: int = 1) -> str:
 def sfmt(x: float, nd: int = 2) -> str:
     """Número con signo explícito (+/−) y coma decimal."""
     s = fmt(abs(x), nd)
-    if s.strip("0,") == "":
+    if s.strip("0,.") == "":
         return s
     return ("+" if x > 0 else "−") + s
 

@@ -1,0 +1,48 @@
+# English edition of the book (Phase 18.5). Same chapters and file names as the Spanish book in
+# docs/; shares the bibliography, the images and the plotting helpers (../_plots_*.py).
+title: trawl-design-lab
+author: Ariel Luján Giamportone
+copyright: "2026"
+logo: ../_static/img/emblema-utn-pesquera-en.svg
+language: en
+only_build_toc_files: true
+exclude_patterns: [_build, "**.ipynb_checkpoints"]
+
+execute:
+  execute_notebooks: cache
+  timeout: 300
+  allow_errors: false
+
+parse:
+  myst_enable_extensions:
+    - dollarmath
+    - amsmath
+    - colon_fence
+    - deflist
+    - substitution
+    - linkify
+
+bibtex_bibfiles:
+  - ../referencias.bib
+
+sphinx:
+  config:
+    bibtex_reference_style: author_year
+    bibtex_default_style: plain
+    language: en
+    numfig: true
+    math_number_all: false
+    suppress_warnings: ["mystnb.unknown_mime_type"]
+    html_static_path: ["../_static"]
+    html_js_files: [lang-switch.js]
+
+repository:
+  url: https://github.com/arielgiamportone/trawl-design-lab
+  path_to_book: docs/en
+  branch: main
+
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_page_button: true
+  home_page_in_navbar: true

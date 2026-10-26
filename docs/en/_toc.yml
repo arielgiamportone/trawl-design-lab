@@ -1,0 +1,53 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Foundations
+    chapters:
+      - file: 01_introduccion
+      - file: 02_nomenclatura
+      - file: glossary
+      - file: utn
+  - caption: Theory and methods
+    chapters:
+      - file: 10_potencia
+      - file: 11_panos_y_cortes
+      - file: 12_mecanica_red
+      - file: 13_dimensiones
+      - file: 14_resistencia
+      - file: 15_portones_aparejo
+      - file: 16_aberturas
+      - file: 17_flotacion_lastre
+      - file: 18_cables
+      - file: 19_ventana_velocidad
+      - file: 20_optimizacion
+      - file: 21_simulacion
+      - file: 22_simulacion_realista
+      - file: 23_mar_real
+      - file: 24_malla_selectividad
+      - file: 25_incertidumbre_calibracion
+  - caption: Case study and validation
+    chapters:
+      - file: 30_caso_beagle
+      - file: 31_validacion_excel
+      - file: 32_validacion_dynamit
+      - file: 33_catalogo_fao
+      - file: 34_componentes
+      - file: 35_lotes_proyeccion
+      - file: 36_construccion
+      - file: 37_economia
+      - file: erratas
+  - caption: Teaching
+    chapters:
+      - file: 38_docentes
+  - caption: Software
+    chapters:
+      - file: motor
+      - file: informes
+      - file: web
+      - file: api
+      - file: despliegue
+      - file: citar
+  - caption: References
+    chapters:
+      - file: bibliografia
+      - file: catalogo_fuentes

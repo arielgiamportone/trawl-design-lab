@@ -16,6 +16,8 @@ import sys
 from functools import cache
 from pathlib import Path
 
+from _lang import L
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
@@ -133,9 +135,9 @@ def finish(fig) -> None:
     fig.tight_layout()
 
 
-def speed_axis(ax, label: str = "Velocidad de arrastre v [kn]") -> None:
+def speed_axis(ax, label: str | None = None) -> None:
     """Eje de velocidades del libro (1–5 kn)."""
-    ax.set_xlabel(label)
+    ax.set_xlabel(label or L("Velocidad de arrastre v [kn]", "Towing speed v [kn]"))
     ax.set_xticks([1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5])
     ax.set_xlim(0.9, 5.1)
 
