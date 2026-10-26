@@ -3,8 +3,8 @@
 `web/` contiene la aplicación de página única **trawl-design-lab · Diseño de redes de arrastre**
 (React 19 + Vite + TypeScript estricto). Consume la API HTTP de `trawlkit` y permite armar un caso
 de diseño, editar los paneles de la red, ver resultados, gráficos y planos, comparar variantes y
-descargar los informes. Toda la interfaz está en español y los números usan coma decimal
-(`Intl.NumberFormat('es-AR')`).
+descargar los informes. La interfaz está en español y en inglés (selector ES/EN); los números usan
+coma decimal en español (`es-AR`) y punto decimal en inglés (`en-US`).
 
 **Probar en línea:** <https://arielgiamportone.github.io/trawl-design-lab/app/> (vista previa
 publicada con este libro; cómo se despliega y sus limitaciones en {doc}`despliegue`).
@@ -462,7 +462,7 @@ web/
 ├── openapi.json              contrato de la API (generado, no editar)
 ├── src/
 │   ├── api/                  schema.d.ts (generado), client.ts (fetch tipado), result.ts
-│   ├── lib/                  formato es-AR, etiquetas, parámetros, paneles, series, diff, tema
+│   ├── lib/                  formato por idioma, unidades, etiquetas, parámetros, paneles, series, diff, tema
 │   ├── state/                ConnectionProvider (espera a /health); CaseProvider: caso, catálogos, /design
 │   ├── components/           panel del caso, KPI, pestañas, editor, plano, comparación…
 │   │   └── charts/           gráficos Recharts (carga diferida)

@@ -23,6 +23,7 @@ import numpy as np
 import _plots_t2 as P
 import _plots_v as PV
 from myst_nb import glue
+from trawlkit.i18n import t
 from trawlkit.model import run
 from trawlkit.sensors import example_log, parse_log, to_observations, windows
 from trawlkit.sim import Scenario
@@ -125,11 +126,22 @@ glue("n_unc", str(UD["n"]), display=False)
 ```{code-cell} ipython3
 :tags: [remove-input]
 digits = {"kgf": 0, "L/h": 1, "cm": 1}
+# The species name inside the L50 label comes from the Spanish catalogue data/species.yaml.
+SPECIES_EN = {"merluza común": "Argentine hake"}
+
+
+def out_label(o) -> str:
+    lab = o["label"]
+    for es_name, en_name in SPECIES_EN.items():
+        lab = lab.replace(es_name, en_name)
+    return lab
+
+
 PV.md_table(
     ["Result", "Nominal", "P10", "P50", "P90"],
     [
         [
-            f"{o['label']} [{o['unit']}]",
+            f"{out_label(o)} [{o['unit']}]",
             "—" if o["nominal"] is None else num(o["nominal"], digits.get(o["unit"], 2)),
             *(num(o[k], digits.get(o["unit"], 2)) for k in ("p10", "p50", "p90")),
         ]
@@ -183,7 +195,7 @@ parameter comes from $(J^\mathsf{T} J)^{-1}$ and is only indicative.
 :tags: [remove-input]
 PV.md_table(
     ["Parameter", "Range"],
-    [[lab, f"{num(lo, 2)} – {num(hi, 2)}"] for lab, lo, hi in PARAMETERS.values()],
+    [[t(lab), f"{num(lo, 2)} – {num(hi, 2)}"] for lab, lo, hi in PARAMETERS.values()],
 )
 ```
 
