@@ -150,7 +150,7 @@ def test_error_details_in_english(monkeypatch: pytest.MonkeyPatch) -> None:
     assert r.status_code == 422 and r.json()["detail"] == "unknown parameters: ['nope']"
     assert client.get("/catalog/nets/nope").json()["detail"] == "red desconocida: 'nope'"
     monkeypatch.setenv("TRAWLKIT_MAX_SIM_SECONDS", "1")
-    body = {**STD, "speeds_kn": [2.0, 3.0, 4.0], "resolution": 6}
+    body = {"speeds_kn": [2.0, 3.0, 4.0], "resolution": 6}
     r = client.post("/simulate?lang=en", json=body)
     assert r.status_code == 422
     detail = r.json()["detail"]
