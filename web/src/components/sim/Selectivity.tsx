@@ -333,9 +333,7 @@ export function Selectivity() {
           <p className="help">{T.help(fmtU(3, 'm'))}</p>
         </div>
       )}
-      {!r && !query.isFetching && !query.error && (
-        <p className="empty">{T.empty}</p>
-      )}
+      {!r && !query.isFetching && !query.error && <p className="empty">{T.empty}</p>}
     </div>
   );
 }

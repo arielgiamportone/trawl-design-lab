@@ -8,6 +8,8 @@ import {
   type WheelEvent,
 } from 'react';
 import type { LayoutResponse } from '../../api/client';
+import { useT } from '../../i18n';
+import { fmtU } from '../../lib/units';
 import {
   arrangePlanes,
   dragMeshes,
@@ -47,7 +49,6 @@ interface Pan {
 }
 type View = { x: number; y: number; w: number; h: number };
 
-const SIDE_LABEL = { left: 'izquierda', right: 'derecha', center: 'centro' } as const;
 
 /** Tirador sobre un polígono de 4 vértices (sup-izq, sup-der, inf-der, inf-izq). */
 function handleOnPolygon(
@@ -87,6 +88,7 @@ export function NetCanvas({
   onCommit,
   onNudge,
 }: Props) {
+  const T = useT().interactive;
   const svgRef = useRef<SVGSVGElement>(null);
   const planes = layout.planes;
   const span = useMemo(() => {
@@ -215,7 +217,7 @@ export function NetCanvas({
         viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`}
         preserveAspectRatio="xMidYMid meet"
         role="group"
-        aria-label="Plano editable de la red. Tab recorre los paneles; Enter selecciona; flechas ajustan mallas (Mayúsculas ×10); +/− zoom; 0 vista completa; Esc deselecciona."
+        aria-label={T.canvasLabel}
         tabIndex={-1}
         onPointerDown={onDown}
         onPointerMove={onMove}
@@ -237,7 +239,7 @@ export function NetCanvas({
                 textAnchor="middle"
                 className="nc-plane-label"
               >
-                Plano {PLANE_LABELS[plane.plane] ?? plane.plane}
+                {T.planeTitle(PLANE_LABELS[plane.plane] ?? plane.plane)}
               </text>
               {plane.shapes.map((s) => {
                 const isSel = s.id === selected;
@@ -245,11 +247,14 @@ export function NetCanvas({
                   drag && drag.shape.id === s.id ? ghostPoints(s, drag.handle, drag.value) : null;
                 const pts = isDragged ?? (s.points as [number, number][]);
                 const [cx, cy] = centroid(pts);
-                const label =
-                  `Panel ${s.id} (${SECTION_LABELS[s.section] ?? s.section}, ` +
-                  `${PLANE_LABELS[s.plane] ?? s.plane}, ${SIDE_LABEL[s.side]}): ` +
-                  `${s.meshes_top} → ${s.meshes_bottom} mallas, N ${s.meshes_depth}, ` +
-                  `mallero ${s.mesh_mm} mm`;
+                const label = T.panelLabel(
+                  s.id,
+                  `${SECTION_LABELS[s.section] ?? s.section}, ${PLANE_LABELS[s.plane] ?? s.plane}, ${T.sides[s.side]}`,
+                  s.meshes_top,
+                  s.meshes_bottom,
+                  s.meshes_depth,
+                  fmtU(s.mesh_mm, 'mesh_mm'),
+                );
                 return (
                   <g key={`${s.id}-${s.side}`}>
                     <polygon
@@ -315,7 +320,7 @@ export function NetCanvas({
                           data-side={s.side}
                           data-panel={s.id}
                           data-plane={plane.plane}
-                          aria-label={`Arrastrar ${HANDLE_LABEL[h]} del panel ${s.id}`}
+                          aria-label={T.dragHandle(HANDLE_LABEL[h], s.id)}
                           onPointerDown={onHandleDown}
                         />
                       );
@@ -327,22 +332,22 @@ export function NetCanvas({
       </svg>
       {drag && (
         <div className="nc-drag-tip" role="status">
-          Panel {drag.shape.id} · {HANDLE_LABEL[drag.handle]}: <strong>{drag.value}</strong> mallas
-          (antes {dragMeshes(drag.shape, drag.handle, 0, 0)}) · Esc cancela
+          {T.dragTipHead(drag.shape.id, HANDLE_LABEL[drag.handle])} <strong>{drag.value}</strong>{' '}
+          {T.dragTipTail(dragMeshes(drag.shape, drag.handle, 0, 0))}
         </div>
       )}
       <div className="plan-zoom">
-        <button type="button" className="btn small" onClick={() => zoom(1.25)} aria-label="Acercar">
+        <button type="button" className="btn small" onClick={() => zoom(1.25)} aria-label={T.zoomIn}>
           +
         </button>
-        <button type="button" className="btn small" onClick={() => zoom(0.8)} aria-label="Alejar">
+        <button type="button" className="btn small" onClick={() => zoom(0.8)} aria-label={T.zoomOut}>
           −
         </button>
         <button
           type="button"
           className="btn small"
           onClick={() => setView(home)}
-          aria-label="Vista completa"
+          aria-label={T.fullView}
         >
           {Math.round((home.w / view.w) * 100)} %
         </button>

@@ -160,9 +160,7 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
                   </option>
                 ))}
               </select>
-              <label htmlFor={`${ids}-len`}>
-                {T.length(sp.measure, `${length} ${sp.unit}`)}
-              </label>
+              <label htmlFor={`${ids}-len`}>{T.length(sp.measure, `${length} ${sp.unit}`)}</label>
               <input
                 id={`${ids}-len`}
                 type="range"

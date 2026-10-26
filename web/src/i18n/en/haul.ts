@@ -15,7 +15,8 @@ export const haul: Messages['haul'] = {
       `the horizontal opening ${down ? 'falls' : 'rises'} ${amount}`,
     pct: (v: string) => ` (${v}%)`,
     and: ' and ',
-    sentence: (from: string, to: string, text: string) => `From ${from} to ${to} of catch, ${text}.`,
+    sentence: (from: string, to: string, text: string) =>
+      `From ${from} to ${to} of catch, ${text}.`,
   },
   intro:
     'Simulates the haul while the catch comes in: the catch «ball» fills the codend, inflates it and slows it down; the otter boards settle into equilibrium (warp to the vessel, lift from their polar and friction with the chosen seabed).',

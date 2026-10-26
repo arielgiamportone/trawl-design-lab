@@ -45,7 +45,7 @@ export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
     <div className={stale ? 'stale' : undefined} aria-busy={stale}>
       <div className={`verdict-banner ${tone}`} role="status" data-overall={tone}>
         <span className="verdict-dot" aria-hidden="true" />
-        {T.overall[tone]}
+        {tone === 'info' ? '' : T.overall[tone]}
       </div>
       <ul className="checks">
         {checks.map((c) => {

@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { Panel } from '../../api/client';
+import { useT } from '../../i18n';
 import { toInput } from '../../lib/format';
 import { HelpTip } from '../HelpTip';
 import { PLANE_LABELS, SECTION_LABELS } from '../../lib/labels';
@@ -29,6 +30,7 @@ interface Props {
 /** Datos del panel seleccionado, con −/+ en los campos enteros. */
 export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, onClose }: Props) {
   const ids = useId();
+  const T = useT().interactive.inspector;
   const pe = edits[panel.id] ?? {};
   const orientation = orientationOf(panel, edits);
   const presetOrientation = orientationOf(panel, {});
@@ -38,21 +40,21 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
     <section className="inspector" aria-labelledby={`${ids}-t`} data-testid="panel-inspector">
       <div className="inspector-head">
         <h3 id={`${ids}-t`}>
-          Panel {panel.id}
+          {T.panel(panel.id)}
           {panel.name && <span className="pname"> · {panel.name}</span>}
         </h3>
         <button
           type="button"
           className="btn small ghost"
           onClick={onClose}
-          aria-label="Cerrar el panel"
+          aria-label={T.close}
         >
           ✕
         </button>
       </div>
       <p className="help">
-        {SECTION_LABELS[panel.section] ?? panel.section} · plano{' '}
-        {PLANE_LABELS[panel.plane] ?? panel.plane}
+        {SECTION_LABELS[panel.section] ?? panel.section} ·{' '}
+        {T.plane(PLANE_LABELS[panel.plane] ?? panel.plane)}
       </p>
       {PANEL_FIELD_ORDER.map((f) => {
         const rule = PANEL_FIELDS[f];
@@ -78,7 +80,7 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
                   type="button"
                   className="btn small"
                   onClick={() => step(-1)}
-                  aria-label={`Restar 1 a ${rule.label}`}
+                  aria-label={T.minus(rule.label)}
                 >
                   −
                 </button>
@@ -97,7 +99,7 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
                   type="button"
                   className="btn small"
                   onClick={() => step(1)}
-                  aria-label={`Sumar 1 a ${rule.label}`}
+                  aria-label={T.plus(rule.label)}
                 >
                   +
                 </button>
@@ -110,8 +112,7 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
       {onOrientation && (
         <div className={`insp-row${orientation !== presetOrientation ? ' edited' : ''}`}>
           <label htmlFor={`${ids}-orient`}>
-            Orientación de la malla{' '}
-            <HelpTip topic="mesh_orientation" label="Orientación de la malla" />
+            {T.orientation} <HelpTip topic="mesh_orientation" label={T.orientation} />
           </label>
           <div className="insp-input">
             <select
@@ -128,13 +129,13 @@ export function PanelInspector({ panel, edits, onEdit, onOrientation, onReset, o
           </div>
           {orientation === 'square' && (
             <p className="help">
-              En malla cuadrada las mallas cuentan cuadrados de una pata (mallero / 2) de lado.
+              {T.squareHelp}
             </p>
           )}
         </div>
       )}
       <button type="button" className="btn small" onClick={onReset} disabled={!anyEdited}>
-        Restablecer este panel
+        {T.reset}
       </button>
     </section>
   );

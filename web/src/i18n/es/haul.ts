@@ -56,6 +56,5 @@ export const haul = {
   shape3d: 'Forma 3D',
   step3d: 'Paso del lance en 3D',
   refs: "Modelo de la captura: O'Neill y O'Donoghue (1997); tendencias de referencia: Priour y de la Prada (2015). Los rozamientos por tipo de fondo son estimaciones con rango (A VERIFICAR). Ver el capítulo 22 del libro.",
-  empty:
-    'Elija la captura final, el fondo y pulse «Simular lance». Cada paso tarda unos segundos.',
+  empty: 'Elija la captura final, el fondo y pulse «Simular lance». Cada paso tarda unos segundos.',
 };

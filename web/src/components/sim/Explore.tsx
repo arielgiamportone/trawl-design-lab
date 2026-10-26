@@ -447,9 +447,7 @@ export function Explore() {
           <p className="help">{T.help}</p>
         </div>
       )}
-      {!r && !query.isFetching && !query.error && (
-        <p className="empty">{T.empty}</p>
-      )}
+      {!r && !query.isFetching && !query.error && <p className="empty">{T.empty}</p>}
     </div>
   );
 }

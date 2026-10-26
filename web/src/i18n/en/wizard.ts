@@ -102,7 +102,6 @@ export const wizard: Messages['wizard'] = {
       ok: 'The design is feasible at the chosen speed.',
       warn: 'The design is feasible, but with little margin.',
       crit: 'The design does not work like this: check the flagged points.',
-      info: '',
     },
     why: 'Why?',
     more: 'More in the book ↗',

@@ -64,12 +64,7 @@ export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
 
   return (
     <div className="timeline" role="group" aria-label={T.label}>
-      <button
-        type="button"
-        className="btn small"
-        onClick={() => stepTo(-1)}
-        aria-label={T.prev}
-      >
+      <button type="button" className="btn small" onClick={() => stepTo(-1)} aria-label={T.prev}>
         ⏮
       </button>
       {!reduced && (
@@ -82,12 +77,7 @@ export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
           {playing ? T.pause : T.play}
         </button>
       )}
-      <button
-        type="button"
-        className="btn small"
-        onClick={() => stepTo(1)}
-        aria-label={T.next}
-      >
+      <button type="button" className="btn small" onClick={() => stepTo(1)} aria-label={T.next}>
         ⏭
       </button>
       <label htmlFor={`${ids}-t`} className="sr-only">

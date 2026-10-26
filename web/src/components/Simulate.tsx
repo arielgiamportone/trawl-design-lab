@@ -405,9 +405,7 @@ function SpeedSweep() {
           </section>
         </div>
       )}
-      {!r && !busy && !err && (
-        <p className="empty">{T.empty}</p>
-      )}
+      {!r && !busy && !err && <p className="empty">{T.empty}</p>}
     </div>
   );
 }

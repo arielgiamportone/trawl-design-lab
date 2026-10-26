@@ -73,8 +73,7 @@ export const optimize: Messages['optimize'] = {
   noBadge: 'NO',
   mapTitle: 'Feasible region in scale × speed',
   mapSub: (net: string, nS: number, nV: number) => `${net} · grid ${nS} × ${nV}`,
-  mapNote:
-    'Each cell is an engine run interpolated to that speed. Hover over it to see the value.',
+  mapNote: 'Each cell is an engine run interpolated to that speed. Hover over it to see the value.',
   paretoTitle: 'Pareto front',
   paretoSub: 'Area swept per hour vs towing work per m² swept',
   paretoFront: 'Pareto front (feasible, non-dominated)',

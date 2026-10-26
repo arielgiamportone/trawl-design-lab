@@ -71,11 +71,7 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
   };
 
   return (
-    <div
-      className="chart-box"
-      role="img"
-      aria-label={T.pareto.aria}
-    >
+    <div className="chart-box" role="img" aria-label={T.pareto.aria}>
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ScatterChart
           margin={{ top: 12, right: narrow ? 8 : 16, bottom: 4, left: narrow ? -8 : 4 }}

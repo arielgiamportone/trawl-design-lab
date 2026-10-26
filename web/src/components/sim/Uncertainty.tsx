@@ -288,9 +288,7 @@ function Bands() {
           </details>
         </div>
       )}
-      {!r && !query.isFetching && !query.error && (
-        <p className="empty">{T.emptyBands}</p>
-      )}
+      {!r && !query.isFetching && !query.error && <p className="empty">{T.emptyBands}</p>}
     </div>
   );
 }
@@ -604,9 +602,7 @@ function Calibration() {
               </select>
             </div>
             <div className="field">
-              <label htmlFor={`${ids}-width`}>
-                {T.width(form.by === 'time' ? 'min' : 'kn')}
-              </label>
+              <label htmlFor={`${ids}-width`}>{T.width(form.by === 'time' ? 'min' : 'kn')}</label>
               <input
                 id={`${ids}-width`}
                 type="number"

@@ -102,7 +102,6 @@ export const wizard = {
       ok: 'El diseño es viable a la velocidad elegida.',
       warn: 'El diseño es viable, pero con poco margen.',
       crit: 'El diseño no funciona así: revise los puntos marcados.',
-      info: '',
     },
     why: '¿Por qué?',
     more: 'Más en el libro ↗',

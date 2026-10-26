@@ -1,5 +1,7 @@
 import type { DesignData } from '../../api/result';
+import { useT } from '../../i18n';
 import { fmtFixed } from '../../lib/format';
+import { toDisplay, unitLabel } from '../../lib/units';
 import { impactRows } from '../../lib/impact';
 
 interface Props {
@@ -13,12 +15,13 @@ interface Props {
 
 /** Indicadores en vivo de la red editada y su diferencia con la red de base. */
 export function LiveImpact({ now, base, variant, speed, stale, hasEdits }: Props) {
-  if (!now) return <p className="empty">Calculando…</p>;
+  const T = useT().interactive.impact;
+  if (!now) return <p className="empty">{T.calculating}</p>;
   const rows = impactRows(now, hasEdits ? base : now, variant, speed);
   return (
     <section
       className={`impact${stale ? ' stale' : ''}`}
-      aria-label="Impacto de los cambios"
+      aria-label={T.label}
       aria-busy={stale}
       aria-live="polite"
     >
@@ -26,21 +29,24 @@ export function LiveImpact({ now, base, variant, speed, stale, hasEdits }: Props
         const sign = r.delta !== null && r.delta > 0 ? '+' : '';
         const showDelta =
           hasEdits && r.delta !== null && Math.abs(r.delta) >= 10 ** -r.metric.digits / 2;
+        const unit = unitLabel(r.metric.unit);
+        const shown = (v: number | null) =>
+          fmtFixed(v === null ? null : toDisplay(v, r.metric.unit), r.metric.digits);
         return (
           <div className={`impact-item ${r.tone}`} key={r.metric.key} data-impact={r.metric.key}>
             <span className="impact-label">
               {r.metric.label}
-              {r.metric.key === 'rn' && ` a ${fmtFixed(speed, 1)} kn`}
+              {r.metric.key === 'rn' && T.at(fmtFixed(speed, 1))}
             </span>
             <span className="impact-value">
-              {fmtFixed(r.now, r.metric.digits)} <span className="unit">{r.metric.unit}</span>
+              {shown(r.now)} <span className="unit">{unit}</span>
             </span>
             <span className="impact-delta">
               {showDelta
-                ? `${sign}${fmtFixed(r.delta, r.metric.digits)} ${r.metric.unit}`
+                ? `${sign}${shown(r.delta)} ${unit}`
                 : hasEdits
-                  ? 'sin cambio'
-                  : 'red de base'}
+                  ? T.noChange
+                  : T.baseNet}
             </span>
           </div>
         );

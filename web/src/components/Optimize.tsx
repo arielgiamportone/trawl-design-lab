@@ -406,9 +406,7 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
           </div>
         </div>
       )}
-      {!r && !busy && !err && (
-        <p className="empty">{T.empty}</p>
-      )}
+      {!r && !busy && !err && <p className="empty">{T.empty}</p>}
     </div>
   );
 }

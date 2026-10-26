@@ -2,6 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { api, type DesignRequest, type NetSpec } from '../../api/client';
 import { asDesignData } from '../../api/result';
+import { useT } from '../../i18n';
 import { keyNudge } from '../../lib/interactive';
 import {
   countEdits,
@@ -43,6 +44,8 @@ export function InteractiveDesign() {
   const [variantSel, setVariant] = useState<'std' | 'mod'>('std');
   const [selected, setSelected] = useState<string | null>(null);
   const [showBase, setShowBase] = useState(true);
+  const Tall = useT();
+  const T = Tall.interactive;
   const v = state.netModified ? variantSel : 'std';
   const spec = specs[v];
   const edits = state.edits[v];
@@ -126,20 +129,17 @@ export function InteractiveDesign() {
     <div className="interactive">
       <div className="panel-toolbar">
         <div>
-          <h2 className="section-title">Diseño interactivo</h2>
-          <p className="section-sub">
-            Toque un panel y arrastre sus tiradores (alto y bordes) o use las flechas; el caso se
-            recalcula al soltar. Ctrl+Z deshace.
-          </p>
+          <h2 className="section-title">{T.title}</h2>
+          <p className="section-sub">{T.sub}</p>
         </div>
         <div className="interactive-tools">
           {state.netModified && (
-            <div className="segmented" role="group" aria-label="Red a editar">
+            <div className="segmented" role="group" aria-label={Tall.expert.panels.netToEdit}>
               <button type="button" aria-pressed={v === 'std'} onClick={() => setVariant('std')}>
-                Estándar
+                {Tall.labels.variantsTitle.std}
               </button>
               <button type="button" aria-pressed={v === 'mod'} onClick={() => setVariant('mod')}>
-                Modificada
+                {Tall.labels.variantsTitle.mod}
               </button>
             </div>
           )}
@@ -149,7 +149,7 @@ export function InteractiveDesign() {
               checked={showBase}
               onChange={(e) => setShowBase(e.target.checked)}
             />
-            Contorno original
+            {T.outline}
           </label>
           <button
             type="button"
@@ -157,7 +157,7 @@ export function InteractiveDesign() {
             onClick={() => setEdits(() => ({}))}
             disabled={nEdits === 0}
           >
-            Restablecer red
+            {Tall.expert.panels.resetNet}
           </button>
         </div>
       </div>
@@ -189,7 +189,7 @@ export function InteractiveDesign() {
             <span>{layout.error.message}</span>
           </div>
         ) : (
-          <p className="empty">Cargando el plano…</p>
+          <p className="empty">{T.loading}</p>
         )}
         {panel && (
           <PanelInspector
@@ -209,10 +209,7 @@ export function InteractiveDesign() {
         )}
       </div>
       <p className="help">
-        {nEdits === 0
-          ? 'Sin cambios respecto de la red de base.'
-          : `${nEdits} ${nEdits === 1 ? 'valor editado' : 'valores editados'} (paneles resaltados). La línea discontinua es la red original.`}{' '}
-        El plano está a malla estirada: ancho = mallas × mallero; alto = N × mallero.
+        {T.edited(nEdits)} {T.stretched}
       </p>
     </div>
   );

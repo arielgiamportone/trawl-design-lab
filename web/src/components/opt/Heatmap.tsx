@@ -159,8 +159,7 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
                 digits: 0,
                 unit: false,
               })}{' '}
-          →{' '}
-          {max === null ? '—' : val(r.objective === 'energy' ? (min ?? 0) : max)}{' '}
+          → {max === null ? '—' : val(r.objective === 'energy' ? (min ?? 0) : max)}{' '}
           {T.better(theme === 'dark')}
         </li>
         <li>

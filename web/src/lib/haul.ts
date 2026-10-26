@@ -150,9 +150,7 @@ export function haulSummary(rows: HaulRow[]): string | null {
       : T.pct(`${d > 0 ? '+' : ''}${fmtFixed((d / x) * 100, 0)}`);
   const dDp = diff(a.doorSpread, b.doorSpread);
   if (dDp !== null)
-    parts.push(
-      T.doors(dDp < 0, fmtU(Math.abs(dDp), 'm', { digits: 1 }), pct(a.doorSpread, dDp)),
-    );
+    parts.push(T.doors(dDp < 0, fmtU(Math.abs(dDp), 'm', { digits: 1 }), pct(a.doorSpread, dDp)));
   const dPull = diff(a.pull, b.pull);
   if (dPull !== null)
     parts.push(T.pull(dPull > 0, fmtU(Math.abs(dPull), 'kgf', { digits: 0 }), pct(a.pull, dPull)));
@@ -161,7 +159,11 @@ export function haulSummary(rows: HaulRow[]): string | null {
   if (!parts.length) return null;
   const last = parts.pop() as string;
   const text = parts.length ? `${parts.join(', ')}${T.and}${last}` : last;
-  return T.sentence(fmtU(a.catchKg, 'kg', { unit: false }), fmtU(b.catchKg, 'kg'), text);
+  return T.sentence(
+    fmtU(a.catchKg, 'kg', { digits: 0, unit: false }),
+    fmtU(b.catchKg, 'kg', { digits: 0 }),
+    text,
+  );
 }
 
 /** Marcas "redondas" (1, 2, 2,5 o 5 × 10ⁿ) que cubren [lo, hi] con unas ``count`` divisiones. */

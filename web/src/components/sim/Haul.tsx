@@ -120,8 +120,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
         </div>
         <div className="field">
           <label htmlFor={`${ids}-catch`}>
-            {T.finalCatch} [{unitLabel('kg')}]{' '}
-            <HelpTip topic="catch_kg" label={T.finalCatch} />
+            {T.finalCatch} [{unitLabel('kg')}] <HelpTip topic="catch_kg" label={T.finalCatch} />
           </label>
           <input
             id={`${ids}-catch`}
@@ -171,7 +170,10 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           </select>
           {sb && (
             <span className="help">
-              {T.mu(fmtFixed(Number(sb.mu_gear.nominal), 2), fmtFixed(Number(sb.mu_door.nominal), 2))}
+              {T.mu(
+                fmtFixed(Number(sb.mu_gear.nominal), 2),
+                fmtFixed(Number(sb.mu_door.nominal), 2),
+              )}
             </span>
           )}
         </div>
@@ -282,13 +284,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
                 engine.demand_kgf ? { value: engine.demand_kgf, label: S.engineDemand } : null
               }
             />
-            <HaulChart
-              id="haul-ah"
-              title={T.charts.ah}
-              unit="m"
-              rows={rows}
-              value={(x) => x.ah}
-            />
+            <HaulChart id="haul-ah" title={T.charts.ah} unit="m" rows={rows} value={(x) => x.ah} />
             <HaulChart
               id="haul-av"
               title={T.charts.av}
@@ -339,9 +335,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           <p className="help">{T.refs}</p>
         </div>
       )}
-      {!r && !query.isFetching && !query.error && (
-        <p className="empty">{T.empty}</p>
-      )}
+      {!r && !query.isFetching && !query.error && <p className="empty">{T.empty}</p>}
     </div>
   );
 }

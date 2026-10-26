@@ -475,9 +475,7 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
             {T.fouled}
           </span>
         )}
-        {onPick && (
-          <span className="help">{T.pickHint}</span>
-        )}
+        {onPick && <span className="help">{T.pickHint}</span>}
         <span className="help">{T.animLegend}</span>
       </figcaption>
     </figure>
