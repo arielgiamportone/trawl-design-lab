@@ -10,9 +10,12 @@ import {
   type BatchRunResponse,
 } from '../api/client';
 import { preferLocal } from '../engine/offline';
+import { msg, useT } from '../i18n';
 import {
   chunks,
   chunkSize,
+  columnValue,
+  economicColumns,
   fleetCsv,
   fleetRecords,
   LAST_BATCH_KEY,
@@ -20,20 +23,20 @@ import {
   MODE_LABEL,
   OBJECTIVE_LABEL,
   openFleetCase,
-  ECONOMIC_COLUMNS,
-  RESULT_COLUMNS,
+  resultColumns as columnsOf,
   resultsCsv,
   STATUS_LABEL,
   toBatchFile,
   type BatchRow,
   type FleetRecord,
   type Objective,
+  type ResultColumn,
   type SavedBatch,
 } from '../lib/batch';
 import { loadPrices, REGION_LABEL } from '../lib/components';
 import { downloadBlob } from '../lib/download';
 import { loadForm, toInputs } from '../lib/economics';
-import { fmt, parseNumber } from '../lib/format';
+import { fmt, fmtNum, parseNumber } from '../lib/format';
 import { idbGet, idbSet } from '../lib/idb';
 import { useCase } from '../state/useCase';
 
@@ -46,15 +49,16 @@ interface Issue {
 }
 
 function errMessage(err: unknown): string {
-  if (err instanceof ApiError && err.status) return `Error ${err.status}: ${err.message}`;
+  if (err instanceof ApiError && err.status)
+    return msg().batch.errorStatus(err.status, err.message);
   return err instanceof Error ? err.message : String(err);
 }
 
-function cellText(v: unknown, digits?: number): string {
+function cellText(v: unknown, c: ResultColumn): string {
   if (v === null || v === undefined || v === '') return '—';
-  if (typeof v === 'boolean') return v ? 'sí' : 'no';
+  if (typeof v === 'boolean') return v ? msg().batch.yes : msg().batch.no;
   if (typeof v === 'number') {
-    return v.toLocaleString('es-AR', { maximumFractionDigits: digits ?? 2 });
+    return fmtNum(columnValue(c, v), { maximumFractionDigits: c.digits ?? 2 });
   }
   return String(v);
 }
@@ -65,6 +69,7 @@ function cellText(v: unknown, digits?: number): string {
  */
 export function Batch({ onOpened }: { onOpened?: () => void }) {
   const { state, update, catalogs, committed } = useCase();
+  const T = useT().batch;
   const ids = useId();
   const [mode, setMode] = useState<BatchKind>('fleet');
   const [file, setFile] = useState<BatchFile | null>(null);
@@ -85,8 +90,8 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
     result?.rows.some(
       (r) => (r.summary as Record<string, unknown> | undefined)?.fuel_l_trip !== undefined,
     )
-      ? [...RESULT_COLUMNS.fleet, ...ECONOMIC_COLUMNS]
-      : RESULT_COLUMNS[mode];
+      ? [...columnsOf('fleet'), ...economicColumns()]
+      : columnsOf(mode);
   const [filter, setFilter] = useState<'all' | 'ok' | 'infeasible' | 'error'>('all');
   const abort = useRef<AbortController | null>(null);
 
@@ -128,8 +133,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
     setError(null);
     try {
       const blob = await api.batchTemplate(mode, format);
-      const name = { fleet: 'flota', nets: 'redes', cases: 'casos' }[mode];
-      downloadBlob(blob, `plantilla_${name}.${format}`);
+      downloadBlob(blob, T.templateFile(T.templateName[mode], format));
     } catch (err) {
       setError(errMessage(err));
     }
@@ -138,7 +142,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
   const load = async (f: File) => {
     setError(null);
     setResult(null);
-    setBusy('Leyendo la planilla…');
+    setBusy(T.reading);
     try {
       const bf = await toBatchFile(f);
       const p = await api.batchParse({ file: bf, mode });
@@ -182,7 +186,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         const size = chunkSize(est * (assemble ? 1 : 0.4), max, records.length, preferLocal());
         const groups = chunks(records, size);
         for (const [i, group] of groups.entries()) {
-          setBusy(`Calculando ${i * size + 1}–${i * size + group.length} de ${records.length}…`);
+          setBusy(T.computingRange(i * size + 1, i * size + group.length, records.length));
           setProgress([i * size, records.length]);
           const body = {
             ...options(),
@@ -191,7 +195,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
           parts.push(await api.batchRun(body, ctrl.signal));
         }
       } else if (file) {
-        setBusy('Calculando…');
+        setBusy(T.computing);
         parts.push(await api.batchRun({ ...options(), file }, ctrl.signal));
       }
       const merged = mergeResults(parts);
@@ -210,7 +214,10 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
     setError(null);
     const columns = resultColumns;
     if (format === 'csv' && result) {
-      downloadBlob(new Blob([resultsCsv(result, columns)], { type: 'text/csv' }), 'lote.csv');
+      downloadBlob(
+        new Blob([resultsCsv(result, columns)], { type: 'text/csv' }),
+        T.resultsFile('csv'),
+      );
       return;
     }
     const bf =
@@ -218,7 +225,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         ? { filename: 'flota.csv', content: fleetCsv(records), encoding: 'text' as const }
         : file;
     if (!bf) return;
-    setBusy(`Preparando ${format.toUpperCase()}…`);
+    setBusy(T.preparing(format.toUpperCase()));
     try {
       const blob = await api.batchExport({ ...options(), file: bf, detail: false }, format);
       if (format === 'html') {
@@ -227,7 +234,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         window.open(url, '_blank', 'noopener');
         setTimeout(() => URL.revokeObjectURL(url), 60_000);
       } else {
-        downloadBlob(blob, `lote.${format}`);
+        downloadBlob(blob, T.resultsFile(format));
       }
     } catch (err) {
       setError(errMessage(err));
@@ -257,12 +264,8 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
 
   return (
     <div className="batch" data-testid="batch">
-      <p className="section-sub">
-        Cargue una planilla (Excel o CSV) con la flota de su puerto, sus redes o varios casos, y
-        calcule todo de una vez. Para una flota, la red elegida se agranda o achica para cada buque
-        según su potencia y se arma con los componentes que se consiguen.
-      </p>
-      <div className="segmented" role="group" aria-label="Qué cargar">
+      <p className="section-sub">{T.intro}</p>
+      <div className="segmented" role="group" aria-label={T.whatToLoad}>
         {(Object.keys(MODE_LABEL) as BatchKind[]).map((m) => (
           <button key={m} type="button" aria-pressed={mode === m} onClick={() => reset(m)}>
             {MODE_LABEL[m]}
@@ -270,12 +273,12 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         ))}
       </div>
       <div className="catalog-actions">
-        <span className="help">Plantilla con ejemplos y ayuda:</span>
+        <span className="help">{T.templateHelp}</span>
         <button type="button" className="btn small" onClick={() => void template('xlsx')}>
-          Descargar plantilla XLSX
+          {T.templateXlsx}
         </button>
         <button type="button" className="btn small" onClick={() => void template('csv')}>
-          CSV
+          {T.csv}
         </button>
       </div>
 
@@ -289,12 +292,12 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
           if (f) void load(f);
         }}
       >
-        <span>Arrastre la planilla aquí o elija un archivo (.xlsx o .csv)</span>
+        <span>{T.drop}</span>
         <input
           id={`${ids}-file`}
           type="file"
           accept=".xlsx,.xlsm,.csv,.txt"
-          aria-label="Planilla del lote"
+          aria-label={T.fileAria}
           onChange={(e) => {
             const f = e.target.files?.[0];
             if (f) void load(f);
@@ -304,8 +307,8 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
       </label>
       {file && (
         <p className="help">
-          Planilla: <strong>{file.filename}</strong>
-          {parsed ? ` · ${parsed.size} filas reconocidas` : ''}
+          {T.sheet} <strong>{file.filename}</strong>
+          {parsed ? T.recognized(parsed.size) : ''}
         </p>
       )}
 
@@ -314,9 +317,9 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
           {issues.map((i, k) => (
             <li key={k} className={i.level === 'error' ? 'crit' : 'warn'}>
               <span className={`badge ${i.level === 'error' ? 'crit' : 'warn'}`}>
-                {i.level === 'error' ? 'error' : 'aviso'}
+                {i.level === 'error' ? T.levelError : T.levelWarn}
               </span>{' '}
-              {[i.sheet, i.row ? `fila ${i.row}` : '', i.column].filter(Boolean).join(', ')}
+              {[i.sheet, i.row ? T.row(i.row) : '', i.column].filter(Boolean).join(', ')}
               {i.row || i.column || i.sheet ? ': ' : ''}
               {i.message}
             </li>
@@ -326,21 +329,21 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
 
       {mode === 'fleet' && records.length > 0 && (
         <div className="table-wrap">
-          <table className="data" aria-label="Flota cargada" data-testid="fleet-preview">
+          <table className="data" aria-label={T.fleetTable} data-testid="fleet-preview">
             <thead>
               <tr>
-                <th scope="col">Buque</th>
+                <th scope="col">{T.colVessel}</th>
                 <th scope="col" className="num">
-                  Potencia [hp]
+                  {T.colPower}
                 </th>
                 <th scope="col" className="num">
-                  Eslora [m]
+                  {T.colLength}
                 </th>
                 <th scope="col" className="num">
-                  Profundidad [m]
+                  {T.colDepth}
                 </th>
                 <th scope="col" className="num">
-                  Velocidad [kn]
+                  {T.colSpeed}
                 </th>
                 <th scope="col" />
               </tr>
@@ -350,7 +353,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                 <tr key={i}>
                   <td>
                     <input
-                      aria-label={`Nombre del buque ${i + 1}`}
+                      aria-label={T.vesselName(i + 1)}
                       value={r.name}
                       onChange={(e) => setRecord(i, { name: e.target.value })}
                     />
@@ -360,9 +363,9 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                       <input
                         className="price-input"
                         inputMode="decimal"
-                        aria-label={`${k} del buque ${i + 1}`}
+                        aria-label={T.vesselField(k, i + 1)}
                         defaultValue={r[k] == null ? '' : fmt(r[k] as number)}
-                        placeholder={k === 'speed_kn' ? 'la mejor' : '—'}
+                        placeholder={k === 'speed_kn' ? T.best : '—'}
                         onBlur={(e) => {
                           const n = parseNumber(e.target.value);
                           if (k === 'bhp') {
@@ -376,7 +379,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                     <button
                       type="button"
                       className="btn small ghost"
-                      aria-label={`Quitar el buque ${i + 1}`}
+                      aria-label={T.removeVessel(i + 1)}
                       onClick={() => setRecords((rs) => rs.filter((_, k) => k !== i))}
                     >
                       ✕
@@ -394,7 +397,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
             <li key={k}>
               <strong>{n.spec.name}</strong>{' '}
               <span className={`badge ${n.ok ? 'good' : 'warn'}`}>
-                {n.ok ? 'cierra' : 'borrador: revisar'}
+                {n.ok ? T.closes : T.draftReview}
               </span>
             </li>
           ))}
@@ -404,14 +407,14 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
       {mode === 'fleet' && (
         <div className="catalog-filters">
           <label className="inline-field">
-            Red a proyectar
+            {T.netToProject}
             <select
-              aria-label="Red a proyectar"
+              aria-label={T.netToProject}
               value={net}
               onChange={(e) => setNet(e.target.value)}
             >
               {typeof caseNet === 'string' && !nets.some((n) => n.id === caseNet) && (
-                <option value={caseNet}>{caseNet} (la del caso)</option>
+                <option value={caseNet}>{T.caseNet(caseNet)}</option>
               )}
               {nets.map((n) => (
                 <option key={n.id} value={n.id}>
@@ -421,9 +424,9 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
             </select>
           </label>
           <label className="inline-field">
-            Objetivo
+            {T.objectiveLabel}
             <select
-              aria-label="Objetivo del lote"
+              aria-label={T.objectiveAria}
               value={objective}
               onChange={(e) => setObjective(e.target.value as Objective)}
             >
@@ -435,13 +438,13 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
             </select>
           </label>
           <label className="inline-field">
-            ¿Qué se consigue en su puerto?
+            {T.port}
             <select
-              aria-label="Región del puerto del lote"
+              aria-label={T.portAria}
               value={region}
               onChange={(e) => setRegion(e.target.value)}
             >
-              <option value="">Cualquier región</option>
+              <option value="">{T.anyRegion}</option>
               {Object.entries(REGION_LABEL).map(([k, v]) => (
                 <option key={k} value={k}>
                   {v}
@@ -455,7 +458,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
               checked={genericOnly}
               onChange={(e) => setGenericOnly(e.target.checked)}
             />
-            Sólo genéricos
+            {T.genericOnly}
           </label>
           <label className="check">
             <input
@@ -463,7 +466,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
               checked={assemble}
               onChange={(e) => setAssemble(e.target.checked)}
             />
-            Armar con el catálogo (más lento)
+            {T.assemble}
           </label>
           <label className="check">
             <input
@@ -471,7 +474,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
               checked={withEconomics}
               onChange={(e) => setWithEconomics(e.target.checked)}
             />
-            Sumar la economía de la marea (datos de la pestaña «Economía»)
+            {T.withEconomics}
           </label>
         </div>
       )}
@@ -483,7 +486,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
           disabled={busy !== null || (mode === 'fleet' ? records.length === 0 : !file)}
           onClick={() => void run()}
         >
-          Calcular el lote
+          {T.run}
         </button>
         {busy && (
           <span role="status" className="help">
@@ -492,7 +495,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         )}
         {busy !== null && progress !== null && (
           <button type="button" className="btn small ghost" onClick={() => abort.current?.abort()}>
-            Cancelar
+            {T.cancel}
           </button>
         )}
       </div>
@@ -501,7 +504,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
           className="batch-progress"
           max={progress[1]}
           value={progress[0]}
-          aria-label="Avance del lote"
+          aria-label={T.progress}
         />
       )}
       {error && (
@@ -514,12 +517,15 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
         <section className="card card-pad" aria-labelledby={`${ids}-res`}>
           <h3 className="section-title" id={`${ids}-res`}>
             <span>
-              Resultados: {result.counts.ok ?? 0} cumplen, {result.counts.infeasible ?? 0} no
-              cumplen, {result.counts.error ?? 0} con error
+              {T.results(
+                result.counts.ok ?? 0,
+                result.counts.infeasible ?? 0,
+                result.counts.error ?? 0,
+              )}
             </span>
           </h3>
           <div className="catalog-actions no-print">
-            <div className="segmented" role="group" aria-label="Filtrar resultados">
+            <div className="segmented" role="group" aria-label={T.filter}>
               {(['all', 'ok', 'infeasible', 'error'] as const).map((f) => (
                 <button
                   key={f}
@@ -527,33 +533,33 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                   aria-pressed={filter === f}
                   onClick={() => setFilter(f)}
                 >
-                  {f === 'all' ? 'Todos' : STATUS_LABEL[f]}
+                  {f === 'all' ? T.all : STATUS_LABEL[f]}
                 </button>
               ))}
             </div>
             <button type="button" className="btn small" onClick={() => void exportAs('xlsx')}>
-              Descargar XLSX
+              {T.downloadXlsx}
             </button>
             <button type="button" className="btn small" onClick={() => void exportAs('csv')}>
-              CSV
+              {T.csv}
             </button>
             {mode === 'fleet' && (
               <>
                 <button type="button" className="btn small" onClick={() => void exportAs('pdf')}>
-                  Informe PDF
+                  {T.pdf}
                 </button>
                 <button type="button" className="btn small" onClick={() => void exportAs('html')}>
-                  Vista para imprimir
+                  {T.printView}
                 </button>
               </>
             )}
           </div>
           <div className="table-wrap">
-            <table className="data" aria-label="Resultados del lote" data-testid="batch-results">
+            <table className="data" aria-label={T.resultsTable} data-testid="batch-results">
               <thead>
                 <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Estado</th>
+                  <th scope="col">{T.colName}</th>
+                  <th scope="col">{T.colStatus}</th>
                   {columns.map((c) => (
                     <th key={c.key} scope="col" className={c.digits !== undefined ? 'num' : ''}>
                       {c.label}
@@ -581,7 +587,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                     ) : (
                       columns.map((c) => (
                         <td key={c.key} className={c.digits !== undefined ? 'num' : ''}>
-                          {cellText(r.summary[c.key], c.digits)}
+                          {cellText(r.summary[c.key], c)}
                         </td>
                       ))
                     )}
@@ -589,7 +595,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
                       <td>
                         {r.detail && (
                           <button type="button" className="btn small" onClick={() => open(r)}>
-                            Abrir este caso
+                            {T.open}
                           </button>
                         )}
                       </td>
@@ -600,10 +606,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
             </table>
           </div>
           <p className="help">
-            {result.engine_runs} corridas del motor en{' '}
-            {result.runtime_s.toLocaleString('es-AR', { maximumFractionDigits: 1 })} s. La escala
-            por semejanza es √(potencia del buque / potencia de diseño de la red); la escala final
-            es la mayor que cumple tiro, apertura, cable y portón.
+            {T.runs(result.engine_runs, fmtNum(result.runtime_s, { maximumFractionDigits: 1 }))}
           </p>
         </section>
       )}

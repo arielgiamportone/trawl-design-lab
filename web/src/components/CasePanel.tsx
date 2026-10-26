@@ -1,21 +1,20 @@
 import { useId } from 'react';
 import { ApiError, type CatalogItem } from '../api/client';
-import { fmtFixed } from '../lib/format';
+import { msg, useT } from '../i18n';
+import { fmtFixed, fmtNum } from '../lib/format';
+import { fmtU, toDisplay, unitLabel } from '../lib/units';
 import { countEdits } from '../lib/panels';
 import { useCase } from '../state/useCase';
 import type { Compat } from '../state/model';
 import { ParamsForm } from './ParamsForm';
 
-const COMPAT_HELP: Record<Compat, string> = {
-  corrected: 'Aplica las fórmulas correctas: el modo recomendado para diseñar.',
-  excel: 'Reproduce el libro Excel original con sus erratas, para validar contra él.',
-};
-
 /** Redes agrupadas por documento de origen, para el selector. */
 function netGroups(nets: CatalogItem[]): [string, CatalogItem[]][] {
   const out = new Map<string, CatalogItem[]>();
   for (const n of nets) {
-    const g = n.source ? (n.source.title.split(',')[0] ?? n.source.key) : 'FAO A-3 (libro Excel)';
+    const g = n.source
+      ? (n.source.title.split(',')[0] ?? n.source.key)
+      : msg().expert.case.faoGroup;
     out.set(g, [...(out.get(g) ?? []), n]);
   }
   return [...out];
@@ -24,6 +23,8 @@ function netGroups(nets: CatalogItem[]): [string, CatalogItem[]][] {
 export function CasePanel() {
   const { state, update, catalogs, errors, design, calculate, dirty, committed, specs } = useCase();
   const ids = useId();
+  const T = useT();
+  const C = T.expert.case;
   const nErrors = Object.keys(errors).length;
   const busy = design.isFetching;
   const err = design.error;
@@ -40,27 +41,21 @@ export function CasePanel() {
   return (
     <aside className="card card-pad case-panel" aria-labelledby={`${ids}-title`}>
       <h2 className="section-title" id={`${ids}-title`}>
-        Caso de diseño
-        {edited > 0 && (
-          <span className="badge warn">
-            {edited} {edited === 1 ? 'celda editada' : 'celdas editadas'}
-          </span>
-        )}
+        {C.title}
+        {edited > 0 && <span className="badge warn">{C.editedCells(edited)}</span>}
       </h2>
-      <p className="section-sub">
-        Elija la red, el buque y el portón. El cálculo se actualiza solo.
-      </p>
+      <p className="section-sub">{C.sub}</p>
 
       {catalogs.error && (
         <div className="alert error" role="alert">
           <span>
-            <strong>No se pudieron cargar los catálogos.</strong> {catalogs.error.message}
+            <strong>{C.catalogError}</strong> {catalogs.error.message}
           </span>
         </div>
       )}
 
       <div className="field">
-        <label htmlFor={`${ids}-net`}>Red</label>
+        <label htmlFor={`${ids}-net`}>{C.net}</label>
         <select
           id={`${ids}-net`}
           value={state.net}
@@ -79,7 +74,7 @@ export function CasePanel() {
               {nets.map((n) => (
                 <option key={n.id} value={n.id}>
                   {n.name ?? n.id}
-                  {n.status === 'draft' ? ' (borrador)' : ''}
+                  {n.status === 'draft' ? C.draft : ''}
                 </option>
               ))}
             </optgroup>
@@ -89,16 +84,15 @@ export function CasePanel() {
         {state.scaled && (
           <div className="alert info" role="status" data-testid="scaled-net">
             <span>
-              <strong>Red escalada s = {fmtFixed(state.scaled.s, 3)}</strong>
-              {state.scaled.speed !== null &&
-                ` · diseño optimizado a ${fmtFixed(state.scaled.speed, 2)} kn`}
-              {state.netModified && !state.scaled.mod && ' (la variante modificada no se escaló)'}.{' '}
+              <strong>{C.scaled(fmtFixed(state.scaled.s, 3))}</strong>
+              {state.scaled.speed !== null && C.optimizedAt(fmtFixed(state.scaled.speed, 2))}
+              {state.netModified && !state.scaled.mod && C.modNotScaled}.{' '}
               <button
                 type="button"
                 className="btn small ghost"
                 onClick={() => update((s) => ({ ...s, scaled: null, edits: { std: {}, mod: {} } }))}
               >
-                Volver a la red del catálogo
+                {C.backToCatalogue}
               </button>
             </span>
           </div>
@@ -106,7 +100,7 @@ export function CasePanel() {
       </div>
 
       <div className="field">
-        <label htmlFor={`${ids}-mod`}>Variante modificada (opcional)</label>
+        <label htmlFor={`${ids}-mod`}>{C.modVariant}</label>
         <select
           id={`${ids}-mod`}
           value={state.netModified ?? ''}
@@ -119,41 +113,40 @@ export function CasePanel() {
             }))
           }
         >
-          <option value="">— Sin variante —</option>
+          <option value="">{C.noVariant}</option>
           {catalogs.nets.map((n) => (
             <option key={n.id} value={n.id}>
               {n.name ?? n.id}
             </option>
           ))}
         </select>
-        <p className="help">Se calcula en paralelo y se compara con la red estándar.</p>
+        <p className="help">{C.modHelp}</p>
       </div>
 
       {state.fromBatch && (
         <div className="alert info" role="status" data-testid="from-batch">
           <span>
-            <strong>Caso del lote: {state.fromBatch.label}</strong> (buque de{' '}
-            {state.fromBatch.vessel.bhp} hp
-            {state.fromBatch.door ? `, portón ${state.fromBatch.door.name}` : ''}).{' '}
+            <strong>{C.fromBatch(state.fromBatch.label)}</strong>{' '}
+            {C.fromBatchVessel(state.fromBatch.vessel.bhp, state.fromBatch.door?.name ?? null)}{' '}
             <button
               type="button"
               className="btn small ghost"
               onClick={() => update({ fromBatch: null })}
             >
-              Usar el buque del catálogo
+              {C.useCatalogueVessel}
             </button>
           </span>
         </div>
       )}
 
       <div className="field">
-        <label htmlFor={`${ids}-vessel`}>Buque</label>
+        <label htmlFor={`${ids}-vessel`}>{C.vessel}</label>
         <select
           id={`${ids}-vessel`}
           value={vesselValue}
           onChange={(e) => update({ vessel: e.target.value || null, fromBatch: null })}
         >
-          {fromPlan && <option value="">Del plano: buque de la potencia de diseño</option>}
+          {fromPlan && <option value="">{C.vesselFromPlan}</option>}
           {catalogs.vessels.map((v) => (
             <option key={v.id} value={v.id}>
               {v.name ?? v.id}
@@ -163,13 +156,13 @@ export function CasePanel() {
         {vessel && (
           <p className="help">
             {vessel.bhp} BHP
-            {vessel.length_m ? ` · eslora ${String(vessel.length_m).replace('.', ',')} m` : ''}
+            {vessel.length_m ? ` · ${C.length(fmtU(vessel.length_m, 'm'))}` : ''}
           </p>
         )}
       </div>
 
       <div className="field">
-        <label htmlFor={`${ids}-door`}>Portón</label>
+        <label htmlFor={`${ids}-door`}>{C.door}</label>
         <select
           id={`${ids}-door`}
           value={doorValue}
@@ -181,7 +174,7 @@ export function CasePanel() {
             }))
           }
         >
-          {fromPlan && <option value="">Del plano (o escalado a la potencia)</option>}
+          {fromPlan && <option value="">{C.doorFromPlan}</option>}
           {catalogs.doors.map((d) => (
             <option key={d.id} value={d.id}>
               {d.name}
@@ -190,8 +183,10 @@ export function CasePanel() {
         </select>
         {door?.area_m2 != null && (
           <p className="help">
-            Área {door.area_m2.toLocaleString('es-AR', { maximumFractionDigits: 2 })} m²
-            {door.weight_air_kg != null ? ` · ${door.weight_air_kg} kg en aire` : ''}
+            {C.area(
+              `${fmtNum(toDisplay(door.area_m2, 'm²'), { maximumFractionDigits: 2 })} ${unitLabel('m²')}`,
+            )}
+            {door.weight_air_kg != null ? ` · ${C.weightInAir(fmtU(door.weight_air_kg, 'kg'))}` : ''}
           </p>
         )}
       </div>
@@ -201,7 +196,7 @@ export function CasePanel() {
           className="label"
           style={{ fontSize: 13, fontWeight: 600, padding: 0, marginBottom: 4 }}
         >
-          Modo de cálculo
+          {C.mode}
         </legend>
         <div className="segmented full">
           {(['corrected', 'excel'] as const).map((c) => (
@@ -213,11 +208,11 @@ export function CasePanel() {
                 checked={state.compat === c}
                 onChange={() => update({ compat: c })}
               />
-              {c === 'corrected' ? 'Corregido' : 'Reproducir Excel'}
+              {c === 'corrected' ? T.labels.compatCorrected : T.labels.compatExcel}
             </label>
           ))}
         </div>
-        <p className="help">{COMPAT_HELP[state.compat]}</p>
+        <p className="help">{C.compatHelp[state.compat as Compat]}</p>
       </fieldset>
 
       <ParamsForm />
@@ -230,30 +225,27 @@ export function CasePanel() {
           disabled={nErrors > 0 || catalogs.loading}
           aria-describedby={`${ids}-status`}
         >
-          Calcular
+          {C.calculate}
         </button>
       </div>
       <div className="status-line" id={`${ids}-status`} role="status" aria-live="polite">
         {busy ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Calculando…
+            <span className="spinner" aria-hidden="true" /> {C.calculating}
           </>
         ) : nErrors > 0 ? (
-          <span>
-            Corrija {nErrors === 1 ? 'el valor marcado' : `los ${nErrors} valores marcados`} para
-            calcular.
-          </span>
+          <span>{C.fix(nErrors)}</span>
         ) : dirty ? (
-          <span>Cambios pendientes…</span>
+          <span>{C.pending}</span>
         ) : design.isSuccess && committed ? (
-          <span>Resultados al día.</span>
+          <span>{C.upToDate}</span>
         ) : null}
       </div>
       {err && (
         <div className="alert error" role="alert">
           <span>
             <strong>
-              {err instanceof ApiError && err.status ? `Error ${err.status}` : 'Error'}:
+              {err instanceof ApiError && err.status ? C.errorStatus(err.status) : C.error}:
             </strong>{' '}
             {err.message}
           </span>

@@ -8,10 +8,12 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useT } from '../../i18n';
 import type { CompositionRow } from '../../lib/series';
 import { fmt, fmtAxis, fmtFixed } from '../../lib/format';
+import { unitLabel } from '../../lib/units';
 import { useChartColors, useMediaQuery } from '../../lib/theme';
-import { TooltipBox } from './ChartParts';
+import { displayRows, TooltipBox } from './ChartParts';
 import { COMPONENTS } from './components';
 
 interface TipProps {
@@ -19,13 +21,23 @@ interface TipProps {
   payload?: readonly { payload?: CompositionRow }[];
 }
 
+/** Barras apiladas de la composición; ``rows`` en kgf (se muestran en el sistema activo). */
 export function CompositionChart({
-  rows,
+  rows: kgfRows,
   speedLabel,
 }: {
   rows: CompositionRow[];
   speedLabel: string;
 }) {
+  const T = useT().charts;
+  const u = unitLabel('kgf');
+  const rows = displayRows(kgfRows, {
+    rn: 'kgf',
+    floats: 'kgf',
+    warps: 'kgf',
+    doors: 'kgf',
+    total: 'kgf',
+  });
   const c = useChartColors();
   const narrow = useMediaQuery('(max-width: 560px)');
   const color = (k: (typeof COMPONENTS)[number]['color']) => c[k];
@@ -35,12 +47,12 @@ export function CompositionChart({
     if (!row) return null;
     return (
       <TooltipBox
-        title={`${row.variant} · ${speedLabel} · total ${fmt(Math.round(row.total))} kgf`}
+        title={`${row.variant} · ${speedLabel} · ${T.total} ${fmt(Math.round(row.total))} ${u}`}
         rows={COMPONENTS.map((s) => ({
           name: `${s.name} (${fmtFixed((row[s.key] / row.total) * 100, 1)} %)`,
           color: color(s.color),
           value: row[s.key],
-          unit: 'kgf',
+          unit: u,
           kind: 'rect' as const,
         }))}
       />
@@ -52,7 +64,7 @@ export function CompositionChart({
     <div
       style={{ width: '100%', height }}
       role="img"
-      aria-label={`Composición de la resistencia total a ${speedLabel}`}
+      aria-label={T.compositionAria(speedLabel)}
     >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <BarChart
@@ -69,7 +81,7 @@ export function CompositionChart({
             tick={{ fill: c.muted, fontSize: 11 }}
             tickLine={false}
             label={{
-              value: '[kgf]',
+              value: `[${u}]`,
               position: 'insideBottomRight',
               offset: -2,
               fill: c.muted,
@@ -107,7 +119,7 @@ export function CompositionChart({
                 <LabelList
                   dataKey="total"
                   position="right"
-                  formatter={(v: unknown) => `${fmt(Math.round(Number(v)))} kgf`}
+                  formatter={(v: unknown) => `${fmt(Math.round(Number(v)))} ${u}`}
                   style={{ fill: c.text, fontSize: 12, fontWeight: 600 }}
                 />
               )}

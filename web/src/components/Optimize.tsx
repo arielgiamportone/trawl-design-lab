@@ -1,16 +1,20 @@
 import { useQuery } from '@tanstack/react-query';
 import { useId, useState } from 'react';
 import { api, ApiError, type Evaluation, type OptimizeRequest } from '../api/client';
-import { fmt, fmtFixed, fmtPct } from '../lib/format';
+import { fmtFixed, fmtPct } from '../lib/format';
+import { msg, useT } from '../i18n';
 import { recall, remember } from '../lib/memo';
 import {
   buildOptimize,
-  CONSTRAINT_LABELS,
-  DEFAULT_FORM,
+  constraintLabel,
+  CONSTRAINT_UNITS,
+  defaultOptimizeForm,
   OBJECTIVES,
-  OBJECTIVE_UNITS,
+  objectiveUnit,
   type OptimizeForm,
 } from '../lib/optimize';
+import { fmtSim, simUnit, simValueOpt } from '../lib/simulate';
+import { fmtU } from '../lib/units';
 import { useChartColors } from '../lib/theme';
 import { useCase } from '../state/useCase';
 import { ChartCard, DataTable } from './charts/ChartParts';
@@ -29,50 +33,45 @@ interface Tile {
 }
 
 function bestTiles(b: Evaluation): Tile[] {
+  const T = msg().optimize.tiles;
+  const tile = (key: string, label: string, v: number | null, unit: string, digits?: number) => ({
+    key,
+    label,
+    value: fmtSim(v, unit, { digits, unit: false }),
+    unit: simUnit(unit),
+  });
   return [
-    { key: 's', label: 'Escala de la red s', value: fmtFixed(b.s, 3) },
-    { key: 'v', label: 'Velocidad', value: fmtFixed(b.v_kn, 2), unit: 'kn' },
-    { key: 'ah', label: 'Abertura horizontal AH', value: fmtFixed(b.ah_m, 2), unit: 'm' },
-    { key: 'av', label: 'Abertura vertical AV', value: fmtFixed(b.av_m, 2), unit: 'm' },
-    {
-      key: 'area',
-      label: 'Área barrida por hora',
-      value: fmt(b.area_rate_m2_h === null ? null : Math.round(b.area_rate_m2_h)),
-      unit: 'm²/h',
-    },
-    {
-      key: 'rt',
-      label: 'Resistencia total R_T',
-      value: fmt(b.demand_kgf === null ? null : Math.round(b.demand_kgf)),
-      unit: 'kgf',
-    },
-    {
-      key: 'ft',
-      label: 'Tiro disponible F_T',
-      value: fmt(b.available_kgf === null ? null : Math.round(b.available_kgf)),
-      unit: 'kgf',
-    },
+    { key: 's', label: T.s, value: fmtFixed(b.s, 3) },
+    { key: 'v', label: T.v, value: fmtFixed(b.v_kn, 2), unit: 'kn' },
+    tile('ah', T.ah, b.ah_m, 'm', 2),
+    tile('av', T.av, b.av_m, 'm', 2),
+    tile('area', T.area, b.area_rate_m2_h, 'm²/h', 0),
+    tile('rt', T.rt, b.demand_kgf, 'kgf', 0),
+    tile('ft', T.ft, b.available_kgf, 'kgf', 0),
     {
       key: 'margin',
-      label: 'Margen F_T/R_T − 1',
+      label: T.margin,
       value: b.thrust_margin === null ? '—' : fmtPct(b.thrust_margin * 100, 1),
     },
   ];
 }
 
-function bound(lower: number | null, upper: number | null): string {
+/** Límites de una restricción, convertidos al sistema activo y con su unidad. */
+function bound(lower: number | null, upper: number | null, unit: string): string {
   const parts = [];
-  if (lower !== null) parts.push(`≥ ${fmt(lower)}`);
-  if (upper !== null) parts.push(`≤ ${fmt(upper)}`);
-  return parts.join(' y ') || '—';
+  if (lower !== null) parts.push(`≥ ${fmtU(lower, unit)}`);
+  if (upper !== null) parts.push(`≤ ${fmtU(upper, unit)}`);
+  return parts.join(msg().optimize.and) || '—';
 }
 
 export function Optimize({ onApplied }: { onApplied?: () => void }) {
   const { state, catalogs, committed, update } = useCase();
   const ids = useId();
   const c = useChartColors();
+  const T = useT().optimize;
+  const S = useT().simulate;
   const [form, setFormState] = useState<OptimizeForm>(
-    () => recall<OptimizeForm>(FORM_KEY) ?? { ...DEFAULT_FORM },
+    () => recall<OptimizeForm>(FORM_KEY) ?? defaultOptimizeForm(),
   );
   const setForm = (patch: Partial<OptimizeForm>) =>
     setFormState((f) => {
@@ -173,20 +172,18 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
     </div>
   );
 
-  const unit = r ? OBJECTIVE_UNITS[r.objective] : undefined;
+  const unit = r ? objectiveUnit(r.objective) : undefined;
   const grid = r?.grid as { s_values?: number[]; v_values?: number[] } | undefined;
 
   return (
     <div>
-      <h2 className="section-title">Optimizar escala y velocidad</h2>
+      <h2 className="section-title">{T.title}</h2>
       <p className="section-sub" style={{ marginBottom: 12 }}>
-        Busca la escala de la red (mismo mallero, s veces más mallas por borde) y la velocidad que
-        mejor cumplen el objetivo con el buque y el portón elegidos, respetando tiro, apertura,
-        cable y portón.
+        {T.intro}
       </p>
-      <div className="opt-form" role="group" aria-label="Parámetros de la optimización">
+      <div className="opt-form" role="group" aria-label={T.formLabel}>
         <fieldset className="field opt-objective">
-          <legend className="label">Objetivo</legend>
+          <legend className="label">{T.objective}</legend>
           <div className="segmented">
             {OBJECTIVES.map((o) => (
               <label key={o.id} title={o.help}>
@@ -203,15 +200,15 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
           </div>
           <span className="help">{OBJECTIVES.find((o) => o.id === form.objective)?.help}</span>
         </fieldset>
-        {field('margin', 'Reserva de tiro [%]', 'F_T ≥ (1 + m)·R_T')}
-        {field('sMin', 'Escala mínima')}
-        {field('sMax', 'Escala máxima')}
-        {field('vMin', 'Velocidad mínima [kn]')}
-        {field('vMax', 'Velocidad máxima [kn]')}
-        {field('nS', 'Puntos en s', 'Malla: una corrida del motor por escala', 'numeric')}
-        {field('nV', 'Puntos en v', undefined, 'numeric')}
+        {field('margin', T.margin, 'F_T ≥ (1 + m)·R_T')}
+        {field('sMin', T.sMin)}
+        {field('sMax', T.sMax)}
+        {field('vMin', T.vMin)}
+        {field('vMax', T.vMax)}
+        {field('nS', T.nS, T.nSHelp, 'numeric')}
+        {field('nV', T.nV, undefined, 'numeric')}
         <div className="field">
-          <label htmlFor={`${ids}-door`}>Portón</label>
+          <label htmlFor={`${ids}-door`}>{T.door}</label>
           <select
             id={`${ids}-door`}
             value={doorValue}
@@ -220,7 +217,7 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
             {catalogs.doors.map((d) => (
               <option key={d.id} value={d.id}>
                 {d.name}
-                {d.area_m2 != null ? ` · ${fmtFixed(d.area_m2, 2)} m²` : ''}
+                {d.area_m2 != null ? ` · ${fmtU(d.area_m2, 'm²', { digits: 2 })}` : ''}
               </option>
             ))}
           </select>
@@ -232,7 +229,7 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
               checked={form.refine}
               onChange={(e) => setForm({ refine: e.target.checked })}
             />
-            Refinar con evolución diferencial (más lento)
+            {T.refine}
           </label>
         </div>
       </div>
@@ -243,25 +240,23 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
           onClick={run}
           disabled={!built.body || busy || catalogs.loading}
         >
-          Optimizar
+          {T.run}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {busy ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Optimizando… (unos segundos)
+            <span className="spinner" aria-hidden="true" /> {T.running}
           </>
         ) : r ? (
-          <span>
-            {r.engine_runs} corridas del motor en {fmtFixed(r.runtime_s, 1)} s.
-          </span>
+          <span>{T.done(r.engine_runs, fmtFixed(r.runtime_s, 1))}</span>
         ) : null}
       </div>
       {err && (
         <div className="alert error" role="alert">
           <span>
             <strong>
-              {err instanceof ApiError && err.status ? `Error ${err.status}` : 'Error'}:
+              {err instanceof ApiError && err.status ? S.errorStatus(err.status) : S.error}:
             </strong>{' '}
             {err.message}
           </span>
@@ -274,11 +269,11 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
             <div className="chart-head">
               <div>
                 <h3 id={`${ids}-best`}>
-                  Mejor diseño{' '}
+                  {T.best}{' '}
                   {r.feasible ? (
-                    <span className="badge good">Factible</span>
+                    <span className="badge good">{T.feasible}</span>
                   ) : (
-                    <span className="badge crit">Ningún diseño factible</span>
+                    <span className="badge crit">{T.noneFeasible}</span>
                   )}
                 </h3>
                 <p className="chart-sub">
@@ -290,10 +285,11 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
                         : r.objective === 'energy'
                           ? r.best.energy_kgf_m_per_m2
                           : r.best.area_rate_m2_h;
-                    return v === null ? '—' : fmt(r.objective === 'energy' ? v : Math.round(v));
-                  })()}{' '}
-                  {unit?.unit} · buque {r.best.vessel_id} · portón {r.best.door_id} · cable{' '}
-                  {r.best.warp_id ?? 'ninguno del catálogo'}
+                    return fmtSim(v, unit?.unit ?? '', {
+                      digits: r.objective === 'energy' ? undefined : 0,
+                    });
+                  })()}
+                  {T.bestSub(r.best.vessel_id, r.best.door_id, r.best.warp_id ?? T.noWarp)}
                 </p>
               </div>
               <button
@@ -302,18 +298,17 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
                 onClick={() => void apply()}
                 disabled={applying}
               >
-                {applying ? 'Aplicando…' : 'Usar este diseño'}
+                {applying ? T.applying : T.apply}
               </button>
             </div>
             {!r.feasible && (
               <div className="alert warn" role="note">
-                Ninguna combinación cumple todas las restricciones; se muestra la de menor
-                violación.
+                {T.infeasibleNote}
               </div>
             )}
             {applyError && (
               <div className="alert error" role="alert">
-                No se pudo aplicar el diseño: {applyError}
+                {T.applyError(applyError)}
               </div>
             )}
             <div className="opt-tiles">
@@ -329,30 +324,32 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
             </div>
             <div className="table-wrap">
               <table className="data" data-testid="opt-constraints">
-                <caption className="sr-only">Restricciones del mejor diseño</caption>
+                <caption className="sr-only">{T.constraintsCaption}</caption>
                 <thead>
                   <tr>
-                    <th scope="col">Restricción</th>
+                    <th scope="col">{T.constraint}</th>
                     <th scope="col" className="num">
-                      Valor
+                      {T.value}
                     </th>
                     <th scope="col" className="num">
-                      Límite
+                      {T.limit}
                     </th>
-                    <th scope="col">Cumple</th>
+                    <th scope="col">{T.ok}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {r.best.constraints.map((k) => (
                     <tr key={k.name} data-constraint={k.name}>
                       <th scope="row" title={k.description}>
-                        {CONSTRAINT_LABELS[k.name] ?? k.name}
+                        {constraintLabel(k.name)}
                       </th>
-                      <td className="num">{fmt(k.value)}</td>
-                      <td className="num">{bound(k.lower, k.upper)}</td>
+                      <td className="num">{fmtU(k.value, CONSTRAINT_UNITS[k.name] ?? '')}</td>
+                      <td className="num">
+                        {bound(k.lower, k.upper, CONSTRAINT_UNITS[k.name] ?? '')}
+                      </td>
                       <td>
                         <span className={`badge ${k.ok ? 'good' : 'crit'}`}>
-                          {k.ok ? 'OK' : 'NO'}
+                          {k.ok ? T.okBadge : T.noBadge}
                         </span>
                       </td>
                     </tr>
@@ -365,35 +362,42 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
           <div className="charts-grid">
             <ChartCard
               id="opt-mapa"
-              title="Región factible en escala × velocidad"
-              sub={`${r.best.net_id.replace(/_s[\d.]+$/, '')} · malla ${grid?.s_values?.length ?? 0} × ${grid?.v_values?.length ?? 0}`}
-              note="Cada celda es una corrida del motor interpolada a esa velocidad. Pase el puntero para ver el valor."
+              title={T.mapTitle}
+              sub={T.mapSub(
+                r.best.net_id.replace(/_s[\d.]+$/, ''),
+                grid?.s_values?.length ?? 0,
+                grid?.v_values?.length ?? 0,
+              )}
+              note={T.mapNote}
             >
               <Heatmap r={r} />
             </ChartCard>
             <ChartCard
               id="opt-pareto"
-              title="Frente de Pareto"
-              sub="Área barrida por hora frente al trabajo de remolque por m² barrido"
+              title={T.paretoTitle}
+              sub={T.paretoSub}
               legend={[
-                { name: 'Frente de Pareto (factibles no dominados)', color: c.s1, kind: 'line' },
-                { name: 'Mejor diseño', color: c.s2, kind: 'rect' },
+                { name: T.paretoFront, color: c.s1, kind: 'line' },
+                { name: T.best, color: c.s2, kind: 'rect' },
               ]}
               table={
                 <DataTable
-                  caption="Puntos del frente de Pareto"
+                  caption={T.paretoCaption}
                   columns={[
                     { key: 's', label: 's' },
                     { key: 'v', label: 'v [kn]' },
-                    { key: 'area', label: 'Área [m²/h]' },
-                    { key: 'energy', label: 'R_T/AH [kgf·m/m²]' },
+                    { key: 'area', label: `${T.area} [${simUnit('m²/h')}]` },
+                    { key: 'energy', label: `R_T/AH [${simUnit('kgf·m/m²')}]` },
                   ]}
-                  rows={r.pareto.map((e) => ({
-                    s: e.s,
-                    v: e.v_kn,
-                    area: e.area_rate_m2_h === null ? null : Math.round(e.area_rate_m2_h),
-                    energy: e.energy_kgf_m_per_m2,
-                  }))}
+                  rows={r.pareto.map((e) => {
+                    const area = simValueOpt(e.area_rate_m2_h, 'm²/h');
+                    return {
+                      s: e.s,
+                      v: e.v_kn,
+                      area: area === null ? null : Math.round(area),
+                      energy: simValueOpt(e.energy_kgf_m_per_m2, 'kgf·m/m²'),
+                    };
+                  })}
                 />
               }
             >
@@ -403,10 +407,7 @@ export function Optimize({ onApplied }: { onApplied?: () => void }) {
         </div>
       )}
       {!r && !busy && !err && (
-        <p className="empty">
-          Elija el objetivo y los rangos y pulse «Optimizar». Se usa el caso actual (red, buque y
-          portón) en modo corregido.
-        </p>
+        <p className="empty">{T.empty}</p>
       )}
     </div>
   );

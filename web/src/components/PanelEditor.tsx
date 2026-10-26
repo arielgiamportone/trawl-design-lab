@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import type { NetSpec } from '../api/client';
+import { useT } from '../i18n';
 import { toInput } from '../lib/format';
 import { PLANE_LABELS, SECTION_LABELS } from '../lib/labels';
 import {
@@ -16,6 +17,8 @@ import { useCase } from '../state/useCase';
 
 export function PanelEditor() {
   const { state, update, specs } = useCase();
+  const T = useT();
+  const P = T.expert.panels;
   const [variant, setVariant] = useState<'std' | 'mod'>('std');
   const v = state.netModified ? variant : 'std';
   const spec = specs[v];
@@ -28,19 +31,17 @@ export function PanelEditor() {
     <div>
       <div className="panel-toolbar">
         <div>
-          <h2 className="section-title">Editor de paneles</h2>
-          <p className="section-sub">
-            Edite mallas, malleros e hilos; el caso se recalcula con la red modificada en línea.
-          </p>
+          <h2 className="section-title">{P.title}</h2>
+          <p className="section-sub">{P.sub}</p>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           {state.netModified && (
-            <div className="segmented" role="group" aria-label="Red a editar">
+            <div className="segmented" role="group" aria-label={P.netToEdit}>
               <button type="button" aria-pressed={v === 'std'} onClick={() => setVariant('std')}>
-                Estándar
+                {T.labels.variantsTitle.std}
               </button>
               <button type="button" aria-pressed={v === 'mod'} onClick={() => setVariant('mod')}>
-                Modificada
+                {T.labels.variantsTitle.mod}
               </button>
             </div>
           )}
@@ -50,12 +51,12 @@ export function PanelEditor() {
             onClick={() => setEdits(() => ({}))}
             disabled={Object.keys(edits).length === 0}
           >
-            Restablecer red
+            {P.resetNet}
           </button>
         </div>
       </div>
       {!spec ? (
-        <p className="empty">Cargando la especificación de la red…</p>
+        <p className="empty">{P.loadingSpec}</p>
       ) : (
         <PanelTable spec={spec} edits={edits} setEdits={setEdits} />
       )}
@@ -71,6 +72,7 @@ interface TableProps {
 
 export function PanelTable({ spec, edits, setEdits }: TableProps) {
   const ids = useId();
+  const P = useT().expert.panels;
   const n = countEdits(spec, edits);
 
   const onChange = (
@@ -84,19 +86,17 @@ export function PanelTable({ spec, edits, setEdits }: TableProps) {
     <>
       <p className="legend-inline" style={{ marginBottom: 8 }}>
         <span className="swatch-edited" aria-hidden="true" />
-        {n === 0
-          ? 'Sin cambios respecto del preset.'
-          : `${n} ${n === 1 ? 'celda editada' : 'celdas editadas'} respecto del preset.`}
-        <span className="sr-only">Las celdas editadas se marcan con fondo amarillo.</span>
+        {P.edited(n)}
+        <span className="sr-only">{P.editedSr}</span>
       </p>
       <div className="table-wrap">
         <table className="data panels">
-          <caption className="sr-only">Paneles de la red {spec.name}</caption>
+          <caption className="sr-only">{P.caption(spec.name)}</caption>
           <thead>
             <tr>
-              <th scope="col">Panel</th>
-              <th scope="col">Plano</th>
-              <th scope="col">Sección</th>
+              <th scope="col">{P.panel}</th>
+              <th scope="col">{P.plane}</th>
+              <th scope="col">{P.section}</th>
               {PANEL_FIELD_ORDER.map((f) => (
                 <th scope="col" key={f} className="num" title={PANEL_FIELDS[f].label}>
                   {PANEL_FIELDS[f].short}
@@ -131,7 +131,7 @@ export function PanelTable({ spec, edits, setEdits }: TableProps) {
                         type="text"
                         inputMode={PANEL_FIELDS[f].integer ? 'numeric' : 'decimal'}
                         autoComplete="off"
-                        aria-label={`${PANEL_FIELDS[f].label} del panel ${p.id}`}
+                        aria-label={P.cellLabel(PANEL_FIELDS[f].label, p.id)}
                         aria-invalid={invalid || undefined}
                         aria-describedby={invalid ? errId : undefined}
                         data-field={f}
@@ -153,8 +153,7 @@ export function PanelTable({ spec, edits, setEdits }: TableProps) {
         </table>
       </div>
       <p className="help" style={{ marginTop: 8 }}>
-        «Mallas boca» y «mallas bolsa» son los bordes del panel más cercanos a la boca y a la bolsa;
-        U1 es el coeficiente de armado horizontal (0–1].
+        {P.help}
       </p>
     </>
   );

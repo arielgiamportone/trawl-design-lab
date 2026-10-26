@@ -92,7 +92,16 @@ export const components = {
     },
   } as Record<string, Record<string, string>>,
   csv: {
-    head: ['Ítem', 'Componente', 'Cantidad', 'Unidad', 'Precio unitario', 'Moneda', 'Costo', 'Nota'],
+    head: [
+      'Ítem',
+      'Componente',
+      'Cantidad',
+      'Unidad',
+      'Precio unitario',
+      'Moneda',
+      'Costo',
+      'Nota',
+    ],
     noPrice: 'sin precio',
     total: 'Total',
     file: 'lista_de_materiales.csv',

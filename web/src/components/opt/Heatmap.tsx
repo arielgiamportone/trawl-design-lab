@@ -1,7 +1,9 @@
 import { useId } from 'react';
 import type { OptimizeResponse } from '../../api/client';
-import { fmt, fmtFixed } from '../../lib/format';
-import { heatCells, OBJECTIVE_UNITS } from '../../lib/optimize';
+import { fmtFixed } from '../../lib/format';
+import { heatCells, objectiveUnit } from '../../lib/optimize';
+import { useT } from '../../i18n';
+import { fmtSim } from '../../lib/simulate';
 import { useMediaQuery, useResolvedTheme } from '../../lib/theme';
 
 /** Rampa secuencial (un solo tono, claro → oscuro en tema claro; al revés en oscuro). */
@@ -23,6 +25,7 @@ const PAD = { l: 44, r: 8, t: 8, b: 40 };
  */
 export function Heatmap({ r }: { r: OptimizeResponse }) {
   const theme = useResolvedTheme();
+  const T = useT().optimize.heatmap;
   // Ancho del dibujo cercano al real para que el texto no quede diminuto.
   const W = useMediaQuery('(max-width: 560px)') ? 330 : 480;
   const ramp = RAMP[theme];
@@ -35,7 +38,8 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
   const cw = (W - PAD.l - PAD.r) / nV;
   const ch = Math.min(30, Math.max(16, cw * 0.65));
   const H = PAD.t + ch * nS + PAD.b;
-  const unit = OBJECTIVE_UNITS[r.objective] ?? { label: r.objective, unit: '' };
+  const unit = objectiveUnit(r.objective);
+  const val = (v: number | null) => fmtSim(v, unit.unit, { digits: 0 });
   const x = (j: number) => PAD.l + j * cw;
   const y = (i: number) => PAD.t + (nS - 1 - i) * ch; // s crece hacia arriba
   const vStep = Math.max(1, Math.ceil(nV / 8));
@@ -47,7 +51,7 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        aria-label={`Mapa de factibilidad: ${nFeasible} de ${cells.length} combinaciones de escala y velocidad son factibles; el color indica ${unit.label.toLowerCase()}.`}
+        aria-label={T.aria(nFeasible, cells.length, unit.label.toLowerCase())}
         data-testid="opt-heatmap"
       >
         <defs>
@@ -75,9 +79,7 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
           >
             <title>
               {`s = ${fmtFixed(c.s, 3)}, v = ${fmtFixed(c.v, 2)} kn: ${
-                c.feasible
-                  ? `${fmt(c.value === null ? null : Math.round(c.value))} ${unit.unit}`
-                  : 'no factible'
+                c.feasible ? val(c.value) : T.infeasibleCell
               }`}
             </title>
           </rect>
@@ -129,7 +131,7 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
           textAnchor="middle"
           className="heat-axis"
         >
-          Velocidad de arrastre v [kn]
+          {T.xAxis}
         </text>
         <text
           x={12}
@@ -138,10 +140,10 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
           className="heat-axis"
           transform={`rotate(-90 12 ${PAD.t + (ch * nS) / 2})`}
         >
-          Escala s
+          {T.yAxis}
         </text>
       </svg>
-      <ul className="chart-legend heat-legend" aria-label="Leyenda">
+      <ul className="chart-legend heat-legend" aria-label={T.legend}>
         <li>
           <span
             className="heat-ramp"
@@ -151,17 +153,23 @@ export function Heatmap({ r }: { r: OptimizeResponse }) {
             }}
           />
           {unit.label}:{' '}
-          {min === null ? '—' : fmt(Math.round(r.objective === 'energy' ? (max ?? 0) : min))} →{' '}
-          {max === null ? '—' : fmt(Math.round(r.objective === 'energy' ? (min ?? 0) : max))}{' '}
-          {unit.unit} ({theme === 'dark' ? 'más claro' : 'más oscuro'} = mejor)
+          {min === null
+            ? '—'
+            : fmtSim(r.objective === 'energy' ? (max ?? 0) : min, unit.unit, {
+                digits: 0,
+                unit: false,
+              })}{' '}
+          →{' '}
+          {max === null ? '—' : val(r.objective === 'energy' ? (min ?? 0) : max)}{' '}
+          {T.better(theme === 'dark')}
         </li>
         <li>
           <span className="heat-hatch" aria-hidden="true" />
-          No factible
+          {T.infeasible}
         </li>
         <li>
           <span className="heat-best" aria-hidden="true" />
-          Mejor punto de la malla
+          {T.bestPoint}
         </li>
       </ul>
     </div>

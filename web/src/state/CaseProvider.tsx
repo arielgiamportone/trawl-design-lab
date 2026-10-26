@@ -2,6 +2,8 @@ import { keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-quer
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { api, type DesignRequest } from '../api/client';
 import { asDesignData } from '../api/result';
+import { msg } from '../i18n';
+import { fmtDate } from '../lib/format';
 import { initHistory, record, redo as redoH, undo as undoH, type History } from '../lib/history';
 import { paramMeta } from '../lib/params';
 import { loadJson, saveJson } from '../lib/storage';
@@ -132,8 +134,8 @@ export function CaseProvider({ children }: { children: ReactNode }) {
     setPinned({
       data: design.data,
       request: committed,
-      label: `${String(s.net_id ?? '')} · ${String(s.vessel_id ?? '')} · ${state.compat === 'excel' ? 'Excel' : 'corregido'}`,
-      at: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
+      label: `${String(s.net_id ?? '')} · ${String(s.vessel_id ?? '')} · ${state.compat === 'excel' ? 'Excel' : msg().state.corrected}`,
+      at: fmtDate(new Date(), { hour: '2-digit', minute: '2-digit' }),
     });
   }, [design.data, committed, state.compat]);
   const unpin = useCallback(() => setPinned(null), []);

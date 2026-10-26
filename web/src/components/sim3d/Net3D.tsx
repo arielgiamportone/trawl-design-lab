@@ -14,13 +14,10 @@ import {
   type SimGeometry,
 } from '../../lib/sim3d';
 import { useChartColors, useResolvedTheme } from '../../lib/theme';
+import { useT } from '../../i18n';
+import { fmtU, toDisplay, unitLabel } from '../../lib/units';
 
-const VIEWS: { key: CameraView; label: string }[] = [
-  { key: 'iso', label: 'Perspectiva' },
-  { key: 'plan', label: 'Planta' },
-  { key: 'profile', label: 'Perfil' },
-  { key: 'front', label: 'Frente' },
-];
+const VIEWS: CameraView[] = ['iso', 'plan', 'profile', 'front'];
 
 function hasWebGL(): boolean {
   try {
@@ -46,6 +43,7 @@ interface Scene3D {
 export function Net3D({ geometry }: { geometry: SimGeometry }) {
   const theme = useResolvedTheme();
   const colors = useChartColors();
+  const T = useT().sim3d;
   const ramp = theme === 'dark' ? RAMP_DARK : RAMP_LIGHT;
   const [mode, setMode] = useState<ColorMode>('tension');
   const buffers = useMemo(
@@ -78,9 +76,11 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
     renderer.domElement.setAttribute('role', 'img');
     renderer.domElement.setAttribute(
       'aria-label',
-      `Forma 3D de la red a ${fmtFixed(geometry.speed_kn, 1)} kn: abertura horizontal ` +
-        `${fmtFixed(geometry.ah_m, 1)} m y vertical ${fmtFixed(geometry.av_m, 2)} m; ` +
-        'color = tensión del hilo.',
+      T.canvasAria(
+        fmtFixed(geometry.speed_kn, 1),
+        fmtU(geometry.ah_m, 'm', { digits: 1 }),
+        fmtU(geometry.av_m, 'm', { digits: 2 }),
+      ),
     );
     renderer.domElement.setAttribute('data-testid', 'net3d-canvas');
 
@@ -182,7 +182,7 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
       scene3d.current?.dispose();
       scene3d.current = null;
     };
-  }, [buffers, colors, geometry, noGl]);
+  }, [buffers, colors, geometry, noGl, T]);
 
   const setView = (v: CameraView) => {
     const s = scene3d.current;
@@ -197,7 +197,7 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
     if (!s) return;
     s.render();
     s.renderer.domElement.toBlob((b) => {
-      if (b) downloadBlob(b, `red-3d-${fmtFixed(geometry.speed_kn, 1).replace(',', '_')}kn.png`);
+      if (b) downloadBlob(b, T.pngName(fmtFixed(geometry.speed_kn, 1).replace(/[.,]/, '_')));
     });
   };
 
@@ -205,70 +205,60 @@ export function Net3D({ geometry }: { geometry: SimGeometry }) {
   return (
     <figure className="net3d" style={{ margin: 0 }}>
       <div className="net3d-tools">
-        <div className="segmented" role="group" aria-label="Vista 3D">
+        <div className="segmented" role="group" aria-label={T.viewsLabel}>
           {VIEWS.map((v) => (
-            <button key={v.key} type="button" onClick={() => setView(v.key)}>
-              {v.label}
+            <button key={v} type="button" onClick={() => setView(v)}>
+              {T.views[v]}
             </button>
           ))}
         </div>
-        <div className="segmented" role="group" aria-label="Color del paño">
+        <div className="segmented" role="group" aria-label={T.colorLabel}>
           <button
             type="button"
             aria-pressed={mode === 'tension'}
             onClick={() => setMode('tension')}
           >
-            Tensión
+            {T.tension}
           </button>
           <button
             type="button"
             aria-pressed={mode === 'contact'}
             onClick={() => setMode('contact')}
           >
-            Contacto con el fondo
+            {T.contact}
           </button>
         </div>
         <button type="button" className="btn small" onClick={savePng} disabled={noGl}>
-          Descargar PNG
+          {T.png}
         </button>
       </div>
       {noGl ? (
         <div className="alert warn" role="note">
-          <span>
-            Este navegador no tiene WebGL: use las proyecciones de planta, perfil y frente de abajo.
-          </span>
+          <span>{T.noWebgl}</span>
         </div>
       ) : (
-        <div
-          ref={host}
-          className="net3d-stage"
-          tabIndex={0}
-          aria-label="Visor 3D: arrastre para girar, rueda para acercar, flechas para desplazar."
-        />
+        <div ref={host} className="net3d-stage" tabIndex={0} aria-label={T.stageAria} />
       )}
       <figcaption className="net3d-legend">
         {mode === 'tension' ? (
           <>
-            <span>Tensión del hilo [N]</span>
+            <span>{T.twineTension(unitLabel('N'))}</span>
             <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
             <span className="net3d-ticks">
-              <span>{fmt(Math.round(buffers.range[0]))}</span>
-              <span>≥ {fmt(Math.round(buffers.range[1]))}</span>
+              <span>{fmt(Math.round(toDisplay(buffers.range[0], 'N')))}</span>
+              <span>≥ {fmt(Math.round(toDisplay(buffers.range[1], 'N')))}</span>
             </span>
           </>
         ) : (
           <>
             <span>
               <span className="key-rect" style={{ background: colors.s2 }} aria-hidden="true" />{' '}
-              Paño apoyado en el fondo
+              {T.onSeabed}
             </span>
-            <span className="net3d-contact">{fmtFixed(contactShare * 100, 0)} % del paño</span>
+            <span className="net3d-contact">{T.contactShare(fmtFixed(contactShare * 100, 0))}</span>
           </>
         )}
-        <span className="help">
-          Línea llena: lima y burlón · discontinua: bridas, patentes y cables · puntos: boyas ·
-          grilla: fondo.
-        </span>
+        <span className="help">{T.legend}</span>
       </figcaption>
     </figure>
   );

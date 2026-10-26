@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiBase } from '../api/client';
 import { statusLabel } from '../lib/connection';
-import { DOCS_URL } from '../lib/docs';
+import { DOCS_URL, docsRoot } from '../lib/docs';
 import type { UiMode } from '../lib/mode';
 import { applyThemePref, initialThemePref, type ThemePref } from '../lib/theme';
 import { LANGS, setLang, useLang, useT } from '../i18n';
@@ -57,7 +57,7 @@ export function Header({ mode, onModeChange }: Props) {
           ))}
         </div>
         {DOCS_URL && (
-          <a className="docs-link" href={DOCS_URL}>
+          <a className="docs-link" href={lang === 'en' ? (docsRoot() ?? DOCS_URL) : DOCS_URL}>
             {T.app.docs}
           </a>
         )}

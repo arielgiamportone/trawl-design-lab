@@ -14,6 +14,8 @@ import {
   type CameraView,
 } from '../../lib/sim3d';
 import { useChartColors, useResolvedTheme } from '../../lib/theme';
+import { useT } from '../../i18n';
+import { toDisplay, unitLabel } from '../../lib/units';
 
 export type AnimColor = 'tension' | 'contact' | 'fouling' | 'opening' | 'values';
 export type AnimScope = 'net' | 'full';
@@ -102,6 +104,7 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
 ) {
   const theme = useResolvedTheme();
   const colors = useChartColors();
+  const T = useT().sim3d;
   const ramp = theme === 'dark' ? RAMP_DARK : RAMP_LIGHT;
   const host = useRef<HTMLDivElement>(null);
   const [noGl] = useState(() => !hasWebGL());
@@ -423,7 +426,7 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
   if (noGl) {
     return (
       <div className="alert warn" role="note">
-        <span>Este navegador no tiene WebGL: la animación 3D no está disponible.</span>
+        <span>{T.noWebglAnim}</span>
       </div>
     );
   }
@@ -431,43 +434,29 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
   return (
     <figure className="net3d" style={{ margin: 0 }}>
       <div className="net3d-tools">
-        <div className="segmented" role="group" aria-label="Vista 3D">
-          {(
-            [
-              ['iso', 'Perspectiva'],
-              ['plan', 'Planta'],
-              ['profile', 'Perfil'],
-              ['front', 'Frente'],
-            ] as [CameraView, string][]
-          ).map(([v, l]) => (
+        <div className="segmented" role="group" aria-label={T.viewsLabel}>
+          {(['iso', 'plan', 'profile', 'front'] as CameraView[]).map((v) => (
             <button key={v} type="button" onClick={() => scene3d.current?.setView(v)}>
-              {l}
+              {T.views[v]}
             </button>
           ))}
         </div>
       </div>
-      <div
-        ref={host}
-        className="net3d-stage"
-        tabIndex={0}
-        aria-label="Visor 3D animado: arrastre para girar, rueda para acercar, flechas para desplazar."
-      />
+      <div ref={host} className="net3d-stage" tabIndex={0} aria-label={T.animStageAria} />
       <figcaption className="net3d-legend">
         {color === 'tension' ? (
           <>
-            <span>Tensión del hilo [N]</span>
+            <span>{T.twineTension(unitLabel('N'))}</span>
             <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
             <span className="net3d-ticks">
               <span>0</span>
-              <span>≥ {fmt(Math.round(tMax))}</span>
+              <span>≥ {fmt(Math.round(toDisplay(tMax, 'N')))}</span>
             </span>
           </>
         ) : color === 'opening' || color === 'values' ? (
           <>
             <span>
-              {color === 'opening'
-                ? 'Apertura de la malla (área / malla abierta en cuadrado)'
-                : (valuesLabel ?? 'Valor por triángulo')}
+              {color === 'opening' ? T.openingLegend : (valuesLabel ?? T.valuePerTriangle)}
             </span>
             <span className="net3d-ramp" style={{ background: gradient }} aria-hidden="true" />
             <span className="net3d-ticks">
@@ -477,24 +466,19 @@ export const NetAnim = forwardRef<NetAnimHandle, Props>(function NetAnim(
           </>
         ) : color === 'contact' ? (
           <span>
-            <span className="key-rect" style={{ background: colors.s2 }} aria-hidden="true" /> Paño
-            apoyado en el fondo
+            <span className="key-rect" style={{ background: colors.s2 }} aria-hidden="true" />{' '}
+            {T.onSeabed}
           </span>
         ) : (
           <span>
-            <span className="key-rect" style={{ background: colors.s3 }} aria-hidden="true" /> Paño
-            ensuciado (más intenso = más nivel)
+            <span className="key-rect" style={{ background: colors.s3 }} aria-hidden="true" />{' '}
+            {T.fouled}
           </span>
         )}
         {onPick && (
-          <span className="help">
-            Haga clic sobre el paño para ver sus mallas de cerca (zoom por malla).
-          </span>
+          <span className="help">{T.pickHint}</span>
         )}
-        <span className="help">
-          Placas: portones · flechas rojas: tiro de los cables en el buque (largo ∝ tensión) ·
-          puntos: boyas · grilla: fondo.
-        </span>
+        <span className="help">{T.animLegend}</span>
       </figcaption>
     </figure>
   );

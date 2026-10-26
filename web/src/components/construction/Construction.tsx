@@ -7,6 +7,7 @@ import {
   type GuideJoin,
   type Variant,
 } from '../../api/client';
+import { useT } from '../../i18n';
 import {
   completion,
   EYE_KEY,
@@ -21,23 +22,31 @@ import {
   type Progress,
 } from '../../lib/construction';
 import { downloadBlob } from '../../lib/download';
-import { fmt, fmtFixed, parseNumber } from '../../lib/format';
+import { fmt, fmtFixed, parseNumber, toInput } from '../../lib/format';
 import { loadJson, saveJson } from '../../lib/storage';
+import { fmtU, getUnits, toCanonical, toDisplay, unitLabel } from '../../lib/units';
 import { useCase } from '../../state/useCase';
 import { JoinMap } from './JoinMap';
 
-const VIEWS: { id: GuideView; label: string }[] = [
-  { id: 'corte', label: 'Hoja de corte' },
-  { id: 'armado', label: 'Armado paso a paso' },
-  { id: 'montaje', label: 'Montaje en relingas' },
-  { id: 'cortes', label: 'Cabos y cables' },
-];
+const VIEWS: GuideView[] = ['corte', 'armado', 'montaje', 'cortes'];
 
-const DOWNLOADS: { format: GuideFormat; label: string }[] = [
-  { format: 'pdf', label: 'Guía en PDF (A4)' },
-  { format: 'xlsx', label: 'Planilla XLSX' },
-  { format: 'html', label: 'Imprimir guía' },
-];
+const DOWNLOADS: GuideFormat[] = ['pdf', 'xlsx', 'html'];
+
+/** Sobrante por gaza guardado (en m) como texto del campo, en el sistema activo. */
+function eyeInput(m: number): string {
+  if (getUnits() !== 'imperial') return String(m);
+  return toInput(Number(toDisplay(m, 'm').toPrecision(4)));
+}
+
+/** Encabezado con unidad: «Peso [kg]» / «Peso [lb]». */
+function withUnit(label: string, unit: string): string {
+  return `${label} [${unitLabel(unit)}]`;
+}
+
+/** Encabezado de malla: «[mm]» y, en imperial, «[mm (in)]». */
+function meshHead(label: string): string {
+  return getUnits() === 'imperial' ? `${label} [mm (in)]` : `${label} [mm]`;
+}
 
 /**
  * Pestaña «Construcción» (Fase 15): del diseño al taller. Hoja de corte, uniones paso a paso con
@@ -46,13 +55,18 @@ const DOWNLOADS: { format: GuideFormat; label: string }[] = [
  */
 export function Construction() {
   const { committed } = useCase();
+  const T = useT().construction;
   const [view, setView] = useState<GuideView>(() => loadJson<GuideView>(GUIDE_VIEW_KEY) ?? 'corte');
   const [variant, setVariant] = useState<Variant>('std');
-  const [eyeText, setEyeText] = useState(() => String(loadJson<number>(EYE_KEY) ?? 0.5));
-  const eye = (() => {
-    const v = parseNumber(eyeText);
-    return v !== null && v >= 0 && v <= 5 ? v : 0.5;
-  })();
+  const [eyeText, setEyeText] = useState(() => eyeInput(loadJson<number>(EYE_KEY) ?? 0.5));
+  // Lo escrito está en el sistema activo (m o ft); la API recibe metros.
+  const eyeOf = (text: string): number | null => {
+    const v = parseNumber(text);
+    if (v === null) return null;
+    const m = Number(toCanonical(v, 'm').toPrecision(10));
+    return m >= 0 && m <= 5 ? m : null;
+  };
+  const eye = eyeOf(eyeText) ?? 0.5;
   const hasMod = Boolean(committed?.net_modified);
   const v: Variant = hasMod ? variant : 'std';
   const q = useQuery({
@@ -88,7 +102,7 @@ export function Construction() {
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank', 'noopener');
         setTimeout(() => URL.revokeObjectURL(url), 60_000);
-      } else downloadBlob(blob, `guia-${g?.net_id ?? 'red'}.${format}`);
+      } else downloadBlob(blob, T.file(g?.net_id ?? T.defaultNet, format));
     } catch (e) {
       setDlError((e as Error).message);
     } finally {
@@ -98,44 +112,40 @@ export function Construction() {
 
   return (
     <div className="construction" data-testid="construction">
-      <p className="section-sub">
-        Del diseño al taller: qué paño comprar, cómo cortar cada pieza, en qué orden unirlas y cómo
-        armar la red en las relingas. Vaya tildando lo que hace: queda guardado en este navegador,
-        también sin conexión.
-      </p>
+      <p className="section-sub">{T.intro}</p>
       <div className="catalog-actions no-print">
         {hasMod && (
-          <div className="segmented" role="group" aria-label="Variante de la red">
+          <div className="segmented" role="group" aria-label={T.variant}>
             {(['std', 'mod'] as const).map((x) => (
               <button key={x} type="button" aria-pressed={v === x} onClick={() => setVariant(x)}>
-                {x === 'std' ? 'Estándar' : 'Modificada'}
+                {x === 'std' ? T.std : T.mod}
               </button>
             ))}
           </div>
         )}
         <label className="inline-field">
-          Sobrante por gaza [m]
+          {withUnit(T.eye, 'm')}
           <input
-            aria-label="Sobrante por gaza"
+            aria-label={T.eye}
             inputMode="decimal"
             size={4}
             value={eyeText}
             onChange={(e) => {
               setEyeText(e.target.value);
-              const n = parseNumber(e.target.value);
-              if (n !== null && n >= 0 && n <= 5) saveJson(EYE_KEY, n);
+              const n = eyeOf(e.target.value);
+              if (n !== null) saveJson(EYE_KEY, n);
             }}
           />
         </label>
         {DOWNLOADS.map((d) => (
           <button
-            key={d.format}
+            key={d}
             type="button"
             className="btn"
             disabled={!g || busy !== null}
-            onClick={() => void download(d.format)}
+            onClick={() => void download(d)}
           >
-            {busy === d.format ? 'Preparando…' : d.label}
+            {busy === d ? T.preparing : T.downloads[d]}
           </button>
         ))}
       </div>
@@ -144,7 +154,7 @@ export function Construction() {
           {dlError}
         </p>
       )}
-      {!committed && <p className="empty">Complete el caso para ver la guía de construcción.</p>}
+      {!committed && <p className="empty">{T.empty}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
           {q.error.message}
@@ -153,15 +163,10 @@ export function Construction() {
       {g && (
         <>
           <GuideSummary g={g} progress={progress} />
-          <div className="segmented no-print" role="group" aria-label="Sección de la guía">
+          <div className="segmented no-print" role="group" aria-label={T.section}>
             {VIEWS.map((x) => (
-              <button
-                key={x.id}
-                type="button"
-                aria-pressed={view === x.id}
-                onClick={() => choose(x.id)}
-              >
-                {x.label}
+              <button key={x} type="button" aria-pressed={view === x} onClick={() => choose(x)}>
+                {T.views[x]}
               </button>
             ))}
           </div>
@@ -185,7 +190,7 @@ export function Construction() {
           {g.notes.length > 0 && (
             <details className="accordion">
               <summary>
-                <span>Supuestos de la guía</span>
+                <span>{T.assumptions}</span>
               </summary>
               <ul className="accordion-body help">
                 {g.notes.map((n) => (
@@ -204,26 +209,27 @@ function GuideSummary({ g, progress }: { g: ConstructionGuide; progress: Progres
   const pieces = g.pieces.reduce((a, p) => a + p.pieces, 0);
   const kg = g.stock.reduce((a, s) => a + s.weight_kg, 0);
   const pct = Math.round(100 * completion(g, progress));
+  const T = useT().construction;
   return (
     <div className="guide-summary" data-testid="guide-summary">
       <div>
-        <span className="kpi-label">Paños</span>
+        <span className="kpi-label">{T.panels}</span>
         <strong>
-          {g.pieces.length} · {pieces} piezas
+          {g.pieces.length} · {T.pieces(pieces)}
         </strong>
       </div>
       <div>
-        <span className="kpi-label">Uniones</span>
+        <span className="kpi-label">{T.joins}</span>
         <strong>{g.joins.length}</strong>
       </div>
       <div>
-        <span className="kpi-label">Paño a comprar</span>
-        <strong>{fmtFixed(kg, 1)} kg</strong>
+        <span className="kpi-label">{T.buy}</span>
+        <strong>{fmtU(kg, 'kg', { digits: 1 })}</strong>
       </div>
       <div>
-        <span className="kpi-label">Avance del taller</span>
+        <span className="kpi-label">{T.progress}</span>
         <strong>{pct} %</strong>
-        <progress max={100} value={pct} aria-label="Avance del taller" />
+        <progress max={100} value={pct} aria-label={T.progress} />
       </div>
     </div>
   );
@@ -238,25 +244,26 @@ function CutSheet({
   done: string[];
   onToggle: (id: string) => void;
 }) {
+  const T = useT().construction;
   return (
     <div data-testid="cut-sheet">
-      <h3 className="subhead">Paño a comprar</h3>
+      <h3 className="subhead">{T.buy}</h3>
       <div className="table-wrap">
-        <table className="data" aria-label="Paño a comprar">
+        <table className="data" aria-label={T.buy}>
           <thead>
             <tr>
-              <th scope="col">Material</th>
+              <th scope="col">{T.colMaterial}</th>
               <th scope="col" className="num">
-                Mallero [mm]
+                {meshHead(T.colMesh)}
               </th>
               <th scope="col" className="num">
-                Ø hilo [mm]
+                {withUnit(T.colTwine, 'mm')}
               </th>
               <th scope="col" className="num">
-                Ancho × alto [mallas]
+                {T.colSize}
               </th>
               <th scope="col" className="num">
-                Peso [kg]
+                {withUnit(T.colWeight, 'kg')}
               </th>
             </tr>
           </thead>
@@ -267,18 +274,18 @@ function CutSheet({
                   {s.material}
                   {s.rtex ? ` · R${fmt(s.rtex)} tex` : ''}
                 </td>
-                <td className="num">{fmt(s.mesh_mm)}</td>
-                <td className="num">{fmt(s.twine_mm)}</td>
+                <td className="num">{fmtU(s.mesh_mm, 'mesh_mm', { unit: false })}</td>
+                <td className="num">{fmtU(s.twine_mm, 'mm', { unit: false })}</td>
                 <td className="num">
                   {fmt(s.width_meshes)} × {fmt(s.depth_meshes)}
                 </td>
-                <td className="num">{fmtFixed(s.weight_kg, 2)}</td>
+                <td className="num">{fmtU(s.weight_kg, 'kg', { digits: 2, unit: false })}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <h3 className="subhead">Piezas</h3>
+      <h3 className="subhead">{T.piecesTitle}</h3>
       <ul className="guide-list">
         {g.pieces.map((p) => {
           const checked = done.includes(p.id);
@@ -289,34 +296,46 @@ function CutSheet({
                   type="checkbox"
                   checked={checked}
                   onChange={() => onToggle(p.id)}
-                  aria-label={`Paño ${p.id} cortado`}
+                  aria-label={T.pieceCut(p.id)}
                 />
                 <span>
                   <strong>
                     {p.id} · {p.name}
                   </strong>{' '}
                   <span className="badge">
-                    {p.pieces} {p.pieces === 1 ? 'pieza' : 'piezas'}
-                    {p.paired ? ' (par)' : ''}
+                    {T.pieceCount(p.pieces)}
+                    {p.paired ? T.pair : ''}
                   </span>
                 </span>
               </label>
               <p className="help">
-                {p.planes} · {p.material} {fmt(p.mesh_mm)} mm, hilo Ø {fmt(p.twine_mm)} mm · mallas:
-                boca {p.meshes_mouth}, bolsa {p.meshes_codend}, alto {p.meshes_depth}
+                {T.pieceSpec(
+                  p.planes,
+                  p.material,
+                  fmtU(p.mesh_mm, 'mesh_mm'),
+                  fmtU(p.twine_mm, 'mm'),
+                  p.meshes_mouth,
+                  p.meshes_codend,
+                  p.meshes_depth,
+                )}
               </p>
               <ul className="guide-cuts">
                 {p.sides.map((s) => (
                   <li key={s.side}>
                     <strong>{s.side}:</strong> {s.instruction}
-                    {s.inferred && <span className="badge warn">inferido</span>}
+                    {s.inferred && <span className="badge warn">{T.inferred}</span>}
                   </li>
                 ))}
               </ul>
               <p className="help">
-                {p.start}. Rectángulo: {p.stock_width} × {p.stock_depth} mallas
-                {p.paired ? ' por par' : ''}, desperdicio {fmtFixed(100 * p.waste, 0)} %; peso por
-                pieza {fmtFixed(p.weight_kg, 2)} kg.
+                {T.pieceStock(
+                  p.start,
+                  p.stock_width,
+                  p.stock_depth,
+                  Boolean(p.paired),
+                  fmtFixed(100 * p.waste, 0),
+                  fmtU(p.weight_kg, 'kg', { digits: 2 }),
+                )}
               </p>
             </li>
           );
@@ -338,6 +357,7 @@ function Assembly({
   onToggle: (step: number) => void;
 }) {
   const { committed } = useCase();
+  const T = useT().construction;
   const layout = useQuery({
     queryKey: ['layout', committed, variant, 'schematic'],
     queryFn: ({ signal }) => api.layout(committed!, variant, 'schematic', signal),
@@ -348,7 +368,7 @@ function Assembly({
   const [current, setCurrent] = useState(firstOpen);
   const join: GuideJoin | undefined = g.joins.find((j) => j.step === current) ?? g.joins[0];
   const index = useMemo(() => g.joins.findIndex((j) => j.step === join?.step), [g, join]);
-  if (!join) return <p className="empty">La red no tiene uniones.</p>;
+  if (!join) return <p className="empty">{T.noJoins}</p>;
   const go = (d: number) => {
     const next = g.joins[index + d];
     if (next) setCurrent(next.step);
@@ -357,14 +377,13 @@ function Assembly({
     <div className="guide-assembly" data-testid="assembly">
       <div className="guide-step" aria-live="polite">
         <p className="guide-step-title">
-          Paso {join.step} de {g.joins.length} · {join.plane}
-          {join.times > 1 ? ` · ${join.times} veces` : ''}
+          {T.step(join.step, g.joins.length, join.plane, join.times)}
         </p>
         <p className="guide-step-text">{joinText(join)}</p>
         {join.note && <p className="help">{join.note}</p>}
         <div className="wizard-actions">
           <button type="button" className="btn" disabled={index <= 0} onClick={() => go(-1)}>
-            ← Anterior
+            {T.prev}
           </button>
           <label className="guide-check big">
             <input
@@ -372,7 +391,7 @@ function Assembly({
               checked={done.includes(join.step)}
               onChange={() => onToggle(join.step)}
             />
-            Hecho
+            {T.done}
           </label>
           <button
             type="button"
@@ -383,7 +402,7 @@ function Assembly({
               go(1);
             }}
           >
-            Hecho, siguiente →
+            {T.doneNext}
           </button>
         </div>
         {layout.data && (
@@ -391,11 +410,11 @@ function Assembly({
             layout={layout.data}
             planes={joinPlanes(join)}
             highlight={joinPanels(join)}
-            label={`Paños de la unión ${join.step}: ${join.a} y ${join.b}`}
+            label={T.mapLabel(join.step, join.a, join.b)}
           />
         )}
       </div>
-      <ol className="guide-list" aria-label="Todas las uniones">
+      <ol className="guide-list" aria-label={T.allJoins}>
         {g.joins.map((j) => (
           <li
             key={j.step}
@@ -409,16 +428,13 @@ function Assembly({
                 type="checkbox"
                 checked={done.includes(j.step)}
                 onChange={() => onToggle(j.step)}
-                aria-label={`Paso ${j.step} hecho`}
+                aria-label={T.stepDone(j.step)}
               />
               <button type="button" className="link-button" onClick={() => setCurrent(j.step)}>
-                Paso {j.step}: {j.a} + {j.b}
+                {T.stepLink(j.step, j.a, j.b)}
               </button>
             </label>
-            <span className="help">
-              {' '}
-              {j.plane} · {j.meshes_a} : {j.meshes_b} mallas · {j.rule}
-            </span>
+            <span className="help">{T.stepMeshes(j.plane, j.meshes_a, j.meshes_b, j.rule)}</span>
           </li>
         ))}
       </ol>
@@ -427,6 +443,7 @@ function Assembly({
 }
 
 function FloatLine({ g }: { g: ConstructionGuide }) {
+  const T = useT().construction;
   const xs = g.floats.map((f) => f.x_m);
   const half = Math.max(1, ...xs.map(Math.abs)) * 1.08;
   const w = 600;
@@ -436,7 +453,7 @@ function FloatLine({ g }: { g: ConstructionGuide }) {
       viewBox={`0 0 ${w} 60`}
       className="float-line"
       role="img"
-      aria-label={`${g.floats.length} boyas sobre la lima`}
+      aria-label={T.floatsAria(g.floats.length)}
       data-testid="float-line"
     >
       <line x1={sx(-half)} x2={sx(half)} y1={40} y2={40} className="float-rope" />
@@ -445,37 +462,41 @@ function FloatLine({ g }: { g: ConstructionGuide }) {
         <g key={f.number}>
           <circle cx={sx(f.x_m)} cy={30} r={7} className="float-ball" />
           <text x={sx(f.x_m)} y={14} textAnchor="middle" fontSize={10}>
-            {fmtFixed(f.x_m, 1)}
+            {fmtFixed(toDisplay(f.x_m, 'm'), 1)}
           </text>
         </g>
       ))}
       <text x={w / 2} y={58} textAnchor="middle" fontSize={10}>
-        centro
+        {T.centre}
       </text>
     </svg>
   );
 }
 
 function Rigging({ g }: { g: ConstructionGuide }) {
+  const T = useT().construction;
+  const per = (kg: number, kgm: number) =>
+    `${fmtU(kg, 'kg', { digits: 1, unit: false })} · ${fmtU(kgm, 'kg/m', { digits: 2, unit: false })}`;
+  const ballastHead = (label: string) => `${label} [${unitLabel('kg')}] · [${unitLabel('kg/m')}]`;
   return (
     <div data-testid="rigging">
-      <h3 className="subhead">Paño en las relingas</h3>
+      <h3 className="subhead">{T.ropesTitle}</h3>
       <div className="table-wrap">
-        <table className="data" aria-label="Montaje en relingas">
+        <table className="data" aria-label={T.ropesTable}>
           <thead>
             <tr>
-              <th scope="col">Relinga</th>
-              <th scope="col">Tramo</th>
+              <th scope="col">{T.colRope}</th>
+              <th scope="col">{T.colPart}</th>
               <th scope="col" className="num">
-                Cabo [m]
+                {withUnit(T.colRopeLen, 'm')}
               </th>
               <th scope="col" className="num">
-                Mallas
+                {T.colMeshes}
               </th>
               <th scope="col" className="num">
                 E
               </th>
-              <th scope="col">Pauta</th>
+              <th scope="col">{T.colSchedule}</th>
             </tr>
           </thead>
           <tbody>
@@ -486,7 +507,7 @@ function Rigging({ g }: { g: ConstructionGuide }) {
                   {h.part} ({h.panels.join(' + ')}){h.times > 1 ? ` × ${h.times}` : ''}
                   {h.warning && <p className="alert warn">{h.warning}</p>}
                 </td>
-                <td className="num">{fmtFixed(h.rope_m, 2)}</td>
+                <td className="num">{fmtU(h.rope_m, 'm', { digits: 2, unit: false })}</td>
                 <td className="num">{h.meshes}</td>
                 <td className="num">{fmtFixed(h.hanging ?? null, 2)}</td>
                 <td>{h.schedule}</td>
@@ -495,27 +516,22 @@ function Rigging({ g }: { g: ConstructionGuide }) {
           </tbody>
         </table>
       </div>
-      <p className="help">
-        E = largo de cabo / largo del paño estirado. En las alas el paño se arma por su costado (una
-        malla por fila de alto).
-      </p>
-      <h3 className="subhead">
-        Boyas sobre la lima ({g.floats.length} de Ø {fmt(g.float_diameter_mm)} mm)
-      </h3>
+      <p className="help">{T.eHelp}</p>
+      <h3 className="subhead">{T.floatsTitle(g.floats.length, fmtU(g.float_diameter_mm, 'mm'))}</h3>
       <FloatLine g={g} />
-      <p className="help">Distancia al centro de la lima en metros (− izquierda, + derecha).</p>
-      <h3 className="subhead">Lastre del burlón</h3>
+      <p className="help">{T.floatsHelp(getUnits() === 'imperial' ? T.feet : T.metres)}</p>
+      <h3 className="subhead">{T.ballastTitle}</h3>
       <div className="table-wrap">
-        <table className="data" aria-label="Lastre del burlón">
+        <table className="data" aria-label={T.ballastTitle}>
           <thead>
             <tr>
-              <th scope="col">Zona</th>
-              <th scope="col">Dónde</th>
+              <th scope="col">{T.colZone}</th>
+              <th scope="col">{T.colWhere}</th>
               <th scope="col" className="num">
-                Mínimo [kg] · [kg/m]
+                {ballastHead(T.colMin)}
               </th>
               <th scope="col" className="num">
-                Máximo [kg] · [kg/m]
+                {ballastHead(T.colMax)}
               </th>
             </tr>
           </thead>
@@ -524,12 +540,8 @@ function Rigging({ g }: { g: ConstructionGuide }) {
               <tr key={b.zone}>
                 <td>{b.zone}</td>
                 <td>{b.where}</td>
-                <td className="num">
-                  {fmtFixed(b.kg_min, 1)} · {fmtFixed(b.kg_m_min, 2)}
-                </td>
-                <td className="num">
-                  {fmtFixed(b.kg_max, 1)} · {fmtFixed(b.kg_m_max, 2)}
-                </td>
+                <td className="num">{per(b.kg_min, b.kg_m_min)}</td>
+                <td className="num">{per(b.kg_max, b.kg_m_max)}</td>
               </tr>
             ))}
           </tbody>
@@ -540,25 +552,26 @@ function Rigging({ g }: { g: ConstructionGuide }) {
 }
 
 function RopeCuts({ g }: { g: ConstructionGuide }) {
+  const T = useT().construction;
   return (
     <div data-testid="rope-cuts">
       <div className="table-wrap">
-        <table className="data" aria-label="Cortes de cabos, cables y cadenas">
+        <table className="data" aria-label={T.cutsTable}>
           <thead>
             <tr>
-              <th scope="col">Pieza</th>
-              <th scope="col">Material</th>
+              <th scope="col">{T.colPiece}</th>
+              <th scope="col">{T.colMaterial}</th>
               <th scope="col" className="num">
-                Cantidad
+                {T.colQuantity}
               </th>
               <th scope="col" className="num">
-                Terminado [m]
+                {withUnit(T.colFinished, 'm')}
               </th>
               <th scope="col" className="num">
-                Gazas
+                {T.colEyes}
               </th>
               <th scope="col" className="num">
-                Cortar [m]
+                {withUnit(T.colCut, 'm')}
               </th>
             </tr>
           </thead>
@@ -568,20 +581,17 @@ function RopeCuts({ g }: { g: ConstructionGuide }) {
                 <td>{r.label}</td>
                 <td>{r.material}</td>
                 <td className="num">{r.pieces}</td>
-                <td className="num">{fmtFixed(r.length_m, 2)}</td>
+                <td className="num">{fmtU(r.length_m, 'm', { digits: 2, unit: false })}</td>
                 <td className="num">{r.eyes}</td>
                 <td className="num">
-                  <strong>{fmtFixed(r.cut_m, 2)}</strong>
+                  <strong>{fmtU(r.cut_m, 'm', { digits: 2, unit: false })}</strong>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p className="help">
-        Largo de corte = largo terminado + {fmtFixed(g.eye_allowance_m, 2)} m por gaza o empalme
-        (ajústelo arriba según el cabo y el empalme que use).
-      </p>
+      <p className="help">{T.cutHelp(fmtU(g.eye_allowance_m, 'm', { digits: 2 }))}</p>
     </div>
   );
 }

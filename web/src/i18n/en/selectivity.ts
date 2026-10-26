@@ -1,3 +1,80 @@
 import type { Messages } from '../es';
 
-export const selectivity: Messages['selectivity'] = {};
+export const selectivity: Messages['selectivity'] = {
+  orientations: {
+    diamond: {
+      label: 'Diamond',
+      help: 'Classic diamond mesh: tension along the codend closes it.',
+    },
+    t90: {
+      label: 'T90',
+      help: 'The same netting turned 90°: the knot tends to keep the mesh open across.',
+    },
+    square: {
+      label: 'Square',
+      help: 'Twines along and across: tension does not close the mesh.',
+    },
+  },
+  intro:
+    'Simulates the codend with the chosen catch and seabed, measures the shape of every mesh and works out which lengths it retains: a fish escapes if the stiffest cross-section of its body fits through the clear opening of the deformed mesh (FISHSELECT-type geometric model). Compare the diamond codend with T90 or square mesh of the same width and length.',
+  formLabel: 'Species and codend',
+  species: 'Species',
+  escapeModel: 'Escape model',
+  codends: 'Codends to compare',
+  meshOrientation: 'Mesh orientation',
+  upTo3: 'Up to 3; each codend is one simulation.',
+  mesh: 'Codend mesh size',
+  meshPlaceholder: 'from the net',
+  run: 'Compute selectivity',
+  running: (n: number) => `Simulating ${n} codends…`,
+  done: (n: number, s: string) => `${n} codends in ${s} s.`,
+  curveOf: 'Curve for',
+  mapCodend: 'Codend of the 3D map',
+  colorLabel: 'Netting colour',
+  colors: { opening: 'Mesh opening', values: 'Passing length', tension: 'Tension' },
+  mapLabel: (v: string) => `Mesh map of the ${v} codend`,
+  valuesLabel: (unit: string) => `Maximum length passing through the mesh [${unit}]`,
+  help: (zone: string) =>
+    `Geometric escape: each fish tries 3 meshes in the ${zone} band ahead of the catch; the cross-section shape of each species is an estimate (TO BE VERIFIED). Mesh opening stiffness enabled in every codend. Chapter 24 of the book.`,
+  empty:
+    'Choose species and codends and press «Compute selectivity». At fast resolution each codend takes a few seconds.',
+  table: {
+    captionA: 'Codend selectivity · L50',
+    captionB: '· SR',
+    captionC: '· SF = L50 / mesh size',
+    selectionRange: 'Selection range',
+    codend: 'Codend',
+    meanOpening: 'Mean opening',
+  },
+  retention: (name: string, measure: string) => `Retention of ${name} by length (${measure}, `,
+  retentionAria: (name: string, keys: string) => `Retention curves of ${name} for ${keys}`,
+  zoom: {
+    sections: {
+      codend: 'codend',
+      extension: 'extension',
+      body: 'body',
+      belly: 'belly',
+      square: 'square',
+      wing: 'wing',
+      wing_tip: 'wing tip',
+    },
+    title: (section: string, tri: number) => `Mesh of the ${section} (triangle ${tri})`,
+    close: 'Close zoom',
+    fish: 'fish',
+    aria: (n: number, deg: string, fish: string, length: string, passes: boolean) =>
+      `Patch of ${n}×${n} meshes with an opening of ${deg}°; a ${length} ${fish} ${passes ? 'passes' : 'does not pass'}`,
+    orientation: 'Orientation',
+    angle: 'Angle between twines',
+    legs: 'Bars (deformed)',
+    clear: 'Clear opening between twines',
+    freeArea: 'Free area',
+    opening: 'Opening',
+    openShare: (pct: string) => `${pct}% of the open mesh`,
+    species: 'Species',
+    length: (measure: string, length: string) => `Length (${measure}): ${length}`,
+    passes: 'Passes through the mesh',
+    retained: 'Retained',
+    maxPass: 'maximum passing length:',
+    help: 'Blue and pink: the two twine families, with the twine thickness to scale. Within one simulator element every mesh has the same shape. The ellipse is the stiffest cross-section of the fish, rotated to pass; with its tissue compression (TO BE VERIFIED).',
+  },
+};

@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type WheelEvent,
 } from 'react';
+import { useT } from '../i18n';
 
 interface ViewT {
   x: number;
@@ -38,6 +39,7 @@ interface Props {
  * Para volver a la vista inicial al cambiar de contenido, el padre cambia la ``key``.
  */
 export function ZoomStage({ svg, alt, label, fetching, placeholder, testId, className }: Props) {
+  const Z = useT().expert.zoom;
   // data: URL (sin object URLs que haya que revocar); el SVG se muestra como imagen, sin scripts.
   const url = useMemo(
     () => (svg ? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` : null),
@@ -123,7 +125,7 @@ export function ZoomStage({ svg, alt, label, fetching, placeholder, testId, clas
       className={`plan-stage${className ? ` ${className}` : ''}`}
       tabIndex={0}
       role="application"
-      aria-roledescription="visor de dibujo"
+      aria-roledescription={Z.roledesc}
       aria-label={label}
       onWheel={onWheel}
       onPointerDown={onDown}
@@ -152,7 +154,7 @@ export function ZoomStage({ svg, alt, label, fetching, placeholder, testId, clas
           type="button"
           className="btn small"
           onClick={() => zoomCenter(1.25)}
-          aria-label="Acercar"
+          aria-label={Z.zoomIn}
         >
           +
         </button>
@@ -160,7 +162,7 @@ export function ZoomStage({ svg, alt, label, fetching, placeholder, testId, clas
           type="button"
           className="btn small"
           onClick={() => zoomCenter(0.8)}
-          aria-label="Alejar"
+          aria-label={Z.zoomOut}
         >
           −
         </button>
@@ -168,7 +170,7 @@ export function ZoomStage({ svg, alt, label, fetching, placeholder, testId, clas
           type="button"
           className="btn small"
           onClick={() => setT(IDENTITY)}
-          aria-label="Restablecer zoom"
+          aria-label={Z.reset}
         >
           {Math.round(t.k * 100)} %
         </button>

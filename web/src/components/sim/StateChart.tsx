@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import { fmt, fmtAxis } from '../../lib/format';
 import { niceTicks } from '../../lib/haul';
+import { useT } from '../../i18n';
 import { useChartColors } from '../../lib/theme';
 import { TooltipBox } from '../charts/ChartParts';
 
@@ -45,6 +46,7 @@ export function StateChart({
   reference,
 }: Props) {
   const c = useChartColors();
+  const T = useT().explore;
   const data = xs.map((x, i) => ({ x, y: ys[i] ?? null }));
   const vals = ys.filter((v): v is number => v !== null);
   if (reference) vals.push(reference.value);
@@ -64,7 +66,7 @@ export function StateChart({
       <figcaption>
         {title} <span className="unit">[{unit}]</span>
       </figcaption>
-      <div className="haul-chart-box" role="img" aria-label={`${title} según la variable`}>
+      <div className="haul-chart-box" role="img" aria-label={T.chartAria(title)}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <LineChart data={data} margin={{ top: 10, right: 12, bottom: 2, left: -4 }}>
             <CartesianGrid stroke={c.grid} vertical={false} />

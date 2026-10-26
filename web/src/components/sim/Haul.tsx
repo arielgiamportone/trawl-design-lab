@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { lazy, Suspense, useId, useState } from 'react';
 import { api, ApiError, type HaulRequest } from '../../api/client';
-import { fmt, fmtFixed } from '../../lib/format';
+import { fmtFixed } from '../../lib/format';
+import { useT } from '../../i18n';
+import { fmtU, toDisplayOpt, unitLabel } from '../../lib/units';
 import {
   CATCH_TYPES,
   DEFAULT_HAUL,
@@ -14,7 +16,14 @@ import {
 import { catchPreset, EXPLORE_FORM_KEY } from '../../lib/explore';
 import { recall, remember } from '../../lib/memo';
 import { isSimGeometry } from '../../lib/sim3d';
-import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
+import {
+  fromInput,
+  inputStep,
+  inputValue,
+  resolutionLabel,
+  SIM_SPEEDS,
+  speedLabel,
+} from '../../lib/simulate';
 import { useCase } from '../../state/useCase';
 import { DataTable } from '../charts/ChartParts';
 import { HelpTip } from '../HelpTip';
@@ -22,12 +31,29 @@ import { HaulChart } from './HaulChart';
 
 const Net3D = lazy(() => import('../sim3d/Net3D').then((m) => ({ default: m.Net3D })));
 const FORM_KEY = 'haul:form';
+
+/** Columnas de la tabla del lance con su unidad del motor. */
+const HAUL_COLUMNS = [
+  ['catchKg', 'kg'],
+  ['doorSpread', 'm'],
+  ['ah', 'm'],
+  ['av', 'm'],
+  ['pull', 'kgf'],
+  ['netDrag', 'kgf'],
+  ['catchDrag', 'kgf'],
+  ['friction', 'kgf'],
+  ['catchLength', 'm'],
+  ['codendDiameter', 'm'],
+] as const;
 const REQ_KEY = 'haul:request';
 
 /** Lance progresivo: la red con captura creciente, fondo elegido y portones acoplados. */
 export function Haul({ onAnimate }: { onAnimate?: () => void }) {
   const { committed, state } = useCase();
   const ids = useId();
+  const M = useT();
+  const T = M.haul;
+  const S = M.simulate;
   const [form, setFormState] = useState<HaulForm>(() => ({
     ...DEFAULT_HAUL,
     speed: state.targetSpeed,
@@ -76,14 +102,10 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
 
   return (
     <div className="haul">
-      <p className="section-sub">
-        Simula el lance mientras entra la captura: la «bola» de captura llena el copo, lo infla y lo
-        frena; los portones se acomodan al equilibrio (cable hasta el buque, sustentación de su
-        polar y roce con el fondo elegido).
-      </p>
-      <div className="opt-form haul-form" role="group" aria-label="Escenario del lance">
+      <p className="section-sub">{T.intro}</p>
+      <div className="opt-form haul-form" role="group" aria-label={T.formLabel}>
         <div className="field">
-          <label htmlFor={`${ids}-speed`}>Velocidad [kn]</label>
+          <label htmlFor={`${ids}-speed`}>{S.speed} [kn]</label>
           <select
             id={`${ids}-speed`}
             value={form.speed}
@@ -98,21 +120,28 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
         </div>
         <div className="field">
           <label htmlFor={`${ids}-catch`}>
-            Captura final [kg] <HelpTip topic="catch_kg" label="Captura final" />
+            {T.finalCatch} [{unitLabel('kg')}]{' '}
+            <HelpTip topic="catch_kg" label={T.finalCatch} />
           </label>
           <input
             id={`${ids}-catch`}
             type="number"
             min={0}
-            max={20000}
-            step={50}
-            value={form.maxCatchKg}
-            onChange={(e) => setForm({ maxCatchKg: Math.max(0, Number(e.target.value) || 0) })}
+            max={inputValue(20000, 'kg', 0)}
+            step={inputStep(50, 'kg')}
+            value={inputValue(form.maxCatchKg, 'kg')}
+            onChange={(e) =>
+              setForm({ maxCatchKg: Math.max(0, fromInput(Number(e.target.value) || 0, 'kg')) })
+            }
           />
-          <span className="help">Pasos: {steps.map((v) => fmt(v)).join(' · ')} kg</span>
+          <span className="help">
+            {T.steps(
+              `${steps.map((v) => fmtU(v, 'kg', { digits: 0, unit: false })).join(' · ')} ${unitLabel('kg')}`,
+            )}
+          </span>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-type`}>Tipo de captura</label>
+          <label htmlFor={`${ids}-type`}>{T.catchType}</label>
           <select
             id={`${ids}-type`}
             value={form.catchType}
@@ -120,14 +149,14 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           >
             {CATCH_TYPES.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.label} ({c.bulk} kg/m³)
+                {c.label} ({fmtU(c.bulk, 'kg/m³', { digits: 1 })})
               </option>
             ))}
           </select>
         </div>
         <div className="field">
           <label htmlFor={`${ids}-seabed`}>
-            Fondo <HelpTip topic="seabed" label="Tipo de fondo" />
+            {S.seabed} <HelpTip topic="seabed" label={T.seabedType} />
           </label>
           <select
             id={`${ids}-seabed`}
@@ -142,13 +171,12 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           </select>
           {sb && (
             <span className="help">
-              μ tren {fmtFixed(Number(sb.mu_gear.nominal), 2)} · μ portón{' '}
-              {fmtFixed(Number(sb.mu_door.nominal), 2)} (estimados, con rango)
+              {T.mu(fmtFixed(Number(sb.mu_gear.nominal), 2), fmtFixed(Number(sb.mu_door.nominal), 2))}
             </span>
           )}
         </div>
         <div className="field">
-          <span className="label">Resolución</span>
+          <span className="label">{S.resolution}</span>
           <div className="segmented">
             {[3, 4].map((res) => (
               <label key={res}>
@@ -158,7 +186,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
                   checked={form.resolution === res}
                   onChange={() => setForm({ resolution: res })}
                 />
-                {res === 3 ? 'Rápida (3)' : 'Normal (4)'}
+                {resolutionLabel(res)}
               </label>
             ))}
           </div>
@@ -169,7 +197,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
             checked={form.coupledDoors}
             onChange={(e) => setForm({ coupledDoors: e.target.checked })}
           />
-          Portones acoplados (separación por equilibrio)
+          {T.coupled}
         </label>
       </div>
       <div className="calc-row">
@@ -179,19 +207,17 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           onClick={run}
           disabled={!committed || query.isFetching}
         >
-          Simular lance
+          {T.run}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {query.isFetching ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Simulando el lance… (≈{' '}
-            {fmtFixed(r?.estimated_s ?? steps.length * 3, 0)} s)
+            <span className="spinner" aria-hidden="true" />{' '}
+            {T.running(fmtFixed(r?.estimated_s ?? steps.length * 3, 0))}
           </>
         ) : r ? (
-          <span>
-            {r.results.length} pasos en {fmtFixed(r.runtime_s, 1)} s.
-          </span>
+          <span>{T.done(r.results.length, fmtFixed(r.runtime_s, 1))}</span>
         ) : null}
       </div>
       {query.error && (
@@ -199,8 +225,8 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
           <span>
             <strong>
               {query.error instanceof ApiError && query.error.status
-                ? `Error ${query.error.status}`
-                : 'Error'}
+                ? S.errorStatus(query.error.status)
+                : S.error}
               :
             </strong>{' '}
             {query.error.message}
@@ -209,7 +235,7 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
       )}
       {rows.some((x) => !x.converged) && (
         <div className="alert warn" role="note">
-          Algún paso no convergió del todo: tome esos valores con cautela.
+          {T.unconverged}
         </div>
       )}
       {r && (
@@ -231,43 +257,41 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
                 onAnimate();
               }}
             >
-              ▶ Animar este lance en el explorador
+              {T.animate}
             </button>
           )}
           <div className="haul-grid">
             <HaulChart
               id="haul-dp"
-              title="Separación de portones"
+              title={T.charts.dp}
               unit="m"
               rows={rows}
               value={(x) => x.doorSpread}
               reference={
-                engine.door_spread_m
-                  ? { value: engine.door_spread_m, label: 'regla del motor' }
-                  : null
+                engine.door_spread_m ? { value: engine.door_spread_m, label: S.engineRule } : null
               }
             />
             <HaulChart
               id="haul-pull"
-              title="Tiro en el buque"
+              title={T.charts.pull}
               unit="kgf"
               digits={0}
               rows={rows}
               value={(x) => x.pull ?? x.netDrag}
               reference={
-                engine.demand_kgf ? { value: engine.demand_kgf, label: 'demanda del motor' } : null
+                engine.demand_kgf ? { value: engine.demand_kgf, label: S.engineDemand } : null
               }
             />
             <HaulChart
               id="haul-ah"
-              title="Abertura horizontal"
+              title={T.charts.ah}
               unit="m"
               rows={rows}
               value={(x) => x.ah}
             />
             <HaulChart
               id="haul-av"
-              title="Abertura vertical"
+              title={T.charts.av}
               unit="m"
               digits={2}
               rows={rows}
@@ -275,29 +299,26 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
             />
           </div>
           <details className="table-view">
-            <summary>Ver tabla del lance</summary>
+            <summary>{T.showTable}</summary>
             <DataTable
-              caption="Lance progresivo"
-              columns={[
-                { key: 'catchKg', label: 'Captura [kg]' },
-                { key: 'doorSpread', label: 'DP [m]' },
-                { key: 'ah', label: 'AH [m]' },
-                { key: 'av', label: 'AV [m]' },
-                { key: 'pull', label: 'Tiro [kgf]' },
-                { key: 'netDrag', label: 'Red [kgf]' },
-                { key: 'catchDrag', label: 'Captura [kgf]' },
-                { key: 'friction', label: 'Roce [kgf]' },
-                { key: 'catchLength', label: 'Largo captura [m]' },
-                { key: 'codendDiameter', label: 'Ø copo [m]' },
-              ]}
-              rows={rows.map((x) => ({ ...x, converged: x.converged ? 'sí' : 'no' }))}
+              caption={T.tableCaption}
+              columns={HAUL_COLUMNS.map(([key, unit]) => ({
+                key,
+                label: `${T.cols[key]} [${unitLabel(unit)}]`,
+              }))}
+              rows={rows.map((x) => ({
+                ...Object.fromEntries(
+                  HAUL_COLUMNS.map(([key, unit]) => [key, toDisplayOpt(x[key], unit)]),
+                ),
+                converged: x.converged ? S.yes : S.no,
+              }))}
             />
           </details>
           {isSimGeometry(geometry) && (
-            <section className="sim-3d" aria-label="Forma 3D del lance">
+            <section className="sim-3d" aria-label={T.shape3dRegion}>
               <div className="net3d-head">
-                <h3 className="group-title">Forma 3D</h3>
-                <div className="segmented" role="group" aria-label="Paso del lance en 3D">
+                <h3 className="group-title">{T.shape3d}</h3>
+                <div className="segmented" role="group" aria-label={T.step3d}>
                   {rows.map((x, i) => (
                     <button
                       key={i}
@@ -305,27 +326,21 @@ export function Haul({ onAnimate }: { onAnimate?: () => void }) {
                       aria-pressed={i === geoIdx}
                       onClick={() => setStep3d(i)}
                     >
-                      {fmt(x.catchKg)} kg
+                      {fmtU(x.catchKg, 'kg', { digits: 0 })}
                     </button>
                   ))}
                 </div>
               </div>
-              <Suspense fallback={<p className="empty">Cargando el visor 3D…</p>}>
+              <Suspense fallback={<p className="empty">{S.loading3d}</p>}>
                 <Net3D geometry={geometry} />
               </Suspense>
             </section>
           )}
-          <p className="help">
-            Modelo de la captura: O'Neill y O'Donoghue (1997); tendencias de referencia: Priour y de
-            la Prada (2015). Los rozamientos por tipo de fondo son estimaciones con rango (A
-            VERIFICAR). Ver el capítulo 22 del libro.
-          </p>
+          <p className="help">{T.refs}</p>
         </div>
       )}
       {!r && !query.isFetching && !query.error && (
-        <p className="empty">
-          Elija la captura final, el fondo y pulse «Simular lance». Cada paso tarda unos segundos.
-        </p>
+        <p className="empty">{T.empty}</p>
       )}
     </div>
   );

@@ -28,7 +28,16 @@ import {
   type SelForm,
   type SelVariant,
 } from '../../lib/selectivity';
-import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
+import {
+  fromInput,
+  inputStep,
+  inputValue,
+  resolutionLabel,
+  SIM_SPEEDS,
+  speedLabel,
+} from '../../lib/simulate';
+import { useT } from '../../i18n';
+import { fmtU, unitLabel } from '../../lib/units';
 import { useChartColors, useMediaQuery } from '../../lib/theme';
 import { useCase } from '../../state/useCase';
 import type { AnimColor } from '../sim3d/NetAnim';
@@ -42,6 +51,9 @@ const REQ_KEY = 'selectivity:request';
 export function Selectivity() {
   const { committed, state } = useCase();
   const ids = useId();
+  const M = useT();
+  const T = M.selectivity;
+  const S = M.simulate;
   const [form, setFormState] = useState<SelForm>(
     () =>
       recall<SelForm>(SEL_FORM_KEY) ?? {
@@ -105,16 +117,11 @@ export function Selectivity() {
 
   return (
     <div className="selectivity">
-      <p className="section-sub">
-        Simula el copo con la captura y el fondo elegidos, mide la forma de cada malla y calcula qué
-        tallas retiene: un pez escapa si la sección más resistente de su cuerpo entra en la luz de
-        la malla deformada (modelo geométrico tipo FISHSELECT). Compare el copo de rombo con T90 o
-        malla cuadrada del mismo ancho y largo.
-      </p>
-      <div className="opt-form explore-form" role="group" aria-label="Especies y copo">
+      <p className="section-sub">{T.intro}</p>
+      <div className="opt-form explore-form" role="group" aria-label={T.formLabel}>
         <fieldset className="field">
           <legend className="label">
-            Especies <HelpTip topic="fishselect" label="Modelo de escape" />
+            {T.species} <HelpTip topic="fishselect" label={T.escapeModel} />
           </legend>
           <div className="check-grid">
             {species.map((s) => (
@@ -131,7 +138,7 @@ export function Selectivity() {
         </fieldset>
         <fieldset className="field">
           <legend className="label">
-            Copos a comparar <HelpTip topic="mesh_orientation" label="Orientación de la malla" />
+            {T.codends} <HelpTip topic="mesh_orientation" label={T.meshOrientation} />
           </legend>
           <div className="check-grid">
             {ORIENTATIONS.map((o) => (
@@ -145,35 +152,39 @@ export function Selectivity() {
               </label>
             ))}
           </div>
-          <span className="help">Hasta 3; cada copo es una simulación.</span>
+          <span className="help">{T.upTo3}</span>
         </fieldset>
         <div className="field">
-          <label htmlFor={`${ids}-mesh`}>Mallero del copo [mm]</label>
+          <label htmlFor={`${ids}-mesh`}>{T.mesh} [mm]</label>
           <input
             id={`${ids}-mesh`}
             type="number"
             min={10}
             max={400}
             step={5}
-            placeholder="el de la red"
+            placeholder={T.meshPlaceholder}
             value={form.meshMm ?? ''}
             onChange={(e) => setForm({ meshMm: e.target.value ? Number(e.target.value) : null })}
           />
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-catch`}>Captura en el copo [kg]</label>
+          <label htmlFor={`${ids}-catch`}>
+            {S.catchCodend} [{unitLabel('kg')}]
+          </label>
           <input
             id={`${ids}-catch`}
             type="number"
             min={0}
-            max={20000}
-            step={50}
-            value={form.catchKg}
-            onChange={(e) => setForm({ catchKg: Math.max(0, Number(e.target.value) || 0) })}
+            max={inputValue(20000, 'kg', 0)}
+            step={inputStep(50, 'kg')}
+            value={inputValue(form.catchKg, 'kg')}
+            onChange={(e) =>
+              setForm({ catchKg: Math.max(0, fromInput(Number(e.target.value) || 0, 'kg')) })
+            }
           />
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-seabed`}>Fondo</label>
+          <label htmlFor={`${ids}-seabed`}>{S.seabed}</label>
           <select
             id={`${ids}-seabed`}
             value={form.seabed ?? ''}
@@ -187,7 +198,7 @@ export function Selectivity() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-speed`}>Velocidad [kn]</label>
+          <label htmlFor={`${ids}-speed`}>{S.speed} [kn]</label>
           <select
             id={`${ids}-speed`}
             value={form.speed}
@@ -201,15 +212,17 @@ export function Selectivity() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-res`}>Resolución</label>
+          <label htmlFor={`${ids}-res`}>{S.resolution}</label>
           <select
             id={`${ids}-res`}
             value={form.resolution}
             onChange={(e) => setForm({ resolution: Number(e.target.value) })}
           >
-            <option value={2}>Muy rápida (2)</option>
-            <option value={3}>Rápida (3)</option>
-            <option value={4}>Normal (4)</option>
+            {[2, 3, 4].map((n) => (
+              <option key={n} value={n}>
+                {resolutionLabel(n)}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -220,18 +233,16 @@ export function Selectivity() {
           onClick={run}
           disabled={!committed || query.isFetching || !form.variants.length || !form.species.length}
         >
-          Calcular selectividad
+          {T.run}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {query.isFetching ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Simulando {form.variants.length} copos…
+            <span className="spinner" aria-hidden="true" /> {T.running(form.variants.length)}
           </>
         ) : r ? (
-          <span>
-            {variants.length} copos en {fmtFixed(r.runtime_s, 1)} s.
-          </span>
+          <span>{T.done(variants.length, fmtFixed(r.runtime_s, 1))}</span>
         ) : null}
       </div>
       {query.error && (
@@ -239,8 +250,8 @@ export function Selectivity() {
           <span>
             <strong>
               {query.error instanceof ApiError && query.error.status
-                ? `Error ${query.error.status}`
-                : 'Error'}
+                ? S.errorStatus(query.error.status)
+                : S.error}
               :
             </strong>{' '}
             {query.error.message}
@@ -252,7 +263,7 @@ export function Selectivity() {
           <SelTable variants={variants} />
           <div className="explore-tools">
             <label className="inline-field">
-              Curva de{' '}
+              {T.curveOf}{' '}
               <select value={shownSp} onChange={(e) => setChartSp(e.target.value)}>
                 {r.species.map((s) => (
                   <option key={s} value={s}>
@@ -264,7 +275,7 @@ export function Selectivity() {
           </div>
           <RetentionChart variants={variants} species={shownSp} />
           <div className="explore-tools">
-            <div className="segmented" role="group" aria-label="Copo del mapa 3D">
+            <div className="segmented" role="group" aria-label={T.mapCodend}>
               {variants.map((v, i) => (
                 <button
                   key={v.label}
@@ -279,27 +290,21 @@ export function Selectivity() {
                 </button>
               ))}
             </div>
-            <div className="segmented" role="group" aria-label="Color del paño">
-              {(
-                [
-                  ['opening', 'Apertura de malla'],
-                  ['values', 'Talla que pasa'],
-                  ['tension', 'Tensión'],
-                ] as [AnimColor, string][]
-              ).map(([v, l]) => (
+            <div className="segmented" role="group" aria-label={T.colorLabel}>
+              {(['opening', 'values', 'tension'] as const).map((v) => (
                 <button
                   key={v}
                   type="button"
                   aria-pressed={color === v}
                   onClick={() => setColor(v)}
                 >
-                  {l}
+                  {T.colors[v]}
                 </button>
               ))}
             </div>
           </div>
           {vSel?.geometry && vSel.frame && (
-            <Suspense fallback={<p className="empty">Cargando el visor 3D…</p>}>
+            <Suspense fallback={<p className="empty">{S.loading3d}</p>}>
               <NetAnim
                 key={vSel.label}
                 geometry={vSel.geometry}
@@ -307,9 +312,9 @@ export function Selectivity() {
                 t={0}
                 color={color}
                 scope="net"
-                label={`Mapa de mallas del copo ${vSel.label}`}
+                label={T.mapLabel(vSel.label)}
                 triValues={fitTri}
-                valuesLabel={`Talla máxima que pasa por la malla [${unit}]`}
+                valuesLabel={T.valuesLabel(unit)}
                 onPick={setPicked}
                 picked={zoomTri}
               />
@@ -325,37 +330,31 @@ export function Selectivity() {
               onClose={() => setPicked(null)}
             />
           )}
-          <p className="help">
-            Escape geométrico: cada pez prueba 3 mallas de la franja de 3 m delante de la captura;
-            la forma de la sección de cada especie es una estimación (A VERIFICAR). Rigidez de
-            apertura de la malla activada en todos los copos. Capítulo 24 del libro.
-          </p>
+          <p className="help">{T.help(fmtU(3, 'm'))}</p>
         </div>
       )}
       {!r && !query.isFetching && !query.error && (
-        <p className="empty">
-          Elija especies y copos y pulse «Calcular selectividad». Con resolución rápida cada copo
-          tarda unos segundos.
-        </p>
+        <p className="empty">{T.empty}</p>
       )}
     </div>
   );
 }
 
 function SelTable({ variants }: { variants: SelVariant[] }) {
+  const T = useT().selectivity.table;
   const sp = variants[0]?.curves.map((c) => ({ id: c.species, name: c.name })) ?? [];
   const n1 = (v: number) => fmtFixed(v, 1);
   return (
     <div className="table-wrap">
       <table className="data" data-testid="selectivity-table">
         <caption>
-          Selectividad del copo · L50 <HelpTip topic="l50" label="L50" /> · SR{' '}
-          <HelpTip topic="selection_range" label="Rango de selección" /> · SF = L50 / mallero
+          {T.captionA} <HelpTip topic="l50" label="L50" /> {T.captionB}{' '}
+          <HelpTip topic="selection_range" label={T.selectionRange} /> {T.captionC}
         </caption>
         <thead>
           <tr>
-            <th scope="col">Copo</th>
-            <th scope="col">Apertura media</th>
+            <th scope="col">{T.codend}</th>
+            <th scope="col">{T.meanOpening}</th>
             {sp.map((s) => (
               <th scope="col" key={s.id}>
                 {s.name}
@@ -409,17 +408,18 @@ function RetentionChart({ variants, species }: { variants: SelVariant[]; species
   const { rows, keys } = curveRows(variants, species);
   const curve = variants[0]?.curves.find((x) => x.species === species);
   const palette = [c.s1, c.s2, c.s3];
+  const T = useT().selectivity;
   if (!rows.length || !curve) return null;
   return (
     <figure className="haul-chart sel-chart" data-chart="retention" style={{ margin: 0 }}>
       <figcaption>
-        Retención de {curve.name.toLowerCase()} según la talla ({curve.measure},{' '}
+        {T.retention(curve.name.toLowerCase(), curve.measure)}
         <span className="unit">{curve.unit}</span>)
       </figcaption>
       <div
         className="sel-chart-box"
         role="img"
-        aria-label={`Curvas de retención de ${curve.name} para ${keys.join(', ')}`}
+        aria-label={T.retentionAria(curve.name, keys.join(', '))}
       >
         <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <LineChart

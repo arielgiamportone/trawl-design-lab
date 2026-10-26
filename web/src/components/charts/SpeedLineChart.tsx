@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { useT } from '../../i18n';
 import { fmtAxis, fmtFixed } from '../../lib/format';
 import { useChartColors, useMediaQuery } from '../../lib/theme';
 import { TooltipBox, type SeriesDef } from './ChartParts';
@@ -20,9 +21,11 @@ export interface RefWindow {
 }
 
 interface Props {
+  /** Filas ya en el sistema de unidades activo (ver ``displayRows``). */
   rows: Record<string, number | null>[];
   series: SeriesDef[];
   xKey?: string;
+  /** Unidad que se muestra (``unitLabel(...)``). */
   yUnit: string;
   yLabel?: string;
   window?: RefWindow | null;
@@ -51,6 +54,7 @@ export function SpeedLineChart({
   ariaLabel,
 }: Props) {
   const c = useChartColors();
+  const T = useT().charts;
   const narrow = useMediaQuery('(max-width: 560px)');
   const xs = rows.map((r) => r[xKey]).filter((v): v is number => typeof v === 'number');
   const xMin = Math.min(...xs);
@@ -107,7 +111,7 @@ export function SpeedLineChart({
             tick={{ fill: c.muted, fontSize: 11 }}
             tickLine={false}
             label={{
-              value: 'Velocidad [kn]',
+              value: T.speedAxis,
               position: 'insideBottomRight',
               offset: -2,
               fill: c.muted,

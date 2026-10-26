@@ -1,5 +1,7 @@
 import { useId } from 'react';
+import { useT } from '../../i18n';
 import { PROPELLER_LABELS } from '../../lib/labels';
+import { fmtU } from '../../lib/units';
 import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
 import { ChoiceCards } from './ChoiceCards';
@@ -7,6 +9,7 @@ import { ChoiceCards } from './ChoiceCards';
 export function StepVessel({ onBatch }: { onBatch?: () => void }) {
   const { state, update, catalogs } = useCase();
   const ids = useId();
+  const T = useT().wizard.vessel;
   const vessel = state.vessel ?? catalogs.vessels[0]?.id ?? '';
   const propDefault = String(
     catalogs.params.find((p) => p.name === 'ft_propeller')?.default ?? 'fixed_pitch',
@@ -15,23 +18,23 @@ export function StepVessel({ onBatch }: { onBatch?: () => void }) {
   return (
     <>
       <p className="wizard-lead">
-        ¿Con qué buque va a arrastrar? Su potencia define cuánta red puede remolcar.
+        {T.lead}
       </p>
       {catalogs.loading && catalogs.vessels.length === 0 ? (
-        <p className="help">Cargando buques…</p>
+        <p className="help">{T.loading}</p>
       ) : (
         <ChoiceCards
           name={`${ids}-vessel`}
           legend={
             <>
-              Buque <HelpTip topic="vessel" label="Buque" />
+              {T.vessel} <HelpTip topic="vessel" label={T.vessel} />
             </>
           }
           value={vessel}
           onChange={(v) => update({ vessel: v, fromBatch: null })}
           choices={catalogs.vessels.map((v) => ({
             value: v.id,
-            title: `${v.bhp} BHP${v.length_m ? ` · ${String(v.length_m).replace('.', ',')} m de eslora` : ''}`,
+            title: `${v.bhp} BHP${v.length_m ? ` · ${T.length(fmtU(v.length_m, 'm'))}` : ''}`,
             detail: v.name ?? v.id,
           }))}
         />
@@ -40,7 +43,7 @@ export function StepVessel({ onBatch }: { onBatch?: () => void }) {
         name={`${ids}-prop`}
         legend={
           <>
-            Hélice <HelpTip topic="propeller" label="Hélice" />
+            {T.propeller} <HelpTip topic="propeller" label={T.propeller} />
           </>
         }
         value={propeller}
@@ -54,9 +57,9 @@ export function StepVessel({ onBatch }: { onBatch?: () => void }) {
       />
       {onBatch && (
         <p className="help">
-          ¿Tiene varios buques?{' '}
+          {T.several}{' '}
           <button type="button" className="link-button" onClick={onBatch}>
-            Cárguelos en una planilla y calcule la red para cada uno
+            {T.batch}
           </button>
         </p>
       )}

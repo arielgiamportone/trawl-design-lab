@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
 import type { DesignData } from '../../api/result';
+import { msg, useT } from '../../i18n';
 import { fmtFixed } from '../../lib/format';
 import { DRAG_METHODS, PROPELLER_LABELS, PULL_METHODS, dragMethodLabel } from '../../lib/labels';
 import {
@@ -15,23 +16,35 @@ import {
   windowPropellers,
 } from '../../lib/series';
 import { useChartColors, type ChartColors } from '../../lib/theme';
+import { toDisplay, unitLabel } from '../../lib/units';
 import { useCase } from '../../state/useCase';
-import { ChartCard, DataTable, type LegendItem, type SeriesDef } from './ChartParts';
+import {
+  ChartCard,
+  DataTable,
+  displayRows,
+  type LegendItem,
+  type SeriesDef,
+} from './ChartParts';
 import { COMPONENTS } from './components';
 import { CompositionChart } from './CompositionChart';
 import { SpeedLineChart } from './SpeedLineChart';
 
+/** Rótulo de la columna de velocidad de las tablas. */
+const T_SPEED = () => msg().charts.speedAxis;
+
 export function Charts() {
   const { design } = useCase();
   const d = design.data;
-  if (!d)
-    return <p className="empty">{design.isFetching ? 'Calculando…' : 'Sin resultados todavía.'}</p>;
+  const T = useT().expert.summary;
+  if (!d) return <p className="empty">{design.isFetching ? T.calculating : T.noResults}</p>;
   return <ChartsBody d={d} stale={design.isFetching} />;
 }
 
 function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
   const c = useChartColors();
   const ids = useId();
+  const T = useT();
+  const C = T.charts;
   const props = windowPropellers(d);
   const [propSel, setProp] = useState<string | null>(null);
   const prop = propSel && props.includes(propSel) ? propSel : designPropeller(d);
@@ -48,20 +61,20 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
 
   return (
     <div className={stale ? 'stale' : undefined}>
-      <div className="charts-toolbar" role="group" aria-label="Opciones de los gráficos">
+      <div className="charts-toolbar" role="group" aria-label={C.options}>
         <div className="field">
-          <label htmlFor={`${ids}-prop`}>Hélice (tiro disponible)</label>
+          <label htmlFor={`${ids}-prop`}>{C.propeller}</label>
           <select id={`${ids}-prop`} value={prop} onChange={(e) => setProp(e.target.value)}>
             {props.map((p) => (
               <option key={p} value={p}>
                 {PROPELLER_LABELS[p] ?? p}
-                {p === designPropeller(d) ? ' · diseño' : ''}
+                {p === designPropeller(d) ? C.designSuffix : ''}
               </option>
             ))}
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-speed`}>Velocidad (composición)</label>
+          <label htmlFor={`${ids}-speed`}>{C.speedComposition}</label>
           <select
             id={`${ids}-speed`}
             value={speed}
@@ -77,7 +90,7 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
         {mod && (
           <div className="field">
             <span className="label" id={`${ids}-var`} style={{ fontSize: 13, fontWeight: 600 }}>
-              Red (RN por método)
+              {C.netByMethod}
             </span>
             <div className="segmented" role="group" aria-labelledby={`${ids}-var`}>
               <button
@@ -85,14 +98,14 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
                 aria-pressed={variant === 'std'}
                 onClick={() => setVariant('std')}
               >
-                Estándar
+                {T.labels.variantsTitle.std}
               </button>
               <button
                 type="button"
                 aria-pressed={variant === 'mod'}
                 onClick={() => setVariant('mod')}
               >
-                Modificada
+                {T.labels.variantsTitle.mod}
               </button>
             </div>
           </div>
@@ -109,46 +122,45 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
 }
 
 function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string }) {
-  const rows = pullRows(d, prop);
+  const C = useT().charts.pull;
+  const u = unitLabel('kgf');
+  const raw = pullRows(d, prop);
   const mod = hasModified(d);
   const w = perfWindow(d, prop, 'std');
   const win = feasibleWindow(w);
   const others = PULL_METHODS.filter(([k]) => k !== 'fridman_kgf');
   const series: SeriesDef[] = [
-    ...others.map(([k, name]) => ({ key: k, name: `Tiro ${name}`, color: c.quiet, quiet: true })),
+    ...others.map(([k, name]) => ({ key: k, name: C.pullOf(name), color: c.quiet, quiet: true })),
     {
       key: 'available',
-      name: 'Tiro disponible (Fridman)',
+      name: C.available,
       color: c.s3,
     },
-    { key: 'demandStd', name: 'Resistencia estándar', color: c.s1 },
-    ...(mod ? [{ key: 'demandMod', name: 'Resistencia modificada', color: c.s2 }] : []),
+    { key: 'demandStd', name: C.dragStd, color: c.s1 },
+    ...(mod ? [{ key: 'demandMod', name: C.dragMod, color: c.s2 }] : []),
   ];
+  const rows = displayRows(raw, Object.fromEntries(series.map((s) => [s.key, 'kgf'])));
   const legend: LegendItem[] = [
-    { name: 'Tiro disponible (Fridman)', color: c.s3, kind: 'line' },
-    { name: 'Resistencia estándar', color: c.s1, kind: 'line' },
-    ...(mod ? [{ name: 'Resistencia modificada', color: c.s2, kind: 'line' as const }] : []),
-    { name: 'Otros métodos de tiro', color: c.quiet, kind: 'thin' },
-    ...(win ? [{ name: 'Ventana remolcable', color: c.window, kind: 'area' as const }] : []),
+    { name: C.available, color: c.s3, kind: 'line' },
+    { name: C.dragStd, color: c.s1, kind: 'line' },
+    ...(mod ? [{ name: C.dragMod, color: c.s2, kind: 'line' as const }] : []),
+    { name: C.otherMethods, color: c.quiet, kind: 'thin' },
+    ...(win ? [{ name: C.window, color: c.window, kind: 'area' as const }] : []),
   ];
   const vmax = w?.max_speed_kn ?? null;
   return (
     <ChartCard
       id="tiro"
-      title="Tiro disponible vs resistencia total"
-      sub={
-        vmax !== null
-          ? `Velocidad máxima remolcable (red estándar): ${fmtFixed(vmax, 2)} kn`
-          : 'El tiro disponible no alcanza en el rango calculado.'
-      }
+      title={C.title}
+      sub={vmax !== null ? C.maxSpeed(fmtFixed(vmax, 2)) : C.notEnough}
       legend={legend}
-      note="Gris: Prado–Dremière, Koyama, Nomura, Hamuro y su promedio (referencia)."
+      note={C.note}
       table={
         <DataTable
-          caption="Tiro disponible y resistencia total por velocidad"
+          caption={C.caption}
           columns={[
-            { key: 'speed', label: 'Velocidad [kn]' },
-            ...series.map((s) => ({ key: s.key, label: `${s.name} [kgf]` })),
+            { key: 'speed', label: T_SPEED() },
+            ...series.map((s) => ({ key: s.key, label: `${s.name} [${u}]` })),
           ]}
           rows={rows}
         />
@@ -157,17 +169,23 @@ function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string 
       <SpeedLineChart
         rows={rows}
         series={series}
-        yUnit="kgf"
-        window={win ? { ...win, label: 'remolcable' } : null}
-        refX={vmax !== null ? { x: vmax, label: `Vmáx ${fmtFixed(vmax, 2)} kn` } : null}
-        ariaLabel="Gráfico de tiro disponible por método y resistencia total en función de la velocidad"
+        yUnit={u}
+        window={win ? { ...win, label: C.towable } : null}
+        refX={vmax !== null ? { x: vmax, label: C.vmax(fmtFixed(vmax, 2)) } : null}
+        ariaLabel={C.aria}
       />
     </ChartCard>
   );
 }
 
 function DragCard({ d, c, variant }: { d: DesignData; c: ChartColors; variant: 'std' | 'mod' }) {
-  const rows = dragRows(d, variant);
+  const T = useT();
+  const C = T.charts.drag;
+  const u = unitLabel('kgf');
+  const rows = displayRows(
+    dragRows(d, variant),
+    Object.fromEntries(DRAG_METHODS.map(([k]) => [k, 'kgf'])),
+  );
   const design = d.result.drag.design_method;
   const series: SeriesDef[] = DRAG_METHODS.map(([k, name]) => ({
     key: k,
@@ -178,18 +196,18 @@ function DragCard({ d, c, variant }: { d: DesignData; c: ChartColors; variant: '
   return (
     <ChartCard
       id="rn"
-      title={`RN por los ${DRAG_METHODS.length} métodos · red ${variant === 'std' ? 'estándar' : 'modificada'}`}
-      sub={`Método de diseño: ${dragMethodLabel(design)}`}
+      title={C.title(DRAG_METHODS.length, T.labels.variants[variant])}
+      sub={C.designMethod(dragMethodLabel(design))}
       legend={[
-        { name: `${dragMethodLabel(design)} (diseño)`, color: c.s1, kind: 'line' },
-        { name: `Otros ${DRAG_METHODS.length - 1} métodos`, color: c.quiet, kind: 'thin' },
+        { name: C.design(dragMethodLabel(design)), color: c.s1, kind: 'line' },
+        { name: C.others(DRAG_METHODS.length - 1), color: c.quiet, kind: 'thin' },
       ]}
-      note="Pase el cursor para ver los 13 valores ordenados a cada velocidad."
+      note={C.note}
       table={
         <DataTable
-          caption="Resistencia de la red por método [kgf]"
+          caption={C.caption(u)}
           columns={[
-            { key: 'speed', label: 'Velocidad [kn]' },
+            { key: 'speed', label: T_SPEED() },
             ...DRAG_METHODS.map(([k, n]) => ({ key: k, label: n })),
           ]}
           rows={rows}
@@ -199,9 +217,9 @@ function DragCard({ d, c, variant }: { d: DesignData; c: ChartColors; variant: '
       <SpeedLineChart
         rows={rows}
         series={series}
-        yUnit="kgf"
+        yUnit={u}
         sortTooltip
-        ariaLabel="Gráfico de resistencia de la red por método en función de la velocidad"
+        ariaLabel={C.aria}
       />
     </ChartCard>
   );
@@ -209,29 +227,44 @@ function DragCard({ d, c, variant }: { d: DesignData; c: ChartColors; variant: '
 
 function CompositionCard({ d, idx, speed }: { d: DesignData; idx: number; speed: number }) {
   const c = useChartColors();
+  const C = useT().charts.composition;
+  const u = unitLabel('kgf');
   const rows = composition(d, idx);
   const speedLabel = `${fmtFixed(speed, 1)} kn`;
+  const pct = (v: number, total: number) => fmtFixed((v / total) * 100, 1);
   return (
     <ChartCard
       id="composicion"
-      title={`Composición de la resistencia total a ${speedLabel}`}
-      sub="Red + boyas + cables + portones (ROB)"
+      title={C.title(speedLabel)}
+      sub={C.sub}
       legend={COMPONENTS.map((s) => ({ name: s.name, color: c[s.color], kind: 'rect' as const }))}
       table={
         <DataTable
-          caption={`Composición de la resistencia total a ${speedLabel} [kgf]`}
+          caption={`${C.title(speedLabel)} [${u}]`}
           columns={[
-            { key: 'variant', label: 'Red' },
-            ...COMPONENTS.map((s) => ({ key: s.key, label: `${s.name} [kgf]` })),
-            { key: 'total', label: 'Total [kgf]' },
+            { key: 'variant', label: C.net },
+            ...COMPONENTS.map((s) => ({ key: s.key, label: `${s.name} [${u}]` })),
+            { key: 'total', label: `${C.total} [${u}]` },
           ]}
-          rows={rows.map((r) => ({ ...r }))}
+          rows={rows.map((r) => ({
+            ...r,
+            rn: toDisplay(r.rn, 'kgf'),
+            floats: toDisplay(r.floats, 'kgf'),
+            warps: toDisplay(r.warps, 'kgf'),
+            doors: toDisplay(r.doors, 'kgf'),
+            total: toDisplay(r.total, 'kgf'),
+          }))}
         />
       }
       note={rows
-        .map(
-          (r) =>
-            `${r.variant}: red ${fmtFixed((r.rn / r.total) * 100, 1)} % · boyas ${fmtFixed((r.floats / r.total) * 100, 1)} % · cables ${fmtFixed((r.warps / r.total) * 100, 1)} % · portones ${fmtFixed((r.doors / r.total) * 100, 1)} %`,
+        .map((r) =>
+          C.note(
+            r.variant,
+            pct(r.rn, r.total),
+            pct(r.floats, r.total),
+            pct(r.warps, r.total),
+            pct(r.doors, r.total),
+          ),
         )
         .join(' — ')}
     >
@@ -241,30 +274,37 @@ function CompositionCard({ d, idx, speed }: { d: DesignData; idx: number; speed:
 }
 
 function SpreadCard({ d, c }: { d: DesignData; c: ChartColors }) {
-  const rows = spreadRows(d);
+  const C = useT().charts.spread;
+  const u = unitLabel('m');
+  const rows = displayRows(spreadRows(d), {
+    dpaStd: 'm',
+    dpaMod: 'm',
+    avStd: 'm',
+    avMod: 'm',
+  });
   const mod = hasModified(d);
   const mk = (std: string, modKey: string): SeriesDef[] => [
-    { key: std, name: 'Red estándar', color: c.s1, unit: 'm' },
-    ...(mod ? [{ key: modKey, name: 'Red modificada', color: c.s2, unit: 'm' }] : []),
+    { key: std, name: C.std, color: c.s1, unit: u },
+    ...(mod ? [{ key: modKey, name: C.mod, color: c.s2, unit: u }] : []),
   ];
   return (
     <ChartCard
       id="aberturas"
-      title="Aberturas de Fridman vs velocidad"
-      sub="DPA: distancia entre puntas de ala · AV: abertura vertical"
+      title={C.title}
+      sub={C.sub}
       legend={[
-        { name: 'Red estándar', color: c.s1, kind: 'line' },
-        ...(mod ? [{ name: 'Red modificada', color: c.s2, kind: 'line' as const }] : []),
+        { name: C.std, color: c.s1, kind: 'line' },
+        ...(mod ? [{ name: C.mod, color: c.s2, kind: 'line' as const }] : []),
       ]}
       table={
         <DataTable
-          caption="DPA y AV de Fridman por velocidad [m]"
+          caption={C.caption(u)}
           columns={[
-            { key: 'speed', label: 'Velocidad [kn]' },
-            { key: 'dpaStd', label: 'DPA estándar [m]' },
-            ...(mod ? [{ key: 'dpaMod', label: 'DPA modificada [m]' }] : []),
-            { key: 'avStd', label: 'AV estándar [m]' },
-            ...(mod ? [{ key: 'avMod', label: 'AV modificada [m]' }] : []),
+            { key: 'speed', label: T_SPEED() },
+            { key: 'dpaStd', label: C.col('DPA', 'std', u) },
+            ...(mod ? [{ key: 'dpaMod', label: C.col('DPA', 'mod', u) }] : []),
+            { key: 'avStd', label: C.col('AV', 'std', u) },
+            ...(mod ? [{ key: 'avMod', label: C.col('AV', 'mod', u) }] : []),
           ]}
           rows={rows as unknown as Record<string, number | null>[]}
         />
@@ -273,24 +313,24 @@ function SpreadCard({ d, c }: { d: DesignData; c: ChartColors }) {
       <div className="spread-pair">
         <div>
           <h4 className="chart-sub" style={{ fontWeight: 600 }}>
-            DPA [m]
+            DPA [{u}]
           </h4>
           <SpeedLineChart
             rows={rows as unknown as Record<string, number | null>[]}
             series={mk('dpaStd', 'dpaMod')}
-            yUnit="m"
-            ariaLabel="Distancia entre puntas de ala según Fridman en función de la velocidad"
+            yUnit={u}
+            ariaLabel={C.ariaDpa}
           />
         </div>
         <div>
           <h4 className="chart-sub" style={{ fontWeight: 600 }}>
-            AV [m]
+            AV [{u}]
           </h4>
           <SpeedLineChart
             rows={rows as unknown as Record<string, number | null>[]}
             series={mk('avStd', 'avMod')}
-            yUnit="m"
-            ariaLabel="Abertura vertical según Fridman en función de la velocidad"
+            yUnit={u}
+            ariaLabel={C.ariaAv}
           />
         </div>
       </div>

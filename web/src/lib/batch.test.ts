@@ -10,7 +10,7 @@ import {
   fleetRecords,
   mergeResults,
   openFleetCase,
-  RESULT_COLUMNS,
+  resultColumns,
   resultsCsv,
   type BatchRow,
 } from './batch';
@@ -40,7 +40,7 @@ describe('lotes', () => {
     expect(merged.rows).toHaveLength(r.rows.length * 2);
     expect((merged.rows as BatchRow[]).map((x) => x.index)).toEqual([0, 1, 2, 3]);
     expect(merged.counts.ok).toBe(2 * (r.counts.ok ?? 0));
-    const csv = resultsCsv(merged, RESULT_COLUMNS.fleet);
+    const csv = resultsCsv(merged, resultColumns('fleet'));
     expect(csv.split('\n')[0]).toBe(
       'Fila;Nombre;Estado;hp;Escala por semejanza;Escala;v [kn];Lima [m];R_T [kgf];Área [m²/h];Portón;Cable;Costo',
     );

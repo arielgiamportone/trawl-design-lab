@@ -10,6 +10,7 @@
  * - ``ok``: ``/health`` respondió;
  * - ``down``: se agotó el presupuesto sin respuesta (la interfaz ofrece «Reintentar»).
  */
+import { msg } from '../i18n';
 
 export type ConnStatus = 'connecting' | 'waking' | 'ok' | 'down';
 
@@ -143,17 +144,18 @@ export function statusLabel(
   outdated = false,
   local = false,
 ): string {
-  if (status === 'ok' && local) return 'Sin conexión · motor del teléfono';
+  const S = msg().api.status;
+  if (status === 'ok' && local) return S.local;
   switch (status) {
     case 'connecting':
-      return 'Conectando…';
+      return S.connecting;
     case 'waking':
-      return 'Despertando la API (puede tardar hasta un minuto)…';
+      return S.waking;
     case 'ok':
-      if (outdated) return version ? `API desactualizada · v${version}` : 'API desactualizada';
-      return version ? `API conectada · v${version}` : 'API conectada';
+      if (outdated) return version ? `${S.outdated} · v${version}` : S.outdated;
+      return version ? `${S.ok} · v${version}` : S.ok;
     case 'down':
-      return 'API no disponible';
+      return S.down;
   }
 }
 

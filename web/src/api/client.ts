@@ -1,6 +1,6 @@
 /** Cliente HTTP tipado para la API trawlkit (contrato en ../../openapi.json). */
 import { isPrepared, localRequest, preferLocal } from '../engine/offline';
-import { getLang, type Lang } from '../i18n';
+import { catalog, getLang, msg, type Lang } from '../i18n';
 import type { Component } from '../lib/components';
 
 /** Ficha de ``GET /catalog/components/{kind}/{id}``: el componente, observaciones y genérico. */
@@ -133,10 +133,12 @@ export function detailMessage(detail: unknown): string {
  * API en línea es anterior a esta versión de la app. Un 404 con otro ``detail`` (p. ej. «red
  * desconocida») es un error de datos y se muestra tal cual.
  */
-export const MISSING_ROUTE_MESSAGE =
-  'La API en línea es anterior a esta versión de la app y todavía no tiene esta función. ' +
-  'Se actualiza sola unos minutos después de cada cambio; si persiste, hay que redesplegarla ' +
-  '(Render → Manual Deploy → Deploy latest commit).';
+export function missingRouteMessage(): string {
+  return msg().api.missingRoute;
+}
+
+/** @deprecated Texto en español; use ``missingRouteMessage()`` (idioma activo). */
+export const MISSING_ROUTE_MESSAGE = catalog('es').api.missingRoute;
 
 export function isMissingRoute(detail: unknown): boolean {
   return detail === undefined || detail === 'Not Found';
@@ -159,7 +161,7 @@ async function errorOf(res: Response): Promise<ApiError> {
   }
   const msg =
     res.status === 404 && isMissingRoute(detail)
-      ? MISSING_ROUTE_MESSAGE
+      ? missingRouteMessage()
       : detailMessage(detail) || `${res.status} ${res.statusText}`;
   return new ApiError(res.status, msg, detail);
 }
@@ -183,7 +185,7 @@ async function request(rawPath: string, init?: RequestInit): Promise<Response> {
       res = await fetch(`${apiBase()}${path}`, init);
     } catch (err) {
       if (init?.signal?.aborted || !isPrepared()) {
-        throw new ApiError(0, `No se pudo conectar con la API (${apiBase()}): ${String(err)}`);
+        throw new ApiError(0, msg().api.cannotConnect(apiBase(), String(err)));
       }
       // Sin red: el motor del teléfono atiende el pedido.
       res = await localFetch(path, init);
@@ -214,7 +216,7 @@ export async function classroomRequest(
       signal: init.signal,
     });
   } catch (err) {
-    throw new ApiError(0, `El aula necesita conexión con la API (${apiBase()}): ${String(err)}`);
+    throw new ApiError(0, msg().api.classroomOffline(apiBase(), String(err)));
   }
   if (!res.ok) throw await errorOf(res);
   return res;

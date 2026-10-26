@@ -1,5 +1,7 @@
 /** Impacto de las ediciones: indicadores de la red editada frente a la de base. */
 import type { DesignData } from '../api/result';
+import { msg } from '../i18n';
+import { localized } from './labels';
 import { designPropeller, perfWindow } from './series';
 import { interp } from './verdict';
 
@@ -8,6 +10,7 @@ export type Better = 'lower' | 'higher' | null;
 export interface Metric {
   key: string;
   label: string;
+  /** Unidad métrica del motor (se muestra con ``fmtU``/``unitLabel``). */
   unit: string;
   digits: number;
   better: Better;
@@ -19,10 +22,9 @@ const summary = (key: string) => (d: DesignData) => {
   return typeof v === 'number' ? v : null;
 };
 
-export const METRICS: Metric[] = [
+const METRIC_DEFS: Omit<Metric, 'label'>[] = [
   {
     key: 'rn',
-    label: 'Resistencia de la red',
     unit: 'kgf',
     digits: 0,
     better: 'lower',
@@ -33,7 +35,6 @@ export const METRICS: Metric[] = [
   },
   {
     key: 'max_speed',
-    label: 'Velocidad máxima',
     unit: 'kn',
     digits: 2,
     better: 'higher',
@@ -41,7 +42,6 @@ export const METRICS: Metric[] = [
   },
   {
     key: 'ah',
-    label: 'Abertura horizontal',
     unit: 'm',
     digits: 2,
     better: 'higher',
@@ -49,7 +49,6 @@ export const METRICS: Metric[] = [
   },
   {
     key: 'av',
-    label: 'Abertura vertical',
     unit: 'm',
     digits: 2,
     better: 'higher',
@@ -57,7 +56,6 @@ export const METRICS: Metric[] = [
   },
   {
     key: 'ss',
-    label: 'Superficie sólida',
     unit: 'm²',
     digits: 2,
     better: null,
@@ -65,13 +63,17 @@ export const METRICS: Metric[] = [
   },
   {
     key: 'weight',
-    label: 'Peso de la red',
     unit: 'kg',
     digits: 1,
     better: null,
     get: (d, v) => (v === 'std' ? summary('net_weight_kg')(d) : null),
   },
 ];
+
+/** Indicadores con el rótulo en el idioma activo. */
+export const METRICS: Metric[] = localized(() =>
+  METRIC_DEFS.map((m) => ({ ...m, label: (msg().labels.impact as Record<string, string>)[m.key] ?? m.key })),
+);
 
 export interface ImpactRow {
   metric: Metric;

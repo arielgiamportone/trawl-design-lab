@@ -10,16 +10,8 @@ import {
   type MeshShape,
 } from '../../lib/selectivity';
 import { useChartColors } from '../../lib/theme';
-
-const SECTION_LABEL: Record<string, string> = {
-  codend: 'copo',
-  extension: 'extensión',
-  body: 'cuerpo',
-  belly: 'vientre',
-  square: 'cielo',
-  wing: 'ala',
-  wing_tip: 'punta de ala',
-};
+import { useT } from '../../i18n';
+import { fmtU } from '../../lib/units';
 
 interface Props {
   mesh: MeshShape & { section: string; orientation: string; meshes: number };
@@ -31,12 +23,18 @@ interface Props {
 
 const N = 4;
 
+/** Dos medidas de malla [mm] (con la pulgada entre paréntesis en imperial). */
+const pair = (a: number, b: number) =>
+  `${fmtU(a, 'mesh_mm', { digits: 1, unit: false })} · ${fmtU(b, 'mesh_mm', { digits: 1 })}`;
+
 /**
  * Zoom por malla: un parche de mallas del triángulo elegido con su forma deformada (exacta dentro
  * del elemento), el hilo a escala y la sección de un pez de la talla elegida, girada a su favor.
  */
 export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props) {
   const c = useChartColors();
+  const T = useT().selectivity.zoom;
+  const sections = T.sections as Record<string, string>;
   const ids = useId();
   const [spId, setSpId] = useState(speciesId);
   const sp = species.find((s) => s.id === spId) ?? species[0];
@@ -73,10 +71,10 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
     <section className="mesh-zoom" aria-labelledby={`${ids}-title`} data-testid="mesh-zoom">
       <div className="mesh-zoom-head">
         <h3 id={`${ids}-title`} className="section-title">
-          Malla del {SECTION_LABEL[mesh.section] ?? mesh.section} (triángulo {triangle})
+          {T.title(sections[mesh.section] ?? mesh.section, triangle)}
         </h3>
         <button type="button" className="btn small" onClick={onClose}>
-          Cerrar zoom
+          {T.close}
         </button>
       </div>
       <div className="mesh-zoom-body">
@@ -84,7 +82,13 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
           className="mesh-zoom-svg"
           viewBox={`${minX} ${-maxY} ${maxX - minX} ${maxY - minY}`}
           role="img"
-          aria-label={`Parche de ${N}×${N} mallas con apertura de ${fmtFixed(mesh.openingDeg, 0)}°; un ${sp?.name.toLowerCase() ?? 'pez'} de ${length} ${sp?.unit ?? ''} ${passes ? 'pasa' : 'no pasa'}`}
+          aria-label={T.aria(
+            N,
+            fmtFixed(mesh.openingDeg, 0),
+            sp?.name.toLowerCase() ?? T.fish,
+            `${length} ${sp?.unit ?? ''}`,
+            passes,
+          )}
         >
           <g transform="scale(1,-1)">
             {knots.map((row, a) =>
@@ -133,26 +137,22 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
         </svg>
         <div className="mesh-zoom-data">
           <dl className="kv">
-            <dt>Orientación</dt>
+            <dt>{T.orientation}</dt>
             <dd>{orientationLabel(mesh.orientation)}</dd>
-            <dt>Ángulo entre hilos</dt>
+            <dt>{T.angle}</dt>
             <dd>{fmtFixed(mesh.openingDeg, 1)}°</dd>
-            <dt>Patas (deformadas)</dt>
-            <dd>
-              {fmtFixed(mesh.legIMm, 1)} · {fmtFixed(mesh.legJMm, 1)} mm
-            </dd>
-            <dt>Luz entre hilos</dt>
-            <dd>
-              {fmtFixed(Math.max(0, clearI), 1)} · {fmtFixed(Math.max(0, clearJ), 1)} mm
-            </dd>
-            <dt>Área libre</dt>
+            <dt>{T.legs}</dt>
+            <dd>{pair(mesh.legIMm, mesh.legJMm)}</dd>
+            <dt>{T.clear}</dt>
+            <dd>{pair(Math.max(0, clearI), Math.max(0, clearJ))}</dd>
+            <dt>{T.freeArea}</dt>
             <dd>{fmtFixed(area, 0)} mm²</dd>
-            <dt>Apertura</dt>
-            <dd>{fmtFixed(openFraction(mesh.openingDeg) * 100, 0)} % de la malla abierta</dd>
+            <dt>{T.opening}</dt>
+            <dd>{T.openShare(fmtFixed(openFraction(mesh.openingDeg) * 100, 0))}</dd>
           </dl>
           {sp && (
             <div className="mesh-zoom-fish">
-              <label htmlFor={`${ids}-sp`}>Especie</label>
+              <label htmlFor={`${ids}-sp`}>{T.species}</label>
               <select id={`${ids}-sp`} value={sp.id} onChange={(e) => setSpId(e.target.value)}>
                 {species.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -161,7 +161,7 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
                 ))}
               </select>
               <label htmlFor={`${ids}-len`}>
-                Talla ({sp.measure}): {length} {sp.unit}
+                {T.length(sp.measure, `${length} ${sp.unit}`)}
               </label>
               <input
                 id={`${ids}-len`}
@@ -173,7 +173,7 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
                 onChange={(e) => setLength(Number(e.target.value))}
               />
               <p className={`mesh-zoom-verdict ${passes ? 'good' : 'bad'}`} role="status">
-                {passes ? 'Pasa por la malla' : 'Queda retenido'} · talla máxima que pasa:{' '}
+                {passes ? T.passes : T.retained} · {T.maxPass}{' '}
                 <strong>
                   {fmtFixed(fit.length, 1)} {sp.unit}
                 </strong>
@@ -182,11 +182,7 @@ export function MeshZoom({ mesh, triangle, species, speciesId, onClose }: Props)
           )}
         </div>
       </div>
-      <p className="help">
-        Azul y rosa: las dos familias de hilos, con el grosor del hilo a escala. Dentro de un
-        elemento del simulador todas las mallas tienen la misma forma. La elipse es la sección más
-        resistente del pez, girada para pasar; con su compresión de tejidos (A VERIFICAR).
-      </p>
+      <p className="help">{T.help}</p>
     </section>
   );
 }

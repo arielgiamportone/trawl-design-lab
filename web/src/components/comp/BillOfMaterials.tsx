@@ -79,10 +79,7 @@ export function BillOfMaterials() {
           disabled={!bom}
           onClick={() =>
             bom &&
-            downloadBlob(
-              new Blob([bomCsv(bom)], { type: 'text/csv;charset=utf-8' }),
-              T.csv.file,
-            )
+            downloadBlob(new Blob([bomCsv(bom)], { type: 'text/csv;charset=utf-8' }), T.csv.file)
           }
         >
           {T.downloadCsv}

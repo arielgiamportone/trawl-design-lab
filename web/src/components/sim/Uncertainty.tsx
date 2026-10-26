@@ -1,9 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { useId, useMemo, useState } from 'react';
 import { api, ApiError, type ObservationIn, type SensorParseResponse } from '../../api/client';
-import { fmt, fmtFixed } from '../../lib/format';
+import { fmtFixed } from '../../lib/format';
+import { useT } from '../../i18n';
 import { recall, remember } from '../../lib/memo';
-import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
+import {
+  fmtSim,
+  fromInput,
+  inputStep,
+  inputValue,
+  resolutionLabel,
+  SIM_SPEEDS,
+  simUnit,
+  simValue,
+  speedLabel,
+} from '../../lib/simulate';
+import { fmtU, getUnits, unitLabel } from '../../lib/units';
 import { useChartColors } from '../../lib/theme';
 import {
   asCalibration,
@@ -14,7 +26,8 @@ import {
   calibrateRequest,
   DEFAULT_CAL,
   DEFAULT_UNC,
-  QUANTITY_LABELS,
+  quantityLabel,
+  quantityUnit,
   relativeSpan,
   tornado,
   UNC_FORM_KEY,
@@ -37,18 +50,19 @@ export function Uncertainty() {
     remember(SUB_KEY, s);
     setSubState(s);
   };
+  const T = useT().uncertainty;
   return (
     <div className="uncertainty">
-      <div className="segmented" role="group" aria-label="Incertidumbre o calibración">
+      <div className="segmented" role="group" aria-label={T.subLabel}>
         <button type="button" aria-pressed={sub === 'bands'} onClick={() => setSub('bands')}>
-          Bandas de incertidumbre
+          {T.bands}
         </button>
         <button
           type="button"
           aria-pressed={sub === 'calibration'}
           onClick={() => setSub('calibration')}
         >
-          Calibración con mediciones
+          {T.calibration}
         </button>
       </div>
       {sub === 'bands' ? <Bands /> : <Calibration />}
@@ -56,14 +70,15 @@ export function Uncertainty() {
   );
 }
 
-function errorBox(error: unknown) {
+function ErrorBox({ error }: { error: unknown }) {
+  const S = useT().simulate;
   if (!error) return null;
   const e = error as Error;
   return (
     <div className="alert error" role="alert">
       <span>
         <strong>
-          {error instanceof ApiError && error.status ? `Error ${error.status}` : 'Error'}:
+          {error instanceof ApiError && error.status ? S.errorStatus(error.status) : S.error}:
         </strong>{' '}
         {e.message}
       </span>
@@ -73,9 +88,15 @@ function errorBox(error: unknown) {
 
 // --- bandas -----------------------------------------------------------------------------------
 
+/** Digitos de una salida según su unidad del motor. */
+const outDigits = (unit: string) => (unit === 'kgf' ? 0 : unit === 'L/h' ? 1 : 2);
+
 function Bands() {
   const { committed, state } = useCase();
   const ids = useId();
+  const M = useT();
+  const T = M.uncertainty;
+  const S = M.simulate;
   const [form, setFormState] = useState<UncForm>(
     () =>
       recall<UncForm>(UNC_FORM_KEY) ?? {
@@ -121,15 +142,10 @@ function Bands() {
 
   return (
     <div className="row-gap">
-      <p className="section-sub">
-        Varios datos del simulador no se conocen con precisión: los coeficientes del hilo, el
-        rozamiento con el fondo, la polar del portón y la densidad de la captura. Se simulan
-        muestras dentro de sus rangos (hipercubo latino) y se muestra la banda P10–P90 de cada
-        resultado y qué dato la mueve más.
-      </p>
-      <div className="opt-form explore-form" role="group" aria-label="Escenario">
+      <p className="section-sub">{T.bandsIntro}</p>
+      <div className="opt-form explore-form" role="group" aria-label={T.scenario}>
         <div className="field">
-          <label htmlFor={`${ids}-speed`}>Velocidad [kn]</label>
+          <label htmlFor={`${ids}-speed`}>{S.speed} [kn]</label>
           <select
             id={`${ids}-speed`}
             value={form.speed}
@@ -143,19 +159,23 @@ function Bands() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-catch`}>Captura en el copo [kg]</label>
+          <label htmlFor={`${ids}-catch`}>
+            {S.catchCodend} [{unitLabel('kg')}]
+          </label>
           <input
             id={`${ids}-catch`}
             type="number"
             min={0}
-            max={20000}
-            step={50}
-            value={form.catchKg}
-            onChange={(e) => setForm({ catchKg: Math.max(0, Number(e.target.value) || 0) })}
+            max={inputValue(20000, 'kg', 0)}
+            step={inputStep(50, 'kg')}
+            value={inputValue(form.catchKg, 'kg')}
+            onChange={(e) =>
+              setForm({ catchKg: Math.max(0, fromInput(Number(e.target.value) || 0, 'kg')) })
+            }
           />
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-seabed`}>Fondo</label>
+          <label htmlFor={`${ids}-seabed`}>{S.seabed}</label>
           <select
             id={`${ids}-seabed`}
             value={form.seabed ?? ''}
@@ -169,7 +189,7 @@ function Bands() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-n`}>Muestras</label>
+          <label htmlFor={`${ids}-n`}>{T.samples}</label>
           <select
             id={`${ids}-n`}
             value={form.samples}
@@ -183,13 +203,13 @@ function Bands() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-sp`}>L50 de</label>
+          <label htmlFor={`${ids}-sp`}>{T.l50Of}</label>
           <select
             id={`${ids}-sp`}
             value={form.species ?? ''}
             onChange={(e) => setForm({ species: e.target.value || null })}
           >
-            <option value="">(sin selectividad)</option>
+            <option value="">{S.noSelectivity}</option>
             {(speciesQ.data ?? []).map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
@@ -198,14 +218,17 @@ function Bands() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-res`}>Resolución</label>
+          <label htmlFor={`${ids}-res`}>{S.resolution}</label>
           <select
             id={`${ids}-res`}
             value={form.resolution}
             onChange={(e) => setForm({ resolution: Number(e.target.value) })}
           >
-            <option value={2}>Muy rápida (2)</option>
-            <option value={3}>Rápida (3)</option>
+            {[2, 3].map((n) => (
+              <option key={n} value={n}>
+                {resolutionLabel(n)}
+              </option>
+            ))}
           </select>
         </div>
       </div>
@@ -216,47 +239,45 @@ function Bands() {
           onClick={run}
           disabled={!committed || query.isFetching}
         >
-          Calcular bandas
+          {T.runBands}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {query.isFetching ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Simulando {form.samples} muestras…
+            <span className="spinner" aria-hidden="true" /> {T.runningBands(form.samples)}
           </>
         ) : r ? (
-          <span>
-            {r.n} muestras ({r.converged} convergidas) en {fmtFixed(query.data?.runtime_s ?? 0, 1)}{' '}
-            s.
-          </span>
+          <span>{T.doneBands(r.n, r.converged, fmtFixed(query.data?.runtime_s ?? 0, 1))}</span>
         ) : null}
       </div>
-      {errorBox(query.error)}
+      <ErrorBox error={query.error} />
       {r && (
         <div className={`row-gap${query.isFetching ? ' stale' : ''}`}>
           <BandTable outputs={r.outputs} selected={shown?.key} onSelect={setOutKey} />
           {shown && <Tornado output={shown} inputs={r.inputs} />}
           <details className="accordion">
             <summary>
-              <span>Rangos de las entradas</span>
+              <span>{T.inputRanges}</span>
             </summary>
             <div className="accordion-body table-wrap">
               <table className="data" data-testid="uncertainty-inputs">
                 <thead>
                   <tr>
-                    <th scope="col">Entrada</th>
-                    <th scope="col">Nominal</th>
-                    <th scope="col">Rango</th>
-                    <th scope="col">Fuente</th>
+                    <th scope="col">{T.input}</th>
+                    <th scope="col">{T.nominal}</th>
+                    <th scope="col">{T.range}</th>
+                    <th scope="col">{T.source}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {r.inputs.map((i) => (
                     <tr key={i.name}>
                       <th scope="row">{i.label}</th>
-                      <td className="num">{fmtFixed(i.nominal, 3)}</td>
+                      <td className="num">{fmtFixed(simValue(i.nominal, i.unit), 3)}</td>
                       <td className="num">
-                        {fmtFixed(i.low, 3)} – {fmtFixed(i.high, 3)} {i.unit}
+                        {fmtFixed(simValue(i.low, i.unit), 3)} –{' '}
+                        {fmtFixed(simValue(i.high, i.unit), 3)} {simUnit(i.unit)}
                       </td>
                       <td>{i.source}</td>
                     </tr>
@@ -268,10 +289,7 @@ function Bands() {
         </div>
       )}
       {!r && !query.isFetching && !query.error && (
-        <p className="empty">
-          Pulse «Calcular bandas». Cada muestra parte de la forma nominal; con 10 muestras en
-          resolución muy rápida tarda del orden de un minuto en la API en línea.
-        </p>
+        <p className="empty">{T.emptyBands}</p>
       )}
     </div>
   );
@@ -279,6 +297,7 @@ function Bands() {
 
 function Strip({ o, span }: { o: UncOutput; span: number }) {
   const c = useChartColors();
+  const T = useT().uncertainty;
   const ref = o.nominal ?? o.p50;
   const W = 220;
   const H = 22;
@@ -290,7 +309,11 @@ function Strip({ o, span }: { o: UncOutput; span: number }) {
       viewBox={`0 0 ${W} ${H}`}
       className="band-strip"
       role="img"
-      aria-label={`${o.label}: P10 ${fmtFixed(o.p10, 2)}, P90 ${fmtFixed(o.p90, 2)} ${o.unit}`}
+      aria-label={T.stripAria(
+        o.label,
+        fmtSim(o.p10, o.unit, { digits: 2, unit: false }),
+        fmtSim(o.p90, o.unit, { digits: 2 }),
+      )}
     >
       <line x1={4} x2={W - 4} y1={H / 2} y2={H / 2} stroke={c.grid} />
       <line x1={W / 2} x2={W / 2} y1={3} y2={H - 3} stroke={c.axis} strokeDasharray="2 2" />
@@ -328,23 +351,24 @@ function BandTable({
   onSelect: (k: string) => void;
 }) {
   const span = relativeSpan(outputs);
-  const digits = (o: UncOutput) => (o.unit === 'kgf' ? 0 : o.unit === 'L/h' ? 1 : 2);
+  const T = useT().uncertainty;
+  const val = (o: UncOutput, v: number | null) =>
+    fmtSim(v, o.unit, { digits: outDigits(o.unit), unit: false });
   return (
     <div className="table-wrap">
       <table className="data" data-testid="uncertainty-table">
         <caption>
-          Banda P10–P90 <HelpTip topic="p10_p90" label="Banda P10–P90" /> · escala ± {span} %
-          respecto del nominal (línea punteada); trazo negro = P50, puntos = muestras
+          {T.bandCaptionA} <HelpTip topic="p10_p90" label={T.bandCaptionA} /> {T.bandCaptionB(span)}
         </caption>
         <thead>
           <tr>
-            <th scope="col">Resultado</th>
-            <th scope="col">Nominal</th>
+            <th scope="col">{T.result}</th>
+            <th scope="col">{T.nominal}</th>
             <th scope="col">P10</th>
             <th scope="col">P50</th>
             <th scope="col">P90</th>
-            <th scope="col">Banda</th>
-            <th scope="col">Dispersión</th>
+            <th scope="col">{T.band}</th>
+            <th scope="col">{T.spread}</th>
           </tr>
         </thead>
         <tbody>
@@ -358,12 +382,12 @@ function BandTable({
                 <button type="button" className="link-button" onClick={() => onSelect(o.key)}>
                   {o.label}
                 </button>{' '}
-                <span className="unit">[{o.unit}]</span>
+                <span className="unit">[{simUnit(o.unit)}]</span>
               </th>
-              <td className="num">{o.nominal === null ? '—' : fmtFixed(o.nominal, digits(o))}</td>
-              <td className="num">{fmtFixed(o.p10, digits(o))}</td>
-              <td className="num">{fmtFixed(o.p50, digits(o))}</td>
-              <td className="num">{fmtFixed(o.p90, digits(o))}</td>
+              <td className="num">{val(o, o.nominal)}</td>
+              <td className="num">{val(o, o.p10)}</td>
+              <td className="num">{val(o, o.p50)}</td>
+              <td className="num">{val(o, o.p90)}</td>
               <td className="num">
                 {bandPct(o) === null ? '—' : `± ${fmtFixed((bandPct(o) as number) / 2, 1)} %`}
               </td>
@@ -380,6 +404,7 @@ function BandTable({
 
 function Tornado({ output, inputs }: { output: UncOutput; inputs: Parameters<typeof tornado>[1] }) {
   const c = useChartColors();
+  const T = useT().uncertainty;
   const rows = tornado(output, inputs);
   const LABEL = 190;
   const W = 600;
@@ -391,16 +416,17 @@ function Tornado({ output, inputs }: { output: UncOutput; inputs: Parameters<typ
   return (
     <figure className="tornado" data-testid="tornado" style={{ margin: 0 }}>
       <figcaption>
-        ¿Qué dato mueve más «{output.label.toLowerCase()}»?{' '}
-        <HelpTip topic="sensitivity" label="Sensibilidad" />
+        {T.tornadoTitle(output.label.toLowerCase())}{' '}
+        <HelpTip topic="sensitivity" label={T.sensitivity} />
       </figcaption>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="tornado-svg"
         role="img"
-        aria-label={`Correlación de cada entrada con ${output.label}: ${rows
-          .map((r) => `${r.label} ${fmtFixed(r.rho, 2)}`)
-          .join(', ')}`}
+        aria-label={T.tornadoAria(
+          output.label,
+          rows.map((r) => `${r.label} ${fmtFixed(r.rho, 2)}`).join(', '),
+        )}
       >
         <line x1={x0} x2={x0} y1={0} y2={H - 16} stroke={c.axis} />
         {rows.map((r, k) => {
@@ -436,10 +462,7 @@ function Tornado({ output, inputs }: { output: UncOutput; inputs: Parameters<typ
           </text>
         ))}
       </svg>
-      <p className="help">
-        Correlación de rangos (Spearman) entre cada entrada y el resultado: azul = al subir la
-        entrada sube el resultado; naranja = baja. Con pocas muestras es orientativa.
-      </p>
+      <p className="help">{T.tornadoHelp}</p>
     </figure>
   );
 }
@@ -451,6 +474,9 @@ const CAL_FORM_KEY = 'calibration:form';
 function Calibration() {
   const { committed } = useCase();
   const ids = useId();
+  const M = useT();
+  const T = M.uncertainty;
+  const S = M.simulate;
   const [form, setFormState] = useState<CalForm>(
     () => recall<CalForm>(CAL_FORM_KEY) ?? DEFAULT_CAL,
   );
@@ -494,7 +520,7 @@ function Calibration() {
     try {
       const text = await api.sensorExample();
       setCsv(text);
-      setFileName('registro_sensores_ejemplo.csv (sintético)');
+      setFileName(T.exampleName);
       await readLog(text);
     } catch (e) {
       setParseError(e);
@@ -530,32 +556,30 @@ function Calibration() {
   return (
     <div className="row-gap">
       <p className="section-sub">
-        Ajusta parámetros inciertos del simulador para que reproduzca mediciones: un registro de
-        sensores del lance (CSV) o la simulación DynamiT de la red FAO A-3. Levenberg–Marquardt
-        sobre los errores relativos. <HelpTip topic="calibration" label="Calibración" />
+        {T.calIntro} <HelpTip topic="calibration" label={T.calHelpTopic} />
       </p>
-      <div className="segmented" role="group" aria-label="Datos para calibrar">
+      <div className="segmented" role="group" aria-label={T.sourceLabel}>
         <button
           type="button"
           aria-pressed={form.source === 'sensors'}
           onClick={() => setForm({ source: 'sensors' })}
         >
-          Registro de sensores (CSV)
+          {T.sensors}
         </button>
         <button
           type="button"
           aria-pressed={form.source === 'dynamit'}
           onClick={() => setForm({ source: 'dynamit' })}
         >
-          Referencia DynamiT (FAO A-3)
+          {T.dynamit}
         </button>
       </div>
       {form.source === 'sensors' && (
         <div className="sensor-box">
-          <div className="opt-form explore-form" role="group" aria-label="Registro de sensores">
+          <div className="opt-form explore-form" role="group" aria-label={T.sensorLog}>
             <div className="field">
               <label htmlFor={`${ids}-file`}>
-                Archivo CSV <HelpTip topic="sensor_log" label="Registro de sensores" />
+                {T.csvFile} <HelpTip topic="sensor_log" label={T.sensorLog} />
               </label>
               <input
                 id={`${ids}-file`}
@@ -566,7 +590,7 @@ function Calibration() {
               {fileName && <span className="help">{fileName}</span>}
             </div>
             <div className="field">
-              <label htmlFor={`${ids}-by`}>Tramos por</label>
+              <label htmlFor={`${ids}-by`}>{T.windowsBy}</label>
               <select
                 id={`${ids}-by`}
                 value={form.by}
@@ -575,13 +599,13 @@ function Calibration() {
                   setForm({ by, width: by === 'time' ? 20 : 0.25 });
                 }}
               >
-                <option value="time">Tiempo</option>
-                <option value="speed">Velocidad</option>
+                <option value="time">{T.time}</option>
+                <option value="speed">{T.speed}</option>
               </select>
             </div>
             <div className="field">
               <label htmlFor={`${ids}-width`}>
-                Ancho del tramo [{form.by === 'time' ? 'min' : 'kn'}]
+                {T.width(form.by === 'time' ? 'min' : 'kn')}
               </label>
               <input
                 id={`${ids}-width`}
@@ -593,7 +617,7 @@ function Calibration() {
               />
             </div>
             <div className="field">
-              <label htmlFor={`${ids}-seabed`}>Fondo del lance</label>
+              <label htmlFor={`${ids}-seabed`}>{T.haulSeabed}</label>
               <select
                 id={`${ids}-seabed`}
                 value={form.seabed ?? ''}
@@ -609,7 +633,7 @@ function Calibration() {
           </div>
           <div className="calc-row">
             <button type="button" className="btn" onClick={() => void loadExample()}>
-              Usar el registro de ejemplo
+              {T.useExample}
             </button>
             <button
               type="button"
@@ -617,20 +641,20 @@ function Calibration() {
               onClick={() => void readLog(csv)}
               disabled={!csv || parsing}
             >
-              Volver a leer
+              {T.reread}
             </button>
           </div>
           {parsing && (
             <p className="status-line">
-              <span className="spinner" aria-hidden="true" /> Leyendo el registro…
+              <span className="spinner" aria-hidden="true" /> {T.reading}
             </p>
           )}
-          {errorBox(parseError)}
+          <ErrorBox error={parseError} />
           {parsed && <SensorSummary parsed={parsed} />}
         </div>
       )}
       <fieldset className="field">
-        <legend className="label">Parámetros a ajustar (hasta 3)</legend>
+        <legend className="label">{T.paramsLegend}</legend>
         <div className="check-grid">
           {CAL_PARAMS.map((p) => (
             <label key={p.id} title={p.help}>
@@ -644,9 +668,9 @@ function Calibration() {
           ))}
         </div>
       </fieldset>
-      <div className="opt-form explore-form" role="group" aria-label="Ajuste">
+      <div className="opt-form explore-form" role="group" aria-label={T.fitLabel}>
         <div className="field">
-          <label htmlFor={`${ids}-evals`}>Evaluaciones máximas</label>
+          <label htmlFor={`${ids}-evals`}>{T.maxEvals}</label>
           <select
             id={`${ids}-evals`}
             value={form.maxEvals}
@@ -660,58 +684,58 @@ function Calibration() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor={`${ids}-cres`}>Resolución</label>
+          <label htmlFor={`${ids}-cres`}>{S.resolution}</label>
           <select
             id={`${ids}-cres`}
             value={form.resolution}
             onChange={(e) => setForm({ resolution: Number(e.target.value) })}
           >
-            <option value={2}>Muy rápida (2)</option>
-            <option value={3}>Rápida (3)</option>
+            {[2, 3].map((n) => (
+              <option key={n} value={n}>
+                {resolutionLabel(n)}
+              </option>
+            ))}
           </select>
         </div>
       </div>
       <div className="calc-row">
         <button type="button" className="btn primary" onClick={run} disabled={!canRun}>
-          Calibrar
+          {T.calibrate}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {query.isFetching ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Ajustando (hasta {form.maxEvals}{' '}
-            evaluaciones)…
+            <span className="spinner" aria-hidden="true" /> {T.fitting(form.maxEvals)}
           </>
         ) : r ? (
-          <span>
-            {r.evaluations} evaluaciones en {fmtFixed(r.runtime_s, 1)} s.
-          </span>
+          <span>{T.doneCal(r.evaluations, fmtFixed(r.runtime_s, 1))}</span>
         ) : null}
       </div>
-      {errorBox(query.error)}
+      <ErrorBox error={query.error} />
       {r && (
         <div className={`row-gap${query.isFetching ? ' stale' : ''}`}>
           <div className="impact">
             <div
               className={`impact-item ${r.rmse_after_pct < r.rmse_before_pct ? 'good' : 'neutral'}`}
             >
-              <span className="impact-label">Error cuadrático medio</span>
+              <span className="impact-label">{T.rmse}</span>
               <span className="impact-value">
                 {fmtFixed(r.rmse_before_pct, 1)} → {fmtFixed(r.rmse_after_pct, 1)}{' '}
                 <span className="unit">%</span>
               </span>
-              <span className="impact-delta">antes → después del ajuste</span>
+              <span className="impact-delta">{T.beforeAfter}</span>
             </div>
           </div>
           <div className="table-wrap">
             <table className="data" data-testid="calibration-params">
-              <caption>Parámetros ajustados</caption>
+              <caption>{T.fittedParams}</caption>
               <thead>
                 <tr>
-                  <th scope="col">Parámetro</th>
-                  <th scope="col">Inicial</th>
-                  <th scope="col">Ajustado</th>
-                  <th scope="col">Rango</th>
+                  <th scope="col">{T.param}</th>
+                  <th scope="col">{T.initial}</th>
+                  <th scope="col">{T.fitted}</th>
+                  <th scope="col">{T.range}</th>
                 </tr>
               </thead>
               <tbody>
@@ -723,8 +747,8 @@ function Calibration() {
                       <strong>{fmtFixed(p.fitted, 3)}</strong>
                       {p.std !== null && ` ± ${fmtFixed(p.std, 3)}`}
                       {atBound(p) && (
-                        <span className="badge warn" title="El ajuste pide salir del rango">
-                          en el límite
+                        <span className="badge warn" title={T.atLimitTitle}>
+                          {T.atLimit}
                         </span>
                       )}
                     </td>
@@ -738,32 +762,32 @@ function Calibration() {
           </div>
           <div className="table-wrap">
             <table className="data" data-testid="calibration-observations">
-              <caption>Mediciones y simulación antes y después del ajuste</caption>
+              <caption>{T.obsCaption}</caption>
               <thead>
                 <tr>
-                  <th scope="col">Magnitud</th>
-                  <th scope="col">Velocidad · captura</th>
-                  <th scope="col">Medido</th>
-                  <th scope="col">Antes</th>
-                  <th scope="col">Después</th>
+                  <th scope="col">{T.quantity}</th>
+                  <th scope="col">{T.speedCatch}</th>
+                  <th scope="col">{T.measured}</th>
+                  <th scope="col">{T.before}</th>
+                  <th scope="col">{T.after}</th>
                 </tr>
               </thead>
               <tbody>
                 {r.observations.map((o, k) => (
                   <tr key={k}>
                     <th scope="row">
-                      {o.label} <span className="unit">[{o.unit}]</span>
+                      {o.label} <span className="unit">[{simUnit(o.unit)}]</span>
                     </th>
                     <td className="num">
-                      {fmtFixed(o.speed_kn, 2)} kn · {fmt(o.catch_kg)} kg
+                      {fmtFixed(o.speed_kn, 2)} kn · {fmtU(o.catch_kg, 'kg')}
                     </td>
-                    <td className="num">{fmtFixed(o.value, o.unit === 'kgf' ? 0 : 2)}</td>
+                    <td className="num">{obs(o.value, o.unit)}</td>
                     <td className="num">
-                      {fmtFixed(o.before, o.unit === 'kgf' ? 0 : 2)}{' '}
+                      {obs(o.before, o.unit)}{' '}
                       <span className="unit">({signed(o.error_before_pct)} %)</span>
                     </td>
                     <td className="num">
-                      {fmtFixed(o.after, o.unit === 'kgf' ? 0 : 2)}{' '}
+                      {obs(o.after, o.unit)}{' '}
                       <span className="unit">({signed(o.error_after_pct)} %)</span>
                     </td>
                   </tr>
@@ -771,11 +795,7 @@ function Calibration() {
               </tbody>
             </table>
           </div>
-          <p className="help">
-            El desvío ± sale de la curvatura del ajuste y es orientativo. Un parámetro «en el
-            límite» indica que el modelo no alcanza a reproducir las mediciones con valores físicos:
-            la diferencia es estructural (capítulo 25 del libro).
-          </p>
+          <p className="help">{T.calHelp}</p>
         </div>
       )}
     </div>
@@ -783,8 +803,11 @@ function Calibration() {
 }
 
 const signed = (v: number) => `${v > 0 ? '+' : ''}${fmtFixed(v, 1)}`;
+const obs = (v: number, unit: string) =>
+  fmtSim(v, unit, { digits: unit === 'kgf' ? 0 : 2, unit: false });
 
 function SensorSummary({ parsed }: { parsed: SensorParseResponse }) {
+  const T = useT().uncertainty;
   const log = parsed.log as {
     mapping: Record<string, string>;
     ignored: string[];
@@ -801,24 +824,27 @@ function SensorSummary({ parsed }: { parsed: SensorParseResponse }) {
   return (
     <div className="row-gap" data-testid="sensor-summary">
       <p className="help">
-        {log.rows} filas · columnas reconocidas:{' '}
+        {T.rows(log.rows)} · {T.recognised}{' '}
         {Object.entries(log.mapping)
           .map(([h, q]) => `«${h}» → ${q}`)
           .join(' · ')}
-        {log.ignored.length > 0 && ` · ignoradas: ${log.ignored.join(', ')}`}
+        {log.ignored.length > 0 && T.ignored(log.ignored.join(', '))}
         {log.warnings.map((w) => ` · ${w}`)}
       </p>
       <div className="table-wrap">
         <table className="data">
-          <caption>Tramos estacionarios (mediana de cada tramo)</caption>
+          <caption>{T.windowsCaption}</caption>
           <thead>
             <tr>
-              <th scope="col">Velocidad</th>
-              <th scope="col">Captura</th>
-              <th scope="col">Filas</th>
+              <th scope="col">{T.speed}</th>
+              <th scope="col">{T.catch}</th>
+              <th scope="col">{T.rowsCol}</th>
               {qs.map((q) => (
                 <th scope="col" key={q}>
-                  {QUANTITY_LABELS[q] ?? q}
+                  {quantityLabel(q)}
+                  {getUnits() === 'imperial' && quantityUnit(q)
+                    ? ` [${unitLabel(quantityUnit(q))}]`
+                    : ''}
                 </th>
               ))}
             </tr>
@@ -827,11 +853,11 @@ function SensorSummary({ parsed }: { parsed: SensorParseResponse }) {
             {ws.map((w, k) => (
               <tr key={k}>
                 <td className="num">{fmtFixed(w.speed_kn, 2)} kn</td>
-                <td className="num">{fmt(w.catch_kg)} kg</td>
+                <td className="num">{fmtU(w.catch_kg, 'kg')}</td>
                 <td className="num">{w.n}</td>
                 {qs.map((q) => (
                   <td className="num" key={q}>
-                    {w.values[q] === undefined ? '—' : fmtFixed(w.values[q] as number, 2)}
+                    {fmtSim(w.values[q], quantityUnit(q), { digits: 2, unit: false })}
                   </td>
                 ))}
               </tr>

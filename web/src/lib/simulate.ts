@@ -2,7 +2,15 @@
 import type { SimulateResponse } from '../api/client';
 import { msg } from '../i18n';
 import { fmt, fmtFixed, fmtNum } from './format';
-import { CONVERSIONS, fmtU, getUnits, toDisplay, unitLabel, type FmtUOptions } from './units';
+import {
+  CONVERSIONS,
+  fmtU,
+  getUnits,
+  toCanonical,
+  toDisplay,
+  unitLabel,
+  type FmtUOptions,
+} from './units';
 
 /** Velocidades ofrecidas [kn] (las de la tabla de DynamiT). */
 export const SIM_SPEEDS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
@@ -169,4 +177,21 @@ export function fmtSim(
   const v = value * e.factor;
   const shown = opts.digits === undefined ? fmt(v) : fmtFixed(v, opts.digits);
   return opts.unit === false ? shown : `${shown} ${e.unit}`;
+}
+
+// --- campos numéricos en el sistema de unidades activo --------------------------------------
+
+/** Valor a mostrar en un ``<input type="number">`` (convertido y redondeado a ``digits``). */
+export function inputValue(value: number, unit: string, digits = 2): number {
+  return Number(toDisplay(value, unit).toFixed(digits));
+}
+
+/** Valor del motor a partir de lo escrito en un campo en el sistema activo. */
+export function fromInput(value: number, unit: string): number {
+  return toCanonical(value, unit);
+}
+
+/** Paso de un campo: el métrico, o libre cuando la unidad se convierte (no hay paso «redondo»). */
+export function inputStep(step: number, unit: string): number | 'any' {
+  return getUnits() === 'imperial' && CONVERSIONS[unit] ? 'any' : step;
 }

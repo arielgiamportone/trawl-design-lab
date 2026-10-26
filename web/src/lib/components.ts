@@ -73,8 +73,18 @@ const COLUMN_FIELDS: Record<ComponentKind, [string, string?][]> = {
     ['breaking_load_kgf', 'kgf'],
     ['runnage_m_per_kg', 'm/kg'],
   ],
-  wire: [['construction'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
-  rope: [['material'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
+  wire: [
+    ['construction'],
+    ['diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
+  ],
+  rope: [
+    ['material'],
+    ['diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
+  ],
   door: [['type'], ['area_m2', 'm²'], ['weight_air_kg', 'kg'], ['hp_range', 'hp']],
   float: [['material'], ['diameter_mm', 'mm'], ['buoyancy_kgf', 'kgf'], ['max_depth_m', 'm']],
   chain: [
@@ -89,25 +99,20 @@ const COLUMN_FIELDS: Record<ComponentKind, [string, string?][]> = {
 export function columns(kind: ComponentKind): Column[] {
   const labels = msg().components.col;
   return COLUMN_FIELDS[kind].map(([field, unit]) =>
-    unit ? { field, label: labels[field] ?? field, unit } : { field, label: labels[field] ?? field },
+    unit
+      ? { field, label: labels[field] ?? field, unit }
+      : { field, label: labels[field] ?? field },
   );
 }
 
-export const DOOR_TYPE_LABEL: Record<string, string> = liveRecord(
-  () => msg().components.doorType,
-);
+export const DOOR_TYPE_LABEL: Record<string, string> = liveRecord(() => msg().components.doorType);
 
 /**
  * Valor legible de una celda. Con ``unit`` (la métrica de la columna) el número se convierte al
  * sistema activo, sin la unidad (va en el título); con ``withUnit``, la unidad se deduce del
  * nombre del campo y se agrega en imperial (tablas de procedencia, sin unidad en el título).
  */
-export function cellText(
-  item: Component,
-  field: string,
-  unit?: string,
-  withUnit = false,
-): string {
+export function cellText(item: Component, field: string, unit?: string, withUnit = false): string {
   const v = item[field];
   if (v === undefined || v === null || v === '') return '—';
   if (field === 'hp_range' && Array.isArray(v)) {
@@ -307,7 +312,12 @@ const CONTRIB_UNITS: Record<ComponentKind, [string, string?][]> = {
     ['weight_kg_per_m', 'kg/m'],
     ['breaking_load_t', 't'],
   ],
-  rope: [['material'], ['diameter_mm', 'mm'], ['weight_kg_per_m', 'kg/m'], ['breaking_load_t', 't']],
+  rope: [
+    ['material'],
+    ['diameter_mm', 'mm'],
+    ['weight_kg_per_m', 'kg/m'],
+    ['breaking_load_t', 't'],
+  ],
   door: [['type'], ['length_m', 'm'], ['height_m', 'm'], ['weight_air_kg', 'kg']],
   float: [['material'], ['diameter_mm', 'mm'], ['buoyancy_kgf', 'kgf'], ['max_depth_m', 'm']],
   chain: [

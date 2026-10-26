@@ -1,6 +1,5 @@
 import type { LayoutResponse } from '../../api/client';
-
-const PLANE_NAME: Record<string, string> = { upper: 'Dorso', lower: 'Vientre', side: 'Costado' };
+import { useT } from '../../i18n';
 
 interface Props {
   layout: LayoutResponse;
@@ -14,6 +13,7 @@ interface Props {
  * que el plano y el diseño interactivo (``POST /design/layout``, malla estirada).
  */
 export function JoinMap({ layout, planes, highlight, label }: Props) {
+  const PLANE_NAME = useT().construction.plane;
   const shown = layout.planes.filter((p) => planes.includes(p.plane));
   if (shown.length === 0) return null;
   const gap = 0.6;

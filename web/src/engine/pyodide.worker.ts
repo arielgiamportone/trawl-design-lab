@@ -21,6 +21,19 @@ interface RequestMsg {
 }
 type InMsg = InitMsg | RequestMsg;
 
+/**
+ * Error con código: el hilo principal lo traduce al idioma de la interfaz (``engine/offline``).
+ * El *worker* no carga los catálogos de textos.
+ */
+class CodedError extends Error {
+  constructor(
+    readonly code: 'download' | 'notStarted',
+    readonly arg = '',
+  ) {
+    super(`${code}${arg ? `: ${arg}` : ''}`);
+  }
+}
+
 interface Pyodide {
   loadPackage(names: string[]): Promise<unknown>;
   runPythonAsync(code: string): Promise<unknown>;
@@ -36,19 +49,21 @@ let handle: ((m: string, p: string, b: string | null) => string) | null = null;
 let starting: Promise<void> | null = null;
 
 async function init(msg: InitMsg): Promise<void> {
-  const progress = (stage: string) => self.postMessage({ id: msg.id, type: 'progress', stage });
-  progress('Cargando el intérprete de Python…');
+  // Las etapas viajan como claves; el hilo principal las traduce.
+  const progress = (stage: 'python' | 'packages' | 'install') =>
+    self.postMessage({ id: msg.id, type: 'progress', stage });
+  progress('python');
   const mod = (await import(/* @vite-ignore */ `${msg.pyodideUrl}pyodide.mjs`)) as {
     loadPyodide: (o: { indexURL: string }) => Promise<Pyodide>;
   };
   const py = await mod.loadPyodide({ indexURL: msg.pyodideUrl });
-  progress('Cargando numpy y pydantic…');
+  progress('packages');
   await py.loadPackage(msg.packages);
-  progress('Instalando el motor trawlkit…');
+  progress('install');
   const names: string[] = [];
   for (const url of [...(msg.extraUrls ?? []), msg.wheelUrl]) {
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`no se pudo descargar ${url.split('/').pop()} (${res.status})`);
+    if (!res.ok) throw new CodedError('download', `${url.split('/').pop()} (${res.status})`);
     const name = url.split('/').pop() ?? 'paquete.whl';
     py.FS.writeFile(`/tmp/${name}`, new Uint8Array(await res.arrayBuffer()));
     names.push(name);
@@ -69,11 +84,12 @@ self.onmessage = async (e: MessageEvent<InMsg>) => {
       self.postMessage({ id: msg.id, type: 'ready' });
       return;
     }
-    if (!handle) throw new Error('el motor sin conexión no está iniciado');
+    if (!handle) throw new CodedError('notStarted');
     const out = handle(msg.method, msg.path, msg.body);
     self.postMessage({ id: msg.id, type: 'response', out });
   } catch (err) {
     if (msg.type === 'init') starting = null;
-    self.postMessage({ id: msg.id, type: 'error', message: String(err) });
+    const coded = err instanceof CodedError ? { code: err.code, arg: err.arg } : {};
+    self.postMessage({ id: msg.id, type: 'error', message: String(err), ...coded });
   }
 };

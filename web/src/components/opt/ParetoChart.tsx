@@ -10,6 +10,8 @@ import {
 import type { OptimizeResponse } from '../../api/client';
 import { fmt, fmtAxis, fmtFixed } from '../../lib/format';
 import { paretoPoints } from '../../lib/optimize';
+import { useT } from '../../i18n';
+import { simUnit, simValue } from '../../lib/simulate';
 import { useChartColors, useMediaQuery } from '../../lib/theme';
 import { TooltipBox } from '../charts/ChartParts';
 
@@ -27,15 +29,21 @@ interface TipProps {
 /** Frente de Pareto: área barrida por hora (a maximizar) frente a R_T/AH (a minimizar). */
 export function ParetoChart({ r }: { r: OptimizeResponse }) {
   const c = useChartColors();
+  const T = useT().optimize;
   const narrow = useMediaQuery('(max-width: 560px)');
-  const pts = paretoPoints(r);
+  // Área en miles de m²/h (o ft²/h) y trabajo por área barrida, en el sistema activo.
+  const area = (thousands: number) => simValue(thousands * 1000, 'm²/h') / 1000;
+  const energy = (v: number) => simValue(v, 'kgf·m/m²');
+  const areaUnit = simUnit('m²/h');
+  const energyUnit = simUnit('kgf·m/m²');
+  const pts = paretoPoints(r).map((p) => ({ ...p, area: area(p.area), energy: energy(p.energy) }));
   const best = r.best;
   const bestPt =
     best.area_rate_m2_h !== null && best.energy_kgf_m_per_m2 !== null
       ? [
           {
-            area: best.area_rate_m2_h / 1000,
-            energy: best.energy_kgf_m_per_m2,
+            area: area(best.area_rate_m2_h / 1000),
+            energy: energy(best.energy_kgf_m_per_m2),
             s: best.s,
             v: best.v_kn,
           },
@@ -50,13 +58,13 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
         title={`s = ${fmtFixed(p.s, 3)} · v = ${fmtFixed(p.v, 2)} kn`}
         rows={[
           {
-            name: 'Área barrida',
+            name: T.pareto.swept,
             color: c.s1,
             value: Math.round(p.area * 1000),
-            unit: 'm²/h',
+            unit: areaUnit,
             strong: true,
           },
-          { name: 'R_T/AH', color: c.s1, value: p.energy, unit: 'kgf·m/m²' },
+          { name: 'R_T/AH', color: c.s1, value: p.energy, unit: energyUnit },
         ]}
       />
     );
@@ -66,7 +74,7 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
     <div
       className="chart-box"
       role="img"
-      aria-label="Frente de Pareto: área barrida por hora frente a trabajo de remolque por metro cuadrado barrido"
+      aria-label={T.pareto.aria}
     >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         <ScatterChart
@@ -81,9 +89,9 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
             stroke={c.axis}
             tick={{ fill: c.muted, fontSize: 11 }}
             tickLine={false}
-            name="Área barrida"
+            name={T.pareto.swept}
             label={{
-              value: 'Área barrida [miles de m²/h]',
+              value: T.pareto.axisX(areaUnit),
               position: 'insideBottomRight',
               offset: -2,
               fill: c.muted,
@@ -106,7 +114,7 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
               narrow
                 ? undefined
                 : {
-                    value: 'R_T/AH [kgf·m/m²]',
+                    value: `R_T/AH [${energyUnit}]`,
                     angle: -90,
                     position: 'insideLeft',
                     fill: c.muted,
@@ -118,7 +126,7 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
           <Tooltip content={renderTip} isAnimationActive={false} cursor={{ stroke: c.axis }} />
           <Scatter
             data={pts}
-            name="Frente de Pareto"
+            name={T.paretoTitle}
             fill={c.s1}
             line={{ stroke: c.s1, strokeWidth: 2 }}
             shape="circle"
@@ -126,7 +134,7 @@ export function ParetoChart({ r }: { r: OptimizeResponse }) {
           />
           <Scatter
             data={bestPt}
-            name="Mejor diseño"
+            name={T.best}
             fill={c.s2}
             shape="diamond"
             isAnimationActive={false}

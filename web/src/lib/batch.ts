@@ -8,27 +8,18 @@ import type {
   NetSpec,
   Vessel,
 } from '../api/client';
+import { getLang, msg } from '../i18n';
 import type { CaseState } from '../state/model';
+import { liveRecord } from './liveRecord';
+import { toDisplay, unitLabel } from './units';
 
-export const MODE_LABEL: Record<BatchKind, string> = {
-  fleet: 'Flota de buques',
-  nets: 'Redes (planos)',
-  cases: 'Casos completos',
-};
+export const MODE_LABEL: Record<BatchKind, string> = liveRecord(() => msg().batch.mode);
 
-export const STATUS_LABEL: Record<string, string> = {
-  ok: 'cumple',
-  infeasible: 'no cumple',
-  error: 'error',
-};
+export const STATUS_LABEL: Record<string, string> = liveRecord(() => msg().batch.status);
 
-export const OBJECTIVE_LABEL = {
-  area: 'La mayor red que el buque remolca',
-  energy: 'Menos trabajo por m² barrido',
-  cost: 'Armado más barato (con precios)',
-} as const;
+export type Objective = 'area' | 'energy' | 'cost';
 
-export type Objective = keyof typeof OBJECTIVE_LABEL;
+export const OBJECTIVE_LABEL: Record<Objective, string> = liveRecord(() => msg().batch.objective);
 
 /** Un buque de la flota, editable en la vista previa. */
 export interface FleetRecord {
@@ -73,6 +64,10 @@ export function fleetRecords(parsed: BatchParseResponse): FleetRecord[] {
   }));
 }
 
+/**
+ * Encabezados de la planilla de flota que se manda a la API: son entradas del motor, así que
+ * quedan como los reconoce ``trawlkit.batch.columns`` (en español y en métrico) en los dos idiomas.
+ */
 const FLEET_HEADERS = [
   'nombre',
   'potencia [hp]',
@@ -87,10 +82,10 @@ const FLEET_HEADERS = [
   'sólo genéricos',
 ];
 
-function cell(v: unknown): string {
+function cell(v: unknown, sep = ';', comma = true): string {
   if (v === null || v === undefined) return '';
-  const s = typeof v === 'number' ? String(v).replace('.', ',') : String(v);
-  return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  const s = typeof v === 'number' && comma ? String(v).replace('.', ',') : String(v);
+  return s.includes(sep) || /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
 /** CSV de la flota (``;`` y coma decimal), con los encabezados que reconoce la API. */
@@ -109,7 +104,7 @@ export function fleetCsv(records: FleetRecord[]): string {
       r.seabed,
       r.generic_only ? 'sí' : '',
     ]
-      .map(cell)
+      .map((v) => cell(v))
       .join(';'),
   );
   return [FLEET_HEADERS.join(';'), ...rows].join('\n') + '\n';
@@ -207,12 +202,17 @@ export function openFleetCase(state: CaseState, row: BatchRow): CaseState {
   };
 }
 
-/** Resumen en CSV (``;``) de las filas del lote, para descargar sin volver a calcular. */
-export function resultsCsv(
-  result: BatchRunResponse,
-  columns: { key: string; label: string }[],
-): string {
-  const head = ['Fila', 'Nombre', 'Estado', ...columns.map((c) => c.label)];
+/**
+ * Resumen en CSV de las filas del lote, para descargar sin volver a calcular: en español con
+ * «;» y coma decimal; en inglés con «,» y punto. Encabezados en el idioma activo y magnitudes en
+ * el sistema de unidades activo (las de las columnas).
+ */
+export function resultsCsv(result: BatchRunResponse, columns: ResultColumn[]): string {
+  const T = msg().batch;
+  const es = getLang() === 'es';
+  const sep = es ? ';' : ',';
+  const head = [...T.csvHead, ...columns.map((c) => c.label)];
+  const out = (v: unknown) => cell(v, sep, es);
   const rows = (result.rows as BatchRow[]).map((r) =>
     [
       r.index + 1,
@@ -220,62 +220,113 @@ export function resultsCsv(
       STATUS_LABEL[r.status] ?? r.status,
       ...columns.map((c) => {
         const v = r.summary[c.key];
-        if (typeof v === 'boolean') return v ? 'sí' : 'no';
+        if (typeof v === 'boolean') return v ? T.yes : T.no;
         if (Array.isArray(v)) return v.join('; ');
-        if (typeof v === 'number') return Math.round(v * 1000) / 1000;
+        if (typeof v === 'number') return Math.round(columnValue(c, v) * 1000) / 1000;
         return v ?? (r.status === 'error' && c === columns[0] ? r.error : '');
       }),
     ]
-      .map(cell)
-      .join(';'),
+      .map(out)
+      .join(sep),
   );
-  return [head.map(cell).join(';'), ...rows].join('\n') + '\n';
+  return [head.map(out).join(sep), ...rows].join('\n') + '\n';
 }
 
-/** Columnas de la tabla de resultados por modo. */
-export const RESULT_COLUMNS: Record<BatchKind, { key: string; label: string; digits?: number }[]> =
-  {
-    fleet: [
-      { key: 'bhp', label: 'hp', digits: 0 },
-      { key: 's0', label: 'Escala por semejanza', digits: 3 },
-      { key: 's', label: 'Escala', digits: 3 },
-      { key: 'speed_kn', label: 'v [kn]', digits: 2 },
-      { key: 'headrope_m', label: 'Lima [m]', digits: 1 },
-      { key: 'demand_kgf', label: 'R_T [kgf]', digits: 0 },
-      { key: 'area_rate_m2_h', label: 'Área [m²/h]', digits: 0 },
-      { key: 'door', label: 'Portón' },
-      { key: 'warp', label: 'Cable' },
-      { key: 'cost', label: 'Costo', digits: 0 },
-    ],
-    cases: [
-      { key: 'net_id', label: 'Red' },
-      { key: 'vessel_id', label: 'Buque' },
-      { key: 'headrope_m', label: 'Lima [m]', digits: 1 },
-      { key: 'vertical_opening_m', label: 'AV [m]', digits: 2 },
-      { key: 'horizontal_opening_m', label: 'AH [m]', digits: 1 },
-      { key: 'rn_std_3kn_kgf', label: 'R_N 3 kn [kgf]', digits: 0 },
-      { key: 'max_speed_kn', label: 'v máx. [kn]', digits: 2 },
-      { key: 'warp_selected', label: 'Cable' },
-    ],
-    nets: [
-      { key: 'panels', label: 'Paneles', digits: 0 },
-      { key: 'errors', label: 'Errores', digits: 0 },
-      { key: 'warnings', label: 'Avisos', digits: 0 },
-      { key: 'headrope_m', label: 'Lima [m]', digits: 1 },
-      { key: 'vertical_opening_m', label: 'AV [m]', digits: 2 },
-      { key: 'rn_std_3kn_kgf', label: 'R_N 3 kn [kgf]', digits: 0 },
-      { key: 'max_speed_kn', label: 'v máx. [kn]', digits: 2 },
-    ],
-  };
+/** Columna de resultados: clave del resumen, título (con la unidad activa) y decimales. */
+export interface ResultColumn {
+  key: string;
+  label: string;
+  digits?: number;
+  /** Unidad métrica del motor; el valor se convierte al sistema activo para mostrarlo. */
+  unit?: string;
+}
+
+/**
+ * Definición de una columna: clave, decimales, unidad métrica y cómo se escribe la unidad en el
+ * título («[m]» o «/kg»). ``'m²/h'`` se convierte como superficie (por hora).
+ */
+type ColumnDef = [key: string, digits?: number, unit?: string, style?: 'per'];
+
+const COLUMN_DEFS: Record<BatchKind, ColumnDef[]> = {
+  fleet: [
+    ['bhp', 0],
+    ['s0', 3],
+    ['s', 3],
+    ['speed_kn', 2, 'kn'],
+    ['headrope_m', 1, 'm'],
+    ['demand_kgf', 0, 'kgf'],
+    ['area_rate_m2_h', 0, 'm²/h'],
+    ['door'],
+    ['warp'],
+    ['cost', 0],
+  ],
+  cases: [
+    ['net_id'],
+    ['vessel_id'],
+    ['headrope_m', 1, 'm'],
+    ['vertical_opening_m', 2, 'm'],
+    ['horizontal_opening_m', 1, 'm'],
+    ['rn_std_3kn_kgf', 0, 'kgf'],
+    ['max_speed_kn', 2, 'kn'],
+    ['warp_selected'],
+  ],
+  nets: [
+    ['panels', 0],
+    ['errors', 0],
+    ['warnings', 0],
+    ['headrope_m', 1, 'm'],
+    ['vertical_opening_m', 2, 'm'],
+    ['rn_std_3kn_kgf', 0, 'kgf'],
+    ['max_speed_kn', 2, 'kn'],
+  ],
+};
+
+const ECONOMIC_DEFS: ColumnDef[] = [
+  ['fuel_l_trip', 0, 'L'],
+  ['catch_kg_trip', 0, 'kg'],
+  ['cost_per_kg', 2, '$/kg', 'per'],
+  ['margin_trip', 0],
+  ['margin_year', 0],
+];
+
+/** Unidad que se muestra para una unidad del motor (con ``m²/h``, que no está en la tabla). */
+function shownUnit(unit: string): string {
+  return unit === 'm²/h' ? `${unitLabel('m²')}/h` : unitLabel(unit);
+}
+
+/** Valor de una columna en el sistema activo. */
+export function columnValue(c: ResultColumn, v: number): number {
+  if (!c.unit) return v;
+  return c.unit === 'm²/h' ? toDisplay(v, 'm²') : toDisplay(v, c.unit);
+}
+
+function buildColumns(defs: ColumnDef[]): ResultColumn[] {
+  const labels = msg().batch.col;
+  return defs.map(([key, digits, unit, style]) => {
+    const text = labels[key] ?? key;
+    const col: ResultColumn = { key, label: text };
+    if (digits !== undefined) col.digits = digits;
+    if (unit) {
+      col.unit = unit;
+      // «Costo/kg» → «Cost/lb»: la unidad de un precio por unidad es la de la cantidad.
+      col.label =
+        style === 'per'
+          ? `${text}/${shownUnit(unit).replace(/^\$\//, '')}`
+          : `${text} [${shownUnit(unit)}]`;
+    }
+    return col;
+  });
+}
+
+/** Columnas de la tabla de resultados de un modo, en el idioma y las unidades activos. */
+export function resultColumns(mode: BatchKind): ResultColumn[] {
+  return buildColumns(COLUMN_DEFS[mode]);
+}
 
 /** Columnas económicas de la flota (Fase 16), si se pidió la economía. */
-export const ECONOMIC_COLUMNS: { key: string; label: string; digits?: number }[] = [
-  { key: 'fuel_l_trip', label: 'Gasoil/marea [L]', digits: 0 },
-  { key: 'catch_kg_trip', label: 'Captura/marea [kg]', digits: 0 },
-  { key: 'cost_per_kg', label: 'Costo/kg', digits: 2 },
-  { key: 'margin_trip', label: 'Margen/marea', digits: 0 },
-  { key: 'margin_year', label: 'Margen/año', digits: 0 },
-];
+export function economicColumns(): ResultColumn[] {
+  return buildColumns(ECONOMIC_DEFS);
+}
 
 export const LAST_BATCH_KEY = 'last-batch:v1';
 

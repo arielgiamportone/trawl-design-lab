@@ -1,2 +1,117 @@
-/** Textos de «construction» (se completan en la extracción de la Fase 18.3). */
-export const construction = {};
+/** Textos de la pestaña «Construcción» (guía de taller) y de ``lib/construction``. */
+export const construction = {
+  views: {
+    corte: 'Hoja de corte',
+    armado: 'Armado paso a paso',
+    montaje: 'Montaje en relingas',
+    cortes: 'Cabos y cables',
+  },
+  downloads: {
+    pdf: 'Guía en PDF (A4)',
+    xlsx: 'Planilla XLSX',
+    html: 'Imprimir guía',
+  },
+  file: (net: string, format: string) => `guia-${net}.${format}`,
+  defaultNet: 'red',
+  plane: { upper: 'Dorso', lower: 'Vientre', side: 'Costado' } as Record<string, string>,
+  joinText: (
+    aEdge: string,
+    a: string,
+    meshesA: number,
+    bEdge: string,
+    b: string,
+    meshesB: number,
+    rule: string,
+  ) =>
+    `Unir el ${aEdge} de ${a} (${meshesA} mallas) con el ${bEdge} de ${b} (${meshesB} mallas). ${rule}.`,
+  intro:
+    'Del diseño al taller: qué paño comprar, cómo cortar cada pieza, en qué orden unirlas y cómo armar la red en las relingas. Vaya tildando lo que hace: queda guardado en este navegador, también sin conexión.',
+  variant: 'Variante de la red',
+  std: 'Estándar',
+  mod: 'Modificada',
+  eye: 'Sobrante por gaza',
+  preparing: 'Preparando…',
+  empty: 'Complete el caso para ver la guía de construcción.',
+  section: 'Sección de la guía',
+  assumptions: 'Supuestos de la guía',
+  // Resumen
+  panels: 'Paños',
+  pieces: (n: number) => `${n} piezas`,
+  joins: 'Uniones',
+  buy: 'Paño a comprar',
+  progress: 'Avance del taller',
+  // Hoja de corte
+  colMaterial: 'Material',
+  colMesh: 'Mallero',
+  colTwine: 'Ø hilo',
+  colSize: 'Ancho × alto [mallas]',
+  colWeight: 'Peso',
+  piecesTitle: 'Piezas',
+  pieceCut: (id: string) => `Paño ${id} cortado`,
+  pieceCount: (n: number) => `${n} ${n === 1 ? 'pieza' : 'piezas'}`,
+  pair: ' (par)',
+  pieceSpec: (
+    planes: string,
+    material: string,
+    mesh: string,
+    twine: string,
+    mouth: number,
+    codend: number,
+    depth: number,
+  ) =>
+    `${planes} · ${material} ${mesh}, hilo Ø ${twine} · mallas: boca ${mouth}, bolsa ${codend}, alto ${depth}`,
+  inferred: 'inferido',
+  pieceStock: (
+    start: string,
+    width: number,
+    depth: number,
+    paired: boolean,
+    waste: string,
+    weight: string,
+  ) =>
+    `${start}. Rectángulo: ${width} × ${depth} mallas${paired ? ' por par' : ''}, desperdicio ${waste} %; peso por pieza ${weight}.`,
+  // Armado
+  noJoins: 'La red no tiene uniones.',
+  step: (step: number, total: number, plane: string, times: number) =>
+    `Paso ${step} de ${total} · ${plane}${times > 1 ? ` · ${times} veces` : ''}`,
+  prev: '← Anterior',
+  done: 'Hecho',
+  doneNext: 'Hecho, siguiente →',
+  mapLabel: (step: number, a: string, b: string) => `Paños de la unión ${step}: ${a} y ${b}`,
+  allJoins: 'Todas las uniones',
+  stepDone: (step: number) => `Paso ${step} hecho`,
+  stepLink: (step: number, a: string, b: string) => `Paso ${step}: ${a} + ${b}`,
+  stepMeshes: (plane: string, a: number, b: number, rule: string) =>
+    ` ${plane} · ${a} : ${b} mallas · ${rule}`,
+  // Montaje
+  floatsAria: (n: number) => `${n} boyas sobre la lima`,
+  centre: 'centro',
+  ropesTitle: 'Paño en las relingas',
+  ropesTable: 'Montaje en relingas',
+  colRope: 'Relinga',
+  colPart: 'Tramo',
+  colRopeLen: 'Cabo',
+  colMeshes: 'Mallas',
+  colSchedule: 'Pauta',
+  eHelp:
+    'E = largo de cabo / largo del paño estirado. En las alas el paño se arma por su costado (una malla por fila de alto).',
+  floatsTitle: (n: number, d: string) => `Boyas sobre la lima (${n} de Ø ${d})`,
+  floatsHelp: (unit: string) =>
+    `Distancia al centro de la lima en ${unit} (− izquierda, + derecha).`,
+  metres: 'metros',
+  feet: 'pies',
+  ballastTitle: 'Lastre del burlón',
+  colZone: 'Zona',
+  colWhere: 'Dónde',
+  colMin: 'Mínimo',
+  colMax: 'Máximo',
+  // Cortes
+  cutsTable: 'Cortes de cabos, cables y cadenas',
+  colPiece: 'Pieza',
+  colQuantity: 'Cantidad',
+  colFinished: 'Terminado',
+  colEyes: 'Gazas',
+  colCut: 'Cortar',
+  cutHelp: (allowance: string) =>
+    `Largo de corte = largo terminado + ${allowance} por gaza o empalme (ajústelo arriba según el cabo y el empalme que use).`,
+};

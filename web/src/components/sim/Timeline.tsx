@@ -1,4 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useT } from '../../i18n';
+import { fmtNum } from '../../lib/format';
 import { useMediaQuery } from '../../lib/theme';
 
 interface Props {
@@ -22,6 +24,7 @@ const SEGMENT_S = 1.2;
  */
 export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
   const reduced = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const T = useT().explore.timeline;
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(1);
   const tRef = useRef(t);
@@ -60,12 +63,12 @@ export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
   };
 
   return (
-    <div className="timeline" role="group" aria-label="Línea de tiempo de la animación">
+    <div className="timeline" role="group" aria-label={T.label}>
       <button
         type="button"
         className="btn small"
         onClick={() => stepTo(-1)}
-        aria-label="Estado anterior"
+        aria-label={T.prev}
       >
         ⏮
       </button>
@@ -76,14 +79,14 @@ export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
           onClick={toggle}
           aria-pressed={playing}
         >
-          {playing ? '⏸ Pausa' : '▶ Reproducir'}
+          {playing ? T.pause : T.play}
         </button>
       )}
       <button
         type="button"
         className="btn small"
         onClick={() => stepTo(1)}
-        aria-label="Estado siguiente"
+        aria-label={T.next}
       >
         ⏭
       </button>
@@ -107,10 +110,10 @@ export function Timeline({ n, t, onChange, valueLabel, variableLabel }: Props) {
         {variableLabel}: <strong>{valueLabel}</strong>
       </span>
       {!reduced && (
-        <div className="segmented" role="group" aria-label="Velocidad de reproducción">
+        <div className="segmented" role="group" aria-label={T.speed}>
           {SPEEDS.map((s) => (
             <button key={s} type="button" aria-pressed={speed === s} onClick={() => setSpeed(s)}>
-              {String(s).replace('.', ',')}×
+              {fmtNum(s)}×
             </button>
           ))}
         </div>

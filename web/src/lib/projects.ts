@@ -1,4 +1,5 @@
 /** Proyectos: guardar/abrir casos con nombre (en el navegador) y exportar/importar archivos. */
+import { msg } from '../i18n';
 import { sanitizeCase, type CaseState } from '../state/model';
 import { loadJson, saveJson } from './storage';
 
@@ -18,7 +19,7 @@ export function toProjectFile(name: string, state: CaseState, now = new Date()):
   return {
     format: PROJECT_FORMAT,
     version: 1,
-    name: name.trim() || 'Proyecto sin nombre',
+    name: name.trim() || msg().state.projects.untitled,
     savedAt: now.toISOString(),
     case: state,
   };
@@ -32,21 +33,21 @@ export function parseProjectFile(text: string): ParsedProject {
   try {
     raw = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'El archivo no es JSON válido.' };
+    return { ok: false, error: msg().state.projects.notJson };
   }
   const r = raw as Partial<ProjectFile> | null;
   if (!r || typeof r !== 'object' || r.format !== PROJECT_FORMAT) {
-    return { ok: false, error: 'No es un proyecto de trawl-design-lab.' };
+    return { ok: false, error: msg().state.projects.notProject };
   }
   if (r.version !== 1) {
-    return { ok: false, error: `Versión de proyecto no soportada (${String(r.version)}).` };
+    return { ok: false, error: msg().state.projects.badVersion(String(r.version)) };
   }
   return {
     ok: true,
     project: {
       format: PROJECT_FORMAT,
       version: 1,
-      name: typeof r.name === 'string' && r.name.trim() ? r.name : 'Proyecto importado',
+      name: typeof r.name === 'string' && r.name.trim() ? r.name : msg().state.projects.imported,
       savedAt: typeof r.savedAt === 'string' ? r.savedAt : new Date(0).toISOString(),
       case: sanitizeCase(r.case),
     },
@@ -61,7 +62,7 @@ export function projectFileName(name: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
-  return `${slug || 'proyecto'}.trawl.json`;
+  return `${slug || msg().state.projects.slug}.trawl.json`;
 }
 
 /** Proyectos guardados en este navegador, del más reciente al más viejo. */

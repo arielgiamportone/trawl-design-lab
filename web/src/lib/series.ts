@@ -1,5 +1,6 @@
 /** Derivación de series para gráficos y KPI a partir de ``DesignData``. */
 import type { DesignData, PerformanceWindow, Series } from '../api/result';
+import { msg } from '../i18n';
 import { DRAG_METHODS, PULL_METHODS } from './labels';
 
 export const at = (s: Series | null | undefined, i: number): number | null => {
@@ -116,8 +117,9 @@ export function composition(d: DesignData, i: number): CompositionRow[] {
     doors,
     total: rn + floats + warps + doors,
   });
-  const rows = [mk('Estándar', at(r.drag.rn.std, i) ?? 0)];
-  if (hasModified(d)) rows.push(mk('Modificada', at(r.drag.rn.mod, i) ?? 0));
+  const V = msg().labels.variantsTitle;
+  const rows = [mk(V.std, at(r.drag.rn.std, i) ?? 0)];
+  if (hasModified(d)) rows.push(mk(V.mod, at(r.drag.rn.mod, i) ?? 0));
   return rows;
 }
 

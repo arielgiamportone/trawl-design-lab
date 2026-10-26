@@ -1,5 +1,7 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent } from 'react';
+import { useT } from '../i18n';
 import { downloadBlob } from '../lib/download';
+import { fmtDate } from '../lib/format';
 import {
   deleteProject,
   listProjects,
@@ -25,6 +27,8 @@ export function ProjectBar() {
   const [message, setMessage] = useState<{ tone: 'good' | 'crit'; text: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const ids = useId();
+  const T = useT();
+  const P = T.expert.project;
 
   // Atajos: Ctrl/Cmd+Z deshace, Ctrl/Cmd+Shift+Z o Ctrl+Y rehace (fuera de campos de texto,
   // donde rige el deshacer propio del navegador).
@@ -47,19 +51,19 @@ export function ProjectBar() {
   const save = () => {
     const n = name.trim();
     if (!n) {
-      setMessage({ tone: 'crit', text: 'Escriba un nombre para el proyecto.' });
+      setMessage({ tone: 'crit', text: P.needName });
       return;
     }
     setProjects(saveProject(toProjectFile(n, state)));
-    setMessage({ tone: 'good', text: `Guardado «${n}» en este navegador.` });
+    setMessage({ tone: 'good', text: P.saved(n) });
   };
   const open = (p: ProjectFile) => {
     replace(p.case);
     setName(p.name);
-    setMessage({ tone: 'good', text: `Abierto «${p.name}».` });
+    setMessage({ tone: 'good', text: P.opened(p.name) });
   };
   const exportFile = () => {
-    const p = toProjectFile(name || 'proyecto', state);
+    const p = toProjectFile(name || P.defaultName, state);
     downloadBlob(
       new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' }),
       projectFileName(p.name),
@@ -78,42 +82,42 @@ export function ProjectBar() {
   };
 
   return (
-    <div className="project-bar" role="toolbar" aria-label="Proyecto">
+    <div className="project-bar" role="toolbar" aria-label={P.toolbar}>
       <button
         type="button"
         className="btn small ghost"
         onClick={undo}
         disabled={!canUndo}
-        title="Deshacer (Ctrl+Z)"
+        title={P.undoTitle}
       >
-        ↶ Deshacer
+        {P.undo}
       </button>
       <button
         type="button"
         className="btn small ghost"
         onClick={redo}
         disabled={!canRedo}
-        title="Rehacer (Ctrl+Shift+Z)"
+        title={P.redoTitle}
       >
-        ↷ Rehacer
+        {P.redo}
       </button>
       <details className="project-menu">
-        <summary className="btn small">Proyectos</summary>
+        <summary className="btn small">{P.projects}</summary>
         <div className="project-pop card card-pad">
           <label htmlFor={`${ids}-name`} className="label">
-            Nombre del proyecto
+            {P.name}
           </label>
           <div className="param-row">
             <input
               id={`${ids}-name`}
               type="text"
               value={name}
-              placeholder="p. ej. Red Beagle 180 HP"
+              placeholder={P.namePlaceholder}
               onChange={(e) => setName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && save()}
             />
             <button type="button" className="btn small primary" onClick={save}>
-              Guardar
+              {T.common.save}
             </button>
           </div>
           {message && (
@@ -123,26 +127,26 @@ export function ProjectBar() {
           )}
           <div className="project-actions">
             <button type="button" className="btn small" onClick={exportFile}>
-              Exportar archivo
+              {P.export}
             </button>
             <button type="button" className="btn small" onClick={() => fileRef.current?.click()}>
-              Importar archivo
+              {P.import}
             </button>
             <button type="button" className="btn small ghost" onClick={reset}>
-              Caso nuevo
+              {P.newCase}
             </button>
             <input
               ref={fileRef}
               type="file"
               accept=".json,application/json"
               hidden
-              aria-label="Archivo de proyecto"
+              aria-label={P.file}
               onChange={(e) => void importFile(e)}
             />
           </div>
-          <h3 className="project-list-title">Guardados en este navegador</h3>
+          <h3 className="project-list-title">{P.savedHere}</h3>
           {projects.length === 0 ? (
-            <p className="help">Todavía no hay proyectos guardados.</p>
+            <p className="help">{P.none}</p>
           ) : (
             <ul className="project-list">
               {projects.map((p) => (
@@ -150,19 +154,16 @@ export function ProjectBar() {
                   <span className="project-name">
                     {p.name}
                     <span className="help">
-                      {new Date(p.savedAt).toLocaleString('es-AR', {
-                        dateStyle: 'short',
-                        timeStyle: 'short',
-                      })}
+                      {fmtDate(new Date(p.savedAt), { dateStyle: 'short', timeStyle: 'short' })}
                     </span>
                   </span>
                   <button type="button" className="btn small" onClick={() => open(p)}>
-                    Abrir
+                    {P.open}
                   </button>
                   <button
                     type="button"
                     className="btn small ghost"
-                    aria-label={`Eliminar ${p.name}`}
+                    aria-label={P.remove(p.name)}
                     onClick={() => setProjects(deleteProject(p.name))}
                   >
                     ✕

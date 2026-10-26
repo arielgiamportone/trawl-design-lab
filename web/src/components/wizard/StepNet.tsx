@@ -1,4 +1,7 @@
 import { useId, useState } from 'react';
+import { useT } from '../../i18n';
+import { fmtNum } from '../../lib/format';
+import { toDisplay, unitLabel } from '../../lib/units';
 import { hpLabel, hpMatches, isDraft, RIG_LABEL } from '../../lib/catalog';
 import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
@@ -7,6 +10,7 @@ import { ChoiceCards } from './ChoiceCards';
 export function StepNet() {
   const { state, update, catalogs } = useCase();
   const ids = useId();
+  const T = useT().wizard.net;
   const door = state.door ?? catalogs.doors[0]?.id ?? '';
   const others = catalogs.nets.filter((n) => n.id !== state.net);
   const [all, setAll] = useState(false);
@@ -20,12 +24,12 @@ export function StepNet() {
   const hidden = catalogs.nets.filter((n) => !isDraft(n)).length - suited.length;
   return (
     <>
-      <p className="wizard-lead">Elija la red y los portones que la abren.</p>
+      <p className="wizard-lead">{T.lead}</p>
       <ChoiceCards
         name={`${ids}-net`}
         legend={
           <>
-            Red <HelpTip topic="net" label="Red" />
+            {T.net} <HelpTip topic="net" label={T.net} />
           </>
         }
         value={state.net}
@@ -48,21 +52,15 @@ export function StepNet() {
       />
       {(hidden > 0 || all) && (
         <p className="help" data-testid="net-filter">
-          {all ? (
-            'Se muestran todas las redes del catálogo.'
-          ) : (
-            <>
-              Se muestran las redes para un buque de {bhp} hp; {hidden} más no son de esa potencia.
-            </>
-          )}{' '}
+          {all ? T.showingAll : T.showingFor(bhp, hidden)}{' '}
           <button type="button" className="link-button" onClick={() => setAll((a) => !a)}>
-            {all ? 'Filtrar por potencia' : 'Ver todas'}
+            {all ? T.filter : T.seeAll}
           </button>
         </p>
       )}
       {state.scaled && (
         <p className="alert info" role="status">
-          <span>Se está usando una versión escalada de esta red (desde «Optimizar»).</span>
+          <span>{T.scaled}</span>
         </p>
       )}
 
@@ -80,11 +78,11 @@ export function StepNet() {
               }))
             }
           />
-          Comparar con otra red <HelpTip topic="net_modified" label="Red para comparar" />
+          {T.compare} <HelpTip topic="net_modified" label={T.compareNet} />
         </label>
         {state.netModified && (
           <select
-            aria-label="Red para comparar"
+            aria-label={T.compareNet}
             value={state.netModified}
             onChange={(e) =>
               update((s) => ({ ...s, netModified: e.target.value, edits: { ...s.edits, mod: {} } }))
@@ -101,14 +99,14 @@ export function StepNet() {
 
       <div className="field">
         <label htmlFor={`${ids}-door`}>
-          Portones <HelpTip topic="door" label="Portones" />
+          {T.doors} <HelpTip topic="door" label={T.doors} />
         </label>
         <select id={`${ids}-door`} value={door} onChange={(e) => update({ door: e.target.value })}>
           {catalogs.doors.map((d) => (
             <option key={d.id} value={d.id}>
               {d.name}
               {d.area_m2 != null
-                ? ` (${d.area_m2.toLocaleString('es-AR', { maximumFractionDigits: 2 })} m²)`
+                ? ` (${fmtNum(toDisplay(d.area_m2, 'm²'), { maximumFractionDigits: 2 })} ${unitLabel('m²')})`
                 : ''}
             </option>
           ))}

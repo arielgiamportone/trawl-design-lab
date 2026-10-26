@@ -6,6 +6,7 @@
  * red (o si el usuario lo elige), el cliente de la API atiende los pedidos con el motor local:
  * las mismas rutas y respuestas que la API (``trawlkit.api.offline``).
  */
+import { msg as messages } from '../i18n';
 import { APP_CONTRACT } from '../lib/connection';
 import { loadJson, removeKey, saveJson } from '../lib/storage';
 import {
@@ -74,12 +75,22 @@ function getWorker(): Worker {
       stage?: string;
       out?: string;
       message?: string;
+      code?: 'download' | 'notStarted';
+      arg?: string;
     };
     const p = pending.get(m.id);
     if (!p) return;
-    if (m.type === 'progress') return p.onProgress?.(m.stage ?? '');
+    const O = messages().api.offline;
+    if (m.type === 'progress') {
+      const stage = m.stage ?? '';
+      return p.onProgress?.(O.stages[stage as keyof typeof O.stages] ?? stage);
+    }
     pending.delete(m.id);
-    if (m.type === 'error') p.reject(new Error(m.message));
+    if (m.type === 'error') {
+      if (m.code === 'download') p.reject(new Error(O.downloadFailed(m.arg ?? '')));
+      else if (m.code === 'notStarted') p.reject(new Error(O.notStarted));
+      else p.reject(new Error(m.message));
+    }
     else p.resolve(m.out);
   };
   return worker;
@@ -114,7 +125,7 @@ export function stopWorker(): void {
 
 async function manifest(): Promise<WheelManifest> {
   const res = await fetch(`${wheelDir()}manifest.json`, { cache: 'no-cache' }).catch(() => null);
-  if (!res?.ok) throw new Error('esta versión de la app no trae el motor sin conexión');
+  if (!res?.ok) throw new Error(messages().api.offline.noEngine);
   return (await res.json()) as WheelManifest;
 }
 
@@ -168,9 +179,10 @@ export async function prepareOffline(
 ): Promise<ReadyInfo> {
   let bytes = 0;
   const m = await manifest();
-  onProgress('Buscando los archivos…', 0);
+  const O = messages().api.offline;
+  onProgress(O.searching, 0);
   const lockRes = await fetch(`${PYODIDE_URL}pyodide-lock.json`);
-  if (!lockRes.ok) throw new Error(`no se pudo leer la lista de paquetes (${lockRes.status})`);
+  if (!lockRes.ok) throw new Error(O.lockFailed(lockRes.status));
   const lock = (await lockRes.json()) as Parameters<typeof packageFiles>[0];
   const urls = [
     ...PYODIDE_CORE.map((f) => `${PYODIDE_URL}${f}`),
@@ -181,22 +193,22 @@ export async function prepareOffline(
   ];
   const cache = typeof caches !== 'undefined' ? await caches.open(OFFLINE_CACHE) : null;
   for (const [i, url] of urls.entries()) {
-    onProgress(`Descargando ${i + 1} de ${urls.length}…`, bytes);
+    onProgress(O.downloading(i + 1, urls.length), bytes);
     const hit = await cache?.match(url);
     if (hit) {
       bytes += Number(hit.headers.get('content-length') ?? 0);
       continue;
     }
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`falló la descarga de ${url.split('/').pop()} (${res.status})`);
+    if (!res.ok) throw new Error(O.fileFailed(`${url.split('/').pop()} (${res.status})`));
     const blob = await res.clone().blob();
     bytes += blob.size;
     await cache?.put(url, res);
   }
   await startEngine((stage) => onProgress(stage, bytes));
-  onProgress('Probando un diseño…', bytes);
+  onProgress(O.testing, bytes);
   const test = await localRequest('POST', '/design', '{}');
-  if (!test.ok) throw new Error('el motor sin conexión no pudo calcular el caso de prueba');
+  if (!test.ok) throw new Error(O.testFailed);
   const info: ReadyInfo = {
     version: m.version,
     pyodide: PYODIDE_VERSION,

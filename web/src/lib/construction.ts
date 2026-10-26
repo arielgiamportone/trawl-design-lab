@@ -5,6 +5,7 @@
  * el redero puede ir tildando en el teléfono aun sin conexión.
  */
 import type { ConstructionGuide, GuideJoin } from '../api/client';
+import { msg } from '../i18n';
 import { loadJson, saveJson } from './storage';
 
 export const GUIDE_VIEW_KEY = 'trawl-design-lab:guide-view';
@@ -60,11 +61,11 @@ export function joinPanels(j: GuideJoin): string[] | 'all' {
   return j.kind === 'side_seam' ? 'all' : [j.a, j.b];
 }
 
-/** Texto de la unión para la lista y la lectura en voz alta. */
+/**
+ * Texto de la unión para la lista y la lectura en voz alta (los bordes y la regla llegan de la
+ * API ya en el idioma de la interfaz).
+ */
 export function joinText(j: GuideJoin): string {
   const rule = j.rule.charAt(0).toUpperCase() + j.rule.slice(1);
-  return (
-    `Unir el ${j.a_edge} de ${j.a} (${j.meshes_a} mallas) con el ${j.b_edge} de ${j.b} ` +
-    `(${j.meshes_b} mallas). ${rule}.`
-  );
+  return msg().construction.joinText(j.a_edge, j.a, j.meshes_a, j.b_edge, j.b, j.meshes_b, rule);
 }

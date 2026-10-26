@@ -1,5 +1,6 @@
 /** Estado del caso de diseño y armado del ``DesignRequest``. */
 import type { DesignRequest, Door, NetSpec, Vessel } from '../api/client';
+import { msg } from '../i18n';
 import { sanitizeContributions, type Component } from '../lib/components';
 import { editErrors, editedSpec, type PanelEdits } from '../lib/panels';
 import { buildParams, type ParamMeta, type ParamValues } from '../lib/params';
@@ -103,7 +104,7 @@ function sanitizeFromBatch(raw: unknown): FromBatch | null {
   const r = raw as Partial<FromBatch>;
   if (!r.vessel || typeof r.vessel !== 'object' || typeof r.vessel.bhp !== 'number') return null;
   return {
-    label: typeof r.label === 'string' ? r.label : 'lote',
+    label: typeof r.label === 'string' ? r.label : msg().state.batchLabel,
     vessel: r.vessel,
     door: r.door && typeof r.door === 'object' ? r.door : null,
   };

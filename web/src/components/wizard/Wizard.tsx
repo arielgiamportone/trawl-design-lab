@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { useT } from '../../i18n';
 import { loadJson, saveJson } from '../../lib/storage';
 import { useCase } from '../../state/useCase';
 import { StepNet } from './StepNet';
@@ -12,6 +13,7 @@ const STEP_KEY = 'trawl-design-lab:wizard-step';
 /** Modo guiado: el mismo caso de diseño, en cuatro pasos y con diagnóstico en lenguaje llano. */
 export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
   const { catalogs, errors } = useCase();
+  const T = useT().wizard;
   const [step, setStepState] = useState<number>(() => {
     const s = loadJson<number>(STEP_KEY);
     return typeof s === 'number' && s >= 0 && s < STEPS.length ? s : 0;
@@ -32,13 +34,13 @@ export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
     headingRef.current?.focus();
   }, [step]);
 
-  const current = STEPS[step] ?? STEPS[0];
+  const current = (STEPS[step] ?? STEPS[0])!;
   const nErrors = Object.keys(errors).length;
   const last = step === STEPS.length - 1;
 
   return (
     <div className="wizard">
-      <nav aria-label="Pasos del diseño guiado">
+      <nav aria-label={T.stepsLabel}>
         <ol className="stepper">
           {STEPS.map((s, i) => (
             <li key={s.id} className={i === step ? 'current' : i < step ? 'done' : ''}>
@@ -62,12 +64,12 @@ export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
 
       <section className="card card-pad wizard-body" aria-labelledby={`${ids}-h`}>
         <h2 id={`${ids}-h`} className="wizard-title" tabIndex={-1} ref={headingRef}>
-          Paso {step + 1} de {STEPS.length}: {current.title}
+          {T.stepHeading(step + 1, STEPS.length, current.title)}
         </h2>
         {catalogs.error && (
           <div className="alert error" role="alert">
             <span>
-              <strong>No se pudieron cargar los catálogos.</strong> {catalogs.error.message}
+              <strong>{T.catalogError}</strong> {catalogs.error.message}
             </span>
           </div>
         )}
@@ -83,11 +85,11 @@ export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
             onClick={() => setStep(step - 1)}
             disabled={step === 0}
           >
-            ← Anterior
+            {T.prev}
           </button>
           {nErrors > 0 && !last && (
             <span className="help" role="status">
-              Hay {nErrors === 1 ? 'un dato' : `${nErrors} datos`} para corregir.
+              {T.toFix(nErrors)}
             </span>
           )}
           {!last ? (
@@ -97,11 +99,11 @@ export function Wizard({ onExpert }: { onExpert: (tab?: string) => void }) {
               onClick={() => setStep(step + 1)}
               disabled={nErrors > 0}
             >
-              {step === STEPS.length - 2 ? 'Ver resultado →' : 'Siguiente →'}
+              {step === STEPS.length - 2 ? T.seeResult : T.next}
             </button>
           ) : (
             <button type="button" className="btn" onClick={() => setStep(0)}>
-              Empezar de nuevo el recorrido
+              {T.restart}
             </button>
           )}
         </div>

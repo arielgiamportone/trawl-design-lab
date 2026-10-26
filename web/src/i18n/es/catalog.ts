@@ -79,8 +79,7 @@ export const catalog = {
   useNet: 'Usar esta red',
   draftNote:
     'Borrador: hay valores supuestos o el validador encontró errores; revíselo antes de usarla.',
-  provCaption: (n: number, pct: number) =>
-    `Procedencia de ${n} valores (${pct} % con fuente)`,
+  provCaption: (n: number, pct: number) => `Procedencia de ${n} valores (${pct} % con fuente)`,
   provByKind: 'Procedencia por tipo',
   validator: 'Validador de consistencia',
   closes: 'La red cierra: empalmes, bocana, cortes y costados sin observaciones.',

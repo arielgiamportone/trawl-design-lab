@@ -7,6 +7,8 @@
  * arrastre de Δ metros equivale exactamente a ``Δ · 1000 / mallero`` mallas.
  */
 import type { components } from '../api/schema';
+import { msg } from '../i18n';
+import { localized } from './labels';
 import { PANEL_FIELDS, type PanelField } from './panels';
 
 export type LayoutShape = components['schemas']['LayoutShape'];
@@ -23,11 +25,7 @@ export const HANDLE_FIELD: Record<Handle, PanelField> = {
   top: 'meshes_top',
 };
 
-export const HANDLE_LABEL: Record<Handle, string> = {
-  depth: 'alto (mallas N)',
-  bottom: 'borde hacia la bolsa',
-  top: 'borde hacia la boca',
-};
+export const HANDLE_LABEL: Record<Handle, string> = localized(() => msg().labels.handles);
 
 function startValue(shape: LayoutShape, handle: Handle): number {
   if (handle === 'depth') return shape.meshes_depth;

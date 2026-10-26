@@ -80,7 +80,11 @@ export function AssemblyPanel() {
         </label>
         <label className="inline-field">
           {T.port}
-          <select aria-label={T.portAria} value={region} onChange={(e) => setRegion(e.target.value)}>
+          <select
+            aria-label={T.portAria}
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+          >
             <option value="">{T.anyRegion}</option>
             {Object.entries(REGION_LABEL).map(([k, v]) => (
               <option key={k} value={k}>

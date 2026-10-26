@@ -7,11 +7,13 @@ import {
   setEnginePref,
   type ReadyInfo,
 } from '../engine/offline';
+import { msg, useT } from '../i18n';
+import { fmtNum } from '../lib/format';
 import { setLowData, useLowData } from '../lib/lowdata';
 import { useConnection } from '../state/connectionContext';
 
 function mb(bytes: number): string {
-  return `${(bytes / 1e6).toLocaleString('es-AR', { maximumFractionDigits: 1 })} MB`;
+  return `${fmtNum(bytes / 1e6, { maximumFractionDigits: 1 })} MB`;
 }
 
 /**
@@ -25,10 +27,11 @@ export function OfflinePanel() {
   const [pref, setPref] = useState(() => enginePref());
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const T = useT().api.offlinePanel;
 
   const prepare = async () => {
     setError(null);
-    setBusy('Empezando…');
+    setBusy(msg().api.offlinePanel.starting);
     try {
       const done = await prepareOffline((stage, bytes) =>
         setBusy(bytes > 0 ? `${stage} (${mb(bytes)})` : stage),
@@ -56,16 +59,13 @@ export function OfflinePanel() {
   return (
     <details className="accordion offline-panel" data-testid="offline-panel">
       <summary>
-        <span>Uso sin conexión y bajo consumo de datos</span>
-        {info && <span className="badge good">listo sin conexión</span>}
-        {conn.local && <span className="badge accent">calculando en el teléfono</span>}
+        <span>{T.title}</span>
+        {info && <span className="badge good">{T.ready}</span>}
+        {conn.local && <span className="badge accent">{T.local}</span>}
       </summary>
       <div className="accordion-body">
         <p className="help">
-          Descargue el motor de cálculo una sola vez (unos 15 MB; mejor con wifi). Después, sin
-          señal, el diseño, la simulación, los planos y el informe HTML se calculan en este teléfono
-          (las simulaciones grandes piden bajar la resolución). Los PDF, el refinamiento de la
-          optimización y los cursos del aula siguen necesitando conexión.
+          {T.intro}
         </p>
         {!info ? (
           <button
@@ -74,36 +74,36 @@ export function OfflinePanel() {
             disabled={busy !== null}
             onClick={() => void prepare()}
           >
-            {busy ?? 'Preparar uso sin conexión'}
+            {busy ?? T.prepare}
           </button>
         ) : (
           <>
             <p className="alert good" role="status">
-              Motor guardado ({mb(info.bytes)}, trawlkit {info.version}). Sin señal se usa solo.
+              {T.saved(mb(info.bytes), info.version)}
             </p>
-            <div className="segmented" role="group" aria-label="Dónde calcular">
+            <div className="segmented" role="group" aria-label={T.where}>
               <button type="button" aria-pressed={pref === 'auto'} onClick={() => choose('auto')}>
-                En el servidor si hay señal
+                {T.server}
               </button>
               <button type="button" aria-pressed={pref === 'local'} onClick={() => choose('local')}>
-                Siempre en el teléfono
+                {T.phone}
               </button>
             </div>
             <p>
               <button type="button" className="btn small ghost" onClick={() => void forget()}>
-                Borrar el motor descargado
+                {T.forget}
               </button>
             </p>
           </>
         )}
         {error && (
           <p className="alert crit" role="alert">
-            No se pudo preparar: {error}
+            {T.error} {error}
           </p>
         )}
         <label className="check">
           <input type="checkbox" checked={lowData} onChange={(e) => setLowData(e.target.checked)} />
-          Bajo consumo de datos: sin vistas 3D ni simulación (pestañas ocultas)
+          {T.lowData}
         </label>
       </div>
     </details>

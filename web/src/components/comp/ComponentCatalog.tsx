@@ -76,7 +76,11 @@ export function ComponentCatalog() {
           value={f.text}
           onChange={(e) => set({ text: e.target.value })}
         />
-        <select aria-label={T.brand} value={f.brand} onChange={(e) => set({ brand: e.target.value })}>
+        <select
+          aria-label={T.brand}
+          value={f.brand}
+          onChange={(e) => set({ brand: e.target.value })}
+        >
           <option value="">{T.allBrands}</option>
           <option value="-">{T.genericAndOwn}</option>
           {brandList.map((b) => (

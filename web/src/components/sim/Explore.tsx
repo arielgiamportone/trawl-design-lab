@@ -17,10 +17,22 @@ import {
   variableDef,
   VARIABLES,
   type ExploreForm,
+  type Indicator,
 } from '../../lib/explore';
-import { fmt, fmtFixed } from '../../lib/format';
+import { fmtFixed } from '../../lib/format';
+import { useT } from '../../i18n';
 import { recall, remember } from '../../lib/memo';
-import { SIM_SPEEDS, speedLabel } from '../../lib/simulate';
+import {
+  fromInput,
+  inputStep,
+  inputValue,
+  resolutionLabel,
+  SIM_SPEEDS,
+  simUnit,
+  simValueOpt,
+  speedLabel,
+} from '../../lib/simulate';
+import { fmtU, toDisplay, unitLabel } from '../../lib/units';
 import { useCase } from '../../state/useCase';
 import type { AnimColor, AnimScope, NetAnimHandle } from '../sim3d/NetAnim';
 import { StateChart } from './StateChart';
@@ -31,10 +43,20 @@ const REQ_KEY = 'explore:request';
 
 const CHARTS = ['dp', 'pull', 'av', 'fuel', 'opening', 'l50'] as const;
 
+/** Las tallas (L50, SR) quedan en la unidad de la especie; el resto, en el sistema activo. */
+const isLength = (ind: Indicator) => ind.unit === 'talla';
+const indUnit = (r: ExploreResponse, ind: Indicator) =>
+  isLength(ind) ? unitOf(r, ind) : simUnit(ind.unit);
+const indValue = (ind: Indicator, v: number | null) =>
+  isLength(ind) ? v : simValueOpt(v, ind.unit);
+
 /** Explorador: estados de red, portones y cables al recorrer una variable, animados. */
 export function Explore() {
   const { committed, state } = useCase();
   const ids = useId();
+  const M = useT();
+  const T = M.explore;
+  const S = M.simulate;
   const [form, setFormState] = useState<ExploreForm>(
     () =>
       recall<ExploreForm>(EXPLORE_FORM_KEY) ?? {
@@ -97,9 +119,11 @@ export function Explore() {
   const rDef = r ? variableDef(r.variable as ExploreForm['variable']) : def;
   const current = valueAt(values, t);
   const fmtVar = useCallback(
-    (v: number | null) => (v === null ? '—' : `${fmtFixed(v, rDef.digits)} ${rDef.unit}`),
+    (v: number | null) => fmtU(v, rDef.unit, { digits: rDef.digits }),
     [rDef],
   );
+  // Valor ya convertido al sistema activo (ejes de los gráficos).
+  const fmtShownVar = (x: number) => `${fmtFixed(x, rDef.digits)} ${unitLabel(rDef.unit)}`;
   const steps = valuesFor(def, form.from, form.to, form.steps);
   const engine = (r?.engine ?? {}) as Record<string, number>;
 
@@ -107,7 +131,9 @@ export function Explore() {
     const c = anim.current?.canvas();
     if (!c) return;
     anim.current?.render();
-    c.toBlob((b) => b && downloadBlob(b, `aparejo-${r?.variable}-${fmtFixed(current, 1)}.png`));
+    c.toBlob(
+      (b) => b && downloadBlob(b, `${T.fileStem}-${r?.variable}-${fmtFixed(current, 1)}.png`),
+    );
   };
   const recordVideo = async () => {
     const c = anim.current?.canvas() ?? null;
@@ -115,7 +141,7 @@ export function Explore() {
     setRecording(true);
     try {
       const blob = await recordTimeline(c, Math.max(1, frames.length - 1), setT);
-      downloadBlob(blob, `aparejo-${r?.variable}.webm`);
+      downloadBlob(blob, `${T.fileStem}-${r?.variable}.webm`);
     } finally {
       setRecording(false);
     }
@@ -123,14 +149,10 @@ export function Explore() {
 
   return (
     <div className="explore">
-      <p className="section-sub">
-        Elija una variable y su rango: se calculan los estados de equilibrio de la red, los portones
-        y los cables, y la animación pasa de uno a otro (interpolando entre estados calculados). El
-        tablero sigue al estado que se ve.
-      </p>
-      <div className="opt-form explore-form" role="group" aria-label="Variable y escenario">
+      <p className="section-sub">{T.intro}</p>
+      <div className="opt-form explore-form" role="group" aria-label={T.formLabel}>
         <div className="field explore-var">
-          <label htmlFor={`${ids}-var`}>Variable a recorrer</label>
+          <label htmlFor={`${ids}-var`}>{T.variable}</label>
           <select
             id={`${ids}-var`}
             value={form.variable}
@@ -141,7 +163,7 @@ export function Explore() {
           >
             {VARIABLES.map((v) => (
               <option key={v.id} value={v.id}>
-                {v.label} [{v.unit}]
+                {v.label} [{unitLabel(v.unit)}]
               </option>
             ))}
           </select>
@@ -149,21 +171,21 @@ export function Explore() {
         {(['from', 'to'] as const).map((k) => (
           <div className="field" key={k}>
             <label htmlFor={`${ids}-${k}`}>
-              {k === 'from' ? 'Desde' : 'Hasta'} [{def.unit}]
+              {k === 'from' ? T.from : T.to} [{unitLabel(def.unit)}]
             </label>
             <input
               id={`${ids}-${k}`}
               type="number"
-              min={def.min}
-              max={def.max}
-              step={def.step}
-              value={form[k]}
-              onChange={(e) => setForm({ [k]: Number(e.target.value) })}
+              min={inputValue(def.min, def.unit)}
+              max={inputValue(def.max, def.unit)}
+              step={inputStep(def.step, def.unit)}
+              value={inputValue(form[k], def.unit)}
+              onChange={(e) => setForm({ [k]: fromInput(Number(e.target.value), def.unit) })}
             />
           </div>
         ))}
         <div className="field">
-          <label htmlFor={`${ids}-steps`}>Estados</label>
+          <label htmlFor={`${ids}-steps`}>{T.states}</label>
           <select
             id={`${ids}-steps`}
             value={form.steps}
@@ -175,14 +197,16 @@ export function Explore() {
               </option>
             ))}
           </select>
-          <span className="help">{steps.map((v) => fmt(v)).join(' · ')}</span>
+          <span className="help">
+            {steps.map((v) => fmtU(v, def.unit, { unit: false })).join(' · ')}
+          </span>
         </div>
         <fieldset className="field explore-base">
-          <legend className="label">Escenario base</legend>
+          <legend className="label">{T.base}</legend>
           <div className="explore-base-grid">
             {form.variable !== 'speed_kn' && (
               <label>
-                Velocidad [kn]
+                {S.speed} [kn]
                 <select
                   value={form.speed}
                   onChange={(e) => setForm({ speed: Number(e.target.value) })}
@@ -197,20 +221,22 @@ export function Explore() {
             )}
             {form.variable !== 'catch_kg' && (
               <label>
-                Captura [kg]
+                {T.catch} [{unitLabel('kg')}]
                 <input
                   type="number"
                   min={0}
-                  max={20000}
-                  step={50}
-                  value={form.catchKg}
-                  onChange={(e) => setForm({ catchKg: Math.max(0, Number(e.target.value) || 0) })}
+                  max={inputValue(20000, 'kg', 0)}
+                  step={inputStep(50, 'kg')}
+                  value={inputValue(form.catchKg, 'kg')}
+                  onChange={(e) =>
+                    setForm({ catchKg: Math.max(0, fromInput(Number(e.target.value) || 0, 'kg')) })
+                  }
                 />
               </label>
             )}
             {form.variable !== 'mu_gear' && (
               <label>
-                Fondo
+                {S.seabed}
                 <select
                   value={form.seabed ?? ''}
                   onChange={(e) => setForm({ seabed: e.target.value || null })}
@@ -224,12 +250,12 @@ export function Explore() {
               </label>
             )}
             <label>
-              Ensuciamiento
+              {T.fouling}
               <select
                 value={form.fouling ?? ''}
                 onChange={(e) => setForm({ fouling: e.target.value || null })}
               >
-                <option value="">Red limpia</option>
+                <option value="">{T.clean}</option>
                 {(foulings.data ?? [])
                   .filter((f) => f.id !== 'clean')
                   .map((f) => (
@@ -241,7 +267,7 @@ export function Explore() {
             </label>
             {form.variable !== 'current_kn' && (
               <label>
-                Corriente [kn, + a favor]
+                {T.current}
                 <input
                   type="number"
                   min={-2}
@@ -254,27 +280,29 @@ export function Explore() {
             )}
             {form.variable !== 'warp_length_m' && (
               <label>
-                Cable filado [m]
+                {T.warp} [{unitLabel('m')}]
                 <input
                   type="number"
-                  min={20}
-                  max={3000}
-                  step={10}
-                  placeholder="del motor"
-                  value={form.warpLength ?? ''}
+                  min={inputValue(20, 'm', 0)}
+                  max={inputValue(3000, 'm', 0)}
+                  step={inputStep(10, 'm')}
+                  placeholder={T.fromEngine}
+                  value={form.warpLength === null ? '' : inputValue(form.warpLength, 'm')}
                   onChange={(e) =>
-                    setForm({ warpLength: e.target.value ? Number(e.target.value) : null })
+                    setForm({
+                      warpLength: e.target.value ? fromInput(Number(e.target.value), 'm') : null,
+                    })
                   }
                 />
               </label>
             )}
             <label>
-              Selectividad de
+              {T.selectivityOf}
               <select
                 value={form.species ?? ''}
                 onChange={(e) => setForm({ species: e.target.value || null })}
               >
-                <option value="">(sin selectividad)</option>
+                <option value="">{S.noSelectivity}</option>
                 {(speciesQ.data ?? []).map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
@@ -283,14 +311,16 @@ export function Explore() {
               </select>
             </label>
             <label>
-              Resolución
+              {S.resolution}
               <select
                 value={form.resolution}
                 onChange={(e) => setForm({ resolution: Number(e.target.value) })}
               >
-                <option value={2}>Muy rápida (2)</option>
-                <option value={3}>Rápida (3)</option>
-                <option value={4}>Normal (4)</option>
+                {[2, 3, 4].map((n) => (
+                  <option key={n} value={n}>
+                    {resolutionLabel(n)}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
@@ -303,18 +333,16 @@ export function Explore() {
           onClick={run}
           disabled={!committed || query.isFetching}
         >
-          Calcular estados
+          {T.run}
         </button>
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {query.isFetching ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Calculando {steps.length} estados…
+            <span className="spinner" aria-hidden="true" /> {T.running(steps.length)}
           </>
         ) : r ? (
-          <span>
-            {r.results.length} estados en {fmtFixed(r.runtime_s, 1)} s.
-          </span>
+          <span>{T.done(r.results.length, fmtFixed(r.runtime_s, 1))}</span>
         ) : null}
       </div>
       {query.error && (
@@ -322,8 +350,8 @@ export function Explore() {
           <span>
             <strong>
               {query.error instanceof ApiError && query.error.status
-                ? `Error ${query.error.status}`
-                : 'Error'}
+                ? S.errorStatus(query.error.status)
+                : S.error}
               :
             </strong>{' '}
             {query.error.message}
@@ -341,44 +369,32 @@ export function Explore() {
           />
           <Dashboard r={r} t={t} />
           <div className="explore-tools">
-            <div className="segmented" role="group" aria-label="Encuadre">
-              {(
-                [
-                  ['net', 'Red y portones'],
-                  ['full', 'Con cables hasta el buque'],
-                ] as [AnimScope, string][]
-              ).map(([v, l]) => (
+            <div className="segmented" role="group" aria-label={T.scopeLabel}>
+              {(['net', 'full'] as AnimScope[]).map((v) => (
                 <button
                   key={v}
                   type="button"
                   aria-pressed={scope === v}
                   onClick={() => setScope(v)}
                 >
-                  {l}
+                  {T.scopes[v]}
                 </button>
               ))}
             </div>
-            <div className="segmented" role="group" aria-label="Color del paño">
-              {(
-                [
-                  ['tension', 'Tensión'],
-                  ['contact', 'Contacto con el fondo'],
-                  ['fouling', 'Ensuciamiento'],
-                  ['opening', 'Apertura de malla'],
-                ] as [AnimColor, string][]
-              ).map(([v, l]) => (
+            <div className="segmented" role="group" aria-label={T.colorLabel}>
+              {(['tension', 'contact', 'fouling', 'opening'] as const).map((v) => (
                 <button
                   key={v}
                   type="button"
                   aria-pressed={color === v}
                   onClick={() => setColor(v)}
                 >
-                  {l}
+                  {T.colors[v]}
                 </button>
               ))}
             </div>
             <button type="button" className="btn small" onClick={savePng}>
-              Descargar PNG
+              {T.png}
             </button>
             <button
               type="button"
@@ -386,10 +402,10 @@ export function Explore() {
               onClick={() => void recordVideo()}
               disabled={recording}
             >
-              {recording ? 'Grabando…' : 'Grabar video (WebM)'}
+              {recording ? T.recording : T.record}
             </button>
           </div>
-          <Suspense fallback={<p className="empty">Cargando el visor 3D…</p>}>
+          <Suspense fallback={<p className="empty">{S.loading3d}</p>}>
             <NetAnim
               ref={anim}
               geometry={geometry}
@@ -397,7 +413,7 @@ export function Explore() {
               t={t}
               color={color}
               scope={scope}
-              label={`Aparejo animado según ${rDef.label.toLowerCase()} (${fmtVar(current)})`}
+              label={T.animLabel(rDef.label.toLowerCase(), fmtVar(current))}
             />
           </Suspense>
           <div className="haul-grid">
@@ -411,45 +427,39 @@ export function Explore() {
                   key={key}
                   id={`explore-${key}`}
                   title={ind.label}
-                  unit={unitOf(r, ind)}
+                  unit={indUnit(r, ind)}
                   digits={ind.digits}
-                  xs={values}
-                  ys={ys}
-                  xLabel={(x) => fmtVar(x)}
-                  cursor={current}
+                  xs={values.map((x) => toDisplay(x, rDef.unit))}
+                  ys={ys.map((y) => indValue(ind, y))}
+                  xLabel={fmtShownVar}
+                  cursor={current === null ? null : toDisplay(current, rDef.unit)}
                   reference={
                     key === 'dp' && engine.door_spread_m
-                      ? { value: engine.door_spread_m, label: 'regla del motor' }
+                      ? { value: toDisplay(engine.door_spread_m, 'm'), label: S.engineRule }
                       : key === 'pull' && engine.demand_kgf && r.variable !== 'speed_kn'
-                        ? { value: engine.demand_kgf, label: 'demanda del motor' }
+                        ? { value: toDisplay(engine.demand_kgf, 'kgf'), label: S.engineDemand }
                         : null
                   }
                 />
               );
             })}
           </div>
-          <p className="help">
-            Energía: potencia = tiro × velocidad en el agua / 0,5; consumo 0,22 kg/kWh (A
-            VERIFICAR). Huella según BENTHIS (Eigaard et al. 2016). Ensuciamiento y corriente:
-            capítulo 23 del libro.
-          </p>
+          <p className="help">{T.help}</p>
         </div>
       )}
       {!r && !query.isFetching && !query.error && (
-        <p className="empty">
-          Elija la variable y pulse «Calcular estados». Con resolución rápida cada estado tarda unos
-          segundos.
-        </p>
+        <p className="empty">{T.empty}</p>
       )}
     </div>
   );
 }
 
 function Dashboard({ r, t }: { r: ExploreResponse; t: number }) {
+  const T = useT().explore;
   return (
-    <section className="explore-dash" aria-label="Estado actual" data-testid="explore-dashboard">
+    <section className="explore-dash" aria-label={T.dashLabel} data-testid="explore-dashboard">
       {INDICATORS.map((ind) => {
-        const ys = series(r, ind);
+        const ys = series(r, ind).map((y) => indValue(ind, y));
         const now = valueAt(ys, t);
         if (now === null) return null;
         const base = ys[0] ?? null;
@@ -465,12 +475,12 @@ function Dashboard({ r, t }: { r: ExploreResponse; t: number }) {
           <div className={`impact-item ${tone}`} key={ind.key} data-indicator={ind.key}>
             <span className="impact-label">{ind.label}</span>
             <span className="impact-value">
-              {fmtFixed(now, ind.digits)} <span className="unit">{unitOf(r, ind)}</span>
+              {fmtFixed(now, ind.digits)} <span className="unit">{indUnit(r, ind)}</span>
             </span>
             <span className="impact-delta">
               {delta === null || Math.abs(delta) < eps
-                ? 'igual al primer estado'
-                : `${delta > 0 ? '+' : ''}${fmtFixed(delta, ind.digits)} vs primer estado`}
+                ? T.same
+                : T.vsFirst(`${delta > 0 ? '+' : ''}${fmtFixed(delta, ind.digits)}`)}
             </span>
           </div>
         );

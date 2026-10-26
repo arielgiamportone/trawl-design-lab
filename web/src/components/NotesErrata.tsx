@@ -1,4 +1,5 @@
-import { errataStatus, type ErrataStatus } from '../lib/errata';
+import { useT } from '../i18n';
+import { errataStatus, errataStatusLabel, type ErrataStatus } from '../lib/errata';
 import { useCase } from '../state/useCase';
 
 const TONE: Record<ErrataStatus, string> = {
@@ -10,6 +11,7 @@ const TONE: Record<ErrataStatus, string> = {
 export function NotesErrata() {
   const { design, catalogs, state } = useCase();
   const d = design.data;
+  const T = useT().expert.notes;
   const compat = d?.case.compat ?? state.compat;
   const counts = { corregida: 0, reproducida: 0, documentada: 0 };
   const rows = catalogs.errata.map((e) => {
@@ -22,7 +24,7 @@ export function NotesErrata() {
     <div className="row-gap">
       <section aria-labelledby="notas-title">
         <h2 className="section-title" id="notas-title">
-          Notas del cálculo
+          {T.title}
         </h2>
         {d ? (
           d.notes.length ? (
@@ -32,28 +34,27 @@ export function NotesErrata() {
               ))}
             </ul>
           ) : (
-            <p className="help">El motor no dejó notas para este caso.</p>
+            <p className="help">{T.none}</p>
           )
         ) : (
-          <p className="help">Sin resultados todavía.</p>
+          <p className="help">{T.noResults}</p>
         )}
       </section>
       <section aria-labelledby="erratas-title">
         <h2 className="section-title" id="erratas-title">
-          Erratas del libro Excel original
+          {T.errataTitle}
         </h2>
         <p className="section-sub" style={{ marginBottom: 8 }}>
-          Modo actual: <strong>{compat === 'excel' ? 'reproducir Excel' : 'corregido'}</strong> ·{' '}
-          {counts.corregida} corregidas · {counts.reproducida} reproducidas · {counts.documentada}{' '}
-          documentadas.
+          {T.mode} <strong>{compat === 'excel' ? T.modeExcel : T.modeCorrected}</strong> ·{' '}
+          {T.counts(counts.corregida, counts.reproducida, counts.documentada)}
         </p>
         <div className="table-wrap">
           <table className="data">
             <thead>
               <tr>
-                <th scope="col">Errata</th>
-                <th scope="col">Hoja · celda</th>
-                <th scope="col">En este caso</th>
+                <th scope="col">{T.errata}</th>
+                <th scope="col">{T.sheetCell}</th>
+                <th scope="col">{T.inThisCase}</th>
               </tr>
             </thead>
             <tbody>
@@ -68,7 +69,7 @@ export function NotesErrata() {
                     <div className="mono help">{e.cell}</div>
                   </td>
                   <td>
-                    <span className={`badge ${TONE[e.status]}`}>{e.status}</span>
+                    <span className={`badge ${TONE[e.status]}`}>{errataStatusLabel(e.status)}</span>
                     <div className="help">{e.note}</div>
                   </td>
                 </tr>

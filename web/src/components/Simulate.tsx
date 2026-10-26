@@ -1,7 +1,9 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../api/client';
-import { fmt, fmtFixed, fmtPct } from '../lib/format';
+import { fmt, fmtFixed, fmtNum, fmtPct } from '../lib/format';
+import { useT } from '../i18n';
+import { toDisplayOpt, unitLabel } from '../lib/units';
 import { recall, remember } from '../lib/memo';
 import { Explore } from './sim/Explore';
 import { Selectivity } from './sim/Selectivity';
@@ -11,11 +13,11 @@ import { isSimGeometry } from '../lib/sim3d';
 import {
   compareRows,
   MAX_SIM_SPEEDS,
-  SIM_QUALITY_LABEL,
   SIM_RESOLUTION,
   SIM_SECONDS_PER_SPEED,
   SIM_SPEEDS,
   SIM_VIEW_KEY,
+  simQualityLabel,
   speedLabel,
   toggleSpeed,
   unconverged,
@@ -33,11 +35,7 @@ const REQ_KEY = 'simulate:request';
 const SEL_KEY = 'simulate:selection';
 type Sel = { speeds: number[]; quality: SimQuality; view3d?: boolean };
 
-const VIEWS: { key: 'plan' | 'profile' | 'front'; label: string }[] = [
-  { key: 'plan', label: 'Planta' },
-  { key: 'profile', label: 'Perfil' },
-  { key: 'front', label: 'Frente' },
-];
+const VIEWS = ['plan', 'profile', 'front'] as const;
 
 function Elapsed({ since }: { since: number }) {
   const [now, setNow] = useState(() => Date.now());
@@ -59,26 +57,25 @@ function pctCell(v: number | null) {
 }
 
 function CompareTable({ r }: { r: SimulateResponse }) {
+  const T = useT().simulate.table;
   const rows = compareRows(r);
   const hasDyn = rows.some((x) => x.dynamit !== null);
   return (
     <div className="table-wrap">
       <table className="data" data-testid="sim-table">
-        <caption className="sr-only">
-          Simulación frente al motor empírico{hasDyn ? ' y a DynamiT' : ''}
-        </caption>
+        <caption className="sr-only">{T.caption(hasDyn)}</caption>
         <thead>
           <tr>
             <th scope="col">v [kn]</th>
-            <th scope="col">Magnitud</th>
+            <th scope="col">{T.quantity}</th>
             <th scope="col" className="num">
-              Simulación
+              {T.sim}
             </th>
             <th scope="col" className="num">
-              Motor
+              {T.engine}
             </th>
             <th scope="col" className="num">
-              Δ sim/motor
+              {T.simVsEngine}
             </th>
             {hasDyn && (
               <>
@@ -86,10 +83,10 @@ function CompareTable({ r }: { r: SimulateResponse }) {
                   DynamiT
                 </th>
                 <th scope="col" className="num">
-                  Δ sim/DynamiT
+                  {T.simVsDynamit}
                 </th>
                 <th scope="col" className="num col-abs">
-                  Δ motor/DynamiT
+                  {T.engineVsDynamit}
                 </th>
               </>
             )}
@@ -100,16 +97,15 @@ function CompareTable({ r }: { r: SimulateResponse }) {
             <tr key={`${x.speed}-${x.key}`} data-row={`${x.speed}-${x.key}`}>
               <td className="num">{i % 3 === 0 ? speedLabel(x.speed) : ''}</td>
               <th scope="row">
-                {x.label} [{x.unit}]<span className="cell-note"> motor: {x.engineName}</span>
+                {x.label} [{unitLabel(x.unit)}]
+                <span className="cell-note">{T.engineNote(x.engineName)}</span>
               </th>
-              <td className="num">{fmt(x.unit === 'kgf' ? roundOrNull(x.sim) : round2(x.sim))}</td>
-              <td className="num">
-                {fmt(x.unit === 'kgf' ? roundOrNull(x.engine) : round2(x.engine))}
-              </td>
+              <td className="num">{fmt(rounded(x.sim, x.unit))}</td>
+              <td className="num">{fmt(rounded(x.engine, x.unit))}</td>
               {pctCell(x.simVsEngine)}
               {hasDyn && (
                 <>
-                  <td className="num">{fmt(x.dynamit)}</td>
+                  <td className="num">{fmt(toDisplayOpt(x.dynamit, x.unit))}</td>
                   {pctCell(x.simVsDynamit)}
                   <td className="num col-abs">
                     {x.engineVsDynamit === null ? '—' : fmtPct(x.engineVsDynamit, 0)}
@@ -124,8 +120,12 @@ function CompareTable({ r }: { r: SimulateResponse }) {
   );
 }
 
-const roundOrNull = (v: number | null) => (v === null ? null : Math.round(v));
-const round2 = (v: number | null) => (v === null ? null : Math.round(v * 100) / 100);
+/** Valor en el sistema de unidades activo: fuerzas al entero, longitudes a dos decimales. */
+function rounded(v: number | null, unit: string): number | null {
+  const d = toDisplayOpt(v, unit);
+  if (d === null) return null;
+  return unit === 'kgf' ? Math.round(d) : Math.round(d * 100) / 100;
+}
 
 /** Pestaña «Simulación»: barrido de velocidades o lance progresivo con escenario. */
 export function Simulate() {
@@ -134,40 +134,20 @@ export function Simulate() {
     remember(SIM_VIEW_KEY, v);
     setViewState(v);
   };
+  const T = useT().simulate;
+  const views: SimView[] = ['speeds', 'haul', 'explore', 'selectivity', 'uncertainty'];
   return (
     <div>
       <div className="panel-toolbar">
         <h2 className="section-title">
-          Simulación de la forma <span className="badge warn">experimental</span>
+          {T.title} <span className="badge warn">{T.experimental}</span>
         </h2>
-        <div className="segmented" role="group" aria-label="Tipo de simulación">
-          <button type="button" aria-pressed={view === 'speeds'} onClick={() => setView('speeds')}>
-            Barrido de velocidad
-          </button>
-          <button type="button" aria-pressed={view === 'haul'} onClick={() => setView('haul')}>
-            Lance progresivo (captura y fondo)
-          </button>
-          <button
-            type="button"
-            aria-pressed={view === 'explore'}
-            onClick={() => setView('explore')}
-          >
-            Explorador animado
-          </button>
-          <button
-            type="button"
-            aria-pressed={view === 'selectivity'}
-            onClick={() => setView('selectivity')}
-          >
-            Mallas y selectividad
-          </button>
-          <button
-            type="button"
-            aria-pressed={view === 'uncertainty'}
-            onClick={() => setView('uncertainty')}
-          >
-            Incertidumbre y calibración
-          </button>
+        <div className="segmented" role="group" aria-label={T.viewsLabel}>
+          {views.map((v) => (
+            <button key={v} type="button" aria-pressed={view === v} onClick={() => setView(v)}>
+              {T.views[v]}
+            </button>
+          ))}
         </div>
       </div>
       {view === 'speeds' ? (
@@ -187,6 +167,7 @@ export function Simulate() {
 
 function SpeedSweep() {
   const { state, committed, catalogs } = useCase();
+  const T = useT().simulate;
   const ids = useId();
   const [speeds, setSpeedsState] = useState<number[]>(() => recall<Sel>(SEL_KEY)?.speeds ?? [3]);
   const [quality, setQualityState] = useState<SimQuality>(
@@ -248,21 +229,17 @@ function SpeedSweep() {
   const estimate = Math.max(1, Math.round(SIM_SECONDS_PER_SPEED[quality] * speeds.length));
   const bad = r ? unconverged(r) : [];
   const netLabel = state.scaled
-    ? `red escalada s = ${fmtFixed(state.scaled.s, 3)}`
+    ? T.scaledNet(fmtFixed(state.scaled.s, 3))
     : (catalogs.nets.find((n) => n.id === state.net)?.name ?? state.net);
 
   return (
     <div>
       <p className="section-sub" style={{ marginBottom: 12 }}>
-        Busca la forma de equilibrio de la red ({netLabel}) remolcada a cada velocidad: paño de
-        hilos con arrastre de Morison, relingas, boyas, lastre, bridas, patentes y contacto con el
-        fondo, con el aparejo del caso actual.
+        {T.intro(netLabel)}
       </p>
-      <div className="opt-form" role="group" aria-label="Parámetros de la simulación">
+      <div className="opt-form" role="group" aria-label={T.formLabel}>
         <fieldset className="field sim-speeds">
-          <legend className="label">
-            Velocidades [kn] (hasta {MAX_SIM_SPEEDS}, {speeds.length} elegidas)
-          </legend>
+          <legend className="label">{T.speedsLegend(MAX_SIM_SPEEDS, speeds.length)}</legend>
           <div className="chip-group">
             {SIM_SPEEDS.map((v) => {
               const on = speeds.includes(v);
@@ -283,7 +260,7 @@ function SpeedSweep() {
           </div>
         </fieldset>
         <fieldset className="field sim-quality">
-          <legend className="label">Resolución</legend>
+          <legend className="label">{T.resolution}</legend>
           <div className="segmented">
             {(['fast', 'normal'] as const).map((q) => (
               <label key={q}>
@@ -294,11 +271,11 @@ function SpeedSweep() {
                   checked={quality === q}
                   onChange={() => setSel(speeds, q)}
                 />
-                {SIM_QUALITY_LABEL[q]} ({SIM_RESOLUTION[q]})
+                {simQualityLabel(q)} ({SIM_RESOLUTION[q]})
               </label>
             ))}
           </div>
-          <span className="help">≈ {estimate} s en el servidor</span>
+          <span className="help">{T.estimate(estimate)}</span>
         </fieldset>
         <label className="check small">
           <input
@@ -306,7 +283,7 @@ function SpeedSweep() {
             checked={view3d}
             onChange={(e) => setSel(speeds, quality, e.target.checked)}
           />
-          Vista 3D
+          {T.view3d}
         </label>
       </div>
       <div className="calc-row">
@@ -316,25 +293,23 @@ function SpeedSweep() {
           onClick={run}
           disabled={!speeds.length || busy || !committed}
         >
-          Simular
+          {T.run}
         </button>
         {busy && (
           <button type="button" className="btn ghost" onClick={cancel}>
-            Cancelar
+            {T.cancel}
           </button>
         )}
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {busy ? (
           <>
-            <span className="spinner" aria-hidden="true" /> Simulando… <Elapsed since={startedAt} />{' '}
-            de ≈ {estimate} s
+            <span className="spinner" aria-hidden="true" /> {T.running}{' '}
+            <Elapsed since={startedAt} /> {T.runningOf(estimate)}
           </>
         ) : r ? (
           <span>
-            {r.results.length}{' '}
-            {r.results.length === 1 ? 'velocidad simulada' : 'velocidades simuladas'} en{' '}
-            {fmtFixed(r.runtime_s, 1)} s (resolución {String(r.settings.resolution)}).
+            {T.done(r.results.length, fmtFixed(r.runtime_s, 1), String(r.settings.resolution))}
           </span>
         ) : null}
       </div>
@@ -342,7 +317,7 @@ function SpeedSweep() {
         <div className="alert error" role="alert">
           <span>
             <strong>
-              {err instanceof ApiError && err.status ? `Error ${err.status}` : 'Error'}:
+              {err instanceof ApiError && err.status ? T.errorStatus(err.status) : T.error}:
             </strong>{' '}
             {err.message}
           </span>
@@ -350,19 +325,18 @@ function SpeedSweep() {
       )}
       {bad.length > 0 && (
         <div className="alert warn" role="note">
-          La simulación no convergió del todo a {bad.map((v) => fmtFixed(v, 1)).join(', ')} kn: tome
-          esos valores con cautela.
+          {T.unconverged(bad.map((v) => fmtFixed(v, 1)).join(', '))}
         </div>
       )}
 
       {r && (
         <div className={`row-gap${busy ? ' stale' : ''}`} style={{ marginTop: 16 }}>
           {r.results.some(isSimGeometry) && (
-            <section className="sim-3d" aria-label="Vista 3D de la forma simulada">
+            <section className="sim-3d" aria-label={T.view3dRegion}>
               <div className="net3d-head">
-                <h3 className="group-title">Vista 3D</h3>
+                <h3 className="group-title">{T.view3d}</h3>
                 {r.results.length > 1 && (
-                  <div className="segmented" role="group" aria-label="Velocidad de la vista 3D">
+                  <div className="segmented" role="group" aria-label={T.speed3d}>
                     {r.results.map((x, i) => (
                       <button
                         key={i}
@@ -376,7 +350,7 @@ function SpeedSweep() {
                   </div>
                 )}
               </div>
-              <Suspense fallback={<p className="empty">Cargando el visor 3D…</p>}>
+              <Suspense fallback={<p className="empty">{T.loading3d}</p>}>
                 {(() => {
                   const g = r.results[Math.min(speed3d, r.results.length - 1)];
                   return isSimGeometry(g) ? <Net3D geometry={g} /> : null;
@@ -384,61 +358,55 @@ function SpeedSweep() {
               </Suspense>
             </section>
           )}
-          {Object.entries(r.projections_svg).map(([k, p]) => (
-            <section
-              key={k}
-              className="sim-speed"
-              aria-label={`Proyecciones a ${k.replace('.', ',')} kn`}
-            >
-              <h3 className="group-title">A {speedLabel(Number(k))} kn</h3>
-              <div className="sim-views" data-speed={k}>
-                {VIEWS.map((view) => (
-                  <figure key={view.key} className="sim-view" style={{ margin: 0 }}>
-                    <figcaption>{view.label}</figcaption>
-                    <ZoomStage
-                      key={`${submitted}-${k}-${view.key}`}
-                      svg={p[view.key]}
-                      alt={`${view.label} de la red simulada a ${k.replace('.', ',')} kn`}
-                      label={`${view.label} de la red a ${k.replace('.', ',')} kn. Arrastre para desplazar, rueda o teclas + y − para acercar, 0 para restablecer.`}
-                      className="compact"
-                      testId="sim-svg"
-                    />
-                  </figure>
-                ))}
-              </div>
-            </section>
-          ))}
+          {Object.entries(r.projections_svg).map(([k, p]) => {
+            const kv = fmtNum(Number(k));
+            return (
+              <section key={k} className="sim-speed" aria-label={T.projAria(kv)}>
+                <h3 className="group-title">{T.at(speedLabel(Number(k)))}</h3>
+                <div className="sim-views" data-speed={k}>
+                  {VIEWS.map((view) => (
+                    <figure key={view} className="sim-view" style={{ margin: 0 }}>
+                      <figcaption>{T.projections[view]}</figcaption>
+                      <ZoomStage
+                        key={`${submitted}-${k}-${view}`}
+                        svg={p[view]}
+                        alt={T.projAlt(T.projections[view], kv)}
+                        label={T.projLabel(T.projections[view], kv)}
+                        className="compact"
+                        testId="sim-svg"
+                      />
+                    </figure>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
           {Object.keys(r.projections_svg).length < r.results.length && (
-            <p className="help">Se dibujan las tres primeras velocidades.</p>
+            <p className="help">{T.firstThree}</p>
           )}
           <section aria-labelledby={`${ids}-cmp`}>
             <h3 className="group-title" id={`${ids}-cmp`}>
-              Simulación, motor empírico{r.dynamit_comparison?.length ? ' y DynamiT' : ''}
+              {T.compareTitle(!!r.dynamit_comparison?.length)}
             </h3>
             <CompareTable r={r} />
             <div className="alert info sim-note" role="note">
               <span>
-                <strong>Sobre la resistencia.</strong> El arrastre simulado es sólo el de los hilos
-                (Morison con C<sub>N</sub> = {fmt(Number(r.settings.cn))} y C<sub>T</sub> ={' '}
-                {fmt(Number(r.settings.ct))}) más el rozamiento con el fondo: en la red FAO A-3
-                queda ≈ 50 % por debajo de la RA de DynamiT entre 2 y 4 kn, y la RN empírica del
-                motor (Aberdeen) ≈ 20 % por encima. Las aberturas, en cambio, coinciden: AH dentro
-                del 3 % y AV dentro del 10–20 %. La brecha de resistencia apunta a lo que el modelo
-                no tiene —nudos, vibración y ondulación del paño, sombra hidrodinámica entre hilos y
-                coeficientes del hilo calibrados en flujo uniforme— y no se cierra con C<sub>N</sub>
-                /C<sub>T</sub> dentro de los rangos de la literatura (ver el capítulo 21 del libro).
-                Use la simulación para la forma y las aberturas, y el motor para la resistencia de
-                diseño.
+                <strong>{T.dragNote.title}</strong> {T.dragNote.a}
+                <sub>N</sub>
+                {T.dragNote.b(fmt(Number(r.settings.cn)))}
+                <sub>T</sub>
+                {T.dragNote.c(fmt(Number(r.settings.ct)))}
+                <sub>N</sub>
+                {T.dragNote.d}
+                <sub>T</sub>
+                {T.dragNote.e}
               </span>
             </div>
           </section>
         </div>
       )}
       {!r && !busy && !err && (
-        <p className="empty">
-          Elija hasta tres velocidades y pulse «Simular». La versión rápida tarda alrededor de un
-          segundo por velocidad.
-        </p>
+        <p className="empty">{T.empty}</p>
       )}
     </div>
   );

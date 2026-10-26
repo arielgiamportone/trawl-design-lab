@@ -1,6 +1,8 @@
 /** Edición de paneles: campos editables, validación y armado de la NetSpec en línea. */
 import type { NetSpec, Panel } from '../api/client';
+import { msg } from '../i18n';
 import { parseNumber } from './format';
+import { localized } from './labels';
 
 export type PanelField =
   | 'mesh_mm'
@@ -14,6 +16,7 @@ export type PanelField =
 export interface FieldRule {
   label: string;
   short: string;
+  /** Unidad (las mallas y el hilo se editan en mm en los dos sistemas: convención del oficio). */
   unit: string;
   integer: boolean;
   /** Mínimo (inclusive salvo ``exclusiveMin``). */
@@ -22,47 +25,35 @@ export interface FieldRule {
   max?: number;
 }
 
-export const PANEL_FIELDS: Record<PanelField, FieldRule> = {
+const FIELD_RULES: Record<PanelField, Omit<FieldRule, 'label' | 'short'>> = {
   mesh_mm: {
-    label: 'Mallero (malla estirada)',
-    short: 'Mallero',
     unit: 'mm',
     integer: false,
     min: 0,
     exclusiveMin: true,
   },
   twine_diameter_mm: {
-    label: 'Diámetro del hilo',
-    short: 'Ø hilo',
     unit: 'mm',
     integer: false,
     min: 0,
     exclusiveMin: true,
   },
   meshes_top: {
-    label: 'Mallas del borde hacia la boca',
-    short: 'Mallas boca',
     unit: '',
     integer: true,
     min: 0,
   },
   meshes_bottom: {
-    label: 'Mallas del borde hacia la bolsa',
-    short: 'Mallas bolsa',
     unit: '',
     integer: true,
     min: 0,
   },
   meshes_depth: {
-    label: 'Mallas de alto (N)',
-    short: 'Mallas alto',
     unit: '',
     integer: true,
     min: 1,
   },
   hanging_ratio: {
-    label: 'Coeficiente de armado U1',
-    short: 'U1',
     unit: '',
     integer: false,
     min: 0,
@@ -70,13 +61,20 @@ export const PANEL_FIELDS: Record<PanelField, FieldRule> = {
     max: 1,
   },
   count: {
-    label: 'Cantidad de paneles iguales',
-    short: 'Cantidad',
     unit: '',
     integer: true,
     min: 1,
   },
 };
+
+/** Reglas de cada campo con sus rótulos en el idioma activo. */
+export const PANEL_FIELDS: Record<PanelField, FieldRule> = localized(() => {
+  const L = msg().labels.panelFields;
+  const out = {} as Record<PanelField, FieldRule>;
+  for (const [f, rule] of Object.entries(FIELD_RULES) as [PanelField, (typeof FIELD_RULES)[PanelField]][])
+    out[f] = { ...L[f], ...rule };
+  return out;
+});
 
 export const PANEL_FIELD_ORDER: PanelField[] = [
   'mesh_mm',
@@ -91,11 +89,10 @@ export const PANEL_FIELD_ORDER: PanelField[] = [
 /** Orientación de la malla del paño (campo de texto, no numérico). */
 export const ORIENTATION_FIELD = 'mesh_orientation';
 export type MeshOrientation = 'diamond' | 't90' | 'square';
-export const MESH_ORIENTATIONS: { id: MeshOrientation; label: string }[] = [
-  { id: 'diamond', label: 'Rombo' },
-  { id: 't90', label: 'T90 (girada 90°)' },
-  { id: 'square', label: 'Cuadrada' },
-];
+const ORIENTATION_IDS: MeshOrientation[] = ['diamond', 't90', 'square'];
+export const MESH_ORIENTATIONS: { id: MeshOrientation; label: string }[] = localized(() =>
+  ORIENTATION_IDS.map((id) => ({ id, label: msg().labels.orientations[id] })),
+);
 
 /** Ediciones crudas (texto) por panel y campo. */
 export type PanelEdits = Record<
@@ -104,7 +101,7 @@ export type PanelEdits = Record<
 >;
 
 const isOrientation = (v: string | undefined): v is MeshOrientation =>
-  MESH_ORIENTATIONS.some((o) => o.id === v);
+  ORIENTATION_IDS.some((o) => o === v);
 
 /** Orientación vigente del panel: la editada o la del preset (rombo por defecto). */
 export function orientationOf(panel: Panel, edits: PanelEdits): MeshOrientation {
@@ -143,18 +140,15 @@ export function validateField(
   field: PanelField,
   text: string,
 ): { ok: true; value: number } | { ok: false; error: string } {
-  const rule = PANEL_FIELDS[field];
+  const rule = FIELD_RULES[field];
+  const E = msg().labels.panelErrors;
   const n = parseNumber(text);
-  if (n === null) return { ok: false, error: 'Ingrese un número' };
-  if (rule.integer && !Number.isInteger(n))
-    return { ok: false, error: 'Debe ser un número entero' };
+  if (n === null) return { ok: false, error: E.number };
+  if (rule.integer && !Number.isInteger(n)) return { ok: false, error: E.integer };
   if (rule.exclusiveMin ? n <= rule.min : n < rule.min) {
-    return {
-      ok: false,
-      error: rule.exclusiveMin ? `Debe ser mayor que ${rule.min}` : `Debe ser ≥ ${rule.min}`,
-    };
+    return { ok: false, error: rule.exclusiveMin ? E.gt(rule.min) : E.gte(rule.min) };
   }
-  if (rule.max !== undefined && n > rule.max) return { ok: false, error: `Debe ser ≤ ${rule.max}` };
+  if (rule.max !== undefined && n > rule.max) return { ok: false, error: E.lte(rule.max) };
   return { ok: true, value: n };
 }
 
@@ -165,7 +159,7 @@ export function editErrors(edits: PanelEdits): Record<string, string> {
     for (const [f, text] of Object.entries(fields)) {
       if (text === undefined) continue;
       if (f === ORIENTATION_FIELD) {
-        if (!isOrientation(text)) out[`${pid}.${f}`] = 'Orientación desconocida';
+        if (!isOrientation(text)) out[`${pid}.${f}`] = msg().labels.panelErrors.orientation;
         continue;
       }
       const r = validateField(f as PanelField, text);

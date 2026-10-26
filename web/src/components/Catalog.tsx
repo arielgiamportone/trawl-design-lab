@@ -69,7 +69,11 @@ export function Catalog() {
             </option>
           ))}
         </select>
-        <select aria-label={T.rigLabel} value={f.rig} onChange={(e) => set({ rig: e.target.value })}>
+        <select
+          aria-label={T.rigLabel}
+          value={f.rig}
+          onChange={(e) => set({ rig: e.target.value })}
+        >
           <option value="">{T.allRigs}</option>
           {Object.entries(RIG_LABEL).map(([k, v]) => (
             <option key={k} value={k}>

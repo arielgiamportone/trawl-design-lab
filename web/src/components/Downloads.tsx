@@ -1,31 +1,16 @@
 import { useState } from 'react';
 import { api, type ReportFormat } from '../api/client';
+import { useT } from '../i18n';
 import { downloadBlob } from '../lib/download';
 import { useCase } from '../state/useCase';
 
-const ITEMS: { format: ReportFormat | 'json'; title: string; desc: string }[] = [
-  {
-    format: 'html',
-    title: 'Informe HTML',
-    desc: 'Informe completo navegable, con tablas y planos.',
-  },
-  { format: 'pdf', title: 'Informe PDF', desc: 'El mismo informe listo para imprimir o archivar.' },
-  {
-    format: 'xlsx',
-    title: 'Planilla XLSX',
-    desc: 'Todas las tablas en hojas de cálculo, con números editables.',
-  },
-  {
-    format: 'json',
-    title: 'Resultado JSON',
-    desc: 'Respuesta completa de la API (caso, resumen, notas y etapas).',
-  },
-];
+const FORMATS: (ReportFormat | 'json')[] = ['html', 'pdf', 'xlsx', 'json'];
 
 export function Downloads() {
   const { committed, design, state } = useCase();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const T = useT().expert.downloads;
   const base = `trawl-${state.net}${state.netModified ? '-vs-mod' : ''}-${state.compat}`;
 
   const run = async (format: ReportFormat | 'json') => {
@@ -44,7 +29,7 @@ export function Downloads() {
       const blob = await api.report(committed, format);
       downloadBlob(blob, `${base}.${format}`);
     } catch (e) {
-      setError(`No se pudo generar el informe ${format.toUpperCase()}: ${(e as Error).message}`);
+      setError(T.error(format.toUpperCase(), (e as Error).message));
     } finally {
       setBusy(null);
     }
@@ -52,14 +37,12 @@ export function Downloads() {
 
   return (
     <div>
-      <h2 className="section-title">Descargas</h2>
+      <h2 className="section-title">{T.title}</h2>
       <p className="section-sub" style={{ marginBottom: 12 }}>
-        Los informes se generan con el caso actual (incluidas las ediciones de paneles y
-        parámetros). Sin conexión, el HTML y la planilla salen del motor del teléfono; para el PDF,
-        imprima el HTML.
+        {T.sub}
       </p>
       <div className="downloads">
-        {ITEMS.map((it) => (
+        {FORMATS.map((format) => ({ format, ...T.items[format] })).map((it) => (
           <div className="download-card" key={it.format}>
             <h3>{it.title}</h3>
             <p>{it.desc}</p>
@@ -72,10 +55,10 @@ export function Downloads() {
             >
               {busy === it.format ? (
                 <>
-                  <span className="spinner" aria-hidden="true" /> Generando…
+                  <span className="spinner" aria-hidden="true" /> {T.generating}
                 </>
               ) : (
-                `Descargar .${it.format}`
+                T.download(it.format)
               )}
             </button>
           </div>

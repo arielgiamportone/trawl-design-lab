@@ -7,19 +7,24 @@ import {
   type EconomicsOut,
   type TripEconomics,
 } from '../../api/client';
+import { useT } from '../../i18n';
 import { loadPrices } from '../../lib/components';
 import {
   COST_LABELS,
   curveRows,
   ECO_VIEW_KEY,
+  fieldText,
   filled,
-  GROUPS,
+  groups,
   loadForm,
   saveForm,
+  storedText,
   toInputs,
+  type EcoField,
   type EcoForm,
 } from '../../lib/economics';
-import { fmt, fmtFixed } from '../../lib/format';
+import { fmt, fmtFixed, parseNumber } from '../../lib/format';
+import { fmtU, toDisplay, unitLabel } from '../../lib/units';
 import { loadJson, saveJson } from '../../lib/storage';
 import { useChartColors } from '../../lib/theme';
 import { useCase } from '../../state/useCase';
@@ -41,6 +46,7 @@ function money(v: number | null | undefined, cur: string): string {
  */
 export function Economics() {
   const { committed } = useCase();
+  const T = useT().economics;
   const [form, setFormState] = useState<EcoForm>(() => loadForm());
   const [useBom, setUseBom] = useState(false);
   const [view, setView] = useState<View>(() => loadJson<View>(ECO_VIEW_KEY) ?? 'curva');
@@ -67,31 +73,24 @@ export function Economics() {
 
   return (
     <div className="economics" data-testid="economics">
-      <p className="section-sub">
-        Cuánto cuesta y cuánto deja una marea con esta red, a cada velocidad. Cargue los precios de
-        su puerto: la app no inventa precios, y lo que falte queda fuera del cálculo y se avisa. Los
-        datos quedan guardados en este navegador.
-      </p>
+      <p className="section-sub">{T.intro}</p>
       <details
         className="accordion"
         open={formOpen}
         onToggle={(e) => setFormOpen((e.target as HTMLDetailsElement).open)}
       >
         <summary>
-          <span>
-            Datos de la operación ({nFilled} cargados · {form.currency})
-          </span>
+          <span>{T.formSummary(nFilled, form.currency)}</span>
         </summary>
         <div className="accordion-body">
           <OperationForm form={form} onChange={setForm} />
           <label className="check-row">
             <input type="checkbox" checked={useBom} onChange={(e) => setUseBom(e.target.checked)} />
-            Si falta el costo de la red y el aparejo, tomarlo de la lista de materiales (precios
-            cargados en «Componentes»)
+            {T.useBom}
           </label>
         </div>
       </details>
-      {!committed && <p className="empty">Complete el caso para ver la economía.</p>}
+      {!committed && <p className="empty">{T.empty}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
           {q.error.message}
@@ -100,13 +99,8 @@ export function Economics() {
       {r && (
         <>
           <BestSummary r={r} />
-          <div className="segmented no-print" role="group" aria-label="Sección de la economía">
-            {(
-              [
-                ['curva', 'Por velocidad'],
-                ['comparar', 'Comparar redes'],
-              ] as const
-            ).map(([id, label]) => (
+          <div className="segmented no-print" role="group" aria-label={T.section}>
+            {(['curva', 'comparar'] as const).map((id) => (
               <button
                 key={id}
                 type="button"
@@ -116,7 +110,7 @@ export function Economics() {
                   saveJson(ECO_VIEW_KEY, id);
                 }}
               >
-                {label}
+                {T.views[id]}
               </button>
             ))}
           </div>
@@ -134,15 +128,16 @@ export function Economics() {
 }
 
 function OperationForm({ form, onChange }: { form: EcoForm; onChange: (f: EcoForm) => void }) {
+  const T = useT().economics;
   const set = (key: string, text: string) =>
     onChange({ ...form, values: { ...form.values, [key]: text } });
   return (
     <div className="eco-form">
       <div className="eco-row">
         <label className="inline-field">
-          Moneda
+          {T.currency}
           <input
-            aria-label="Moneda"
+            aria-label={T.currency}
             value={form.currency}
             maxLength={3}
             size={4}
@@ -150,19 +145,19 @@ function OperationForm({ form, onChange }: { form: EcoForm; onChange: (f: EcoFor
           />
         </label>
         <label className="inline-field">
-          Tripulación
+          {T.crew}
           <select
-            aria-label="Pago de la tripulación"
+            aria-label={T.crewAria}
             value={form.crewMode}
             onChange={(e) => onChange({ ...form, crewMode: e.target.value as EcoForm['crewMode'] })}
           >
-            <option value="share">a la parte</option>
-            <option value="wage">a jornal</option>
-            <option value="none">no se cuenta</option>
+            <option value="share">{T.crewModes.share}</option>
+            <option value="wage">{T.crewModes.wage}</option>
+            <option value="none">{T.crewModes.none}</option>
           </select>
         </label>
       </div>
-      {GROUPS.map((g) => (
+      {groups().map((g) => (
         <fieldset key={g.id} className="eco-group">
           <legend>{g.title}</legend>
           {g.fields.map((f) => (
@@ -179,16 +174,15 @@ function OperationForm({ form, onChange }: { form: EcoForm; onChange: (f: EcoFor
                   <span className="unit"> [{form.currency}]</span>
                 ) : null}
               </span>
-              <input
-                inputMode="decimal"
-                aria-label={f.label}
-                value={form.values[f.key] ?? ''}
+              <FieldInput
+                field={f}
+                stored={form.values[f.key]}
                 placeholder={
                   f.fallback === undefined
-                    ? 'sin dato'
-                    : `${fmt(f.unit?.startsWith('%') ? f.fallback * 100 : f.fallback)} (por defecto)`
+                    ? T.noData
+                    : T.byDefault(fmt(f.percent ? f.fallback * 100 : f.fallback))
                 }
-                onChange={(e) => set(f.key, e.target.value)}
+                onChange={(text) => set(f.key, text)}
               />
               {f.help && <span className="help">{f.help}</span>}
             </label>
@@ -199,7 +193,41 @@ function OperationForm({ form, onChange }: { form: EcoForm; onChange: (f: EcoFor
   );
 }
 
+/**
+ * Campo numérico del formulario. Los que se convierten (captura, precios por kg y por litro)
+ * se escriben en el sistema activo y se guardan en métrico; el texto escrito se conserva aparte
+ * para no reescribirlo mientras se tipea.
+ */
+function FieldInput({
+  field,
+  stored,
+  placeholder,
+  onChange,
+}: {
+  field: EcoField;
+  stored: string | undefined;
+  placeholder: string;
+  onChange: (stored: string) => void;
+}) {
+  const [text, setText] = useState(() => fieldText(field, stored));
+  // Si lo guardado cambia desde afuera (p. ej. se vacía), el campo lo sigue.
+  const shown = storedText(field, text) === (stored ?? '') ? text : fieldText(field, stored);
+  return (
+    <input
+      inputMode="decimal"
+      aria-label={field.label}
+      value={shown}
+      placeholder={placeholder}
+      onChange={(e) => {
+        setText(e.target.value);
+        onChange(storedText(field, e.target.value));
+      }}
+    />
+  );
+}
+
 function BestSummary({ r }: { r: EconomicsOut }) {
+  const T = useT().economics;
   const best: TripEconomics | undefined =
     r.trips.find((t) => t.speed_kn === r.best_margin_kn) ??
     r.trips.find((t) => t.speed_kn === r.least_fuel_kg_kn);
@@ -208,42 +236,41 @@ function BestSummary({ r }: { r: EconomicsOut }) {
     <div data-testid="eco-summary">
       <div className="guide-summary">
         <div>
-          <span className="kpi-label">Velocidad de mayor margen</span>
+          <span className="kpi-label">{T.bestSpeed}</span>
           <strong>{r.best_margin_kn === null ? '—' : `${fmtFixed(r.best_margin_kn, 2)} kn`}</strong>
         </div>
         <div>
-          <span className="kpi-label">Margen por marea</span>
+          <span className="kpi-label">{T.marginTrip}</span>
           <strong>{money(best?.margin, r.currency)}</strong>
         </div>
         <div>
-          <span className="kpi-label">Costo por kg</span>
+          <span className="kpi-label">{T.costPer(unitLabel('kg'))}</span>
           <strong>
             {best?.cost_per_kg === null || best?.cost_per_kg === undefined
               ? '—'
-              : `${fmtFixed(best.cost_per_kg, 2)} ${r.currency}`}
+              : `${fmtFixed(toDisplay(best.cost_per_kg, '$/kg'), 2)} ${r.currency}`}
           </strong>
         </div>
         <div>
-          <span className="kpi-label">Gasoil por marea</span>
-          <strong>{best ? `${fmtFixed(best.fuel_l, 0)} L` : '—'}</strong>
+          <span className="kpi-label">{T.fuelTrip}</span>
+          <strong>{best ? fmtU(best.fuel_l, 'L', { digits: 0 }) : '—'}</strong>
         </div>
         <div>
-          <span className="kpi-label">Margen por año</span>
+          <span className="kpi-label">{T.marginYear}</span>
           <strong>{money(r.year.margin, r.currency)}</strong>
         </div>
         <div>
-          <span className="kpi-label">Precio de equilibrio</span>
+          <span className="kpi-label">{T.breakeven}</span>
           <strong>
             {best?.breakeven_price === null || best?.breakeven_price === undefined
               ? '—'
-              : `${fmtFixed(best.breakeven_price, 2)} ${r.currency}/kg`}
+              : `${fmtFixed(toDisplay(best.breakeven_price, '$/kg'), 2)} ${r.currency}/${unitLabel('kg')}`}
           </strong>
         </div>
       </div>
       {missing.length > 0 && (
         <p className="alert warn" role="status">
-          Faltan datos: {missing.join(', ')}.{' '}
-          {best?.revenue === null ? '' : 'Lo que falta queda fuera del costo.'}
+          {T.missing(missing.join(', '))} {best?.revenue === null ? '' : T.missingOut}
         </p>
       )}
     </div>
@@ -251,60 +278,63 @@ function BestSummary({ r }: { r: EconomicsOut }) {
 }
 
 function SpeedView({ r }: { r: EconomicsOut }) {
+  const T = useT().economics;
   const c = useChartColors();
+  const L = unitLabel('L');
+  const perKg = unitLabel('kg');
   const rows = curveRows(r.trips);
   const feasible = r.trips.filter((t) => t.feasible).map((t) => t.speed_kn);
   const hasMoney = r.trips.some((t) => t.total_cost !== null);
   const series = hasMoney
     ? [
-        { key: 'revenue', name: 'Ingreso', color: c.s3, width: 2, unit: r.currency },
-        { key: 'cost', name: 'Costo', color: c.s2, width: 2, unit: r.currency },
-        { key: 'margin', name: 'Margen', color: c.s1, width: 3, unit: r.currency },
+        { key: 'revenue', name: T.revenue, color: c.s3, width: 2, unit: r.currency },
+        { key: 'cost', name: T.cost, color: c.s2, width: 2, unit: r.currency },
+        { key: 'margin', name: T.margin, color: c.s1, width: 3, unit: r.currency },
       ]
-    : [{ key: 'fuel', name: 'Gasoil por marea', color: c.s2, width: 2, unit: 'L' }];
+    : [{ key: 'fuel', name: T.fuelTrip, color: c.s2, width: 2, unit: L }];
   return (
     <>
       <ChartCard
         id="eco-curva"
-        title={hasMoney ? 'Ingreso, costo y margen por marea' : 'Gasoil por marea'}
-        sub="Según la velocidad de arrastre; la franja marca donde el buque remolca con reserva."
+        title={hasMoney ? T.chartMoney : T.fuelTrip}
+        sub={T.chartSub}
         legend={series.map((s) => ({ name: s.name, color: s.color, kind: 'line' as const }))}
       >
         <SpeedLineChart
           rows={rows}
           series={series}
-          yUnit={hasMoney ? r.currency : 'L'}
+          yUnit={hasMoney ? r.currency : L}
           window={
             feasible.length
-              ? { from: Math.min(...feasible), to: Math.max(...feasible), label: 'remolcable' }
+              ? { from: Math.min(...feasible), to: Math.max(...feasible), label: T.towable }
               : null
           }
-          refX={r.best_margin_kn === null ? null : { x: r.best_margin_kn, label: 'mayor margen' }}
-          ariaLabel="Ingreso, costo y margen de la marea según la velocidad"
+          refX={r.best_margin_kn === null ? null : { x: r.best_margin_kn, label: T.bestMargin }}
+          ariaLabel={T.chartAria}
         />
       </ChartCard>
       <div className="table-wrap">
-        <table className="data" aria-label="Economía por velocidad" data-testid="eco-table">
+        <table className="data" aria-label={T.table} data-testid="eco-table">
           <thead>
             <tr>
               <th scope="col" className="num">
                 v [kn]
               </th>
-              <th scope="col">Remolca</th>
+              <th scope="col">{T.colTows}</th>
               <th scope="col" className="num">
-                Gasoil [L]
+                {T.colFuel} [{L}]
               </th>
               <th scope="col" className="num">
-                Captura [kg]
+                {T.colCatch} [{perKg}]
               </th>
               <th scope="col" className="num">
-                Costo
+                {T.colCost}
               </th>
               <th scope="col" className="num">
-                Margen
+                {T.colMargin}
               </th>
               <th scope="col" className="num">
-                Costo/kg
+                {T.colCostPer}/{perKg}
               </th>
             </tr>
           </thead>
@@ -318,17 +348,21 @@ function SpeedView({ r }: { r: EconomicsOut }) {
                 <td className="num">{fmtFixed(t.speed_kn, 2)}</td>
                 <td>
                   <span className={`badge ${t.feasible ? 'good' : 'crit'}`}>
-                    {t.feasible ? 'sí' : 'no'}
+                    {t.feasible ? T.yes : T.no}
                   </span>
                   {(t.warnings ?? []).length > 0 && (
                     <span className="help"> {(t.warnings ?? []).join('; ')}</span>
                   )}
                 </td>
-                <td className="num">{fmtFixed(t.fuel_l, 0)}</td>
-                <td className="num">{t.catch_kg === null ? '—' : fmtFixed(t.catch_kg, 0)}</td>
+                <td className="num">{fmtFixed(toDisplay(t.fuel_l, 'L'), 0)}</td>
+                <td className="num">
+                  {t.catch_kg === null ? '—' : fmtFixed(toDisplay(t.catch_kg, 'kg'), 0)}
+                </td>
                 <td className="num">{t.total_cost === null ? '—' : fmtFixed(t.total_cost, 0)}</td>
                 <td className="num">{t.margin === null ? '—' : fmtFixed(t.margin, 0)}</td>
-                <td className="num">{t.cost_per_kg === null ? '—' : fmtFixed(t.cost_per_kg, 2)}</td>
+                <td className="num">
+                  {t.cost_per_kg === null ? '—' : fmtFixed(toDisplay(t.cost_per_kg, '$/kg'), 2)}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -340,6 +374,7 @@ function SpeedView({ r }: { r: EconomicsOut }) {
 }
 
 function CostBreakdown({ r }: { r: EconomicsOut }) {
+  const T = useT().economics;
   const c = useChartColors();
   const best =
     r.trips.find((t) => t.speed_kn === r.best_margin_kn) ??
@@ -351,9 +386,9 @@ function CostBreakdown({ r }: { r: EconomicsOut }) {
   return (
     <div className="eco-breakdown" data-testid="eco-breakdown">
       <h3 className="subhead">
-        Costo de la marea a {fmtFixed(best.speed_kn, 2)} kn: {money(best.total_cost, r.currency)}
+        {T.breakdownTitle(fmtFixed(best.speed_kn, 2), money(best.total_cost, r.currency))}
       </h3>
-      <div className="eco-bar" role="img" aria-label="Reparto del costo de la marea">
+      <div className="eco-bar" role="img" aria-label={T.breakdownAria}>
         {items.map(([k, v], i) => (
           <span
             key={k}
@@ -381,20 +416,21 @@ function CompareView({
   prices: Record<string, unknown>;
 }) {
   const { committed, catalogs } = useCase();
+  const T = useT().economics;
   const [alt, setAlt] = useState<string>('');
   const [gear, setGear] = useState('');
   const [request, setRequest] = useState<EconomicsCompareRequest | null>(null);
   const options = catalogs.nets.filter((n) => n.id !== committed?.net);
   const build = (): EconomicsCompareRequest | null => {
     if (!committed || !alt) return null;
-    const n = Number(gear.replace(',', '.'));
+    const n = parseNumber(gear);
     return {
       cases: [
-        { label: 'Red actual', case: committed },
+        { label: T.current, case: committed },
         {
           label: options.find((o) => o.id === alt)?.name ?? alt,
           case: { ...committed, net: alt, net_modified: null },
-          gear_cost: gear.trim() && Number.isFinite(n) ? n : null,
+          gear_cost: gear.trim() && n !== null ? n : null,
         },
       ],
       economics: inputs,
@@ -413,9 +449,9 @@ function CompareView({
     <div data-testid="eco-compare">
       <div className="catalog-actions">
         <label className="inline-field">
-          Comparar con
-          <select aria-label="Red a comparar" value={alt} onChange={(e) => setAlt(e.target.value)}>
-            <option value="">elija una red del catálogo…</option>
+          {T.compareWith}
+          <select aria-label={T.compareAria} value={alt} onChange={(e) => setAlt(e.target.value)}>
+            <option value="">{T.choose}</option>
             {options.map((n) => (
               <option key={n.id} value={n.id}>
                 {n.name}
@@ -424,9 +460,9 @@ function CompareView({
           </select>
         </label>
         <label className="inline-field">
-          Costo de la red nueva [{inputs.currency}]
+          {T.newCost(inputs.currency)}
           <input
-            aria-label="Costo de la red nueva"
+            aria-label={T.newCostAria}
             inputMode="decimal"
             size={10}
             value={gear}
@@ -434,15 +470,11 @@ function CompareView({
           />
         </label>
         <button type="button" className="btn" disabled={!alt} onClick={() => setRequest(build())}>
-          Calcular
+          {T.compute}
         </button>
       </div>
-      <p className="help">
-        Mismo buque, portón y datos de operación; cada red trabaja a su velocidad de mayor margen.
-        El ahorro es la diferencia de margen por año; el repago, el costo de la red nueva sobre ese
-        ahorro.
-      </p>
-      {q.isFetching && <p className="empty">Calculando…</p>}
+      <p className="help">{T.compareHelp}</p>
+      {q.isFetching && <p className="empty">{T.computing}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
           {q.error.message}
@@ -450,24 +482,24 @@ function CompareView({
       )}
       {res && (
         <div className="table-wrap">
-          <table className="data" aria-label="Comparación económica">
+          <table className="data" aria-label={T.compareTable}>
             <thead>
               <tr>
-                <th scope="col">Red</th>
+                <th scope="col">{T.colNet}</th>
                 <th scope="col" className="num">
                   v [kn]
                 </th>
                 <th scope="col" className="num">
-                  Gasoil por año [L]
+                  {T.colFuelYear} [{unitLabel('L')}]
                 </th>
                 <th scope="col" className="num">
-                  Margen por año
+                  {T.colMarginYear}
                 </th>
                 <th scope="col" className="num">
-                  Ahorro por año
+                  {T.colSavings}
                 </th>
                 <th scope="col" className="num">
-                  Repago
+                  {T.colPayback}
                 </th>
               </tr>
             </thead>
@@ -477,7 +509,9 @@ function CompareView({
                   <td>{row.label}</td>
                   <td className="num">{row.trip ? fmtFixed(row.trip.speed_kn, 2) : '—'}</td>
                   <td className="num">
-                    {row.annual_fuel_l === null ? '—' : fmtFixed(row.annual_fuel_l, 0)}
+                    {row.annual_fuel_l === null
+                      ? '—'
+                      : fmtFixed(toDisplay(row.annual_fuel_l, 'L'), 0)}
                   </td>
                   <td className="num">{money(row.annual_margin, res.currency)}</td>
                   <td className="num">{money(row.savings_year, res.currency)}</td>
@@ -485,8 +519,8 @@ function CompareView({
                     {row.payback_years === null
                       ? '—'
                       : row.payback_years < 1
-                        ? `${fmtFixed(row.payback_years * 12, 1)} meses`
-                        : `${fmtFixed(row.payback_years, 1)} años`}
+                        ? T.months(fmtFixed(row.payback_years * 12, 1))
+                        : T.years(fmtFixed(row.payback_years, 1))}
                   </td>
                 </tr>
               ))}

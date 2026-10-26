@@ -1,12 +1,18 @@
 import { useState } from 'react';
 import type { DesignData } from '../api/result';
+import { useT } from '../i18n';
 import { diffSummaries } from '../lib/diff';
 import { fmt, fmtDelta, fmtPct } from '../lib/format';
 import { at } from '../lib/series';
 import { useChartColors } from '../lib/theme';
+import { fmtU, toDisplay, unitLabel } from '../lib/units';
 import { useCase } from '../state/useCase';
-import { ChartCard, DataTable, type SeriesDef } from './charts/ChartParts';
+import { ChartCard, DataTable, displayRows, type SeriesDef } from './charts/ChartParts';
 import { SpeedLineChart } from './charts/SpeedLineChart';
+
+/** Valor de una celda (número en el sistema de unidades activo, o texto). */
+const val = (v: number | string | null, unit: string) =>
+  typeof v === 'number' ? fmtU(v, unit, { unit: false }) : fmt(v);
 
 function overlay(a: DesignData, b: DesignData, pick: (d: DesignData) => (number | null)[]) {
   const speeds = [...new Set([...a.case.speeds_kn, ...b.case.speeds_kn])].sort((x, y) => x - y);
@@ -23,6 +29,8 @@ export function Compare() {
   const { design, pinned, pin, unpin } = useCase();
   const c = useChartColors();
   const [onlyChanged, setOnlyChanged] = useState(true);
+  const T = useT();
+  const C = T.expert.compare;
   const b = design.data;
   const a = pinned?.data;
 
@@ -33,17 +41,15 @@ export function Compare() {
           A
         </span>
         <div className="slot-body">
-          <strong>A · resultado fijado</strong>
-          {pinned
-            ? `${pinned.label} · fijado a las ${pinned.at}`
-            : 'Todavía no fijó ningún resultado.'}
+          <strong>{C.aTitle}</strong>
+          {pinned ? C.pinnedAt(pinned.label, pinned.at) : C.nonePinned}
           <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
             <button type="button" className="btn small primary" onClick={pin} disabled={!b}>
-              {pinned ? 'Reemplazar A por el actual' : 'Fijar el resultado actual como A'}
+              {pinned ? C.replace : C.pin}
             </button>
             {pinned && (
               <button type="button" className="btn small" onClick={unpin}>
-                Quitar A
+                {C.unpin}
               </button>
             )}
           </div>
@@ -54,13 +60,11 @@ export function Compare() {
           B
         </span>
         <div className="slot-body">
-          <strong>B · caso en vivo</strong>
+          <strong>{C.bTitle}</strong>
           {b
-            ? `${String(b.summary.net_id)} · ${String(b.summary.vessel_id)} · ${b.case.compat === 'excel' ? 'Excel' : 'corregido'}`
-            : 'Calculando…'}
-          <div style={{ marginTop: 6 }}>
-            Cambie red, buque, parámetros o paneles y compare con A.
-          </div>
+            ? `${String(b.summary.net_id)} · ${String(b.summary.vessel_id)} · ${b.case.compat === 'excel' ? 'Excel' : C.corrected}`
+            : C.calculating}
+          <div style={{ marginTop: 6 }}>{C.bHelp}</div>
         </div>
       </div>
     </div>
@@ -70,13 +74,10 @@ export function Compare() {
     return (
       <div>
         <h2 className="section-title" style={{ marginBottom: 12 }}>
-          Comparar casos
+          {C.title}
         </h2>
         {slots}
-        <p className="empty">
-          Fije el resultado actual como «A», modifique el caso y vea aquí las diferencias con el
-          resultado en vivo «B».
-        </p>
+        <p className="empty">{C.empty}</p>
       </div>
     );
   }
@@ -85,32 +86,47 @@ export function Compare() {
   const shown = onlyChanged ? rows.filter((r) => r.changed) : rows;
   const nSig = rows.filter((r) => r.significant).length;
   const series: SeriesDef[] = [
-    { key: 'a', name: 'A (fijado)', color: c.s3 },
-    { key: 'b', name: 'B (en vivo)', color: c.s1 },
+    { key: 'a', name: C.aPinned, color: c.s3 },
+    { key: 'b', name: C.bLive, color: c.s1 },
   ];
   const legend = [
-    { name: 'A (fijado)', color: c.s3, kind: 'line' as const },
-    { name: 'B (en vivo)', color: c.s1, kind: 'line' as const },
+    { name: C.aPinned, color: c.s3, kind: 'line' as const },
+    { name: C.bLive, color: c.s1, kind: 'line' as const },
   ];
-  const demand = overlay(a, b, (d) => d.result.performance.demand.std);
-  const avail = overlay(
-    a,
-    b,
-    (d) => d.result.performance.windows[d.result.performance.design_key]?.available_kgf ?? [],
+  const kgf = unitLabel('kgf');
+  const m = unitLabel('m');
+  const ab = (unit: string) => ({ a: unit, b: unit });
+  const demand = displayRows(
+    overlay(a, b, (d) => d.result.performance.demand.std),
+    ab('kgf'),
   );
-  const av = overlay(a, b, (d) => d.result.spread.vertical.fridman.std.av_m);
-  const rn = overlay(a, b, (d) => d.result.drag.rn.std);
+  const avail = displayRows(
+    overlay(
+      a,
+      b,
+      (d) => d.result.performance.windows[d.result.performance.design_key]?.available_kgf ?? [],
+    ),
+    ab('kgf'),
+  );
+  const av = displayRows(
+    overlay(a, b, (d) => d.result.spread.vertical.fridman.std.av_m),
+    ab('m'),
+  );
+  const rn = displayRows(
+    overlay(a, b, (d) => d.result.drag.rn.std),
+    ab('kgf'),
+  );
+  const speedCol = { key: 'speed', label: T.charts.speedAxis };
 
   return (
     <div className={design.isFetching ? 'stale' : undefined}>
       <h2 className="section-title" style={{ marginBottom: 12 }}>
-        Comparar casos
+        {C.title}
       </h2>
       {slots}
       <div className="panel-toolbar">
         <p className="section-sub" role="status">
-          {rows.filter((r) => r.changed).length} magnitudes cambian · {nSig} con variación ≥ 1 %
-          (resaltadas).
+          {C.status(rows.filter((r) => r.changed).length, nSig)}
         </p>
         <label className="toggle-line">
           <input
@@ -118,14 +134,14 @@ export function Compare() {
             checked={onlyChanged}
             onChange={(e) => setOnlyChanged(e.target.checked)}
           />
-          Mostrar sólo lo que cambia
+          {C.onlyChanged}
         </label>
       </div>
       <div className="table-wrap" style={{ marginBottom: 16 }}>
         <table className="data" data-testid="compare-table">
           <thead>
             <tr>
-              <th scope="col">Magnitud</th>
+              <th scope="col">{T.expert.summary.quantity}</th>
               <th scope="col" className="num">
                 A
               </th>
@@ -138,14 +154,14 @@ export function Compare() {
               <th scope="col" className="num">
                 Δ %
               </th>
-              <th scope="col">Unidad</th>
+              <th scope="col">{T.expert.summary.unit}</th>
             </tr>
           </thead>
           <tbody>
             {shown.length === 0 && (
               <tr>
                 <td colSpan={6} className="empty">
-                  A y B son idénticos.
+                  {C.identical}
                 </td>
               </tr>
             )}
@@ -154,10 +170,10 @@ export function Compare() {
                 <th scope="row" style={{ fontWeight: r.significant ? 650 : 500 }}>
                   {r.label}
                 </th>
-                <td className="num">{fmt(r.a)}</td>
-                <td className="num">{fmt(r.b)}</td>
+                <td className="num">{val(r.a, r.unit)}</td>
+                <td className="num">{val(r.b, r.unit)}</td>
                 <td className="num col-abs">
-                  {r.abs === null ? (r.changed ? 'cambia' : '') : fmtDelta(r.abs)}
+                  {r.abs === null ? (r.changed ? C.changes : '') : fmtDelta(toDisplay(r.abs, r.unit))}
                 </td>
                 <td className="num">
                   {r.pct === null ? (
@@ -169,7 +185,7 @@ export function Compare() {
                     </span>
                   )}
                 </td>
-                <td className="unit">{r.unit}</td>
+                <td className="unit">{r.unit ? unitLabel(r.unit) : ''}</td>
               </tr>
             ))}
           </tbody>
@@ -178,19 +194,16 @@ export function Compare() {
       <div className="charts-grid">
         <ChartCard
           id="cmp-resistencia"
-          title="Resistencia total, red estándar"
-          sub="Tiro disponible de diseño en línea fina"
-          legend={[
-            ...legend,
-            { name: 'Tiro disponible (línea fina)', color: c.text2, kind: 'thin' },
-          ]}
+          title={C.totalTitle}
+          sub={C.totalSub}
+          legend={[...legend, { name: C.availThin, color: c.text2, kind: 'thin' }]}
           table={
             <DataTable
-              caption="Resistencia total A y B"
+              caption={C.totalCaption}
               columns={[
-                { key: 'speed', label: 'Velocidad [kn]' },
-                { key: 'a', label: 'A [kgf]' },
-                { key: 'b', label: 'B [kgf]' },
+                speedCol,
+                { key: 'a', label: `A [${kgf}]` },
+                { key: 'b', label: `B [${kgf}]` },
               ]}
               rows={demand}
             />
@@ -203,25 +216,25 @@ export function Compare() {
               availB: avail[i]?.b ?? null,
             }))}
             series={[
-              { key: 'availA', name: 'Tiro disponible A', color: c.s3, width: 1, quiet: true },
-              { key: 'availB', name: 'Tiro disponible B', color: c.s1, width: 1, quiet: true },
+              { key: 'availA', name: C.availOf('A'), color: c.s3, width: 1, quiet: true },
+              { key: 'availB', name: C.availOf('B'), color: c.s1, width: 1, quiet: true },
               ...series,
             ]}
-            yUnit="kgf"
-            ariaLabel="Resistencia total de A y B en función de la velocidad"
+            yUnit={kgf}
+            ariaLabel={C.totalAria}
           />
         </ChartCard>
         <ChartCard
           id="cmp-rn"
-          title="Resistencia de la red (RN de diseño)"
+          title={C.rnTitle}
           legend={legend}
           table={
             <DataTable
-              caption="RN A y B"
+              caption={C.rnCaption}
               columns={[
-                { key: 'speed', label: 'Velocidad [kn]' },
-                { key: 'a', label: 'A [kgf]' },
-                { key: 'b', label: 'B [kgf]' },
+                speedCol,
+                { key: 'a', label: `A [${kgf}]` },
+                { key: 'b', label: `B [${kgf}]` },
               ]}
               rows={rn}
             />
@@ -230,21 +243,21 @@ export function Compare() {
           <SpeedLineChart
             rows={rn}
             series={series}
-            yUnit="kgf"
-            ariaLabel="RN de A y B en función de la velocidad"
+            yUnit={kgf}
+            ariaLabel={C.rnAria}
           />
         </ChartCard>
         <ChartCard
           id="cmp-av"
-          title="Abertura vertical (Fridman), red estándar"
+          title={C.avTitle}
           legend={legend}
           table={
             <DataTable
-              caption="AV A y B"
+              caption={C.avCaption}
               columns={[
-                { key: 'speed', label: 'Velocidad [kn]' },
-                { key: 'a', label: 'A [m]' },
-                { key: 'b', label: 'B [m]' },
+                speedCol,
+                { key: 'a', label: `A [${m}]` },
+                { key: 'b', label: `B [${m}]` },
               ]}
               rows={av}
             />
@@ -252,9 +265,9 @@ export function Compare() {
         >
           <SpeedLineChart
             rows={av}
-            series={series.map((s) => ({ ...s, unit: 'm' }))}
-            yUnit="m"
-            ariaLabel="Abertura vertical de A y B"
+            series={series.map((s) => ({ ...s, unit: m }))}
+            yUnit={m}
+            ariaLabel={C.avAria}
           />
         </ChartCard>
       </div>
