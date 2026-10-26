@@ -118,6 +118,28 @@ test.describe('escritorio', () => {
     await shot(page, 'escritorio-construccion', page.getByTestId('guide-summary'));
   });
 
+  test('economía de la marea', async ({ page }) => {
+    await start(page, { mode: 'expert', tab: 'economia' });
+    const eco = page.getByTestId('economics');
+    await expect(eco.getByTestId('eco-summary')).toBeVisible({ timeout: 30_000 });
+    const fill: [string, string][] = [
+      ['Captura por hora de arrastre', '150'],
+      ['Precio en playa', '1000'],
+      ['Precio del gasoil', '1200'],
+      ['Precio del lubricante', '6000'],
+      ['Parte de la tripulación', '40'],
+      ['Hielo, víveres, carnada y puerto', '150000'],
+      ['Permisos, seguro y fijos', '6000000'],
+    ];
+    await eco.getByLabel('Moneda', { exact: true }).fill('ARS');
+    for (const [label, value] of fill) await eco.getByLabel(label).fill(value);
+    await eco.getByLabel('Costo de la red y el aparejo', { exact: true }).fill('3000000');
+    await expect(eco.getByTestId('eco-summary')).not.toContainText('Faltan datos');
+    await eco.locator('details.accordion summary').first().click();
+    await page.waitForTimeout(800);
+    await shot(page, 'escritorio-economia', eco.getByTestId('eco-summary'));
+  });
+
   test('lotes y flota', async ({ page }) => {
     await start(page, { mode: 'expert', tab: 'lotes' });
     const fleet =

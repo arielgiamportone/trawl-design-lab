@@ -25,6 +25,9 @@ const Components = lazy(() => import('./Components').then((m) => ({ default: m.C
 const Construction = lazy(() =>
   import('./construction/Construction').then((m) => ({ default: m.Construction })),
 );
+const Economics = lazy(() =>
+  import('./economics/Economics').then((m) => ({ default: m.Economics })),
+);
 const Batch = lazy(() => import('./Batch').then((m) => ({ default: m.Batch })));
 
 export function Results() {
@@ -56,6 +59,7 @@ export function Results() {
     { id: 'catalogo', label: 'Catálogo FAO' },
     { id: 'componentes', label: 'Componentes' },
     { id: 'construccion', label: 'Construcción' },
+    { id: 'economia', label: 'Economía' },
     { id: 'lotes', label: 'Lotes y flota' },
     {
       id: 'notas',
@@ -80,6 +84,7 @@ export function Results() {
             {active === 'catalogo' && <Catalog />}
             {active === 'componentes' && <Components />}
             {active === 'construccion' && <Construction />}
+            {active === 'economia' && <Economics />}
             {active === 'lotes' && <Batch onOpened={() => setTab('resumen')} />}
           </Suspense>
           {active === 'paneles' && <PanelEditor />}

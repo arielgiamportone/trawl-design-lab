@@ -441,11 +441,14 @@ def economics(
     speeds: tuple[float, ...] | None = None,
     limits: Limits | None = None,
     prices: dict[str, Any] | None = None,
+    reference_area_rate_m2_h: float | None = None,
 ) -> EconomicsResult:
     """Curva económica del caso entre ``limits.v_min_kn`` y ``v_max_kn``.
 
     Si ``inputs.gear_cost`` falta y ``prices`` completa la lista de materiales en la moneda de
-    ``inputs``, el costo del armado sale de ella.
+    ``inputs``, el costo del armado sale de ella. ``reference_area_rate_m2_h`` fija el área
+    barrida por hora a la que corresponde ``inputs.catch_kg_h`` (por defecto, la de este caso a
+    la velocidad de referencia); :func:`compare` le pasa la de la red base.
     """
     from trawlkit.optimize.evaluate import Evaluator, Limits
 
@@ -467,6 +470,7 @@ def economics(
         gear_source = "sin dato"
     ref_v = min(max(inputs.reference_speed_kn, lo), hi)
     ref: Evaluation = ev.from_curves(curves, ref_v)
+    ref_area = ref.area_rate_m2_h if reference_area_rate_m2_h is None else reference_area_rate_m2_h
     trips: list[TripEconomics] = []
     for v in speeds:
         e = ev.from_curves(curves, v)
@@ -482,7 +486,7 @@ def economics(
                 speed_kn=v,
                 demand_kgf=e.demand_kgf,
                 area_rate_m2_h=e.area_rate_m2_h,
-                reference_area_rate_m2_h=ref.area_rate_m2_h,
+                reference_area_rate_m2_h=ref_area,
                 vessel_hp=case.vessel.bhp,
                 feasible=ok,
                 warnings=warns,
@@ -572,16 +576,25 @@ def compare(
     """Compara casos con los mismos datos de operación; el primero es la base.
 
     Cada caso va como ``(rótulo, caso, costo del armado o None)``. Sin ``speed_kn`` cada uno
-    trabaja a su velocidad de mayor margen (o de menos combustible por kg). El **ahorro** es la
+    trabaja a su velocidad de mayor margen (o de menos combustible por kg). La captura por hora
+    de ``inputs`` vale para la red base a la velocidad de referencia; las otras pescan en
+    proporción a su área barrida por hora (una red más chica, menos captura). El **ahorro** es la
     diferencia de margen anual frente a la base (o, sin precios de captura, de costo anual) y el
     **repago** el costo del armado nuevo dividido por ese ahorro.
     """
+    from trawlkit.optimize.evaluate import Evaluator
+
     out: list[Comparison] = []
     base: Comparison | None = None
     n = inputs.trips_per_year
+    ref_area: float | None = None
+    if cases:
+        ev = Evaluator(cases[0][1], limits=limits)
+        lo, hi = float(ev.speeds[0]), float(ev.speeds[-1])
+        ref_area = ev.at(1.0, min(max(inputs.reference_speed_kn, lo), hi)).area_rate_m2_h
     for label, case, gear in cases:
         inp = inputs if gear is None else dataclasses.replace(inputs, gear_cost=gear)
-        res = economics(case, inp, limits=limits, prices=prices)
+        res = economics(case, inp, limits=limits, prices=prices, reference_area_rate_m2_h=ref_area)
         t = res.at(speed_kn) if speed_kn is not None else res.best
         margin = None if t is None or t.margin is None else t.margin * n
         cost = None if t is None or t.total_cost is None else t.total_cost * n

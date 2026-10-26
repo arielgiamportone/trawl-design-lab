@@ -20,6 +20,7 @@ import {
   MODE_LABEL,
   OBJECTIVE_LABEL,
   openFleetCase,
+  ECONOMIC_COLUMNS,
   RESULT_COLUMNS,
   resultsCsv,
   STATUS_LABEL,
@@ -31,6 +32,7 @@ import {
 } from '../lib/batch';
 import { loadPrices, REGION_LABEL } from '../lib/components';
 import { downloadBlob } from '../lib/download';
+import { loadForm, toInputs } from '../lib/economics';
 import { fmt, parseNumber } from '../lib/format';
 import { idbGet, idbSet } from '../lib/idb';
 import { useCase } from '../state/useCase';
@@ -73,10 +75,18 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
   const [region, setRegion] = useState('');
   const [genericOnly, setGenericOnly] = useState(false);
   const [assemble, setAssemble] = useState(true);
+  const [withEconomics, setWithEconomics] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [progress, setProgress] = useState<[number, number] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<BatchRunResponse | null>(null);
+  const resultColumns =
+    mode === 'fleet' &&
+    result?.rows.some(
+      (r) => (r.summary as Record<string, unknown> | undefined)?.fuel_l_trip !== undefined,
+    )
+      ? [...RESULT_COLUMNS.fleet, ...ECONOMIC_COLUMNS]
+      : RESULT_COLUMNS[mode];
   const [filter, setFilter] = useState<'all' | 'ok' | 'infeasible' | 'error'>('all');
   const abort = useRef<AbortController | null>(null);
 
@@ -155,6 +165,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
     prices: loadPrices(),
     currency: null,
     detail: true,
+    economics: withEconomics ? toInputs(loadForm()) : null,
   });
 
   const run = async () => {
@@ -197,7 +208,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
 
   const exportAs = async (format: BatchFormat) => {
     setError(null);
-    const columns = RESULT_COLUMNS[mode];
+    const columns = resultColumns;
     if (format === 'csv' && result) {
       downloadBlob(new Blob([resultsCsv(result, columns)], { type: 'text/csv' }), 'lote.csv');
       return;
@@ -239,7 +250,7 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
       ((result?.rows ?? []) as BatchRow[]).filter((r) => filter === 'all' || r.status === filter),
     [result, filter],
   );
-  const columns = RESULT_COLUMNS[mode];
+  const columns = resultColumns;
   const nets = catalogs.nets.filter((n) => n.status !== 'draft');
   const caseNet = state.scaled ? null : committed?.net;
   const loadedNets = (parsed?.nets ?? []) as { spec: { name: string }; ok: boolean }[];
@@ -453,6 +464,14 @@ export function Batch({ onOpened }: { onOpened?: () => void }) {
               onChange={(e) => setAssemble(e.target.checked)}
             />
             Armar con el catálogo (más lento)
+          </label>
+          <label className="check">
+            <input
+              type="checkbox"
+              checked={withEconomics}
+              onChange={(e) => setWithEconomics(e.target.checked)}
+            />
+            Sumar la economía de la marea (datos de la pestaña «Economía»)
           </label>
         </div>
       )}

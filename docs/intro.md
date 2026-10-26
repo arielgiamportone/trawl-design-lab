@@ -48,7 +48,7 @@ minuto si estaba dormida (plan gratuito; ver {doc}`despliegue`).
    Excel y contra el simulador DynamiT, el catálogo de redes FAO con su procedencia
    ({doc}`33_catalogo_fao`), los componentes y el costo ({doc}`34_componentes`), los lotes y la
    proyección de redes a una flota ({doc}`35_lotes_proyeccion`), la guía de construcción para el
-   taller ({doc}`36_construccion`) y las erratas del modelo original.
+   taller ({doc}`36_construccion`), la economía de la operación ({doc}`37_economia`) y las erratas del modelo original.
 4. **Software**: motor, informes y planos, aplicación web, API, despliegue en línea y cómo citar.
 
 Los capítulos son notebooks ejecutables: el código y los números que muestran se recalculan cada vez

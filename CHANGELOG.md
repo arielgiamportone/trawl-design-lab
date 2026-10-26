@@ -17,6 +17,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   `POST /economics` y `/economics/compare` (ahorro anual y repago del armado), también sin
   conexión; `trawlkit economics`; en los lotes de flota, gasoil, captura, costo por kg y margen
   por buque.
+- App web, pestaña **«Economía»**: datos de la operación (precios en blanco, guardados en el
+  navegador), resumen a la velocidad de mayor margen, curva de ingreso, costo y margen con la
+  franja remolcable, tabla por velocidad, reparto del costo y comparación con otra red del
+  catálogo (ahorro y repago); «Sumar la economía de la marea» en Lotes y flota; en el modo
+  guiado, «¿Cuánto deja la marea?». Libro: capítulo 37 «Economía de la operación».
 - **Guía de construcción (Fase 15)**: `trawlkit.construction` pasa del diseño al taller. Hoja de
   corte por paño (mallas, piezas, el ciclo de cada corte explicado, rectángulo de paño y
   desperdicio; las alas se cortan de a pares encastradas), paño a comprar por calidad, uniones

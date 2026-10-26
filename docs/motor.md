@@ -33,6 +33,7 @@ Alrededor de ese núcleo, que reproduce el libro, crecieron módulos que el Exce
 | `trawlkit.catalog`, `.topology`, `.netcheck`, `.provenance` | Caso de diseño de cada red del catálogo FAO, topologías distintas de la A-3, validador de consistencia y procedencia valor por valor | {doc}`33_catalogo_fao` |
 | `trawlkit.components`, `trawlkit.cost` | Catálogo de componentes con equivalentes genéricos; lista de materiales y costo orientativo | {doc}`34_componentes` |
 | `trawlkit.construction` | Guía de construcción: hoja de corte, paño a comprar, uniones con tomas, montaje en relingas, boyas, lastre y cortes de cabos | {doc}`36_construccion` |
+| `trawlkit.economics` | Economía de la operación: gasoil, captura, costos por rubro, margen y precio de equilibrio por velocidad; comparación de redes con ahorro y repago | {doc}`37_economia` |
 | `trawlkit.batch` | Planillas de flota, redes y casos; proyección de una red a cada buque; exportación | {doc}`35_lotes_proyeccion` |
 | `trawlkit.drawing`, `trawlkit.report` | Plano SVG (lámina y escala real), gráficos e informes HTML, PDF y XLSX | {doc}`informes` |
 | `trawlkit.api` | API FastAPI (`app`, `service`, `schemas`) y `api.offline`, el mismo servicio sin servidor que la app corre en Pyodide | {doc}`api`, {doc}`web` |

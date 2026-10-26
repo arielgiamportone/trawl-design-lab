@@ -295,6 +295,24 @@ diseño al taller:
   el resumen muestra el porcentaje del taller. En el modo guiado, el resultado ofrece «¿Cómo la
   armo? Guía para el taller».
 
+## Economía de la operación
+
+La pestaña **«Economía»** ({doc}`37_economia`, `POST /economics`) dice cuánto cuesta y cuánto deja
+una marea con la red del caso:
+
+- **Datos de la operación**: captura por hora y precio en playa, marea (lances, duración,
+  maniobras, navegación, mareas por año), gasoil y lubricante, tripulación (a la parte, a jornal o
+  sin contar), red y aparejo (costo, vida útil, reparación) y otros gastos. Los precios empiezan en
+  blanco y se guardan en el navegador; las constantes de ingeniería muestran su valor por defecto.
+- **Resumen** a la velocidad de mayor margen (margen por marea y por año, costo por kg, gasoil y
+  precio de equilibrio) y aviso de los datos que faltan.
+- **Por velocidad**: ingreso, costo y margen con la franja donde el buque remolca con reserva, la
+  tabla por velocidad y el reparto del costo de la marea.
+- **Comparar redes**: otra red del catálogo en el mismo buque, con ahorro por año y repago de la
+  red nueva (`POST /economics/compare`).
+- En **Lotes y flota**, «Sumar la economía de la marea» agrega gasoil, captura, costo por kg y
+  margen por buque. En el modo guiado, «¿Cuánto deja la marea?».
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,
@@ -367,6 +385,8 @@ consumo de datos** oculta «Diseño interactivo» y «Simulación», que descarg
 ![Lotes y flota: la red proyectada a cada buque](../web/docs/screenshots/escritorio-lotes.png)
 
 ![Construcción: armado paso a paso con el plano resaltado](../web/docs/screenshots/escritorio-construccion.png)
+
+![Economía: margen por velocidad y reparto del costo](../web/docs/screenshots/escritorio-economia.png)
 
 ## Arquitectura
 

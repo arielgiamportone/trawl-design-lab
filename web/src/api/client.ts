@@ -62,6 +62,12 @@ export type ConstructionGuide = S['ConstructionGuideOut'];
 export type GuideJoin = S['JoinOut'];
 export type GuidePiece = S['CutPieceOut'];
 export type GuideFormat = 'html' | 'pdf' | 'xlsx';
+export type EconomicInputs = S['EconomicInputsIn'];
+export type EconomicsRequest = S['EconomicsRequest'];
+export type EconomicsOut = S['EconomicsOut'];
+export type TripEconomics = S['TripEconomicsOut'];
+export type EconomicsCompareRequest = S['EconomicsCompareRequest'];
+export type EconomicsCompareOut = S['EconomicsCompareOut'];
 export type ComponentOptimizeRequest = S['ComponentOptimizeRequest'];
 export type ComponentOptimizeResponse = S['ComponentOptimizeResponse'];
 export type AssemblyOut = S['AssemblyOut'];
@@ -269,6 +275,17 @@ export const api = {
       signal,
     );
     return res.blob();
+  },
+  async economics(req: EconomicsRequest, signal?: AbortSignal): Promise<EconomicsOut> {
+    const res = await post('/economics', req, signal);
+    return (await res.json()) as EconomicsOut;
+  },
+  async economicsCompare(
+    req: EconomicsCompareRequest,
+    signal?: AbortSignal,
+  ): Promise<EconomicsCompareOut> {
+    const res = await post('/economics/compare', req, signal);
+    return (await res.json()) as EconomicsCompareOut;
   },
   async optimizeComponents(
     req: ComponentOptimizeRequest,

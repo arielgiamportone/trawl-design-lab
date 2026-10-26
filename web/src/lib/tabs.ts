@@ -13,6 +13,7 @@ export const TAB_IDS = [
   'catalogo',
   'componentes',
   'construccion',
+  'economia',
   'lotes',
   'notas',
 ];

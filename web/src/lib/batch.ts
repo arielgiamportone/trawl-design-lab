@@ -268,6 +268,15 @@ export const RESULT_COLUMNS: Record<BatchKind, { key: string; label: string; dig
     ],
   };
 
+/** Columnas económicas de la flota (Fase 16), si se pidió la economía. */
+export const ECONOMIC_COLUMNS: { key: string; label: string; digits?: number }[] = [
+  { key: 'fuel_l_trip', label: 'Gasoil/marea [L]', digits: 0 },
+  { key: 'catch_kg_trip', label: 'Captura/marea [kg]', digits: 0 },
+  { key: 'cost_per_kg', label: 'Costo/kg', digits: 2 },
+  { key: 'margin_trip', label: 'Margen/marea', digits: 0 },
+  { key: 'margin_year', label: 'Margen/año', digits: 0 },
+];
+
 export const LAST_BATCH_KEY = 'last-batch:v1';
 
 export interface SavedBatch {

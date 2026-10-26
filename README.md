@@ -73,6 +73,8 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
 | **Gráficos** (tema oscuro) | **Sin conexión**: el motor corre en el teléfono |
 | ![Construcción: armado paso a paso con el plano resaltado](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-construccion.png) | ![La guía para el taller en el teléfono](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/movil-guia-taller.png) |
 | **Construcción**: hoja de corte, uniones y montaje | **Guía para el taller** en el teléfono, paso a paso |
+| ![Economía: margen por velocidad y reparto del costo](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-economia.png) | ![Optimizar: mejor diseño, región factible y frente de Pareto](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-claro-optimizar.png) |
+| **Economía**: margen, costo por kg y velocidad más rentable | **Optimizar**: escala de la red y velocidad |
 
 ## Qué hace
 
@@ -96,6 +98,9 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
 - **Guía de construcción**: del diseño al taller. Paño a comprar, hoja de corte con el ciclo de
   cada corte, uniones paso a paso con sus tomas, montaje en relingas (mallas por metro), boyas,
   lastre y cortes de cabos; en PDF para imprimir, planilla y paso a paso en el teléfono.
+- **Economía de la operación**: gasoil, captura, costos por rubro y margen de la marea a cada
+  velocidad, con los precios del puerto; la velocidad más rentable, la comparación entre redes y
+  el repago de una red nueva, también en los lotes de flota.
 - **Sin conexión**: la app se instala y el mismo motor corre en el teléfono (Pyodide).
 
 ## Arquitectura
@@ -120,7 +125,7 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 40](https://img.shields.io/badge/rutas%20API-40-1c5cab) ![capítulos: 36](https://img.shields.io/badge/cap%C3%ADtulos-36-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 40](https://img.shields.io/badge/rutas%20API-40-1c5cab) ![capítulos: 37](https://img.shields.io/badge/cap%C3%ADtulos-37-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
@@ -132,7 +137,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 40 |
-| Capítulos del libro | 36 · 69 referencias |
+| Capítulos del libro | 37 · 69 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->
@@ -151,6 +156,7 @@ trawlkit optimize fao_a3_standard               # escala y velocidad óptimas
 trawlkit batch flota.xlsx --net fao_wb_bt2p_60hp -o lote.xlsx         # una red para cada buque
 trawlkit batch --template plantilla.xlsx        # plantilla de flota con su hoja de ayuda
 trawlkit build-guide fao_a3_standard -o guia.pdf    # guía de construcción para el taller
+trawlkit economics fao_a3_standard --fuel-price 1200 --catch-kg-h 150 --price-kg 1000
 trawlkit serve                                  # API en http://127.0.0.1:8000/docs
 trawlkit errata                                 # erratas del Excel original
 ```
@@ -211,6 +217,7 @@ El despliegue (GitHub Pages para el libro y la app, Render para la API) está en
 | 13 | Componentes con equivalentes genéricos, costo, armado óptimo y uso sin conexión |
 | 14 | Planillas de flota, cálculo por lotes y proyección de una red a cada buque |
 | 15 | Guía de construcción para el taller: corte, armado, montaje en relingas y cortes de cabos |
+| 16 | Economía de la operación: costo, margen y velocidad más rentable; comparación y repago |
 
 El detalle de cada versión está en el [CHANGELOG](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CHANGELOG.md).
 

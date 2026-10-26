@@ -138,6 +138,9 @@ export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
         >
           ¿Cómo la armo? Guía para el taller
         </button>
+        <button type="button" className="btn" onClick={() => onExpert('economia')}>
+          ¿Cuánto deja la marea? Economía
+        </button>
       </div>
       <details className="accordion">
         <summary>

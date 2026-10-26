@@ -29,6 +29,8 @@ import optimizeComponents from './fixtures/optimize_components.json';
 import batchParse from './fixtures/batch_parse.json';
 import batchRun from './fixtures/batch_run.json';
 import construction from './fixtures/construction.json';
+import economics from './fixtures/economics.json';
+import economicsCompare from './fixtures/economics_compare.json';
 
 export const fixtures = {
   design,
@@ -59,6 +61,8 @@ export const fixtures = {
   batchParse,
   batchRun,
   construction,
+  economics,
+  economicsCompare,
 };
 
 export interface Call {
@@ -138,6 +142,8 @@ export function mockApi(
     }
     if (path === '/design/bom') return json(bom);
     if (path === '/design/construction') return json(construction);
+    if (path === '/economics') return json(economics);
+    if (path === '/economics/compare') return json(economicsCompare);
     if (path === '/design/construction/export')
       return new Response('%PDF-fake', { headers: { 'Content-Type': 'application/pdf' } });
     if (path === '/batch/parse') return json(batchParse);
