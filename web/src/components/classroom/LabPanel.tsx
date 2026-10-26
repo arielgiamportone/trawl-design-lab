@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { api, type Lab, type LabStep } from '../../api/client';
 import { useT } from '../../i18n';
 import { classroom, pct } from '../../lib/classroom';
@@ -81,6 +81,14 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState<string | null>(null);
+  // Al cambiar de paso, el foco va al título del paso nuevo (no al abrir el panel).
+  const heading = useRef<HTMLHeadingElement>(null);
+  const shownStep = useRef(step?.id);
+  useEffect(() => {
+    if (shownStep.current === step?.id) return;
+    shownStep.current = step?.id;
+    heading.current?.focus();
+  }, [step?.id]);
 
   const update = (next: Partial<ActiveLab>) => saveLab({ ...active, ...next });
   const go = (i: number) => {
@@ -182,7 +190,9 @@ function LabBody({ lab, active }: { lab: Lab; active: ActiveLab }) {
   return (
     <div className="lab-body">
       <p className="lab-progress">{T.progress(idx + 1, n, done)}</p>
-      <h4>{step.title}</h4>
+      <h4 ref={heading} tabIndex={-1}>
+        {step.title}
+      </h4>
       <p>{step.instruction}</p>
       {step.target.tab && (
         <p className="help">

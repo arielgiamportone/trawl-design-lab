@@ -6,6 +6,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Accesibilidad (Fase 18.4)**: pruebas con axe (WCAG 2.1 A/AA) sobre todos los modos y
+  pestañas, en los dos temas y los dos idiomas, más los resultados calculados y el panel del
+  laboratorio; pruebas de recorrido sólo con teclado del modo guiado y de un ejercicio del aula.
+  Correcciones: la tabla de procedencia (con scroll propio) se puede enfocar; la revisión de una
+  entrega toma el foco, se cierra con Esc y devuelve el foco; el panel del laboratorio lleva el
+  foco al título del paso nuevo. Sección «Accesibilidad» en `docs/web.md`.
 - **App en inglés y en unidades imperiales (Fase 18.3)**: selector ES/EN y Métrico/Imperial en
   la cabecera (se recuerdan; el idioma inicial sale del navegador). Catálogos propios sin
   dependencias (`web/src/i18n/`), con el inglés tipado contra el español: falta una clave y el

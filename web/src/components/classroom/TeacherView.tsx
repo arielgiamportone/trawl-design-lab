@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { api } from '../../api/client';
 import { useT } from '../../i18n';
 import {
@@ -525,6 +525,14 @@ interface Answer {
 }
 
 function Review({ id, onClose }: { id: number; onClose: () => void }) {
+  // Diálogo de revisión: toma el foco al abrirse, se cierra con Esc y devuelve el foco al botón
+  // que lo abrió.
+  const box = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    box.current?.focus();
+    return () => opener?.focus();
+  }, []);
   const T = useT().classroom.teacher.review;
   const q = useQuery({
     queryKey: ['aula', 'submission', id],
@@ -550,7 +558,16 @@ function Review({ id, onClose }: { id: number; onClose: () => void }) {
     steps?: Record<string, { done: boolean; questions: Answer[] }>;
   };
   return (
-    <div className="card card-pad aula-review-box" role="dialog" aria-label={T.label}>
+    <div
+      ref={box}
+      className="card card-pad aula-review-box"
+      role="dialog"
+      aria-label={T.label}
+      tabIndex={-1}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onClose();
+      }}
+    >
       {q.error && <p className="alert error">{q.error.message}</p>}
       {s && (
         <>

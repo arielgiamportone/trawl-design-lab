@@ -353,6 +353,23 @@ es español).
   en métrico. Las mallas quedan en mm con la pulgada entre paréntesis, como en el oficio. Los
   ejercicios del aula se corrigen en las unidades de su enunciado.
 
+## Accesibilidad
+
+La app apunta a WCAG 2.1 AA y lo prueba en cada cambio (`web/e2e/a11y.spec.ts`):
+
+- **axe** (`@axe-core/playwright`) revisa el modo guiado, el aula y las quince pestañas del modo
+  experto, en tema claro y oscuro y en español e inglés; también los resultados ya calculados
+  (simulación 3D, optimización) y el panel de un laboratorio en curso. La prueba falla con
+  cualquier violación seria o crítica.
+- **Teclado**: una prueba recorre el modo guiado completo sin mouse (Tab, flechas en las opciones
+  y en las pestañas, Enter) y otra resuelve y corrige un ejercicio del aula.
+- **Foco**: al cambiar de paso en un laboratorio el foco va al título del paso; la revisión de
+  una entrega toma el foco, se cierra con Esc y lo devuelve al botón que la abrió. Las tablas con
+  scroll propio se pueden enfocar para recorrerlas con el teclado. Los resultados de las
+  comprobaciones se anuncian (`role="status"` y `role="alert"`).
+
+Para correr sólo estas pruebas: `npx playwright test e2e/a11y.spec.ts`.
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,

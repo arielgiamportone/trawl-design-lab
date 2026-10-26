@@ -310,7 +310,8 @@ function NetCard({
       </div>
       {prov.isLoading && <p className="empty">{L.loading}</p>}
       {prov.data && (
-        <div className="table-wrap prov-table">
+        // Tabla con scroll propio: enfocable para recorrerla con el teclado.
+        <div className="table-wrap prov-table" tabIndex={0} role="region" aria-label={T.provTable}>
           <table className="data" aria-label={T.provTable} data-testid="provenance">
             <thead>
               <tr>
