@@ -273,8 +273,8 @@ def _help_rows(cols: Sequence[Col]) -> list[list[Any]]:
                 c.key,
                 ", ".join(c.aliases[:4]),
                 c.unit,
-                "sí" if c.required else "",
-                c.help,
+                t("sí") if c.required else "",
+                t(c.help),
                 c.example,
                 rng,
             ]

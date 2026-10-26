@@ -3507,8 +3507,16 @@ export interface components {
             prompt: string;
             /** Unit */
             unit: string;
-            /** Options */
+            /**
+             * Options
+             * @description Textos de las opciones en el idioma activo
+             */
             options: string[] | null;
+            /**
+             * Option Ids
+             * @description Ids estables de las opciones (se puede responder con el id)
+             */
+            option_ids?: string[] | null;
         };
         /**
          * LabQuestionResultOut

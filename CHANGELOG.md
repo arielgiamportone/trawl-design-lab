@@ -6,6 +6,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Motor, informes y banco docente en inglés (Fase 18.1)**: `trawlkit.i18n` (el texto en
+  español es la clave; catálogos `data/i18n/en/*.yaml`, idioma por pedido con `ContextVar` y
+  números con punto o coma según el idioma). La API lee `?lang=en` o `Accept-Language` y responde
+  con `Content-Language`; el motor sin conexión acepta el mismo `lang`; la CLI suma `--lang en`
+  global. Salen en inglés las notas y avisos del motor, la construcción, la economía, los
+  sensores, la simulación, los errores de la API y del aula, la ayuda de `/params`, los informes
+  HTML, PDF y XLSX, la guía de construcción, la lámina del plano, los lotes y la guía de
+  ejercicios. Los ejercicios y laboratorios tienen su versión en inglés y las opciones de las
+  preguntas tienen `id` estable, así una entrega se corrige en cualquier idioma. Las salidas en
+  español no cambian. Pruebas de catálogo completo (todo texto marcado tiene traducción y los
+  mismos campos) y de informes sin palabras españolas; paridad en Pyodide con `lang=en`. Los
+  nombres de redes, buques y portones siguen siendo datos y no se traducen.
 - **Todo el cálculo sin conexión (Fase 18.2)**: el motor del teléfono atiende también la
   simulación (forma, lance progresivo, explorador, selectividad, incertidumbre y calibración),
   los planos SVG, el informe HTML y XLSX, los registros de sensores y los catálogos de

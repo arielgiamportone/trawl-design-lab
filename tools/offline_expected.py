@@ -74,6 +74,10 @@ CASES: list[tuple[str, str, dict[str, object] | None]] = [
         "/teaching/labs/check",
         {"lab_id": "lab.red_chica", "step_id": "chica", "design": {"net": _NET}, "answers": {}},
     ),
+    # Inglés: los textos del motor salen traducidos también en Pyodide.
+    ("POST", "/design?lang=en", {"net": _NET}),
+    ("POST", "/design/construction?lang=en", {"net": _NET}),
+    ("GET", "/teaching/exercises/potencia.prado_arrastre?seed=0&lang=en", None),
 ]
 
 

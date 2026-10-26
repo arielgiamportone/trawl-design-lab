@@ -9182,7 +9182,23 @@
         "type": "null"
        }
       ],
-      "title": "Options"
+      "title": "Options",
+      "description": "Textos de las opciones en el idioma activo"
+     },
+     "option_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Option Ids",
+      "description": "Ids estables de las opciones (se puede responder con el id)"
      }
     },
     "type": "object",
