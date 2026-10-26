@@ -276,6 +276,25 @@ La pestaña **«Lotes y flota»** ({doc}`35_lotes_proyeccion`) calcula muchos ca
   CSV, informe PDF y vista para imprimir (`POST /batch/export`).
 - El último lote queda guardado en IndexedDB y vuelve al abrir la pestaña.
 
+## Construcción: la guía para el taller
+
+La pestaña **«Construcción»** ({doc}`36_construccion`, `POST /design/construction`) lleva el
+diseño al taller:
+
+- **Hoja de corte**: paño a comprar por calidad y, por pieza, las mallas, el ciclo de corte de
+  cada costado explicado (los inferidos van marcados), por dónde empezar, el rectángulo de paño y
+  el peso. Cada pieza tiene su casilla «cortado».
+- **Armado paso a paso**: una unión por vez, en letra grande, con «Hecho, siguiente →» y el plano
+  de la cara con los dos paños de la unión resaltados; debajo, la lista completa con casillas.
+- **Montaje en relingas**: mallas por metro y coeficiente de armado de cada tramo de lima y burlón
+  (con aviso si el cabo supera al paño), la línea de boyas sobre la lima y las zonas de lastre.
+- **Cabos y cables**: largos terminados y de corte, con el sobrante por gaza ajustable.
+- **Descargas**: guía en PDF (A4), planilla XLSX e «Imprimir guía» (HTML); sin conexión salen la
+  planilla y la vista para imprimir.
+- El avance (paños cortados, uniones hechas) queda guardado en el navegador por red y variante, y
+  el resumen muestra el porcentaje del taller. En el modo guiado, el resultado ofrece «¿Cómo la
+  armo? Guía para el taller».
+
 ## Uso sin conexión y bajo consumo de datos
 
 La app se instala como aplicación (PWA, `vite-plugin-pwa`): el *service worker* guarda la app y,
@@ -347,6 +366,8 @@ consumo de datos** oculta «Diseño interactivo» y «Simulación», que descarg
 
 ![Lotes y flota: la red proyectada a cada buque](../web/docs/screenshots/escritorio-lotes.png)
 
+![Construcción: armado paso a paso con el plano resaltado](../web/docs/screenshots/escritorio-construccion.png)
+
 ## Arquitectura
 
 ```
@@ -378,6 +399,8 @@ web/
 ![Plano en móvil](../web/docs/screenshots/movil-plano.png)
 
 ![Sin conexión: el motor del teléfono](../web/docs/screenshots/movil-sin-conexion.png)
+
+![Guía para el taller en el teléfono](../web/docs/screenshots/movil-guia-taller.png)
 
 ## Pruebas
 

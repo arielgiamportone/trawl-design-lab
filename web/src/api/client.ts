@@ -58,6 +58,10 @@ export type ComponentKindOut = S['ComponentKindOut'];
 export type ComponentCheckOut = S['ComponentCheckOut'];
 export type BomRequest = S['BomRequest'];
 export type BomOut = S['BomOut'];
+export type ConstructionGuide = S['ConstructionGuideOut'];
+export type GuideJoin = S['JoinOut'];
+export type GuidePiece = S['CutPieceOut'];
+export type GuideFormat = 'html' | 'pdf' | 'xlsx';
 export type ComponentOptimizeRequest = S['ComponentOptimizeRequest'];
 export type ComponentOptimizeResponse = S['ComponentOptimizeResponse'];
 export type AssemblyOut = S['AssemblyOut'];
@@ -238,6 +242,33 @@ export const api = {
   async bom(req: BomRequest, signal?: AbortSignal): Promise<BomOut> {
     const res = await post('/design/bom', req, signal);
     return (await res.json()) as BomOut;
+  },
+  async construction(
+    req: DesignRequest,
+    variant: Variant,
+    eyeAllowanceM: number,
+    signal?: AbortSignal,
+  ): Promise<ConstructionGuide> {
+    const res = await post(
+      `/design/construction?variant=${variant}&eye_allowance_m=${eyeAllowanceM}`,
+      req,
+      signal,
+    );
+    return (await res.json()) as ConstructionGuide;
+  },
+  async constructionExport(
+    req: DesignRequest,
+    format: GuideFormat,
+    variant: Variant,
+    eyeAllowanceM: number,
+    signal?: AbortSignal,
+  ): Promise<Blob> {
+    const res = await post(
+      `/design/construction/export?format=${format}&variant=${variant}&eye_allowance_m=${eyeAllowanceM}`,
+      req,
+      signal,
+    );
+    return res.blob();
   },
   async optimizeComponents(
     req: ComponentOptimizeRequest,

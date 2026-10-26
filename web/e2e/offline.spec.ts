@@ -60,5 +60,14 @@ test('sin conexión: el motor del teléfono calcula, arma la lista y valida un a
   const download = page.waitForEvent('download');
   await item.getByRole('button', { name: 'Exportar' }).click();
   expect((await download).suggestedFilename()).toBe('user_wire_cable_del_muelle.json');
+
+  // La guía de construcción también sale del teléfono (el PDF no: avisa).
+  await page.getByRole('tab', { name: 'Construcción' }).click();
+  await expect(page.getByTestId('cut-sheet')).toBeVisible({ timeout: 60_000 });
+  await page.getByRole('button', { name: 'Guía en PDF (A4)' }).click();
+  await expect(page.getByTestId('construction').getByRole('alert')).toContainText('conexión');
+  const xlsx = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Planilla XLSX' }).click();
+  expect((await xlsx).suggestedFilename()).toBe('guia-fao_a3_standard.xlsx');
   await context.setOffline(false);
 });

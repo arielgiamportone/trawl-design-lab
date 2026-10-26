@@ -326,7 +326,7 @@ T = {
             ("Cables", "cap. 18"),
             ("Velocidad viable", "cap. 19"),
         ],
-        "phases_t": "Hoja de ruta: fases 0 a 14",
+        "phases_t": "Hoja de ruta: fases 0 a 15",
         "phases": [
             ("0–1", "datos abiertos"),
             ("2", "motor validado"),
@@ -341,6 +341,7 @@ T = {
             ("12", "catálogo FAO"),
             ("13", "componentes, sin conexión"),
             ("14", "flotas y lotes"),
+            ("15", "guía de taller"),
         ],
         "fleet_t": "Del puerto a la red: flota, proyección y armado",
         "fleet": [
@@ -390,7 +391,7 @@ T = {
             ("Warps", "ch. 18"),
             ("Feasible speed", "ch. 19"),
         ],
-        "phases_t": "Roadmap: phases 0 to 14",
+        "phases_t": "Roadmap: phases 0 to 15",
         "phases": [
             ("0–1", "open data"),
             ("2", "validated engine"),
@@ -405,6 +406,7 @@ T = {
             ("12", "FAO catalogue"),
             ("13", "components, offline"),
             ("14", "fleets and batches"),
+            ("15", "workshop guide"),
         ],
         "fleet_t": "From the port to the net: fleet, projection and rigging",
         "fleet": [

@@ -47,7 +47,8 @@ minuto si estaba dormida (plan gratuito; ver {doc}`despliegue`).
 3. **Caso de estudio y validación**: la red FAO A-3 estándar y modificada, la validación contra el
    Excel y contra el simulador DynamiT, el catálogo de redes FAO con su procedencia
    ({doc}`33_catalogo_fao`), los componentes y el costo ({doc}`34_componentes`), los lotes y la
-   proyección de redes a una flota ({doc}`35_lotes_proyeccion`) y las erratas del modelo original.
+   proyección de redes a una flota ({doc}`35_lotes_proyeccion`), la guía de construcción para el
+   taller ({doc}`36_construccion`) y las erratas del modelo original.
 4. **Software**: motor, informes y planos, aplicación web, API, despliegue en línea y cómo citar.
 
 Los capítulos son notebooks ejecutables: el código y los números que muestran se recalculan cada vez

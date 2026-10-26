@@ -32,6 +32,7 @@ parts:
       - file: 33_catalogo_fao
       - file: 34_componentes
       - file: 35_lotes_proyeccion
+      - file: 36_construccion
       - file: erratas
   - caption: Software
     chapters:

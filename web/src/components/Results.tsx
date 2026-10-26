@@ -22,6 +22,9 @@ const InteractiveDesign = lazy(() =>
 const Simulate = lazy(() => import('./Simulate').then((m) => ({ default: m.Simulate })));
 const Catalog = lazy(() => import('./Catalog').then((m) => ({ default: m.Catalog })));
 const Components = lazy(() => import('./Components').then((m) => ({ default: m.Components })));
+const Construction = lazy(() =>
+  import('./construction/Construction').then((m) => ({ default: m.Construction })),
+);
 const Batch = lazy(() => import('./Batch').then((m) => ({ default: m.Batch })));
 
 export function Results() {
@@ -52,6 +55,7 @@ export function Results() {
     { id: 'descargas', label: 'Descargas' },
     { id: 'catalogo', label: 'Catálogo FAO' },
     { id: 'componentes', label: 'Componentes' },
+    { id: 'construccion', label: 'Construcción' },
     { id: 'lotes', label: 'Lotes y flota' },
     {
       id: 'notas',
@@ -75,6 +79,7 @@ export function Results() {
             {active === 'diseno' && <InteractiveDesign />}
             {active === 'catalogo' && <Catalog />}
             {active === 'componentes' && <Components />}
+            {active === 'construccion' && <Construction />}
             {active === 'lotes' && <Batch onOpened={() => setTab('resumen')} />}
           </Suspense>
           {active === 'paneles' && <PanelEditor />}

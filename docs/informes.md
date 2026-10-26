@@ -56,9 +56,9 @@ velocidad).
 
 | Salida | Contenido |
 |---|---|
-| `informe.html` | Página autocontenida (sin conexión ni JavaScript), modo claro y oscuro: portada, resumen con indicadores, láminas, escala real, gráficos, tablas, erratas, notas, metodología y créditos. |
+| `informe.html` | Página autocontenida (sin conexión ni JavaScript), modo claro y oscuro: portada, resumen con indicadores, láminas, escala real, gráficos, construcción y materiales (lista de materiales y guía para el taller, {doc}`36_construccion`), tablas, erratas, notas, metodología y créditos. |
 | `informe.pdf` | El mismo HTML impreso: A4 vertical, tablas anchas en A4 apaisado y láminas en A3 apaisado. |
-| `informe.xlsx` | Una hoja por tabla (resumen, paneles, potencia, resistencia, demanda, aparejo, boyas y lastre, cable, ventana de velocidad, erratas) más "Caso" con todos los parámetros y "Notas". |
+| `informe.xlsx` | Una hoja por tabla (resumen, paneles, potencia, resistencia, demanda, aparejo, boyas y lastre, cable, ventana de velocidad, erratas, lista de materiales y las tablas de la guía de construcción) más "Caso" con todos los parámetros y "Notas". |
 | Optimización (opcional) | Sección «Optimización» del HTML/PDF: mejor diseño, restricciones (OK/NO), mapa de factibilidad escala × velocidad, frente de Pareto y su tabla; hojas `optimizacion`, `optimizacion_restricciones`, `optimizacion_pareto` y `optimizacion_malla` del XLSX. |
 | Simulación (opcional) | Sección «Simulación»: tabla simulación / motor / DynamiT (red FAO A-3 estándar) con diferencias porcentuales y planta, perfil y frente de las tres primeras velocidades; hojas `simulacion` y `simulacion_detalle`. |
 | `plano_estandar.svg`, `plano_modificada.svg` | Lámina técnica A3 como los planos de 2014: planos superior e inferior, mallas por borde, códigos de corte, tablas laterales, relingas, superficie y peso por plano, esquema del aparejo y rótulo. |

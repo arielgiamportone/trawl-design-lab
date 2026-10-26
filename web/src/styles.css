@@ -2601,3 +2601,137 @@ table.data tr.selected td {
   width: 100%;
   min-width: 8em;
 }
+
+/* Guía de construcción (Fase 15) */
+.construction .segmented {
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.subhead {
+  font-size: 15px;
+  margin: 18px 0 6px;
+}
+.guide-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+.guide-summary > div {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guide-summary progress {
+  width: 100%;
+  accent-color: var(--good);
+}
+.guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.guide-list > li {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 2px;
+}
+.guide-list > li.done {
+  opacity: 0.62;
+}
+.guide-list > li.current {
+  background: var(--accent-soft);
+  border-radius: var(--radius-sm);
+}
+.guide-cuts {
+  margin: 4px 0 4px 34px;
+  padding: 0;
+  list-style: disc;
+}
+.guide-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.guide-check input[type='checkbox'] {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  accent-color: var(--good);
+}
+.guide-check.big {
+  font-weight: 600;
+}
+.guide-check .badge {
+  margin-left: 6px;
+}
+.guide-step {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 0 0 12px;
+  background: var(--surface);
+}
+.guide-step-title {
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.guide-step-text {
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 0 0 6px;
+}
+.join-map {
+  width: 100%;
+  max-height: 340px;
+  margin-top: 8px;
+}
+.join-map .join-off {
+  fill: var(--surface-2);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+.join-map .join-on {
+  fill: var(--warn-bg);
+  stroke: var(--warn-mark);
+  stroke-width: 2.5;
+}
+.join-map text {
+  fill: var(--text);
+}
+.join-map .join-map-title {
+  font-weight: 700;
+}
+.float-line {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+}
+.float-line .float-rope {
+  stroke: var(--text-2);
+  stroke-width: 2;
+}
+.float-line .float-axis {
+  stroke: var(--muted);
+  stroke-dasharray: 3 3;
+}
+.float-line .float-ball {
+  fill: var(--warn-mark);
+  stroke: var(--text-2);
+}
+.float-line text {
+  fill: var(--text-2);
+}
+@media (max-width: 480px) {
+  .guide-step-text {
+    font-size: 16px;
+  }
+  .guide-check input[type='checkbox'] {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+}

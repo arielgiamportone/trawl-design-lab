@@ -71,6 +71,8 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
 | **Lotes y flota**: la red para cada buque del puerto | **Selectividad**: qué tallas retiene el copo |
 | ![Gráficos en tema oscuro: tiro disponible y resistencia](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-oscuro-graficos.png) | ![En el teléfono, sin conexión, con el motor del teléfono](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/movil-sin-conexion.png) |
 | **Gráficos** (tema oscuro) | **Sin conexión**: el motor corre en el teléfono |
+| ![Construcción: armado paso a paso con el plano resaltado](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-construccion.png) | ![La guía para el taller en el teléfono](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/movil-guia-taller.png) |
+| **Construcción**: hoja de corte, uniones y montaje | **Guía para el taller** en el teléfono, paso a paso |
 
 ## Qué hace
 
@@ -91,6 +93,9 @@ Facultades Regionales donde se dicta **Ingeniería Pesquera**, sobre el Mar Arge
   registros de sensores.
 - **Lotes y flota**: planillas de flota, redes y casos (CSV o XLSX); una red probada proyectada a
   cada buque por semejanza y refinada con el motor.
+- **Guía de construcción**: del diseño al taller. Paño a comprar, hoja de corte con el ciclo de
+  cada corte, uniones paso a paso con sus tomas, montaje en relingas (mallas por metro), boyas,
+  lastre y cortes de cabos; en PDF para imprimir, planilla y paso a paso en el teléfono.
 - **Sin conexión**: la app se instala y el mismo motor corre en el teléfono (Pyodide).
 
 ## Arquitectura
@@ -115,7 +120,7 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 38](https://img.shields.io/badge/rutas%20API-38-1c5cab) ![capítulos: 35](https://img.shields.io/badge/cap%C3%ADtulos-35-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 38](https://img.shields.io/badge/rutas%20API-38-1c5cab) ![capítulos: 36](https://img.shields.io/badge/cap%C3%ADtulos-36-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
@@ -127,7 +132,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 38 |
-| Capítulos del libro | 35 · 68 referencias |
+| Capítulos del libro | 36 · 69 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->
@@ -145,6 +150,7 @@ trawlkit report fao_a3_standard --vessel fao_a3_150hp --out informe/   # HTML, P
 trawlkit optimize fao_a3_standard               # escala y velocidad óptimas
 trawlkit batch flota.xlsx --net fao_wb_bt2p_60hp -o lote.xlsx         # una red para cada buque
 trawlkit batch --template plantilla.xlsx        # plantilla de flota con su hoja de ayuda
+trawlkit build-guide fao_a3_standard -o guia.pdf    # guía de construcción para el taller
 trawlkit serve                                  # API en http://127.0.0.1:8000/docs
 trawlkit errata                                 # erratas del Excel original
 ```
@@ -204,6 +210,7 @@ El despliegue (GitHub Pages para el libro y la app, Render para la API) está en
 | 12 | Catálogo de redes FAO con procedencia valor por valor |
 | 13 | Componentes con equivalentes genéricos, costo, armado óptimo y uso sin conexión |
 | 14 | Planillas de flota, cálculo por lotes y proyección de una red a cada buque |
+| 15 | Guía de construcción para el taller: corte, armado, montaje en relingas y cortes de cabos |
 
 El detalle de cada versión está en el [CHANGELOG](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CHANGELOG.md).
 

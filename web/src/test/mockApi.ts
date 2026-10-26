@@ -28,6 +28,7 @@ import componentsWire from './fixtures/components_wire.json';
 import optimizeComponents from './fixtures/optimize_components.json';
 import batchParse from './fixtures/batch_parse.json';
 import batchRun from './fixtures/batch_run.json';
+import construction from './fixtures/construction.json';
 
 export const fixtures = {
   design,
@@ -57,6 +58,7 @@ export const fixtures = {
   optimizeComponents,
   batchParse,
   batchRun,
+  construction,
 };
 
 export interface Call {
@@ -135,6 +137,9 @@ export function mockApi(
       });
     }
     if (path === '/design/bom') return json(bom);
+    if (path === '/design/construction') return json(construction);
+    if (path === '/design/construction/export')
+      return new Response('%PDF-fake', { headers: { 'Content-Type': 'application/pdf' } });
     if (path === '/batch/parse') return json(batchParse);
     if (path === '/batch/run') return json(batchRun);
     if (path === '/batch/export' || path === '/batch/template') {

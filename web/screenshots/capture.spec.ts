@@ -104,6 +104,20 @@ test.describe('escritorio', () => {
     await shot(page, 'escritorio-componentes');
   });
 
+  test('construcción: armado paso a paso', async ({ page }) => {
+    await start(page, { mode: 'expert', tab: 'construccion' });
+    await expect(page.getByTestId('cut-sheet')).toBeVisible({ timeout: 30_000 });
+    await page.getByLabel('Paño A cortado').check();
+    await page.getByLabel('Paño B cortado').check();
+    await page.getByRole('button', { name: 'Armado paso a paso' }).click();
+    await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
+    await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
+    await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
+    await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
+    await expect(page.getByTestId('join-map')).toBeVisible();
+    await shot(page, 'escritorio-construccion', page.getByTestId('guide-summary'));
+  });
+
   test('lotes y flota', async ({ page }) => {
     await start(page, { mode: 'expert', tab: 'lotes' });
     const fleet =
@@ -132,6 +146,15 @@ test.describe('teléfono', () => {
     await expect(page.getByTestId('plan-image')).toBeVisible();
     await page.waitForTimeout(2000);
     await shot(page, 'movil-plano', page.getByRole('tablist').first());
+  });
+
+  test('guía para el taller en el teléfono', async ({ page }) => {
+    await start(page, { mode: 'expert', tab: 'construccion' });
+    await expect(page.getByTestId('cut-sheet')).toBeVisible({ timeout: 30_000 });
+    await page.getByRole('button', { name: 'Armado paso a paso' }).click();
+    await page.getByRole('button', { name: 'Hecho, siguiente →' }).click();
+    await expect(page.getByTestId('join-map')).toBeVisible();
+    await shot(page, 'movil-guia-taller', page.getByTestId('assembly'));
   });
 
   test('sin conexión: motor del teléfono', async ({ page, context }) => {

@@ -1,7 +1,9 @@
 import { ApiError } from '../../api/client';
 import { chapterUrl } from '../../lib/docs';
 import { catchPreset, EXPLORE_FORM_KEY } from '../../lib/explore';
+import { GUIDE_VIEW_KEY } from '../../lib/construction';
 import { remember } from '../../lib/memo';
+import { saveJson } from '../../lib/storage';
 import { DEFAULT_SEL, SEL_FORM_KEY } from '../../lib/selectivity';
 import { SIM_VIEW_KEY } from '../../lib/simulate';
 import { fmtFixed } from '../../lib/format';
@@ -125,6 +127,16 @@ export function StepResult({ onExpert }: { onExpert: (tab?: string) => void }) {
           }}
         >
           ¿Qué tallas retiene el copo?
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            saveJson(GUIDE_VIEW_KEY, 'corte');
+            onExpert('construccion');
+          }}
+        >
+          ¿Cómo la armo? Guía para el taller
         </button>
       </div>
       <details className="accordion">
