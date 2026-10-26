@@ -1,0 +1,270 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# Components: catalogues, equivalents and cost
+
+```{code-cell} ipython3
+:tags: [remove-cell]
+import sys, pathlib
+DOCS = pathlib.Path.cwd().parent
+sys.path[:0] = [str(DOCS.parent), str(DOCS)]
+import _lang  # English book: number format and engine messages in English
+import dataclasses
+
+import _plots_v as PV
+from myst_nb import glue
+from trawlkit import components as comp
+from trawlkit.catalog import catalog_case
+from trawlkit.cost import bill_of_materials
+from trawlkit.i18n import t
+from trawlkit.io import load_net
+from trawlkit.model import run
+from trawlkit.optimize import optimise_components
+
+
+def num(x: float, nd: int = 1) -> str:
+    return f"{x:,.{nd}f}"
+
+
+ITEMS = {k: comp.load_components(k) for k in comp.KINDS}
+N_ITEMS = sum(len(v) for v in ITEMS.values())
+BRANDS = sorted({i.brand for v in ITEMS.values() for i in v if i.brand})
+glue("n_items", N_ITEMS, display=False)
+glue("n_brands", len(BRANDS), display=False)
+```
+
+## Purpose
+
+A net is not built from the drawing alone: it takes netting, wire ropes, ropes, otter boards,
+floats and chains, and what can be found changes from port to port. This chapter describes the
+**components catalogue** (Phase 13): {glue:}`n_items` items from {glue:}`n_brands` brands and
+**generic** equivalents, with the source of each value; how the engine uses them for sizing; how
+the **bill of materials** is put together with its indicative cost; and how the optimizer **chooses
+the rigging** among what is available. The tool is aimed at fishers with few resources: the
+generics can be found in any ship chandler's, the prices are entered by the user and the app
+computes **offline** on the phone.
+
+## Sources and generic equivalents
+
+Almost no manufacturer publishes open tables, let alone for small sizes. That is why each type has
+a **generic family** derived from the tables of FAO's *Fisherman's Workbook* {cite}`prado1990`,
+and the brands are cited **point data**, never complete tables (at most ten sizes per product
+line):
+
+* **Netting and twine**: diameter and breaking load per Rtex for twisted and braided PA, PES, PP
+  and PE, with a power fit $y = a\,x^b$ on a logarithmic scale over the tables of the *Workbook*;
+  Garware (India) for braided PE {cite}`garware_fisheries`.
+* **Steel wire ropes**: weight and breaking load with $y = k\,d^2$ over the 6x7, 6x12, 6x19 and
+  6x24 tables of the *Workbook*; Bridon-Bekaert {cite}`bridon2023` and PFEIFER
+  {cite}`pfeifer_6x19w` as manufacturers.
+* **Ropes**: PA, PE, PES, PP and combination steel-and-fibre ropes; Garware X2.
+* **Otter boards**: area and weight by power from the *Workbook* for flat, oval, V and Süberkrüb
+  otter boards; the polar of each type comes from the flat board of the Excel workbook (C_L max.
+  0.93, consistent with 0.95 in {cite}`lange1993`) or from the Morgère one, scaled for the V board;
+  and four boards from the shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`.
+* **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+rows = []
+for k in comp.KINDS:
+    s = comp.summary(ITEMS[k])
+    rows.append([t(comp.KIND_LABEL[k]), s["items"], s["generic"], ", ".join(s["brands"]) or "—"])
+PV.md_table(["Type", "Items", "Generic", "Brands"], rows)
+```
+
+Each item carries its **provenance per value** (transcribed, derived, assumed or from the Excel
+workbook), like the nets of the previous chapter, and points to its **generic equivalent**: the one
+with the same construction and the closest generic size (the *Workbook* table does not have every
+size, and the generic may break at more or less than the branded one). The table compares branded
+wire ropes with their generic:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+rows = []
+for item in ITEMS["wire"]:
+    if item.brand != "Bridon-Bekaert" or item.diameter_mm not in (14, 16, 18):
+        continue
+    g = comp.generic_for(item)
+    if g is None or g.id == item.id:
+        continue
+    rows.append(
+        [
+            f"{item.diameter_mm:g} mm",
+            f"{item.name}",
+            num(item.weight_kg_per_m, 3),
+            num(item.breaking_load_t, 1),
+            g.name,
+            num(g.weight_kg_per_m, 3),
+            num(g.breaking_load_t, 1),
+        ]
+    )
+PV.md_table(
+    ["Ø", "Branded", "kg/m", "Breaking load [t]", "Generic", "kg/m", "Breaking load [t]"], rows[:6]
+)
+```
+
+## Physical validation
+
+A component entered by hand may carry a units error or a typo. The validator
+(`trawlkit.components.check`) compares each value with physical ranges of the material: weight per
+metre against $k\,d^2$ (steel, fibre, chain), breaking load against that of the material, twine
+tenacity in gf/tex, buoyancy against the volume of the float and otter board weight per m². For
+example, a 10 mm wire rope entered with 2 kg/m and 50 t:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+bad = comp.parse_component(
+    {
+        "kind": "wire",
+        "id": "user_wire",
+        "name": "contribution",
+        "status": "user",
+        "construction": "6x19",
+        "diameter_mm": 10,
+        "weight_kg_per_m": 2.0,
+        "breaking_load_t": 50,
+    }
+)
+PV.md_table(["Level", "Code", "Remark"], [[i.level, i.code, i.message] for i in comp.check(bad)])
+```
+
+## The engine with components
+
+`DesignCase` accepts a catalogue component by id for the warp (`warp_id`), the floats
+(`float_id`), the twine of all panels except the codend (`twine_id`) and the chain (`chain_id`); the
+headrope and footrope ropes and the otter board were already chosen by id. Without those fields,
+the automatic selection uses the catalogues of the Excel workbook and **the A-3 result does not
+change** (the golden tests verify it); with the filters `component_brands`, `component_region` or
+`generic_only`, the automatic selection searches the filtered components catalogue. With a chosen
+float, the number of floats comes from the required buoyancy (Flot!F72:F82); with a twine, the
+weight and the drag of the netting are recomputed with its diameter.
+
+## Bill of materials and indicative cost
+
+`trawlkit.cost.bill_of_materials` puts together the list of what has to be bought: the netting by
+material (the weight in air that `net.analyse` already computes), the headrope and the footrope,
+the bridles and sweeps, the warp (two warps of the length paid out with 50 % spare, Cab!D12), the
+floats, the pair of otter boards and the ballast chain. The prices are **always indicative**: they
+are entered by the user or come from the catalogue with a date and a source. A line without a price
+is reported as such and **never counts as zero**. The table uses illustrative prices in a fictitious
+currency (XXX, the ISO code for “no currency”):
+
+```{code-cell} ipython3
+:tags: [remove-input]
+case_a3 = catalog_case(load_net("fao_wb_bt2p_60hp")).case
+res = run(case_a3)
+XXX = lambda v, u: {"value": v, "currency": "XXX", "unit": u, "date": "2026-10", "source": "example"}
+prices = {"netting_pa": XXX(12, "kg"), "doors": XXX(300, "unit"), "floats": XXX(4, "unit")}
+bom = bill_of_materials(res, prices)
+rows = [
+    [
+        ln.label,
+        ln.component_name or ln.component_id or "—",
+        f"{num(ln.quantity, 1)} {ln.unit}",
+        "no price" if ln.cost is None else num(ln.cost, 0),
+    ]
+    for ln in bom.lines
+]
+PV.md_table(["Item", "Component", "Quantity", "Cost [XXX]"], rows)
+glue("bom_missing", bom.missing_prices, display=False)
+glue("bom_total", round(bom.totals.get("XXX", 0)), display=False)
+```
+
+The total with these prices is {glue:}`bom_total` XXX and {glue:}`bom_missing` lines remain without
+a price, which the app asks to fill in before comparing riggings by cost.
+
+## Optimal rigging with what is available
+
+`trawlkit.optimize.optimise_components` searches a discrete grid over the filtered catalogue:
+otter boards within the power range of the vessel or with an area close to the required one
+(Port!F215), floats that withstand the fishing depth, twines that reach 90 % of the breaking load
+of the drawing's twine, and the thinnest warp that meets the diameter and the breaking load at the
+working speed. Each rigging is evaluated with the constraints of the optimizer of chapter 20 (pull
+with reserve, open net, warp, otter board, speed range) plus the depth of the floats and the
+breaking load of the twine, at the best speed of the 0.05 kn grid, and is ranked by **minimum
+drag**, **minimum work per m² swept** (maximum area per litre) or **minimum cost**. With the
+two-panel bottom trawl of the *Workbook* and its 60 hp vessel:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+opt_all = optimise_components(case_a3, "drag")
+opt_gen = optimise_components(dataclasses.replace(case_a3, generic_only=True), "drag")
+
+
+def row(label, a):
+    ev = a.evaluation
+    c = a.components()
+    return [
+        label,
+        c["door"],
+        c["warp"] or "—",
+        f"{c['float'] or 'from the drawing'} × {a.float_count or '—'}",
+        c["twine"] or "from the drawing",
+        num(ev.v_kn, 2),
+        num(ev.demand_kgf, 0),
+        "yes" if a.feasible else "no",
+    ]
+
+
+rows = [row("Recommended", opt_all.best)]
+rows += [row(f"Alternative {i + 1}", a) for i, a in enumerate(opt_all.alternatives[:2])]
+rows.append(row("Generics only", opt_gen.best))
+PV.md_table(
+    ["Rigging", "Otter board", "Warp", "Floats", "Twine", "v [kn]", "R_T [kgf]", "Feasible"], rows
+)
+glue("opt_evaluated", opt_all.evaluated, display=False)
+```
+
+{glue:}`opt_evaluated` riggings were evaluated, one per engine run (≈ 0.05 s each). Here the
+recommended rigging is already generic (the otter board from the drawing, a 6x12 wire rope of the
+*Workbook* family, plastic floats and a polyester twine thinner than the drawing's with the same
+breaking load), which is why “generics only” gives the same one; when the recommended one includes
+brands, the app always adds a generic alternative. The alternatives differ by a few kgf: the otter
+board and the floats weigh little in the drag of a small net, which depends mostly on the netting.
+
+## Offline: the engine on the phone
+
+In port there is often no signal. The app is an **installable web application** (PWA) and, with
+“Prepare offline use”, it downloads once the Python interpreter compiled to WebAssembly (Pyodide),
+numpy, pydantic, pyyaml and the `trawlkit` *wheel* (about 15 MB). From then on, without a network,
+the design, the catalogues, the bill of materials, the rigging with components, the validator of
+contributions and the grid optimization run **on the phone**: `trawlkit.api.offline` serves the
+same routes as the API with the same request and response models. The tests compare each route
+with the API and, in CI, the design of the A-3 inside Pyodide (in Node) with that of CPython: the
+largest relative difference is of the order of $10^{-16}$. The simulation, the PDF reports and the
+SVG drawings still need the server, and the app says so. The **low data usage mode** hides the 3D
+views and the simulation, which download three.js.
+
+## User contributions
+
+Anyone who uses a wire rope, rope or float that is not in the catalogue enters it in the
+“Components” tab with the data from the label or the data sheet. The contribution is validated with
+`POST /components/check`, is stored **only in the browser** with the status “contribution, not
+verified” and enters the calculation only if the user enables it: it travels in the `components`
+field of each request and the engine sees it only during that request. To add it to the catalogue,
+“Propose for the catalogue” opens a GitHub *issue* with the components template and the JSON of the
+contribution; a maintainer reviews it and transcribes it in `tools/components/` with its source.
+There are no accounts and no personal data.
+
+## Assumptions and limits
+
+* The generics are **fits** to reference tables, not products: a real wire rope or twine of the
+  same diameter may weigh or break ±10 % differently. The data sheet of each item says which value
+  is from the manufacturer and which is derived or assumed.
+* The polars of the generic otter boards are those of their type (flat, oval, V), not measurements
+  of each model; no manufacturer publishes C_L/C_D.
+* There are hardly any open data sheets from Latin American suppliers or for small sizes: the
+  contributions cover that gap and are always distinguished from the sourced data.
+* The prices are indicative and the user's own; the cost optimizer ranks first the riggings with
+  fewer missing prices.
+* The components optimizer does not scale the net (that is what the one in chapter 20 is for) nor
+  does it change the headrope and footrope ropes, which are chosen by hand.
