@@ -4,8 +4,9 @@
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
 lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
-optimización por malla y los lotes (Fase 14; el PDF del lote, no). Lo demás (simulación,
-informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que lo explica.
+optimización por malla, los lotes (Fase 14) y la guía de construcción (Fase 15; sus PDF, no).
+Lo demás (simulación, informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que
+lo explica.
 
 Usa los mismos modelos de pedido y respuesta que la API (:mod:`trawlkit.api.schemas`) y las
 mismas funciones de :mod:`trawlkit.api.service`; ``tests/test_offline.py`` compara cada ruta con
@@ -33,7 +34,8 @@ from trawlkit.io.schema import Door, NetSpec, Vessel
 #: Mensaje de las rutas que necesitan el servidor.
 NEEDS_SERVER = (
     "Esta función necesita conexión con la API (simulación, informes y planos no corren en el "
-    "teléfono). El diseño, la lista de materiales y el armado con componentes sí."
+    "teléfono). El diseño, la lista de materiales, el armado con componentes y la guía de "
+    "construcción sí."
 )
 
 M = TypeVar("M", bound=BaseModel)
@@ -201,6 +203,34 @@ def _layout(_m: re.Match[str], query: Query, body: Any) -> Any:
     return _dump(sc.LayoutResponse, service.layout_of(net, mode))
 
 
+def _guide_args(query: Query) -> tuple[str, float]:
+    variant = _q(query, "variant", "std") or "std"
+    try:
+        eye = float(_q(query, "eye_allowance_m", "0.5") or 0.5)
+    except ValueError as exc:
+        raise _HTTPError(422, "eye_allowance_m debe ser un número") from exc
+    return variant, eye
+
+
+def _construction(_m: re.Match[str], query: Query, body: Any) -> Any:
+    req = _body(sc.DesignRequest, body)
+    variant, eye = _guide_args(query)
+    with service.user_items(req.components):
+        out = service.construction_guide(_build(req), variant, eye)
+    return _dump(sc.ConstructionGuideOut, out)
+
+
+def _construction_export(_m: re.Match[str], query: Query, body: Any) -> Any:
+    req = _body(sc.DesignRequest, body)
+    variant, eye = _guide_args(query)
+    fmt = _q(query, "format", "pdf") or "pdf"
+    if fmt == "pdf":
+        raise _HTTPError(503, "el PDF de la guía necesita conexión: use format=html e imprímalo")
+    with service.user_items(req.components):
+        data, media, name = service.construction_export(_build(req), variant, eye, fmt)
+    return Binary(data, media, name)
+
+
 def _check(_m: re.Match[str], _q_: Query, body: Any) -> Any:
     req = _body(sc.ComponentCheckRequest, body)
     return _dump(sc.ComponentCheckOut, service.component_check(req.model_dump()))
@@ -312,6 +342,8 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/design"), _design),
     ("POST", re.compile(r"/design/bom"), _bom),
     ("POST", re.compile(r"/design/layout"), _layout),
+    ("POST", re.compile(r"/design/construction"), _construction),
+    ("POST", re.compile(r"/design/construction/export"), _construction_export),
     ("POST", re.compile(r"/components/check"), _check),
     ("POST", re.compile(r"/optimize"), _optimize),
     ("POST", re.compile(r"/optimize/components"), _optimize_components),

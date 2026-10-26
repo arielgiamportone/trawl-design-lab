@@ -722,6 +722,153 @@
     }
    }
   },
+  "/design/construction": {
+   "post": {
+    "summary": "Design Construction",
+    "description": "Guía de construcción para el taller: hoja de corte, armado, montaje en relingas y cortes.",
+    "operationId": "design_construction_design_construction_post",
+    "parameters": [
+     {
+      "name": "variant",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "std",
+        "mod"
+       ],
+       "type": "string",
+       "default": "std",
+       "title": "Variant"
+      }
+     },
+     {
+      "name": "eye_allowance_m",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "maximum": 5.0,
+       "minimum": 0.0,
+       "default": 0.5,
+       "title": "Eye Allowance M"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ConstructionGuideOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/design/construction/export": {
+   "post": {
+    "summary": "Design Construction Export",
+    "description": "Guía de construcción en PDF o HTML (para imprimir en A4) o XLSX.",
+    "operationId": "design_construction_export_design_construction_export_post",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "html",
+        "pdf",
+        "xlsx"
+       ],
+       "type": "string",
+       "default": "pdf",
+       "title": "Format"
+      }
+     },
+     {
+      "name": "variant",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "std",
+        "mod"
+       ],
+       "type": "string",
+       "default": "std",
+       "title": "Variant"
+      }
+     },
+     {
+      "name": "eye_allowance_m",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "number",
+       "maximum": 5.0,
+       "minimum": 0.0,
+       "default": 0.5,
+       "title": "Eye Allowance M"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DesignRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/pdf": {},
+       "text/html": {},
+       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/design/layout": {
    "post": {
     "summary": "Design Layout",
@@ -1590,6 +1737,45 @@
     ],
     "title": "AssemblyOut",
     "description": "Un armado evaluado (``trawlkit.optimize.components.Assembly``)."
+   },
+   "BallastZoneOut": {
+    "properties": {
+     "zone": {
+      "type": "string",
+      "title": "Zone"
+     },
+     "where": {
+      "type": "string",
+      "title": "Where"
+     },
+     "kg_min": {
+      "type": "number",
+      "title": "Kg Min"
+     },
+     "kg_max": {
+      "type": "number",
+      "title": "Kg Max"
+     },
+     "kg_m_min": {
+      "type": "number",
+      "title": "Kg M Min"
+     },
+     "kg_m_max": {
+      "type": "number",
+      "title": "Kg M Max"
+     }
+    },
+    "type": "object",
+    "required": [
+     "zone",
+     "where",
+     "kg_min",
+     "kg_max",
+     "kg_m_min",
+     "kg_m_max"
+    ],
+    "title": "BallastZoneOut",
+    "description": "Zona de lastre del burlón con el lastre mínimo y el máximo."
    },
    "BatchFile": {
     "properties": {
@@ -3091,6 +3277,286 @@
     "title": "ConstraintOut",
     "description": "Restricción evaluada (``lower ≤ value ≤ upper``)."
    },
+   "ConstructionGuideOut": {
+    "properties": {
+     "net_id": {
+      "type": "string",
+      "title": "Net Id"
+     },
+     "net_name": {
+      "type": "string",
+      "title": "Net Name"
+     },
+     "variant": {
+      "type": "string",
+      "enum": [
+       "std",
+       "mod"
+      ],
+      "title": "Variant"
+     },
+     "eye_allowance_m": {
+      "type": "number",
+      "title": "Eye Allowance M"
+     },
+     "pieces": {
+      "items": {
+       "$ref": "#/components/schemas/CutPieceOut"
+      },
+      "type": "array",
+      "title": "Pieces"
+     },
+     "stock": {
+      "items": {
+       "$ref": "#/components/schemas/NettingStockOut"
+      },
+      "type": "array",
+      "title": "Stock"
+     },
+     "joins": {
+      "items": {
+       "$ref": "#/components/schemas/JoinOut"
+      },
+      "type": "array",
+      "title": "Joins"
+     },
+     "hanging": {
+      "items": {
+       "$ref": "#/components/schemas/HangingOut"
+      },
+      "type": "array",
+      "title": "Hanging"
+     },
+     "floats": {
+      "items": {
+       "$ref": "#/components/schemas/FloatPositionOut"
+      },
+      "type": "array",
+      "title": "Floats"
+     },
+     "float_diameter_mm": {
+      "type": "number",
+      "title": "Float Diameter Mm"
+     },
+     "ballast": {
+      "items": {
+       "$ref": "#/components/schemas/BallastZoneOut"
+      },
+      "type": "array",
+      "title": "Ballast"
+     },
+     "ropes": {
+      "items": {
+       "$ref": "#/components/schemas/RopeCutOut"
+      },
+      "type": "array",
+      "title": "Ropes"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "net_id",
+     "net_name",
+     "variant",
+     "eye_allowance_m",
+     "pieces",
+     "stock",
+     "joins",
+     "hanging",
+     "floats",
+     "float_diameter_mm",
+     "ballast",
+     "ropes",
+     "notes"
+    ],
+    "title": "ConstructionGuideOut",
+    "description": "Resultado de ``POST /design/construction``: la guía de construcción para el taller."
+   },
+   "CutPieceOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "planes": {
+      "type": "string",
+      "title": "Planes"
+     },
+     "section": {
+      "type": "string",
+      "title": "Section"
+     },
+     "pieces": {
+      "type": "integer",
+      "title": "Pieces"
+     },
+     "paired": {
+      "type": "boolean",
+      "title": "Paired"
+     },
+     "material": {
+      "type": "string",
+      "title": "Material"
+     },
+     "mesh_mm": {
+      "type": "number",
+      "title": "Mesh Mm"
+     },
+     "twine_mm": {
+      "type": "number",
+      "title": "Twine Mm"
+     },
+     "rtex": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rtex"
+     },
+     "orientation": {
+      "type": "string",
+      "title": "Orientation"
+     },
+     "meshes_mouth": {
+      "type": "integer",
+      "title": "Meshes Mouth"
+     },
+     "meshes_codend": {
+      "type": "integer",
+      "title": "Meshes Codend"
+     },
+     "meshes_depth": {
+      "type": "integer",
+      "title": "Meshes Depth"
+     },
+     "hanging_ratio": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hanging Ratio"
+     },
+     "sides": {
+      "items": {
+       "$ref": "#/components/schemas/CutSideOut"
+      },
+      "type": "array",
+      "title": "Sides"
+     },
+     "start": {
+      "type": "string",
+      "title": "Start"
+     },
+     "stock_width": {
+      "type": "integer",
+      "title": "Stock Width"
+     },
+     "stock_depth": {
+      "type": "integer",
+      "title": "Stock Depth"
+     },
+     "weight_kg": {
+      "type": "number",
+      "title": "Weight Kg"
+     },
+     "stock_weight_kg": {
+      "type": "number",
+      "title": "Stock Weight Kg"
+     },
+     "waste": {
+      "type": "number",
+      "title": "Waste"
+     },
+     "stretched_width_m": {
+      "type": "number",
+      "title": "Stretched Width M"
+     },
+     "stretched_length_m": {
+      "type": "number",
+      "title": "Stretched Length M"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "planes",
+     "section",
+     "pieces",
+     "paired",
+     "material",
+     "mesh_mm",
+     "twine_mm",
+     "orientation",
+     "meshes_mouth",
+     "meshes_codend",
+     "meshes_depth",
+     "sides",
+     "start",
+     "stock_width",
+     "stock_depth",
+     "weight_kg",
+     "stock_weight_kg",
+     "waste",
+     "stretched_width_m",
+     "stretched_length_m"
+    ],
+    "title": "CutPieceOut",
+    "description": "Un paño de la hoja de corte (``trawlkit.construction.CutPiece``)."
+   },
+   "CutSideOut": {
+    "properties": {
+     "side": {
+      "type": "string",
+      "title": "Side"
+     },
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "cycles": {
+      "type": "integer",
+      "title": "Cycles"
+     },
+     "instruction": {
+      "type": "string",
+      "title": "Instruction"
+     },
+     "inferred": {
+      "type": "boolean",
+      "title": "Inferred",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "side",
+     "code",
+     "cycles",
+     "instruction"
+    ],
+    "title": "CutSideOut",
+    "description": "Corte de un costado del paño (``trawlkit.construction.CutSide``)."
+   },
    "DesignRequest": {
     "properties": {
      "net": {
@@ -3980,6 +4446,30 @@
     "title": "ExploreResponse",
     "description": "Resultado de ``POST /simulate/explore``."
    },
+   "FloatPositionOut": {
+    "properties": {
+     "number": {
+      "type": "integer",
+      "title": "Number"
+     },
+     "x_m": {
+      "type": "number",
+      "title": "X M"
+     },
+     "zone": {
+      "type": "string",
+      "title": "Zone"
+     }
+    },
+    "type": "object",
+    "required": [
+     "number",
+     "x_m",
+     "zone"
+    ],
+    "title": "FloatPositionOut",
+    "description": "Boya sobre la lima, a ``x_m`` del centro (+ derecha)."
+   },
    "FloatSpec": {
     "properties": {
      "count": {
@@ -4066,6 +4556,85 @@
     },
     "type": "object",
     "title": "HTTPValidationError"
+   },
+   "HangingOut": {
+    "properties": {
+     "rope": {
+      "type": "string",
+      "title": "Rope"
+     },
+     "part": {
+      "type": "string",
+      "title": "Part"
+     },
+     "panels": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Panels"
+     },
+     "times": {
+      "type": "integer",
+      "title": "Times"
+     },
+     "rope_m": {
+      "type": "number",
+      "title": "Rope M"
+     },
+     "meshes": {
+      "type": "integer",
+      "title": "Meshes"
+     },
+     "netting_m": {
+      "type": "number",
+      "title": "Netting M"
+     },
+     "hanging": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hanging"
+     },
+     "meshes_per_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Meshes Per M"
+     },
+     "schedule": {
+      "type": "string",
+      "title": "Schedule"
+     },
+     "warning": {
+      "type": "string",
+      "title": "Warning",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "rope",
+     "part",
+     "panels",
+     "times",
+     "rope_m",
+     "meshes",
+     "netting_m",
+     "schedule"
+    ],
+    "title": "HangingOut",
+    "description": "Tramo de relinga con su paño (``trawlkit.construction.HangingSection``)."
    },
    "HaulRequest": {
     "properties": {
@@ -4289,6 +4858,86 @@
     ],
     "title": "Health",
     "description": "Estado del servicio.\n\n``contract`` es la huella de las rutas de la API (ver ``trawlkit.api.contract``): la app la\ncompara con la de su build para avisar si la API en línea es de otra versión. ``commit`` es\nel commit desplegado (``RENDER_GIT_COMMIT`` en Render; ``None`` en local)."
+   },
+   "JoinOut": {
+    "properties": {
+     "step": {
+      "type": "integer",
+      "title": "Step"
+     },
+     "plane": {
+      "type": "string",
+      "title": "Plane"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "seam",
+       "wing_to_body",
+       "side_seam",
+       "side_panel"
+      ],
+      "title": "Kind"
+     },
+     "a": {
+      "type": "string",
+      "title": "A"
+     },
+     "a_edge": {
+      "type": "string",
+      "title": "A Edge"
+     },
+     "b": {
+      "type": "string",
+      "title": "B"
+     },
+     "b_edge": {
+      "type": "string",
+      "title": "B Edge"
+     },
+     "meshes_a": {
+      "type": "integer",
+      "title": "Meshes A"
+     },
+     "meshes_b": {
+      "type": "integer",
+      "title": "Meshes B"
+     },
+     "times": {
+      "type": "integer",
+      "title": "Times"
+     },
+     "ratio": {
+      "type": "string",
+      "title": "Ratio"
+     },
+     "rule": {
+      "type": "string",
+      "title": "Rule"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note",
+      "default": ""
+     }
+    },
+    "type": "object",
+    "required": [
+     "step",
+     "plane",
+     "kind",
+     "a",
+     "a_edge",
+     "b",
+     "b_edge",
+     "meshes_a",
+     "meshes_b",
+     "times",
+     "ratio",
+     "rule"
+    ],
+    "title": "JoinOut",
+    "description": "Una unión del armado (``trawlkit.construction.Join``)."
    },
    "LayoutPlane": {
     "properties": {
@@ -4778,6 +5427,71 @@
     ],
     "title": "NetSpec",
     "description": "Especificación completa de una red de arrastre."
+   },
+   "NettingStockOut": {
+    "properties": {
+     "material": {
+      "type": "string",
+      "title": "Material"
+     },
+     "mesh_mm": {
+      "type": "number",
+      "title": "Mesh Mm"
+     },
+     "twine_mm": {
+      "type": "number",
+      "title": "Twine Mm"
+     },
+     "rtex": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rtex"
+     },
+     "pieces": {
+      "type": "integer",
+      "title": "Pieces"
+     },
+     "width_meshes": {
+      "type": "integer",
+      "title": "Width Meshes"
+     },
+     "depth_meshes": {
+      "type": "integer",
+      "title": "Depth Meshes"
+     },
+     "area_meshes": {
+      "type": "integer",
+      "title": "Area Meshes"
+     },
+     "weight_kg": {
+      "type": "number",
+      "title": "Weight Kg"
+     },
+     "finished_kg": {
+      "type": "number",
+      "title": "Finished Kg"
+     }
+    },
+    "type": "object",
+    "required": [
+     "material",
+     "mesh_mm",
+     "twine_mm",
+     "pieces",
+     "width_meshes",
+     "depth_meshes",
+     "area_meshes",
+     "weight_kg",
+     "finished_kg"
+    ],
+    "title": "NettingStockOut",
+    "description": "Paño a comprar de una calidad (``trawlkit.construction.NettingStock``)."
    },
    "ObservationIn": {
     "properties": {
@@ -5487,6 +6201,50 @@
     ],
     "title": "Rope",
     "description": "Cabo o relinga."
+   },
+   "RopeCutOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "material": {
+      "type": "string",
+      "title": "Material"
+     },
+     "pieces": {
+      "type": "integer",
+      "title": "Pieces"
+     },
+     "length_m": {
+      "type": "number",
+      "title": "Length M"
+     },
+     "eyes": {
+      "type": "integer",
+      "title": "Eyes"
+     },
+     "cut_m": {
+      "type": "number",
+      "title": "Cut M"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "label",
+     "material",
+     "pieces",
+     "length_m",
+     "eyes",
+     "cut_m"
+    ],
+    "title": "RopeCutOut",
+    "description": "Corte de un cabo, cable o cadena."
    },
    "ScaledNetRequest": {
     "properties": {

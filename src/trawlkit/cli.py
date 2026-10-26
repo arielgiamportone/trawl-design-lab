@@ -373,6 +373,54 @@ def batch(
     typer.echo(f"resultados en {out}")
 
 
+@app.command("build-guide")
+def build_guide(
+    net: NetArg,
+    vessel: VesselOpt = None,
+    door: DoorOpt = None,
+    modified: ModifiedOpt = None,
+    variant: Annotated[str, typer.Option(help="std (estándar) | mod (modificada)")] = "std",
+    eye_allowance: Annotated[
+        float, typer.Option(help="Sobrante por gaza o empalme al cortar cabos [m].")
+    ] = 0.5,
+    out: Annotated[
+        Path | None, typer.Option("-o", "--out", help="Salida: .pdf, .html, .xlsx o .json.")
+    ] = None,
+) -> None:
+    """Guía de construcción para el taller: hoja de corte, armado, montaje en relingas y cortes."""
+    from trawlkit.construction import guide
+    from trawlkit.report import construction as rc
+
+    if variant not in ("std", "mod"):
+        raise typer.BadParameter("variant: std o mod")
+    case = build_case(net, vessel, door, modified, None, "corrected")
+    g = guide(run_case(case), variant, eye_allowance)  # type: ignore[arg-type]
+    typer.echo(
+        f"{g.net_name}: {len(g.pieces)} paños, {sum(p.pieces for p in g.pieces)} piezas, "
+        f"{len(g.joins)} uniones, {sum(s.weight_kg for s in g.stock):.1f} kg de paño a comprar"
+    )
+    if out is None:
+        for j in g.joins:
+            typer.echo(
+                f"{j.step:3}. {j.plane}: {j.a} ({j.meshes_a}) + {j.b} ({j.meshes_b}): {j.rule}"
+            )
+        return
+    suffix = out.suffix.lower()
+    if suffix == ".pdf":
+        out.write_bytes(rc.construction_pdf(g))
+    elif suffix in (".html", ".htm"):
+        out.write_text(rc.construction_html(g), encoding="utf-8")
+    elif suffix == ".xlsx":
+        out.write_bytes(rc.construction_xlsx(g))
+    elif suffix == ".json":
+        from trawlkit.api.service import to_jsonable
+
+        out.write_text(json.dumps(to_jsonable(g.to_dict()), ensure_ascii=False, indent=1))
+    else:
+        raise typer.BadParameter("salida: .pdf, .html, .xlsx o .json")
+    typer.echo(f"guía escrita en {out}")
+
+
 @app.command()
 def serve(
     host: Annotated[str, typer.Option(help="Interfaz de escucha.")] = "127.0.0.1",

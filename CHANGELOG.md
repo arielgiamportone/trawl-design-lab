@@ -6,6 +6,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Guía de construcción (Fase 15)**: `trawlkit.construction` pasa del diseño al taller. Hoja de
+  corte por paño (mallas, piezas, el ciclo de cada corte explicado, rectángulo de paño y
+  desperdicio; las alas se cortan de a pares encastradas), paño a comprar por calidad, uniones
+  paso a paso con la regla de toma cuando cambia la cantidad de mallas, montaje en relingas
+  (coeficiente de armado y mallas por metro, con aviso si el cabo es más largo que el paño),
+  posición de las boyas, zonas de lastre y cortes de cabos, cables y cadenas con sobrante por
+  gaza. Salidas: `trawlkit build-guide` (PDF, HTML, XLSX, JSON), `POST /design/construction` y
+  `/design/construction/export` (también sin conexión, salvo el PDF) y una sección
+  «Construcción y materiales» en el informe del caso, con la lista de materiales.
 - DOI de Zenodo (10.5281/zenodo.23657981, todas las versiones) en el README, `CITATION.cff`, la
   página «Cómo citar» y la introducción del libro.
 

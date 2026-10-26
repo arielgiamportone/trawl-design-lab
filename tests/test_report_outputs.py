@@ -68,7 +68,9 @@ def test_pdf(built: list[Path]) -> None:
 def test_xlsx_matches_tables(result: DesignResult, built: list[Path]) -> None:
     path = next(p for p in built if p.suffix == ".xlsx")
     wb = openpyxl.load_workbook(path)
-    tables = [t for t in all_tables(result) if t.key != "notas"]
+    from trawlkit.report.construction import report_tables
+
+    tables = [t for t in all_tables(result) if t.key != "notas"] + report_tables(result)
     assert wb.sheetnames == [t.key for t in tables] + ["Caso", "Notas"]
     for t in tables:
         ws = wb[t.key]

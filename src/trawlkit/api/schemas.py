@@ -1014,3 +1014,148 @@ LayoutMode = Literal["schematic", "true_scale"]
 PlanView = Literal["sheet", "scale"]
 Variant = Literal["std", "mod"]
 ReportFormat = Literal["html", "pdf", "xlsx"]
+
+
+# ---------------------------------------------------------------------------------------------
+# Guía de construcción (Fase 15)
+# ---------------------------------------------------------------------------------------------
+
+
+class CutSideOut(BaseModel):
+    """Corte de un costado del paño (``trawlkit.construction.CutSide``)."""
+
+    side: str
+    code: str
+    cycles: int
+    instruction: str
+    inferred: bool = False
+
+
+class CutPieceOut(BaseModel):
+    """Un paño de la hoja de corte (``trawlkit.construction.CutPiece``)."""
+
+    id: str
+    name: str
+    planes: str
+    section: str
+    pieces: int
+    paired: bool
+    material: str
+    mesh_mm: float
+    twine_mm: float
+    rtex: float | None = None
+    orientation: str
+    meshes_mouth: int
+    meshes_codend: int
+    meshes_depth: int
+    hanging_ratio: float | None = None
+    sides: list[CutSideOut]
+    start: str
+    stock_width: int
+    stock_depth: int
+    weight_kg: float
+    stock_weight_kg: float
+    waste: float
+    stretched_width_m: float
+    stretched_length_m: float
+
+
+class NettingStockOut(BaseModel):
+    """Paño a comprar de una calidad (``trawlkit.construction.NettingStock``)."""
+
+    material: str
+    mesh_mm: float
+    twine_mm: float
+    rtex: float | None = None
+    pieces: int
+    width_meshes: int
+    depth_meshes: int
+    area_meshes: int
+    weight_kg: float
+    finished_kg: float
+
+
+class JoinOut(BaseModel):
+    """Una unión del armado (``trawlkit.construction.Join``)."""
+
+    step: int
+    plane: str
+    kind: Literal["seam", "wing_to_body", "side_seam", "side_panel"]
+    a: str
+    a_edge: str
+    b: str
+    b_edge: str
+    meshes_a: int
+    meshes_b: int
+    times: int
+    ratio: str
+    rule: str
+    note: str = ""
+
+
+class HangingOut(BaseModel):
+    """Tramo de relinga con su paño (``trawlkit.construction.HangingSection``)."""
+
+    rope: str
+    part: str
+    panels: list[str]
+    times: int
+    rope_m: float
+    meshes: int
+    netting_m: float
+    hanging: float | None = None
+    meshes_per_m: float | None = None
+    schedule: str
+    warning: str = ""
+
+
+class FloatPositionOut(BaseModel):
+    """Boya sobre la lima, a ``x_m`` del centro (+ derecha)."""
+
+    number: int
+    x_m: float
+    zone: str
+
+
+class BallastZoneOut(BaseModel):
+    """Zona de lastre del burlón con el lastre mínimo y el máximo."""
+
+    zone: str
+    where: str
+    kg_min: float
+    kg_max: float
+    kg_m_min: float
+    kg_m_max: float
+
+
+class RopeCutOut(BaseModel):
+    """Corte de un cabo, cable o cadena."""
+
+    key: str
+    label: str
+    material: str
+    pieces: int
+    length_m: float
+    eyes: int
+    cut_m: float
+
+
+class ConstructionGuideOut(BaseModel):
+    """Resultado de ``POST /design/construction``: la guía de construcción para el taller."""
+
+    net_id: str
+    net_name: str
+    variant: Literal["std", "mod"]
+    eye_allowance_m: float
+    pieces: list[CutPieceOut]
+    stock: list[NettingStockOut]
+    joins: list[JoinOut]
+    hanging: list[HangingOut]
+    floats: list[FloatPositionOut]
+    float_diameter_mm: float
+    ballast: list[BallastZoneOut]
+    ropes: list[RopeCutOut]
+    notes: list[str]
+
+
+GuideFormat = Literal["html", "pdf", "xlsx"]

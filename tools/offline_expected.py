@@ -52,6 +52,8 @@ CASES: list[tuple[str, str, dict[str, object] | None]] = [
         {"file": {"filename": "f.csv", "content": _FLEET}, "net": _NET, "assemble": False},
     ),
     ("GET", "/batch/template?kind=fleet&format=xlsx", None),
+    ("POST", "/design/construction", {"net": _NET}),
+    ("POST", "/design/construction/export?format=xlsx", {"net": _NET}),
 ]
 
 

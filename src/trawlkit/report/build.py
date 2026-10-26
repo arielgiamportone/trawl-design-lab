@@ -74,10 +74,12 @@ def build_report(
         assert html is not None
         written.append(html_to_pdf(html, out / f"{basename}.pdf"))
     if "xlsx" in fmts:
+        from trawlkit.report.construction import report_tables
         from trawlkit.report.extras import optimization_tables, simulation_tables
         from trawlkit.report.xlsx import write_xlsx
 
         extra = [
+            *report_tables(result),
             *(optimization_tables(optimization) if optimization is not None else []),
             *(simulation_tables(result, simulation) if simulation else []),
         ]

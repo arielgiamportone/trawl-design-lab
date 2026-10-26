@@ -392,6 +392,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/design/construction": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Design Construction
+         * @description Guía de construcción para el taller: hoja de corte, armado, montaje en relingas y cortes.
+         */
+        post: operations["design_construction_design_construction_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/design/construction/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Design Construction Export
+         * @description Guía de construcción en PDF o HTML (para imprimir en A4) o XLSX.
+         */
+        post: operations["design_construction_export_design_construction_export_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/layout": {
         parameters: {
             query?: never;
@@ -790,6 +830,24 @@ export interface components {
             /** Missing Prices */
             missing_prices: number;
             bom: components["schemas"]["BomOut"];
+        };
+        /**
+         * BallastZoneOut
+         * @description Zona de lastre del burlón con el lastre mínimo y el máximo.
+         */
+        BallastZoneOut: {
+            /** Zone */
+            zone: string;
+            /** Where */
+            where: string;
+            /** Kg Min */
+            kg_min: number;
+            /** Kg Max */
+            kg_max: number;
+            /** Kg M Min */
+            kg_m_min: number;
+            /** Kg M Max */
+            kg_m_max: number;
         };
         /**
          * BatchFile
@@ -1380,6 +1438,114 @@ export interface components {
             description: string;
         };
         /**
+         * ConstructionGuideOut
+         * @description Resultado de ``POST /design/construction``: la guía de construcción para el taller.
+         */
+        ConstructionGuideOut: {
+            /** Net Id */
+            net_id: string;
+            /** Net Name */
+            net_name: string;
+            /**
+             * Variant
+             * @enum {string}
+             */
+            variant: "std" | "mod";
+            /** Eye Allowance M */
+            eye_allowance_m: number;
+            /** Pieces */
+            pieces: components["schemas"]["CutPieceOut"][];
+            /** Stock */
+            stock: components["schemas"]["NettingStockOut"][];
+            /** Joins */
+            joins: components["schemas"]["JoinOut"][];
+            /** Hanging */
+            hanging: components["schemas"]["HangingOut"][];
+            /** Floats */
+            floats: components["schemas"]["FloatPositionOut"][];
+            /** Float Diameter Mm */
+            float_diameter_mm: number;
+            /** Ballast */
+            ballast: components["schemas"]["BallastZoneOut"][];
+            /** Ropes */
+            ropes: components["schemas"]["RopeCutOut"][];
+            /** Notes */
+            notes: string[];
+        };
+        /**
+         * CutPieceOut
+         * @description Un paño de la hoja de corte (``trawlkit.construction.CutPiece``).
+         */
+        CutPieceOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Planes */
+            planes: string;
+            /** Section */
+            section: string;
+            /** Pieces */
+            pieces: number;
+            /** Paired */
+            paired: boolean;
+            /** Material */
+            material: string;
+            /** Mesh Mm */
+            mesh_mm: number;
+            /** Twine Mm */
+            twine_mm: number;
+            /** Rtex */
+            rtex?: number | null;
+            /** Orientation */
+            orientation: string;
+            /** Meshes Mouth */
+            meshes_mouth: number;
+            /** Meshes Codend */
+            meshes_codend: number;
+            /** Meshes Depth */
+            meshes_depth: number;
+            /** Hanging Ratio */
+            hanging_ratio?: number | null;
+            /** Sides */
+            sides: components["schemas"]["CutSideOut"][];
+            /** Start */
+            start: string;
+            /** Stock Width */
+            stock_width: number;
+            /** Stock Depth */
+            stock_depth: number;
+            /** Weight Kg */
+            weight_kg: number;
+            /** Stock Weight Kg */
+            stock_weight_kg: number;
+            /** Waste */
+            waste: number;
+            /** Stretched Width M */
+            stretched_width_m: number;
+            /** Stretched Length M */
+            stretched_length_m: number;
+        };
+        /**
+         * CutSideOut
+         * @description Corte de un costado del paño (``trawlkit.construction.CutSide``).
+         */
+        CutSideOut: {
+            /** Side */
+            side: string;
+            /** Code */
+            code: string;
+            /** Cycles */
+            cycles: number;
+            /** Instruction */
+            instruction: string;
+            /**
+             * Inferred
+             * @default false
+             */
+            inferred: boolean;
+        };
+        /**
          * DesignRequest
          * @description Caso de diseño a calcular.
          *
@@ -1677,6 +1843,18 @@ export interface components {
             runtime_s: number;
         };
         /**
+         * FloatPositionOut
+         * @description Boya sobre la lima, a ``x_m`` del centro (+ derecha).
+         */
+        FloatPositionOut: {
+            /** Number */
+            number: number;
+            /** X M */
+            x_m: number;
+            /** Zone */
+            zone: string;
+        };
+        /**
          * FloatSpec
          * @description Flotadores de la lima.
          */
@@ -1712,6 +1890,37 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /**
+         * HangingOut
+         * @description Tramo de relinga con su paño (``trawlkit.construction.HangingSection``).
+         */
+        HangingOut: {
+            /** Rope */
+            rope: string;
+            /** Part */
+            part: string;
+            /** Panels */
+            panels: string[];
+            /** Times */
+            times: number;
+            /** Rope M */
+            rope_m: number;
+            /** Meshes */
+            meshes: number;
+            /** Netting M */
+            netting_m: number;
+            /** Hanging */
+            hanging?: number | null;
+            /** Meshes Per M */
+            meshes_per_m?: number | null;
+            /** Schedule */
+            schedule: string;
+            /**
+             * Warning
+             * @default
+             */
+            warning: string;
         };
         /**
          * HaulRequest
@@ -1802,6 +2011,44 @@ export interface components {
             commit?: string | null;
             /** Nets Failed */
             nets_failed?: string[] | null;
+        };
+        /**
+         * JoinOut
+         * @description Una unión del armado (``trawlkit.construction.Join``).
+         */
+        JoinOut: {
+            /** Step */
+            step: number;
+            /** Plane */
+            plane: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "seam" | "wing_to_body" | "side_seam" | "side_panel";
+            /** A */
+            a: string;
+            /** A Edge */
+            a_edge: string;
+            /** B */
+            b: string;
+            /** B Edge */
+            b_edge: string;
+            /** Meshes A */
+            meshes_a: number;
+            /** Meshes B */
+            meshes_b: number;
+            /** Times */
+            times: number;
+            /** Ratio */
+            ratio: string;
+            /** Rule */
+            rule: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
         };
         /**
          * LayoutPlane
@@ -1979,6 +2226,32 @@ export interface components {
             };
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * NettingStockOut
+         * @description Paño a comprar de una calidad (``trawlkit.construction.NettingStock``).
+         */
+        NettingStockOut: {
+            /** Material */
+            material: string;
+            /** Mesh Mm */
+            mesh_mm: number;
+            /** Twine Mm */
+            twine_mm: number;
+            /** Rtex */
+            rtex?: number | null;
+            /** Pieces */
+            pieces: number;
+            /** Width Meshes */
+            width_meshes: number;
+            /** Depth Meshes */
+            depth_meshes: number;
+            /** Area Meshes */
+            area_meshes: number;
+            /** Weight Kg */
+            weight_kg: number;
+            /** Finished Kg */
+            finished_kg: number;
         };
         /**
          * ObservationIn
@@ -2308,6 +2581,26 @@ export interface components {
             breaking_load_t?: number | null;
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * RopeCutOut
+         * @description Corte de un cabo, cable o cadena.
+         */
+        RopeCutOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Material */
+            material: string;
+            /** Pieces */
+            pieces: number;
+            /** Length M */
+            length_m: number;
+            /** Eyes */
+            eyes: number;
+            /** Cut M */
+            cut_m: number;
         };
         /**
          * ScaledNetRequest
@@ -3400,6 +3693,81 @@ export interface operations {
                 };
                 content: {
                     "image/svg+xml": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    design_construction_design_construction_post: {
+        parameters: {
+            query?: {
+                variant?: "std" | "mod";
+                eye_allowance_m?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesignRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConstructionGuideOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    design_construction_export_design_construction_export_post: {
+        parameters: {
+            query?: {
+                format?: "html" | "pdf" | "xlsx";
+                variant?: "std" | "mod";
+                eye_allowance_m?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesignRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/pdf": unknown;
+                    "text/html": unknown;
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": unknown;
                 };
             };
             /** @description Validation Error */

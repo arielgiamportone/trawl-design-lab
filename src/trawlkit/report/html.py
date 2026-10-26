@@ -565,6 +565,19 @@ def render_html(
         toc.append(("simulacion", "Simulación"))
         sections.append(_simulation_section(result, simulation))
 
+    from trawlkit.report.construction import report_tables
+
+    toc.append(("construccion", "Construcción"))
+    construction_html = "".join(render_table(t) for t in report_tables(result))
+    sections.append(
+        '<section id="construccion" class="major"><h2>Construcción y materiales</h2>'
+        "<p>Lista de materiales y guía para el taller (red estándar): paño a comprar, hoja de "
+        "corte, uniones, montaje en relingas, boyas, lastre y cortes de cabos. La versión para "
+        "imprimir en A4 sale de <code>trawlkit build-guide</code> o de la pestaña "
+        "«Construcción» de la app.</p>"
+        f"{construction_html}</section>"
+    )
+
     toc.append(("tablas", "Tablas"))
     skip = {"resumen", "erratas", "notas"}
     tables = [t for t in all_tables(result) if t.key not in skip]

@@ -39,6 +39,9 @@ POSTS: list[tuple[str, dict[str, object]]] = [
     ("/design", {"unknown": 1}),
     ("/design/bom", {"prices": {"doors": {"value": 450, "currency": "USD", "unit": "unit"}}}),
     ("/design/layout?mode=true_scale", {}),
+    ("/design/construction", {}),
+    ("/design/construction?variant=mod&eye_allowance_m=0.3", {"net_modified": "fao_a3_modified"}),
+    ("/design/construction?variant=mod", {}),
     (
         "/components/check",
         {

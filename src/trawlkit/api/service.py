@@ -1656,3 +1656,50 @@ def batch_template(kind: str, fmt: str) -> tuple[bytes, str, str]:
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         f"plantilla_{names[kind]}.xlsx",
     )
+
+
+# ---------------------------------------------------------------------------------------------
+# Guía de construcción (Fase 15)
+# ---------------------------------------------------------------------------------------------
+
+
+def _guide(case: DesignCase, variant: str, eye_allowance_m: float) -> Any:
+    from trawlkit.construction import guide
+
+    if variant not in ("std", "mod"):
+        raise BadRequestError("variant: std o mod")
+    if not 0.0 <= eye_allowance_m <= 5.0:
+        raise BadRequestError("eye_allowance_m: entre 0 y 5 m")
+    try:
+        return guide(run_case(case), variant, eye_allowance_m)  # type: ignore[arg-type]
+    except ValueError as exc:
+        raise BadRequestError(str(exc)) from exc
+
+
+def construction_guide(
+    case: DesignCase, variant: str = "std", eye_allowance_m: float = 0.5
+) -> dict[str, Any]:
+    """Guía de construcción del caso (``ConstructionGuideOut``)."""
+    out: dict[str, Any] = to_jsonable(_guide(case, variant, eye_allowance_m).to_dict())
+    return out
+
+
+def construction_export(
+    case: DesignCase, variant: str, eye_allowance_m: float, fmt: str
+) -> tuple[bytes, str, str]:
+    """Guía exportada: (contenido, tipo MIME, nombre de archivo)."""
+    from trawlkit.report import construction as rc
+
+    g = _guide(case, variant, eye_allowance_m)
+    name = f"guia-{g.net_id}"
+    if fmt == "html":
+        return rc.construction_html(g).encode("utf-8"), "text/html; charset=utf-8", f"{name}.html"
+    if fmt == "xlsx":
+        return (
+            rc.construction_xlsx(g),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            f"{name}.xlsx",
+        )
+    if fmt == "pdf":
+        return rc.construction_pdf(g), "application/pdf", f"{name}.pdf"
+    raise BadRequestError("formato: html, pdf o xlsx")

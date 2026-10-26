@@ -30,12 +30,14 @@ from trawlkit.api.schemas import (
     ComponentKindOut,
     ComponentOptimizeRequest,
     ComponentOptimizeResponse,
+    ConstructionGuideOut,
     DesignRequest,
     DesignResponse,
     ErratumOut,
     ExploreRequest,
     ExploreResponse,
     FoulingOut,
+    GuideFormat,
     HaulRequest,
     HaulResponse,
     Health,
@@ -237,6 +239,13 @@ def _run(req: DesignRequest) -> DesignResult:
         return service.run_case(case)
 
 
+_GUIDE_MEDIA = (
+    "application/pdf",
+    "text/html",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+)
+
+
 @app.post("/design", response_model=DesignResponse)
 def design(req: DesignRequest) -> dict[str, Any]:
     """Calcula un caso de diseño completo."""
@@ -277,6 +286,53 @@ def design_plan(req: DesignRequest, view: PlanView = "sheet", variant: Variant =
     result = _run(req)
     svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
     return Response(svg, media_type="image/svg+xml")
+
+
+def _build(req: DesignRequest) -> Any:
+    return service.build_case(
+        net=req.net,
+        net_modified=req.net_modified,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        params=req.params,
+    )
+
+
+@app.post("/design/construction", response_model=ConstructionGuideOut)
+def design_construction(
+    req: DesignRequest,
+    variant: Variant = "std",
+    eye_allowance_m: float = Query(0.5, ge=0.0, le=5.0),
+) -> dict[str, Any]:
+    """Guía de construcción para el taller: hoja de corte, armado, montaje en relingas y cortes."""
+    with service.user_items(req.components):
+        return service.construction_guide(_build(req), variant, eye_allowance_m)
+
+
+@app.post(
+    "/design/construction/export",
+    response_class=Response,
+    responses={200: {"content": {m: {} for m in _GUIDE_MEDIA}}},
+)
+def design_construction_export(
+    req: DesignRequest,
+    format: GuideFormat = "pdf",  # noqa: A002
+    variant: Variant = "std",
+    eye_allowance_m: float = Query(0.5, ge=0.0, le=5.0),
+) -> Response:
+    """Guía de construcción en PDF o HTML (para imprimir en A4) o XLSX."""
+    with service.user_items(req.components):
+        try:
+            data, media, name = service.construction_export(
+                _build(req), variant, eye_allowance_m, format
+            )
+        except RuntimeError as exc:  # extra 'report' o 'excel' no instalado
+            raise HTTPException(501, str(exc)) from exc
+    return Response(
+        data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
+    )
 
 
 @app.post("/design/layout", response_model=LayoutResponse)
