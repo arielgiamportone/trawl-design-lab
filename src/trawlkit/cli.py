@@ -5,7 +5,7 @@ from __future__ import annotations
 import dataclasses
 import json
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 
 import typer
 
@@ -598,6 +598,80 @@ def exercises_sheet(
     else:
         raise typer.BadParameter("salida: .html o .pdf")
     typer.echo(f"{len(items)} ejercicios en {out}")
+
+
+classroom_app = typer.Typer(
+    help="Aula UTN en el servidor: base de datos, administrador e invitaciones (usa DATABASE_URL).",
+    no_args_is_help=True,
+)
+app.add_typer(classroom_app, name="classroom")
+
+
+def _classroom_db() -> Any:
+    try:
+        from trawlkit.classroom import db
+    except ImportError as exc:  # pragma: no cover - depende de los extras instalados
+        raise typer.BadParameter('instale el extra: pip install "trawlkit[classroom]"') from exc
+    if db.database_url() is None:
+        raise typer.BadParameter("defina DATABASE_URL (Postgres de Neon o sqlite:///aula.db)")
+    return db
+
+
+@classroom_app.command("migrate")
+def classroom_migrate() -> None:
+    """Crea las tablas del aula que falten (se puede correr cada vez)."""
+    db = _classroom_db()
+    db.init_db()
+    typer.echo("base del aula lista")
+
+
+@classroom_app.command("create-admin")
+def classroom_create_admin(
+    username: Annotated[str, typer.Option(help="Usuario del administrador.")],
+    password: Annotated[
+        str,
+        typer.Option(
+            prompt="Contraseña", hide_input=True, confirmation_prompt=True, help="Contraseña."
+        ),
+    ],
+    display_name: Annotated[str, typer.Option(help="Nombre para mostrar.")] = "Administración",
+) -> None:
+    """Crea un administrador (genera las invitaciones de los docentes)."""
+    from trawlkit.classroom.service import ClassroomError, create_admin
+
+    db = _classroom_db()
+    db.init_db()
+    with db.session() as s:
+        try:
+            user = create_admin(s, username, password, display_name)
+        except ClassroomError as exc:
+            raise typer.BadParameter(exc.detail) from exc
+    typer.echo(f"administrador {user.username} creado")
+
+
+@classroom_app.command("invite")
+def classroom_invite(
+    username: Annotated[str, typer.Option(help="Administrador que firma las invitaciones.")],
+    count: Annotated[int, typer.Option(help="Cantidad de códigos.")] = 1,
+    days: Annotated[int, typer.Option(help="Días de validez.")] = 30,
+) -> None:
+    """Códigos de invitación para docentes (también desde la app, como administrador)."""
+    from sqlalchemy import select
+
+    from trawlkit.classroom.models import User
+    from trawlkit.classroom.service import ClassroomError, create_invites
+
+    db = _classroom_db()
+    with db.session() as s:
+        admin = s.scalar(select(User).where(User.username == username.strip().lower()))
+        if admin is None:
+            raise typer.BadParameter(f"no existe el usuario {username}")
+        try:
+            rows = create_invites(s, admin, count, days)
+        except ClassroomError as exc:
+            raise typer.BadParameter(exc.detail) from exc
+    for r in rows:
+        typer.echo(f"{r['code']}  (vence {r['expires_at']:%Y-%m-%d})")
 
 
 @app.command()

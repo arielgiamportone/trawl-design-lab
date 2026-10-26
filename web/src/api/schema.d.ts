@@ -4,6 +4,474 @@
  */
 
 export interface paths {
+    "/classroom/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Status
+         * @description Si el aula está habilitada en este servidor (sin tocar la base).
+         */
+        get: operations["status_classroom_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register
+         * @description Alta de alumno (con código de curso) o de docente (con código de invitación).
+         */
+        post: operations["register_classroom_auth_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Login
+         * @description Inicio de sesión (se bloquea unos minutos tras diez intentos fallidos).
+         */
+        post: operations["login_classroom_auth_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Logout
+         * @description Cierra la sesión.
+         */
+        post: operations["logout_classroom_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Me
+         * @description El usuario y sus cursos.
+         */
+        get: operations["me_classroom_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/me/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change Password
+         * @description Cambia la contraseña propia.
+         */
+        post: operations["change_password_classroom_me_password_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/me/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Delete Me
+         * @description Borra la cuenta propia y sus entregas.
+         */
+        post: operations["delete_me_classroom_me_delete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/invites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Invites
+         * @description Invitaciones para docentes (administrador).
+         */
+        get: operations["invites_classroom_invites_get"];
+        put?: never;
+        /**
+         * Create Invites
+         * @description Crea invitaciones para docentes (administrador).
+         */
+        post: operations["create_invites_classroom_invites_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Courses
+         * @description Cursos del usuario.
+         */
+        get: operations["courses_classroom_courses_get"];
+        put?: never;
+        /**
+         * Create Course
+         * @description Curso nuevo (docente); devuelve su código de inscripción.
+         */
+        post: operations["create_course_classroom_courses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Join Course
+         * @description Un alumno se suma a otro curso con su código.
+         */
+        post: operations["join_course_classroom_courses_join_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Course
+         * @description Un curso.
+         */
+        get: operations["get_course_classroom_courses__course_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Course
+         * @description Cambia nombre, cuatrimestre, archivado o código (docente del curso).
+         */
+        patch: operations["update_course_classroom_courses__course_id__patch"];
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}/teachers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add Teacher
+         * @description Suma otro docente al curso.
+         */
+        post: operations["add_teacher_classroom_courses__course_id__teachers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}/students": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Course Students
+         * @description Alumnos del curso (docente).
+         */
+        get: operations["course_students_classroom_courses__course_id__students_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}/students/{student_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Student
+         * @description Quita a un alumno del curso.
+         */
+        delete: operations["remove_student_classroom_courses__course_id__students__student_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}/students/{student_id}/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset Password
+         * @description El docente pone una contraseña nueva a un alumno (no hay correo para recuperarla).
+         */
+        post: operations["reset_password_classroom_courses__course_id__students__student_id__password_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/courses/{course_id}/assignments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Assignments
+         * @description Tareas del curso (los alumnos ven sólo las abiertas, con su avance).
+         */
+        get: operations["assignments_classroom_courses__course_id__assignments_get"];
+        put?: never;
+        /**
+         * Create Assignment
+         * @description Tarea nueva con ejercicios y laboratorios del banco (docente).
+         */
+        post: operations["create_assignment_classroom_courses__course_id__assignments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/assignments/{assignment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Assignment
+         * @description Una tarea; el alumno recibe sus datos (semilla propia) y sus entregas.
+         */
+        get: operations["get_assignment_classroom_assignments__assignment_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Assignment
+         * @description Borra una tarea con sus entregas.
+         */
+        delete: operations["delete_assignment_classroom_assignments__assignment_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update Assignment
+         * @description Cambia una tarea (los ítems, sólo sin entregas).
+         */
+        patch: operations["update_assignment_classroom_assignments__assignment_id__patch"];
+        trace?: never;
+    };
+    "/classroom/assignments/{assignment_id}/items/{item}/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit
+         * @description Entrega de un ítem: el servidor corrige y devuelve lo que la política permite ver.
+         */
+        post: operations["submit_classroom_assignments__assignment_id__items__item__submit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/assignments/{assignment_id}/grades": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Grades
+         * @description Planilla de notas de la tarea (docente).
+         */
+        get: operations["grades_classroom_assignments__assignment_id__grades_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/assignments/{assignment_id}/grades/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Grades Export
+         * @description La planilla en Excel o CSV.
+         */
+        get: operations["grades_export_classroom_assignments__assignment_id__grades_export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/assignments/{assignment_id}/sheet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Assignment Sheet
+         * @description Guía imprimible de la tarea: enunciados o clave, de un alumno, de todos o del libro.
+         */
+        get: operations["assignment_sheet_classroom_assignments__assignment_id__sheet_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/classroom/submissions/{submission_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Submission
+         * @description Una entrega: completa para el docente; según la política, para su alumno.
+         */
+        get: operations["submission_classroom_submissions__submission_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Review
+         * @description Nota y comentario del docente sobre una entrega.
+         */
+        patch: operations["review_classroom_submissions__submission_id__patch"];
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -1019,6 +1487,133 @@ export interface components {
             bom: components["schemas"]["BomOut"];
         };
         /**
+         * AssignmentIn
+         * @description Tarea nueva.
+         */
+        AssignmentIn: {
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Items */
+            items: components["schemas"]["ItemIn"][];
+            /** Opens At */
+            opens_at?: string | null;
+            /** Due At */
+            due_at?: string | null;
+            /**
+             * Max Attempts
+             * @default 3
+             */
+            max_attempts: number;
+            /**
+             * Feedback
+             * @default immediate
+             * @enum {string}
+             */
+            feedback: "immediate" | "after_due";
+            /**
+             * Per Student Data
+             * @default true
+             */
+            per_student_data: boolean;
+        };
+        /**
+         * AssignmentOut
+         * @description Tarea.
+         */
+        AssignmentOut: {
+            /** Id */
+            id: number;
+            /** Course Id */
+            course_id: number;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Items */
+            items: components["schemas"]["ItemOut"][];
+            /** Opens At */
+            opens_at: string | null;
+            /** Due At */
+            due_at: string | null;
+            /** Max Attempts */
+            max_attempts: number;
+            /**
+             * Feedback
+             * @enum {string}
+             */
+            feedback: "immediate" | "after_due";
+            /** Per Student Data */
+            per_student_data: boolean;
+            /** Open */
+            open: boolean;
+            /** Closed */
+            closed: boolean;
+            progress?: components["schemas"]["ProgressOut"] | null;
+        };
+        /**
+         * AssignmentPatch
+         * @description Cambios de una tarea.
+         */
+        AssignmentPatch: {
+            /** Title */
+            title?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Items */
+            items?: components["schemas"]["ItemIn"][] | null;
+            /** Opens At */
+            opens_at?: string | null;
+            /** Due At */
+            due_at?: string | null;
+            /** Max Attempts */
+            max_attempts?: number | null;
+            /** Feedback */
+            feedback?: ("immediate" | "after_due") | null;
+            /** Per Student Data */
+            per_student_data?: boolean | null;
+        };
+        /**
+         * AssignmentViewOut
+         * @description Tarea con los ítems del alumno (vacío para el docente).
+         */
+        AssignmentViewOut: {
+            /** Id */
+            id: number;
+            /** Course Id */
+            course_id: number;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Items */
+            items: components["schemas"]["ItemOut"][];
+            /** Opens At */
+            opens_at: string | null;
+            /** Due At */
+            due_at: string | null;
+            /** Max Attempts */
+            max_attempts: number;
+            /**
+             * Feedback
+             * @enum {string}
+             */
+            feedback: "immediate" | "after_due";
+            /** Per Student Data */
+            per_student_data: boolean;
+            /** Open */
+            open: boolean;
+            /** Closed */
+            closed: boolean;
+            progress?: components["schemas"]["ProgressOut"] | null;
+            /** Item List */
+            item_list?: components["schemas"]["StudentItemOut"][];
+        };
+        /**
          * BallastZoneOut
          * @description Zona de lastre del burlón con el lastre mínimo y el máximo.
          */
@@ -1697,6 +2292,58 @@ export interface components {
             notes: string[];
         };
         /**
+         * CourseIn
+         * @description Curso nuevo.
+         */
+        CourseIn: {
+            /** Name */
+            name: string;
+            /**
+             * Term
+             * @default
+             */
+            term: string;
+        };
+        /**
+         * CourseOut
+         * @description Curso (el código sólo para sus docentes).
+         */
+        CourseOut: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Term */
+            term: string;
+            /** Archived */
+            archived: boolean;
+            /** Students */
+            students: number;
+            /** Teachers */
+            teachers: string[];
+            /** Role */
+            role: string | null;
+            /** Code */
+            code: string | null;
+        };
+        /**
+         * CoursePatch
+         * @description Cambios de un curso.
+         */
+        CoursePatch: {
+            /** Name */
+            name?: string | null;
+            /** Term */
+            term?: string | null;
+            /** Archived */
+            archived?: boolean | null;
+            /**
+             * New Code
+             * @default false
+             */
+            new_code: boolean;
+        };
+        /**
          * CutPieceOut
          * @description Un paño de la hoja de corte (``trawlkit.construction.CutPiece``).
          */
@@ -1768,6 +2415,14 @@ export interface components {
              * @default false
              */
             inferred: boolean;
+        };
+        /**
+         * DeleteMeIn
+         * @description Confirmación para borrar la cuenta.
+         */
+        DeleteMeIn: {
+            /** Password */
+            password: string;
         };
         /**
          * DesignRequest
@@ -2449,6 +3104,22 @@ export interface components {
             notes: string;
         };
         /**
+         * GradeCellOut
+         * @description Celda de la planilla: la mejor entrega de un ítem.
+         */
+        GradeCellOut: {
+            /** Item */
+            item: number;
+            /** Attempts */
+            attempts: number;
+            /** Score */
+            score: number | null;
+            /** Submission Id */
+            submission_id: number | null;
+            /** Needs Review */
+            needs_review: boolean;
+        };
+        /**
          * GradeOut
          * @description Corrección de un ejercicio: puntaje (0 a 1), por respuesta y explicación.
          */
@@ -2480,6 +3151,28 @@ export interface components {
             answers?: {
                 [key: string]: string | number;
             };
+        };
+        /**
+         * GradeRowOut
+         * @description Fila de la planilla: un alumno.
+         */
+        GradeRowOut: {
+            student: components["schemas"]["UserOut"];
+            /** Cells */
+            cells: components["schemas"]["GradeCellOut"][];
+            /** Points */
+            points: number;
+        };
+        /**
+         * GradesOut
+         * @description Planilla de notas de una tarea.
+         */
+        GradesOut: {
+            assignment: components["schemas"]["AssignmentOut"];
+            /** Total Points */
+            total_points: number;
+            /** Rows */
+            rows: components["schemas"]["GradeRowOut"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -2606,6 +3299,85 @@ export interface components {
             commit?: string | null;
             /** Nets Failed */
             nets_failed?: string[] | null;
+        };
+        /**
+         * InviteOut
+         * @description Invitación.
+         */
+        InviteOut: {
+            /** Code */
+            code: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Used By */
+            used_by: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * InvitesIn
+         * @description Invitaciones nuevas para docentes.
+         */
+        InvitesIn: {
+            /**
+             * Count
+             * @default 1
+             */
+            count: number;
+            /**
+             * Days
+             * @default 30
+             */
+            days: number;
+        };
+        /**
+         * ItemIn
+         * @description Ítem de una tarea: un ejercicio o un laboratorio del banco.
+         */
+        ItemIn: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "exercise" | "lab";
+            /** Ref */
+            ref: string;
+            /**
+             * Points
+             * @default 1
+             */
+            points: number;
+        };
+        /**
+         * ItemOut
+         * @description Ítem de una tarea con su título.
+         */
+        ItemOut: {
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "exercise" | "lab";
+            /** Ref */
+            ref: string;
+            /** Points */
+            points: number;
+            /** Title */
+            title: string;
+        };
+        /**
+         * JoinIn
+         * @description Sumarse a un curso.
+         */
+        JoinIn: {
+            /** Code */
+            code: string;
         };
         /**
          * JoinOut
@@ -2925,6 +3697,35 @@ export interface components {
             mesh_orientation: string;
             /** Cut Code */
             cut_code: string | null;
+        };
+        /**
+         * LoginIn
+         * @description Inicio de sesión.
+         */
+        LoginIn: {
+            /** Username */
+            username: string;
+            /** Password */
+            password: string;
+        };
+        /**
+         * MeOut
+         * @description Usuario con sus cursos.
+         */
+        MeOut: {
+            /** Id */
+            id: number;
+            /** Username */
+            username: string;
+            /** Display Name */
+            display_name: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "admin" | "teacher" | "student";
+            /** Courses */
+            courses: components["schemas"]["CourseOut"][];
         };
         /**
          * MeshOrientation
@@ -3262,6 +4063,16 @@ export interface components {
             comment: string;
         };
         /**
+         * PasswordIn
+         * @description Cambio de contraseña.
+         */
+        PasswordIn: {
+            /** Old Password */
+            old_password: string;
+            /** New Password */
+            new_password: string;
+        };
+        /**
          * Plane
          * @description Plano (cara) de la red al que pertenece un panel.
          * @enum {string}
@@ -3295,6 +4106,16 @@ export interface components {
              * @default usuario
              */
             source: string;
+        };
+        /**
+         * ProgressOut
+         * @description Avance de un alumno en una tarea.
+         */
+        ProgressOut: {
+            /** Items */
+            items: number;
+            /** Submitted */
+            submitted: number;
         };
         /**
          * PropellerType
@@ -3342,6 +4163,40 @@ export interface components {
             provenance?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /**
+         * RegisterIn
+         * @description Alta: alumno con código de curso o docente con código de invitación.
+         */
+        RegisterIn: {
+            /** Username */
+            username: string;
+            /** Password */
+            password: string;
+            /** Display Name */
+            display_name: string;
+            /** Course Code */
+            course_code?: string | null;
+            /** Invite Code */
+            invite_code?: string | null;
+        };
+        /**
+         * ResetPasswordIn
+         * @description Contraseña nueva para un alumno.
+         */
+        ResetPasswordIn: {
+            /** Password */
+            password: string;
+        };
+        /**
+         * ReviewIn
+         * @description Nota del docente (0 a 1; nula vuelve a la automática) y comentario.
+         */
+        ReviewIn: {
+            /** Teacher Score */
+            teacher_score?: number | null;
+            /** Comment */
+            comment?: string | null;
         };
         /**
          * Rope
@@ -3639,6 +4494,15 @@ export interface components {
             observations: components["schemas"]["ObservationIn"][];
         };
         /**
+         * SessionOut
+         * @description Token de sesión y usuario.
+         */
+        SessionOut: {
+            /** Token */
+            token: string;
+            user: components["schemas"]["UserOut"];
+        };
+        /**
          * SimEngineRow
          * @description Magnitudes empíricas del motor a una velocidad (comparables con la simulación).
          */
@@ -3843,6 +4707,146 @@ export interface components {
             price?: number | null;
         };
         /**
+         * StatusOut
+         * @description Estado del aula en este servidor.
+         */
+        StatusOut: {
+            /** Enabled */
+            enabled: boolean;
+            /** Detail */
+            detail: string;
+        };
+        /**
+         * StudentItemOut
+         * @description Ítem de la tarea para el alumno: sus datos y sus entregas.
+         */
+        StudentItemOut: {
+            /** Index */
+            index: number;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "exercise" | "lab";
+            /** Ref */
+            ref: string;
+            /** Points */
+            points: number;
+            /** Title */
+            title: string;
+            /** Attempts Used */
+            attempts_used: number;
+            /** Attempts Left */
+            attempts_left: number;
+            /** Submissions */
+            submissions: components["schemas"]["StudentSubmissionOut"][];
+            /** Exercise */
+            exercise?: {
+                [key: string]: unknown;
+            } | null;
+            /** Lab */
+            lab?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /**
+         * StudentSubmissionOut
+         * @description Entrega vista por el alumno (según la política de devolución).
+         */
+        StudentSubmissionOut: {
+            /** Id */
+            id: number;
+            /** Item */
+            item: number;
+            /** Attempt */
+            attempt: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Score */
+            score: number | null;
+            /** Teacher Score */
+            teacher_score: number | null;
+            /** Comment */
+            comment: string;
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            } | null;
+            /** Message */
+            message: string;
+        };
+        /**
+         * SubmissionOut
+         * @description Entrega completa (vista del docente).
+         */
+        SubmissionOut: {
+            /** Id */
+            id: number;
+            /** Assignment Id */
+            assignment_id: number;
+            /** Item */
+            item: number;
+            item_info: components["schemas"]["ItemOut"];
+            student: components["schemas"]["UserOut"] | null;
+            /** Attempt */
+            attempt: number;
+            /** Seed */
+            seed: number;
+            /** Answers */
+            answers: {
+                [key: string]: unknown;
+            };
+            /** Design */
+            design: {
+                [key: string]: unknown;
+            } | null;
+            /** Auto Score */
+            auto_score: number | null;
+            /** Teacher Score */
+            teacher_score: number | null;
+            /** Comment */
+            comment: string;
+            /** Result */
+            result: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * SubmitIn
+         * @description Entrega de un ítem: respuestas de un ejercicio o pasos de un laboratorio.
+         */
+        SubmitIn: {
+            /** Answers */
+            answers?: {
+                [key: string]: string | number;
+            };
+            /**
+             * Steps
+             * @description Laboratorio: por paso, {design: DesignRequest, answers: {pregunta: valor}}
+             */
+            steps?: {
+                [key: string]: {
+                    [key: string]: unknown;
+                };
+            } | null;
+        };
+        /**
+         * TeacherIn
+         * @description Otro docente para el curso.
+         */
+        TeacherIn: {
+            /** Username */
+            username: string;
+        };
+        /**
          * TripEconomicsOut
          * @description Una marea a una velocidad (``trawlkit.economics.TripEconomics``).
          */
@@ -3987,6 +4991,23 @@ export interface components {
             /** Runtime S */
             runtime_s: number;
         };
+        /**
+         * UserOut
+         * @description Usuario.
+         */
+        UserOut: {
+            /** Id */
+            id: number;
+            /** Username */
+            username: string;
+            /** Display Name */
+            display_name: string;
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "admin" | "teacher" | "student";
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -4041,6 +5062,981 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    status_classroom_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatusOut"];
+                };
+            };
+        };
+    };
+    register_classroom_auth_register_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    login_classroom_auth_login_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    logout_classroom_auth_logout_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    me_classroom_me_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    change_password_classroom_me_password_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PasswordIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_me_classroom_me_delete_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteMeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    invites_classroom_invites_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_invites_classroom_invites_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvitesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    courses_classroom_courses_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_course_classroom_courses_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CourseIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    join_course_classroom_courses_join_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JoinIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_course_classroom_courses__course_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_course_classroom_courses__course_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CoursePatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_teacher_classroom_courses__course_id__teachers_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TeacherIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CourseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    course_students_classroom_courses__course_id__students_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_student_classroom_courses__course_id__students__student_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+                student_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_password_classroom_courses__course_id__students__student_id__password_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+                student_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetPasswordIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assignments_classroom_courses__course_id__assignments_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_assignment_classroom_courses__course_id__assignments_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                course_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_assignment_classroom_assignments__assignment_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentViewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_assignment_classroom_assignments__assignment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_assignment_classroom_assignments__assignment_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignmentPatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssignmentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_classroom_assignments__assignment_id__items__item__submit_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+                item: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StudentSubmissionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    grades_classroom_assignments__assignment_id__grades_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradesOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    grades_export_classroom_assignments__assignment_id__grades_export_get: {
+        parameters: {
+            query?: {
+                format?: "csv" | "xlsx";
+            };
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                    "application/octet-stream": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    assignment_sheet_classroom_assignments__assignment_id__sheet_get: {
+        parameters: {
+            query?: {
+                format?: "html" | "pdf";
+                key?: boolean;
+                student_id?: number | null;
+                /** @description Una guía por alumno, cada uno con sus datos */
+                all_students?: boolean;
+            };
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                assignment_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": unknown;
+                    "application/pdf": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submission_classroom_submissions__submission_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                submission_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionOut"] | components["schemas"]["StudentSubmissionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    review_classroom_submissions__submission_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                Authorization?: string | null;
+            };
+            path: {
+                submission_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmissionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     health_health_get: {
         parameters: {
             query?: never;

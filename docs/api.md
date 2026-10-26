@@ -42,6 +42,7 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/teaching/grade` | Corrige las respuestas de práctica (números con coma o punto, dentro de la tolerancia de cada respuesta) y devuelve la solución y la explicación. |
 | GET | `/teaching/labs`, `/teaching/labs/{id}` | Laboratorios guiados sobre la app: caso de partida, pasos, dónde se hace cada uno y sus preguntas (sin las respuestas). |
 | POST | `/teaching/labs/check` | Comprueba un paso de laboratorio sobre el caso del alumno con hechos que calcula el motor y corrige sus preguntas. |
+| — | `/classroom/…` | Aula UTN (sólo en línea, con `DATABASE_URL`; ver {doc}`despliegue`): alta con código de curso o de invitación, inicio de sesión con token *bearer*, cursos, alumnos, tareas con ejercicios y laboratorios del banco (datos propios por alumno, intentos, fechas y devolución inmediata o al cierre), entregas corregidas en el servidor, planilla de notas (JSON, XLSX, CSV), guía imprimible por alumno y revisión del docente. `GET /classroom/status` dice si está habilitada. |
 | POST | `/optimize` | Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial). |
 | POST | `/optimize/scaled-net` | Red escalada por `s` (mismas mallas y materiales), para usar el diseño optimizado. |
 | POST | `/simulate` | Simula la forma de equilibrio de la red a varias velocidades (experimental). |

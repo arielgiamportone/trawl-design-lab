@@ -84,12 +84,48 @@ Los resultados son los mismos que en local: el motor y los datos son idénticos.
 | `TRAWLKIT_MAX_BATCH_SECONDS` | API | `120` | `90` | Costo estimado máximo de `POST /simulate/uncertainty` y `POST /simulate/calibrate` [s]. |
 | `TRAWLKIT_MAX_OPT_GRID` | API | `25` | `15` | Lado máximo de la malla de `POST /optimize` (2–25). |
 | `TRAWLKIT_ALLOW_REFINE` | API | permitido | permitido | `0`/`false` rechaza `refine: true` en `POST /optimize`. |
+| `DATABASE_URL` | API | sin aula | Postgres de Neon (secreto) | Base del Aula UTN (cuentas, cursos, tareas y entregas). Sin ella, `/classroom` responde 503 y lo demás funciona igual. |
 | `PORT` | API (Docker) | `8000` | lo fija Render | Puerto de escucha de uvicorn. |
 | `VITE_API_URL` | app (compilación) | `http://127.0.0.1:8000` | variable del repo `TRAWLKIT_API_URL` o `https://trawl-design-lab-api.onrender.com` | URL base de la API. |
 | `VITE_BASE` | app (compilación) | `/` | `/trawl-design-lab/app/` | Ruta pública de la app. |
 | `VITE_DOCS_URL` | app (compilación) | sin enlace | `../` | Enlace «Documentación» de la cabecera (al libro). |
 
 Las variables de la API se cambian en Render (*servicio → Environment*) o en `render.yaml`.
+
+## Aula UTN: base de datos en Neon
+
+El aula (cursos, alumnos, tareas, entregas y notas) necesita una base que sobreviva a los
+despliegues; el disco del plan gratuito de Render se borra en cada uno. Se usa Postgres en
+[Neon](https://neon.tech), cuyo plan gratuito no vence (0,5 GB alcanzan para muchos cursos).
+
+1. **Crear la base.** En Neon, *New project* (región cercana a la de Render, p. ej. US West para
+   `oregon`). En *Connection details*, copiar la cadena de conexión
+   (`postgresql://usuario:clave@ep-….neon.tech/neondb?sslmode=require`). Es un secreto: no se
+   pega en el repositorio ni en issues.
+2. **Cargarla en Render.** *trawl-design-lab-api → Environment → Add environment variable*:
+   `DATABASE_URL` con esa cadena (el `render.yaml` la declara con `sync: false`, así que Render la
+   pide y no la versiona). Guardar redespliega la API; las tablas se crean solas en el primer
+   pedido al aula.
+3. **Crear el administrador**, una sola vez, desde una computadora con el repositorio (el plan
+   gratuito de Render no tiene consola):
+
+   ```bash
+   uv sync --extra classroom
+   export DATABASE_URL='postgresql://…neon.tech/neondb?sslmode=require'
+   uv run trawlkit classroom migrate
+   uv run trawlkit classroom create-admin --username ariel   # pide la contraseña
+   ```
+4. **Invitar a los docentes.** Con la cuenta de administrador, en la app (modo «Aula UTN» →
+   *Invitaciones*) o con `uv run trawlkit classroom invite --username ariel --count 3`. Cada
+   docente se registra con su código y crea sus cursos; los alumnos se registran con el código del
+   curso.
+
+`GET /classroom/status` dice si el aula está habilitada en el servidor. Para probar en local sin
+Neon: `DATABASE_URL=sqlite:///aula.db uv run trawlkit serve`.
+
+Datos personales: sólo usuario, nombre para mostrar (nombre o legajo) y la contraseña con hash
+(scrypt); no hay correo. El docente resetea contraseñas de sus alumnos y cada usuario puede borrar
+su cuenta con sus entregas.
 
 ## Probar el despliegue en local
 

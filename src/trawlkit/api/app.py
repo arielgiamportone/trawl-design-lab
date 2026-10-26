@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse, Response
 
 from trawlkit import __version__
 from trawlkit.api import service
+from trawlkit.api.classroom import router as classroom_router
 from trawlkit.api.contract import fingerprint
 from trawlkit.api.schemas import (
     BatchParseRequest,
@@ -90,9 +91,10 @@ _origins = [o.strip() for o in os.environ.get("TRAWLKIT_CORS_ORIGINS", "*").spli
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_origins,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["*"],
 )
+app.include_router(classroom_router)
 
 
 @app.exception_handler(service.BadRequestError)

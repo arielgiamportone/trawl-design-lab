@@ -6,6 +6,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Aula UTN en el servidor (Fase 17.2)**: `trawlkit.classroom` y rutas `/classroom`. Cuentas sin
+  correo (usuario, nombre o legajo y contraseña con scrypt), alumnos que se registran con el
+  código del curso y docentes con un código de invitación del administrador; sesión con token
+  *bearer* y bloqueo tras diez intentos fallidos. Cursos, alumnos (reseteo de contraseña por el
+  docente), tareas con ejercicios y laboratorios del banco, datos propios por alumno (semilla
+  derivada con un secreto de la base), intentos, apertura y cierre, devolución inmediata o al
+  cierre; corrección siempre en el servidor; planilla de notas (JSON, XLSX, CSV), revisión del
+  docente con nota y comentario, y guía imprimible de enunciados o clave por alumno.
+  Postgres (Neon) con `DATABASE_URL`, SQLite en desarrollo; sin base, el aula responde 503 y lo
+  demás sigue igual. Extra `classroom`; `trawlkit classroom migrate|create-admin|invite`.
 - **Modo docente, banco de ejercicios y laboratorios (Fase 17.1)**: `trawlkit.teaching`. Más de
   40 ejercicios de los capítulos 10 a 37 en tres niveles (básico, intermedio, avanzado), con
   datos que varían por semilla (la 0 son los del libro) y respuestas que calcula el mismo motor;

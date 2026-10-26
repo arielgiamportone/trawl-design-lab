@@ -26,3 +26,7 @@ services:
         value: '15'
       - key: TRAWLKIT_MAX_BATCH_SECONDS
         value: '90'
+      # Aula UTN (Fase 17): Postgres de Neon. Se carga a mano en Render (Environment) y no se
+      # versiona; sin ella, /classroom responde 503 y el resto de la API sigue igual.
+      - key: DATABASE_URL
+        sync: false

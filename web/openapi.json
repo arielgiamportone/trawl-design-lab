@@ -6,6 +6,1744 @@
   "version": "1.1.0"
  },
  "paths": {
+  "/classroom/status": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Status",
+    "description": "Si el aula está habilitada en este servidor (sin tocar la base).",
+    "operationId": "status_classroom_status_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/StatusOut"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/auth/register": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Register",
+    "description": "Alta de alumno (con código de curso) o de docente (con código de invitación).",
+    "operationId": "register_classroom_auth_register_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RegisterIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SessionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/auth/login": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Login",
+    "description": "Inicio de sesión (se bloquea unos minutos tras diez intentos fallidos).",
+    "operationId": "login_classroom_auth_login_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LoginIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SessionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/auth/logout": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Logout",
+    "description": "Cierra la sesión.",
+    "operationId": "logout_classroom_auth_logout_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/me": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Me",
+    "description": "El usuario y sus cursos.",
+    "operationId": "me_classroom_me_get",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MeOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/me/password": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Change Password",
+    "description": "Cambia la contraseña propia.",
+    "operationId": "change_password_classroom_me_password_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PasswordIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/me/delete": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Delete Me",
+    "description": "Borra la cuenta propia y sus entregas.",
+    "operationId": "delete_me_classroom_me_delete_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DeleteMeIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/invites": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Invites",
+    "description": "Invitaciones para docentes (administrador).",
+    "operationId": "invites_classroom_invites_get",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/InviteOut"
+         },
+         "title": "Response Invites Classroom Invites Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Create Invites",
+    "description": "Crea invitaciones para docentes (administrador).",
+    "operationId": "create_invites_classroom_invites_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/InvitesIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/InviteOut"
+         },
+         "title": "Response Create Invites Classroom Invites Post"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Courses",
+    "description": "Cursos del usuario.",
+    "operationId": "courses_classroom_courses_get",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/CourseOut"
+         },
+         "title": "Response Courses Classroom Courses Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Create Course",
+    "description": "Curso nuevo (docente); devuelve su código de inscripción.",
+    "operationId": "create_course_classroom_courses_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CourseIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CourseOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/join": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Join Course",
+    "description": "Un alumno se suma a otro curso con su código.",
+    "operationId": "join_course_classroom_courses_join_post",
+    "parameters": [
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/JoinIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CourseOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Get Course",
+    "description": "Un curso.",
+    "operationId": "get_course_classroom_courses__course_id__get",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CourseOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Update Course",
+    "description": "Cambia nombre, cuatrimestre, archivado o código (docente del curso).",
+    "operationId": "update_course_classroom_courses__course_id__patch",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CoursePatch"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CourseOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}/teachers": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Add Teacher",
+    "description": "Suma otro docente al curso.",
+    "operationId": "add_teacher_classroom_courses__course_id__teachers_post",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TeacherIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CourseOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}/students": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Course Students",
+    "description": "Alumnos del curso (docente).",
+    "operationId": "course_students_classroom_courses__course_id__students_get",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/UserOut"
+         },
+         "title": "Response Course Students Classroom Courses  Course Id  Students Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}/students/{student_id}": {
+   "delete": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Remove Student",
+    "description": "Quita a un alumno del curso.",
+    "operationId": "remove_student_classroom_courses__course_id__students__student_id__delete",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "student_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Student Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}/students/{student_id}/password": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Reset Password",
+    "description": "El docente pone una contraseña nueva a un alumno (no hay correo para recuperarla).",
+    "operationId": "reset_password_classroom_courses__course_id__students__student_id__password_post",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "student_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Student Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ResetPasswordIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/courses/{course_id}/assignments": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Assignments",
+    "description": "Tareas del curso (los alumnos ven sólo las abiertas, con su avance).",
+    "operationId": "assignments_classroom_courses__course_id__assignments_get",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/AssignmentOut"
+         },
+         "title": "Response Assignments Classroom Courses  Course Id  Assignments Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Create Assignment",
+    "description": "Tarea nueva con ejercicios y laboratorios del banco (docente).",
+    "operationId": "create_assignment_classroom_courses__course_id__assignments_post",
+    "parameters": [
+     {
+      "name": "course_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Course Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AssignmentIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssignmentOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/assignments/{assignment_id}": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Get Assignment",
+    "description": "Una tarea; el alumno recibe sus datos (semilla propia) y sus entregas.",
+    "operationId": "get_assignment_classroom_assignments__assignment_id__get",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssignmentViewOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Update Assignment",
+    "description": "Cambia una tarea (los ítems, sólo sin entregas).",
+    "operationId": "update_assignment_classroom_assignments__assignment_id__patch",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/AssignmentPatch"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AssignmentOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Delete Assignment",
+    "description": "Borra una tarea con sus entregas.",
+    "operationId": "delete_assignment_classroom_assignments__assignment_id__delete",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/assignments/{assignment_id}/items/{item}/submit": {
+   "post": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Submit",
+    "description": "Entrega de un ítem: el servidor corrige y devuelve lo que la política permite ver.",
+    "operationId": "submit_classroom_assignments__assignment_id__items__item__submit_post",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "item",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Item"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SubmitIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/StudentSubmissionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/assignments/{assignment_id}/grades": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Grades",
+    "description": "Planilla de notas de la tarea (docente).",
+    "operationId": "grades_classroom_assignments__assignment_id__grades_get",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/GradesOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/assignments/{assignment_id}/grades/export": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Grades Export",
+    "description": "La planilla en Excel o CSV.",
+    "operationId": "grades_export_classroom_assignments__assignment_id__grades_export_get",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "csv",
+        "xlsx"
+       ],
+       "type": "string",
+       "default": "xlsx",
+       "title": "Format"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/csv": {},
+       "application/octet-stream": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/assignments/{assignment_id}/sheet": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Assignment Sheet",
+    "description": "Guía imprimible de la tarea: enunciados o clave, de un alumno, de todos o del libro.",
+    "operationId": "assignment_sheet_classroom_assignments__assignment_id__sheet_get",
+    "parameters": [
+     {
+      "name": "assignment_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Assignment Id"
+      }
+     },
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "html",
+        "pdf"
+       ],
+       "type": "string",
+       "default": "html",
+       "title": "Format"
+      }
+     },
+     {
+      "name": "key",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "default": false,
+       "title": "Key"
+      }
+     },
+     {
+      "name": "student_id",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Student Id"
+      }
+     },
+     {
+      "name": "all_students",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "description": "Una guía por alumno, cada uno con sus datos",
+       "default": false,
+       "title": "All Students"
+      },
+      "description": "Una guía por alumno, cada uno con sus datos"
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/html": {},
+       "application/pdf": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/classroom/submissions/{submission_id}": {
+   "get": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Submission",
+    "description": "Una entrega: completa para el docente; según la política, para su alumno.",
+    "operationId": "submission_classroom_submissions__submission_id__get",
+    "parameters": [
+     {
+      "name": "submission_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Submission Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "anyOf": [
+          {
+           "$ref": "#/components/schemas/SubmissionOut"
+          },
+          {
+           "$ref": "#/components/schemas/StudentSubmissionOut"
+          }
+         ],
+         "title": "Response Submission Classroom Submissions  Submission Id  Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "tags": [
+     "aula"
+    ],
+    "summary": "Review",
+    "description": "Nota y comentario del docente sobre una entrega.",
+    "operationId": "review_classroom_submissions__submission_id__patch",
+    "parameters": [
+     {
+      "name": "submission_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Submission Id"
+      }
+     },
+     {
+      "name": "Authorization",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Authorization"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReviewIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SubmissionOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/health": {
    "get": {
     "summary": "Health",
@@ -2221,6 +3959,405 @@
     "title": "AssemblyOut",
     "description": "Un armado evaluado (``trawlkit.optimize.components.Assembly``)."
    },
+   "AssignmentIn": {
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Title"
+     },
+     "description": {
+      "type": "string",
+      "maxLength": 4000,
+      "title": "Description",
+      "default": ""
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ItemIn"
+      },
+      "type": "array",
+      "maxItems": 40,
+      "minItems": 1,
+      "title": "Items"
+     },
+     "opens_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Opens At"
+     },
+     "due_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Due At"
+     },
+     "max_attempts": {
+      "type": "integer",
+      "maximum": 20.0,
+      "minimum": 1.0,
+      "title": "Max Attempts",
+      "default": 3
+     },
+     "feedback": {
+      "type": "string",
+      "enum": [
+       "immediate",
+       "after_due"
+      ],
+      "title": "Feedback",
+      "default": "immediate"
+     },
+     "per_student_data": {
+      "type": "boolean",
+      "title": "Per Student Data",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "title",
+     "items"
+    ],
+    "title": "AssignmentIn",
+    "description": "Tarea nueva."
+   },
+   "AssignmentOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "course_id": {
+      "type": "integer",
+      "title": "Course Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ItemOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "opens_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Opens At"
+     },
+     "due_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Due At"
+     },
+     "max_attempts": {
+      "type": "integer",
+      "title": "Max Attempts"
+     },
+     "feedback": {
+      "type": "string",
+      "enum": [
+       "immediate",
+       "after_due"
+      ],
+      "title": "Feedback"
+     },
+     "per_student_data": {
+      "type": "boolean",
+      "title": "Per Student Data"
+     },
+     "open": {
+      "type": "boolean",
+      "title": "Open"
+     },
+     "closed": {
+      "type": "boolean",
+      "title": "Closed"
+     },
+     "progress": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ProgressOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "course_id",
+     "title",
+     "description",
+     "items",
+     "opens_at",
+     "due_at",
+     "max_attempts",
+     "feedback",
+     "per_student_data",
+     "open",
+     "closed"
+    ],
+    "title": "AssignmentOut",
+    "description": "Tarea."
+   },
+   "AssignmentPatch": {
+    "properties": {
+     "title": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 160
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "description": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 4000
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Description"
+     },
+     "items": {
+      "anyOf": [
+       {
+        "items": {
+         "$ref": "#/components/schemas/ItemIn"
+        },
+        "type": "array",
+        "maxItems": 40
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Items"
+     },
+     "opens_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Opens At"
+     },
+     "due_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Due At"
+     },
+     "max_attempts": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 20.0,
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Max Attempts"
+     },
+     "feedback": {
+      "anyOf": [
+       {
+        "type": "string",
+        "enum": [
+         "immediate",
+         "after_due"
+        ]
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Feedback"
+     },
+     "per_student_data": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Per Student Data"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "AssignmentPatch",
+    "description": "Cambios de una tarea."
+   },
+   "AssignmentViewOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "course_id": {
+      "type": "integer",
+      "title": "Course Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/ItemOut"
+      },
+      "type": "array",
+      "title": "Items"
+     },
+     "opens_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Opens At"
+     },
+     "due_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Due At"
+     },
+     "max_attempts": {
+      "type": "integer",
+      "title": "Max Attempts"
+     },
+     "feedback": {
+      "type": "string",
+      "enum": [
+       "immediate",
+       "after_due"
+      ],
+      "title": "Feedback"
+     },
+     "per_student_data": {
+      "type": "boolean",
+      "title": "Per Student Data"
+     },
+     "open": {
+      "type": "boolean",
+      "title": "Open"
+     },
+     "closed": {
+      "type": "boolean",
+      "title": "Closed"
+     },
+     "progress": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ProgressOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "item_list": {
+      "items": {
+       "$ref": "#/components/schemas/StudentItemOut"
+      },
+      "type": "array",
+      "title": "Item List"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "course_id",
+     "title",
+     "description",
+     "items",
+     "opens_at",
+     "due_at",
+     "max_attempts",
+     "feedback",
+     "per_student_data",
+     "open",
+     "closed"
+    ],
+    "title": "AssignmentViewOut",
+    "description": "Tarea con los ítems del alumno (vacío para el docente)."
+   },
    "BallastZoneOut": {
     "properties": {
      "zone": {
@@ -4012,6 +6149,143 @@
     "title": "ConstructionGuideOut",
     "description": "Resultado de ``POST /design/construction``: la guía de construcción para el taller."
    },
+   "CourseIn": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "term": {
+      "type": "string",
+      "maxLength": 40,
+      "title": "Term",
+      "default": ""
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name"
+    ],
+    "title": "CourseIn",
+    "description": "Curso nuevo."
+   },
+   "CourseOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "term": {
+      "type": "string",
+      "title": "Term"
+     },
+     "archived": {
+      "type": "boolean",
+      "title": "Archived"
+     },
+     "students": {
+      "type": "integer",
+      "title": "Students"
+     },
+     "teachers": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Teachers"
+     },
+     "role": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Role"
+     },
+     "code": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Code"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "term",
+     "archived",
+     "students",
+     "teachers",
+     "role",
+     "code"
+    ],
+    "title": "CourseOut",
+    "description": "Curso (el código sólo para sus docentes)."
+   },
+   "CoursePatch": {
+    "properties": {
+     "name": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 120
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Name"
+     },
+     "term": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 40
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Term"
+     },
+     "archived": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Archived"
+     },
+     "new_code": {
+      "type": "boolean",
+      "title": "New Code",
+      "default": false
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "CoursePatch",
+    "description": "Cambios de un curso."
+   },
    "CutPieceOut": {
     "properties": {
      "id": {
@@ -4189,6 +6463,22 @@
     ],
     "title": "CutSideOut",
     "description": "Corte de un costado del paño (``trawlkit.construction.CutSide``)."
+   },
+   "DeleteMeIn": {
+    "properties": {
+     "password": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Password"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "password"
+    ],
+    "title": "DeleteMeIn",
+    "description": "Confirmación para borrar la cuenta."
    },
    "DesignRequest": {
     "properties": {
@@ -5980,6 +8270,54 @@
     "title": "FoulingOut",
     "description": "Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo)."
    },
+   "GradeCellOut": {
+    "properties": {
+     "item": {
+      "type": "integer",
+      "title": "Item"
+     },
+     "attempts": {
+      "type": "integer",
+      "title": "Attempts"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "submission_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Submission Id"
+     },
+     "needs_review": {
+      "type": "boolean",
+      "title": "Needs Review"
+     }
+    },
+    "type": "object",
+    "required": [
+     "item",
+     "attempts",
+     "score",
+     "submission_id",
+     "needs_review"
+    ],
+    "title": "GradeCellOut",
+    "description": "Celda de la planilla: la mejor entrega de un ítem."
+   },
    "GradeOut": {
     "properties": {
      "id": {
@@ -6059,6 +8397,58 @@
     ],
     "title": "GradeRequest",
     "description": "Respuestas a corregir (``POST /teaching/grade``), por clave; números con coma o punto."
+   },
+   "GradeRowOut": {
+    "properties": {
+     "student": {
+      "$ref": "#/components/schemas/UserOut"
+     },
+     "cells": {
+      "items": {
+       "$ref": "#/components/schemas/GradeCellOut"
+      },
+      "type": "array",
+      "title": "Cells"
+     },
+     "points": {
+      "type": "number",
+      "title": "Points"
+     }
+    },
+    "type": "object",
+    "required": [
+     "student",
+     "cells",
+     "points"
+    ],
+    "title": "GradeRowOut",
+    "description": "Fila de la planilla: un alumno."
+   },
+   "GradesOut": {
+    "properties": {
+     "assignment": {
+      "$ref": "#/components/schemas/AssignmentOut"
+     },
+     "total_points": {
+      "type": "number",
+      "title": "Total Points"
+     },
+     "rows": {
+      "items": {
+       "$ref": "#/components/schemas/GradeRowOut"
+      },
+      "type": "array",
+      "title": "Rows"
+     }
+    },
+    "type": "object",
+    "required": [
+     "assignment",
+     "total_points",
+     "rows"
+    ],
+    "title": "GradesOut",
+    "description": "Planilla de notas de una tarea."
    },
    "HTTPValidationError": {
     "properties": {
@@ -6374,6 +8764,146 @@
     ],
     "title": "Health",
     "description": "Estado del servicio.\n\n``contract`` es la huella de las rutas de la API (ver ``trawlkit.api.contract``): la app la\ncompara con la de su build para avisar si la API en línea es de otra versión. ``commit`` es\nel commit desplegado (``RENDER_GIT_COMMIT`` en Render; ``None`` en local)."
+   },
+   "InviteOut": {
+    "properties": {
+     "code": {
+      "type": "string",
+      "title": "Code"
+     },
+     "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Expires At"
+     },
+     "used_by": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Used By"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "code",
+     "expires_at",
+     "used_by",
+     "created_at"
+    ],
+    "title": "InviteOut",
+    "description": "Invitación."
+   },
+   "InvitesIn": {
+    "properties": {
+     "count": {
+      "type": "integer",
+      "maximum": 50.0,
+      "minimum": 1.0,
+      "title": "Count",
+      "default": 1
+     },
+     "days": {
+      "type": "integer",
+      "maximum": 365.0,
+      "minimum": 1.0,
+      "title": "Days",
+      "default": 30
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "InvitesIn",
+    "description": "Invitaciones nuevas para docentes."
+   },
+   "ItemIn": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "exercise",
+       "lab"
+      ],
+      "title": "Kind"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "points": {
+      "type": "number",
+      "maximum": 100.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Points",
+      "default": 1.0
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "kind",
+     "ref"
+    ],
+    "title": "ItemIn",
+    "description": "Ítem de una tarea: un ejercicio o un laboratorio del banco."
+   },
+   "ItemOut": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "exercise",
+       "lab"
+      ],
+      "title": "Kind"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "points": {
+      "type": "number",
+      "title": "Points"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "ref",
+     "points",
+     "title"
+    ],
+    "title": "ItemOut",
+    "description": "Ítem de una tarea con su título."
+   },
+   "JoinIn": {
+    "properties": {
+     "code": {
+      "type": "string",
+      "maxLength": 20,
+      "title": "Code"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "code"
+    ],
+    "title": "JoinIn",
+    "description": "Sumarse a un curso."
    },
    "JoinOut": {
     "properties": {
@@ -7142,6 +9672,70 @@
     ],
     "title": "LayoutShape",
     "description": "Polígono de un panel en un plano (``trawlkit.drawing.layout.PanelShape``), en metros.\n\n``y`` crece desde la boca hacia la bolsa; ``x = 0`` es el eje de la red. ``points`` va en\nsentido horario desde la esquina superior izquierda (un borde de 0 mallas da un triángulo)."
+   },
+   "LoginIn": {
+    "properties": {
+     "username": {
+      "type": "string",
+      "maxLength": 40,
+      "title": "Username"
+     },
+     "password": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Password"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "username",
+     "password"
+    ],
+    "title": "LoginIn",
+    "description": "Inicio de sesión."
+   },
+   "MeOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "username": {
+      "type": "string",
+      "title": "Username"
+     },
+     "display_name": {
+      "type": "string",
+      "title": "Display Name"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "admin",
+       "teacher",
+       "student"
+      ],
+      "title": "Role"
+     },
+     "courses": {
+      "items": {
+       "$ref": "#/components/schemas/CourseOut"
+      },
+      "type": "array",
+      "title": "Courses"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "username",
+     "display_name",
+     "role",
+     "courses"
+    ],
+    "title": "MeOut",
+    "description": "Usuario con sus cursos."
    },
    "MeshOrientation": {
     "type": "string",
@@ -7942,6 +10536,29 @@
     "title": "ParamInfo",
     "description": "Parámetro sobrescribible de ``DesignCase``."
    },
+   "PasswordIn": {
+    "properties": {
+     "old_password": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Old Password"
+     },
+     "new_password": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 8,
+      "title": "New Password"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "old_password",
+     "new_password"
+    ],
+    "title": "PasswordIn",
+    "description": "Cambio de contraseña."
+   },
    "Plane": {
     "type": "string",
     "enum": [
@@ -7996,6 +10613,25 @@
     ],
     "title": "PriceIn",
     "description": "Precio orientativo de un componente o de una línea de la lista de materiales."
+   },
+   "ProgressOut": {
+    "properties": {
+     "items": {
+      "type": "integer",
+      "title": "Items"
+     },
+     "submitted": {
+      "type": "integer",
+      "title": "Submitted"
+     }
+    },
+    "type": "object",
+    "required": [
+     "items",
+     "submitted"
+    ],
+    "title": "ProgressOut",
+    "description": "Avance de un alumno en una tarea."
    },
    "PropellerType": {
     "type": "string",
@@ -8105,6 +10741,111 @@
     ],
     "title": "ProvenanceRow",
     "description": "Un valor de la red y su procedencia (``trawlkit.provenance``)."
+   },
+   "RegisterIn": {
+    "properties": {
+     "username": {
+      "type": "string",
+      "maxLength": 40,
+      "minLength": 3,
+      "title": "Username"
+     },
+     "password": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 8,
+      "title": "Password"
+     },
+     "display_name": {
+      "type": "string",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Display Name"
+     },
+     "course_code": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 20
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Course Code"
+     },
+     "invite_code": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 20
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Invite Code"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "username",
+     "password",
+     "display_name"
+    ],
+    "title": "RegisterIn",
+    "description": "Alta: alumno con código de curso o docente con código de invitación."
+   },
+   "ResetPasswordIn": {
+    "properties": {
+     "password": {
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 8,
+      "title": "Password"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "password"
+    ],
+    "title": "ResetPasswordIn",
+    "description": "Contraseña nueva para un alumno."
+   },
+   "ReviewIn": {
+    "properties": {
+     "teacher_score": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 1.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Teacher Score"
+     },
+     "comment": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 4000
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Comment"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "ReviewIn",
+    "description": "Nota del docente (0 a 1; nula vuelve a la automática) y comentario."
    },
    "Rope": {
     "properties": {
@@ -8745,6 +11486,24 @@
     "title": "SensorParseResponse",
     "description": "Resultado de ``POST /sensors/parse``."
    },
+   "SessionOut": {
+    "properties": {
+     "token": {
+      "type": "string",
+      "title": "Token"
+     },
+     "user": {
+      "$ref": "#/components/schemas/UserOut"
+     }
+    },
+    "type": "object",
+    "required": [
+     "token",
+     "user"
+    ],
+    "title": "SessionOut",
+    "description": "Token de sesión y usuario."
+   },
    "SimEngineRow": {
     "properties": {
      "speed_kn": {
@@ -9290,6 +12049,345 @@
     "title": "SpeciesPriceIn",
     "description": "Especie de la captura: fracción del peso y precio en playa por kg."
    },
+   "StatusOut": {
+    "properties": {
+     "enabled": {
+      "type": "boolean",
+      "title": "Enabled"
+     },
+     "detail": {
+      "type": "string",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "required": [
+     "enabled",
+     "detail"
+    ],
+    "title": "StatusOut",
+    "description": "Estado del aula en este servidor."
+   },
+   "StudentItemOut": {
+    "properties": {
+     "index": {
+      "type": "integer",
+      "title": "Index"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "exercise",
+       "lab"
+      ],
+      "title": "Kind"
+     },
+     "ref": {
+      "type": "string",
+      "title": "Ref"
+     },
+     "points": {
+      "type": "number",
+      "title": "Points"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "attempts_used": {
+      "type": "integer",
+      "title": "Attempts Used"
+     },
+     "attempts_left": {
+      "type": "integer",
+      "title": "Attempts Left"
+     },
+     "submissions": {
+      "items": {
+       "$ref": "#/components/schemas/StudentSubmissionOut"
+      },
+      "type": "array",
+      "title": "Submissions"
+     },
+     "exercise": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Exercise"
+     },
+     "lab": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lab"
+     }
+    },
+    "type": "object",
+    "required": [
+     "index",
+     "kind",
+     "ref",
+     "points",
+     "title",
+     "attempts_used",
+     "attempts_left",
+     "submissions"
+    ],
+    "title": "StudentItemOut",
+    "description": "Ítem de la tarea para el alumno: sus datos y sus entregas."
+   },
+   "StudentSubmissionOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "item": {
+      "type": "integer",
+      "title": "Item"
+     },
+     "attempt": {
+      "type": "integer",
+      "title": "Attempt"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "teacher_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Teacher Score"
+     },
+     "comment": {
+      "type": "string",
+      "title": "Comment"
+     },
+     "result": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Result"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "item",
+     "attempt",
+     "created_at",
+     "score",
+     "teacher_score",
+     "comment",
+     "result",
+     "message"
+    ],
+    "title": "StudentSubmissionOut",
+    "description": "Entrega vista por el alumno (según la política de devolución)."
+   },
+   "SubmissionOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "assignment_id": {
+      "type": "integer",
+      "title": "Assignment Id"
+     },
+     "item": {
+      "type": "integer",
+      "title": "Item"
+     },
+     "item_info": {
+      "$ref": "#/components/schemas/ItemOut"
+     },
+     "student": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/UserOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "attempt": {
+      "type": "integer",
+      "title": "Attempt"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "answers": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Answers"
+     },
+     "design": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Design"
+     },
+     "auto_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Auto Score"
+     },
+     "teacher_score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Teacher Score"
+     },
+     "comment": {
+      "type": "string",
+      "title": "Comment"
+     },
+     "result": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Result"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "assignment_id",
+     "item",
+     "item_info",
+     "student",
+     "attempt",
+     "seed",
+     "answers",
+     "design",
+     "auto_score",
+     "teacher_score",
+     "comment",
+     "result",
+     "created_at"
+    ],
+    "title": "SubmissionOut",
+    "description": "Entrega completa (vista del docente)."
+   },
+   "SubmitIn": {
+    "properties": {
+     "answers": {
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "number"
+        }
+       ]
+      },
+      "type": "object",
+      "title": "Answers"
+     },
+     "steps": {
+      "anyOf": [
+       {
+        "additionalProperties": {
+         "additionalProperties": true,
+         "type": "object"
+        },
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Steps",
+      "description": "Laboratorio: por paso, {design: DesignRequest, answers: {pregunta: valor}}"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "SubmitIn",
+    "description": "Entrega de un ítem: respuestas de un ejercicio o pasos de un laboratorio."
+   },
+   "TeacherIn": {
+    "properties": {
+     "username": {
+      "type": "string",
+      "maxLength": 40,
+      "title": "Username"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "username"
+    ],
+    "title": "TeacherIn",
+    "description": "Otro docente para el curso."
+   },
    "TripEconomicsOut": {
     "properties": {
      "speed_kn": {
@@ -9695,6 +12793,40 @@
     ],
     "title": "UncertaintyResponse",
     "description": "Resultado de ``POST /simulate/uncertainty``."
+   },
+   "UserOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "username": {
+      "type": "string",
+      "title": "Username"
+     },
+     "display_name": {
+      "type": "string",
+      "title": "Display Name"
+     },
+     "role": {
+      "type": "string",
+      "enum": [
+       "admin",
+       "teacher",
+       "student"
+      ],
+      "title": "Role"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "username",
+     "display_name",
+     "role"
+    ],
+    "title": "UserOut",
+    "description": "Usuario."
    },
    "ValidationError": {
     "properties": {

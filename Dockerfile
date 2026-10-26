@@ -25,12 +25,14 @@ WORKDIR /app
 
 # 1) Dependencias (capa cacheada mientras no cambien pyproject.toml/uv.lock).
 COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project --extra api --extra report --extra optimize
+RUN uv sync --frozen --no-dev --no-install-project \
+        --extra api --extra report --extra optimize --extra classroom
 
 # 2) El paquete (código + datos de src/trawlkit/data), instalado como rueda, no editable.
 COPY README.md LICENSE ./
 COPY src ./src
-RUN uv sync --frozen --no-dev --no-editable --extra api --extra report --extra optimize \
+RUN uv sync --frozen --no-dev --no-editable \
+        --extra api --extra report --extra optimize --extra classroom \
     && rm -rf /root/.cache
 
 RUN useradd --create-home --uid 10001 app

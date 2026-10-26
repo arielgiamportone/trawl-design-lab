@@ -94,7 +94,8 @@ jobs:
         run: |
           docker run -d --name trawlkit-api -p 8000:10000 -e PORT=10000 \
             -e TRAWLKIT_CORS_ORIGINS=https://arielgiamportone.github.io \
-            -e TRAWLKIT_MAX_SIM_SECONDS=20 -e TRAWLKIT_MAX_OPT_GRID=15 trawlkit-api
+            -e TRAWLKIT_MAX_SIM_SECONDS=20 -e TRAWLKIT_MAX_OPT_GRID=15 \
+            -e DATABASE_URL=sqlite:////tmp/aula.db trawlkit-api
       - name: Esperar /health
         run: |
           for i in $(seq 1 60); do
@@ -118,12 +119,28 @@ jobs:
           echo "HTTP $code"
           test "$code" = 200
           head -c 5 informe.pdf | grep -q '%PDF-'
+      - name: Aula con base de datos (SQLite en el contenedor)
+        run: |
+          curl -fsS http://127.0.0.1:8000/classroom/status | grep -q '"enabled":true'
+          docker exec trawlkit-api trawlkit classroom create-admin --username ci-admin \
+            --password clave-de-ci
+          code=$(curl -sS -o login.json -w '%{http_code}' -X POST \
+            http://127.0.0.1:8000/classroom/auth/login -H 'Content-Type: application/json' \
+            -d '{"username": "ci-admin", "password": "clave-de-ci"}')
+          echo "HTTP $code"
+          test "$code" = 200
+          grep -q '"role":"admin"' login.json
       - name: CORS para GitHub Pages
         run: |
           curl -sSi -X OPTIONS http://127.0.0.1:8000/design \
             -H 'Origin: https://arielgiamportone.github.io' \
             -H 'Access-Control-Request-Method: POST' \
             | grep -i '^access-control-allow-origin: https://arielgiamportone.github.io'
+          curl -sSi -X OPTIONS http://127.0.0.1:8000/classroom/assignments/1 \
+            -H 'Origin: https://arielgiamportone.github.io' \
+            -H 'Access-Control-Request-Method: PATCH' \
+            -H 'Access-Control-Request-Headers: authorization, content-type' \
+            | grep -i '^access-control-allow-methods:.*PATCH'
       - name: Healthcheck de Docker
         run: |
           for i in $(seq 1 30); do
