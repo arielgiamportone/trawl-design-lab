@@ -378,3 +378,16 @@ típica de arrastre de fondo; a 3,5 kn ya consume el 38 %. Por eso el promedio d
 $S_{req}$ entre 2 y 4 kn (≈ 1,66 m² por portón para 150 HP) es algo menor que el portón elegido.
 Nótese que la resistencia total del capítulo {doc}`19_ventana_velocidad` (modo corregido) suma el
 "ROB" de la hoja, es decir, la resistencia de **un** portón.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("15_portones_aparejo")
+```

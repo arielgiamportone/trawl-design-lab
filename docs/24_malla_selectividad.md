@@ -320,3 +320,16 @@ si se elige una especie.
 :tags: [remove-cell]
 print(f"capítulo ejecutado en {time.perf_counter() - T0:.0f} s")
 ```
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("24_malla_selectividad")
+```

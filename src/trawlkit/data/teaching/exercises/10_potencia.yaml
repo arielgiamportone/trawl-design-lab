@@ -1,0 +1,100 @@
+# Ejercicios del capítulo 10 «Potencia disponible para el arrastre».
+# Los datos de la semilla 0 son los del caso del libro (buque de 150 HP de la FAO A-3).
+exercises:
+  - id: potencia.fridman_tiro
+    chapter: 10_potencia
+    topic: potencia
+    level: basico
+    title: Tiro disponible de Fridman
+    statement: >
+      Un arrastrero de {bhp} HP con hélice {helice} arrastra a {v} kn. Calcule el tiro disponible
+      F_T según Fridman, F_T = BHP·(K_F − 0,7·v), con K_F = 10 para paso fijo (PF) y 15 para paso
+      variable con tobera (PV+T).
+    vars:
+      bhp: {label: Potencia al freno, unit: HP, choices: [120, 150, 180, 220, 300], default: 150}
+      helice: {label: Hélice, choices: [PF, PV+T], default: PF}
+      v: {label: Velocidad de arrastre, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: fridman_tiro
+    answers:
+      - {key: ft_kgf, label: Tiro disponible F_T, unit: kgf, decimals: 0}
+    hints:
+      - "Con hélice {helice}, K_F vale 10 (PF) o 15 (PV+T)."
+      - La velocidad va en nudos, sin convertir.
+    explanation: >
+      K_F = {kf}; F_T = {bhp}·({kf} − 0,7·{v}) = {ft_kgf} kgf. A más velocidad, menos tiro: la
+      hélice gasta potencia en mover el buque.
+    refs: [fridman1986]
+
+  - id: potencia.prado_bollard
+    chapter: 10_potencia
+    topic: potencia
+    level: basico
+    title: Tiro a punto fijo de Prado y Dremière
+    statement: >
+      Estime el tiro a punto fijo (bollard pull) de un buque de {bhp} HP con hélice {helice} con la
+      regla de Prado y Dremière: BP = BHP·0,9·(pct/100)·1000 kgf, con pct = 1,10 (PF), 1,20 (PF+T),
+      1,25 (PV) y 1,40 (PV+T).
+    vars:
+      bhp: {label: Potencia al freno, unit: HP, choices: [100, 150, 180, 250, 400], default: 150}
+      helice: {label: Hélice, choices: [PF, PF+T, PV, PV+T], default: PF}
+    solver: prado_bollard
+    answers:
+      - {key: bp_kgf, label: Tiro a punto fijo, unit: kgf, decimals: 0}
+    explanation: "pct = {pct}; BP = {bhp}·0,9·({pct}/100)·1000 = {bp_kgf} kgf ({bp_t} t)."
+    formats: {pct: 2, bp_t: 3}
+    refs: [prado1990]
+
+  - id: potencia.prado_arrastre
+    chapter: 10_potencia
+    topic: potencia
+    level: intermedio
+    title: Potencia de arrastre y tiro pescando (Prado)
+    statement: >
+      Para un buque de {bhp} HP con hélice {helice}: (a) promedie el tiro a punto fijo por
+      porcentaje con el tiro por factor K de la tabla de Prado; (b) calcule la potencia nominal
+      aparente APN = 0,09·BP; (c) la potencia de arrastre P = 0,75·K·APN con K = {k}; (d) el tiro
+      pescando a {v} kn, BPF = 150·P/v.
+    vars:
+      bhp: {label: Potencia al freno, unit: HP, choices: [150, 180], default: 150}
+      helice: {label: Hélice, choices: [PF, PV+T], default: PF}
+      k: {label: K de la potencia de arrastre, choices: [0.20, 0.25, 0.28], default: 0.20, decimals: 2}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: prado_arrastre
+    answers:
+      - {key: bp_avg_kgf, label: Tiro a punto fijo promedio, unit: kgf, decimals: 0}
+      - {key: apn_hp, label: Potencia nominal aparente, unit: HP, decimals: 1}
+      - {key: p_hp, label: Potencia de arrastre, unit: HP, decimals: 1}
+      - {key: bpf_kgf, label: Tiro pescando, unit: kgf, decimals: 0}
+    hints:
+      - El factor K de la tabla para el tiro a punto fijo depende de la hélice y de la potencia.
+      - El 150 de BPF = 150·P/v es una constante de conversión, no la potencia del buque.
+    explanation: >
+      BP por porcentaje = {bp_kgf} kgf; por factor K ({k_bp}) = {bp_k_kgf} kgf; promedio
+      {bp_avg_kgf} kgf. APN = 0,09·{bp_avg_kgf} = {apn_hp} HP; P = 0,75·{k}·{apn_hp} = {p_hp} HP;
+      BPF = 150·{p_hp}/{v} = {bpf_kgf} kgf.
+    formats: {k_bp: 1}
+    refs: [prado1990]
+
+  - id: potencia.koyama_tiro
+    chapter: 10_potencia
+    topic: potencia
+    level: intermedio
+    title: Tiro de Koyama a potencia constante
+    statement: >
+      Koyama supone que el 60 % de la potencia al freno llega a la hélice y que una fracción K de
+      ella es potencia efectiva de remolque: F = 75·K·0,6·BHP/v, con v en m/s y K = 0,15 para
+      buques de menos de 600 BHP. Calcule el tiro de un buque de {bhp} HP a {v} kn.
+    vars:
+      bhp: {label: Potencia al freno, unit: HP, choices: [150, 180, 250, 400, 550], default: 150}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: koyama_tiro
+    answers:
+      - {key: ehp_hp, label: Potencia efectiva EHP, unit: HP, decimals: 1}
+      - {key: pull_kgf, label: Tiro, unit: kgf, decimals: 0}
+    hints:
+      - "1 kn = 0,5144 m/s; 1 HP = 75 kgf·m/s."
+    explanation: >
+      BHP_F = 0,6·{bhp} = {bhp_f} HP; EHP = {k}·{bhp_f} = {ehp_hp} HP; v = {v_ms} m/s;
+      F = 75·{ehp_hp}/{v_ms} = {pull_kgf} kgf.
+    formats: {k: 2, v_ms: 3}
+    refs: [koyama1974]

@@ -6,6 +6,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Modo docente, banco de ejercicios y laboratorios (Fase 17.1)**: `trawlkit.teaching`. Más de
+  40 ejercicios de los capítulos 10 a 37 en tres niveles (básico, intermedio, avanzado), con
+  datos que varían por semilla (la 0 son los del libro) y respuestas que calcula el mismo motor;
+  corrección con tolerancia por respuesta, números con coma o punto y aviso de unidades.
+  Laboratorios guiados sobre la app (paño y resistencia, buque y velocidad, portones,
+  profundidad, una red a la medida del buque, del plano al taller) que se comprueban con hechos
+  del motor sobre el caso del alumno. `GET /teaching/exercises`, `/teaching/labs`,
+  `POST /teaching/grade` y `/teaching/labs/check`, también sin conexión;
+  `trawlkit exercises list|show|solve|sheet` (guía imprimible de enunciados o clave en HTML o
+  PDF). Libro: sección «Ejercicios» al final de los capítulos de teoría y aplicaciones.
 - **Economía de la operación (Fase 16)**: `trawlkit.economics`. Por velocidad de arrastre,
   gasoil y lubricante (arrastre con la resistencia del motor, navegación y maniobras), captura
   proporcional al área barrida por hora, ingreso (captura × precio en playa o mezcla de

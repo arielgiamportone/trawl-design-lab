@@ -256,3 +256,16 @@ bolsa también son relativamente cortos. La circunferencia relativa $a/b$ (1,05)
 debajo de lo habitual. Nada de esto es un error —la A-3 es un diseño FAO probado para buques
 pequeños—, pero explica por qué conviene vigilar su abertura vertical y el escape por encima de la
 lima ({doc}`16_aberturas`).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("13_dimensiones")
+```

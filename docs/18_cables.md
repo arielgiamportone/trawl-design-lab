@@ -343,3 +343,16 @@ P.finish(fig)
 | $R_W$ como % de $F_T$ | 0,1 % | 0,4 % | 1,0 % | 1,5 % | 2,0 % | 3,5 % |
 | $R_W$ corregido ($C_D$ = 0,054) [kgf] | 3,7 | 14,7 | 33,0 | 44,9 | 58,6 | 91,6 |
 | $R_W$ corregido como % de $F_T$ | 0,3 % | 1,1 % | 2,8 % | 4,0 % | 5,4 % | 9,4 % |
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("18_cables")
+```

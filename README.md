@@ -125,7 +125,7 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 40](https://img.shields.io/badge/rutas%20API-40-1c5cab) ![capítulos: 37](https://img.shields.io/badge/cap%C3%ADtulos-37-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 46](https://img.shields.io/badge/rutas%20API-46-1c5cab) ![capítulos: 37](https://img.shields.io/badge/cap%C3%ADtulos-37-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
@@ -136,7 +136,7 @@ encadena semejanza, refinado y armado:
 | Valores de referencia del Excel | 697, reproducidos con rtol 1e-6 en modo `excel` |
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
-| Rutas de la API | 40 |
+| Rutas de la API | 46 |
 | Capítulos del libro | 37 · 69 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>

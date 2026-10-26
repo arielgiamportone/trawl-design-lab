@@ -479,6 +479,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/teaching/exercises": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Teaching Exercises
+         * @description Banco de ejercicios, filtrado por capítulo del libro, nivel o tema.
+         */
+        get: operations["teaching_exercises_teaching_exercises_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teaching/exercises/{exercise_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Teaching Exercise
+         * @description Un ejercicio con sus datos para la semilla (0 = los del libro), sin las respuestas.
+         */
+        get: operations["teaching_exercise_teaching_exercises__exercise_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teaching/grade": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teaching Grade
+         * @description Corrige las respuestas de un ejercicio de práctica y muestra la solución.
+         */
+        post: operations["teaching_grade_teaching_grade_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teaching/labs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Teaching Labs
+         * @description Laboratorios guiados sobre la app.
+         */
+        get: operations["teaching_labs_teaching_labs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teaching/labs/{lab_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Teaching Lab
+         * @description Un laboratorio: caso de partida y pasos (sin las respuestas).
+         */
+        get: operations["teaching_lab_teaching_labs__lab_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/teaching/labs/check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Teaching Lab Check
+         * @description Comprueba un paso de laboratorio sobre el caso del alumno y corrige sus preguntas.
+         */
+        post: operations["teaching_lab_check_teaching_labs_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/layout": {
         parameters: {
             query?: never;
@@ -829,6 +949,26 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AnswerGradeOut
+         * @description Corrección de una respuesta.
+         */
+        AnswerGradeOut: {
+            /** Key */
+            key: string;
+            /** Ok */
+            ok: boolean;
+            /** Given */
+            given: string | null;
+            /** Expected */
+            expected: number | string | null;
+            /** Expected Text */
+            expected_text: string | null;
+            /** Error Rel */
+            error_rel: number | null;
+            /** Message */
+            message: string;
+        };
         /**
          * AssemblyOut
          * @description Un armado evaluado (``trawlkit.optimize.components.Assembly``).
@@ -2085,6 +2225,93 @@ export interface components {
             penalty: number | null;
         };
         /**
+         * ExerciseDataOut
+         * @description Un dato del enunciado.
+         */
+        ExerciseDataOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Value */
+            value: number | string;
+            /** Unit */
+            unit: string;
+            /** Text */
+            text: string;
+        };
+        /**
+         * ExerciseFieldOut
+         * @description Un campo a responder.
+         */
+        ExerciseFieldOut: {
+            /** Key */
+            key: string;
+            /** Label */
+            label: string;
+            /** Unit */
+            unit: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "number" | "code" | "choice";
+            /** Options */
+            options: string[] | null;
+        };
+        /**
+         * ExerciseInstanceOut
+         * @description Un ejercicio con sus datos para una semilla, sin las respuestas.
+         */
+        ExerciseInstanceOut: {
+            /** Id */
+            id: string;
+            /** Seed */
+            seed: number;
+            /** Chapter */
+            chapter: string;
+            /** Topic */
+            topic: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "basico" | "intermedio" | "avanzado";
+            /** Title */
+            title: string;
+            /** Statement */
+            statement: string;
+            /** Data */
+            data: components["schemas"]["ExerciseDataOut"][];
+            /** Answers */
+            answers: components["schemas"]["ExerciseFieldOut"][];
+            /** Hints */
+            hints: string[];
+            /** Refs */
+            refs: string[];
+        };
+        /**
+         * ExerciseSummaryOut
+         * @description Ejercicio del banco (sin datos ni respuestas).
+         */
+        ExerciseSummaryOut: {
+            /** Id */
+            id: string;
+            /** Chapter */
+            chapter: string;
+            /** Topic */
+            topic: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "basico" | "intermedio" | "avanzado";
+            /** Title */
+            title: string;
+            /** Answers */
+            answers: number;
+        };
+        /**
          * ExploreRequest
          * @description Explorador (``POST /simulate/explore``): estados al recorrer una variable.
          *
@@ -2220,6 +2447,39 @@ export interface components {
             };
             /** Notes */
             notes: string;
+        };
+        /**
+         * GradeOut
+         * @description Corrección de un ejercicio: puntaje (0 a 1), por respuesta y explicación.
+         */
+        GradeOut: {
+            /** Id */
+            id: string;
+            /** Seed */
+            seed: number;
+            /** Score */
+            score: number;
+            /** Answers */
+            answers: components["schemas"]["AnswerGradeOut"][];
+            /** Explanation */
+            explanation: string | null;
+        };
+        /**
+         * GradeRequest
+         * @description Respuestas a corregir (``POST /teaching/grade``), por clave; números con coma o punto.
+         */
+        GradeRequest: {
+            /** Id */
+            id: string;
+            /**
+             * Seed
+             * @default 0
+             */
+            seed: number;
+            /** Answers */
+            answers?: {
+                [key: string]: string | number;
+            };
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -2384,6 +2644,190 @@ export interface components {
              * @default
              */
             note: string;
+        };
+        /**
+         * LabCheckOut
+         * @description Comprobación de un paso, sin la respuesta.
+         */
+        LabCheckOut: {
+            /** Label */
+            label: string;
+            /** Fact */
+            fact: string;
+            /** Op */
+            op: string;
+        };
+        /**
+         * LabCheckRequest
+         * @description Comprobar un paso sobre el caso del alumno (``POST /teaching/labs/check``).
+         */
+        LabCheckRequest: {
+            /** Lab Id */
+            lab_id: string;
+            /** Step Id */
+            step_id: string;
+            design: components["schemas"]["DesignRequest"];
+            /** Answers */
+            answers?: {
+                [key: string]: string | number;
+            };
+        };
+        /**
+         * LabCheckResultOut
+         * @description Resultado de una comprobación.
+         */
+        LabCheckResultOut: {
+            /** Label */
+            label: string;
+            /** Ok */
+            ok: boolean;
+            /** Fact */
+            fact: string;
+            /** Value */
+            value: unknown;
+            /** Target */
+            target: unknown;
+        };
+        /**
+         * LabOut
+         * @description Laboratorio completo: caso de partida y pasos.
+         */
+        LabOut: {
+            /** Id */
+            id: string;
+            /** Chapter */
+            chapter: string;
+            /** Topic */
+            topic: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "basico" | "intermedio" | "avanzado";
+            /** Title */
+            title: string;
+            /** Summary */
+            summary: string;
+            /** Steps */
+            steps: number;
+            /** Start */
+            start: {
+                [key: string]: unknown;
+            };
+            /** Step List */
+            step_list: components["schemas"]["LabStepOut"][];
+            /** Closing */
+            closing: string;
+        };
+        /**
+         * LabQuestionOut
+         * @description Pregunta de un paso (sin la respuesta correcta).
+         */
+        LabQuestionOut: {
+            /** Id */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "number" | "choice" | "text";
+            /** Prompt */
+            prompt: string;
+            /** Unit */
+            unit: string;
+            /** Options */
+            options: string[] | null;
+        };
+        /**
+         * LabQuestionResultOut
+         * @description Corrección de una pregunta (``ok`` nulo en las abiertas).
+         */
+        LabQuestionResultOut: {
+            /** Id */
+            id: string;
+            /** Ok */
+            ok: boolean | null;
+            /** Given */
+            given: string | null;
+            /** Expected Text */
+            expected_text: string | null;
+            /** Message */
+            message: string;
+        };
+        /**
+         * LabStepOut
+         * @description Un paso del laboratorio.
+         */
+        LabStepOut: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Instruction */
+            instruction: string;
+            target: components["schemas"]["LabTargetOut"];
+            /** Checks */
+            checks: components["schemas"]["LabCheckOut"][];
+            /** Questions */
+            questions: components["schemas"]["LabQuestionOut"][];
+        };
+        /**
+         * LabStepResultOut
+         * @description Estado del paso: hecho o no, comprobaciones, preguntas y los valores del caso.
+         */
+        LabStepResultOut: {
+            /** Lab Id */
+            lab_id: string;
+            /** Step Id */
+            step_id: string;
+            /** Done */
+            done: boolean;
+            /** Checks */
+            checks: components["schemas"]["LabCheckResultOut"][];
+            /** Questions */
+            questions: components["schemas"]["LabQuestionResultOut"][];
+            /** Values */
+            values: {
+                [key: string]: unknown;
+            };
+        };
+        /**
+         * LabSummaryOut
+         * @description Laboratorio guiado (sin los pasos).
+         */
+        LabSummaryOut: {
+            /** Id */
+            id: string;
+            /** Chapter */
+            chapter: string;
+            /** Topic */
+            topic: string;
+            /**
+             * Level
+             * @enum {string}
+             */
+            level: "basico" | "intermedio" | "avanzado";
+            /** Title */
+            title: string;
+            /** Summary */
+            summary: string;
+            /** Steps */
+            steps: number;
+        };
+        /**
+         * LabTargetOut
+         * @description Dónde se hace el paso en la app.
+         */
+        LabTargetOut: {
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "expert" | "simple";
+            /** Tab */
+            tab: string | null;
+            /** Hint */
+            hint: string | null;
         };
         /**
          * LayoutPlane
@@ -4236,6 +4680,201 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EconomicsCompareOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_exercises_teaching_exercises_get: {
+        parameters: {
+            query?: {
+                chapter?: string | null;
+                level?: ("basico" | "intermedio" | "avanzado") | null;
+                topic?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseSummaryOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_exercise_teaching_exercises__exercise_id__get: {
+        parameters: {
+            query?: {
+                seed?: number;
+            };
+            header?: never;
+            path: {
+                exercise_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExerciseInstanceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_grade_teaching_grade_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GradeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GradeOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_labs_teaching_labs_get: {
+        parameters: {
+            query?: {
+                chapter?: string | null;
+                level?: ("basico" | "intermedio" | "avanzado") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabSummaryOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_lab_teaching_labs__lab_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                lab_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    teaching_lab_check_teaching_labs_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabCheckRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabStepResultOut"];
                 };
             };
             /** @description Validation Error */

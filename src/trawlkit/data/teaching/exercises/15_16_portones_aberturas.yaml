@@ -1,0 +1,117 @@
+# Ejercicios de los capítulos 15 «Portones y aparejo» y 16 «Aberturas».
+exercises:
+  - id: portones.fuerzas
+    chapter: 15_portones_aparejo
+    topic: portones
+    level: basico
+    title: Resistencia y fuerza de abertura de un portón
+    statement: >
+      Un portón de {area} m² trabaja con C_D = {cd} y C_L = {cl}. Con F = ½·(ρ/g)·C·S·v²
+      (ρ = 1024 kg/m³, g = 9,81 m/s², v en m/s), calcule a {v} kn la resistencia y la fuerza de
+      abertura de un portón, en kgf.
+    vars:
+      area: {label: Superficie del portón, unit: m², choices: [1.805, 1.2, 1.5, 2.2], default: 1.805, decimals: 3}
+      cd: {label: C_D, choices: [0.71, 0.5, 0.6, 0.56], default: 0.71, decimals: 2}
+      cl: {label: C_L, choices: [0.93, 1.0, 1.2, 1.35], default: 0.93, decimals: 2}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: fuerzas_porton
+    answers:
+      - {key: rd_kgf, label: Resistencia de un portón, unit: kgf, decimals: 0}
+      - {key: ry_kgf, label: Fuerza de abertura, unit: kgf, decimals: 0}
+    hints:
+      - "ρ/g = 1024/9,81 ≈ 104,4 kgf·s²/m⁴."
+    explanation: >
+      v = {v_ms} m/s; R_D = ½·104,4·{cd}·{area}·{v_ms}² = {rd_kgf} kgf y R_Y con C_L = {ry_kgf} kgf.
+    formats: {v_ms: 3}
+    refs: [fridman1986]
+
+  - id: portones.separacion
+    chapter: 15_portones_aparejo
+    topic: portones
+    level: basico
+    title: Separación entre portones «al metro»
+    statement: >
+      Con {cable} m de cable filado, pastecas separadas {pastecas} m y una separación de {por_metro}
+      m por metro de cable (la regla práctica del capítulo), estime la distancia entre portones
+      Ds = (sep. por metro − pastecas)·Ls + pastecas y el semiángulo de divergencia del cable
+      ½φ = asin(0,5·(Ds − pastecas)/Ls).
+    vars:
+      cable: {label: Cable filado, unit: m, choices: [200, 150, 250, 300], default: 200}
+      pastecas: {label: Separación de pastecas, unit: m, choices: [2.5, 2.2, 2.0, 2.4], default: 2.5, decimals: 1}
+      por_metro: {label: Separación con 1 m de cable, unit: m, value: 2.65, decimals: 2}
+    solver: separacion_portones
+    answers:
+      - {key: ds_m, label: Distancia entre portones, unit: m, decimals: 1}
+      - {key: medio_phi, label: Semiángulo de divergencia, unit: °, decimals: 1, tol_abs: 0.3, tol_rel: 0}
+    explanation: >
+      Ds = ({por_metro} − {pastecas})·{cable} + {pastecas} = {ds_m} m y ½φ = {medio_phi}°. La
+      regla es empírica: vale para buques chicos como los del libro, con pastecas a menos de 2,65 m.
+    refs: [prado1990]
+
+  - id: portones.superficie
+    chapter: 15_portones_aparejo
+    topic: portones
+    level: intermedio
+    title: Superficie de portón necesaria
+    statement: >
+      Fridman asigna a los portones una resistencia ROB del {fraccion} % del tiro disponible. Para
+      un buque de {bhp} HP con hélice de paso fijo a {v} kn, con portones de C_D = {cd}, calcule
+      el tiro de Fridman, ROB y la superficie total S = 2·ROB/((ρ/g)·C_D·v²) y por portón.
+    vars:
+      bhp: {label: Potencia, unit: HP, choices: [150, 180, 250, 300], default: 150}
+      v: {label: Velocidad, unit: kn, choices: [2.5, 3.0, 3.5], default: 3.0, decimals: 1}
+      fraccion: {label: Fracción para los portones, unit: "%", choices: [15, 20, 25, 30], default: 20}
+      cd: {label: C_D, choices: [0.71, 0.6, 0.56], default: 0.71, decimals: 2}
+    solver: superficie_porton
+    answers:
+      - {key: ft_kgf, label: Tiro disponible, unit: kgf, decimals: 0}
+      - {key: rob_kgf, label: Resistencia de los portones, unit: kgf, decimals: 0}
+      - {key: s_porton_m2, label: Superficie por portón, unit: m², decimals: 2}
+    explanation: >
+      F_T = {bhp}·(10 − 0,7·{v}) = {ft_kgf} kgf; ROB = {fraccion} % = {rob_kgf} kgf;
+      S = {s_total_m2} m² en total, {s_porton_m2} m² por portón.
+    formats: {s_total_m2: 2}
+    refs: [fridman1986]
+
+  - id: aberturas.dpa
+    chapter: 16_aberturas
+    topic: aberturas
+    level: basico
+    title: Abertura entre puntas de ala por triángulos semejantes
+    statement: >
+      Los portones van a {ds} m uno de otro. La red mide {l_red} m de largo y el aparejo (patentes y
+      bridas) {aparejo} m. Estime la distancia entre puntas de ala DPA = Ds·L/(L + aparejo) y
+      compárela con la lima de {lima} m (DPA/lima).
+    vars:
+      ds: {label: Distancia entre portones, unit: m, choices: [32.5, 30.0, 40.0, 45.0], default: 32.5, decimals: 1}
+      l_red: {label: Largo de la red, unit: m, choices: [33.4, 30.0, 40.0], default: 33.4, decimals: 1}
+      aparejo: {label: Patentes y bridas, unit: m, choices: [43.0, 30.0, 55.0], default: 43.0, decimals: 1}
+      lima: {label: Lima, unit: m, value: 28.7, decimals: 1}
+    solver: dpa_triangulos
+    answers:
+      - {key: dpa_m, label: DPA, unit: m, decimals: 2}
+      - {key: relacion, label: DPA/lima, decimals: 2, tol_abs: 0.01, tol_rel: 0}
+    explanation: >
+      DPA = {ds}·{l_red}/({l_red} + {aparejo}) = {dpa_m} m, el {relacion} de la lima. Entre 0,4 y
+      0,6 es lo habitual en una red de fondo.
+    refs: [fridman1986]
+
+  - id: aberturas.vertical
+    chapter: 16_aberturas
+    topic: aberturas
+    level: basico
+    title: Abertura vertical por la circunferencia
+    statement: >
+      La boca de la red tiene {mallas} mallas de {malla} mm en la circunferencia. Calcule la
+      circunferencia estirada y la abertura vertical por Suzuki (4/90) y por Prado ({pct} %).
+    vars:
+      mallas: {label: Mallas de la circunferencia, unit: mallas, choices: [744, 600, 900], default: 744}
+      malla: {label: Malla, unit: mm, choices: [60, 80, 100], default: 60}
+      pct: {label: Porcentaje de Prado, unit: "%", choices: [5.5, 6.5], default: 5.5, decimals: 1}
+    solver: abertura_vertical
+    answers:
+      - {key: a_m, label: Circunferencia estirada, unit: m, decimals: 2}
+      - {key: suzuki_m, label: AV de Suzuki, unit: m, decimals: 2}
+      - {key: prado_m, label: AV de Prado, unit: m, decimals: 2}
+    explanation: "a = {mallas}·{malla}/1000 = {a_m} m; Suzuki {suzuki_m} m; Prado {prado_m} m."
+    refs: [suzuki1982, prado1990]

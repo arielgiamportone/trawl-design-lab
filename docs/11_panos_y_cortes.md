@@ -295,3 +295,16 @@ lógica del diseño: alas de 80 mm con cortes 1N2B (en el vientre, el ala D usa 
 segunda sección F completa la bocana del burlón), square y primer cuerpo de 60 mm que se cierran con
 el mismo corte, y un segundo cuerpo y bolsa de 40 mm armados más cerrados ($U_1 = 0{,}23$), que es lo
 que reduce el ángulo de ataque de 11,6° a 6,7° en esa zona.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("11_panos_y_cortes")
+```

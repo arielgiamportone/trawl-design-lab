@@ -30,6 +30,14 @@ GETS = [
     "/errata",
     "/catalog/nets/nope",
     "/catalog/components/bobbin",
+    "/teaching/exercises",
+    "/teaching/exercises?chapter=14_resistencia&level=basico",
+    "/teaching/exercises?level=experto",
+    "/teaching/exercises/panos.corte_simetrico?seed=7",
+    "/teaching/exercises/nada",
+    "/teaching/labs",
+    "/teaching/labs/lab.pano_y_resistencia",
+    "/teaching/labs/lab.nada",
 ]
 
 POSTS: list[tuple[str, dict[str, object]]] = [
@@ -55,6 +63,18 @@ POSTS: list[tuple[str, dict[str, object]]] = [
             "speed_kn": 2.0,
         },
     ),
+    ("/teaching/grade", {"id": "resistencia.aberdeen", "seed": 5, "answers": {"rn_kgf": "900"}}),
+    ("/teaching/grade", {"id": "nada", "answers": {}}),
+    (
+        "/teaching/labs/check",
+        {
+            "lab_id": "lab.buque_y_velocidad",
+            "step_id": "buque",
+            "design": {"vessel": "fao_a3_180hp"},
+            "answers": {"vmax": "2,52", "rn": "No: la red es la misma"},
+        },
+    ),
+    ("/teaching/labs/check", {"lab_id": "lab.taller", "step_id": "nada", "design": {}}),
     (
         "/components/check",
         {

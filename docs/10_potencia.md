@@ -281,3 +281,16 @@ de Fridman hacia 2,5 kn en el buque de 150 BHP y hacia 2,7 kn en el de 180 BHP; 
 tobera ($K_F = 15$) esos cruces suben a 3,25 y 3,6 kn. Según Koyama o Nomura el cruce baja a
 2,1–2,3 kn. El margen real, una vez sumados portones, cables y boyas, se analiza en
 {doc}`19_ventana_velocidad`.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("10_potencia")
+```

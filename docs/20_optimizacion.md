@@ -398,3 +398,16 @@ es de ≈ 50 % (la red original sólo puede ir a 2–2,3 kn); con PV+T, de ≈ 1
 - **Óptimos en los bordes.** Los óptimos de área y de energía caen en $s_{\min}$: el resultado
   dice "lo más chico que se permita" y depende del rango elegido, que debe reflejar el mínimo
   práctico de la red (manejo en cubierta, especie objetivo).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("20_optimizacion")
+```

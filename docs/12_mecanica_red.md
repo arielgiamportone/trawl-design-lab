@@ -232,3 +232,16 @@ es la pieza que más pesa en la resistencia. Las únicas filas que cambian entre
 I y J (errata `codend_minor_side_uses_depth`); en ellas el libro suma 2,15 m² de hilo que no existen.
 Por su $U_1 = 0{,}23$, las bolsas tienen poca superficie de trabajo para su superficie sólida, es
 decir, la mayor solidez de la red (≈0,31 contra ≈0,10 de las alas).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("12_mecanica_red")
+```

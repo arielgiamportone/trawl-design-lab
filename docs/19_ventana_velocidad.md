@@ -251,3 +251,16 @@ Tres lecturas:
    de la red (superficie sólida, burlón) reducen $R_N$ ≈ 5 % y compensan buena parte del portón
    que se agrega. Las redes estándar y modificada son casi equivalentes (la bolsa de 30 mm resiste un
    poco menos en modo Excel).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("19_ventana_velocidad")
+```

@@ -947,6 +947,336 @@
     }
    }
   },
+  "/teaching/exercises": {
+   "get": {
+    "summary": "Teaching Exercises",
+    "description": "Banco de ejercicios, filtrado por capítulo del libro, nivel o tema.",
+    "operationId": "teaching_exercises_teaching_exercises_get",
+    "parameters": [
+     {
+      "name": "chapter",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Chapter"
+      }
+     },
+     {
+      "name": "level",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "enum": [
+          "basico",
+          "intermedio",
+          "avanzado"
+         ],
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Level"
+      }
+     },
+     {
+      "name": "topic",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Topic"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/ExerciseSummaryOut"
+         },
+         "title": "Response Teaching Exercises Teaching Exercises Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/teaching/exercises/{exercise_id}": {
+   "get": {
+    "summary": "Teaching Exercise",
+    "description": "Un ejercicio con sus datos para la semilla (0 = los del libro), sin las respuestas.",
+    "operationId": "teaching_exercise_teaching_exercises__exercise_id__get",
+    "parameters": [
+     {
+      "name": "exercise_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Exercise Id"
+      }
+     },
+     {
+      "name": "seed",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 2147483647,
+       "minimum": 0,
+       "default": 0,
+       "title": "Seed"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ExerciseInstanceOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/teaching/grade": {
+   "post": {
+    "summary": "Teaching Grade",
+    "description": "Corrige las respuestas de un ejercicio de práctica y muestra la solución.",
+    "operationId": "teaching_grade_teaching_grade_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/GradeRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/GradeOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/teaching/labs": {
+   "get": {
+    "summary": "Teaching Labs",
+    "description": "Laboratorios guiados sobre la app.",
+    "operationId": "teaching_labs_teaching_labs_get",
+    "parameters": [
+     {
+      "name": "chapter",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Chapter"
+      }
+     },
+     {
+      "name": "level",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "enum": [
+          "basico",
+          "intermedio",
+          "avanzado"
+         ],
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Level"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/LabSummaryOut"
+         },
+         "title": "Response Teaching Labs Teaching Labs Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/teaching/labs/{lab_id}": {
+   "get": {
+    "summary": "Teaching Lab",
+    "description": "Un laboratorio: caso de partida y pasos (sin las respuestas).",
+    "operationId": "teaching_lab_teaching_labs__lab_id__get",
+    "parameters": [
+     {
+      "name": "lab_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Lab Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LabOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/teaching/labs/check": {
+   "post": {
+    "summary": "Teaching Lab Check",
+    "description": "Comprueba un paso de laboratorio sobre el caso del alumno y corrige sus preguntas.",
+    "operationId": "teaching_lab_check_teaching_labs_check_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LabCheckRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LabStepResultOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/design/layout": {
    "post": {
     "summary": "Design Layout",
@@ -1669,6 +1999,81 @@
  },
  "components": {
   "schemas": {
+   "AnswerGradeOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "given": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Given"
+     },
+     "expected": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Expected"
+     },
+     "expected_text": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Expected Text"
+     },
+     "error_rel": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error Rel"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "ok",
+     "given",
+     "expected",
+     "expected_text",
+     "error_rel",
+     "message"
+    ],
+    "title": "AnswerGradeOut",
+    "description": "Corrección de una respuesta."
+   },
    "AssemblyOut": {
     "properties": {
      "components": {
@@ -5028,6 +5433,221 @@
     "title": "EvaluationOut",
     "description": "Diseño ``(s, v)`` evaluado."
    },
+   "ExerciseDataOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "value": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "title": "Value"
+     },
+     "unit": {
+      "type": "string",
+      "title": "Unit"
+     },
+     "text": {
+      "type": "string",
+      "title": "Text"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "label",
+     "value",
+     "unit",
+     "text"
+    ],
+    "title": "ExerciseDataOut",
+    "description": "Un dato del enunciado."
+   },
+   "ExerciseFieldOut": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "title": "Key"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "unit": {
+      "type": "string",
+      "title": "Unit"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "number",
+       "code",
+       "choice"
+      ],
+      "title": "Kind"
+     },
+     "options": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Options"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key",
+     "label",
+     "unit",
+     "kind",
+     "options"
+    ],
+    "title": "ExerciseFieldOut",
+    "description": "Un campo a responder."
+   },
+   "ExerciseInstanceOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "chapter": {
+      "type": "string",
+      "title": "Chapter"
+     },
+     "topic": {
+      "type": "string",
+      "title": "Topic"
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "basico",
+       "intermedio",
+       "avanzado"
+      ],
+      "title": "Level"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "statement": {
+      "type": "string",
+      "title": "Statement"
+     },
+     "data": {
+      "items": {
+       "$ref": "#/components/schemas/ExerciseDataOut"
+      },
+      "type": "array",
+      "title": "Data"
+     },
+     "answers": {
+      "items": {
+       "$ref": "#/components/schemas/ExerciseFieldOut"
+      },
+      "type": "array",
+      "title": "Answers"
+     },
+     "hints": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Hints"
+     },
+     "refs": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Refs"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "seed",
+     "chapter",
+     "topic",
+     "level",
+     "title",
+     "statement",
+     "data",
+     "answers",
+     "hints",
+     "refs"
+    ],
+    "title": "ExerciseInstanceOut",
+    "description": "Un ejercicio con sus datos para una semilla, sin las respuestas."
+   },
+   "ExerciseSummaryOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "chapter": {
+      "type": "string",
+      "title": "Chapter"
+     },
+     "topic": {
+      "type": "string",
+      "title": "Topic"
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "basico",
+       "intermedio",
+       "avanzado"
+      ],
+      "title": "Level"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "answers": {
+      "type": "integer",
+      "title": "Answers"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "chapter",
+     "topic",
+     "level",
+     "title",
+     "answers"
+    ],
+    "title": "ExerciseSummaryOut",
+    "description": "Ejercicio del banco (sin datos ni respuestas)."
+   },
    "ExploreRequest": {
     "properties": {
      "net": {
@@ -5359,6 +5979,86 @@
     ],
     "title": "FoulingOut",
     "description": "Escenario de ensuciamiento: nivel 0–1 por zona (alas, cuerpo, copo)."
+   },
+   "GradeOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "seed": {
+      "type": "integer",
+      "title": "Seed"
+     },
+     "score": {
+      "type": "number",
+      "title": "Score"
+     },
+     "answers": {
+      "items": {
+       "$ref": "#/components/schemas/AnswerGradeOut"
+      },
+      "type": "array",
+      "title": "Answers"
+     },
+     "explanation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Explanation"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "seed",
+     "score",
+     "answers",
+     "explanation"
+    ],
+    "title": "GradeOut",
+    "description": "Corrección de un ejercicio: puntaje (0 a 1), por respuesta y explicación."
+   },
+   "GradeRequest": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "seed": {
+      "type": "integer",
+      "maximum": 2147483647.0,
+      "minimum": 0.0,
+      "title": "Seed",
+      "default": 0
+     },
+     "answers": {
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "number"
+        }
+       ]
+      },
+      "type": "object",
+      "title": "Answers"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "id"
+    ],
+    "title": "GradeRequest",
+    "description": "Respuestas a corregir (``POST /teaching/grade``), por clave; números con coma o punto."
    },
    "HTTPValidationError": {
     "properties": {
@@ -5754,6 +6454,453 @@
     ],
     "title": "JoinOut",
     "description": "Una unión del armado (``trawlkit.construction.Join``)."
+   },
+   "LabCheckOut": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "fact": {
+      "type": "string",
+      "title": "Fact"
+     },
+     "op": {
+      "type": "string",
+      "title": "Op"
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "fact",
+     "op"
+    ],
+    "title": "LabCheckOut",
+    "description": "Comprobación de un paso, sin la respuesta."
+   },
+   "LabCheckRequest": {
+    "properties": {
+     "lab_id": {
+      "type": "string",
+      "title": "Lab Id"
+     },
+     "step_id": {
+      "type": "string",
+      "title": "Step Id"
+     },
+     "design": {
+      "$ref": "#/components/schemas/DesignRequest"
+     },
+     "answers": {
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "number"
+        }
+       ]
+      },
+      "type": "object",
+      "title": "Answers"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "lab_id",
+     "step_id",
+     "design"
+    ],
+    "title": "LabCheckRequest",
+    "description": "Comprobar un paso sobre el caso del alumno (``POST /teaching/labs/check``)."
+   },
+   "LabCheckResultOut": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "fact": {
+      "type": "string",
+      "title": "Fact"
+     },
+     "value": {
+      "title": "Value"
+     },
+     "target": {
+      "title": "Target"
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "ok",
+     "fact",
+     "value",
+     "target"
+    ],
+    "title": "LabCheckResultOut",
+    "description": "Resultado de una comprobación."
+   },
+   "LabOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "chapter": {
+      "type": "string",
+      "title": "Chapter"
+     },
+     "topic": {
+      "type": "string",
+      "title": "Topic"
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "basico",
+       "intermedio",
+       "avanzado"
+      ],
+      "title": "Level"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "steps": {
+      "type": "integer",
+      "title": "Steps"
+     },
+     "start": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Start"
+     },
+     "step_list": {
+      "items": {
+       "$ref": "#/components/schemas/LabStepOut"
+      },
+      "type": "array",
+      "title": "Step List"
+     },
+     "closing": {
+      "type": "string",
+      "title": "Closing"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "chapter",
+     "topic",
+     "level",
+     "title",
+     "summary",
+     "steps",
+     "start",
+     "step_list",
+     "closing"
+    ],
+    "title": "LabOut",
+    "description": "Laboratorio completo: caso de partida y pasos."
+   },
+   "LabQuestionOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "enum": [
+       "number",
+       "choice",
+       "text"
+      ],
+      "title": "Kind"
+     },
+     "prompt": {
+      "type": "string",
+      "title": "Prompt"
+     },
+     "unit": {
+      "type": "string",
+      "title": "Unit"
+     },
+     "options": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Options"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "prompt",
+     "unit",
+     "options"
+    ],
+    "title": "LabQuestionOut",
+    "description": "Pregunta de un paso (sin la respuesta correcta)."
+   },
+   "LabQuestionResultOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "ok": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ok"
+     },
+     "given": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Given"
+     },
+     "expected_text": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Expected Text"
+     },
+     "message": {
+      "type": "string",
+      "title": "Message"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "ok",
+     "given",
+     "expected_text",
+     "message"
+    ],
+    "title": "LabQuestionResultOut",
+    "description": "Corrección de una pregunta (``ok`` nulo en las abiertas)."
+   },
+   "LabStepOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "instruction": {
+      "type": "string",
+      "title": "Instruction"
+     },
+     "target": {
+      "$ref": "#/components/schemas/LabTargetOut"
+     },
+     "checks": {
+      "items": {
+       "$ref": "#/components/schemas/LabCheckOut"
+      },
+      "type": "array",
+      "title": "Checks"
+     },
+     "questions": {
+      "items": {
+       "$ref": "#/components/schemas/LabQuestionOut"
+      },
+      "type": "array",
+      "title": "Questions"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "title",
+     "instruction",
+     "target",
+     "checks",
+     "questions"
+    ],
+    "title": "LabStepOut",
+    "description": "Un paso del laboratorio."
+   },
+   "LabStepResultOut": {
+    "properties": {
+     "lab_id": {
+      "type": "string",
+      "title": "Lab Id"
+     },
+     "step_id": {
+      "type": "string",
+      "title": "Step Id"
+     },
+     "done": {
+      "type": "boolean",
+      "title": "Done"
+     },
+     "checks": {
+      "items": {
+       "$ref": "#/components/schemas/LabCheckResultOut"
+      },
+      "type": "array",
+      "title": "Checks"
+     },
+     "questions": {
+      "items": {
+       "$ref": "#/components/schemas/LabQuestionResultOut"
+      },
+      "type": "array",
+      "title": "Questions"
+     },
+     "values": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Values"
+     }
+    },
+    "type": "object",
+    "required": [
+     "lab_id",
+     "step_id",
+     "done",
+     "checks",
+     "questions",
+     "values"
+    ],
+    "title": "LabStepResultOut",
+    "description": "Estado del paso: hecho o no, comprobaciones, preguntas y los valores del caso."
+   },
+   "LabSummaryOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "chapter": {
+      "type": "string",
+      "title": "Chapter"
+     },
+     "topic": {
+      "type": "string",
+      "title": "Topic"
+     },
+     "level": {
+      "type": "string",
+      "enum": [
+       "basico",
+       "intermedio",
+       "avanzado"
+      ],
+      "title": "Level"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "steps": {
+      "type": "integer",
+      "title": "Steps"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "chapter",
+     "topic",
+     "level",
+     "title",
+     "summary",
+     "steps"
+    ],
+    "title": "LabSummaryOut",
+    "description": "Laboratorio guiado (sin los pasos)."
+   },
+   "LabTargetOut": {
+    "properties": {
+     "mode": {
+      "type": "string",
+      "enum": [
+       "expert",
+       "simple"
+      ],
+      "title": "Mode"
+     },
+     "tab": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Tab"
+     },
+     "hint": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hint"
+     }
+    },
+    "type": "object",
+    "required": [
+     "mode",
+     "tab",
+     "hint"
+    ],
+    "title": "LabTargetOut",
+    "description": "Dónde se hace el paso en la app."
    },
    "LayoutPlane": {
     "properties": {

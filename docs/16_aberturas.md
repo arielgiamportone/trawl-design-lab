@@ -338,3 +338,16 @@ P.finish(fig)
 
 A la velocidad de pesca (2,5 kn) las dos estimaciones físicas coinciden con las de diseño: DPA de
 Fridman ≈ 12 m frente a AH = 13,0 m, y AV de Fridman ≈ 1,95 m frente a 1,98 m de Suzuki.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("16_aberturas")
+```

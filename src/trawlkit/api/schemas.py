@@ -1321,4 +1321,187 @@ class EconomicsCompareOut(BaseModel):
     rows: list[ComparisonOut]
 
 
+# --- Fase 17: banco de ejercicios y laboratorios ----------------------------------------------
+
+TeachingLevel = Literal["basico", "intermedio", "avanzado"]
+
+
+class ExerciseSummaryOut(BaseModel):
+    """Ejercicio del banco (sin datos ni respuestas)."""
+
+    id: str
+    chapter: str
+    topic: str
+    level: TeachingLevel
+    title: str
+    answers: int
+
+
+class ExerciseDataOut(BaseModel):
+    """Un dato del enunciado."""
+
+    key: str
+    label: str
+    value: float | str
+    unit: str
+    text: str
+
+
+class ExerciseFieldOut(BaseModel):
+    """Un campo a responder."""
+
+    key: str
+    label: str
+    unit: str
+    kind: Literal["number", "code", "choice"]
+    options: list[str] | None
+
+
+class ExerciseInstanceOut(BaseModel):
+    """Un ejercicio con sus datos para una semilla, sin las respuestas."""
+
+    id: str
+    seed: int
+    chapter: str
+    topic: str
+    level: TeachingLevel
+    title: str
+    statement: str
+    data: list[ExerciseDataOut]
+    answers: list[ExerciseFieldOut]
+    hints: list[str]
+    refs: list[str]
+
+
+class GradeRequest(BaseModel):
+    """Respuestas a corregir (``POST /teaching/grade``), por clave; números con coma o punto."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    seed: int = Field(default=0, ge=0, le=2**31 - 1)
+    answers: dict[str, str | float] = Field(default_factory=dict)
+
+
+class AnswerGradeOut(BaseModel):
+    """Corrección de una respuesta."""
+
+    key: str
+    ok: bool
+    given: str | None
+    expected: float | str | None
+    expected_text: str | None
+    error_rel: float | None
+    message: str
+
+
+class GradeOut(BaseModel):
+    """Corrección de un ejercicio: puntaje (0 a 1), por respuesta y explicación."""
+
+    id: str
+    seed: int
+    score: float
+    answers: list[AnswerGradeOut]
+    explanation: str | None
+
+
+class LabSummaryOut(BaseModel):
+    """Laboratorio guiado (sin los pasos)."""
+
+    id: str
+    chapter: str
+    topic: str
+    level: TeachingLevel
+    title: str
+    summary: str
+    steps: int
+
+
+class LabCheckOut(BaseModel):
+    """Comprobación de un paso, sin la respuesta."""
+
+    label: str
+    fact: str
+    op: str
+
+
+class LabQuestionOut(BaseModel):
+    """Pregunta de un paso (sin la respuesta correcta)."""
+
+    id: str
+    kind: Literal["number", "choice", "text"]
+    prompt: str
+    unit: str
+    options: list[str] | None
+
+
+class LabTargetOut(BaseModel):
+    """Dónde se hace el paso en la app."""
+
+    mode: Literal["expert", "simple"]
+    tab: str | None
+    hint: str | None
+
+
+class LabStepOut(BaseModel):
+    """Un paso del laboratorio."""
+
+    id: str
+    title: str
+    instruction: str
+    target: LabTargetOut
+    checks: list[LabCheckOut]
+    questions: list[LabQuestionOut]
+
+
+class LabOut(LabSummaryOut):
+    """Laboratorio completo: caso de partida y pasos."""
+
+    start: dict[str, Any]
+    step_list: list[LabStepOut]
+    closing: str
+
+
+class LabCheckRequest(BaseModel):
+    """Comprobar un paso sobre el caso del alumno (``POST /teaching/labs/check``)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    lab_id: str
+    step_id: str
+    design: DesignRequest
+    answers: dict[str, str | float] = Field(default_factory=dict)
+
+
+class LabCheckResultOut(BaseModel):
+    """Resultado de una comprobación."""
+
+    label: str
+    ok: bool
+    fact: str
+    value: Any
+    target: Any
+
+
+class LabQuestionResultOut(BaseModel):
+    """Corrección de una pregunta (``ok`` nulo en las abiertas)."""
+
+    id: str
+    ok: bool | None
+    given: str | None
+    expected_text: str | None
+    message: str
+
+
+class LabStepResultOut(BaseModel):
+    """Estado del paso: hecho o no, comprobaciones, preguntas y los valores del caso."""
+
+    lab_id: str
+    step_id: str
+    done: bool
+    checks: list[LabCheckResultOut]
+    questions: list[LabQuestionResultOut]
+    values: dict[str, Any]
+
+
 BatchRunRequest.model_rebuild()

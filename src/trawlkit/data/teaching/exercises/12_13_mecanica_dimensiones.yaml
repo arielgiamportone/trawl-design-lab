@@ -1,0 +1,135 @@
+# Ejercicios de los capítulos 12 «Mecánica de la red» y 13 «Dimensiones de la red».
+exercises:
+  - id: mecanica.indice_filtracion
+    chapter: 12_mecanica_red
+    topic: mecanica
+    level: basico
+    title: Índice de filtración d/l
+    statement: >
+      Una red tiene tres filas de paños: alas de {m1} mm con hilo de {d1} mm, cuerpo de {m2} mm con
+      hilo de {d2} mm y copo de {m3} mm con hilo de {d3} mm. Calcule el índice de filtración de la
+      red como Σd/Σl (suma de diámetros de hilo sobre suma de malleros).
+    vars:
+      m1: {label: Malla de las alas, unit: mm, choices: [80, 100, 120], default: 80}
+      d1: {label: Hilo de las alas, unit: mm, choices: [1.37, 1.6, 2.0], default: 1.37, decimals: 2}
+      m2: {label: Malla del cuerpo, unit: mm, choices: [60, 70, 80], default: 60}
+      d2: {label: Hilo del cuerpo, unit: mm, choices: [1.16, 1.37, 1.6], default: 1.16, decimals: 2}
+      m3: {label: Malla del copo, unit: mm, choices: [40, 50, 60], default: 40}
+      d3: {label: Hilo del copo, unit: mm, choices: [1.37, 2.0, 2.5], default: 1.37, decimals: 2}
+    solver: indice_filtracion
+    answers:
+      - {key: dl, label: Índice d/l, decimals: 4, tol_rel: 0.01}
+    explanation: >
+      Σd = {suma_d} mm y Σl = {suma_l} mm, así que d/l = {suma_d}/{suma_l} = {dl}. Es un promedio
+      por fila, no ponderado por la superficie de cada paño.
+    formats: {suma_d: 2}
+    refs: [prado1990]
+
+  - id: mecanica.superficie_solida
+    chapter: 12_mecanica_red
+    topic: mecanica
+    level: basico
+    title: Superficie sólida de un paño
+    statement: >
+      Calcule la superficie sólida (el área que ocupa el hilo) de {paneles} paños de cuerpo de
+      malla {malla} mm, hilo de {d} mm, T1 = {t1}, T2 = {t2} y N = {n} mallas, con
+      Ss = L·d·(T1 + T2)/1000 por paño, donde L = N·m_L/1000 es el largo del paño.
+    vars:
+      paneles: {label: Paños iguales, choices: [1, 2], default: 2}
+      malla: {label: Malla, unit: mm, choices: [40, 60, 80], default: 60}
+      d: {label: Diámetro del hilo, unit: mm, choices: [1.16, 1.37, 1.6], default: 1.16, decimals: 2}
+      t1: {label: T1, unit: mallas, choices: [372, 300, 243], default: 372}
+      t2: {label: T2, unit: mallas, choices: [162, 113, 150], default: 162}
+      n: {label: N, unit: mallas, choices: [210, 130, 180], default: 210}
+    solver: superficie_solida
+    answers:
+      - {key: ss_m2, label: Superficie sólida, unit: m², decimals: 2}
+    explanation: >
+      L = {n}·{malla}/1000 = {largo_m} m; Ss = {largo_m}·{d}·({t1} + {t2})/1000·{paneles} =
+      {ss_m2} m².
+    refs: [prado1990]
+
+  - id: mecanica.solidez
+    chapter: 12_mecanica_red
+    topic: mecanica
+    level: intermedio
+    title: Solidez y coeficiente de filtrado
+    statement: >
+      Para un paño de malla {malla} mm, hilo de {d} mm, T1 = {t1}, T2 = {t2}, N = {n} y U1 = {u1},
+      calcule la superficie sólida, la superficie de trabajo 0,5·U1·U2·m_L²·(T1 + T2)·N, la
+      solidez Ss/St y el coeficiente de filtrado 1 − Ss/St.
+    vars:
+      malla: {label: Malla, unit: mm, choices: [40, 60, 80], default: 60}
+      d: {label: Hilo, unit: mm, choices: [1.16, 1.37, 2.0], default: 1.16, decimals: 2}
+      t1: {label: T1, unit: mallas, choices: [372, 243], default: 372}
+      t2: {label: T2, unit: mallas, choices: [162, 113], default: 162}
+      n: {label: N, unit: mallas, choices: [210, 130], default: 210}
+      u1: {label: U1, choices: [0.38, 0.23, 0.5], default: 0.38, decimals: 2}
+    solver: solidez
+    answers:
+      - {key: st_m2, label: Superficie de trabajo, unit: m², decimals: 2}
+      - {key: solidez, label: Solidez, decimals: 3, tol_rel: 0.03}
+      - {key: filtrado, label: Coeficiente de filtrado, decimals: 3, tol_rel: 0.01}
+    explanation: >
+      Ss = {ss_m2} m², St = {st_m2} m²; solidez = {solidez} y filtrado = {filtrado}. Un hilo más
+      grueso o una malla más chica suben la solidez y con ella la resistencia.
+    refs: [perezaguila2010]
+
+  - id: dimensiones.lima_por_piezas
+    chapter: 13_dimensiones
+    topic: dimensiones
+    level: intermedio
+    title: Largo de la lima por piezas (Martini)
+    statement: >
+      La pieza de ala de la lima es el alto estirado de la punta de ala ({n_punta} mallas) y del ala
+      ({n_ala} mallas) de {malla_ala} mm. La bocana es la mitad de lo que el borde del square
+      ({t_square} mallas de {malla_square} mm) excede a los dos bordes de las alas ({t_ala} mallas
+      de {malla_ala} mm cada una). Con embandos {e_ala} en las alas y {e_bocana} en la bocana,
+      calcule el largo de la lima.
+    vars:
+      n_punta: {label: Alto de la punta de ala, unit: mallas, choices: [36, 30, 40], default: 36}
+      n_ala: {label: Alto del ala, unit: mallas, choices: [120, 100, 140], default: 120}
+      malla_ala: {label: Malla de las alas, unit: mm, choices: [80, 100], default: 80}
+      t_square: {label: Borde del square, unit: mallas, choices: [412, 450, 520], default: 412}
+      malla_square: {label: Malla del square, unit: mm, choices: [60, 80], default: 60}
+      t_ala: {label: Borde de pegadura del ala, unit: mallas, choices: [117, 100, 90], default: 117}
+      e_ala: {label: Embando del ala, value: 1.05, decimals: 2}
+      e_bocana: {label: Embando de la bocana, value: 0.83, decimals: 2}
+    solver: lima_por_piezas
+    answers:
+      - {key: ala_m, label: Pieza de ala, unit: m, decimals: 2}
+      - {key: bocana_m, label: Bocana, unit: m, decimals: 2}
+      - {key: lima_m, label: Lima, unit: m, decimals: 2}
+    hints:
+      - "Lima = 2·E_ala·ala + E_bocana·bocana."
+      - Si la bocana da negativa, el square es más angosto que las alas y el diseño no cierra.
+    explanation: >
+      Ala = ({n_punta} + {n_ala})·{malla_ala}/1000 = {ala_m} m; bocana = ({t_square}·{malla_square}
+      − 2·{t_ala}·{malla_ala})/2000 = {bocana_m} m. Lima = 2·{ala_corr_m} + {bocana_corr_m} =
+      {lima_m} m.
+    formats: {ala_corr_m: 3, bocana_corr_m: 2}
+    refs: [martini]
+
+  - id: dimensiones.circunferencia
+    chapter: 13_dimensiones
+    topic: dimensiones
+    level: basico
+    title: Circunferencia de pesca y abertura vertical estimada
+    statement: >
+      El dorso y el vientre tienen {t_dorso} y {t_vientre} mallas de {malla} mm en la boca. Calcule
+      la circunferencia de pesca, la abertura vertical de Suzuki (4/90 de la circunferencia) y la de
+      Prado como el {pct} % de la circunferencia.
+    vars:
+      t_dorso: {label: Mallas del dorso, unit: mallas, choices: [372, 300, 450], default: 372}
+      t_vientre: {label: Mallas del vientre, unit: mallas, choices: [372, 300, 450], default: 372}
+      malla: {label: Malla, unit: mm, choices: [60, 80, 100], default: 60}
+      pct: {label: Porcentaje de Prado, unit: "%", choices: [5.5, 6.5], default: 5.5, decimals: 1}
+    solver: circunferencia
+    answers:
+      - {key: fc_m, label: Circunferencia de pesca, unit: m, decimals: 2}
+      - {key: av_suzuki_m, label: AV de Suzuki, unit: m, decimals: 2}
+      - {key: av_pct_m, label: AV de Prado, unit: m, decimals: 2}
+    explanation: >
+      FC = ({t_dorso} + {t_vientre})·{malla}/1000 = {fc_m} m; Suzuki: 4/90·{fc_m} = {av_suzuki_m} m;
+      Prado: {pct} %·{fc_m} = {av_pct_m} m.
+    refs: [suzuki1982, prado1990]

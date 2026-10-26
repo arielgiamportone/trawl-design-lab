@@ -38,13 +38,21 @@ from trawlkit.api.schemas import (
     EconomicsOut,
     EconomicsRequest,
     ErratumOut,
+    ExerciseInstanceOut,
+    ExerciseSummaryOut,
     ExploreRequest,
     ExploreResponse,
     FoulingOut,
+    GradeOut,
+    GradeRequest,
     GuideFormat,
     HaulRequest,
     HaulResponse,
     Health,
+    LabCheckRequest,
+    LabOut,
+    LabStepResultOut,
+    LabSummaryOut,
     LayoutMode,
     LayoutResponse,
     NetCheckOut,
@@ -63,6 +71,7 @@ from trawlkit.api.schemas import (
     SimulateRequest,
     SimulateResponse,
     SpeciesOut,
+    TeachingLevel,
     UncertaintyRequest,
     UncertaintyResponse,
     Variant,
@@ -363,6 +372,48 @@ def economics_compare(req: EconomicsCompareRequest) -> dict[str, Any]:
         with service.user_items(c.case.components):
             cases.append((c.label, _build(c.case), c.gear_cost))
     return service.economics_compare(cases, req.model_dump(mode="json"))
+
+
+@app.get("/teaching/exercises", response_model=list[ExerciseSummaryOut])
+def teaching_exercises(
+    chapter: str | None = None, level: TeachingLevel | None = None, topic: str | None = None
+) -> list[dict[str, Any]]:
+    """Banco de ejercicios, filtrado por capítulo del libro, nivel o tema."""
+    return service.teaching_exercises(chapter, level, topic)
+
+
+@app.get("/teaching/exercises/{exercise_id}", response_model=ExerciseInstanceOut)
+def teaching_exercise(exercise_id: str, seed: int = Query(0, ge=0, le=2**31 - 1)) -> dict[str, Any]:
+    """Un ejercicio con sus datos para la semilla (0 = los del libro), sin las respuestas."""
+    return service.teaching_exercise(exercise_id, seed)
+
+
+@app.post("/teaching/grade", response_model=GradeOut)
+def teaching_grade(req: GradeRequest) -> dict[str, Any]:
+    """Corrige las respuestas de un ejercicio de práctica y muestra la solución."""
+    return service.teaching_grade(req.id, req.seed, dict(req.answers))
+
+
+@app.get("/teaching/labs", response_model=list[LabSummaryOut])
+def teaching_labs(
+    chapter: str | None = None, level: TeachingLevel | None = None
+) -> list[dict[str, Any]]:
+    """Laboratorios guiados sobre la app."""
+    return service.teaching_labs(chapter, level)
+
+
+@app.get("/teaching/labs/{lab_id}", response_model=LabOut)
+def teaching_lab(lab_id: str) -> dict[str, Any]:
+    """Un laboratorio: caso de partida y pasos (sin las respuestas)."""
+    return service.teaching_lab(lab_id)
+
+
+@app.post("/teaching/labs/check", response_model=LabStepResultOut)
+def teaching_lab_check(req: LabCheckRequest) -> dict[str, Any]:
+    """Comprueba un paso de laboratorio sobre el caso del alumno y corrige sus preguntas."""
+    return service.teaching_lab_check(
+        req.lab_id, req.step_id, req.design.model_dump(mode="json"), dict(req.answers)
+    )
 
 
 @app.post("/design/layout", response_model=LayoutResponse)

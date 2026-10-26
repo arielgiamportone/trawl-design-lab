@@ -515,6 +515,91 @@ def economics_cmd(
     typer.echo(f"resultado en {out}")
 
 
+exercises_app = typer.Typer(
+    help="Banco de ejercicios del modo docente: listar, ver, resolver e imprimir guías.",
+    no_args_is_help=True,
+)
+app.add_typer(exercises_app, name="exercises")
+
+SeedOpt = Annotated[int, typer.Option(help="Semilla de los datos (0 = los del libro).")]
+
+
+@exercises_app.command("list")
+def exercises_list(
+    chapter: Annotated[
+        str | None, typer.Option(help="Capítulo del libro (14_resistencia).")
+    ] = None,
+    level: Annotated[str | None, typer.Option(help="basico, intermedio o avanzado.")] = None,
+) -> None:
+    """Lista los ejercicios del banco."""
+    from trawlkit.teaching import bank
+
+    for e in bank(chapter, level):
+        typer.echo(f"{e.id:34s} {e.level:11s} {e.chapter:24s} {e.title}")
+
+
+@exercises_app.command("show")
+def exercises_show(exercise_id: str, seed: SeedOpt = 0) -> None:
+    """Muestra el enunciado de un ejercicio."""
+    from trawlkit.teaching import UnknownExerciseError, instantiate
+
+    try:
+        ex = instantiate(exercise_id, seed)
+    except UnknownExerciseError as exc:
+        raise typer.BadParameter(f"ejercicio desconocido: {exercise_id}") from exc
+    typer.echo(f"{ex.title} ({ex.level}, semilla {seed})\n\n{ex.statement}\n")
+    for d in ex.data:
+        typer.echo(f"  {d.label}: {d.text} {d.unit}".rstrip())
+    typer.echo("")
+    for a in ex.answers:
+        typer.echo(f"  ? {a.label}" + (f" [{a.unit}]" if a.unit else ""))
+
+
+@exercises_app.command("solve")
+def exercises_solve(exercise_id: str, seed: SeedOpt = 0) -> None:
+    """Muestra las respuestas y la explicación de un ejercicio."""
+    from trawlkit.teaching import UnknownExerciseError, exercise, solve
+
+    try:
+        spec = exercise(exercise_id)
+    except UnknownExerciseError as exc:
+        raise typer.BadParameter(f"ejercicio desconocido: {exercise_id}") from exc
+    sol = solve(exercise_id, seed)
+    for a in spec.answers:
+        typer.echo(f"{a.label}: {sol.texts[a.key]} {a.unit}".rstrip())
+    typer.echo(f"\n{sol.explanation}")
+
+
+@exercises_app.command("sheet")
+def exercises_sheet(
+    out: Annotated[Path, typer.Option("-o", "--out", help="Salida .html o .pdf.")],
+    chapter: Annotated[str | None, typer.Option(help="Capítulo del libro.")] = None,
+    level: Annotated[str | None, typer.Option(help="basico, intermedio o avanzado.")] = None,
+    ids: Annotated[
+        list[str] | None, typer.Option("--id", help="Ejercicio (se puede repetir).")
+    ] = None,
+    seed: SeedOpt = 0,
+    key: Annotated[bool, typer.Option(help="Clave de respuestas en lugar de enunciados.")] = False,
+    title: Annotated[str, typer.Option(help="Título de la guía.")] = "Guía de ejercicios",
+) -> None:
+    """Guía imprimible de enunciados o su clave de respuestas."""
+    from trawlkit.report.exercises import exercise_sheet_html, exercise_sheet_pdf
+    from trawlkit.teaching import bank, exercise, instantiate, solve
+
+    chosen = [exercise(i).id for i in ids] if ids else [e.id for e in bank(chapter, level)]
+    if not chosen:
+        raise typer.BadParameter("no hay ejercicios con esos filtros")
+    items = [(instantiate(i, seed), solve(i, seed) if key else None) for i in chosen]
+    text = exercise_sheet_html(items, title=title)
+    if out.suffix.lower() == ".html":
+        out.write_text(text, encoding="utf-8")
+    elif out.suffix.lower() == ".pdf":
+        out.write_bytes(exercise_sheet_pdf(text))
+    else:
+        raise typer.BadParameter("salida: .html o .pdf")
+    typer.echo(f"{len(items)} ejercicios en {out}")
+
+
 @app.command()
 def serve(
     host: Annotated[str, typer.Option(help="Interfaz de escucha.")] = "127.0.0.1",

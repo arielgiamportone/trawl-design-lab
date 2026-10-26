@@ -59,6 +59,13 @@ CASES: list[tuple[str, str, dict[str, object] | None]] = [
         "/economics",
         {"net": _NET, "economics": {"fuel_price_l": 1.2, "catch_kg_h": 80, "price_kg": 3}},
     ),
+    ("GET", "/teaching/exercises/construccion.toma?seed=11", None),
+    ("POST", "/teaching/grade", {"id": "potencia.prado_arrastre", "seed": 3, "answers": {}}),
+    (
+        "POST",
+        "/teaching/labs/check",
+        {"lab_id": "lab.red_chica", "step_id": "chica", "design": {"net": _NET}, "answers": {}},
+    ),
 ]
 
 

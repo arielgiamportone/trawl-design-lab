@@ -1,0 +1,111 @@
+# Ejercicios del capítulo 14 «Resistencia de la red» (semilla 0: FAO A-3, Ss = 38,75 m²).
+exercises:
+  - id: resistencia.aberdeen
+    chapter: 14_resistencia
+    topic: resistencia
+    level: basico
+    title: Resistencia de diseño (Aberdeen demersal)
+    statement: >
+      Una red de fondo de polietileno tiene una superficie sólida de {ss} m². Con la fórmula del
+      Marine Laboratory Aberdeen, R_N [t] = Ss·(0,00624 + 0,00475·v²)/(1 + 0,0641·v) con v en
+      nudos, calcule la resistencia de la red a {v} kn en kgf.
+    vars:
+      ss: {label: Superficie sólida, unit: m², choices: [38.75, 25.0, 30.0, 45.0, 60.0], default: 38.75, decimals: 2}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: rn_aberdeen
+    answers:
+      - {key: rn_kgf, label: Resistencia de la red, unit: kgf, decimals: 0}
+    hints:
+      - La fórmula da toneladas; multiplique por 1000.
+    explanation: >
+      R_N = {ss}·(0,00624 + 0,00475·{v}²)/(1 + 0,0641·{v}) = {rn_t} t = {rn_kgf} kgf.
+    formats: {rn_t: 3}
+    refs: [aberdeen]
+
+  - id: resistencia.tauti
+    chapter: 14_resistencia
+    topic: resistencia
+    level: intermedio
+    title: Resistencia de Tauti–Nomura–Shu
+    statement: >
+      La escuela japonesa estima R_N [t] = 27·(d/l)·a²·v^1,45/1000 con a la circunferencia estirada
+      [m] y v en m/s. Para d/l = {dl}, a = {a} m y {v} kn, calcule la velocidad en m/s y la
+      resistencia en kgf.
+    vars:
+      dl: {label: Índice d/l, choices: [0.0213, 0.018, 0.025, 0.03], default: 0.0213, decimals: 4}
+      a: {label: Circunferencia estirada, unit: m, choices: [44.64, 35.0, 55.0], default: 44.64, decimals: 2}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: rn_tauti
+    answers:
+      - {key: v_ms, label: Velocidad, unit: m/s, decimals: 3, tol_rel: 0.005}
+      - {key: rn_kgf, label: Resistencia, unit: kgf, decimals: 0}
+    explanation: >
+      v = {v}·0,5144 = {v_ms} m/s; R_N = 27·{dl}·{a}²·{v_ms}^1,45/1000 = {rn_t} t = {rn_kgf} kgf.
+    formats: {rn_t: 3}
+    refs: [tauti1974]
+
+  - id: resistencia.comparar
+    chapter: 14_resistencia
+    topic: resistencia
+    level: intermedio
+    title: Dos escuelas, dos resultados
+    statement: >
+      Para la misma red (d/l = {dl}, circunferencia a = {a} m, largo sin copo L = {l} m y
+      superficie sólida Ss = {ss} m²) a {v} kn, calcule la resistencia con Koyama (1984),
+      R_N [t] = 8·(d/l)·a·L·v²/1000 con v en nudos, y con Aberdeen demersal. ¿En qué porcentaje
+      difiere Koyama de Aberdeen?
+    vars:
+      dl: {label: Índice d/l, value: 0.0213, decimals: 4}
+      a: {label: Circunferencia, unit: m, value: 44.64, decimals: 2}
+      l: {label: Largo sin copo, unit: m, choices: [21.4, 18.0, 25.0], default: 21.4, decimals: 1}
+      ss: {label: Superficie sólida, unit: m², value: 38.75, decimals: 2}
+      v: {label: Velocidad, unit: kn, min: 2.0, max: 4.0, step: 0.5, default: 3.0, decimals: 1}
+    solver: rn_comparar
+    answers:
+      - {key: koyama_kgf, label: Koyama 1984, unit: kgf, decimals: 0}
+      - {key: aberdeen_kgf, label: Aberdeen demersal, unit: kgf, decimals: 0}
+      - {key: dif_pct, label: Diferencia de Koyama sobre Aberdeen, unit: "%", decimals: 1, tol_abs: 1.5, tol_rel: 0}
+    explanation: >
+      Koyama: {koyama_kgf} kgf; Aberdeen: {aberdeen_kgf} kgf; diferencia {dif_pct} %. Cada fórmula
+      se ajustó a otro tipo de redes: por eso el libro elige una de diseño y muestra el abanico.
+    refs: [koyama1984, aberdeen]
+
+  - id: resistencia.reid
+    chapter: 14_resistencia
+    topic: resistencia
+    level: basico
+    title: Resistencia de una red pelágica (Reid)
+    statement: >
+      Una red pelágica de superficie sólida {ss} m² arrastra a {v} kn. Con Reid (1977),
+      R_N [t] = v²·Ss/(54,72·v + 115,2) con v en nudos, calcule la resistencia en kgf.
+    vars:
+      ss: {label: Superficie sólida, unit: m², choices: [60, 90, 120, 180], default: 90}
+      v: {label: Velocidad, unit: kn, min: 3.0, max: 5.0, step: 0.5, default: 4.0, decimals: 1}
+    solver: rn_reid
+    answers:
+      - {key: rn_kgf, label: Resistencia, unit: kgf, decimals: 0}
+    explanation: "R_N = {v}²·{ss}/(54,72·{v} + 115,2) = {rn_t} t = {rn_kgf} kgf."
+    formats: {rn_t: 3}
+    refs: [reid1977]
+
+  - id: resistencia.velocidad
+    chapter: 14_resistencia
+    topic: resistencia
+    level: basico
+    title: Cuánto sube la resistencia con la velocidad
+    statement: >
+      Con Aberdeen demersal y Ss = {ss} m², calcule la resistencia de la red a {v1} kn y a {v2} kn
+      y en qué porcentaje aumenta.
+    vars:
+      ss: {label: Superficie sólida, unit: m², choices: [38.75, 30.0, 50.0], default: 38.75, decimals: 2}
+      v1: {label: Velocidad 1, unit: kn, choices: [2.0, 2.5], default: 2.0, decimals: 1}
+      v2: {label: Velocidad 2, unit: kn, choices: [3.0, 3.5, 4.0], default: 3.0, decimals: 1}
+    solver: rn_velocidad
+    answers:
+      - {key: r1_kgf, label: Resistencia a la velocidad 1, unit: kgf, decimals: 0}
+      - {key: r2_kgf, label: Resistencia a la velocidad 2, unit: kgf, decimals: 0}
+      - {key: aumento_pct, label: Aumento, unit: "%", decimals: 0, tol_abs: 2, tol_rel: 0}
+    explanation: >
+      {r1_kgf} kgf a {v1} kn y {r2_kgf} kgf a {v2} kn: {aumento_pct} % más. La resistencia crece
+      casi con el cuadrado de la velocidad, mientras que el tiro disponible baja.
+    refs: [aberdeen]

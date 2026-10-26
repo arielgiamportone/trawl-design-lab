@@ -1,0 +1,217 @@
+# Laboratorios guiados sobre la app (Fase 17). Cada paso se comprueba con hechos que el motor
+# calcula para el caso del alumno (ver trawlkit.teaching.labs). Caso de partida: FAO A-3 con el
+# buque de 150 HP.
+labs:
+  - id: lab.pano_y_resistencia
+    chapter: 14_resistencia
+    topic: resistencia
+    level: basico
+    title: El paño y la resistencia
+    summary: >
+      Cambiar la malla del copo y el hilo del cuerpo y ver qué pasa con la superficie sólida, la
+      resistencia y la velocidad máxima.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp}
+    steps:
+      - id: base
+        title: El caso de partida
+        instruction: >
+          Abra la pestaña «Resumen» con la red FAO A-3 y el buque de 150 HP. Anote la superficie
+          sólida y la resistencia de la red a 3 kn.
+        target: {tab: resumen}
+        checks:
+          - {fact: net.id, op: "==", value: fao_a3_standard, label: La red es la FAO A-3}
+          - {fact: vessel.bhp, op: "==", value: 150, label: El buque es el de 150 HP}
+        questions:
+          - {id: ss, kind: number, prompt: "Superficie sólida de la red", unit: m², fact: summary.solid_surface_m2}
+          - {id: rn, kind: number, prompt: "Resistencia de la red a 3 kn", unit: kgf, fact: summary.rn_std_3kn_kgf}
+      - id: copo
+        title: Agrandar la malla del copo
+        instruction: >
+          En la pestaña «Paneles», cambie la malla de los dos paños del copo (I y J) de 40 a 50 mm,
+          sin tocar el número de mallas, y vuelva a calcular.
+        target: {tab: paneles, hint: Editar los paños de la sección copo}
+        checks:
+          - {fact: net.codend_mesh_mm, op: ">=", value: 50, label: El copo tiene malla de 50 mm o más}
+        questions:
+          - id: rn
+            kind: number
+            prompt: "Resistencia de la red a 3 kn con el copo nuevo"
+            unit: kgf
+            fact: summary.rn_std_3kn_kgf
+          - id: porque
+            kind: choice
+            prompt: "¿Por qué cambió la resistencia así?"
+            options:
+              - "Bajó: una malla más grande deja pasar más agua"
+              - "Subió: con las mismas mallas, el copo es más largo y tiene más hilo"
+              - "No cambió: el copo no influye en la resistencia"
+            answer: "Subió: con las mismas mallas, el copo es más largo y tiene más hilo"
+      - id: hilo
+        title: Afinar el hilo del cuerpo
+        instruction: >
+          Ahora baje el diámetro del hilo de los paños del cuerpo, el square y el vientre (E, F, G y
+          H) a 0,9 mm. ¿Qué pasa con la velocidad máxima?
+        target: {tab: paneles}
+        checks:
+          - {fact: net.body_twine_max_mm, op: "<=", value: 0.9, label: "Todo el cuerpo con hilo de 0,9 mm o menos"}
+          - {fact: summary.rn_std_3kn_kgf, op: "<", baseline_factor: 1.0, label: La resistencia quedó por debajo de la del caso de partida}
+        questions:
+          - {id: vmax, kind: number, prompt: "Velocidad máxima remolcable", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - id: costo
+            kind: text
+            prompt: "¿Qué se pierde con un hilo más fino? Piense en la resistencia a la rotura y el desgaste."
+    closing: >
+      La resistencia de la red depende sobre todo de cuánto hilo enfrenta al agua (superficie
+      sólida), no del tamaño de malla en sí.
+
+  - id: lab.buque_y_velocidad
+    chapter: 19_ventana_velocidad
+    topic: ventana
+    level: basico
+    title: Más potencia, más velocidad
+    summary: Cambiar el buque y ver cómo se mueve la ventana de velocidad.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp}
+    steps:
+      - id: base
+        title: Velocidad máxima con 150 HP
+        instruction: En la pestaña «Gráficos», mire dónde se cruzan el tiro y la resistencia total.
+        target: {tab: graficos}
+        checks:
+          - {fact: vessel.bhp, op: "==", value: 150, label: Buque de 150 HP}
+        questions:
+          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+      - id: buque
+        title: Cambiar al buque de 180 HP
+        instruction: En el panel del caso, elija el buque de 180 HP y vuelva a calcular.
+        target: {tab: graficos, hint: Selector «Buque» del panel del caso}
+        checks:
+          - {fact: vessel.bhp, op: ">=", value: 180, label: Buque de 180 HP o más}
+          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.0, label: La velocidad máxima subió}
+        questions:
+          - {id: vmax, kind: number, prompt: "Velocidad máxima con 180 HP", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - id: rn
+            kind: choice
+            prompt: "¿Cambió la resistencia de la red a 3 kn?"
+            options: ["Sí, subió", "Sí, bajó", "No: la red es la misma"]
+            answer: "No: la red es la misma"
+    closing: >
+      La potencia mueve la curva de tiro; la red fija la curva de resistencia. La ventana es el
+      tramo en que la primera queda por encima de la segunda.
+
+  - id: lab.portones
+    chapter: 16_aberturas
+    topic: aberturas
+    level: intermedio
+    title: Otro portón, otra boca
+    summary: Comparar el portón plano de madera de la A-3 con un portón oval y su efecto en la abertura.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp, door: fao_flat_wood_a3}
+    steps:
+      - id: base
+        title: Abertura con el portón plano
+        instruction: En «Resumen», anote la abertura horizontal y la velocidad máxima.
+        target: {tab: resumen}
+        checks:
+          - {fact: door.id, op: "==", value: fao_flat_wood_a3, label: Portón plano de madera de la A-3}
+        questions:
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+      - id: oval
+        title: Portón oval
+        instruction: Elija el portón oval del catálogo en el panel del caso y vuelva a calcular.
+        target: {tab: resumen, hint: Selector «Portón»}
+        checks:
+          - {fact: door.id, op: "!=", value: fao_flat_wood_a3, label: Otro portón}
+        questions:
+          - {id: ah, kind: number, prompt: "Abertura horizontal con el portón nuevo", unit: m, fact: summary.horizontal_opening_m}
+          - {id: vmax, kind: number, prompt: "Velocidad máxima", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - id: balance
+            kind: text
+            prompt: "¿Conviene el cambio? Compare lo que se gana en velocidad con lo que se pierde en abertura."
+
+  - id: lab.profundidad
+    chapter: 18_cables
+    topic: cables
+    level: intermedio
+    title: Pescar más hondo
+    summary: Cambiar la profundidad de trabajo y seguir el cable, los ángulos y la abertura.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp}
+    steps:
+      - id: base
+        title: A 40 m
+        instruction: En «Resumen», anote el largo de cable filado y la abertura horizontal a 40 m.
+        target: {tab: resumen}
+        questions:
+          - {id: cable, kind: number, prompt: "Cable filado", unit: m, fact: summary.warp_length_m}
+      - id: hondo
+        title: A 80 m
+        instruction: >
+          En los parámetros del caso, ponga la profundidad de trabajo (depth_m) en 80 m y vuelva a
+          calcular.
+        target: {tab: diseno, hint: Parámetro «depth_m»}
+        checks:
+          - {fact: case.depth_m, op: ">=", value: 80, label: Profundidad de 80 m o más}
+        questions:
+          - {id: cable, kind: number, prompt: "Cable filado a 80 m", unit: m, fact: summary.warp_length_m}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+          - id: relacion
+            kind: choice
+            prompt: "¿La relación cable/profundidad es la misma que a 40 m?"
+            options: ["Sí, siempre 5 a 1", "No: a más profundidad la relación baja", "No: a más profundidad la relación sube"]
+            answer: "No: a más profundidad la relación baja"
+
+  - id: lab.red_chica
+    chapter: 20_optimizacion
+    topic: optimizacion
+    level: avanzado
+    title: Una red a la medida del buque
+    summary: Probar una red más chica del catálogo en el buque de 150 HP y comparar.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp}
+    steps:
+      - id: base
+        title: La A-3 en 150 HP
+        instruction: Fije el caso actual con «Fijar A» en la pestaña «Comparar».
+        target: {tab: comparar}
+        questions:
+          - {id: vmax, kind: number, prompt: "Velocidad máxima de la A-3", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+      - id: chica
+        title: Red del Workbook de 2 paneles
+        instruction: >
+          En el panel del caso elija la red de fondo de 2 paneles del Fisherman's Workbook (60 hp) y
+          mantenga el buque de 150 HP. Compare con la A-3.
+        target: {tab: comparar, hint: Selector «Red»}
+        checks:
+          - {fact: net.id, op: "!=", value: fao_a3_standard, label: Otra red}
+          - {fact: vessel.bhp, op: "==", value: 150, label: El mismo buque de 150 HP}
+          - {fact: summary.max_speed_kn, op: ">", baseline_factor: 1.2, label: La velocidad máxima subió más de un 20 %}
+        questions:
+          - {id: vmax, kind: number, prompt: "Velocidad máxima con la red nueva", unit: kn, fact: summary.max_speed_kn, tol_abs: 0.03, tol_rel: 0}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m}
+          - id: conclusion
+            kind: text
+            prompt: "Con la economía de la marea (capítulo 37), ¿cuál de las dos redes pescaría más por hora? Justifique con el área barrida."
+
+  - id: lab.taller
+    chapter: 36_construccion
+    topic: construccion
+    level: basico
+    title: Del plano al taller
+    summary: Recorrer la guía de construcción de la A-3 y entender la hoja de corte y el armado.
+    start: {net: fao_a3_standard, vessel: fao_a3_150hp}
+    steps:
+      - id: corte
+        title: Hoja de corte
+        instruction: Abra la pestaña «Construcción», vista «Hoja de corte».
+        target: {tab: construccion}
+        questions:
+          - {id: piezas, kind: number, prompt: "¿Cuántas piezas distintas hay que cortar?", fact: construction.pieces, tol_rel: 0}
+          - id: ala
+            kind: choice
+            prompt: "Las alas superior e inferior se cortan…"
+            options: ["Por separado, cada una en su paño", "Encastradas de a pares en el mismo paño", "Del mismo paño que el cuerpo"]
+            answer: "Encastradas de a pares en el mismo paño"
+      - id: armado
+        title: Armado paso a paso
+        instruction: Pase a «Armado paso a paso» y recorra las uniones de la bolsa a las alas.
+        target: {tab: construccion}
+        questions:
+          - {id: uniones, kind: number, prompt: "¿Cuántas uniones tiene el armado?", fact: construction.joins, tol_rel: 0}
+          - {id: pano, kind: number, prompt: "¿Cuántos kg de paño hay que comprar?", unit: kg, fact: construction.stock_kg, tol_rel: 0.05}

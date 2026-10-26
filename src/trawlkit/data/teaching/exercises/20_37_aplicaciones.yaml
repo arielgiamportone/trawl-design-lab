@@ -1,0 +1,216 @@
+# Ejercicios de los capítulos 20, 23, 24, 36 y 37 (optimización, mar real, selectividad,
+# construcción y economía).
+exercises:
+  - id: optimizacion.area_barrida
+    chapter: 20_optimizacion
+    topic: optimizacion
+    level: basico
+    title: Área barrida por hora
+    statement: >
+      La red A abre {ah1} m entre puntas de ala y arrastra a {v1} kn; la red B, más chica, abre
+      {ah2} m pero el buque la puede remolcar a {v2} kn. Calcule el área barrida por hora de cada
+      una (AH·v, con 1 kn = 1852 m/h) y cuánto más barre B.
+    vars:
+      ah1: {label: Abertura de A, unit: m, choices: [13.1, 15.0, 12.0], default: 13.1, decimals: 1}
+      v1: {label: Velocidad de A, unit: kn, choices: [2.2, 2.0, 2.5], default: 2.2, decimals: 1}
+      ah2: {label: Abertura de B, unit: m, choices: [11.0, 10.0, 11.5], default: 11.0, decimals: 1}
+      v2: {label: Velocidad de B, unit: kn, choices: [3.0, 2.8, 3.2], default: 3.0, decimals: 1}
+    solver: area_barrida
+    answers:
+      - {key: a1_m2_h, label: Área de A, unit: m²/h, decimals: 0}
+      - {key: a2_m2_h, label: Área de B, unit: m²/h, decimals: 0}
+      - {key: ganancia_pct, label: Ganancia de B, unit: "%", decimals: 1, tol_abs: 1, tol_rel: 0}
+    explanation: >
+      A: {ah1}·{v1}·1852 = {a1_m2_h} m²/h; B: {ah2}·{v2}·1852 = {a2_m2_h} m²/h ({ganancia_pct} %).
+      Una red más chica que se arrastra más rápido puede pescar más.
+
+  - id: mar.corriente
+    chapter: 23_mar_real
+    topic: mar
+    level: basico
+    title: Arrastrar con o contra la corriente
+    statement: >
+      El buque arrastra a {v_fondo} kn sobre el fondo con una corriente de {corriente} kn {sentido}.
+      ¿A qué velocidad pasa el agua por la red y cuánto cambia la resistencia (Aberdeen demersal,
+      Ss = {ss} m²) respecto de no tener corriente?
+    vars:
+      v_fondo: {label: Velocidad sobre el fondo, unit: kn, choices: [3.0, 2.5, 3.5], default: 3.0, decimals: 1}
+      corriente: {label: Corriente, unit: kn, choices: [0.5, 0.8, 1.0], default: 0.5, decimals: 1}
+      sentido: {label: Sentido, choices: [en contra, a favor], default: en contra}
+      ss: {label: Superficie sólida, unit: m², value: 38.75, decimals: 2}
+    solver: corriente
+    answers:
+      - {key: v_agua, label: Velocidad en el agua, unit: kn, decimals: 1, tol_abs: 0.05, tol_rel: 0}
+      - {key: cambio_pct, label: Cambio de la resistencia, unit: "%", decimals: 0, tol_abs: 2, tol_rel: 0}
+    hints:
+      - La red siente la velocidad relativa al agua, no al fondo.
+    explanation: >
+      Agua a {v_agua} kn: la resistencia pasa de {r0_kgf} a {r1_kgf} kgf ({cambio_pct} %).
+
+  - id: selectividad.logistica
+    chapter: 24_malla_selectividad
+    topic: selectividad
+    level: intermedio
+    title: Curva de retención logística
+    statement: >
+      Un copo de {malla} mm tiene un factor de selección FS = {fs} y un rango de selección
+      SR = {sr} cm. Con la curva logística r(L) = 1/(1 + exp(−ln 9·(L − L50)/SR)), calcule L50 =
+      FS·malla, L25 y L75, y la fracción retenida de peces de {talla} cm.
+    vars:
+      malla: {label: Malla del copo, unit: mm, choices: [40, 50, 60, 90, 120], default: 120}
+      fs: {label: Factor de selección, choices: [3.0, 3.3, 3.6], default: 3.3, decimals: 1}
+      sr: {label: Rango de selección, unit: cm, choices: [6, 8, 10], default: 8}
+      talla: {label: Talla, unit: cm, choices: [30, 35, 40, 45, 15, 20], default: 40}
+    solver: retencion_logistica
+    answers:
+      - {key: l50_cm, label: L50, unit: cm, decimals: 1, tol_abs: 0.1, tol_rel: 0}
+      - {key: l75_cm, label: L75, unit: cm, decimals: 1, tol_abs: 0.1, tol_rel: 0}
+      - {key: r_pct, label: Retención, unit: "%", decimals: 1, tol_abs: 1.5, tol_rel: 0}
+    hints:
+      - "La malla está en mm: divida por 10 para tener L50 en cm."
+      - "L25 = L50 − SR/2 y L75 = L50 + SR/2."
+    explanation: >
+      L50 = {fs}·{malla}/10 = {l50_cm} cm; L25 = {l25_cm} cm y L75 = {l75_cm} cm. Un pez de {talla}
+      cm queda retenido con probabilidad {r_pct} %.
+
+  - id: construccion.ciclo
+    chapter: 36_construccion
+    topic: construccion
+    level: basico
+    title: Leer un ciclo de corte
+    statement: >
+      Un borde se corta {codigo} a lo largo de {alto} mallas de alto. ¿Cuál es la razón de corte
+      (T + B/2)/(N + B/2), cuántas mallas de alto avanza cada ciclo, cuántos ciclos se repiten y
+      cuántas mallas de ancho se pierden en ese borde?
+    vars:
+      codigo: {label: Corte, choices: [1N2B, 1N1B, 1N4B, 2N1B, 1N3B], default: 1N2B}
+      alto: {label: Alto del paño, unit: mallas, choices: [36, 60, 120, 200], default: 120}
+    solver: ciclo_corte
+    answers:
+      - {key: razon, label: Razón de corte, decimals: 3, tol_abs: 0.005, tol_rel: 0}
+      - {key: ciclos, label: Ciclos, decimals: 1, tol_abs: 0.5, tol_rel: 0}
+      - {key: mallas_ancho, label: Mallas de ancho perdidas, decimals: 0, tol_abs: 1, tol_rel: 0}
+    hints:
+      - "Una punta (N) baja una malla; una malleta (B) avanza media malla en alto y media en ancho."
+    explanation: >
+      Razón {razon}; cada ciclo baja {alto_ciclo} mallas, así que hay {alto}/{alto_ciclo} =
+      {ciclos} ciclos y se pierden {mallas_ancho} mallas de ancho.
+    formats: {alto_ciclo: 1}
+    refs: [klust1982]
+
+  - id: construccion.embande
+    chapter: 36_construccion
+    topic: construccion
+    level: basico
+    title: Embando y mallas por metro
+    statement: >
+      Un borde de {mallas} mallas de {malla} mm se arma sobre {relinga} m de relinga. Calcule el
+      largo estirado del borde, el coeficiente de armado E = relinga/paño estirado, las mallas por
+      metro de relinga y cuántas mallas van cada 50 cm.
+    vars:
+      mallas: {label: Mallas del borde, unit: mallas, choices: [412, 156, 300, 240], default: 412}
+      malla: {label: Malla, unit: mm, choices: [60, 80, 100], default: 60}
+      e_obj: {label: Embando buscado, choices: [0.83, 0.8, 0.9, 1.05], default: 0.83, show: false}
+    solver: embande
+    answers:
+      - {key: e, label: Coeficiente E, decimals: 3, tol_rel: 0.01}
+      - {key: mallas_m, label: Mallas por metro, unit: mallas/m, decimals: 1, tol_rel: 0.02}
+      - {key: cada_50cm, label: Mallas cada 50 cm, decimals: 1, tol_rel: 0.03}
+    explanation: >
+      Paño estirado = {mallas}·{malla}/1000 = {estirado_m} m; E = {relinga}/{estirado_m} = {e};
+      {mallas}/{relinga} = {mallas_m} mallas/m, es decir {cada_50cm} cada 50 cm.
+    refs: [klust1982]
+
+  - id: construccion.toma
+    chapter: 36_construccion
+    topic: construccion
+    level: intermedio
+    title: Unir paños de distinto número de mallas
+    statement: >
+      Hay que coser un borde de {na} mallas con otro de {nb} mallas. Exprese la relación como a:b
+      simplificada, diga cuántas tomas (2 mallas juntas del borde más largo) hacen falta y cada
+      cuántas mallas del borde corto va una toma.
+    vars:
+      na: {label: Mallas del paño A, unit: mallas, choices: [117, 162, 150, 120, 243], default: 162}
+      razon_b: {label: Relación B/A, choices: [0.7, 0.75, 0.8, 0.85, 0.9], default: 0.7, show: false}
+    solver: toma_union
+    answers:
+      - {key: tomas, label: Tomas, decimals: 0, tol_rel: 0}
+      - {key: cada, label: Una toma cada, unit: mallas, decimals: 1, tol_abs: 0.1, tol_rel: 0}
+    explanation: >
+      Relación {a}:{b}; sobran {tomas} mallas en el borde largo, así que va una toma cada {cada}
+      mallas del borde corto.
+    formats: {a: 0, b: 0}
+
+  - id: economia.gasoil
+    chapter: 37_economia
+    topic: economia
+    level: basico
+    title: Gasoil del arrastre
+    statement: >
+      La red y el aparejo piden {r} kgf a {v} kn. Con un rendimiento de remolque η = {eta}, un
+      consumo específico de 0,22 kg/kWh y gasoil de 0,84 kg/L, calcule la potencia al freno
+      P = R·g·v/η (v en m/s), los litros por hora y el gasoil de un lance de {horas} h.
+    vars:
+      r: {label: Resistencia total, unit: kgf, choices: [1100, 1500, 2000, 900], default: 1100}
+      v: {label: Velocidad, unit: kn, choices: [2.0, 2.5, 3.0], default: 2.0, decimals: 1}
+      eta: {label: Rendimiento de remolque, value: 0.5, decimals: 2}
+      horas: {label: Duración del lance, unit: h, choices: [2, 3, 4], default: 2}
+    solver: gasoil_arrastre
+    answers:
+      - {key: p_kw, label: Potencia al freno, unit: kW, decimals: 1}
+      - {key: l_h, label: Consumo, unit: L/h, decimals: 1}
+      - {key: l_lance, label: Gasoil del lance, unit: L, decimals: 0}
+    hints:
+      - "R en N = kgf·9,807; 1 kn = 1852/3600 m/s."
+    explanation: >
+      P = {r}·9,807·({v}·0,5144)/{eta}/1000 = {p_kw} kW; consumo = {p_kw}·0,22/0,84 = {l_h} L/h;
+      en {horas} h, {l_lance} L.
+    refs: [parker2015]
+
+  - id: economia.equilibrio
+    chapter: 37_economia
+    topic: economia
+    level: intermedio
+    title: Precio de equilibrio con tripulación a la parte
+    statement: >
+      En una marea los costos que no dependen del precio suman F = {f} $, de los cuales G = {g} $
+      son gastos compartidos (gasoil, lubricante y víveres) que se descuentan antes de la parte de
+      la tripulación, que es el {parte} % de lo que queda. Se pescan {captura} kg. ¿A qué precio
+      por kg la marea queda en cero? p* = (F − c·G)/((1 − c)·C).
+    vars:
+      f: {label: Costos sin la tripulación, unit: $, choices: [900000, 1200000, 1500000], default: 1200000}
+      g: {label: Gastos compartidos, unit: $, choices: [500000, 700000, 800000], default: 700000}
+      parte: {label: Parte de la tripulación, unit: "%", choices: [35, 40, 45], default: 40}
+      captura: {label: Captura de la marea, unit: kg, choices: [1200, 1500, 2000], default: 1500}
+    solver: precio_equilibrio
+    answers:
+      - {key: p, label: Precio de equilibrio, unit: $/kg, decimals: 0}
+    hints:
+      - "Ingreso − F − c·(Ingreso − G) = 0, con Ingreso = p·C."
+    explanation: "p* = ({f} − {parte} %·{g})/((1 − {parte} %)·{captura}) = {p} $/kg."
+
+  - id: economia.red_por_hora
+    chapter: 37_economia
+    topic: economia
+    level: basico
+    title: Cuánto cuesta la red por hora de arrastre
+    statement: >
+      Una red y su aparejo cuestan {costo} $ y duran {vida} horas de arrastre; cada año se gasta
+      en reparaciones el {reparacion} % de su costo. El buque arrastra {horas_marea} h por marea y
+      hace {mareas} mareas por año. Calcule la amortización por hora, la reparación por hora y el
+      total por hora de arrastre.
+    vars:
+      costo: {label: Costo de la red y el aparejo, unit: $, choices: [3000000, 2000000, 5000000], default: 3000000}
+      vida: {label: Vida útil, unit: h, choices: [2000, 1500, 3000], default: 2000}
+      reparacion: {label: Reparación anual, unit: "%", choices: [10, 15, 20], default: 10}
+      horas_marea: {label: Horas de arrastre por marea, unit: h, choices: [8, 6, 10], default: 8}
+      mareas: {label: Mareas por año, choices: [150, 120, 180], default: 150}
+    solver: costo_red_hora
+    answers:
+      - {key: amort_h, label: Amortización, unit: $/h, decimals: 0}
+      - {key: rep_h, label: Reparación, unit: $/h, decimals: 0}
+      - {key: total_h, label: Total, unit: $/h, decimals: 0}
+    explanation: >
+      Amortización {costo}/{vida} = {amort_h} $/h; reparación {reparacion} %·{costo}/{horas_anio} h
+      = {rep_h} $/h; total {total_h} $/h.

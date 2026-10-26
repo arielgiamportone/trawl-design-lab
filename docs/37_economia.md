@@ -206,3 +206,16 @@ cambiar, y por eso la app no trae precios propios.
 - La velocidad «posible» es la que deja tiro con reserva y un cable que aguanta; las demás
   restricciones del optimizador (apertura de la red, portón) se avisan pero no la descartan.
 - Los costos sin dato quedan fuera del total: el resultado es incompleto y se avisa.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("37_economia")
+```

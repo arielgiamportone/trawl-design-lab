@@ -1,0 +1,204 @@
+# Ejercicios de los capítulos 17 «Flotación y lastre», 18 «Cables» y 19 «Ventana de velocidad».
+exercises:
+  - id: flotacion.empirica
+    chapter: 17_flotacion_lastre
+    topic: flotacion
+    level: basico
+    title: Flotación por Koyama y por Prado
+    statement: >
+      Estime la flotación de la lima para una red de {lima} m de lima remolcada por un buque de
+      {nhp} HP: Koyama, F = 1,11·L − 6,81 kgf; Prado y Dremière, F = 0,2·NHP kgf. Promedie ambas.
+    vars:
+      lima: {label: Lima, unit: m, choices: [28.7, 22.0, 35.0, 40.0], default: 28.7, decimals: 1}
+      nhp: {label: Potencia, unit: HP, choices: [150, 180, 120, 250], default: 150}
+    solver: flotacion_empirica
+    answers:
+      - {key: koyama_kgf, label: Koyama, unit: kgf, decimals: 1}
+      - {key: prado_kgf, label: Prado, unit: kgf, decimals: 1}
+      - {key: promedio_kgf, label: Promedio, unit: kgf, decimals: 1}
+    explanation: >
+      Koyama: 1,11·{lima} − 6,81 = {koyama_kgf} kgf; Prado: 0,2·{nhp} = {prado_kgf} kgf; promedio
+      {promedio_kgf} kgf.
+    refs: [koyama1974, prado1990]
+
+  - id: flotacion.boyas
+    chapter: 17_flotacion_lastre
+    topic: flotacion
+    level: basico
+    title: Número de boyas
+    statement: >
+      La red necesita {flot} kgf de flotación y cada boya da {unitaria} kgf de empuje neto.
+      ¿Cuántas boyas hay que poner (redondeando al entero más cercano) y cuánta flotación suman?
+    vars:
+      flot: {label: Flotación necesaria, unit: kgf, choices: [35, 28, 45, 60], default: 35}
+      unitaria: {label: Empuje de una boya, unit: kgf, choices: [2.9, 1.4, 3.6, 4.5], default: 2.9, decimals: 1}
+    solver: numero_boyas
+    answers:
+      - {key: boyas, label: Boyas, decimals: 0, tol_rel: 0}
+      - {key: total_kgf, label: Flotación total, unit: kgf, decimals: 1, tol_rel: 0.01}
+    explanation: "{flot}/{unitaria} → {boyas} boyas, que suman {total_kgf} kgf."
+    refs: [prado1990]
+
+  - id: flotacion.fridman
+    chapter: 17_flotacion_lastre
+    topic: flotacion
+    level: avanzado
+    title: Balance vertical de Fridman
+    statement: >
+      Fridman reparte sobre la lima la componente vertical de dos fuerzas: F1 = 0,8·F_T/4 con el
+      ángulo de las bridas α = {alfa}°, y F2 = R_N/4 con el ángulo β = atan((AV/2)/L_cuerpo). Con
+      F_T = {ft} kgf, R_N = {rn} kgf, AV = {av} m, cuerpo de {l_cuerpo} m y una lima que pesa
+      {w_lima} kgf en el agua, calcule β, F1·sen α, F2·sen β y la flotación F = F1·sen α + F2·sen β
+      + W_lima.
+    vars:
+      ft: {label: Tiro disponible, unit: kgf, choices: [1185, 1000, 1400], default: 1185}
+      rn: {label: Resistencia de la red, unit: kgf, choices: [1592, 1200, 1800], default: 1592}
+      alfa: {label: Ángulo de las bridas, unit: °, value: 4.8, decimals: 1}
+      av: {label: Abertura vertical, unit: m, choices: [1.98, 1.5, 2.5], default: 1.98, decimals: 2}
+      l_cuerpo: {label: Largo del cuerpo, unit: m, choices: [21.4, 18.0, 25.0], default: 21.4, decimals: 1}
+      w_lima: {label: Peso de la lima en el agua, unit: kgf, choices: [10.4, 8.0, 12.0], default: 10.4, decimals: 1}
+    solver: flotacion_fridman
+    answers:
+      - {key: beta, label: β, unit: °, decimals: 2, tol_abs: 0.1, tol_rel: 0}
+      - {key: f1v_kgf, label: F1·sen α, unit: kgf, decimals: 1}
+      - {key: f2v_kgf, label: F2·sen β, unit: kgf, decimals: 1}
+      - {key: f_kgf, label: Flotación, unit: kgf, decimals: 1}
+    explanation: >
+      β = atan(({av}/2)/{l_cuerpo}) = {beta}°; F1 = {f1_kgf} kgf → {f1v_kgf} kgf vertical;
+      F2 = {f2_kgf} kgf → {f2v_kgf} kgf; F = {f_kgf} kgf.
+    refs: [fridman1986]
+
+  - id: flotacion.lastre
+    chapter: 17_flotacion_lastre
+    topic: flotacion
+    level: basico
+    title: Lastre y su reparto
+    statement: >
+      Estime el lastre del burlón con Koyama (1,81·L_lima − 4,54 kg, lima de {lima} m) y con Prado
+      (0,28·NHP, buque de {nhp} HP). Con el lastre de Prado, la cadena de reglaje pesa el 20 % del
+      lastre (redondeado hacia arriba) por 2 m de cadena; reparta el resto parejo sobre un burlón de
+      {burlon} m.
+    vars:
+      lima: {label: Lima, unit: m, choices: [28.7, 22.0, 35.0], default: 28.7, decimals: 1}
+      nhp: {label: Potencia, unit: HP, choices: [150, 180, 120, 250], default: 150}
+      burlon: {label: Burlón, unit: m, choices: [33.4, 26.0, 40.0], default: 33.4, decimals: 1}
+    solver: lastre_empirico
+    answers:
+      - {key: koyama_kg, label: Lastre de Koyama, unit: kg, decimals: 1}
+      - {key: prado_kg, label: Lastre de Prado, unit: kg, decimals: 1}
+      - {key: kg_m, label: Lastre por metro de burlón, unit: kg/m, decimals: 2, tol_rel: 0.03}
+    explanation: >
+      Koyama: {koyama_kg} kg; Prado: {prado_kg} kg. Cadena de reglaje: {cadena_kg} kg; quedan
+      ({prado_kg} − {cadena_kg})/{burlon} = {kg_m} kg/m.
+    refs: [koyama1974, prado1990]
+
+  - id: cables.por_profundidad
+    chapter: 18_cables
+    topic: cables
+    level: basico
+    title: Cable filado según la profundidad
+    statement: >
+      Con la tabla de relación cable/profundidad del capítulo, ¿cuánto cable se fila para pescar a
+      {prof} m? ¿Cuánto cable hay que comprar por banda si se agrega un 50 % de repuesto
+      (2·Ls + 0,5·Ls para los dos cables)?
+    vars:
+      prof: {label: Profundidad, unit: m, choices: [40, 20, 60, 100, 150], default: 40}
+    solver: cable_por_profundidad
+    answers:
+      - {key: cable_m, label: Cable filado, unit: m, decimals: 0, tol_rel: 0}
+      - {key: a_comprar_m, label: Cable a comprar, unit: m, decimals: 0, tol_rel: 0}
+    hints:
+      - En aguas someras la relación es mayor (5 a 1 o más); en aguas profundas, menor.
+    explanation: >
+      A {prof} m la tabla da una relación de {relacion}: {cable_m} m de cable. A comprar:
+      2·{cable_m} + 0,5·{cable_m} = {a_comprar_m} m.
+    formats: {relacion: 1}
+    refs: [prado1990]
+
+  - id: cables.angulos
+    chapter: 18_cables
+    topic: cables
+    level: intermedio
+    title: Ángulos del cable de remolque
+    statement: >
+      Un buque de {puntal} m de puntal pesca a {prof} m con {cable} m de cable; los portones van a
+      {ds} m y las pastecas a {pastecas} m. Calcule la declinación δ1 = asin((profundidad +
+      puntal)/Ls) y la divergencia δ2 = asin(0,5·(Ds − pastecas)/Ls).
+    vars:
+      prof: {label: Profundidad, unit: m, choices: [40, 30, 60, 80], default: 40}
+      puntal: {label: Puntal, unit: m, choices: [2.5, 2.0, 3.0], default: 2.5, decimals: 1}
+      cable: {label: Cable filado, unit: m, choices: [200, 180, 300, 400], default: 200}
+      ds: {label: Distancia entre portones, unit: m, choices: [32.5, 30.0, 40.0], default: 32.5, decimals: 1}
+      pastecas: {label: Pastecas, unit: m, choices: [2.5, 2.2], default: 2.5, decimals: 1}
+    solver: angulos_cable
+    answers:
+      - {key: delta1, label: Declinación δ1, unit: °, decimals: 1, tol_abs: 0.2, tol_rel: 0}
+      - {key: delta2, label: Divergencia δ2, unit: °, decimals: 1, tol_abs: 0.2, tol_rel: 0}
+    explanation: >
+      δ1 = asin(({prof} + {puntal})/{cable}) = {delta1}°; δ2 = asin(0,5·({ds} − {pastecas})/{cable})
+      = {delta2}°.
+    refs: [fridman1986]
+
+  - id: cables.diametro
+    chapter: 18_cables
+    topic: cables
+    level: basico
+    title: Diámetro y peso del cable
+    statement: >
+      Con la regla de Pérez Águila, Dw = 5,6822·ln(NHP) − 17,225 mm, estime el diámetro del cable
+      para un buque de {nhp} HP, redondéelo al milímetro y calcule el peso en el aire de {cable} m
+      con el peso por metro del catálogo de cables del libro.
+    vars:
+      nhp: {label: Potencia, unit: HP, choices: [150, 180, 250, 400], default: 150}
+      cable: {label: Cable, unit: m, choices: [200, 300, 400], default: 200}
+    solver: diametro_cable
+    answers:
+      - {key: dw_mm, label: Diámetro calculado, unit: mm, decimals: 2}
+      - {key: dw_redondo, label: Diámetro elegido, unit: mm, decimals: 0, tol_rel: 0}
+    explanation: >
+      Dw = 5,6822·ln({nhp}) − 17,225 = {dw_mm} mm → {dw_redondo} mm; {cable} m pesan
+      {peso_aire_kg} kg en el aire.
+    refs: [perezaguila2010]
+
+  - id: ventana.interpolada
+    chapter: 19_ventana_velocidad
+    topic: ventana
+    level: intermedio
+    title: Velocidad máxima remolcable
+    statement: >
+      Un buque de {bhp} HP con hélice de paso fijo (Fridman, K_F = 10) remolca una red de
+      Ss = {ss} m² (Aberdeen demersal). Portones, cables y aparejo suman un {aparejo} % más sobre
+      la resistencia de la red. Arme la tabla de tiro y resistencia total entre 1,5 y 4 kn cada
+      0,5 kn y obtenga, interpolando linealmente, la velocidad máxima a la que el tiro alcanza.
+    vars:
+      bhp: {label: Potencia, unit: HP, choices: [150, 180, 220, 300], default: 150}
+      ss: {label: Superficie sólida, unit: m², choices: [38.75, 30.0, 45.0, 55.0], default: 38.75, decimals: 2}
+      aparejo: {label: Aparejo sobre la red, unit: "%", choices: [25, 30, 40], default: 30}
+    solver: ventana_velocidad
+    answers:
+      - {key: v_max, label: Velocidad máxima, unit: kn, decimals: 2, tol_abs: 0.05, tol_rel: 0}
+    hints:
+      - "Busque las dos velocidades entre las que F_T − R_T cambia de signo."
+    explanation: >
+      A 2,5 kn F_T = {ft_2_5} kgf y R_T = {rt_2_5} kgf; a 3,0 kn F_T = {ft_3_0} kgf y R_T =
+      {rt_3_0} kgf. El cruce da v* = {v_max} kn.
+    refs: [fridman1986, aberdeen]
+
+  - id: ventana.caso_a3
+    chapter: 19_ventana_velocidad
+    topic: ventana
+    level: avanzado
+    title: La A-3 con el motor completo
+    statement: >
+      Use la app (o la CLI, «trawlkit run fao_a3_standard --vessel {buque}») para calcular la red
+      FAO A-3 con el buque «{buque}». ¿Qué resistencia tiene la red a 3 kn y cuál es la velocidad
+      máxima que el buque puede remolcar?
+    vars:
+      buque: {label: Buque del catálogo, choices: [fao_a3_150hp, fao_a3_180hp], default: fao_a3_150hp}
+    solver: caso_a3
+    answers:
+      - {key: rn3_kgf, label: Resistencia de la red a 3 kn, unit: kgf, decimals: 0}
+      - {key: v_max, label: Velocidad máxima, unit: kn, decimals: 2, tol_abs: 0.05, tol_rel: 0}
+    explanation: >
+      R_N(3 kn) = {rn3_kgf} kgf; v* = {v_max} kn. Por encima de esa velocidad la red pide más tiro
+      del que el buque tiene.

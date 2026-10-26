@@ -311,3 +311,16 @@ P.finish(fig)
 La resistencia de las boyas es pequeña frente a la de la red (≈ 1,4 % a 3 kn), pero no
 despreciable: a 5 kn duplica la de los dos cables de remolque calculada con el coeficiente de
 Nomura–Yamazaki ({doc}`18_cables`).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("17_flotacion_lastre")
+```

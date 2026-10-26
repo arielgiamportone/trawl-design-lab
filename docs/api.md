@@ -37,6 +37,11 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/design/construction/export` | La guía en `pdf` o `html` (A4 para imprimir) o `xlsx` (una hoja por tabla). |
 | POST | `/economics` | Economía de la operación ({doc}`37_economia`): por velocidad, gasoil (arrastre, navegación y maniobras), captura, ingreso, costos por rubro (combustible, lubricante, tripulación, red y aparejo, marea, fijos), margen, costo por kg y precio de equilibrio; la velocidad de mayor margen, la de menor costo por kg y el año. Sin precios, los montos salen en `null` y `missing` dice qué falta. |
 | POST | `/economics/compare` | Compara redes o buques con los mismos datos de operación: margen y gasoil por año, ahorro frente al primero y repago del armado. |
+| GET | `/teaching/exercises` | Banco de ejercicios del modo docente, filtrable por `chapter`, `level` (`basico`, `intermedio`, `avanzado`) y `topic`. |
+| GET | `/teaching/exercises/{id}?seed=` | Un ejercicio con sus datos para la semilla (0 = los del libro), sin las respuestas. |
+| POST | `/teaching/grade` | Corrige las respuestas de práctica (números con coma o punto, dentro de la tolerancia de cada respuesta) y devuelve la solución y la explicación. |
+| GET | `/teaching/labs`, `/teaching/labs/{id}` | Laboratorios guiados sobre la app: caso de partida, pasos, dónde se hace cada uno y sus preguntas (sin las respuestas). |
+| POST | `/teaching/labs/check` | Comprueba un paso de laboratorio sobre el caso del alumno con hechos que calcula el motor y corrige sus preguntas. |
 | POST | `/optimize` | Optimiza la escala de la red y la velocidad de arrastre (malla + evolución diferencial). |
 | POST | `/optimize/scaled-net` | Red escalada por `s` (mismas mallas y materiales), para usar el diseño optimizado. |
 | POST | `/simulate` | Simula la forma de equilibrio de la red a varias velocidades (experimental). |

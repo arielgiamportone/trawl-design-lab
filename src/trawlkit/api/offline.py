@@ -4,8 +4,8 @@
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
 lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
-optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15; sus PDF, no) y la
-economía de la operación (Fase 16).
+optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15; sus PDF, no), la
+economía de la operación (Fase 16) y el banco de ejercicios y los laboratorios (Fase 17).
 Lo demás (simulación, informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que
 lo explica.
 
@@ -340,6 +340,49 @@ def _batch_template(_m: re.Match[str], query: Query, _b: Any) -> Any:
     return Binary(data, media, name)
 
 
+def _teaching_exercises(_m: re.Match[str], query: Query, _b: Any) -> Any:
+    level = _q(query, "level")
+    if level is not None and level not in ("basico", "intermedio", "avanzado"):
+        raise _HTTPError(422, "level: basico, intermedio o avanzado")
+    out = service.teaching_exercises(_q(query, "chapter"), level, _q(query, "topic"))
+    return _dump(list[sc.ExerciseSummaryOut], out)
+
+
+def _teaching_exercise(m: re.Match[str], query: Query, _b: Any) -> Any:
+    raw = _q(query, "seed", "0") or "0"
+    try:
+        seed = int(raw)
+    except ValueError:
+        raise _HTTPError(422, "seed: entero") from None
+    if not 0 <= seed <= 2**31 - 1:
+        raise _HTTPError(422, "seed: entre 0 y 2³¹ − 1")
+    return _dump(sc.ExerciseInstanceOut, service.teaching_exercise(unquote(m["id"]), seed))
+
+
+def _teaching_grade(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.GradeRequest, body)
+    return _dump(sc.GradeOut, service.teaching_grade(req.id, req.seed, dict(req.answers)))
+
+
+def _teaching_labs(_m: re.Match[str], query: Query, _b: Any) -> Any:
+    level = _q(query, "level")
+    if level is not None and level not in ("basico", "intermedio", "avanzado"):
+        raise _HTTPError(422, "level: basico, intermedio o avanzado")
+    return _dump(list[sc.LabSummaryOut], service.teaching_labs(_q(query, "chapter"), level))
+
+
+def _teaching_lab(m: re.Match[str], _q_: Query, _b: Any) -> Any:
+    return _dump(sc.LabOut, service.teaching_lab(unquote(m["id"])))
+
+
+def _teaching_lab_check(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.LabCheckRequest, body)
+    out = service.teaching_lab_check(
+        req.lab_id, req.step_id, req.design.model_dump(mode="json"), dict(req.answers)
+    )
+    return _dump(sc.LabStepResultOut, out)
+
+
 _ID = r"(?P<id>[^/]+)"
 _KIND = r"(?P<kind>[^/]+)"
 
@@ -373,6 +416,12 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/batch/run"), _batch_run),
     ("POST", re.compile(r"/batch/export"), _batch_export),
     ("GET", re.compile(r"/batch/template"), _batch_template),
+    ("GET", re.compile(r"/teaching/exercises"), _teaching_exercises),
+    ("GET", re.compile(rf"/teaching/exercises/{_ID}"), _teaching_exercise),
+    ("POST", re.compile(r"/teaching/grade"), _teaching_grade),
+    ("GET", re.compile(r"/teaching/labs"), _teaching_labs),
+    ("GET", re.compile(rf"/teaching/labs/{_ID}"), _teaching_lab),
+    ("POST", re.compile(r"/teaching/labs/check"), _teaching_lab_check),
 ]
 
 

@@ -343,3 +343,16 @@ pelágica), un factor de 6. Si se dejan de lado los que están fuera de su domin
 1040–2240 kgf, un factor de 2, que es la incertidumbre honesta de una estimación empírica de
 resistencia. La $R_N$ de diseño (1680 kgf) queda en el centro de ese abanico, algo por encima de su
 mediana (1545 kgf), y un 26 % por encima de la simulación DynamiT (1331 kgf).
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("14_resistencia")
+```

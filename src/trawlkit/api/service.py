@@ -1766,3 +1766,128 @@ def economics_compare(
         {"currency": inputs.currency, "rows": [r.to_dict() for r in rows]}
     )
     return out
+
+
+# --- Fase 17: banco de ejercicios y laboratorios ----------------------------------------------
+
+
+def _exercise_or_404(exercise_id: str) -> Any:
+    from trawlkit.teaching import UnknownExerciseError, exercise
+
+    try:
+        return exercise(exercise_id)
+    except UnknownExerciseError:
+        raise NotFoundError(f"ejercicio desconocido: {exercise_id!r}") from None
+
+
+def teaching_exercises(
+    chapter: str | None = None, level: str | None = None, topic: str | None = None
+) -> list[dict[str, Any]]:
+    """Ejercicios del banco (``ExerciseSummaryOut``)."""
+    from trawlkit.teaching import bank
+
+    return [
+        {
+            "id": e.id,
+            "chapter": e.chapter,
+            "topic": e.topic,
+            "level": e.level,
+            "title": e.title,
+            "answers": len(e.answers),
+        }
+        for e in bank(chapter, level, topic)
+    ]
+
+
+def teaching_exercise(exercise_id: str, seed: int = 0) -> dict[str, Any]:
+    """Un ejercicio con sus datos para ``seed`` (``ExerciseInstanceOut``)."""
+    from trawlkit.teaching import instantiate
+
+    _exercise_or_404(exercise_id)
+    return instantiate(exercise_id, seed).to_dict()
+
+
+def teaching_grade(
+    exercise_id: str, seed: int, answers: dict[str, Any], reveal: bool = True
+) -> dict[str, Any]:
+    """Corrige un ejercicio (``GradeOut``)."""
+    from trawlkit.teaching import grade
+
+    _exercise_or_404(exercise_id)
+    return grade(exercise_id, seed, answers, reveal=reveal).to_dict()
+
+
+def _lab_or_404(lab_id: str) -> Any:
+    from trawlkit.teaching.labs import UnknownLabError, lab
+
+    try:
+        return lab(lab_id)
+    except UnknownLabError:
+        raise NotFoundError(f"laboratorio desconocido: {lab_id!r}") from None
+
+
+def _lab_summary(x: Any) -> dict[str, Any]:
+    return {
+        "id": x.id,
+        "chapter": x.chapter,
+        "topic": x.topic,
+        "level": x.level,
+        "title": x.title,
+        "summary": x.summary,
+        "steps": len(x.steps),
+    }
+
+
+def teaching_labs(chapter: str | None = None, level: str | None = None) -> list[dict[str, Any]]:
+    """Laboratorios guiados (``LabSummaryOut``)."""
+    from trawlkit.teaching.labs import labs
+
+    return [_lab_summary(x) for x in labs(chapter, level)]
+
+
+def teaching_lab(lab_id: str) -> dict[str, Any]:
+    """Un laboratorio con sus pasos, sin las respuestas (``LabOut``)."""
+    x = _lab_or_404(lab_id)
+    steps = [
+        {
+            "id": s.id,
+            "title": s.title,
+            "instruction": s.instruction,
+            "target": s.target.model_dump(),
+            "checks": [{"label": c.label, "fact": c.fact, "op": c.op} for c in s.checks],
+            "questions": [
+                {
+                    "id": q.id,
+                    "kind": q.kind,
+                    "prompt": q.prompt,
+                    "unit": q.unit,
+                    "options": q.options,
+                }
+                for q in s.questions
+            ],
+        }
+        for s in x.steps
+    ]
+    return {**_lab_summary(x), "start": x.start, "step_list": steps, "closing": x.closing}
+
+
+def teaching_lab_check(
+    lab_id: str,
+    step_id: str,
+    design: dict[str, Any],
+    answers: dict[str, Any],
+    reveal: bool = True,
+) -> dict[str, Any]:
+    """Comprueba un paso de laboratorio sobre el caso del alumno (``LabStepResultOut``)."""
+    from trawlkit.teaching.labs import UnknownLabError, lab_check
+
+    spec = _lab_or_404(lab_id)
+    if step_id not in {s.id for s in spec.steps}:
+        raise NotFoundError(f"paso desconocido: {step_id!r}")
+    try:
+        out: dict[str, Any] = to_jsonable(
+            lab_check(lab_id, step_id, design, answers, reveal=reveal).to_dict()
+        )
+    except UnknownLabError as exc:
+        raise NotFoundError(str(exc)) from exc
+    return out

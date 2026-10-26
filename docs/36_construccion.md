@@ -222,3 +222,16 @@ PV.md_table(
 - La posición de las boyas y el reparto del lastre son un punto de partida para la prueba de mar.
 - Las costuras laterales se dan como una costura por lado con las mallas de cada cara; los
   refuerzos de costado (cabos de costado, *selvedges*) dependen del plano.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro. Con la CLI (`trawlkit exercises`) se generan
+con otros datos y se corrigen.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("36_construccion")
+```
