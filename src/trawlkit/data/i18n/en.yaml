@@ -1,0 +1,3 @@
+# Catálogo inglés del motor (Fase 18): «texto en español» → traducción. Lo genera y verifica
+# tests/test_i18n.py: cada texto marcado con t(), tr() o N_() en src/trawlkit tiene que estar acá.
+{}

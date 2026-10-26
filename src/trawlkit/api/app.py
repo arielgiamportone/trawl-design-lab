@@ -78,6 +78,7 @@ from trawlkit.api.schemas import (
     Variant,
 )
 from trawlkit.compat import ERRATA
+from trawlkit.i18n import normalize_lang, reset_lang, set_lang
 from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignResult
 
@@ -95,6 +96,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(classroom_router)
+
+
+@app.middleware("http")
+async def _language(request: Request, call_next: Any) -> Any:
+    """Idioma de los textos del pedido: ``?lang=en`` o ``Accept-Language`` (Fase 18)."""
+    lang = request.query_params.get("lang") or request.headers.get("accept-language")
+    token = set_lang(lang)
+    try:
+        response = await call_next(request)
+    finally:
+        reset_lang(token)
+    response.headers["Content-Language"] = normalize_lang(lang)
+    return response
 
 
 @app.exception_handler(service.BadRequestError)

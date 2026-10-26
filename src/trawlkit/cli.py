@@ -24,6 +24,20 @@ app = typer.Typer(
 )
 
 
+@app.callback()
+def _main(
+    lang: Annotated[
+        str, typer.Option("--lang", help="Idioma de los textos e informes: es o en.")
+    ] = "es",
+) -> None:
+    """trawlkit: diseño y dimensionamiento de redes de arrastre."""
+    from trawlkit.i18n import LANGS, set_lang
+
+    if lang.lower()[:2] not in LANGS:
+        raise typer.BadParameter("idioma: es o en")
+    set_lang(lang)
+
+
 @app.command()
 def version() -> None:
     """Muestra la versión instalada."""

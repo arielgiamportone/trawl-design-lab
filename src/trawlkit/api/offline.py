@@ -34,6 +34,7 @@ from trawlkit import __version__
 from trawlkit.api import schemas as sc
 from trawlkit.api import service
 from trawlkit.compat import ERRATA
+from trawlkit.i18n import use_lang
 from trawlkit.io.schema import Door, NetSpec, Vessel
 
 #: Mensaje de las rutas que necesitan el servidor.
@@ -666,10 +667,15 @@ def handle(method: str, path: str, body: Any = None) -> tuple[int, Any]:
     """Atiende un pedido como la API: ``(estado HTTP, cuerpo JSON o :class:`Binary`)``.
 
     ``path`` puede llevar la consulta (``/catalog/components/wire?generic=true``); ``body`` es el
-    cuerpo ya decodificado (o el texto JSON).
+    cuerpo ya decodificado (o el texto JSON). ``?lang=en`` pide los textos en inglés.
     """
     parts = urlsplit(path)
     query = parse_qs(parts.query)
+    with use_lang(_q(query, "lang")):
+        return _handle(method, parts, query, body)
+
+
+def _handle(method: str, parts: Any, query: Query, body: Any) -> tuple[int, Any]:
     if isinstance(body, str):
         body = json.loads(body) if body else None
     for m, pattern, fn in ROUTES:
