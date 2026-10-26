@@ -421,6 +421,100 @@ def build_guide(
     typer.echo(f"guía escrita en {out}")
 
 
+@app.command("economics")
+def economics_cmd(
+    net: NetArg,
+    vessel: VesselOpt = None,
+    door: DoorOpt = None,
+    inputs: Annotated[
+        Path | None,
+        typer.Option(help="Datos de la operación en YAML o JSON (campos de EconomicInputs)."),
+    ] = None,
+    currency: Annotated[str | None, typer.Option(help="Moneda (ARS, USD…).")] = None,
+    fuel_price: Annotated[float | None, typer.Option(help="Precio del gasoil por litro.")] = None,
+    lube_price: Annotated[float | None, typer.Option(help="Precio del lubricante por L.")] = None,
+    catch_kg_h: Annotated[
+        float | None,
+        typer.Option(help="Captura por hora de arrastre a la velocidad de referencia."),
+    ] = None,
+    price_kg: Annotated[float | None, typer.Option(help="Precio en playa por kg.")] = None,
+    crew_share: Annotated[float | None, typer.Option(help="Parte de la tripulación (0–1).")] = None,
+    gear_cost: Annotated[float | None, typer.Option(help="Costo de la red y el aparejo.")] = None,
+    trip_costs: Annotated[
+        float | None, typer.Option(help="Hielo, víveres, carnada y puerto por marea.")
+    ] = None,
+    annual_costs: Annotated[
+        float | None, typer.Option(help="Permisos, seguro y otros fijos por año.")
+    ] = None,
+    out: Annotated[Path | None, typer.Option("-o", "--out", help="Salida .json o .csv.")] = None,
+) -> None:
+    """Economía de la operación: costo, ingreso y margen de una marea a cada velocidad."""
+    import yaml
+
+    from trawlkit.api.service import to_jsonable
+    from trawlkit.economics import EconomicInputs, economics
+
+    data: dict[str, object] = {}
+    if inputs is not None:
+        loaded = yaml.safe_load(inputs.read_text(encoding="utf-8")) or {}
+        if not isinstance(loaded, dict):
+            raise typer.BadParameter("inputs: se espera un mapa de campos")
+        data.update(loaded)
+    flags = {
+        "currency": currency,
+        "fuel_price_l": fuel_price,
+        "lube_price_l": lube_price,
+        "catch_kg_h": catch_kg_h,
+        "price_kg": price_kg,
+        "crew_share": crew_share,
+        "gear_cost": gear_cost,
+        "trip_costs": trip_costs,
+        "annual_costs": annual_costs,
+    }
+    data.update({k: v for k, v in flags.items() if v is not None})
+    try:
+        inp = EconomicInputs.from_dict(data)
+    except (TypeError, ValueError) as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    case = build_case(net, vessel, door, None, None, "corrected")
+    res = economics(case, inp)
+
+    def f(x: float | None, nd: int = 0) -> str:
+        return "—" if x is None else f"{x:,.{nd}f}".replace(",", " ").replace(".", ",")
+
+    typer.echo(
+        f"| v [kn] | cumple | gasoil [L] | captura [kg] | costo/kg [{inp.currency}] | margen |"
+    )
+    typer.echo("|---|---|---|---|---|---|")
+    for t in res.trips:
+        typer.echo(
+            f"| {f(t.speed_kn, 2)} | {'sí' if t.feasible else 'no'} | {f(t.fuel_l)} | "
+            f"{f(t.catch_kg)} | {f(t.cost_per_kg, 2)} | {f(t.margin)} |"
+        )
+    typer.echo(
+        f"Mayor margen: {f(res.best_margin_kn, 2)} kn · menor costo por kg: "
+        f"{f(res.best_cost_kg_kn, 2)} kn · menos gasoil por kg: {f(res.least_fuel_kg_kn, 2)} kn"
+    )
+    missing = sorted({m for t in res.trips for m in t.missing})
+    if missing:
+        typer.echo("Faltan datos: " + ", ".join(missing))
+    if out is None:
+        return
+    if out.suffix.lower() == ".json":
+        out.write_text(json.dumps(to_jsonable(res.to_dict()), ensure_ascii=False, indent=1))
+    elif out.suffix.lower() == ".csv":
+        cols = ["speed_kn", "feasible", "fuel_l", "catch_kg", "revenue", "total_cost"]
+        cols += ["margin", "cost_per_kg", "breakeven_price"]
+        lines = [";".join(cols)]
+        for t in res.trips:
+            d = t.to_dict()
+            lines.append(";".join("" if d[c] is None else str(d[c]) for c in cols))
+        out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    else:
+        raise typer.BadParameter("salida: .json o .csv")
+    typer.echo(f"resultado en {out}")
+
+
 @app.command()
 def serve(
     host: Annotated[str, typer.Option(help="Interfaz de escucha.")] = "127.0.0.1",

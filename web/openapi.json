@@ -869,6 +869,84 @@
     }
    }
   },
+  "/economics": {
+   "post": {
+    "summary": "Economics",
+    "description": "Economía de la operación: costo, ingreso y margen de una marea a cada velocidad.\n\nDevuelve la curva entre ``v_min_kn`` y ``v_max_kn``, la velocidad de mayor margen, la de\nmenor costo por kg y la de menos gasoil por kg, y el año a la mejor. Sin precios, los\nmontos salen en ``null`` y ``missing`` dice qué falta.",
+    "operationId": "economics_economics_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EconomicsRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/EconomicsOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/economics/compare": {
+   "post": {
+    "summary": "Economics Compare",
+    "description": "Compara redes o buques con los mismos datos de operación; el primero es la base.\n\nPor caso: la marea a ``speed_kn`` (o a su velocidad de mayor margen), el año, el ahorro\nfrente a la base y el repago del armado.",
+    "operationId": "economics_compare_economics_compare_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EconomicsCompareRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/EconomicsCompareOut"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/design/layout": {
    "post": {
     "summary": "Design Layout",
@@ -1993,6 +2071,16 @@
       "type": "boolean",
       "title": "Detail",
       "default": true
+     },
+     "economics": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/EconomicInputsIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
      }
     },
     "additionalProperties": false,
@@ -2810,6 +2898,146 @@
     "type": "object",
     "title": "CodendVariant",
     "description": "Variante de copo: orientación de la malla y, opcionalmente, mallero y U1."
+   },
+   "CompareCaseIn": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Label"
+     },
+     "case": {
+      "$ref": "#/components/schemas/DesignRequest"
+     },
+     "gear_cost": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gear Cost"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "label",
+     "case"
+    ],
+    "title": "CompareCaseIn",
+    "description": "Un caso de la comparación: rótulo, caso y costo de su armado (opcional)."
+   },
+   "ComparisonOut": {
+    "properties": {
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "net_id": {
+      "type": "string",
+      "title": "Net Id"
+     },
+     "vessel_id": {
+      "type": "string",
+      "title": "Vessel Id"
+     },
+     "gear_cost": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gear Cost"
+     },
+     "trip": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/TripEconomicsOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "annual_margin": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Annual Margin"
+     },
+     "annual_fuel_l": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Annual Fuel L"
+     },
+     "savings_year": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Savings Year"
+     },
+     "fuel_savings_l_year": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fuel Savings L Year"
+     },
+     "payback_years": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Payback Years"
+     }
+    },
+    "type": "object",
+    "required": [
+     "label",
+     "net_id",
+     "vessel_id",
+     "gear_cost",
+     "trip",
+     "annual_margin",
+     "annual_fuel_l",
+     "savings_year",
+     "fuel_savings_l_year",
+     "payback_years"
+    ],
+    "title": "ComparisonOut",
+    "description": "Un caso comparado: su marea, el año y el ahorro y el repago frente a la base."
    },
    "ComponentCheckOut": {
     "properties": {
@@ -3914,6 +4142,594 @@
     ],
     "title": "DynamitRow",
     "description": "Comparación con DynamiT (red FAO A-3 estándar) a una velocidad de la tabla de DynamiT."
+   },
+   "EconomicInputsIn": {
+    "properties": {
+     "currency": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3,
+      "title": "Currency",
+      "default": "USD"
+     },
+     "fuel_price_l": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fuel Price L"
+     },
+     "lube_price_l": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lube Price L"
+     },
+     "lube_ratio": {
+      "type": "number",
+      "maximum": 0.2,
+      "minimum": 0.0,
+      "title": "Lube Ratio",
+      "default": 0.01
+     },
+     "sfc_kg_kwh": {
+      "type": "number",
+      "maximum": 0.5,
+      "exclusiveMinimum": 0.1,
+      "title": "Sfc Kg Kwh",
+      "default": 0.22
+     },
+     "towing_efficiency": {
+      "type": "number",
+      "maximum": 1.0,
+      "exclusiveMinimum": 0.05,
+      "title": "Towing Efficiency",
+      "default": 0.5
+     },
+     "steaming_load": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Steaming Load",
+      "default": 0.8
+     },
+     "idle_load": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Idle Load",
+      "default": 0.2
+     },
+     "steaming_hours": {
+      "type": "number",
+      "maximum": 500.0,
+      "minimum": 0.0,
+      "title": "Steaming Hours",
+      "default": 4.0
+     },
+     "hauls_per_trip": {
+      "type": "integer",
+      "maximum": 200.0,
+      "minimum": 1.0,
+      "title": "Hauls Per Trip",
+      "default": 4
+     },
+     "haul_hours": {
+      "type": "number",
+      "maximum": 24.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Haul Hours",
+      "default": 2.0
+     },
+     "handling_hours": {
+      "type": "number",
+      "maximum": 12.0,
+      "minimum": 0.0,
+      "title": "Handling Hours",
+      "default": 0.5
+     },
+     "trip_days": {
+      "type": "number",
+      "maximum": 120.0,
+      "minimum": 0.0,
+      "title": "Trip Days",
+      "default": 1.0
+     },
+     "trips_per_year": {
+      "type": "number",
+      "maximum": 366.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Trips Per Year",
+      "default": 150.0
+     },
+     "catch_kg_h": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catch Kg H"
+     },
+     "reference_speed_kn": {
+      "type": "number",
+      "maximum": 8.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Reference Speed Kn",
+      "default": 3.0
+     },
+     "price_kg": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Price Kg"
+     },
+     "species": {
+      "items": {
+       "$ref": "#/components/schemas/SpeciesPriceIn"
+      },
+      "type": "array",
+      "maxItems": 20,
+      "title": "Species"
+     },
+     "crew_mode": {
+      "type": "string",
+      "enum": [
+       "share",
+       "wage",
+       "none"
+      ],
+      "title": "Crew Mode",
+      "default": "share"
+     },
+     "crew_share": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 1.0,
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Crew Share"
+     },
+     "share_after_costs": {
+      "type": "boolean",
+      "title": "Share After Costs",
+      "default": true
+     },
+     "crew_size": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "maximum": 200.0,
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Crew Size"
+     },
+     "wage_day": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Wage Day"
+     },
+     "gear_cost": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gear Cost"
+     },
+     "gear_life_hours": {
+      "type": "number",
+      "exclusiveMinimum": 0.0,
+      "title": "Gear Life Hours",
+      "default": 2000.0
+     },
+     "gear_repair_year": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Gear Repair Year",
+      "default": 0.1
+     },
+     "trip_costs": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Trip Costs"
+     },
+     "annual_costs": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Annual Costs"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "EconomicInputsIn",
+    "description": "Datos de la operación (``trawlkit.economics.EconomicInputs``).\n\nLos precios y montos en ``null`` son «sin dato»: las magnitudes que los necesitan salen en\n``null`` y se listan en ``missing``. No hay precios por defecto."
+   },
+   "EconomicsCompareOut": {
+    "properties": {
+     "currency": {
+      "type": "string",
+      "title": "Currency"
+     },
+     "rows": {
+      "items": {
+       "$ref": "#/components/schemas/ComparisonOut"
+      },
+      "type": "array",
+      "title": "Rows"
+     }
+    },
+    "type": "object",
+    "required": [
+     "currency",
+     "rows"
+    ],
+    "title": "EconomicsCompareOut",
+    "description": "Resultado de ``POST /economics/compare``."
+   },
+   "EconomicsCompareRequest": {
+    "properties": {
+     "cases": {
+      "items": {
+       "$ref": "#/components/schemas/CompareCaseIn"
+      },
+      "type": "array",
+      "maxItems": 6,
+      "minItems": 2,
+      "title": "Cases"
+     },
+     "economics": {
+      "$ref": "#/components/schemas/EconomicInputsIn"
+     },
+     "prices": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/PriceIn"
+      },
+      "type": "object",
+      "title": "Prices"
+     },
+     "speed_kn": {
+      "anyOf": [
+       {
+        "type": "number",
+        "maximum": 6.0,
+        "minimum": 0.5
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Speed Kn"
+     },
+     "v_min_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "V Min Kn",
+      "default": 1.5
+     },
+     "v_max_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "V Max Kn",
+      "default": 4.0
+     },
+     "margin": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Margin",
+      "default": 0.1
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "cases"
+    ],
+    "title": "EconomicsCompareRequest",
+    "description": "Comparación económica (``POST /economics/compare``); el primer caso es la base."
+   },
+   "EconomicsOut": {
+    "properties": {
+     "net_id": {
+      "type": "string",
+      "title": "Net Id"
+     },
+     "vessel_id": {
+      "type": "string",
+      "title": "Vessel Id"
+     },
+     "currency": {
+      "type": "string",
+      "title": "Currency"
+     },
+     "gear_cost": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gear Cost"
+     },
+     "gear_cost_source": {
+      "type": "string",
+      "title": "Gear Cost Source"
+     },
+     "trips": {
+      "items": {
+       "$ref": "#/components/schemas/TripEconomicsOut"
+      },
+      "type": "array",
+      "title": "Trips"
+     },
+     "best_margin_kn": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Best Margin Kn"
+     },
+     "best_cost_kg_kn": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Best Cost Kg Kn"
+     },
+     "least_fuel_kg_kn": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Least Fuel Kg Kn"
+     },
+     "year": {
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      },
+      "type": "object",
+      "title": "Year"
+     },
+     "inputs": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Inputs"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "net_id",
+     "vessel_id",
+     "currency",
+     "gear_cost",
+     "gear_cost_source",
+     "trips",
+     "best_margin_kn",
+     "best_cost_kg_kn",
+     "least_fuel_kg_kn",
+     "year",
+     "inputs",
+     "notes"
+    ],
+    "title": "EconomicsOut",
+    "description": "Resultado de ``POST /economics``: curva por velocidad, las mejores y el año."
+   },
+   "EconomicsRequest": {
+    "properties": {
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       }
+      ],
+      "title": "Net",
+      "default": "fao_a3_standard"
+     },
+     "net_modified": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Net Modified"
+     },
+     "vessel": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Vessel"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel"
+     },
+     "door": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Door"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Door"
+     },
+     "class_vessels": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Class Vessels"
+     },
+     "compat": {
+      "type": "string",
+      "enum": [
+       "excel",
+       "corrected"
+      ],
+      "title": "Compat",
+      "default": "corrected"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     },
+     "components": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Components",
+      "description": "Aportes de usuario (componentes en línea, estado «user») para este cálculo"
+     },
+     "economics": {
+      "$ref": "#/components/schemas/EconomicInputsIn"
+     },
+     "prices": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/PriceIn"
+      },
+      "type": "object",
+      "title": "Prices"
+     },
+     "v_min_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "V Min Kn",
+      "default": 1.5
+     },
+     "v_max_kn": {
+      "type": "number",
+      "maximum": 6.0,
+      "minimum": 0.5,
+      "title": "V Max Kn",
+      "default": 4.0
+     },
+     "margin": {
+      "type": "number",
+      "maximum": 2.0,
+      "minimum": 0.0,
+      "title": "Margin",
+      "default": 0.1
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "EconomicsRequest",
+    "description": "Curva económica del caso (``POST /economics``).\n\n``economics``: datos de la operación; ``prices``: precios de componentes para sacar el costo\ndel armado de la lista de materiales si ``economics.gear_cost`` falta; ``v_min_kn`` y\n``v_max_kn``: rango de velocidades (paso 0,25 kn)."
    },
    "ErratumOut": {
     "properties": {
@@ -7290,6 +8106,232 @@
     ],
     "title": "SpeciesOut",
     "description": "Especie con la forma de su sección transversal (``trawlkit.selectivity``)."
+   },
+   "SpeciesPriceIn": {
+    "properties": {
+     "name": {
+      "type": "string",
+      "maxLength": 60,
+      "minLength": 1,
+      "title": "Name"
+     },
+     "share": {
+      "type": "number",
+      "maximum": 1.0,
+      "exclusiveMinimum": 0.0,
+      "title": "Share"
+     },
+     "price": {
+      "anyOf": [
+       {
+        "type": "number",
+        "minimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Price"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "name",
+     "share"
+    ],
+    "title": "SpeciesPriceIn",
+    "description": "Especie de la captura: fracción del peso y precio en playa por kg."
+   },
+   "TripEconomicsOut": {
+    "properties": {
+     "speed_kn": {
+      "type": "number",
+      "title": "Speed Kn"
+     },
+     "feasible": {
+      "type": "boolean",
+      "title": "Feasible"
+     },
+     "towing_power_kw": {
+      "type": "number",
+      "title": "Towing Power Kw"
+     },
+     "power_limited": {
+      "type": "boolean",
+      "title": "Power Limited"
+     },
+     "fuel_l_tow": {
+      "type": "number",
+      "title": "Fuel L Tow"
+     },
+     "fuel_l_steam": {
+      "type": "number",
+      "title": "Fuel L Steam"
+     },
+     "fuel_l_handling": {
+      "type": "number",
+      "title": "Fuel L Handling"
+     },
+     "fuel_l": {
+      "type": "number",
+      "title": "Fuel L"
+     },
+     "fuel_l_h_tow": {
+      "type": "number",
+      "title": "Fuel L H Tow"
+     },
+     "area_rate_m2_h": {
+      "type": "number",
+      "title": "Area Rate M2 H"
+     },
+     "catch_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catch Kg"
+     },
+     "fuel_l_per_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Fuel L Per Kg"
+     },
+     "revenue": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Revenue"
+     },
+     "costs": {
+      "additionalProperties": {
+       "anyOf": [
+        {
+         "type": "number"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      },
+      "type": "object",
+      "title": "Costs"
+     },
+     "total_cost": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total Cost"
+     },
+     "margin": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Margin"
+     },
+     "cost_per_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cost Per Kg"
+     },
+     "margin_per_sea_hour": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Margin Per Sea Hour"
+     },
+     "breakeven_price": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Breakeven Price"
+     },
+     "missing": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Missing"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Warnings"
+     },
+     "complete": {
+      "type": "boolean",
+      "title": "Complete",
+      "default": false
+     }
+    },
+    "type": "object",
+    "required": [
+     "speed_kn",
+     "feasible",
+     "towing_power_kw",
+     "power_limited",
+     "fuel_l_tow",
+     "fuel_l_steam",
+     "fuel_l_handling",
+     "fuel_l",
+     "fuel_l_h_tow",
+     "area_rate_m2_h",
+     "catch_kg",
+     "fuel_l_per_kg",
+     "revenue",
+     "costs",
+     "total_cost",
+     "margin",
+     "cost_per_kg",
+     "margin_per_sea_hour",
+     "breakeven_price",
+     "missing"
+    ],
+    "title": "TripEconomicsOut",
+    "description": "Una marea a una velocidad (``trawlkit.economics.TripEconomics``)."
    },
    "UncertainIn": {
     "properties": {

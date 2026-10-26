@@ -6,6 +6,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Economía de la operación (Fase 16)**: `trawlkit.economics`. Por velocidad de arrastre,
+  gasoil y lubricante (arrastre con la resistencia del motor, navegación y maniobras), captura
+  proporcional al área barrida por hora, ingreso (captura × precio en playa o mezcla de
+  especies), tripulación «a la parte» (antes o después de los gastos compartidos) o a jornal,
+  amortización y reparación de la red y el aparejo (del costo cargado o de la lista de
+  materiales con precios), gastos de la marea y fijos anuales; margen, costo por kg, precio de
+  equilibrio, la velocidad de mayor margen, la de menor costo por kg y la de menos gasoil por
+  kg, y el año. Sin precios no se inventan: los rubros sin dato quedan fuera y se avisan.
+  `POST /economics` y `/economics/compare` (ahorro anual y repago del armado), también sin
+  conexión; `trawlkit economics`; en los lotes de flota, gasoil, captura, costo por kg y margen
+  por buque.
 - **Guía de construcción (Fase 15)**: `trawlkit.construction` pasa del diseño al taller. Hoja de
   corte por paño (mallas, piezas, el ciclo de cada corte explicado, rectángulo de paño y
   desperdicio; las alas se cortan de a pares encastradas), paño a comprar por calidad, uniones

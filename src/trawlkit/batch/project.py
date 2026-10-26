@@ -182,6 +182,9 @@ class ProjectOptions:
     max_doors: int = 3
     max_floats: int = 3
     max_twines: int = 2
+    economics: Any = None
+    """Datos de la operación (:class:`trawlkit.economics.EconomicInputs`): si se dan, cada
+    buque suma combustible, captura, costo por kg y margen por marea y por año."""
 
 
 def _a3_vessel() -> Vessel:

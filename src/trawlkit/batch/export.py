@@ -78,6 +78,17 @@ SUMMARY_COLUMNS: dict[str, tuple[tuple[str, str], ...]] = {
     ),
 }
 
+#: Columnas económicas del lote de flota (Fase 16), si se pidió la economía.
+ECONOMIC_COLUMNS: tuple[tuple[str, str], ...] = (
+    ("fuel_l_trip", "Gasoil por marea [L]"),
+    ("catch_kg_trip", "Captura por marea [kg]"),
+    ("revenue_trip", "Ingreso por marea"),
+    ("cost_trip", "Costo por marea"),
+    ("cost_per_kg", "Costo por kg"),
+    ("margin_trip", "Margen por marea"),
+    ("margin_year", "Margen por año"),
+)
+
 STATUS_LABEL = {"ok": "cumple", "infeasible": "no cumple", "error": "error"}
 
 
@@ -94,6 +105,8 @@ def _cell(value: Any) -> Any:
 def tables(result: BatchResult) -> list[Table]:
     """Hojas del lote: resumen, materiales (flota), redes escaladas y observaciones."""
     cols = SUMMARY_COLUMNS[result.mode]
+    if result.mode == "fleet" and any("fuel_l_trip" in r.summary for r in result.rows):
+        cols = cols[:-1] + ECONOMIC_COLUMNS + cols[-1:]
     head = ["Fila", "Nombre", "Estado"] + [h for _, h in cols]
     rows = [
         [r.index + 1, r.name, STATUS_LABEL[r.status], *(_cell(r.summary.get(k)) for k, _ in cols)]

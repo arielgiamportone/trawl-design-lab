@@ -432,6 +432,53 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/economics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Economics
+         * @description Economía de la operación: costo, ingreso y margen de una marea a cada velocidad.
+         *
+         *     Devuelve la curva entre ``v_min_kn`` y ``v_max_kn``, la velocidad de mayor margen, la de
+         *     menor costo por kg y la de menos gasoil por kg, y el año a la mejor. Sin precios, los
+         *     montos salen en ``null`` y ``missing`` dice qué falta.
+         */
+        post: operations["economics_economics_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/economics/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Economics Compare
+         * @description Compara redes o buques con los mismos datos de operación; el primero es la base.
+         *
+         *     Por caso: la marea a ``speed_kn`` (o a su velocidad de mayor margen), el año, el ahorro
+         *     frente a la base y el repago del armado.
+         */
+        post: operations["economics_compare_economics_compare_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/design/layout": {
         parameters: {
             query?: never;
@@ -964,6 +1011,7 @@ export interface components {
              * @default true
              */
             detail: boolean;
+            economics?: components["schemas"]["EconomicInputsIn"] | null;
         };
         /**
          * BatchRunResponse
@@ -1255,6 +1303,42 @@ export interface components {
             hanging_ratio?: number | null;
             /** Label */
             label?: string | null;
+        };
+        /**
+         * CompareCaseIn
+         * @description Un caso de la comparación: rótulo, caso y costo de su armado (opcional).
+         */
+        CompareCaseIn: {
+            /** Label */
+            label: string;
+            case: components["schemas"]["DesignRequest"];
+            /** Gear Cost */
+            gear_cost?: number | null;
+        };
+        /**
+         * ComparisonOut
+         * @description Un caso comparado: su marea, el año y el ahorro y el repago frente a la base.
+         */
+        ComparisonOut: {
+            /** Label */
+            label: string;
+            /** Net Id */
+            net_id: string;
+            /** Vessel Id */
+            vessel_id: string;
+            /** Gear Cost */
+            gear_cost: number | null;
+            trip: components["schemas"]["TripEconomicsOut"] | null;
+            /** Annual Margin */
+            annual_margin: number | null;
+            /** Annual Fuel L */
+            annual_fuel_l: number | null;
+            /** Savings Year */
+            savings_year: number | null;
+            /** Fuel Savings L Year */
+            fuel_savings_l_year: number | null;
+            /** Payback Years */
+            payback_years: number | null;
         };
         /**
          * ComponentCheckOut
@@ -1676,6 +1760,257 @@ export interface components {
             engine_pct: {
                 [key: string]: number | null;
             };
+        };
+        /**
+         * EconomicInputsIn
+         * @description Datos de la operación (``trawlkit.economics.EconomicInputs``).
+         *
+         *     Los precios y montos en ``null`` son «sin dato»: las magnitudes que los necesitan salen en
+         *     ``null`` y se listan en ``missing``. No hay precios por defecto.
+         */
+        EconomicInputsIn: {
+            /**
+             * Currency
+             * @default USD
+             */
+            currency: string;
+            /** Fuel Price L */
+            fuel_price_l?: number | null;
+            /** Lube Price L */
+            lube_price_l?: number | null;
+            /**
+             * Lube Ratio
+             * @default 0.01
+             */
+            lube_ratio: number;
+            /**
+             * Sfc Kg Kwh
+             * @default 0.22
+             */
+            sfc_kg_kwh: number;
+            /**
+             * Towing Efficiency
+             * @default 0.5
+             */
+            towing_efficiency: number;
+            /**
+             * Steaming Load
+             * @default 0.8
+             */
+            steaming_load: number;
+            /**
+             * Idle Load
+             * @default 0.2
+             */
+            idle_load: number;
+            /**
+             * Steaming Hours
+             * @default 4
+             */
+            steaming_hours: number;
+            /**
+             * Hauls Per Trip
+             * @default 4
+             */
+            hauls_per_trip: number;
+            /**
+             * Haul Hours
+             * @default 2
+             */
+            haul_hours: number;
+            /**
+             * Handling Hours
+             * @default 0.5
+             */
+            handling_hours: number;
+            /**
+             * Trip Days
+             * @default 1
+             */
+            trip_days: number;
+            /**
+             * Trips Per Year
+             * @default 150
+             */
+            trips_per_year: number;
+            /** Catch Kg H */
+            catch_kg_h?: number | null;
+            /**
+             * Reference Speed Kn
+             * @default 3
+             */
+            reference_speed_kn: number;
+            /** Price Kg */
+            price_kg?: number | null;
+            /** Species */
+            species?: components["schemas"]["SpeciesPriceIn"][];
+            /**
+             * Crew Mode
+             * @default share
+             * @enum {string}
+             */
+            crew_mode: "share" | "wage" | "none";
+            /** Crew Share */
+            crew_share?: number | null;
+            /**
+             * Share After Costs
+             * @default true
+             */
+            share_after_costs: boolean;
+            /** Crew Size */
+            crew_size?: number | null;
+            /** Wage Day */
+            wage_day?: number | null;
+            /** Gear Cost */
+            gear_cost?: number | null;
+            /**
+             * Gear Life Hours
+             * @default 2000
+             */
+            gear_life_hours: number;
+            /**
+             * Gear Repair Year
+             * @default 0.1
+             */
+            gear_repair_year: number;
+            /** Trip Costs */
+            trip_costs?: number | null;
+            /** Annual Costs */
+            annual_costs?: number | null;
+        };
+        /**
+         * EconomicsCompareOut
+         * @description Resultado de ``POST /economics/compare``.
+         */
+        EconomicsCompareOut: {
+            /** Currency */
+            currency: string;
+            /** Rows */
+            rows: components["schemas"]["ComparisonOut"][];
+        };
+        /**
+         * EconomicsCompareRequest
+         * @description Comparación económica (``POST /economics/compare``); el primer caso es la base.
+         */
+        EconomicsCompareRequest: {
+            /** Cases */
+            cases: components["schemas"]["CompareCaseIn"][];
+            economics?: components["schemas"]["EconomicInputsIn"];
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /** Speed Kn */
+            speed_kn?: number | null;
+            /**
+             * V Min Kn
+             * @default 1.5
+             */
+            v_min_kn: number;
+            /**
+             * V Max Kn
+             * @default 4
+             */
+            v_max_kn: number;
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
+        };
+        /**
+         * EconomicsOut
+         * @description Resultado de ``POST /economics``: curva por velocidad, las mejores y el año.
+         */
+        EconomicsOut: {
+            /** Net Id */
+            net_id: string;
+            /** Vessel Id */
+            vessel_id: string;
+            /** Currency */
+            currency: string;
+            /** Gear Cost */
+            gear_cost: number | null;
+            /** Gear Cost Source */
+            gear_cost_source: string;
+            /** Trips */
+            trips: components["schemas"]["TripEconomicsOut"][];
+            /** Best Margin Kn */
+            best_margin_kn: number | null;
+            /** Best Cost Kg Kn */
+            best_cost_kg_kn: number | null;
+            /** Least Fuel Kg Kn */
+            least_fuel_kg_kn: number | null;
+            /** Year */
+            year: {
+                [key: string]: number | null;
+            };
+            /** Inputs */
+            inputs: {
+                [key: string]: unknown;
+            };
+            /** Notes */
+            notes: string[];
+        };
+        /**
+         * EconomicsRequest
+         * @description Curva económica del caso (``POST /economics``).
+         *
+         *     ``economics``: datos de la operación; ``prices``: precios de componentes para sacar el costo
+         *     del armado de la lista de materiales si ``economics.gear_cost`` falta; ``v_min_kn`` y
+         *     ``v_max_kn``: rango de velocidades (paso 0,25 kn).
+         */
+        EconomicsRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Net Modified */
+            net_modified?: string | components["schemas"]["NetSpec"] | null;
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /** Params */
+            params?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Components
+             * @description Aportes de usuario (componentes en línea, estado «user») para este cálculo
+             */
+            components?: {
+                [key: string]: unknown;
+            }[];
+            economics?: components["schemas"]["EconomicInputsIn"];
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /**
+             * V Min Kn
+             * @default 1.5
+             */
+            v_min_kn: number;
+            /**
+             * V Max Kn
+             * @default 4
+             */
+            v_max_kn: number;
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
         };
         /**
          * ErratumOut
@@ -3052,6 +3387,73 @@ export interface components {
             notes: string;
         };
         /**
+         * SpeciesPriceIn
+         * @description Especie de la captura: fracción del peso y precio en playa por kg.
+         */
+        SpeciesPriceIn: {
+            /** Name */
+            name: string;
+            /** Share */
+            share: number;
+            /** Price */
+            price?: number | null;
+        };
+        /**
+         * TripEconomicsOut
+         * @description Una marea a una velocidad (``trawlkit.economics.TripEconomics``).
+         */
+        TripEconomicsOut: {
+            /** Speed Kn */
+            speed_kn: number;
+            /** Feasible */
+            feasible: boolean;
+            /** Towing Power Kw */
+            towing_power_kw: number;
+            /** Power Limited */
+            power_limited: boolean;
+            /** Fuel L Tow */
+            fuel_l_tow: number;
+            /** Fuel L Steam */
+            fuel_l_steam: number;
+            /** Fuel L Handling */
+            fuel_l_handling: number;
+            /** Fuel L */
+            fuel_l: number;
+            /** Fuel L H Tow */
+            fuel_l_h_tow: number;
+            /** Area Rate M2 H */
+            area_rate_m2_h: number;
+            /** Catch Kg */
+            catch_kg: number | null;
+            /** Fuel L Per Kg */
+            fuel_l_per_kg: number | null;
+            /** Revenue */
+            revenue: number | null;
+            /** Costs */
+            costs: {
+                [key: string]: number | null;
+            };
+            /** Total Cost */
+            total_cost: number | null;
+            /** Margin */
+            margin: number | null;
+            /** Cost Per Kg */
+            cost_per_kg: number | null;
+            /** Margin Per Sea Hour */
+            margin_per_sea_hour: number | null;
+            /** Breakeven Price */
+            breakeven_price: number | null;
+            /** Missing */
+            missing: string[];
+            /** Warnings */
+            warnings?: string[];
+            /**
+             * Complete
+             * @default false
+             */
+            complete: boolean;
+        };
+        /**
          * UncertainIn
          * @description Rango uniforme de una entrada incierta (reemplaza el rango por defecto).
          */
@@ -3768,6 +4170,72 @@ export interface operations {
                     "application/pdf": unknown;
                     "text/html": unknown;
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    economics_economics_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EconomicsRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EconomicsOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    economics_compare_economics_compare_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EconomicsCompareRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EconomicsCompareOut"];
                 };
             };
             /** @description Validation Error */

@@ -333,6 +333,8 @@ def run_fleet(
             )
         if progress:
             progress(i + 1, len(vessels))
+    if opt.economics is not None:
+        _add_economics(rows, spec, opt.economics)
     settings = {
         "net": spec.id,
         "net_name": spec.name,
@@ -345,6 +347,68 @@ def run_fleet(
     return BatchResult(
         "fleet", rows, settings, runtime_s=time.perf_counter() - t0, engine_runs=runs
     )
+
+
+#: Columnas económicas que se suman al resumen de cada buque (Fase 16).
+ECONOMIC_KEYS = (
+    "fuel_l_trip",
+    "catch_kg_trip",
+    "revenue_trip",
+    "cost_trip",
+    "cost_per_kg",
+    "margin_trip",
+    "margin_year",
+)
+
+
+def _add_economics(rows: list[BatchRow], spec: NetSpec, inputs: Any) -> None:
+    """Economía de la marea de cada buque a su velocidad proyectada.
+
+    La captura por hora del usuario vale para la red base, en su caso de diseño, a la velocidad
+    de referencia; cada buque pesca en proporción a su área barrida por hora.
+    """
+    from trawlkit.catalog import catalog_case
+    from trawlkit.economics import trip
+    from trawlkit.optimize.evaluate import Evaluator
+
+    ev = Evaluator(catalog_case(spec).case)
+    lo, hi = float(ev.speeds[0]), float(ev.speeds[-1])
+    ref = ev.at(1.0, min(max(inputs.reference_speed_kn, lo), hi)).area_rate_m2_h
+    for row in rows:
+        p = row.projection
+        if p is None or row.summary is None:
+            continue
+        s = row.summary
+        inp = inputs
+        if (
+            inp.gear_cost is None
+            and s.get("cost") is not None
+            and s.get("currency") == inp.currency
+        ):
+            if not s.get("missing_prices"):
+                inp = dataclasses.replace(inp, gear_cost=float(s["cost"]))
+        t = trip(
+            inp,
+            speed_kn=float(s["speed_kn"]),
+            demand_kgf=float(s["demand_kgf"]),
+            area_rate_m2_h=float(s["area_rate_m2_h"]),
+            reference_area_rate_m2_h=ref,
+            vessel_hp=float(s["bhp"]),
+            feasible=bool(s["feasible"]),
+        )
+        n = inp.trips_per_year
+        s.update(
+            {
+                "fuel_l_trip": t.fuel_l,
+                "catch_kg_trip": t.catch_kg,
+                "revenue_trip": t.revenue,
+                "cost_trip": t.total_cost,
+                "cost_per_kg": t.cost_per_kg,
+                "margin_trip": t.margin,
+                "margin_year": None if t.margin is None else t.margin * n,
+            }
+        )
+        row.notes.extend(f"economía: falta {m}" for m in t.missing[:3])
 
 
 def _case_summary(result: DesignResult) -> dict[str, Any]:

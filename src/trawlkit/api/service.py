@@ -1566,6 +1566,7 @@ def _batch_options(req: dict[str, Any]) -> Any:
         currency=req.get("currency"),
         region=req.get("region"),
         generic_only=bool(req.get("generic_only", False)),
+        economics=None if not req.get("economics") else economic_inputs(req["economics"]),
     )
 
 
@@ -1703,3 +1704,65 @@ def construction_export(
     if fmt == "pdf":
         return rc.construction_pdf(g), "application/pdf", f"{name}.pdf"
     raise BadRequestError("formato: html, pdf o xlsx")
+
+
+# ---------------------------------------------------------------------------------------------
+# Economía de la operación (Fase 16)
+# ---------------------------------------------------------------------------------------------
+
+
+def economic_inputs(data: dict[str, Any] | None) -> Any:
+    """``EconomicInputs`` desde el JSON de la API (``BadRequestError`` si no valida)."""
+    from trawlkit.economics import EconomicInputs
+
+    try:
+        return EconomicInputs.from_dict(dict(data or {}))
+    except (TypeError, ValueError) as exc:
+        raise BadRequestError(f"economics: {exc}") from exc
+
+
+def _limits(req: dict[str, Any]) -> Any:
+    from trawlkit.optimize.evaluate import Limits
+
+    try:
+        return Limits(
+            margin=float(req.get("margin", 0.1)),
+            v_min_kn=float(req.get("v_min_kn", 1.5)),
+            v_max_kn=float(req.get("v_max_kn", 4.0)),
+        )
+    except ValueError as exc:
+        raise BadRequestError(str(exc)) from exc
+
+
+def economics_case(case: DesignCase, req: dict[str, Any]) -> dict[str, Any]:
+    """Curva económica del caso (``EconomicsOut``)."""
+    from trawlkit.economics import economics
+
+    res = economics(
+        case,
+        economic_inputs(req.get("economics")),
+        limits=_limits(req),
+        prices=dict(req.get("prices") or {}),
+    )
+    out: dict[str, Any] = to_jsonable(res.to_dict())
+    return out
+
+
+def economics_compare(
+    cases: list[tuple[str, DesignCase, float | None]], req: dict[str, Any]
+) -> dict[str, Any]:
+    """Comparación económica de casos con los mismos datos (``EconomicsCompareOut``)."""
+    from trawlkit.economics import compare
+
+    inputs = economic_inputs(req.get("economics"))
+    rows = compare(
+        cases,
+        inputs,
+        speed_kn=req.get("speed_kn"),
+        limits=_limits(req),
+        prices=dict(req.get("prices") or {}),
+    )
+    out: dict[str, Any] = to_jsonable(
+        {"currency": inputs.currency, "rows": [r.to_dict() for r in rows]}
+    )
+    return out

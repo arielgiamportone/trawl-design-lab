@@ -448,6 +448,7 @@ class BatchRunRequest(BatchParseRequest):
     prices: dict[str, PriceIn] = Field(default_factory=dict)
     currency: str | None = Field(default=None, min_length=3, max_length=3)
     detail: bool = True
+    economics: EconomicInputsIn | None = None
 
 
 class BatchParseResponse(BaseModel):
@@ -1159,3 +1160,165 @@ class ConstructionGuideOut(BaseModel):
 
 
 GuideFormat = Literal["html", "pdf", "xlsx"]
+
+
+# ---------------------------------------------------------------------------------------------
+# Economía de la operación (Fase 16)
+# ---------------------------------------------------------------------------------------------
+
+
+class SpeciesPriceIn(BaseModel):
+    """Especie de la captura: fracción del peso y precio en playa por kg."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str = Field(min_length=1, max_length=60)
+    share: float = Field(gt=0.0, le=1.0)
+    price: float | None = Field(default=None, ge=0.0)
+
+
+class EconomicInputsIn(BaseModel):
+    """Datos de la operación (``trawlkit.economics.EconomicInputs``).
+
+    Los precios y montos en ``null`` son «sin dato»: las magnitudes que los necesitan salen en
+    ``null`` y se listan en ``missing``. No hay precios por defecto.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    currency: str = Field(default="USD", min_length=3, max_length=3)
+    fuel_price_l: float | None = Field(default=None, ge=0.0)
+    lube_price_l: float | None = Field(default=None, ge=0.0)
+    lube_ratio: float = Field(default=0.01, ge=0.0, le=0.2)
+    sfc_kg_kwh: float = Field(default=0.22, gt=0.1, le=0.5)
+    towing_efficiency: float = Field(default=0.5, gt=0.05, le=1.0)
+    steaming_load: float = Field(default=0.8, ge=0.0, le=1.0)
+    idle_load: float = Field(default=0.2, ge=0.0, le=1.0)
+    steaming_hours: float = Field(default=4.0, ge=0.0, le=500.0)
+    hauls_per_trip: int = Field(default=4, ge=1, le=200)
+    haul_hours: float = Field(default=2.0, gt=0.0, le=24.0)
+    handling_hours: float = Field(default=0.5, ge=0.0, le=12.0)
+    trip_days: float = Field(default=1.0, ge=0.0, le=120.0)
+    trips_per_year: float = Field(default=150.0, gt=0.0, le=366.0)
+    catch_kg_h: float | None = Field(default=None, ge=0.0)
+    reference_speed_kn: float = Field(default=3.0, gt=0.0, le=8.0)
+    price_kg: float | None = Field(default=None, ge=0.0)
+    species: list[SpeciesPriceIn] = Field(default_factory=list, max_length=20)
+    crew_mode: Literal["share", "wage", "none"] = "share"
+    crew_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    share_after_costs: bool = True
+    crew_size: int | None = Field(default=None, ge=1, le=200)
+    wage_day: float | None = Field(default=None, ge=0.0)
+    gear_cost: float | None = Field(default=None, ge=0.0)
+    gear_life_hours: float = Field(default=2000.0, gt=0.0)
+    gear_repair_year: float = Field(default=0.1, ge=0.0, le=2.0)
+    trip_costs: float | None = Field(default=None, ge=0.0)
+    annual_costs: float | None = Field(default=None, ge=0.0)
+
+
+class EconomicsRequest(DesignRequest):
+    """Curva económica del caso (``POST /economics``).
+
+    ``economics``: datos de la operación; ``prices``: precios de componentes para sacar el costo
+    del armado de la lista de materiales si ``economics.gear_cost`` falta; ``v_min_kn`` y
+    ``v_max_kn``: rango de velocidades (paso 0,25 kn).
+    """
+
+    economics: EconomicInputsIn = Field(default_factory=EconomicInputsIn)
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+    v_min_kn: float = Field(default=1.5, ge=0.5, le=6.0)
+    v_max_kn: float = Field(default=4.0, ge=0.5, le=6.0)
+    margin: float = Field(default=0.1, ge=0.0, le=2.0)
+
+
+class TripEconomicsOut(BaseModel):
+    """Una marea a una velocidad (``trawlkit.economics.TripEconomics``)."""
+
+    speed_kn: float
+    feasible: bool
+    towing_power_kw: float
+    power_limited: bool
+    fuel_l_tow: float
+    fuel_l_steam: float
+    fuel_l_handling: float
+    fuel_l: float
+    fuel_l_h_tow: float
+    area_rate_m2_h: float
+    catch_kg: float | None
+    fuel_l_per_kg: float | None
+    revenue: float | None
+    costs: dict[str, float | None]
+    total_cost: float | None
+    margin: float | None
+    cost_per_kg: float | None
+    margin_per_sea_hour: float | None
+    breakeven_price: float | None
+    missing: list[str]
+    warnings: list[str] = Field(default_factory=list)
+    complete: bool = False
+
+
+class EconomicsOut(BaseModel):
+    """Resultado de ``POST /economics``: curva por velocidad, las mejores y el año."""
+
+    net_id: str
+    vessel_id: str
+    currency: str
+    gear_cost: float | None
+    gear_cost_source: str
+    trips: list[TripEconomicsOut]
+    best_margin_kn: float | None
+    best_cost_kg_kn: float | None
+    least_fuel_kg_kn: float | None
+    year: dict[str, float | None]
+    inputs: dict[str, Any]
+    notes: list[str]
+
+
+class CompareCaseIn(BaseModel):
+    """Un caso de la comparación: rótulo, caso y costo de su armado (opcional)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    label: str = Field(min_length=1, max_length=80)
+    case: DesignRequest
+    gear_cost: float | None = Field(default=None, ge=0.0)
+
+
+class EconomicsCompareRequest(BaseModel):
+    """Comparación económica (``POST /economics/compare``); el primer caso es la base."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    cases: list[CompareCaseIn] = Field(min_length=2, max_length=6)
+    economics: EconomicInputsIn = Field(default_factory=EconomicInputsIn)
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+    speed_kn: float | None = Field(default=None, ge=0.5, le=6.0)
+    v_min_kn: float = Field(default=1.5, ge=0.5, le=6.0)
+    v_max_kn: float = Field(default=4.0, ge=0.5, le=6.0)
+    margin: float = Field(default=0.1, ge=0.0, le=2.0)
+
+
+class ComparisonOut(BaseModel):
+    """Un caso comparado: su marea, el año y el ahorro y el repago frente a la base."""
+
+    label: str
+    net_id: str
+    vessel_id: str
+    gear_cost: float | None
+    trip: TripEconomicsOut | None
+    annual_margin: float | None
+    annual_fuel_l: float | None
+    savings_year: float | None
+    fuel_savings_l_year: float | None
+    payback_years: float | None
+
+
+class EconomicsCompareOut(BaseModel):
+    """Resultado de ``POST /economics/compare``."""
+
+    currency: str
+    rows: list[ComparisonOut]
+
+
+BatchRunRequest.model_rebuild()

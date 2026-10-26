@@ -42,6 +42,19 @@ POSTS: list[tuple[str, dict[str, object]]] = [
     ("/design/construction", {}),
     ("/design/construction?variant=mod&eye_allowance_m=0.3", {"net_modified": "fao_a3_modified"}),
     ("/design/construction?variant=mod", {}),
+    ("/economics", {"economics": {"fuel_price_l": 1.2, "catch_kg_h": 100, "price_kg": 3}}),
+    ("/economics", {"economics": {"hauls_per_trip": 0}}),
+    (
+        "/economics/compare",
+        {
+            "cases": [
+                {"label": "A", "case": {}},
+                {"label": "B", "case": {"net": "fao_wb_bt2p_60hp"}},
+            ],
+            "economics": {"fuel_price_l": 1.2},
+            "speed_kn": 2.0,
+        },
+    ),
     (
         "/components/check",
         {

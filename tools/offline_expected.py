@@ -54,6 +54,11 @@ CASES: list[tuple[str, str, dict[str, object] | None]] = [
     ("GET", "/batch/template?kind=fleet&format=xlsx", None),
     ("POST", "/design/construction", {"net": _NET}),
     ("POST", "/design/construction/export?format=xlsx", {"net": _NET}),
+    (
+        "POST",
+        "/economics",
+        {"net": _NET, "economics": {"fuel_price_l": 1.2, "catch_kg_h": 80, "price_kg": 3}},
+    ),
 ]
 
 

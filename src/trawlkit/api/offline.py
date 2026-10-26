@@ -4,7 +4,8 @@
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
 lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
-optimización por malla, los lotes (Fase 14) y la guía de construcción (Fase 15; sus PDF, no).
+optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15; sus PDF, no) y la
+economía de la operación (Fase 16).
 Lo demás (simulación, informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que
 lo explica.
 
@@ -231,6 +232,24 @@ def _construction_export(_m: re.Match[str], query: Query, body: Any) -> Any:
     return Binary(data, media, name)
 
 
+def _economics(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.EconomicsRequest, body)
+    with service.user_items(req.components):
+        out = service.economics_case(_build(req), req.model_dump(mode="json"))
+    return _dump(sc.EconomicsOut, out)
+
+
+def _economics_compare(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.EconomicsCompareRequest, body)
+    cases = []
+    for c in req.cases:
+        with service.user_items(c.case.components):
+            cases.append((c.label, _build(c.case), c.gear_cost))
+    return _dump(
+        sc.EconomicsCompareOut, service.economics_compare(cases, req.model_dump(mode="json"))
+    )
+
+
 def _check(_m: re.Match[str], _q_: Query, body: Any) -> Any:
     req = _body(sc.ComponentCheckRequest, body)
     return _dump(sc.ComponentCheckOut, service.component_check(req.model_dump()))
@@ -345,6 +364,8 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/design/construction"), _construction),
     ("POST", re.compile(r"/design/construction/export"), _construction_export),
     ("POST", re.compile(r"/components/check"), _check),
+    ("POST", re.compile(r"/economics"), _economics),
+    ("POST", re.compile(r"/economics/compare"), _economics_compare),
     ("POST", re.compile(r"/optimize"), _optimize),
     ("POST", re.compile(r"/optimize/components"), _optimize_components),
     ("POST", re.compile(r"/optimize/scaled-net"), _scaled_net),

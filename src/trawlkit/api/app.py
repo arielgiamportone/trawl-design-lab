@@ -33,6 +33,10 @@ from trawlkit.api.schemas import (
     ConstructionGuideOut,
     DesignRequest,
     DesignResponse,
+    EconomicsCompareOut,
+    EconomicsCompareRequest,
+    EconomicsOut,
+    EconomicsRequest,
     ErratumOut,
     ExploreRequest,
     ExploreResponse,
@@ -333,6 +337,32 @@ def design_construction_export(
     return Response(
         data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
     )
+
+
+@app.post("/economics", response_model=EconomicsOut)
+def economics(req: EconomicsRequest) -> dict[str, Any]:
+    """Economía de la operación: costo, ingreso y margen de una marea a cada velocidad.
+
+    Devuelve la curva entre ``v_min_kn`` y ``v_max_kn``, la velocidad de mayor margen, la de
+    menor costo por kg y la de menos gasoil por kg, y el año a la mejor. Sin precios, los
+    montos salen en ``null`` y ``missing`` dice qué falta.
+    """
+    with service.user_items(req.components):
+        return service.economics_case(_build(req), req.model_dump(mode="json"))
+
+
+@app.post("/economics/compare", response_model=EconomicsCompareOut)
+def economics_compare(req: EconomicsCompareRequest) -> dict[str, Any]:
+    """Compara redes o buques con los mismos datos de operación; el primero es la base.
+
+    Por caso: la marea a ``speed_kn`` (o a su velocidad de mayor margen), el año, el ahorro
+    frente a la base y el repago del armado.
+    """
+    cases = []
+    for c in req.cases:
+        with service.user_items(c.case.components):
+            cases.append((c.label, _build(c.case), c.gear_cost))
+    return service.economics_compare(cases, req.model_dump(mode="json"))
 
 
 @app.post("/design/layout", response_model=LayoutResponse)
