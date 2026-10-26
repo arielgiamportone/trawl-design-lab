@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-// Uso sin conexión (Fase 13): instalar la app, preparar el motor (Pyodide), cortar la red y
-// calcular, ver la lista de materiales y cargar un aporte, todo en el navegador.
+// Uso sin conexión (Fases 13 y 18): instalar la app, preparar el motor (Pyodide), cortar la red
+// y calcular, ver la lista de materiales, cargar un aporte, el plano, el informe y simular, todo
+// en el navegador.
 test('sin conexión: el motor del teléfono calcula, arma la lista y valida un aporte', async ({
   page,
   context,
@@ -69,5 +70,17 @@ test('sin conexión: el motor del teléfono calcula, arma la lista y valida un a
   const xlsx = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Planilla XLSX' }).click();
   expect((await xlsx).suggestedFilename()).toBe('guia-fao_a3_standard.xlsx');
+
+  // Fase 18: el plano, el informe HTML y la simulación también corren en el teléfono.
+  await page.getByRole('tab', { name: 'Plano' }).click();
+  await expect(page.getByTestId('plan-image')).toBeVisible({ timeout: 60_000 });
+  await page.getByRole('tab', { name: 'Descargas' }).click();
+  const report = page.waitForEvent('download');
+  await page.locator('button[data-download="html"]').click();
+  expect((await report).suggestedFilename()).toMatch(/\.html$/);
+  await page.getByRole('tab', { name: 'Simulación' }).click();
+  await page.getByText('Rápida (3)').click();
+  await page.getByRole('button', { name: 'Simular' }).click();
+  await expect(page.getByTestId('sim-svg')).toHaveCount(3, { timeout: 180_000 });
   await context.setOffline(false);
 });

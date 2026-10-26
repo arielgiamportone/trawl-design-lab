@@ -346,7 +346,13 @@ Pyodide 0.29.5, numpy, pydantic, pyyaml y la *wheel* de `trawlkit` (≈ 15 MB) e
   teléfono (`src/engine/`: un *Web Worker* con `trawlkit.api.offline`), con las mismas rutas y
   respuestas; el indicador dice «Sin conexión · motor del teléfono»;
 - «Siempre en el teléfono» usa el motor local aunque haya señal (ahorra datos);
-- la simulación, los informes y los planos SVG responden 503 con un mensaje que lo explica.
+- desde la Fase 18 también corren en el teléfono la simulación (forma, lance, explorador,
+  selectividad, incertidumbre y calibración), los planos SVG, el informe HTML y XLSX y los
+  registros de sensores, con guardas de costo más bajas que las del servidor
+  (`offline.PHONE_LIMITS`): una simulación demasiado grande pide bajar la resolución en lugar de
+  colgar el teléfono, y «Cancelar» detiene el motor (el próximo pedido lo vuelve a cargar);
+- los PDF, el refinamiento de la optimización (scipy) y los cursos del aula responden 503 con un
+  mensaje que lo explica.
 
 La *wheel* se construye en la CI y en `docs.yml` (`uv build --wheel` y
 `tools/offline_bundle.py`, que la copia a `web/public/py/<hash>/` con su `manifest.json`); sin ese

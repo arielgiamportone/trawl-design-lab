@@ -4,10 +4,12 @@
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
 lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
-optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15; sus PDF, no), la
-economía de la operación (Fase 16) y el banco de ejercicios y los laboratorios (Fase 17).
-Lo demás (simulación, informes, planos SVG, incertidumbre) devuelve 503 con un mensaje que
-lo explica.
+optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15), la economía de
+la operación (Fase 16), el banco de ejercicios y los laboratorios (Fase 17) y, desde la Fase 18,
+la simulación (forma, lance, explorador, selectividad, incertidumbre y calibración), los planos
+SVG, el informe HTML y XLSX y los registros de sensores, con guardas de costo propias del
+teléfono (:data:`PHONE_LIMITS`). Los PDF, el refinamiento con scipy y el aula devuelven 503 con
+un mensaje que lo explica.
 
 Usa los mismos modelos de pedido y respuesta que la API (:mod:`trawlkit.api.schemas`) y las
 mismas funciones de :mod:`trawlkit.api.service`; ``tests/test_offline.py`` compara cada ruta con
@@ -18,7 +20,9 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import re
+import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, TypeVar
@@ -34,10 +38,30 @@ from trawlkit.io.schema import Door, NetSpec, Vessel
 
 #: Mensaje de las rutas que necesitan el servidor.
 NEEDS_SERVER = (
-    "Esta función necesita conexión con la API (simulación, informes y planos no corren en el "
-    "teléfono). El diseño, la lista de materiales, el armado con componentes y la guía de "
-    "construcción sí."
+    "Esta función necesita conexión con la API: los PDF, el refinamiento de la optimización y el "
+    "aula del curso no corren en el teléfono. El cálculo, la simulación, los planos y el informe "
+    "HTML sí."
 )
+
+#: Guardas de costo del teléfono (más bajas que las del servidor: la CPU es más lenta y el
+#: cálculo corre en el navegador). Se aplican sólo dentro de Pyodide y no pisan una variable ya
+#: definida.
+PHONE_LIMITS = {
+    "TRAWLKIT_MAX_SIM_SECONDS": "10",
+    "TRAWLKIT_MAX_BATCH_SECONDS": "40",
+    "TRAWLKIT_MAX_OPT_GRID": "15",
+    "TRAWLKIT_ALLOW_REFINE": "0",
+}
+
+
+def phone_limits() -> None:
+    """Fija las guardas de costo del teléfono (si no hay otras definidas)."""
+    for key, value in PHONE_LIMITS.items():
+        os.environ.setdefault(key, value)
+
+
+if sys.platform == "emscripten":  # pragma: no cover - sólo en el navegador
+    phone_limits()
 
 M = TypeVar("M", bound=BaseModel)
 Query = dict[str, list[str]]
@@ -383,6 +407,201 @@ def _teaching_lab_check(_m: re.Match[str], _q_: Query, body: Any) -> Any:
     return _dump(sc.LabStepResultOut, out)
 
 
+# -- Fase 18: simulación, plano, informe y sensores en el teléfono ------------------------------
+
+
+def _fouling(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
+    return _dump(list[sc.FoulingOut], service.fouling_catalogue())
+
+
+def _species(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
+    return _dump(list[sc.SpeciesOut], service.species_catalogue())
+
+
+def _plan(_m: re.Match[str], query: Query, body: Any) -> Any:
+    from trawlkit.drawing import net_scale_svg, net_sheet_svg
+
+    req = _body(sc.DesignRequest, body)
+    view = _q(query, "view", "sheet") or "sheet"
+    variant = _q(query, "variant", "std") or "std"
+    if view not in ("sheet", "scale") or variant not in ("std", "mod"):
+        raise _HTTPError(422, "view: sheet|scale; variant: std|mod")
+    if variant == "mod" and req.net_modified is None:
+        raise _HTTPError(422, "variant 'mod' requiere net_modified")
+    with service.user_items(req.components):
+        result = service.run_case(_build(req))
+    svg = (net_sheet_svg if view == "sheet" else net_scale_svg)(result, variant)
+    return Binary(svg.encode("utf-8"), "image/svg+xml", "plano.svg")
+
+
+_REPORT_MEDIA = {
+    "html": "text/html; charset=utf-8",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+}
+
+
+def _report(_m: re.Match[str], query: Query, body: Any) -> Any:
+    import tempfile
+    from pathlib import Path
+
+    from trawlkit.report.build import build_report
+
+    req = _body(sc.DesignRequest, body)
+    fmt = _q(query, "format", "html") or "html"
+    if fmt == "pdf":
+        raise _HTTPError(503, "el informe PDF necesita conexión: use format=html e imprímalo")
+    if fmt not in _REPORT_MEDIA:
+        raise _HTTPError(422, "format: html, pdf o xlsx")
+    with service.user_items(req.components):
+        result = service.run_case(_build(req))
+    with tempfile.TemporaryDirectory() as tmp:
+        paths = build_report(result, tmp, (fmt,))
+        path = next(p for p in paths if p.suffix == f".{fmt}")
+        data = Path(path).read_bytes()
+    return Binary(data, _REPORT_MEDIA[fmt], f"informe.{fmt}")
+
+
+def _scenario(req: Any) -> Any:
+    return None if req.scenario is None else req.scenario.model_dump()
+
+
+def _simulate(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.SimulateRequest, body)
+    out = service.simulate_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speeds_kn=req.speeds_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        knot_factor=req.knot_factor,
+        door_spread_m=req.door_spread_m,
+        include_geometry=req.include_geometry,
+        mu=req.mu,
+        scenario=_scenario(req),
+    )
+    return _dump(sc.SimulateResponse, out)
+
+
+def _explore(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.ExploreRequest, body)
+    out = service.explore_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        variable=req.variable,
+        values=req.values,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        include_geometry=req.include_geometry,
+        species=req.species,
+    )
+    return _dump(sc.ExploreResponse, out)
+
+
+def _selectivity(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.SelectivityRequest, body)
+    out = service.selectivity_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        species=req.species,
+        variants=[v.model_dump() for v in req.variants],
+        contact=req.contact,
+        zone_length_m=req.zone_length_m,
+        lengths=req.lengths,
+        include_geometry=req.include_geometry,
+    )
+    return _dump(sc.SelectivityResponse, out)
+
+
+def _uncertainty(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.UncertaintyRequest, body)
+    out = service.uncertainty_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        samples=req.samples,
+        seed=req.seed,
+        inputs=None if req.inputs is None else [i.model_dump() for i in req.inputs],
+        species=req.species,
+    )
+    return _dump(sc.UncertaintyResponse, out)
+
+
+def _calibrate(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.CalibrateRequest, body)
+    out = service.calibrate_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        resolution=req.resolution,
+        scenario=req.scenario.model_dump(),
+        reference=req.reference,
+        observations=[o.model_dump() for o in req.observations],
+        params=list(req.params),
+        max_evals=req.max_evals,
+    )
+    return _dump(sc.CalibrateResponse, out)
+
+
+def _haul(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.HaulRequest, body)
+    out = service.haul_case(
+        net=req.net,
+        vessel=req.vessel,
+        door=req.door,
+        class_vessels=req.class_vessels,
+        compat=req.compat,
+        speed_kn=req.speed_kn,
+        catches_kg=req.catches_kg,
+        resolution=req.resolution,
+        cn=req.cn,
+        ct=req.ct,
+        scenario=req.scenario.model_dump(),
+        include_geometry=req.include_geometry,
+    )
+    return _dump(sc.HaulResponse, out)
+
+
+def _sensors_parse(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.SensorParseRequest, body)
+    out = service.parse_sensors(req.csv, req.by, req.width, req.min_rows)
+    return _dump(sc.SensorParseResponse, out)
+
+
+def _sensors_example(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
+    return Binary(
+        service.sensor_example().encode("utf-8"),
+        "text/csv; charset=utf-8",
+        "registro_sensores_ejemplo.csv",
+    )
+
+
 _ID = r"(?P<id>[^/]+)"
 _KIND = r"(?P<kind>[^/]+)"
 
@@ -399,11 +618,15 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("GET", re.compile(r"/catalog/vessels"), _vessels),
     ("GET", re.compile(r"/catalog/doors"), _doors),
     ("GET", re.compile(r"/catalog/seabeds"), _seabeds),
+    ("GET", re.compile(r"/catalog/fouling"), _fouling),
+    ("GET", re.compile(r"/catalog/species"), _species),
     ("GET", re.compile(r"/params"), _params),
     ("GET", re.compile(r"/errata"), _errata),
     ("POST", re.compile(r"/design"), _design),
     ("POST", re.compile(r"/design/bom"), _bom),
     ("POST", re.compile(r"/design/layout"), _layout),
+    ("POST", re.compile(r"/design/plan"), _plan),
+    ("POST", re.compile(r"/design/report"), _report),
     ("POST", re.compile(r"/design/construction"), _construction),
     ("POST", re.compile(r"/design/construction/export"), _construction_export),
     ("POST", re.compile(r"/components/check"), _check),
@@ -416,6 +639,14 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/batch/run"), _batch_run),
     ("POST", re.compile(r"/batch/export"), _batch_export),
     ("GET", re.compile(r"/batch/template"), _batch_template),
+    ("POST", re.compile(r"/simulate"), _simulate),
+    ("POST", re.compile(r"/simulate/explore"), _explore),
+    ("POST", re.compile(r"/simulate/selectivity"), _selectivity),
+    ("POST", re.compile(r"/simulate/uncertainty"), _uncertainty),
+    ("POST", re.compile(r"/simulate/calibrate"), _calibrate),
+    ("POST", re.compile(r"/simulate/haul"), _haul),
+    ("POST", re.compile(r"/sensors/parse"), _sensors_parse),
+    ("GET", re.compile(r"/sensors/example"), _sensors_example),
     ("GET", re.compile(r"/teaching/exercises"), _teaching_exercises),
     ("GET", re.compile(rf"/teaching/exercises/{_ID}"), _teaching_exercise),
     ("POST", re.compile(r"/teaching/grade"), _teaching_grade),

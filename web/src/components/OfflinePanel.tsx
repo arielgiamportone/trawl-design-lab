@@ -63,8 +63,9 @@ export function OfflinePanel() {
       <div className="accordion-body">
         <p className="help">
           Descargue el motor de cálculo una sola vez (unos 15 MB; mejor con wifi). Después, sin
-          señal, el diseño, la lista de materiales y el armado con componentes se calculan en este
-          teléfono. La simulación, los informes PDF y los planos siguen necesitando conexión.
+          señal, el diseño, la simulación, los planos y el informe HTML se calculan en este teléfono
+          (las simulaciones grandes piden bajar la resolución). Los PDF, el refinamiento de la
+          optimización y los cursos del aula siguen necesitando conexión.
         </p>
         {!info ? (
           <button

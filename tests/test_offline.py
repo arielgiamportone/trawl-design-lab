@@ -30,6 +30,8 @@ GETS = [
     "/errata",
     "/catalog/nets/nope",
     "/catalog/components/bobbin",
+    "/catalog/fouling",
+    "/catalog/species",
     "/teaching/exercises",
     "/teaching/exercises?chapter=14_resistencia&level=basico",
     "/teaching/exercises?level=experto",
@@ -63,6 +65,20 @@ POSTS: list[tuple[str, dict[str, object]]] = [
             "speed_kn": 2.0,
         },
     ),
+    ("/simulate", {"speeds_kn": [3.0], "resolution": 2}),
+    ("/simulate", {"speeds_kn": [3.0], "resolution": 9}),
+    (
+        "/simulate/haul",
+        {"speed_kn": 3.0, "catches_kg": [0, 600], "resolution": 2, "scenario": {"seabed": "mud"}},
+    ),
+    ("/simulate/explore", {"variable": "catch_kg", "values": [0, 800], "resolution": 2}),
+    ("/simulate/selectivity", {"resolution": 2, "species": ["cod"]}),
+    (
+        "/simulate/uncertainty",
+        {"samples": 3, "resolution": 2, "inputs": [{"name": "cn", "low": 1.2, "high": 1.3}]},
+    ),
+    ("/simulate/calibrate", {}),
+    ("/sensors/parse", {"csv": "a,b\n1,2"}),
     ("/teaching/grade", {"id": "resistencia.aberdeen", "seed": 5, "answers": {"rn_kgf": "900"}}),
     ("/teaching/grade", {"id": "nada", "answers": {}}),
     (
@@ -159,10 +175,11 @@ def test_binary_batch_routes() -> None:
 
 
 def test_server_only_routes_and_json_wrapper() -> None:
-    status, out = offline.handle("POST", "/simulate", "{}")
+    status, out = offline.handle("POST", "/classroom/auth/login", "{}")
     assert status == 503 and "conexión" in out["detail"]
     assert offline.handle("GET", "/design")[0] == 405
-    assert offline.supports("POST", "/design/bom") and not offline.supports("POST", "/simulate")
+    assert offline.supports("POST", "/design/bom") and offline.supports("POST", "/simulate")
+    assert not offline.supports("POST", "/classroom/auth/login")
     wrapped = json.loads(offline.handle_json("GET", "/health"))
     assert wrapped["status"] == 200 and wrapped["body"]["status"] == "ok"
     refine = offline.handle("POST", "/optimize", json.dumps({"refine": True}))
@@ -181,3 +198,41 @@ def test_offline_engine_does_not_import_server_or_heavy_packages() -> None:
 
     out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=True)
     assert json.loads(out.stdout.strip().splitlines()[-1]) == []
+
+
+def test_binary_design_routes_offline() -> None:
+    """Fase 18: el plano SVG, el informe HTML y XLSX y el registro de ejemplo, sin servidor."""
+    plan = offline.handle("POST", "/design/plan?view=sheet", "{}")
+    assert plan[0] == 200 and isinstance(plan[1], offline.Binary)
+    assert plan[1].data == client.post("/design/plan?view=sheet", json={}).content
+    assert offline.handle("POST", "/design/plan?variant=mod", "{}")[0] == 422
+    html = offline.handle("POST", "/design/report?format=html", "{}")
+    assert html[0] == 200 and isinstance(html[1], offline.Binary)
+    assert html[1].media.startswith("text/html") and b"<html" in html[1].data[:400].lower()
+    xlsx = offline.handle("POST", "/design/report?format=xlsx", "{}")
+    assert xlsx[0] == 200 and isinstance(xlsx[1], offline.Binary) and xlsx[1].data[:2] == b"PK"
+    pdf = offline.handle("POST", "/design/report?format=pdf", "{}")
+    assert pdf[0] == 503 and "html" in pdf[1]["detail"]
+    ex = offline.handle("GET", "/sensors/example")
+    assert isinstance(ex[1], offline.Binary)
+    assert ex[1].data.decode() == client.get("/sensors/example").text
+    assert offline.handle("POST", "/classroom/auth/login", "{}")[0] == 503
+
+
+def test_phone_limits(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Las guardas del teléfono rechazan una simulación cara con 422, no la cuelgan."""
+    for key in offline.PHONE_LIMITS:
+        monkeypatch.delenv(key, raising=False)
+    offline.phone_limits()
+    try:
+        status, out = offline.handle(
+            "POST",
+            "/simulate",
+            json.dumps({"speeds_kn": [1.0, 2.0, 3.0, 4.0, 5.0], "resolution": 6}),
+        )
+        assert status == 422 and "costosa" in out["detail"]
+        status, _ = offline.handle("POST", "/optimize", json.dumps({"refine": True}))
+        assert status == 422
+    finally:
+        for key in offline.PHONE_LIMITS:
+            monkeypatch.delenv(key, raising=False)

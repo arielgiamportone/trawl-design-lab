@@ -144,7 +144,7 @@ export function isMissingRoute(detail: unknown): boolean {
 /** Pedido al motor del teléfono (sin conexión): mismo contrato que la API. */
 async function localFetch(path: string, init?: RequestInit): Promise<Response> {
   const body = typeof init?.body === 'string' ? init.body : null;
-  return localRequest(init?.method ?? 'GET', path, body);
+  return localRequest(init?.method ?? 'GET', path, body, init?.signal ?? undefined);
 }
 
 /** Error de la API a partir de una respuesta no exitosa. */

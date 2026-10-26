@@ -6,6 +6,12 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Todo el cálculo sin conexión (Fase 18.2)**: el motor del teléfono atiende también la
+  simulación (forma, lance progresivo, explorador, selectividad, incertidumbre y calibración),
+  los planos SVG, el informe HTML y XLSX, los registros de sensores y los catálogos de
+  ensuciamiento y especies, con guardas de costo propias del teléfono. «Cancelar» corta una
+  simulación (también detiene el motor local). Sólo los PDF, el refinamiento con scipy y el aula
+  siguen necesitando servidor. Paridad en Pyodide con tolerancia propia para la simulación.
 - Libro: capítulo 38 **«Guía para docentes»** (nueva parte «Docencia»): cómo usar la práctica
   libre, los laboratorios y el aula en clase, el banco por capítulo y nivel, cómo se corrige,
   una planificación de 16 semanas para tecnicatura y grado, ejemplos de parcial con datos por

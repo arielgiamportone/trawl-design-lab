@@ -19,6 +19,11 @@ from trawlkit.api import offline
 _FLEET = "nombre;potencia\nA;60\nB;150\n"
 _NET = "fao_wb_bt2p_60hp"
 
+#: Tolerancias propias de la simulación (rtol, atol): itera hasta converger y entre builds de
+#: numpy CPython y Pyodide difieren en ~1e-5, que los porcentajes amplifican y los redondeos a
+#: 0,1 vuelven saltos de una décima. El resto se compara con rtol 1e-9.
+ITERATIVE_TOL = {"/simulate/selectivity": (1e-2, 0.2)}
+
 CASES: list[tuple[str, str, dict[str, object] | None]] = [
     ("GET", "/health", None),
     ("GET", "/catalog/components/wire?generic=true", None),
@@ -60,6 +65,9 @@ CASES: list[tuple[str, str, dict[str, object] | None]] = [
         {"net": _NET, "economics": {"fuel_price_l": 1.2, "catch_kg_h": 80, "price_kg": 3}},
     ),
     ("GET", "/teaching/exercises/construccion.toma?seed=11", None),
+    ("POST", "/design/plan?view=sheet", {}),
+    ("POST", "/simulate/selectivity", {"resolution": 2, "species": ["cod"]}),
+    ("GET", "/catalog/species", None),
     ("POST", "/teaching/grade", {"id": "potencia.prado_arrastre", "seed": 3, "answers": {}}),
     (
         "POST",
@@ -75,6 +83,8 @@ def main(out: str) -> None:
     for method, path, body in CASES:
         status, response = offline.handle(method, path, None if body is None else json.dumps(body))
         row: dict[str, object] = {"method": method, "path": path, "body": body, "status": status}
+        if path.split("?")[0] in ITERATIVE_TOL:
+            row["rtol"], row["atol"] = ITERATIVE_TOL[path.split("?")[0]]
         if isinstance(response, offline.Binary):
             kind = "xlsx" if response.media.startswith("application/vnd") else "text"
             row["binary"] = {"kind": kind, "data": base64.b64encode(response.data).decode()}

@@ -33,6 +33,6 @@ describe('cliente sin red', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
     const h = await api.health();
     expect((h as { offline?: boolean }).offline).toBe(true);
-    expect(local).toHaveBeenCalledWith('GET', '/health', null);
+    expect(local).toHaveBeenCalledWith('GET', '/health', null, undefined);
   });
 });

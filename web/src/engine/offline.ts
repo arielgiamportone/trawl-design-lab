@@ -85,12 +85,31 @@ function getWorker(): Worker {
   return worker;
 }
 
-function send(msg: Record<string, unknown>, onProgress?: (s: string) => void): Promise<unknown> {
+function send(
+  msg: Record<string, unknown>,
+  onProgress?: (s: string) => void,
+  signal?: AbortSignal,
+): Promise<unknown> {
   const id = ++seq;
   return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(new DOMException('cancelado', 'AbortError'));
     pending.set(id, { resolve, reject, onProgress });
     getWorker().postMessage({ id, ...msg });
+    signal?.addEventListener('abort', () => stopWorker(), { once: true });
   });
+}
+
+/**
+ * Corta un cálculo del motor local (una simulación larga): termina el *worker* y rechaza lo que
+ * esperaba. El próximo pedido vuelve a cargar el motor desde la caché.
+ */
+export function stopWorker(): void {
+  if (!worker) return;
+  worker.terminate();
+  worker = null;
+  readyPromise = null;
+  for (const p of pending.values()) p.reject(new DOMException('cancelado', 'AbortError'));
+  pending.clear();
 }
 
 async function manifest(): Promise<WheelManifest> {
@@ -200,9 +219,10 @@ export async function localRequest(
   method: string,
   path: string,
   body: string | null,
+  signal?: AbortSignal,
 ): Promise<Response> {
   await startEngine();
-  const raw = (await send({ type: 'request', method, path, body })) as string;
+  const raw = (await send({ type: 'request', method, path, body }, undefined, signal)) as string;
   const parsed = JSON.parse(raw) as {
     status: number;
     body?: unknown;

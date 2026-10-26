@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect, useId, useState } from 'react';
 import { api, ApiError, type SimulateRequest, type SimulateResponse } from '../api/client';
 import { fmt, fmtFixed, fmtPct } from '../lib/format';
@@ -215,6 +215,12 @@ function SpeedSweep() {
   const r = query.data;
   const busy = query.isFetching;
   const err = query.error;
+  const qc = useQueryClient();
+  // Corta la simulación: en el servidor se abandona el pedido; en el teléfono se detiene el motor.
+  const cancel = () => {
+    void qc.cancelQueries({ queryKey: ['simulate', submitted] });
+    setSubmitted(null);
+  };
 
   const run = () => {
     if (!speeds.length || !committed) return;
@@ -312,6 +318,11 @@ function SpeedSweep() {
         >
           Simular
         </button>
+        {busy && (
+          <button type="button" className="btn ghost" onClick={cancel}>
+            Cancelar
+          </button>
+        )}
       </div>
       <div className="status-line" role="status" aria-live="polite">
         {busy ? (

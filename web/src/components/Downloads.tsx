@@ -54,8 +54,9 @@ export function Downloads() {
     <div>
       <h2 className="section-title">Descargas</h2>
       <p className="section-sub" style={{ marginBottom: 12 }}>
-        Los informes se generan en el servidor con el caso actual (incluidas las ediciones de
-        paneles y parámetros).
+        Los informes se generan con el caso actual (incluidas las ediciones de paneles y
+        parámetros). Sin conexión, el HTML y la planilla salen del motor del teléfono; para el PDF,
+        imprima el HTML.
       </p>
       <div className="downloads">
         {ITEMS.map((it) => (
