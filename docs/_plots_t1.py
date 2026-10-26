@@ -8,13 +8,12 @@ quedan por debajo de 3:1 de contraste, por lo que las series llevan etiqueta dir
 
 from __future__ import annotations
 
-from _lang import LANG
-
 import html
 from collections.abc import Sequence
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from _lang import LANG
 from IPython.display import HTML, display
 
 #: Ranuras categóricas (modo claro), en orden fijo.

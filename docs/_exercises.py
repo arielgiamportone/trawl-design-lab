@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import html
 
+from _lang import LANG, L
 from IPython.display import Markdown
 
-from _lang import LANG, L
 from trawlkit.i18n import use_lang
 from trawlkit.teaching import bank, instantiate, solve
 from trawlkit.teaching.bank import level_label

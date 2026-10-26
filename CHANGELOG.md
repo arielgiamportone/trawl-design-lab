@@ -6,6 +6,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Agregado
+- **Libro completo en inglés (Fase 18.5)**: `docs/en/`, con los mismos capítulos y archivos que
+  el libro en español, publicado en `/trawl-design-lab/en/`. Las celdas ejecutan el mismo código:
+  las tablas y avisos del motor, los números (punto decimal) y los ejercicios salen en inglés
+  (`docs/_lang.py`). Glosario español → inglés de la terminología FAO (`docs/en/glossary.md`).
+  Cada página tiene un botón «English / Español» al mismo capítulo en el otro libro. La compilación
+  del libro inglés corre con `-W` en el flujo de Docs, y una prueba exige que cada capítulo tenga su
+  par. README en inglés con enlaces al libro en inglés.
+
+### Corregido
+- Capítulo 21: la abertura vertical por resolución (1,96 / 1,70 / 1,64 m) estaba desactualizada.
 - **Accesibilidad (Fase 18.4)**: pruebas con axe (WCAG 2.1 A/AA) sobre todos los modos y
   pestañas, en los dos temas y los dos idiomas, más los resultados calculados y el panel del
   laboratorio; pruebas de recorrido sólo con teclado del modo guiado y de un ejercicio del aula.

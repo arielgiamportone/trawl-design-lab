@@ -9,7 +9,7 @@
   <a href="https://pypi.org/project/trawlkit/"><img src="https://img.shields.io/pypi/pyversions/trawlkit" alt="Python"></a>
   <a href="https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE"><img src="https://img.shields.io/badge/code-MIT-blue" alt="Code: MIT"></a>
   <a href="https://github.com/arielgiamportone/trawl-design-lab/blob/main/LICENSE-docs"><img src="https://img.shields.io/badge/docs%20%26%20data-CC%20BY%204.0-blue" alt="Docs and data: CC BY 4.0"></a>
-  <a href="https://arielgiamportone.github.io/trawl-design-lab/"><img src="https://img.shields.io/badge/book-Jupyter%20Book-c35a1b" alt="Book"></a>
+  <a href="https://arielgiamportone.github.io/trawl-design-lab/en/"><img src="https://img.shields.io/badge/book-Jupyter%20Book-c35a1b" alt="Book"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/app/"><img src="https://img.shields.io/badge/app-works%20offline-2e7d32" alt="App: works offline"></a>
   <a href="https://doi.org/10.5281/zenodo.23657981"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.23657981.svg" alt="DOI 10.5281/zenodo.23657981"></a>
   <a href="https://arielgiamportone.github.io/trawl-design-lab/citar.html"><img src="https://img.shields.io/badge/how%20to-cite-6a4c93" alt="How to cite"></a>
@@ -22,12 +22,13 @@ calculation engine (`trawlkit`), a web app that works on a phone even without si
 and a reproducible book with the theory. It is meant for fishers and skippers, net makers,
 fishing schools, and fisheries students and engineers: choose the net a vessel can tow, at what
 speed, with which doors, warps and floats, and what it costs to rig it with what the port sells.
-The app, the book and the code comments are in Spanish.
+The app and the book are in English and Spanish; the code comments are in Spanish.
 
 | Try it | |
 |---|---|
 | 📱 Web app (installable, offline) | https://arielgiamportone.github.io/trawl-design-lab/app/ |
-| 📘 Book (Jupyter Book, Spanish) | https://arielgiamportone.github.io/trawl-design-lab/ |
+| 📘 Book (Jupyter Book, English) | https://arielgiamportone.github.io/trawl-design-lab/en/ |
+| 📗 Book (Spanish original) | https://arielgiamportone.github.io/trawl-design-lab/ |
 | 🔌 API (interactive docs) | https://trawl-design-lab-api.onrender.com/docs |
 
 The API runs on Render's free plan: after a period of inactivity it sleeps and the first request
@@ -125,14 +126,14 @@ The rest of the screenshots show the Spanish interface:
 One engine (`src/trawlkit/`) and one data source (`src/trawlkit/data/`) for everything: the CLI,
 the FastAPI API (`src/trawlkit/api/`), the offline engine the app loads in a Web Worker, the React
 app (`web/`) and the book (`docs/`), whose numbers come from running the engine. The engine
-architecture is described in [docs/motor.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/motor.md) (Spanish).
+architecture is described in [docs/en/motor.md](https://github.com/arielgiamportone/trawl-design-lab/blob/main/docs/en/motor.md).
 
 ## Calculation chain
 
 ![Calculation chain: power, netting, mechanics, dimensions, drag, doors, openings, buoyancy, warps and speed window](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/docs/_static/img/cadena-calculo-en.svg)
 
 The same chain as the original model, stage by stage, each with its chapter in the
-[book](https://arielgiamportone.github.io/trawl-design-lab/). For a fleet, the projection chains
+[book](https://arielgiamportone.github.io/trawl-design-lab/en/). For a fleet, the projection chains
 similarity, refinement and rigging:
 
 ![Fleet flow: spreadsheet, projection by similarity, refinement and rigging, results](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/docs/_static/img/flujo-flota-en.svg)

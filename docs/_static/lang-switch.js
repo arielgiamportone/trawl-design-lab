@@ -1,7 +1,7 @@
 // Enlace «English / Español» al mismo capítulo en el otro libro (el inglés vive en /en/).
 document.addEventListener('DOMContentLoaded', () => {
   const path = window.location.pathname;
-  const english = /\/en\/[^/]*$/.test(path);
+  const english = (document.documentElement.lang || '').startsWith('en');
   let page = path.split('/').pop() || 'intro.html';
   if (english && page === 'glossary.html') page = '02_nomenclatura.html';
   const href = english ? `../${page}` : `en/${page}`;
