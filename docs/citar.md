@@ -13,7 +13,7 @@ GitHub, el botón **Cite this repository** los da en APA y BibTeX.
   author    = {Giamportone, Ariel Luján},
   title     = {Trawl Design Lab (trawlkit): diseño y dimensionamiento de redes de arrastre},
   organization = {Universidad Tecnológica Nacional, Facultad Regional Tierra del Fuego},
-  version   = {1.0.0},
+  version   = {1.1.0},
   year      = {2026},
   publisher = {Zenodo},
   url       = {https://github.com/arielgiamportone/trawl-design-lab},

@@ -5,6 +5,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+## [1.1.0] - 2026-10-26
+
+Primera versión publicada en PyPI y archivada en Zenodo.
+
 ### Agregado
 - App web, **modo guiado** (por defecto): asistente en 4 pasos (buque, red, operación, resultado)
   con diagnóstico por semáforos en lenguaje llano a la velocidad elegida (potencia, velocidad
