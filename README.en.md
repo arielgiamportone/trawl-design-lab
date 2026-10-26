@@ -60,6 +60,16 @@ Faculties where **Fisheries Engineering** is taught, along the Argentine Sea:
 
 ## Screenshots
 
+The app speaks English and Spanish (ES/EN in the header) and shows metric or imperial units
+(Metric/Imperial); the engine always computes in metric.
+
+| | |
+|---|---|
+| ![Guided mode in English: the diagnosis](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/en-guided-diagnosis.png) | ![Expert mode in English with imperial units](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/en-expert-summary-imperial.png) |
+| ![Trip economics with prices per gallon and per pound](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/en-economics-imperial.png) | ![UTN Classroom: an exercise in English with instant grading](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/en-classroom-practice.png) |
+
+The rest of the screenshots show the Spanish interface:
+
 | | |
 |---|---|
 | ![Guided mode: the diagnosis with traffic lights for power, speed and warp](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/guiado-diagnostico.png) | ![Expert mode: the design case and its indicators](https://raw.githubusercontent.com/arielgiamportone/trawl-design-lab/main/web/docs/screenshots/escritorio-claro-caso.png) |

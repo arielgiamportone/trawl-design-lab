@@ -27,17 +27,22 @@ test('modo guiado en inglés e imperial: la profundidad en pies llega en metros'
   await page.getByRole('radio', { name: /180 BHP/ }).check();
   await page.getByRole('button', { name: 'Next →' }).click();
   await page.getByRole('button', { name: 'Next →' }).click();
-  const sent: { params?: Record<string, unknown> }[] = [];
+  const sent: { lang: string | null; body: string }[] = [];
   page.on('request', (r) => {
     const u = new URL(r.url());
-    if (u.pathname.endsWith('/design') && r.method() === 'POST') {
-      expect(u.searchParams.get('lang')).toBe('en');
-      sent.push(r.postDataJSON() as { params?: Record<string, unknown> });
-    }
+    if (u.pathname.endsWith('/design') && r.method() === 'POST')
+      sent.push({ lang: u.searchParams.get('lang'), body: r.postData() ?? '' });
   });
+  const lastDepth = () => {
+    const last = sent.at(-1);
+    if (!last) return NaN;
+    const json = JSON.parse(last.body) as { params?: Record<string, unknown> };
+    return Number(json.params?.depth_m);
+  };
   await page.getByRole('textbox', { name: /Working depth/ }).fill('200');
   await page.getByRole('button', { name: 'See result →' }).click();
-  await expect.poll(() => Number(sent.at(-1)?.params?.depth_m)).toBeCloseTo(60.96, 2);
+  await expect.poll(lastDepth).toBeCloseTo(60.96, 2);
+  expect(sent.every((r) => r.lang === 'en')).toBe(true);
   await expect(page.locator('[data-check="pull"]')).toHaveClass(/ok|warn|crit/);
   await expect(page.getByRole('main')).not.toContainText(SPANISH);
 
