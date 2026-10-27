@@ -152,7 +152,7 @@ class SourceDocument(_Model):
 
 
 NetFamily = Literal["bottom", "semi_pelagic", "pelagic"]
-NetRig = Literal["otter", "pair"]
+NetRig = Literal["otter", "pair", "outrigger", "twin", "beam"]
 
 
 class NetSpec(_Model):

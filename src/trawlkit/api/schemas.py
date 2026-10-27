@@ -728,6 +728,11 @@ class SimulateRequest(BaseModel):
     include_geometry: bool = False
     mu: float | None = Field(default=None, ge=0.0, le=1.5, description="μ red–fondo")
     scenario: ScenarioIn | None = None
+    params: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Parámetros del caso como en DesignRequest (p. ej. el aparejo: rig, tangones, "
+        "muerto o vara)",
+    )
 
     @model_validator(mode="after")
     def _check_speeds(self) -> SimulateRequest:

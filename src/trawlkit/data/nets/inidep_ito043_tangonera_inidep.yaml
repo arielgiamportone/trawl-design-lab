@@ -1,0 +1,935 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: inidep_ito043_tangonera_inidep
+name: Red tangonera de langostino propuesta por el INIDEP (ITO 043/2022, fig. 5)
+description: 'Red de arrastre de fondo de baja abertura para tangones (langostino patagónico), de tres
+  paños (dorso, vientre y costados): alas de 160 mm en el dorso y 140 mm en el vientre, cielo y cuerpo
+  de 140 mm, cuerpo trasero de 120 mm de Dyneema y copo de 60 mm de nylon; lima de 35,5 m y burlón de
+  32,5 m. Plano de DynamiT del INIDEP (Roth y Rubio 2022).'
+source: 'INIDEP ITO 043/22 (Roth y Rubio 2022), fig. 5: red tangonera propuesta por el INIDEP (simulación
+  DynamiT 3) (https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf)'
+family: bottom
+rig: outrigger
+vessel_hp:
+- 948.7
+- 948.7
+target_species: langostino patagónico (Pleoticus muelleri)
+status: draft
+sources:
+- key: roth2022ito043
+  title: 'INIDEP ITO 043/22 (Roth y Rubio 2022), fig. 5: red tangonera propuesta por el INIDEP (simulación
+    DynamiT 3)'
+  url: https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf
+  accessed: '2026-10-27'
+  figure: Figura 5
+  page: '9'
+panels:
+- id: UW1
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 1.8
+  rtex: 2000.0
+  meshes_top: 4
+  meshes_bottom: 52
+  meshes_depth: 70
+  hanging_ratio: 0.7
+  count: 2
+  cut_code: 10N9B
+  cut_code_x2: AB
+  note: Rótulo de corte «10N9B-:AB» (el guion final no se interpreta).
+- id: UW2
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 1.8
+  rtex: 2000.0
+  meshes_top: 52
+  meshes_bottom: 76
+  meshes_depth: 14
+  hanging_ratio: 0.7
+  count: 2
+  cut_code: 5N4B
+  cut_code_x2: 1T2B
+- id: U1
+  plane: upper
+  section: square
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 235
+  meshes_bottom: 214
+  meshes_depth: 15
+  hanging_ratio: 0.7
+  count: 1
+  cut_code: 3N4B
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 214
+  meshes_bottom: 135
+  meshes_depth: 59
+  hanging_ratio: 0.7
+  count: 1
+  cut_code: 19N7B
+  note: El rótulo se lee «19N7B», pero el paño pasa de 214 a 135 mallas en 59 filas, como el vientre con
+    1N4B (el validador lo avisa).
+- id: U3
+  plane: upper
+  section: body
+  material: HMPE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 6667.0
+  meshes_top: 157
+  meshes_bottom: 40
+  meshes_depth: 88
+  hanging_ratio: 0.7
+  count: 1
+  cut_code: 1N4B
+  note: Rótulo «1N4B-» (el guion final no se interpreta).
+- id: UC
+  plane: upper
+  section: codend
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 217
+  hanging_ratio: 0.7
+  count: 1
+  cut_code: AN
+- id: LW1
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 1.8
+  rtex: 2000.0
+  meshes_top: 1
+  meshes_bottom: 50
+  meshes_depth: 73
+  hanging_ratio: 0.64
+  count: 2
+  cut_code: 1N1B
+  cut_code_x2: AB
+- id: LW2
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 1.8
+  rtex: 2000.0
+  meshes_top: 50
+  meshes_bottom: 77
+  meshes_depth: 16
+  hanging_ratio: 0.64
+  count: 2
+  cut_code: 1N1B
+  cut_code_x2: 1T2B
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 210
+  meshes_bottom: 131
+  meshes_depth: 59
+  hanging_ratio: 0.64
+  count: 1
+  cut_code: 1N4B
+- id: L3
+  plane: lower
+  section: body
+  material: HMPE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 6667.0
+  meshes_top: 153
+  meshes_bottom: 61
+  meshes_depth: 88
+  hanging_ratio: 0.64
+  count: 1
+  cut_code: 5N1B
+  note: Rótulo «5N1B-»; el paño pasa de 153 a 61 mallas en 88 filas (el validador lo avisa).
+- id: LC
+  plane: lower
+  section: codend
+  material: PA
+  mesh_mm: 60.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 217
+  hanging_ratio: 0.64
+  count: 1
+  cut_code: AN
+- id: S1
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 39
+  meshes_bottom: 17
+  meshes_depth: 151
+  hanging_ratio: 0.67
+  count: 2
+  cut_code: 3N1B
+  cut_code_x2: AN
+  note: Tramo trasero del costado (140 mm, 150,857 filas); el tramo delantero de 160 mm (20 filas AN:1T6B
+    de 2 a 29 mallas y 63,5 filas AN de 34 mallas, junto a las alas) no se modela.
+species:
+  name: Langostino
+  scientific_name: Pleoticus muelleri
+headrope:
+  name: lima
+  length_m: 35.5
+  diameter_mm: 22
+  wing_m: 14.75
+  bosom_m: 6.0
+  description: combinado Ø22 mm (A + B en cada ala, E en la bocana)
+  construction: rope_combinado_6_22mm
+footrope:
+  name: burlón
+  length_m: 32.5
+  diameter_mm: 24
+  wing_m: 13.75
+  bosom_m: 5.0
+  description: cable mixto Ø24 mm (O + P en cada ala, S en la bocana)
+  construction: rope_combinado_6_24mm
+rigging:
+  doors: rectangulares planos de madera con refuerzos de acero, 540 kg cada uno
+  bridle: tijera de 70 m de cable de acero de 22 mm
+  warp: acero de 24 mm con alma de acero
+design:
+  vessel_id: ar_tangonero_1998
+  door_id: door_flat_500hp
+  door_weight_air_kg: 540.0
+  outrigger_bridle_m: 70.0
+  outrigger_bridle_diameter_mm: 22.0
+  speed_kn: 3.5
+measured:
+- speed_kn: 3.5
+  vertical_opening_m: 1.3
+  horizontal_opening_m: 14.0
+  door_spread_m: 16.2
+  warp_tension_kgf: 3777.2
+  note: 'resultados de la simulación DynamiT 3 del INIDEP (p. 6): modelo, no mediciones'
+notes:
+- 'Cabos del plano: A combinado 22 mm 11,00 m; B combinado 22 mm 3,75 m; E combinado 22 mm 6,00 m (lima:
+  2 × (11,00 + 3,75) + 6,00 = 35,5 m); O cable mixto 24 mm 10,00 m; P 3,75 m; S 5,00 m (burlón: 2 × (10,00
+  + 3,75) + 5,00 = 32,5 m); J cable mixto 24 mm 3,15 m (borde delantero del costado); costuras de 2 y
+  3 mm.'
+- 'Aparejo de las tres simulaciones (pp. 1 y 5): tijera de 70 m de cable de acero de 22 mm, cable de arrastre
+  de acero de 24 mm con alma de acero, portones rectangulares planos de madera con refuerzos de acero
+  de 540 kg cada uno, 3,5 nudos; tangones del B/P «Atlántico 1».'
+- 'Paños del plano: #1 28,80 m² y 62,26 kg; LOW 25,95 m² y 57,76 kg; SIDE 9,92 m² y 17,18 kg; total 64,68
+  m² y 137,21 kg.'
+- La boca del cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso, 61 en el vientre) se une a un
+  copo de 100 mallas de 60 mm en cada cara, como dibuja el plano.
+- El cabo del burlón es un cable mixto de 24 mm; el motor toma el combinado de 24 mm del catálogo de componentes
+  para el peso y la resistencia.
+provenance:
+  panels.UW1.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.UW1.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 500 m/kg (rendimiento del hilo «Santy-160 mm» en la tabla de materiales del plano)
+  panels.UW1.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW1.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW1.meshes_depth:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 69,5 filas redondeadas a 70
+  panels.UW1.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW1.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 1.8 mm del hilo «Santy-160 mm» en la tabla de materiales del plano
+  panels.UW1.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.UW2.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.UW2.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 500 m/kg (rendimiento del hilo «Santy-160 mm» en la tabla de materiales del plano)
+  panels.UW2.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW2.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW2.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW2.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UW2.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 1.8 mm del hilo «Santy-160 mm» en la tabla de materiales del plano
+  panels.UW2.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.U1.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 235 m/kg (rendimiento del hilo «140 3 mm PCU» en la tabla de materiales del plano)
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U1.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U1.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «140 3 mm PCU» en la tabla de materiales del plano
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.U2.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 235 m/kg (rendimiento del hilo «140 3 mm PCU» en la tabla de materiales del plano)
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U2.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U2.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «140 3 mm PCU» en la tabla de materiales del plano
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.U3.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 150 m/kg (rendimiento del hilo «DY 3 120 mm» en la tabla de materiales del plano)
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U3.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U3.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.U3.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «DY 3 120 mm» en la tabla de materiales del plano
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.UC.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 280 m/kg (rendimiento del hilo «NY» en la tabla de materiales del plano)
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UC.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UC.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UC.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.UC.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «NY» en la tabla de materiales del plano
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del dorso: lima E de 6,00 m sobre 235 × 140 − 2 × 76 × 160 = 8,58 m de paño
+      estirado (6,00 / 8,58 = 0,70); se usa en todo el dorso'
+  panels.LW1.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.LW1.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 500 m/kg (rendimiento del hilo «140 PEPE» en la tabla de materiales del plano)
+  panels.LW1.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW1.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW1.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW1.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW1.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 1.8 mm del hilo «140 PEPE» en la tabla de materiales del plano
+  panels.LW1.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del vientre: burlón S de 5,00 m sobre 210 × 140 − 2 × 77 × 140 = 7,84 m (5,00
+      / 7,84 = 0,64); se usa en todo el vientre'
+  panels.LW2.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.LW2.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 500 m/kg (rendimiento del hilo «140 PEPE» en la tabla de materiales del plano)
+  panels.LW2.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW2.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW2.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW2.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LW2.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 1.8 mm del hilo «140 PEPE» en la tabla de materiales del plano
+  panels.LW2.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del vientre: burlón S de 5,00 m sobre 210 × 140 − 2 × 77 × 140 = 7,84 m (5,00
+      / 7,84 = 0,64); se usa en todo el vientre'
+  panels.L2.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.L2.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 235 m/kg (rendimiento del hilo «140 3 mm PCU» en la tabla de materiales del plano)
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L2.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L2.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «140 3 mm PCU» en la tabla de materiales del plano
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del vientre: burlón S de 5,00 m sobre 210 × 140 − 2 × 77 × 140 = 7,84 m (5,00
+      / 7,84 = 0,64); se usa en todo el vientre'
+  panels.L3.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.L3.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 150 m/kg (rendimiento del hilo «DY 3 120 mm» en la tabla de materiales del plano)
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L3.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L3.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.L3.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «DY 3 120 mm» en la tabla de materiales del plano
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del vientre: burlón S de 5,00 m sobre 210 × 140 − 2 × 77 × 140 = 7,84 m (5,00
+      / 7,84 = 0,64); se usa en todo el vientre'
+  panels.LC.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.LC.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 280 m/kg (rendimiento del hilo «NY» en la tabla de materiales del plano)
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LC.meshes_depth:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LC.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LC.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.LC.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «NY» en la tabla de materiales del plano
+  panels.LC.hanging_ratio:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'U1 de la bocana del vientre: burlón S de 5,00 m sobre 210 × 140 − 2 × 77 × 140 = 7,84 m (5,00
+      / 7,84 = 0,64); se usa en todo el vientre'
+  panels.S1.mesh_mm:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: mallero = 2 × lado de malla («Mesh side») del plano de DynamiT
+  panels.S1.rtex:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Rtex = 10⁶ / 235 m/kg (rendimiento del hilo «140 3 mm PCU» en la tabla de materiales del plano)
+  panels.S1.meshes_top:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.S1.meshes_bottom:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.S1.meshes_depth:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 150,857 filas redondeadas a 151
+  panels.S1.cut_code:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  panels.S1.count:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: Ø 3 mm del hilo «140 3 mm PCU» en la tabla de materiales del plano
+  panels.S1.hanging_ratio:
+    kind: assumed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'el plano no da U1 del costado: promedio del dorso (0,70) y del vientre (0,64)'
+  headrope.length_m:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  headrope.diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  headrope.wing_m:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: alas = A + B = 11,00 + 3,75 m; bocana = E = 6,00 m
+  headrope.bosom_m:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: alas = A + B = 11,00 + 3,75 m; bocana = E = 6,00 m
+  footrope.length_m:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  footrope.diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+  footrope.wing_m:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: alas = O + P = 10,00 + 3,75 m; bocana = S = 5,00 m
+  footrope.bosom_m:
+    kind: derived
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: alas = O + P = 10,00 + 3,75 m; bocana = S = 5,00 m
+  design.vessel_id:
+    kind: assumed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'B/P «Atlántico 1» (tangonero): el informe no da eslora ni potencia; se usa el tangonero típico
+      de la flota argentina (media de 1998)'
+  design.door_id:
+    kind: assumed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: 'portones rectangulares planos de madera de 540 kg (pp. 1 y 5) sin medidas publicadas: se toma
+      el portón plano genérico del catálogo de peso más cercano (510 kg, 2,5 × 1,25 m; alto ≤ 1,5 m de
+      la Res. CFP 7/2018). A VERIFICAR'
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: portones de madera de 540 kg cada uno
+  design.outrigger_bridle_m:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: tijera de 70 m (pp. 1 y 5)
+  design.outrigger_bridle_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: cable de acero de 22 mm
+  design.speed_kn:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: velocidad de las simulaciones (p. 5)

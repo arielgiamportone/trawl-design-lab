@@ -458,7 +458,7 @@ def _coerce_params(params: dict[str, Any]) -> dict[str, Any]:
         values = v if isinstance(v, list) else [v]
         for item in values:
             if isinstance(item, bool):
-                if info[k] != "bool":
+                if info[k].replace(" ", "").removesuffix("|None") != "bool":
                     raise BadRequestError(t("{k}: valor no admitido {item!r}", k=k, item=item))
                 continue
             if not isinstance(item, (int, float, str)):
@@ -811,8 +811,12 @@ def simulate_case(
     max_projections: int = 3,
     mu: float | None = None,
     scenario: dict[str, Any] | None = None,
+    params: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Corre el motor y :func:`trawlkit.sim.sweep`, y arma la respuesta de ``POST /simulate``.
+
+    ``params`` sobrescribe parámetros del caso como en ``POST /design`` (p. ej. el aparejo:
+    ``rig``, tangones, muerto o vara; Fase 19.5).
 
     Las velocidades se simulan en orden creciente (cada una parte de la forma de la anterior) y
     se devuelven en el orden pedido. Las proyecciones son de las ``max_projections`` primeras
@@ -828,7 +832,14 @@ def simulate_case(
     from trawlkit.sim.validation import DYNAMIT
 
     t0 = time.perf_counter()
-    case = build_case(net=net, vessel=vessel, door=door, class_vessels=class_vessels, compat=compat)
+    case = build_case(
+        net=net,
+        vessel=vessel,
+        door=door,
+        class_vessels=class_vessels,
+        compat=compat,
+        params=params,
+    )
     sc = make_scenario(scenario)
     coupled = bool(sc and sc.coupled_doors)
     estimate = estimate_sim_cost(len(speeds_kn), resolution, case.net, coupled=coupled)

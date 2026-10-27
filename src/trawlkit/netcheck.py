@@ -223,11 +223,33 @@ def check(spec: NetSpec) -> list[Issue]:
             issues.append(
                 Issue("error", "structure", t("{plane}: no hay paños centrales", plane=label))
             )
-    # Costados (redes de 4 paneles): estación por estación con el dorso, desde el copo.
+    # Costados (redes de 4 paneles): estación por estación con el dorso, desde el copo. Si no
+    # coinciden pero se pueden repartir por largo estirado (Fase 19.5) es un aviso.
+    by_length = False
     if "side" in lay.planes and "upper" in lay.planes:
         sides = [s.panel for s in lay.central("side")]
         body = [s.panel for s in lay.central("upper")]
-        if len(sides) > len(body):
+        from trawlkit.topology import equivalent_two_panel, side_stations_match
+
+        if not side_stations_match(sides, body):
+            try:
+                equivalent_two_panel(spec)
+                by_length = True
+            except ValueError:
+                by_length = False
+        if by_length:
+            issues.append(
+                Issue(
+                    "warning",
+                    "side",
+                    t(
+                        "los costados no coinciden estación por estación con el dorso: la red "
+                        "equivalente de 2 paneles los reparte por largo estirado (aproximación)"
+                    ),
+                    tuple(p.id for p in sides),
+                )
+            )
+        elif len(sides) > len(body):
             issues.append(
                 Issue(
                     "error",
@@ -241,6 +263,8 @@ def check(spec: NetSpec) -> list[Issue]:
                 )
             )
         for s_, b in zip(reversed(sides), reversed(body), strict=False):
+            if by_length:
+                break
             if s_.meshes_depth != b.meshes_depth or abs(s_.mesh_mm - b.mesh_mm) > 1e-9:
                 issues.append(
                     Issue(

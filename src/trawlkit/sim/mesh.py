@@ -183,6 +183,10 @@ class Rigging:
     # recalcular CL y CD al ángulo que resulta de la geometría resuelta.
     door_polar: tuple[tuple[float, float, float], ...] = ()
     door_attack_angle_deg: float = 32.0
+    #: Arrastre de vara (Fase 19.5): altura de la vara sobre el fondo [m]. Las puntas de la lima
+    #: quedan fijas en los extremos de la vara (``y = ±door_spread_m/2``, ``z`` = esta altura) y
+    #: las del burlón en los patines (``z = 0``); no hay bridas ni patentes. ``None`` = portones.
+    beam_height_m: float | None = None
 
     def rope_ea(self, which: str) -> float:
         """EA de la lima (``headrope``) o del burlón (``footrope``) [N]."""
@@ -287,6 +291,8 @@ class NetModel:
     door_cd_factor: float = 1.0
     #: Red pelágica: trabaja a media agua, sin la restricción del fondo (Fase 12).
     floor_free: bool = False
+    #: Vara (Fase 19.5): las cuatro puntas de ala son nodos fijos (ver ``Rigging.beam_height_m``).
+    fixed_tips: bool = False
 
     @property
     def n_nodes(self) -> int:
@@ -776,11 +782,21 @@ def build_model(
     # que la barra no tenga largo nulo.
     sweeps = max(rigging.sweeps_m, MIN_SWEEP_M)
     rig_len = rigging.upper_bridle_m + sweeps
+    beam = rigging.beam_height_m is not None
+    if beam:
+        # Vara: las puntas de la lima van a los extremos de la vara y las del burlón a los patines,
+        # a la altura del cuello de la boca (x medio de las cuatro puntas).
+        x_tip = float(np.mean(x0[[*tips_u, *tips_l], 0]))
+        for k, sgn in ((0, 1.0), (1, -1.0)):
+            y = sgn * rigging.door_spread_m / 2.0
+            x0[tips_u[k]] = [x_tip, y, float(rigging.beam_height_m or 0.0)]
+            x0[tips_l[k]] = [x_tip, y, 0.0]
+        x_list = [*x0.tolist()]
     for k, sgn in ((0, 1.0), (1, -1.0)):
         tip = 0.5 * (x0[tips_u[k]] + x0[tips_l[k]])
         door = np.array([0.0, sgn * rigging.door_spread_m / 2.0, rigging.door_height_m / 2.0])
         dy = door[1] - tip[1]
-        dx = math.sqrt(max(rig_len**2 - dy**2, 1.0))
+        dx = 0.0 if beam else math.sqrt(max(rig_len**2 - dy**2, 1.0))
         door[0] = tip[0] - dx
         frac = sweeps / rig_len
         junc = door + frac * (tip - door)
@@ -796,6 +812,8 @@ def build_model(
             bd.append(0.0)
             bw.append(0.0)
             kinds.append("wing_end")
+        if beam:
+            continue  # sin bridas ni patentes: las puntas de ala están en la vara
         for a_, b_, ln, kind in (
             (tips_u[k], junctions[-1], rigging.upper_bridle_m, "upper_bridle"),
             (tips_l[k], junctions[-1], rigging.lower_bridle_m, "lower_bridle"),
@@ -898,7 +916,12 @@ def build_model(
         float_weights=float_w,
         float_buoyancy_n=rigging.float_buoyancy_kgf * GRAVITY,
         float_area_m2=math.pi * (rigging.float_diameter_mm / 1000.0) ** 2 / 4.0,
-        fixed=np.asarray(vessel_pts if coupled_doors else doors, dtype=np.int64),
+        fixed=np.asarray(
+            vessel_pts
+            if coupled_doors
+            else ([*tips_u, *tips_l, *junctions, *doors] if beam else doors),
+            dtype=np.int64,
+        ),
         headrope=head,
         footrope=foot,
         headrope_centre=int(head[head.size // 2]),
@@ -927,6 +950,7 @@ def build_model(
         door_polar=np.asarray(rigging.door_polar, dtype=float).reshape(-1, 3),
         door_angle_deg=float(rigging.door_attack_angle_deg),
         floor_free=spec.family == "pelagic",
+        fixed_tips=beam,
     )
 
 

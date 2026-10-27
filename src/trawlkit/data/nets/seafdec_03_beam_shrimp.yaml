@@ -1,0 +1,633 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: seafdec_03_beam_shrimp
+name: Arrastre de vara para camarón, 17 m y 235 hp (SEAFDEC 2016, n.º 03)
+description: 'Red de vara de dos caras para camarón de un buque de 17 m y 235 hp (Chumphon, Tailandia,
+  1986): alas de 57 mm, cielo de 57 mm, cuerpo de 51 mm y copo de 32 mm, PE; lima de 6,90 m y burlón de
+  8,70 m.'
+source: SEAFDEC (2016) The Catalogue Bottom Trawl Net Designs of Thailand, TD/RES/141, plano 03 (Bottom,
+  beam trawl; shrimp) (https://repository.seafdec.or.th/handle/20.500.12067/1826)
+family: bottom
+rig: beam
+vessel_hp:
+- 235
+- 235
+target_species: camarón (shrimp)
+status: draft
+sources:
+- key: seafdec2016thai
+  title: SEAFDEC (2016) The Catalogue Bottom Trawl Net Designs of Thailand, TD/RES/141, plano 03 (Bottom,
+    beam trawl; shrimp)
+  url: https://repository.seafdec.or.th/handle/20.500.12067/1826
+  accessed: '2026-10-27'
+  figure: Plano 03
+  page: 16 (22 del PDF)
+panels:
+- id: UW
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 57.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 20
+  meshes_bottom: 55
+  meshes_depth: 52
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 2N2B
+  cut_code_x2: AB
+- id: U1
+  plane: upper
+  section: square
+  material: PE
+  mesh_mm: 57.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 140
+  meshes_bottom: 140
+  meshes_depth: 17
+  hanging_ratio: 0.5
+  count: 1
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 51.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 140
+  meshes_bottom: 140
+  meshes_depth: 20
+  hanging_ratio: 0.5
+  count: 1
+  note: El plano dibuja el cuerpo y el copo una vez, comunes a las dos caras.
+- id: U3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 51.0
+  twine_diameter_mm: 0.94
+  rtex: 506.7
+  meshes_top: 140
+  meshes_bottom: 50
+  meshes_depth: 90
+  hanging_ratio: 0.5
+  count: 1
+  note: 'El plano no da el corte del cuerpo (140 → 50 mallas en 90 filas: 1N2B).'
+- id: UC
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 32.0
+  twine_diameter_mm: 0.94
+  rtex: 506.7
+  meshes_top: 50
+  meshes_bottom: 50
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: AN
+  note: El copo de 50 mallas de 32 mm se une 1/1 al cuerpo de 50 mallas de 51 mm.
+- id: LW
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 57.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 10
+  meshes_bottom: 56
+  meshes_depth: 69
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 2N2B
+  cut_code_x2: AB
+  note: Junto a la relinga del ala del vientre el plano dibuja una tira de 120 mm (PE 700d/12) de una
+    malla de ancho, que no se modela.
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 51.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 140
+  meshes_bottom: 140
+  meshes_depth: 20
+  hanging_ratio: 0.5
+  count: 1
+- id: L3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 51.0
+  twine_diameter_mm: 0.94
+  rtex: 506.7
+  meshes_top: 140
+  meshes_bottom: 50
+  meshes_depth: 90
+  hanging_ratio: 0.5
+  count: 1
+- id: LC
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 32.0
+  twine_diameter_mm: 0.94
+  rtex: 506.7
+  meshes_top: 50
+  meshes_bottom: 50
+  meshes_depth: 100
+  hanging_ratio: 0.5
+  count: 1
+  cut_code: AN
+headrope:
+  name: lima
+  length_m: 6.9
+  diameter_mm: 6
+  wing_m: 3.02
+  bosom_m: 0.86
+  description: 2 × PP Ø6 mm S+Z
+  construction: rope_pp_6mm
+footrope:
+  name: burlón
+  length_m: 8.7
+  diameter_mm: 6
+  wing_m: 3.95
+  bosom_m: 0.8
+  description: 2 × PP Ø6 mm S+Z
+  construction: rope_pp_6mm
+design:
+  vessel_length_m: 17.0
+  beam_count: 2
+notes:
+- 'El hilo va en denier: 380d/15 en alas, cielo y primer cuerpo; 380d/12 en el cuerpo trasero y el copo.'
+- 'El plano no da la vara, los patines, las cadenas ni el lastre: el caso usa los valores por defecto
+  del motor para la vara (Eigaard et al. 2016 y C056/20).'
+provenance:
+  panels.UW.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UW.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.UW.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UW.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UW.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UW.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UW.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.UW.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U1.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U1.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U1.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.U1.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U2.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U2.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U2.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.U2.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U3.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U3.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.U3.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 506.7
+  panels.U3.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.UC.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 506.7
+  panels.UC.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.LW.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LW.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.LW.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LW.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LW.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LW.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LW.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.LW.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L2.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L2.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L2.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.L2.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L3.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L3.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.L3.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 506.7
+  panels.L3.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  panels.LC.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Rtex ≈ n·den/9 de PE 380d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  panels.LC.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 506.7
+  panels.LC.hanging_ratio:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da U1 ni el largo de la relinga de la bocana; 0,5 supuesto
+  headrope.length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  headrope.diameter_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  headrope.wing_m:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: 'bocana con U1 = 0,5: 140 − 2 × 55 = 30 mallas de 57 mm (0,86 m); alas = (6,90 − 0,86) / 2'
+  headrope.bosom_m:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: 'bocana con U1 = 0,5: 140 − 2 × 55 = 30 mallas de 57 mm (0,86 m); alas = (6,90 − 0,86) / 2'
+  footrope.length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  footrope.diameter_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+  footrope.wing_m:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: 'bocana con U1 = 0,5: 140 − 2 × 56 = 28 mallas de 57 mm (0,80 m); alas = (8,70 − 0,80) / 2'
+  footrope.bosom_m:
+    kind: derived
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: 'bocana con U1 = 0,5: 140 − 2 × 56 = 28 mallas de 57 mm (0,80 m); alas = (8,70 − 0,80) / 2'
+  design.vessel_length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: Loa 17,00 m
+  design.beam_count:
+    kind: assumed
+    document: seafdec2016thai
+    page: 16 (22 del PDF)
+    figure: Plano 03
+    note: el plano no da el aparejo; dos varas por buque (Eigaard et al. 2016)

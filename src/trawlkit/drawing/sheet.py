@@ -787,6 +787,11 @@ def net_sheet_svg(result: DesignResult, variant: str = "std", *, year: int | Non
     children += _surface_box(result, variant, 660.0, 640.0)
     children += _rigging(result, 56.0, 858.0, SHEET_W - margin - 350.0 - 20.0)
     tb_w = 350.0
+    if result.multirig is not None:
+        # Fase 19.5: esquema en planta del aparejo de tangones, gemelo o vara.
+        from trawlkit.drawing.rig import rig_elements
+
+        children += rig_elements(result, SHEET_W - margin - tb_w, 790.0, tb_w, 152.0)
     children += _title_block(
         result, variant, spec, year, SHEET_W - margin - tb_w, SHEET_H - margin - 136.0, tb_w
     )

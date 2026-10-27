@@ -655,6 +655,7 @@ def simulate(req: SimulateRequest) -> dict[str, Any]:
         include_geometry=req.include_geometry,
         mu=req.mu,
         scenario=None if req.scenario is None else req.scenario.model_dump(),
+        params=req.params or None,
     )
 
 

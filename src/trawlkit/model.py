@@ -57,6 +57,7 @@ from trawlkit.net import NetGeometry
 from trawlkit.performance import SpeedWindow, speed_window
 from trawlkit.power import FridmanSummary, PowerCurves
 from trawlkit.propulsion import PropellerPull, WinchCheck
+from trawlkit.rigging import multirig
 from trawlkit.rigging import (
     BallastChain,
     BallastDistribution,
@@ -273,8 +274,23 @@ class DesignCase:
     warp_drag_shares: tuple[float, ...] = (0.05, 0.10)  # Rem!E191:H199
 
     # --- aparejo (Fase 12) ----------------------------------------------------------------
-    rig: str | None = None  # "otter" o "pair" (None → net.rig o "otter")
+    rig: str | None = None  # otter, pair, outrigger, twin o beam (None → net.rig o "otter")
     pair_wing_spread_m: float | None = None  # pareja: separación de puntas de ala (None → ½ lima)
+    # --- tangones, gemelo y vara (Fase 19.5; None = valor de la fuente) ------------------
+    boom_length_m: float | None = None  # tangón (None → 24 pies, Knake et al. 1958)
+    boom_angle_deg: float | None = None  # tangón (None → 20°, Knake et al. 1958; vara: 30°)
+    boom_heel_offset_m: float = 0.0  # pie del tangón desde la crujía (FL 470: al pie del palo)
+    outrigger_bridle_m: float | None = None  # tijera de cada red (None → 70 m, INIDEP 043/2022)
+    outrigger_bridle_diameter_mm: float | None = None  # tijera (None → 22 mm, INIDEP 043/2022)
+    clump_weight_kg: float | None = None  # muerto del gemelo (None → 1,5 portones, Seafish)
+    clump_frontal_area_m2: float | None = None  # muerto (None → trineo de Bullis y Floyd 1972)
+    beam_count: int | None = None  # varas por buque (None → 2, Eigaard et al. 2016)
+    beam_length_m: float | None = None  # largo de cada vara (None → Eigaard et al. 2016 por kW)
+    beam_diameter_m: float | None = None  # diámetro de la vara (None → C056/20, tabla 2)
+    beam_shoe_area_m2: float | None = None  # área frontal de un patín (None → C056/20, tabla 2)
+    beam_shoe_height_m: float | None = None  # alto del patín (None → C056/20, tabla 2)
+    beam_ticklers: bool | None = None  # cadenas espantadoras (None → sí, salvo crustáceos)
+    beam_weight_kg: float | None = None  # vara y patines en aire (None → sin rozamiento)
 
     # --- fondo ----------------------------------------------------------------------------
     seabed: str | None = None  # tipo de fondo (data/seabed.yaml); None = sin rozamiento extra
@@ -320,8 +336,35 @@ class DesignCase:
             raise ValueError(t("rob_share debe estar entre 0 y 1"))
         if self.door_spread_rule not in ("excel", "fridman"):
             raise ValueError(t("door_spread_rule debe ser 'excel' o 'fridman'"))
-        if self.rig_kind not in ("otter", "pair"):
-            raise ValueError(t("rig debe ser 'otter' o 'pair', no {rig!r}", rig=self.rig_kind))
+        if self.rig_kind not in multirig.RIGS:
+            raise ValueError(
+                t(
+                    "rig debe ser uno de {rigs}, no {rig!r}",
+                    rigs=", ".join(multirig.RIGS),
+                    rig=self.rig_kind,
+                )
+            )
+        for name in (
+            "boom_length_m",
+            "outrigger_bridle_m",
+            "outrigger_bridle_diameter_mm",
+            "clump_frontal_area_m2",
+            "beam_length_m",
+            "beam_diameter_m",
+            "beam_shoe_area_m2",
+            "beam_shoe_height_m",
+        ):
+            value = getattr(self, name)
+            if value is not None and value <= 0:
+                raise ValueError(t("{name} debe ser positivo", name=name))
+        for name in ("clump_weight_kg", "beam_weight_kg"):
+            value = getattr(self, name)
+            if value is not None and value < 0:
+                raise ValueError(t("{name} no puede ser negativo", name=name))
+        if self.boom_angle_deg is not None and not 0.0 <= self.boom_angle_deg < 90.0:
+            raise ValueError(t("boom_angle_deg debe estar entre 0 y 90°"))
+        if self.beam_count is not None and self.beam_count not in (1, 2):
+            raise ValueError(t("beam_count debe ser 1 o 2"))
         if self.pair_wing_spread_m is not None and self.pair_wing_spread_m <= 0:
             raise ValueError(t("pair_wing_spread_m debe ser positivo"))
         if self.door.area_m2 is None or self.door.length_m is None:
@@ -363,6 +406,68 @@ class DesignCase:
     def is_pair(self) -> bool:
         """Si el aparejo es de pareja."""
         return self.rig_kind == "pair"
+
+    @property
+    def is_beam(self) -> bool:
+        """Si el arte es de vara (Fase 19.5): sin portones, la vara fija la abertura."""
+        return self.rig_kind == "beam"
+
+    @property
+    def is_multi(self) -> bool:
+        """Si el aparejo es de tangones, gemelo o vara (:class:`RigStage`, Fase 19.5)."""
+        return self.rig_kind in multirig.MULTI_RIGS
+
+    @property
+    def n_nets(self) -> int:
+        """Redes que remolca el buque: 2 con tangones o gemelo, una por vara, 1 si no."""
+        if self.rig_kind in ("outrigger", "twin"):
+            return 2
+        if self.is_beam:
+            return int(self.beam_count or multirig.BEAMS_PER_VESSEL)
+        return 1
+
+    @property
+    def power_kw(self) -> float:
+        """Potencia del motor [kW] (``engine_kw`` del buque o BHP·0,7457)."""
+        return float(self.vessel.engine_kw or self.vessel.bhp * 0.7457)
+
+    @property
+    def beam_metier(self) -> str:
+        """Métier de la vara de Eigaard et al. (2016): ``CRU`` (crustáceos) o ``DMF``."""
+        sp = self.net.species
+        crust = multirig.is_crustacean(
+            self.net.target_species,
+            None if sp is None else sp.name,
+            None if sp is None else sp.scientific_name,
+        )
+        return "CRU" if crust else "DMF"
+
+    @property
+    def beam_class(self) -> str:
+        """Clase de buque de C056/20 por la potencia: ``small`` (≤ 221 kW) o ``large``."""
+        return multirig.beam_class(self.power_kw)
+
+    @property
+    def beam_length(self) -> float:
+        """Largo de cada vara [m]: el del caso o el ancho total de Eigaard et al. / varas."""
+        if self.beam_length_m is not None:
+            return float(self.beam_length_m)
+        total = multirig.beam_width_total_m(self.power_kw, self.beam_metier)
+        return total / self.n_nets
+
+    @property
+    def boom_length(self) -> float | None:
+        """Largo del tangón [m]: el del caso, 24 pies (FL 470) con tangones; sin dato en la vara."""
+        if self.boom_length_m is not None:
+            return float(self.boom_length_m)
+        return multirig.BOOM_LENGTH_M if self.rig_kind == "outrigger" else None
+
+    @property
+    def boom_angle(self) -> float:
+        """Ángulo del tangón [°]: el del caso, 20° (FL 470) o 30° en la vara (Verhoest y Maton)."""
+        if self.boom_angle_deg is not None:
+            return float(self.boom_angle_deg)
+        return multirig.BEAM_BOOM_ANGLE_DEG if self.is_beam else multirig.BOOM_ANGLE_DEG
 
     @property
     def working_depth_m(self) -> float:
@@ -692,6 +797,56 @@ class PerformanceStage:
 
 
 @dataclass(frozen=True)
+class RigStage:
+    """Tangones, gemelo o vara (Fase 19.5): planta del aparejo y resistencia de todo el arte.
+
+    Las etapas del libro calculan **una** red con su par de portones (``doors.spread_m`` es la
+    separación de los puntos de remolque de esa red: sus dos portones con tangones, portón y muerto
+    en el gemelo, los extremos de la vara en la vara). Esta etapa suma las redes, los portones, los
+    cables, la tijera, el muerto o los componentes de la vara (todo en kgf):
+
+    * ``per_net``: una red con su parte del aparejo (RN + boyas + portones + un cable + tijera o
+      medio muerto; en la vara RN + vara, patines, tren, cadenas y un cable);
+    * ``warp_load``: lo que remolca cada grupo de cables (una red por cable con tangones y varas;
+      todo el arte en el gemelo, como el libro con sus dos cables);
+    * ``demand``: ``n_nets·per_net`` más el rozamiento con el fondo, frente al tiro del buque.
+    """
+
+    kind: str
+    n_nets: int
+    n_doors: int
+    n_warps: int
+    net_spread_m: float
+    door_spread_total_m: float
+    swept_width_m: float
+    vertical_opening_m: float
+    per_net: Pair[FloatArray]
+    warp_load: Pair[FloatArray]
+    warp_drag_kgf: FloatArray
+    doors_drag_kgf: FloatArray
+    friction_kgf: float
+    demand: Pair[FloatArray]
+    layout: multirig.OutriggerLayout | None = None
+    boom_length_m: float | None = None
+    boom_angle_deg: float | None = None
+    bridle_m: float | None = None
+    bridle_diameter_mm: float | None = None
+    bridle_drag_kgf: FloatArray | None = None
+    clump_weight_kg: float | None = None
+    clump_frontal_area_m2: float | None = None
+    clump_drag_kgf: FloatArray | None = None
+    beam: multirig.BeamDrag | None = None
+    watson_door_area_m2: tuple[float, float] | None = None
+    watson_spread_m: tuple[float, float] | None = None
+    #: Valores por defecto usados y su fuente (también van a las notas de la corrida).
+    sources: tuple[str, ...] = ()
+
+    def to_dict(self) -> dict[str, Any]:
+        """Representación serializable."""
+        return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
+
+
+@dataclass(frozen=True)
 class DesignResult:
     """Resultado de :func:`run`: un dataclass por etapa más las notas de la corrida."""
 
@@ -709,16 +864,23 @@ class DesignResult:
     warps: WarpStage
     performance: PerformanceStage
     notes: list[str] = field(default_factory=list)
+    #: Tangones, gemelo o vara (Fase 19.5); ``None`` con portones o pareja.
+    multirig: RigStage | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable en JSON (arrays → listas).
 
         Si el caso no trae red modificada (``case.net_modified is None``) cada :class:`Pair`
         se serializa como ``{"std": …, "mod": None}``: la columna modificada sería una copia
-        fantasma de la estándar. :meth:`summary` no cambia (sólo usa la estándar).
+        fantasma de la estándar. :meth:`summary` no cambia (sólo usa la estándar). ``multirig``
+        sólo aparece con tangones, gemelo o vara.
         """
         with _serialising_mod(self.case.net_modified is not None):
-            return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
+            return {
+                f.name: _serialise(getattr(self, f.name))
+                for f in fields(self)
+                if not (f.name == "multirig" and self.multirig is None)
+            }
 
     def summary(self) -> dict[str, float | str | None]:
         """Resumen 'Dimensiones de la Red'!F45:F71 más RN, ROB, boyas, lastre, cable y velocidad."""
@@ -784,6 +946,26 @@ class DesignResult:
             ].max_speed_kn
         if self.warps.winch is not None:
             out["winch_drum_required_m"] = self.warps.winch.drum_required_m
+        mr = self.multirig
+        if mr is not None:  # Fase 19.5: tangones, gemelo o vara
+            out["rig"] = mr.kind
+            out["n_nets"] = mr.n_nets
+            out["net_spread_m"] = mr.net_spread_m
+            out["door_spread_total_m"] = mr.door_spread_total_m
+            out["swept_width_m"] = mr.swept_width_m
+            if mr.kind == "beam":
+                out["vertical_opening_m"] = mr.vertical_opening_m
+                out["beam_length_m"] = mr.net_spread_m
+            if mr.layout is not None:
+                out["boom_tip_offset_m"] = mr.layout.tip_offset_m
+                out["nets_gap_m"] = mr.layout.gap_m
+            if mr.clump_weight_kg is not None:
+                out["clump_weight_kg"] = mr.clump_weight_kg
+            for v in case.report_speeds_kn:
+                i = case.speed_index(v)
+                tag = f"{v:g}".replace(".", "_")
+                out[f"net_total_{tag}kn_kgf"] = float(mr.per_net.std[i])
+                out[f"total_drag_{tag}kn_kgf"] = float(mr.demand.std[i])
         return out
 
 
@@ -899,8 +1081,9 @@ def _stage_rigging(case: DesignCase, dimensions: Pair[NetDimensions]) -> Rigging
         deep_factor=case.warp_deep_factor,
     )
     assert case.door.length_m is not None
-    # En la pareja no hay portón: el cable se une a las patentes sin pie de gallo.
-    door_length = 0.0 if case.is_pair else case.door.length_m
+    # En la pareja y en la vara no hay portón: el cable se une a las patentes (o a la vara) sin
+    # pie de gallo.
+    door_length = 0.0 if case.is_pair or case.is_beam else case.door.length_m
     crowfoot = rigging.crowfoot_m(door_length, case.crowfoot_extension_m)  # Port!E97:E99
     return RiggingGeometry(
         towing=towing,
@@ -984,6 +1167,8 @@ def _stage_doors(
     warp_m = rig.towing.warp_m  # Port!D9 = Mec!E177
     if case.is_pair:
         spread = pair_towing_spread_m(case, rig)
+    elif case.is_beam:
+        spread = case.beam_length  # la vara fija la separación de las puntas de ala
     elif case.door_spread_rule == "fridman":
         spread = fridman_door_spread_m(case, drag, rig, polar)
     else:
@@ -1018,8 +1203,9 @@ def _stage_doors(
     )  # D252:D260
     cop = rigging.centre_of_pressure_m(door.length_m, case.door_attack_angle_deg)  # C266:C270
     moments = rigging.moment_balance(force, drag.rn.std, cop.d_m, case.sweep_lever_m)  # G281:H289
-    if case.is_pair:
-        # Pareja: no hay portones; sus fuerzas, su arrastre y su superficie requerida son nulos.
+    if case.is_pair or case.is_beam:
+        # Pareja o vara: no hay portones; sus fuerzas, su arrastre y su superficie requerida son
+        # nulos.
         zero = 0.0 * v_ms
         forces = rigging.door_forces_kgf(door.area_m2, 0.0, 0.0, v_ms)
         areas, force = zero, zero
@@ -1310,9 +1496,10 @@ def _stage_spread(
         d_std.total_length_m, case.working_u2, d_std.cut_angle_deg
     )  # L233
     ah = rigging.horizontal_opening_m(cut, working, geometric, _arr(table.dpa_std_m))  # Dim!F61
-    if case.is_pair:
-        # Sin portones no hay DPA de Fridman: la abertura la fija la separación de la pareja.
-        ah = pair_wing_spread_m(case)
+    if case.is_pair or case.is_beam:
+        # Sin portones no hay DPA de Fridman: la abertura la fija la separación de la pareja o el
+        # largo de la vara.
+        ah = pair_wing_spread_m(case) if case.is_pair else case.beam_length
         const = ah + 0.0 * case.speeds_ms
         fridman = replace(fridman, dpa_std_m=const, dpa_mod_m=const)
     dpa_over_l = working / d_std.headrope_m  # O265 = O264/O260, O264 = L225
@@ -1579,6 +1766,7 @@ def _warp_stretch(
     loads: WarpLoads,
     selection: WarpSelection,
     warp_m: float,
+    n_warps: int = 2,
 ) -> WarpStretch:
     """Estiramiento elástico del cable elegido (Fase 19.1): ΔL = T·L/EA a la velocidad de diseño.
 
@@ -1603,7 +1791,25 @@ def _warp_stretch(
         core = wire_core(None, selection.construction)
         ea_n, kind = wire_rope_ea_n(selection.diameter_mm, core), "derived"
     alpha = rigging.warp_attack_angle_deg(angles.declination_deg, angles.divergence_deg)
-    return rigging.warp_stretch(loads, selection, warp_m, alpha, ea_n, kind, core)
+    return rigging.warp_stretch(loads, selection, warp_m, alpha, ea_n, kind, core, n_warps)
+
+
+def _friction_parts(case: DesignCase, ballast: BallastStage) -> tuple[float, float, float]:
+    """(tren de una red, un portón, μ de las zapatas) del rozamiento con el fondo [kgf].
+
+    Tren: μ del tren por el peso en el agua de burlón y lastre (máximo, acero); portón: μ de las
+    zapatas por su peso en el agua. Ceros si el caso no indica ``seabed`` o la red es pelágica.
+    """
+    if case.seabed is None or case.net.family == "pelagic":
+        return 0.0, 0.0, 0.0
+    sb = rigging.seabed(case.seabed)
+    dist = ballast.distribution_max
+    steel = 1.0 - 1024.0 / 7850.0
+    ballast_water = (dist.wings_kg + dist.bosom_kg + dist.adjust_kg) * steel
+    gear = sb.mu_gear.nominal * (ballast.footrope_weight_water_kgf + ballast_water)
+    door = case.door
+    door_water = door.weight_water_kg or (door.weight_air_kg or 0.0) * 0.6
+    return float(gear), float(sb.mu_door.nominal * door_water), float(sb.mu_door.nominal)
 
 
 def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
@@ -1612,19 +1818,383 @@ def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
     Es μ del tren por el peso en el agua de burlón y lastre (máximo, acero) más μ de las zapatas
     por el peso en el agua de los dos portones; 0 si el caso no indica ``seabed``. Es una cota
     simple (todo el peso apoyado): el simulador con portones acoplados reparte la reacción con la
-    sustentación de las boyas y los cables.
+    sustentación de las boyas y los cables. Con tangones, gemelo o vara el rozamiento de todo el
+    arte está en :class:`RigStage` (``friction_kgf``).
     """
-    if case.seabed is None or case.net.family == "pelagic":
-        return 0.0
-    sb = rigging.seabed(case.seabed)
-    dist = ballast.distribution_max
-    steel = 1.0 - 1024.0 / 7850.0
-    ballast_water = (dist.wings_kg + dist.bosom_kg + dist.adjust_kg) * steel
-    gear = sb.mu_gear.nominal * (ballast.footrope_weight_water_kgf + ballast_water)
-    door = case.door
-    door_water = door.weight_water_kg or (door.weight_air_kg or 0.0) * 0.6
+    gear, door_one, _ = _friction_parts(case, ballast)
     doors = 0 if case.is_pair else DOORS_PER_RIG
-    return float(gear + doors * sb.mu_door.nominal * door_water)
+    return float(gear + doors * door_one)
+
+
+def _stage_rig(
+    case: DesignCase,
+    dimensions: Pair[NetDimensions],
+    geometry: Pair[NetGeometry],
+    drag: DragStage,
+    doors: DoorStage,
+    spread: SpreadStage,
+    floats: FloatStage,
+    ballast: BallastStage,
+    warps: WarpStage,
+) -> RigStage:
+    """Tangones, gemelo o vara (Fase 19.5): ver :class:`RigStage`.
+
+    Las etapas del libro dan una red con su par de portones y dos cables; acá se cuentan las
+    piezas que tiene de verdad cada aparejo:
+
+    * **tangones**: dos portones y un cable por red, más la tijera (dos ramas por red);
+    * **gemelo**: un portón por red, el muerto central (medio por red) y un cable por red;
+    * **vara**: sin portones ni boyas (la lima va a la vara); vara, patines, tren y cadenas
+      espantadoras por vara (C056/20) y un cable por vara.
+    """
+    kind = case.rig_kind
+    n = case.n_nets
+    v_ms = case.speeds_ms
+    zero = 0.0 * v_ms
+    rn = drag.rn
+    rb = _arr(floats.drag_kgf)
+    door_one = _arr(doors.forces.drag_kgf)
+    rw_one = _arr(warps.drag_kgf) / 2.0  # la etapa del libro cuenta dos cables
+    gear, door_friction, mu_door = _friction_parts(case, ballast)
+    dims = dimensions.std
+    sources: list[str] = []
+    layout: multirig.OutriggerLayout | None = None
+    extra = {"bridle": None, "clump_w": None, "clump_a": None, "clump_d": None, "beam": None}
+    watson_area: tuple[float, float] | None = None
+    watson_spread: tuple[float, float] | None = None
+    vertical = float(spread.vertical.suzuki_m)
+    boom_l = case.boom_length
+    if kind in ("outrigger", "twin"):
+        watson_area = multirig.watson_door_area_m2(dims.headrope_m)
+        watson_spread = multirig.watson_spread_m(dims.headrope_m)
+    if kind == "outrigger":
+        n_doors, n_warps = 2 * n, n
+        bridle_m = case.outrigger_bridle_m or multirig.OUTRIGGER_BRIDLE_M
+        bridle_d = case.outrigger_bridle_diameter_mm or multirig.OUTRIGGER_BRIDLE_DIAMETER_MM
+        if case.outrigger_bridle_m is None:
+            sources.append(t("tijera de {m:g} m (INIDEP, Roth y Rubio 2022)", m=bridle_m))
+        if case.outrigger_bridle_diameter_mm is None:
+            sources.append(t("cable de la tijera de {d:g} mm (Roth y Rubio 2022)", d=bridle_d))
+        # Dos ramas de tijera por red, con el CD del cable de remolque.
+        bridle = _arr(rigging.warp_drag_kgf(warps.cd, bridle_d / 1000.0, bridle_m, v_ms, 2))
+        extra["bridle"] = (bridle_m, bridle_d, bridle)
+        per_extra = 2.0 * door_one + rw_one + bridle
+        assert boom_l is not None
+        if case.boom_length_m is None:
+            sources.append(t("tangón de 24 pies (7,32 m; Knake et al. 1958, FL 470)"))
+        if case.boom_angle_deg is None:
+            sources.append(t("tangón a 20° de la horizontal (FL 470)"))
+        layout = multirig.outrigger_layout(
+            doors.spread_m, boom_l, case.boom_angle, case.boom_heel_offset_m
+        )
+        net_spread = doors.spread_m
+        door_total = layout.swept_width_m
+        swept = layout.swept_width_m
+        friction = n * gear + n_doors * door_friction
+    elif kind == "twin":
+        n_doors, n_warps = 2, 2
+        clump_w = case.clump_weight_kg
+        if clump_w is None and case.door.weight_air_kg:
+            clump_w = multirig.clump_weight_kg(float(case.door.weight_air_kg))
+            sources.append(
+                t(
+                    "muerto de {kg:.0f} kg = 1,5 × el portón (Seafish, regla práctica)",
+                    kg=clump_w,
+                )
+            )
+        clump_a = case.clump_frontal_area_m2 or multirig.SLED_FRONTAL_M2
+        if case.clump_frontal_area_m2 is None:
+            sources.append(
+                t(
+                    "área frontal del muerto {a:.3f} m² del trineo de Bullis y Floyd (1972): "
+                    "32 × 8 pulgadas (supuesto)",
+                    a=clump_a,
+                )
+            )
+        clump_d = multirig.drag_kgf(multirig.CD_SLED, clump_a, v_ms)
+        extra.update(clump_w=clump_w, clump_a=clump_a, clump_d=clump_d)
+        per_extra = door_one + rw_one + 0.5 * clump_d
+        net_spread = doors.spread_m
+        door_total = 2.0 * doors.spread_m
+        swept = door_total
+        clump_friction = 0.0 if clump_w is None else mu_door * multirig.steel_in_water(clump_w)
+        friction = n * gear + n_doors * door_friction + clump_friction
+    else:  # vara
+        n_doors, n_warps = 0, n
+        cls = case.beam_class
+        data = multirig.BEAM_CLASSES[cls]
+        metier = case.beam_metier
+        ticklers = case.beam_ticklers if case.beam_ticklers is not None else metier == "DMF"
+        if case.beam_length_m is None:
+            sources.append(
+                t(
+                    "vara de {m:.2f} m: ancho total de Eigaard et al. (2016, TBB_{metier}) para "
+                    "{kw:.0f} kW repartido en {n} varas",
+                    m=case.beam_length,
+                    metier=metier,
+                    kw=case.power_kw,
+                    n=n,
+                )
+            )
+        if case.beam_count is None:
+            sources.append(t("dos varas por buque (Eigaard et al. 2016)"))
+        if case.beam_ticklers is None:
+            sources.append(
+                t("cadenas espantadoras: sí (peces)")
+                if ticklers
+                else t("cadenas espantadoras: no (crustáceos; Eigaard et al. 2016)")
+            )
+        if (
+            case.beam_diameter_m is None
+            or case.beam_shoe_area_m2 is None
+            or case.beam_shoe_height_m is None
+        ):
+            sources.append(
+                t(
+                    "vara, patines y cadenas de buques {cls} de C056/20 (Rijnsdorp et al. 2020, "
+                    "tablas 2, 8 y 9)",
+                    cls=t("chicos (≤ 221 kW)") if cls == "small" else t("grandes (> 221 kW)"),
+                )
+            )
+        beam = multirig.beam_drag(
+            v_ms,
+            length_m=case.beam_length,
+            diameter_m=case.beam_diameter_m or data.beam_diameter_m,
+            shoe_area_m2=case.beam_shoe_area_m2 or data.shoe_area_m2,
+            shoe_height_m=case.beam_shoe_height_m or data.shoe_height_m,
+            cls=cls,
+            ticklers=ticklers,
+            metier=metier,
+            twine_area_m2=float(geometry.std.solid_surface_m2),
+        )
+        extra["beam"] = beam
+        rb = zero  # la lima va a la vara: sin boyas
+        per_extra = beam.total_kgf + rw_one
+        net_spread = case.beam_length
+        door_total = 0.0
+        swept = n * case.beam_length
+        vertical = beam.shoe_height_m
+        if boom_l is not None and n == 2:
+            layout = multirig.outrigger_layout(
+                net_spread, boom_l, case.boom_angle, case.boom_heel_offset_m
+            )
+        foot_friction = gear
+        if case.seabed is not None and case.net.family != "pelagic":
+            sb = rigging.seabed(case.seabed)
+            foot_friction = sb.mu_gear.nominal * ballast.footrope_weight_water_kgf
+        beam_friction = (
+            0.0
+            if case.beam_weight_kg is None
+            else mu_door * multirig.steel_in_water(case.beam_weight_kg)
+        )
+        friction = n * (foot_friction + beam_friction)
+    per_net = Pair(rn.std + rb + per_extra, rn.mod + rb + per_extra)
+    system = Pair(n * per_net.std, n * per_net.mod)
+    demand = Pair(system.std + friction, system.mod + friction)
+    warp_load = system if kind == "twin" else per_net
+    bridle = extra["bridle"]
+    return RigStage(
+        kind=kind,
+        n_nets=n,
+        n_doors=n_doors,
+        n_warps=n_warps,
+        net_spread_m=float(net_spread),
+        door_spread_total_m=float(door_total),
+        swept_width_m=float(swept),
+        vertical_opening_m=float(vertical),
+        per_net=per_net,
+        warp_load=warp_load,
+        warp_drag_kgf=n_warps * rw_one,
+        doors_drag_kgf=n_doors * door_one,
+        friction_kgf=float(friction),
+        demand=demand,
+        layout=layout,
+        boom_length_m=boom_l,
+        boom_angle_deg=case.boom_angle if boom_l is not None else None,
+        bridle_m=None if bridle is None else bridle[0],
+        bridle_diameter_mm=None if bridle is None else bridle[1],
+        bridle_drag_kgf=None if bridle is None else n * bridle[2],
+        clump_weight_kg=extra["clump_w"],
+        clump_frontal_area_m2=extra["clump_a"],
+        clump_drag_kgf=extra["clump_d"],
+        beam=extra["beam"],
+        watson_door_area_m2=watson_area,
+        watson_spread_m=watson_spread,
+        sources=tuple(sources),
+    )
+
+
+def _rig_warps(case: DesignCase, warps: WarpStage, mr: RigStage) -> WarpStage:
+    """Cables de un aparejo de tangones, gemelo o vara (Fase 19.5).
+
+    El libro dimensiona cada cable con la resistencia de todo lo que remolca el par de cables
+    (Rem!E267). Con tangones o varas cada cable remolca una red; en el gemelo, los dos cables
+    remolcan todo el arte. La cantidad a comprar es un largo filado por cable más la reserva.
+    """
+    loads = rigging.working_load_and_breaking_load(
+        mr.warp_load.std, case.speeds, case.warp_design_speed_kn, case.warp_safety_factor
+    )
+    selection = rigging.select_warp(
+        warps.diameter_mm, loads.min_breaking_load_kgf, case.compat, items=_case_warps(case)
+    )
+    per_group = 2 if mr.kind == "twin" else 1
+    return replace(
+        warps,
+        loads=loads,
+        selection=selection,
+        quantity_m=mr.n_warps * warps.warp_m + case.warp_spare_fraction * warps.warp_m,
+        stretch=_warp_stretch(warps.angles, loads, selection, warps.warp_m, per_group),
+    )
+
+
+def _rig_notes(case: DesignCase, result: RigStage, doors: DoorStage) -> list[str]:
+    """Notas de la corrida con tangones, gemelo o vara (Fase 19.5)."""
+    label = {
+        "outrigger": t("tangones"),
+        "twin": t("gemelo"),
+        "beam": t("vara"),
+    }[result.kind]
+    out = [
+        t(
+            "multirig: aparejo de {label} con {n} redes; ancho barrido {swept:.1f} m; la "
+            "resistencia total suma las redes, {doors} portones y {warps} cables",
+            label=label,
+            n=result.n_nets,
+            swept=result.swept_width_m,
+            doors=result.n_doors,
+            warps=result.n_warps,
+        )
+    ]
+    out.extend(f"multirig: {s}" for s in result.sources)
+    lay = result.layout
+    if lay is not None and lay.overlap:
+        out.append(
+            t(
+                "multirig_overlap: con tangones de {length:.2f} m a {angle:g}° las redes de "
+                "{spread:.1f} m de DP se superponen {gap:.1f} m; hace falta un tangón de al "
+                "menos {need:.2f} m o redes desfasadas (FL 470: una red 25 brazas más a popa)",
+                length=result.boom_length_m or 0.0,
+                angle=result.boom_angle_deg or 0.0,
+                spread=lay.net_spread_m,
+                gap=-lay.gap_m,
+                need=multirig.boom_length_without_overlap_m(
+                    lay.net_spread_m, result.boom_angle_deg or 0.0, case.boom_heel_offset_m
+                ),
+            )
+        )
+    if result.watson_door_area_m2 is not None and case.door.area_m2 is not None:
+        lo, hi = result.watson_door_area_m2
+        if not lo <= case.door.area_m2 <= hi:
+            out.append(
+                t(
+                    "watson_door_area: portón de {area:.2f} m² fuera del rango de Watson et al. "
+                    "(1984) para esta relinga: {lo:.2f}–{hi:.2f} m² (70–80 pulg²/pie, abertura "
+                    "70–75 % de la relinga)",
+                    area=case.door.area_m2,
+                    lo=lo,
+                    hi=hi,
+                )
+            )
+    if result.kind == "twin":
+        out.append(
+            t(
+                "twin_clump: cada portón abre una red contra el muerto central (sin "
+                "sustentación); la separación por red es portón–muerto ({spread:.1f} m)",
+                spread=doors.spread_m,
+            )
+        )
+        if result.clump_weight_kg is None:
+            out.append(
+                t(
+                    "twin_clump_weight: el portón no trae peso; indique clump_weight_kg para el "
+                    "rozamiento del muerto"
+                )
+            )
+    if result.kind == "outrigger":
+        out.append(
+            t(
+                "outrigger_warp: un cable por red desde la punta del tangón con tijera a los dos "
+                "portones (FL 470); la geometría de cada red se calcula como un arrastre con "
+                "portones del libro"
+            )
+        )
+    if result.kind == "beam":
+        beam = result.beam
+        assert beam is not None
+        out.append(
+            t(
+                "beam_trawl: vara de {length:.2f} m (abertura horizontal) y patines de "
+                "{height:.2f} m (abertura vertical); sin portones ni boyas; la red se calcula con "
+                "la RN de diseño (Aberdeen), equivalente a la ec. 10 de C056/20",
+                length=result.net_spread_m,
+                height=result.vertical_opening_m,
+            )
+        )
+        if case.beam_weight_kg is None and case.seabed is not None:
+            out.append(
+                t(
+                    "beam_weight: sin peso de la vara y los patines (beam_weight_kg) no se "
+                    "calcula su rozamiento con el fondo"
+                )
+            )
+    return out
+
+
+def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
+    """Límites de la Res. CFP 7/2018 para la flota langostinera con tangones (Fase 19.5).
+
+    Art. 3 c: tangoneros nuevos de hasta 40 m de eslora y 2000 hp; art. 4: portones y abertura
+    vertical de la boca de la red de hasta 150 cm. Sólo con tangones y un buque tangonero o una
+    red de langostino.
+    """
+    if case.rig_kind != "outrigger":
+        return []
+    sp = case.net.species
+    texts = (
+        case.net.target_species,
+        None if sp is None else sp.name,
+        None if sp is None else sp.scientific_name,
+    )
+    hay = " ".join(x for x in texts if x).lower()
+    tangonero = case.vessel.vessel_type is not None and case.vessel.vessel_type.value == (
+        "tangonero"
+    )
+    if not (tangonero or "langostino" in hay or "pleoticus" in hay):
+        return []
+    out: list[str] = []
+    limit = 1.5
+    h = case.door.height_m
+    if h is not None:
+        ok = h <= limit
+        out.append(
+            t(
+                "cfp_res7_2018: alto del portón {h:.2f} m {verdict} el máximo de 1,50 m (art. 4)",
+                h=h,
+                verdict=t("dentro de") if ok else t("supera"),
+            )
+        )
+    av = float(result.spread.vertical.suzuki_m)
+    out.append(
+        t(
+            "cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki) {verdict} el máximo de "
+            "1,50 m (art. 4)",
+            av=av,
+            verdict=t("dentro de") if av <= limit else t("supera"),
+        )
+    )
+    loa = case.vessel.loa_m or case.vessel.length_m
+    if loa is not None and loa > 40.0:
+        out.append(
+            t("cfp_res7_2018: eslora {loa:.1f} m mayor que 40 m (art. 3 c)", loa=float(loa))
+        )
+    if case.vessel.bhp > 2000.0:
+        out.append(
+            t(
+                "cfp_res7_2018: potencia {hp:.0f} hp mayor que 2000 hp (art. 3 c)",
+                hp=case.vessel.bhp,
+            )
+        )
+    return out
 
 
 #: Clave de las ventanas de velocidad con el tiro por la hélice (Fase 19.4).
@@ -1632,18 +2202,27 @@ PROPELLER_MODEL_KEY = "propeller_model"
 
 
 def _stage_performance(
-    case: DesignCase, power: PowerStage, warps: WarpStage, ballast: BallastStage
+    case: DesignCase,
+    power: PowerStage,
+    warps: WarpStage,
+    ballast: BallastStage,
+    multi: RigStage | None = None,
 ) -> PerformanceStage:
     """FT de Fridman por propulsor frente a la resistencia total (con ROB en modo corregido).
 
     Con ``case.seabed`` la demanda suma el rozamiento con el fondo (:func:`seabed_friction_kgf`).
+    Con tangones, gemelo o vara la demanda es la de todo el arte (:class:`RigStage`).
     """
-    friction = seabed_friction_kgf(case, ballast)
-    demand = (
-        warps.total
-        if friction == 0.0
-        else Pair(warps.total.std + friction, warps.total.mod + friction)
-    )
+    if multi is not None:
+        friction = multi.friction_kgf
+        demand = multi.demand
+    else:
+        friction = seabed_friction_kgf(case, ballast)
+        demand = (
+            warps.total
+            if friction == 0.0
+            else Pair(warps.total.std + friction, warps.total.mod + friction)
+        )
     windows: dict[str, SpeedWindow] = {}
     for prop in (PropellerType.FIXED_PITCH, PropellerType.VARIABLE_PITCH_NOZZLE):
         ft = _ft_of(power.fridman, prop)
@@ -1734,7 +2313,14 @@ def run(case: DesignCase) -> DesignResult:
     bridles = _stage_bridles(case, dimensions, rig, doors, spread)
     ballast = _stage_ballast(case, dimensions, floats)
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
-    performance = _stage_performance(case, power, warps, ballast)
+    multi: RigStage | None = None
+    if case.is_multi:  # Fase 19.5: tangones, gemelo o vara
+        multi = _stage_rig(
+            case, dimensions, geometry, drag, doors, spread, floats, ballast, warps
+        )
+        warps = _rig_warps(case, warps, multi)
+        notes.extend(_rig_notes(case, multi, doors))
+    performance = _stage_performance(case, power, warps, ballast, multi)
     winch = propulsion.winch_check(case, power, warps)  # Fase 19.4
     if winch is not None:
         warps = replace(warps, winch=winch)
@@ -1743,6 +2329,7 @@ def run(case: DesignCase) -> DesignResult:
     if (
         case.compat is Compat.CORRECTED
         and not case.is_pair
+        and not case.is_beam
         and rigging.polar_extrapolated(case.door, case.door_attack_angle_deg)
     ):
         notes.append(
@@ -1794,7 +2381,7 @@ def run(case: DesignCase) -> DesignResult:
                 tow=doors.spread_m,
             )
         )
-    if case.door_spread_rule == "fridman" and not case.is_pair:
+    if case.door_spread_rule == "fridman" and not case.is_pair and not case.is_beam:
         notes.append(
             t(
                 "door_spread_fridman: separación de portones {spread:.1f} m de la DPA de "
@@ -1812,7 +2399,7 @@ def run(case: DesignCase) -> DesignResult:
                 need=warps.loads.min_breaking_load_kgf / 1000,
             )
         )
-    return DesignResult(
+    result = DesignResult(
         case=case,
         geometry=geometry,
         dimensions=dimensions,
@@ -1827,7 +2414,10 @@ def run(case: DesignCase) -> DesignResult:
         warps=warps,
         performance=performance,
         notes=notes,
+        multirig=multi,
     )
+    notes.extend(_cfp_checks(case, result))
+    return result
 
 
 __all__ = [
@@ -1842,6 +2432,7 @@ __all__ = [
     "Pair",
     "PerformanceStage",
     "PowerStage",
+    "RigStage",
     "RiggingGeometry",
     "SpreadStage",
     "VerticalOpening",

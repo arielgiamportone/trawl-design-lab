@@ -13,6 +13,10 @@ del buque de 150 hp y el portón de la FAO A-3:
 * **Profundidad y patentes**: las de ``design`` (con su procedencia) o un valor por familia.
 * **Separación de portones**: de la DPA de Fridman con el portón del caso
   (``door_spread_rule="fridman"``); la regla «al metro» del libro vale para la A-3.
+* **Buque y portón del catálogo** (Fase 19.5): si ``design`` nombra un buque de la flota
+  (``vessel_id``) o un portón del catálogo de componentes (``door_id``), se usan esos, con la
+  razón en la procedencia de la red. El aparejo (``rig``) y sus parámetros (tangón, tijera,
+  muerto, vara) también salen de ``design`` cuando la fuente los da.
 
 Todo lo que no sale de la fuente queda en :attr:`CatalogCase.assumptions`.
 """
@@ -24,7 +28,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from trawlkit.i18n import t
-from trawlkit.io import Door, NetSpec, Vessel, load_doors, load_net, load_vessels
+from trawlkit.io import Door, NetSpec, Vessel, load_doors, load_fleet, load_net, load_vessels
 from trawlkit.model import DEFAULT_SPEEDS_KN, DesignCase
 
 #: Profundidad de trabajo por familia cuando la fuente no la da [m].
@@ -33,6 +37,21 @@ DEFAULT_DEPTH_M = {"bottom": 30.0, "semi_pelagic": 40.0, "pelagic": 60.0}
 REFERENCE_VESSEL_ID = "fao_a3_150hp"
 #: Portón de referencia (polar y proporciones): el plano de madera de la A-3.
 REFERENCE_DOOR_ID = "fao_flat_wood_a3"
+#: Parámetros del aparejo (Fase 19.5) que ``design`` puede traer de la fuente.
+RIG_DESIGN_KEYS: tuple[str, ...] = (
+    "boom_length_m",
+    "boom_angle_deg",
+    "outrigger_bridle_m",
+    "outrigger_bridle_diameter_mm",
+    "clump_weight_kg",
+    "clump_frontal_area_m2",
+    "beam_count",
+    "beam_length_m",
+    "beam_diameter_m",
+    "beam_shoe_area_m2",
+    "beam_shoe_height_m",
+    "beam_weight_kg",
+)
 
 
 @dataclass(frozen=True)
@@ -137,23 +156,54 @@ def catalog_case(
     notes: list[str] = []
     hp = design_hp(spec)
     length = design.get("vessel_length_m")
-    vessel = generic_vessel(hp, None if length is None else float(length))
-    if spec.vessel_hp is None:
-        notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
-    rule = t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
-    notes.append(
-        t(
-            "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "
-            "puntal {depth} m escalados del de 150 hp de la A-3 ({rule})",
-            hp=hp,
-            length=vessel.length_m,
-            beam=vessel.beam_m,
-            depth=vessel.depth_m,
-            rule=rule,
+    fleet = {v.id: v for v in load_fleet().vessels}
+    if design.get("vessel_id") in fleet:
+        vessel, filled = complete_vessel(fleet[str(design["vessel_id"])])
+        notes.append(
+            t(
+                "buque {name} de la flota ({hp:g} hp), el que indica la red",
+                name=vessel.name or vessel.id,
+                hp=vessel.bhp,
+            )
         )
-    )
+        notes.extend(filled)
+    else:
+        vessel = generic_vessel(hp, None if length is None else float(length))
+        if spec.vessel_hp is None:
+            notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
+        rule = (
+            t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
+        )
+        notes.append(
+            t(
+                "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "
+                "puntal {depth} m escalados del de 150 hp de la A-3 ({rule})",
+                hp=hp,
+                length=vessel.length_m,
+                beam=vessel.beam_m,
+                depth=vessel.depth_m,
+                rule=rule,
+            )
+        )
     rig = overrides.get("rig") or spec.rig or "otter"
-    if "door_length_m" in design and "door_height_m" in design:
+    from trawlkit.components import DoorItem, get_component
+
+    door_item = None
+    if design.get("door_id"):
+        try:
+            door_item = get_component("door", str(design["door_id"]))
+        except KeyError:
+            door_item = None
+    if isinstance(door_item, DoorItem):
+        door = door_item.to_door()
+        notes.append(
+            t(
+                "portón {name} del catálogo de componentes ({area:.2f} m²), el que indica la red",
+                name=door.name,
+                area=door.area_m2 or 0.0,
+            )
+        )
+    elif "door_length_m" in design and "door_height_m" in design:
         weight = design.get("door_weight_air_kg")
         door = plan_door(
             float(design["door_length_m"]),
@@ -174,7 +224,7 @@ def catalog_case(
 
         ref = _reference_door()
         door = scale_door(ref, float(ref.area_m2 or 1.805) * hp / 150.0)
-        if rig != "pair":
+        if rig not in ("pair", "beam"):
             notes.append(
                 t(
                     "el plano no da portón: el de la A-3 escalado a {area:.2f} m² "
@@ -184,6 +234,8 @@ def catalog_case(
             )
     if rig == "pair":
         notes.append(t("arrastre de pareja: el portón del caso no se usa"))
+    if rig == "beam":
+        notes.append(t("arrastre de vara: el portón del caso no se usa"))
     depth = design.get("depth_m")
     if depth is None:
         depth = DEFAULT_DEPTH_M.get(spec.family or "bottom", 30.0)
@@ -199,6 +251,9 @@ def catalog_case(
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}
     if design.get("sweeps_m") is not None:
         kwargs["sweeps_m"] = float(design["sweeps_m"])
+    for key in RIG_DESIGN_KEYS:
+        if design.get(key) is not None:
+            kwargs[key] = int(design[key]) if key == "beam_count" else float(design[key])
     kwargs.update(overrides)
     case = DesignCase(
         net=spec,
@@ -213,6 +268,7 @@ def catalog_case(
 
 __all__ = [
     "DEFAULT_DEPTH_M",
+    "RIG_DESIGN_KEYS",
     "CatalogCase",
     "catalog_case",
     "design_hp",

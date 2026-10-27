@@ -533,6 +533,7 @@ def _simulate(_m: re.Match[str], _q_: Query, body: Any) -> Any:
         include_geometry=req.include_geometry,
         mu=req.mu,
         scenario=_scenario(req),
+        params=req.params or None,
     )
     return _dump(sc.SimulateResponse, out)
 

@@ -11,6 +11,12 @@ central, redes de pareja, redes de 4 paneles (dorso, vientre y dos costados).
   la boca al copo, en orden), las mallas de cada costado se reparten mitad al dorso y mitad al
   vientre. Conserva la circunferencia, la superficie de paño y el largo, que es lo que usan el
   motor y el simulador; pierde las dos costuras extra de los costados.
+* Si los costados no coinciden estación por estación con el dorso (planos de DynamiT en los que
+  un costado de un solo mallero acompaña a paños de dos malleros, o que no llega al copo; Fase
+  19.5), :func:`equivalent_two_panel` los reparte **por largo estirado**: el costado termina
+  donde empieza el copo y cada paño central recibe, en su borde de boca y de bolsa, el ancho
+  estirado del costado en esa posición expresado en mallas de su mallero (aproximación: conserva
+  la circunferencia estirada, no la superficie exacta del costado).
 """
 
 from __future__ import annotations
@@ -83,23 +89,23 @@ def equivalent_two_panel(spec: NetSpec) -> NetSpec:
     panels = list(spec.panels)
     sides = _stations(panels, Plane.SIDE)
     extra: dict[str, tuple[int, int, list[str]]] = {}
+    by_length = False
     for plane in (Plane.UPPER, Plane.LOWER):
         chain = _stations(panels, plane)
-        if len(sides) > len(chain):
-            raise ValueError(
-                f"hay {len(sides)} costados y sólo {len(chain)} paños centrales en "
-                f"{plane.value}: no se puede armar la red equivalente"
-            )
-        for side, p in zip(reversed(sides), reversed(chain), strict=False):
-            if side.meshes_depth != p.meshes_depth or abs(side.mesh_mm - p.mesh_mm) > 1e-9:
-                raise ValueError(
-                    f"el costado {side.id} ({side.meshes_depth} mallas de {side.mesh_mm:g} mm) "
-                    f"no coincide con su estación {p.id} ({p.meshes_depth} mallas de "
-                    f"{p.mesh_mm:g} mm)"
+        if side_stations_match(sides, chain):
+            for side, p in zip(reversed(sides), reversed(chain), strict=False):
+                top, bottom, ids = extra.get(p.id, (0, 0, []))
+                # Un paño que cubre las dos caras recibe un costado por cara.
+                extra[p.id] = (
+                    top + side.meshes_top,
+                    bottom + side.meshes_bottom,
+                    [*ids, side.id],
                 )
-            top, bottom, ids = extra.get(p.id, (0, 0, []))
-            # Un paño que cubre las dos caras recibe un costado por cara.
-            extra[p.id] = (top + side.meshes_top, bottom + side.meshes_bottom, [*ids, side.id])
+            continue
+        by_length = True
+        for pid, (top, bottom, ids) in _sides_by_length(sides, chain, plane).items():
+            t0, b0, ids0 = extra.get(pid, (0, 0, []))
+            extra[pid] = (t0 + top, b0 + bottom, [*ids0, *ids])
     out: list[Panel] = []
     for p in panels:
         if Plane.SIDE in panel_planes(p):
@@ -120,4 +126,75 @@ def equivalent_two_panel(spec: NetSpec) -> NetSpec:
         "se suman al dorso y al vientre de cada estación (misma circunferencia, superficie y "
         "largo; sin las costuras de los costados).",
     ]
+    if by_length:
+        notes.append(
+            "Los costados no coinciden estación por estación con el dorso y el vientre: se "
+            "reparten por largo estirado (el costado termina donde empieza el copo; su ancho "
+            "estirado pasa a mallas del paño central de cada tramo)."
+        )
     return spec.model_copy(update={"panels": out, "notes": notes})
+
+
+#: Diferencia admitida entre el largo estirado de los costados y el del cuerpo (sin copo) para
+#: repartirlos por largo (los costados pueden empezar junto a las alas).
+SIDE_LENGTH_TOL = 0.25
+
+
+def side_stations_match(sides: list[Panel], chain: list[Panel]) -> bool:
+    """Si los costados se cosen estación por estación (mismo alto y mallero desde el copo)."""
+    if len(sides) > len(chain):
+        return False
+    return all(
+        s.meshes_depth == p.meshes_depth and abs(s.mesh_mm - p.mesh_mm) <= 1e-9
+        for s, p in zip(reversed(sides), reversed(chain), strict=False)
+    )
+
+
+def _sides_by_length(
+    sides: list[Panel], chain: list[Panel], plane: Plane
+) -> dict[str, tuple[int, int, list[str]]]:
+    """Mallas de costado para cada paño central del cuerpo, por largo estirado (ver el módulo).
+
+    ``ValueError`` si el largo de los costados difiere del cuerpo (sin copo) en más de
+    :data:`SIDE_LENGTH_TOL`.
+    """
+    body = [p for p in chain if p.section is not Section.CODEND]
+    l_body = sum(p.meshes_depth * p.mesh_mm for p in body)
+    l_side = sum(s.meshes_depth * s.mesh_mm for s in sides)
+    if not body or not l_side or abs(l_body - l_side) > SIDE_LENGTH_TOL * l_side:
+        raise ValueError(
+            f"los costados ({l_side / 1000:.2f} m estirados) no se pueden repartir sobre el "
+            f"cuerpo de {plane.value} ({l_body / 1000:.2f} m): no se puede armar la red "
+            "equivalente"
+        )
+    start = l_body - l_side  # posición del comienzo de los costados desde la boca [mm]
+    spans: list[tuple[float, float, Panel]] = []
+    x = start
+    for s in sides:
+        length = s.meshes_depth * s.mesh_mm
+        spans.append((x, x + length, s))
+        x += length
+
+    def width_mm(pos: float) -> tuple[float, str | None]:
+        for a, b, s in spans:
+            if a - 1e-6 <= pos <= b + 1e-6:
+                f = 0.0 if b <= a else min(max((pos - a) / (b - a), 0.0), 1.0)
+                meshes = s.meshes_top + f * (s.meshes_bottom - s.meshes_top)
+                return meshes * s.mesh_mm, s.id
+        return 0.0, None
+
+    out: dict[str, tuple[int, int, list[str]]] = {}
+    pos = 0.0
+    for p in body:
+        end = pos + p.meshes_depth * p.mesh_mm
+        w_top, id_top = width_mm(pos)
+        w_bot, id_bot = width_mm(end)
+        ids = sorted({i for i in (id_top, id_bot) if i is not None})
+        if ids:
+            out[p.id] = (
+                int(round(w_top / p.mesh_mm)),
+                int(round(w_bot / p.mesh_mm)),
+                ids,
+            )
+        pos = end
+    return out

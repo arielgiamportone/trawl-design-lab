@@ -370,3 +370,8 @@ NETS: list[dict[str, Any]] = [
 from tools.catalog.transcriptions_123 import NETS_123  # noqa: E402
 
 NETS += NETS_123
+
+# Fase 19.5: redes tangoneras del INIDEP (ITO 043/2022) y red de vara de la SEAFDEC (2016).
+from tools.catalog.transcriptions_195 import NETS_195  # noqa: E402
+
+NETS += NETS_195

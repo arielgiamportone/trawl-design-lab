@@ -13,6 +13,10 @@ armar el arte, con cantidades y, si hay precios, el costo:
 * **Grilletes** [unidades] (Fase 19.2): cantidad supuesta por armado (:data:`SHACKLES_PER_SIDE`)
   y el grillete más chico del catálogo de componentes con carga de trabajo (WLL) no menor que la
   carga de trabajo del arte (Rem!E267).
+* **Tangones, gemelo y vara** (Fase 19.5): paño, relingas, bridas, patentes, boyas y lastre se
+  multiplican por las redes del aparejo; los portones son dos por red con tangones y dos en el
+  gemelo (más el muerto central); con tangones se agregan las tijeras y en la vara las varas, los
+  patines y las cadenas espantadoras (sin portones, boyas, bridas ni lastre).
 
 Cada línea dice qué componente se usa (id del catálogo de componentes cuando lo hay) y su
 precio: el del caso (``prices``, cargado por el usuario), el del componente (``price``) o ninguno.
@@ -38,7 +42,7 @@ Unit = str
 #: cantidad): con portones, cable–portón, portón–patente, patente–malletas y las dos malletas a
 #: la punta del ala (relinga superior e inferior) = 5; en la pareja, sin portones ni patentes,
 #: cable–malletas y las dos malletas al ala = 3. Las uniones de la red (copo, paños) no cuentan.
-SHACKLES_PER_SIDE: dict[str, int] = {"otter": 5, "pair": 3}
+SHACKLES_PER_SIDE: dict[str, int] = {"otter": 5, "pair": 3, "outrigger": 5, "twin": 5, "beam": 3}
 
 
 @dataclass(frozen=True)
@@ -139,6 +143,10 @@ def bill_of_materials(
     }
     dims = result.dimensions.std
     lines: list[BomLine] = []
+    mr = result.multirig
+    nets = 1 if mr is None else mr.n_nets
+    beam = mr is not None and mr.kind == "beam"
+    per = "" if nets == 1 else t(" ({n} redes)", n=nets)
 
     def add(
         key: str,
@@ -182,8 +190,8 @@ def bill_of_materials(
     for mat, kg in by_mat.items():
         add(
             f"netting_{mat.lower()}",
-            t("Paño de {material}", material=mat),
-            kg,
+            t("Paño de {material}", material=mat) + per,
+            nets * kg,
             "kg",
             "twine" if twine else None,
             twine,
@@ -193,23 +201,38 @@ def bill_of_materials(
     # Relingas.
     head = result.floats.headrope_rope
     foot = result.ballast.footrope_rope
-    add("headrope", t("Lima (relinga superior)"), dims.headrope_m, "m", "rope", head.id)
-    add("footrope", t("Burlón (relinga inferior)"), dims.footrope_m, "m", "rope", foot.id)
+    add(
+        "headrope", t("Lima (relinga superior)") + per, nets * dims.headrope_m, "m", "rope", head.id
+    )
+    add(
+        "footrope", t("Burlón (relinga inferior)") + per, nets * dims.footrope_m, "m", "rope", foot.id
+    )
 
-    # Bridas y patentes (dos lados).
+    # Bridas y patentes (dos lados de cada red; la vara no las lleva).
     br = result.bridles
     wire_id = warp_id or result.warps.selection.id
     bridles_m = 2.0 * (br.lengths.upper_m + br.lengths.lower_m)
-    add(
-        "bridles",
-        t("Malletas (superior e inferior, dos lados)"),
-        bridles_m,
-        "m",
-        "wire",
-        wire_id,
-    )
-    if not case.is_pair and br.sweeps_m > 0:
-        add("sweeps", t("Patentes (dos)"), 2.0 * br.sweeps_m, "m", "wire", wire_id)
+    if not beam:
+        add(
+            "bridles",
+            t("Malletas (superior e inferior, dos lados)") + per,
+            nets * bridles_m,
+            "m",
+            "wire",
+            wire_id,
+        )
+    if not case.is_pair and not beam and br.sweeps_m > 0:
+        add("sweeps", t("Patentes (dos)") + per, nets * 2.0 * br.sweeps_m, "m", "wire", wire_id)
+    if mr is not None and mr.bridle_m is not None:
+        add(
+            "outrigger_bridles",
+            t("Tijeras (dos ramas por red)"),
+            nets * 2.0 * mr.bridle_m,
+            "m",
+            None,
+            None,
+            name=t("Cable de acero Ø{d:g} mm", d=mr.bridle_diameter_mm or 0.0),
+        )
     add(
         "warps",
         t("Cable de remolque"),
@@ -217,41 +240,105 @@ def bill_of_materials(
         "m",
         "wire",
         wire_id,
-        note=t("2 cables del largo filado más 50 % de reserva (Cab!D12)"),
+        note=t("2 cables del largo filado más 50 % de reserva (Cab!D12)")
+        if mr is None
+        else t(
+            "{n} cables del largo filado más {pct:.0f} % de reserva",
+            n=mr.n_warps,
+            pct=100 * case.warp_spare_fraction,
+        ),
     )
 
     # Boyas.
     fl = result.floats
-    add(
-        "floats",
-        t("Boyas de {d:g} mm", d=fl.diameter_mm),
-        float(fl.count),
-        "unit",
-        "float" if case.float_id else None,
-        case.float_id,
-        name=None if case.float_id else t("Boya Ø{d:g} mm", d=fl.diameter_mm),
-    )
+    if not beam:  # en la vara la lima va a la vara
+        add(
+            "floats",
+            t("Boyas de {d:g} mm", d=fl.diameter_mm) + per,
+            float(nets * fl.count),
+            "unit",
+            "float" if case.float_id else None,
+            case.float_id,
+            name=None if case.float_id else t("Boya Ø{d:g} mm", d=fl.diameter_mm),
+        )
 
     # Portones.
-    if not case.is_pair:
+    n_doors = 2 if mr is None else mr.n_doors
+    if not case.is_pair and n_doors > 0:
         add(
             "doors",
-            t("Portones (par)"),
-            2.0,
+            t("Portones (par)") if n_doors == 2 else t("Portones ({n})", n=n_doors),
+            float(n_doors),
             "unit",
             "door",
             case.door.id,
             name=case.door.name,
         )
+    if mr is not None and mr.kind == "twin":
+        add(
+            "clump",
+            t("Muerto central (trineo)"),
+            1.0,
+            "unit",
+            None,
+            None,
+            name=t("Muerto central"),
+            note=None
+            if mr.clump_weight_kg is None
+            else t("{kg:.0f} kg en aire", kg=mr.clump_weight_kg),
+        )
+    if beam and mr is not None and mr.beam is not None:
+        b = mr.beam
+        add(
+            "beams",
+            t("Varas de {m:.2f} m", m=b.beam_length_m),
+            float(nets),
+            "unit",
+            None,
+            None,
+            name=t("Vara Ø{d:g} m", d=b.beam_diameter_m),
+        )
+        add(
+            "beam_shoes",
+            t("Patines de la vara"),
+            float(2 * nets),
+            "unit",
+            None,
+            None,
+            name=t("Patín de {h:.2f} m", h=b.shoe_height_m),
+        )
+        if b.ticklers:
+            from trawlkit.rigging.multirig import BEAM_CLASSES
+
+            data = BEAM_CLASSES[b.beam_class]
+            n_tick = round(data.shoe_ticklers) + round(data.net_ticklers)
+            add(
+                "ticklers",
+                t("Cadenas espantadoras"),
+                float(nets * n_tick),
+                "unit",
+                None,
+                None,
+                name=t("Cadena espantadora"),
+                note=t(
+                    "{shoe:g} de patín y {net:g} de red por vara (medianas de C056/20, tabla 3; "
+                    "A VERIFICAR)",
+                    shoe=data.shoe_ticklers,
+                    net=data.net_ticklers,
+                ),
+                optional=True,
+            )
 
     # Cadena: reglaje y lastre del burlón (a lo sumo, el máximo del libro).
     bc = result.ballast.chain
-    ballast_kg = float(result.ballast.limits.max_kg)
-    if bc is not None:
+    ballast_kg = float(nets * result.ballast.limits.max_kg)
+    if beam:
+        pass  # el tren de la vara son las cadenas: no hay lastre de Fridman
+    elif bc is not None:
         add(
             "chain",
-            t("Cadena de lastre y reglaje"),
-            bc.max_m,
+            t("Cadena de lastre y reglaje") + per,
+            nets * bc.max_m,
             "m",
             "chain",
             bc.id,
@@ -265,7 +352,7 @@ def bill_of_materials(
     else:
         add(
             "ballast",
-            t("Lastre (cadena o plomos)"),
+            t("Lastre (cadena o plomos)") + per,
             ballast_kg,
             "kg",
             None,
@@ -277,7 +364,7 @@ def bill_of_materials(
     # Grilletes de las uniones del aparejo (cantidad supuesta; ver SHACKLES_PER_SIDE).
     load_t = float(result.warps.loads.working_load_kgf) / 1000.0
     shackle = select_shackle(load_t, case)
-    n = 2 * SHACKLES_PER_SIDE["pair" if case.is_pair else "otter"]
+    n = 2 * SHACKLES_PER_SIDE[case.rig_kind] * nets
     add(
         "shackles",
         t("Grilletes de las uniones del aparejo"),
@@ -290,7 +377,7 @@ def bill_of_materials(
             "{n} grilletes ({per} por banda, supuesto) con WLL ≥ {load:.2g} t, la carga de "
             "trabajo del arte (Rem!E267)",
             n=n,
-            per=n // 2,
+            per=n // (2 * nets),
             load=load_t,
         ),
         optional=True,

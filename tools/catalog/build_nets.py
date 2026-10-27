@@ -144,13 +144,15 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
                 "key": src["key"],
                 "title": src["title"],
                 "url": src["url"],
-                "accessed": ACCESSED,
+                "accessed": src.get("accessed", ACCESSED),
                 "figure": src.get("figure"),
                 "page": src.get("page"),
             }
         ],
         "panels": panels,
     }
+    if t.get("species"):
+        spec["species"] = dict(t["species"])
     for name in ("headrope", "footrope"):
         r = t.get(name)
         if not r:
@@ -168,6 +170,10 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
         mark(f"{name}.length_m")
         if r.get("diameter_mm") is not None:
             mark(f"{name}.diameter_mm")
+        if r.get("pieces_note"):
+            # Largos de ala y bocana derivados de los cabos del plano (Fase 19.5).
+            for piece in ("wing_m", "bosom_m"):
+                mark(f"{name}.{piece}", "derived", r["pieces_note"])
     if f := t.get("floats"):
         spec["floats"] = {"count": f["count"], "diameter_mm": f["diameter_mm"]}
         for k in ("count", "diameter_mm"):

@@ -107,6 +107,9 @@ class SimResult:
     #: Ángulo de ataque y coeficientes de los portones acoplados (Fase 19.3): modo («fixed» o
     #: «dynamic»), ángulo, CL, CD, ángulos del cable y de la patente; vacío = portones fijos.
     door_attack: dict[str, Any] = field(default_factory=dict)
+    #: Tangones, gemelo o vara (Fase 19.5): aparejo, redes, desplazamiento lateral de cada copia
+    #: de la red simulada (para la vista 3D) y arrastre de todas las redes; vacío = una red.
+    rig: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self, *, geometry: bool = True) -> dict[str, Any]:
         """Representación serializable (``geometry=False`` omite nodos y conectividad)."""
@@ -142,6 +145,8 @@ class SimResult:
             "operation": dict(self.operation),
             "door_attack": dict(self.door_attack),
         }
+        if self.rig:
+            out["rig"] = dict(self.rig)
         if geometry:
             out.update(
                 nodes=self.nodes.tolist(),
@@ -241,6 +246,18 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         float(dims.footrope.bosom_corrected_m),
     )
     warp_core, warp_ea = _warp_stiffness(r)
+    mr = r.multirig
+    beam = mr is not None and mr.kind == "beam"
+    if beam:
+        # Vara: sin boyas (la lima va a la vara); las puntas de ala quedan fijas en la vara.
+        assert mr is not None
+        return dataclasses.replace(
+            rigging_from_result(dataclasses.replace(r, multirig=None), door_spread_m),
+            float_count=0,
+            float_buoyancy_kgf=0.0,
+            float_positions_m=(),
+            beam_height_m=float(mr.vertical_opening_m),
+        )
     return Rigging(
         door_spread_m=float(r.doors.spread_m if door_spread_m is None else door_spread_m),
         upper_bridle_m=float(r.bridles.lengths.upper_m),
@@ -665,9 +682,11 @@ def _coupled(scenario: Scenario | None, result: DesignResult | None) -> bool:
     """Si la corrida lleva portones acoplados.
 
     Nunca en la pareja: no hay portones; los puntos de remolque (uniones de los cables con las
-    patentes) quedan fijos a la separación de la pareja.
+    patentes) quedan fijos a la separación de la pareja. Tampoco con tangones, gemelo o vara
+    (Fase 19.5): se simula una red con sus puntos de remolque fijos (portones, portón y muerto o
+    extremos de la vara).
     """
-    if result is not None and result.case.is_pair:
+    if result is not None and (result.case.is_pair or result.case.is_multi):
         return False
     return bool(scenario and scenario.coupled_doors)
 
@@ -797,7 +816,9 @@ def simulate(
         rc = relax(coarse, p, tol=tol, qoi_tol=qoi_tol, max_iter=max_iter)
         x_init = interpolate_shape(coarse, rc.x, mdl)
     start = (mdl.x0 if x_init is None else x_init).copy()
-    if not coupled:
+    if mdl.fixed_tips:
+        start[mdl.fixed] = mdl.x0[mdl.fixed]  # vara: puntas de ala en la vara y los patines
+    elif not coupled:
         for k, sgn in zip(mdl.doors, (1.0, -1.0), strict=True):
             start[k] = [mdl.x0[k, 0], sgn * rig.door_spread_m / 2.0, mdl.x0[k, 2]]
     else:
@@ -816,7 +837,7 @@ def simulate(
             ff.update_catch(relaxed.x)
             fill = np.zeros(mdl.tri.shape[0])
             fill[ff.catch_tri] = ff.catch_w
-    return _result(
+    out = _result(
         mdl,
         rig,
         p,
@@ -829,6 +850,40 @@ def simulate(
         ff_fouling=foul,
         catch_fill=fill,
     )
+    info = rig_info(result, out)
+    return dataclasses.replace(out, rig=info) if info else out
+
+
+def rig_info(result: DesignResult | None, sim: SimResult) -> dict[str, Any]:
+    """Tangones, gemelo o vara (Fase 19.5): copias de la red simulada y arrastre del aparejo.
+
+    Se simula **una** red con sus puntos de remolque fijos y se replica en la vista 3D:
+
+    * tangones: cada red centrada detrás de la punta de su tangón (``±y`` de la punta);
+    * gemelo: las dos redes a cada lado del muerto central, que queda en la crujía: los puntos
+      de remolque de la red simulada son el portón y el muerto (simplificación: la red es
+      simétrica respecto de su eje; el muerto va en el fondo y sin sustentación);
+    * vara: una vara por tangón (``±y`` de la punta si hay tangones; si no, lado a lado).
+
+    ``drag_kgf`` es el arrastre de todas las redes (sin portones, cables ni vara).
+    """
+    if result is None or result.multirig is None:
+        return {}
+    mr = result.multirig
+    n = mr.n_nets
+    if n == 1:
+        offsets: list[float] = [0.0]
+    elif mr.layout is not None:
+        offsets = [mr.layout.tip_offset_m, -mr.layout.tip_offset_m]
+    else:
+        offsets = [0.5 * mr.net_spread_m, -0.5 * mr.net_spread_m]
+    return {
+        "kind": mr.kind,
+        "n_nets": n,
+        "offsets_m": offsets,
+        "drag_kgf": n * sim.drag_kgf,
+        "swept_width_m": mr.swept_width_m,
+    }
 
 
 def _mesh_bending(model: NetModel, scenario: Scenario | None) -> float:
