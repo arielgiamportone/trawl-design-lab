@@ -40,6 +40,8 @@ const RTOL = 1e-9;
 let worst = 0;
 let rtol = RTOL;
 let atol = 0;
+// Claves que no se comparan en este pedido (estados intermedios de una simulación iterativa).
+let ignore = new Set();
 function compare(a, b, path) {
   if (typeof a === 'number' && typeof b === 'number') {
     const d = Math.abs(a - b) / Math.max(Math.abs(a), Math.abs(b), 1e-12);
@@ -55,10 +57,10 @@ function compare(a, b, path) {
   }
   if (a && b && typeof a === 'object' && typeof b === 'object') {
     const ka = Object.keys(a)
-      .filter((k) => k !== 'runtime_s')
+      .filter((k) => k !== 'runtime_s' && !ignore.has(k))
       .sort();
     const kb = Object.keys(b)
-      .filter((k) => k !== 'runtime_s')
+      .filter((k) => k !== 'runtime_s' && !ignore.has(k))
       .sort();
     if (ka.join() !== kb.join()) throw new Error(`${path}: claves distintas`);
     ka.forEach((k) => compare(a[k], b[k], `${path}.${k}`));
@@ -84,6 +86,7 @@ for (const c of expected) {
   // La simulación itera hasta una tolerancia: entre builds de numpy difiere en ~1e-5.
   rtol = c.rtol ?? RTOL;
   atol = c.atol ?? 0;
+  ignore = new Set(c.ignore ?? []);
   const out = JSON.parse(handle(c.method, c.path, c.body == null ? null : JSON.stringify(c.body)));
   try {
     if (out.status !== c.status) throw new Error(`estado ${out.status} ≠ ${c.status}`);

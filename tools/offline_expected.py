@@ -25,6 +25,9 @@ _NET = "fao_wb_bt2p_60hp"
 #: de los portones (Fase 19.3) la forma converge a un punto apenas distinto según el build: en la
 #: CI el conteo de mallas de escape (≈1100) llegó a diferir un 2 %.
 ITERATIVE_TOL = {"/simulate/selectivity": (3e-2, 0.2)}
+#: Claves que no se comparan: la forma intermedia de la red (``frame``: tensiones y posiciones
+#: nodo por nodo) depende del punto exacto de convergencia; se comparan las curvas e indicadores.
+ITERATIVE_IGNORE = {"/simulate/selectivity": ["frame"]}
 
 CASES: list[tuple[str, str, dict[str, object] | None]] = [
     ("GET", "/health", None),
@@ -91,6 +94,7 @@ def main(out: str) -> None:
         row: dict[str, object] = {"method": method, "path": path, "body": body, "status": status}
         if path.split("?")[0] in ITERATIVE_TOL:
             row["rtol"], row["atol"] = ITERATIVE_TOL[path.split("?")[0]]
+            row["ignore"] = ITERATIVE_IGNORE.get(path.split("?")[0], [])
         if isinstance(response, offline.Binary):
             kind = "xlsx" if response.media.startswith("application/vnd") else "text"
             row["binary"] = {"kind": kind, "data": base64.b64encode(response.data).decode()}
