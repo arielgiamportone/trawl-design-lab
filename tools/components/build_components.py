@@ -507,6 +507,49 @@ def door_rebyc() -> list[dict[str, Any]]:
     return out
 
 
+def door_noaa_ff9() -> list[dict[str, Any]]:
+    """Portón de madera de la red de prueba de 16 pies (Fishery Facts 9; Fase 19.6)."""
+    page = "p. 2 (tabla 1) y pp. 13–14 (fig. 12)"
+    flat = _type_polar("flat").coefficient_dicts()
+    out = []
+    for label, length, height in src.DOOR_NOAA_FF9:
+        out.append(
+            {
+                "id": "door_noaa_ff9_30x15in",
+                "name": f"Portón plano de madera {label} de la red de prueba de 16 pies (NOAA)",
+                "type": "flat_wood",
+                "product": "diseño publicado (construcción casera)",
+                "length_m": round(length, 3),
+                "height_m": round(height, 3),
+                "area_m2": round(length * height, 3),
+                "weight_water_coefficient": 0.6,
+                "coefficients": flat,
+                "country": "US",
+                "regions": ["north_america"],
+                "notes": [
+                    "Terciado marino de ¾ de pulgada con patín de hierro de ¼ × 2½ × 33 pulgadas; "
+                    "brida de 104 eslabones de cadena de 3/16 de pulgada (patas de 15, 30, 14 y "
+                    "29 eslabones).",
+                    "Uso: red de prueba (try-net) de 16 pies de los camaroneros del golfo de "
+                    "México y botes de 12 a 30 pies; el documento no da el peso ni la potencia.",
+                ],
+                "provenance": {
+                    "length_m": prov("gutherz1974", page=page, note=f"{label} (pulgadas)"),
+                    "height_m": prov("gutherz1974", page=page, note=f"{label} (pulgadas)"),
+                    "area_m2": prov("gutherz1974", "derived", page, "largo × alto"),
+                    "coefficients": prov(
+                        "sfia1993",
+                        "assumed",
+                        "Appendix IV-3 (PDF p. 133)",
+                        "portón plano de terciado; se supone la polar del modelo plano de madera "
+                        "de Seafish (" + FLAT_POLAR_NOTE + ")",
+                    ),
+                },
+            }
+        )
+    return out
+
+
 # --- Portones de fabricante (Fase 19.3) -------------------------------------------------------
 
 
@@ -1534,6 +1577,7 @@ def main() -> int:
     dg = door_generics()
     write("door", "generic_workbook", [WB, "sfia1993", "mellibovsky2018"], dg)
     write("door", "rebyc_colombia", ["zuniga2006", "sfia1993"], door_rebyc())
+    write("door", "noaa_ff9", ["gutherz1974", "sfia1993"], door_noaa_ff9())
     write("door", "vonin", ["vonin_doors", "sfia1993", "mellibovsky2018"], vonin_doors(dg))
     write("door", "morgere_2025", ["morgere2025", "sfia1993"], morgere_doors(dg))
     write("door", "excel_a3", ["giamportone2024", "sfia1993"], excel_items("door"))

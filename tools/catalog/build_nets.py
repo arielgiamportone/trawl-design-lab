@@ -174,6 +174,9 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
             # Largos de ala y bocana derivados de los cabos del plano (Fase 19.5).
             for piece in ("wing_m", "bosom_m"):
                 mark(f"{name}.{piece}", "derived", r["pieces_note"])
+        for piece, (kind, note) in r.get("pieces", {}).items():
+            # Largos de ala y bocana leídos en el plano o derivados del total (Fase 19.6).
+            mark(f"{name}.{piece}", kind, note)
     if f := t.get("floats"):
         spec["floats"] = {"count": f["count"], "diameter_mm": f["diameter_mm"]}
         for k in ("count", "diameter_mm"):

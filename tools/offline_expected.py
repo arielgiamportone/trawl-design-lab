@@ -21,8 +21,10 @@ _NET = "fao_wb_bt2p_60hp"
 
 #: Tolerancias propias de la simulación (rtol, atol): itera hasta converger y entre builds de
 #: numpy CPython y Pyodide difieren en ~1e-5, que los porcentajes amplifican y los redondeos a
-#: 0,1 vuelven saltos de una décima. El resto se compara con rtol 1e-9.
-ITERATIVE_TOL = {"/simulate/selectivity": (1e-2, 0.2)}
+#: 0,1 vuelven saltos de una décima. El resto se compara con rtol 1e-9. Desde la polar dinámica
+#: de los portones (Fase 19.3) la forma converge a un punto apenas distinto según el build: en la
+#: CI el conteo de mallas de escape (≈1100) llegó a diferir un 2 %.
+ITERATIVE_TOL = {"/simulate/selectivity": (3e-2, 0.2)}
 
 CASES: list[tuple[str, str, dict[str, object] | None]] = [
     ("GET", "/health", None),

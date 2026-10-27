@@ -95,6 +95,13 @@ DOCS: dict[str, dict[str, Any]] = {
         "url": "https://hdl.handle.net/2117/116734",
         "accessed": "2026-10-27",
     },
+    "gutherz1974": {
+        "key": "gutherz1974",
+        "title": "Gutherz, Serra y Klima (1974). Design and Materials Used in Construction of a "
+        "16-Foot Shrimp Trawl. NOAA/NMFS Fishery Facts 9",
+        "url": "https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf",
+        "accessed": "2026-10-27",
+    },
     "vonin_doors": {
         "key": "vonin_doors",
         "title": "Vónin P/F, portones Storm 2, Tornado y Twister: tamaños y pesos (páginas de "
@@ -482,6 +489,14 @@ DOOR_REBYC: list[tuple[str, float, float, str]] = [
     ("8'x36\"", 8 * 0.3048, 36 * 0.0254, "el más usado (43 %) con redes de 37' de relinga"),
     ("9'x36\"", 9 * 0.3048, 36 * 0.0254, "37,7 % de la flota; redes japonesas de 42'"),
     ("10'x40\"", 10 * 0.3048, 40 * 0.0254, "buque de 520 hp con red de 52'"),
+]
+
+#: Portón de la red de prueba (*try-net*) de 16 pies del golfo de México (Gutherz, Serra y Klima
+#: 1974, NOAA Fishery Facts 9, p. 2 y pp. 13–14, fig. 12): 30 × 15 pulgadas de terciado marino
+#: de ¾ de pulgada con patín de hierro de ¼ × 2½ × 33 pulgadas; el documento no da el peso.
+#: (nombre, largo [m], alto [m]) (Fase 19.6).
+DOOR_NOAA_FF9: list[tuple[str, float, float]] = [
+    ('30"x15"', 30 * 0.0254, 15 * 0.0254),
 ]
 
 # --- Portones de fabricante (Fase 19.3) ------------------------------------------------------

@@ -375,3 +375,8 @@ NETS += NETS_123
 from tools.catalog.transcriptions_195 import NETS_195  # noqa: E402
 
 NETS += NETS_195
+
+# Fase 19.6: redes del catálogo tailandés de la SEAFDEC (2016): tangones, vara y portones.
+from tools.catalog.transcriptions_196 import NETS_196  # noqa: E402
+
+NETS += NETS_196

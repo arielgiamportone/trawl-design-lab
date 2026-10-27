@@ -1,0 +1,1181 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: seafdec_22_otter_fish
+name: Arrastre de fondo para peces, 20 m y 365 hp (SEAFDEC 2016, n.º 22)
+description: 'Red de arrastre de fondo de dos caras con portones para peces de un buque de 20 m y 365
+  hp (Klong, Samut Songkhram, Tailandia, 1986): puntas de ala, alas y cielo de 180 mm, cuerpo de 160,
+  120, 80, 60 y 38 mm y copo de 19 mm, PE; lima de 46,10 m y burlón de 49,80 m.'
+source: SEAFDEC (2016) The Catalogue Bottom Trawl Net Designs of Thailand, TD/RES/141, plano 22 (Bottom,
+  Otter; Fishes) (https://repository.seafdec.or.th/handle/20.500.12067/1826)
+family: bottom
+rig: otter
+vessel_hp:
+- 365
+- 365
+target_species: peces demersales (fishes)
+status: draft
+sources:
+- key: seafdec2016thai
+  title: SEAFDEC (2016) The Catalogue Bottom Trawl Net Designs of Thailand, TD/RES/141, plano 22 (Bottom,
+    Otter; Fishes)
+  url: https://repository.seafdec.or.th/handle/20.500.12067/1826
+  accessed: '2026-10-27'
+  figure: Plano 22
+  page: 35 (41 del PDF)
+panels:
+- id: UT
+  plane: upper
+  section: wing_tip
+  material: PE
+  mesh_mm: 180.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 1
+  meshes_bottom: 70
+  meshes_depth: 35
+  hanging_ratio: 0.49
+  count: 2
+  cut_code: AB
+  cut_code_x2: AB
+  note: Punta de ala triangular desde un vértice (0 mallas; se toma 1) hasta 70 mallas en 35 filas, con
+    los dos costados en malletas (AB).
+- id: UW
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 180.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 70
+  meshes_bottom: 85
+  meshes_depth: 75
+  hanging_ratio: 0.49
+  count: 2
+  cut_code: 1N8B
+  cut_code_x2: AB
+- id: U1
+  plane: upper
+  section: square
+  material: PE
+  mesh_mm: 180.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 243
+  meshes_bottom: 211
+  meshes_depth: 20
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 1N8B
+  note: El cielo de 211 mallas de 180 mm se une 7/8 al cuerpo de 241 mallas de 160 mm.
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 241
+  meshes_bottom: 220
+  meshes_depth: 21
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 1N2B
+  note: Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre. Unión 4/5 con el paño
+    de 120 mm (220 → 275 mallas).
+- id: U3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 275
+  meshes_bottom: 240
+  meshes_depth: 35
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 1N2B
+  note: Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre. Unión 4/5 con el paño
+    de 80 mm (240 → 300 mallas).
+- id: U4
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 300
+  meshes_bottom: 250
+  meshes_depth: 50
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 1N2B
+  note: 'Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre. Unión 1/1 con el paño
+    de 60 mm (250 mallas): frunce un 25 %.'
+- id: U5
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 250
+  meshes_bottom: 200
+  meshes_depth: 50
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 1N2B
+  note: Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre. Unión 2/3 con el paño
+    de 38 mm (200 → 300 mallas).
+- id: U6
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 38.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 300
+  meshes_bottom: 200
+  meshes_depth: 150
+  hanging_ratio: 0.49
+  count: 1
+  cut_code: 2N2B
+  note: Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre. Unión 2/3 con el copo
+    de 19 mm (200 → 300 mallas).
+- id: UC
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 19.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 300
+  meshes_bottom: 300
+  meshes_depth: 250
+  hanging_ratio: 0.49
+  count: 1
+  note: Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre.
+- id: LT
+  plane: lower
+  section: wing_tip
+  material: PE
+  mesh_mm: 180.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 1
+  meshes_bottom: 70
+  meshes_depth: 30
+  hanging_ratio: 0.46
+  count: 2
+  cut_code: AB
+  cut_code_x2: AB
+  note: 'Punta de ala del vientre: 0 (se toma 1) → 70 mallas en 30 filas con los dos costados AB (darían
+    60 mallas); se conserva lo leído y el validador lo avisa.'
+- id: LW
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 180.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 70
+  meshes_bottom: 89
+  meshes_depth: 95
+  hanging_ratio: 0.46
+  count: 2
+  cut_code: 1N8B
+  cut_code_x2: AB
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 241
+  meshes_bottom: 220
+  meshes_depth: 21
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: 1N2B
+- id: L3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 1.68
+  rtex: 1633.3
+  meshes_top: 275
+  meshes_bottom: 240
+  meshes_depth: 35
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: 1N2B
+- id: L4
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 80.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 300
+  meshes_bottom: 250
+  meshes_depth: 50
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: 1N2B
+- id: L5
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 60.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 250
+  meshes_bottom: 200
+  meshes_depth: 50
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: 1N2B
+- id: L6
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 38.0
+  twine_diameter_mm: 1.27
+  rtex: 933.3
+  meshes_top: 300
+  meshes_bottom: 200
+  meshes_depth: 150
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: 2N2B
+- id: LC
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 19.0
+  twine_diameter_mm: 1.05
+  rtex: 633.3
+  meshes_top: 300
+  meshes_bottom: 300
+  meshes_depth: 250
+  hanging_ratio: 0.46
+  count: 1
+headrope:
+  name: lima
+  length_m: 46.1
+  diameter_mm: 20
+  wing_m: 19.8
+  bosom_m: 6.5
+  description: 19,80 combinado Ø20 mm en cada ala + bocana 6,50
+  construction: rope_combinado_6_20mm
+footrope:
+  name: burlón
+  length_m: 49.8
+  diameter_mm: 32
+  wing_m: 23.4
+  bosom_m: 3.0
+  description: 23,40 combinado Ø32 mm en cada ala + bocana 3,00
+  construction: rope_combinado_6_24mm
+design:
+  vessel_length_m: 20.0
+notes:
+- 'BORRADOR: dos uniones no cierran en largo estirado: 1/1 entre el paño de 80 mm y el de 60 mm (250 mallas,
+  25 %) y 2/3 entre el cuerpo de 38 mm y el copo de 19 mm (7,60 m contra 5,70 m, 25 %).'
+- Lima = 2 × 19,80 + 6,50 = 46,10 m y burlón = 2 × 23,40 + 3,00 = 49,80 m, como el total del plano.
+- El burlón es un combinado de Ø32 mm; el catálogo de componentes llega a 24 mm y el motor toma ese para
+  el peso y la resistencia.
+- 'El plano no da boyas, lastre ni portones: el caso usa el portón de la A-3 escalado por potencia.'
+provenance:
+  panels.UT.mesh_mm:
+    kind: assumed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'el plano no rotula el mallero de la punta de ala (sólo sus filas): se toma el del ala'
+  panels.UT.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.UT.meshes_top:
+    kind: assumed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: el plano dibuja la punta de ala como un vértice (0 mallas); el simulador necesita un borde de
+      boca, así que se toma 1 malla
+  panels.UT.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UT.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UT.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UT.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UT.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.UT.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.UW.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UW.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR)
+  panels.UW.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UW.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UW.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UW.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UW.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.UW.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: mallero rotulado una vez para el ala y el cielo
+  panels.U1.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U1.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U1.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U1.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U2.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U3.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U4.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/12» de arriba'
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U5.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.U6.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/12» de arriba'
+  panels.U6.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.U6.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.U6.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UC.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UC.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UC.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.UC.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del dorso: lima de 6,50 m sobre 243 × 180 mm − 2 × 85 × 180 mm = 13,14 m de
+      paño estirado (6,50 / 13,14 = 0,49); se usa en todo el dorso'
+  panels.LT.mesh_mm:
+    kind: assumed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'el plano no rotula el mallero de la punta de ala (sólo sus filas): se toma el del ala'
+  panels.LT.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.LT.meshes_top:
+    kind: assumed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: el plano dibuja la punta de ala como un vértice (0 mallas); el simulador necesita un borde de
+      boca, así que se toma 1 malla
+  panels.LT.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LT.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LT.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LT.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LT.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.LT.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.LW.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LW.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR)
+  panels.LW.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LW.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LW.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LW.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LW.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.LW.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L2.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/21 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/21» de las alas'
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L3.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 1633.3
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.L4.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR)
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L4.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.L4.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.L5.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/12» de arriba'
+  panels.L5.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L5.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.L5.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.L6.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'Rtex ≈ n·den/9 de PE 700d/12 (sin el aumento por torsión; A VERIFICAR); sin rótulo en esa fila:
+      se toma el «PE 700d/12» de arriba'
+  panels.L6.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.cut_code:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.L6.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 933.3
+  panels.L6.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  panels.LC.mesh_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LC.rtex:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Rtex ≈ n·den/9 de PE 380d/15 (sin el aumento por torsión; A VERIFICAR)
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LC.meshes_depth:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LC.count:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  panels.LC.twine_diameter_mm:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: d = K·√Rtex con K = 0.038 para PA (tabla de la FAO A-3), escalado por √(ρ_PA/ρ_PE); Rtex 633.3
+  panels.LC.hanging_ratio:
+    kind: derived
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: 'U1 de la bocana del vientre: burlón de 3,00 m sobre 241 × 160 mm − 2 × 89 × 180 mm = 6,52 m
+      de paño estirado (3,00 / 6,52 = 0,46); se usa en todo el vientre'
+  headrope.length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  headrope.diameter_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  headrope.wing_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  headrope.bosom_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  footrope.length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  footrope.diameter_mm:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  footrope.wing_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  footrope.bosom_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+  design.vessel_length_m:
+    kind: transcribed
+    document: seafdec2016thai
+    page: 35 (41 del PDF)
+    figure: Plano 22
+    note: Loa 20,00 m

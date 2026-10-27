@@ -1,0 +1,73 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: door
+sources:
+- key: gutherz1974
+  title: Gutherz, Serra y Klima (1974). Design and Materials Used in Construction of a 16-Foot Shrimp
+    Trawl. NOAA/NMFS Fishery Facts 9
+  url: https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf
+  accessed: '2026-10-27'
+- key: sfia1993
+  title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
+    (contrato CEE FAR TE 1 214)
+  url: https://www.seafish.org/media/1peahnrq/otterboard_performance_and_behaviour.pdf
+  accessed: '2026-10-27'
+items:
+- id: door_noaa_ff9_30x15in
+  name: Portón plano de madera 30"x15" de la red de prueba de 16 pies (NOAA)
+  type: flat_wood
+  product: diseño publicado (construcción casera)
+  length_m: 0.762
+  height_m: 0.381
+  area_m2: 0.29
+  weight_water_coefficient: 0.6
+  coefficients:
+  - angle_deg: 25.0
+    cl: 0.8
+    cd: 0.53
+  - angle_deg: 30.0
+    cl: 0.92
+    cd: 0.67
+  - angle_deg: 32.0
+    cl: 0.93
+    cd: 0.71
+  - angle_deg: 35.0
+    cl: 0.86
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 0.78
+    cd: 0.79
+  - angle_deg: 45.0
+    cl: 0.76
+    cd: 0.89
+  country: US
+  regions:
+  - north_america
+  notes:
+  - Terciado marino de ¾ de pulgada con patín de hierro de ¼ × 2½ × 33 pulgadas; brida de 104 eslabones
+    de cadena de 3/16 de pulgada (patas de 15, 30, 14 y 29 eslabones).
+  - 'Uso: red de prueba (try-net) de 16 pies de los camaroneros del golfo de México y botes de 12 a 30
+    pies; el documento no da el peso ni la potencia.'
+  provenance:
+    length_m:
+      kind: transcribed
+      document: gutherz1974
+      page: p. 2 (tabla 1) y pp. 13–14 (fig. 12)
+      note: 30"x15" (pulgadas)
+    height_m:
+      kind: transcribed
+      document: gutherz1974
+      page: p. 2 (tabla 1) y pp. 13–14 (fig. 12)
+      note: 30"x15" (pulgadas)
+    area_m2:
+      kind: derived
+      document: gutherz1974
+      page: p. 2 (tabla 1) y pp. 13–14 (fig. 12)
+      note: largo × alto
+    coefficients:
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-3 (PDF p. 133)
+      note: portón plano de terciado; se supone la polar del modelo plano de madera de Seafish (hoja «Flat
+        Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la polar del libro
+        Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí)
