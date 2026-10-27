@@ -1845,6 +1845,12 @@ export interface components {
             cost?: number | null;
             /** Note */
             note?: string | null;
+            /**
+             * Optional
+             * @description Cantidad supuesta: sin precio no deja incompleta la lista
+             * @default false
+             */
+            optional: boolean;
         };
         /**
          * BomOut

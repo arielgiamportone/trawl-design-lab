@@ -4945,6 +4945,12 @@
        }
       ],
       "title": "Note"
+     },
+     "optional": {
+      "type": "boolean",
+      "title": "Optional",
+      "description": "Cantidad supuesta: sin precio no deja incompleta la lista",
+      "default": false
      }
     },
     "type": "object",
