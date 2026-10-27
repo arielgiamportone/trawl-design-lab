@@ -220,8 +220,8 @@ notes:
   diferencia de largo estirado) y los paños de 51, 45 y 38 mm también 1/1 (12 y 16 %).'
 - Lima = 2 × 12,75 + 1,40 = 26,90 m y burlón = 2 × 13,75 + 0,70 = 28,20 m, como el total del plano.
 - 'El plano no da boyas, lastre, portones ni tangones: el caso usa la eslora del documento y los valores
-  por defecto del motor (portón de la A-3 escalado por potencia y tangones de 24 pies a 20°, Knake et
-  al. 1958).'
+  por defecto del motor (portón de la A-3 escalado por potencia, tangones de 24 pies a 20° de Knake et
+  al. 1958 y tijera de 70 m del INIDEP), que no son los de la flota tailandesa.'
 provenance:
   panels.UW.mesh_mm:
     kind: transcribed

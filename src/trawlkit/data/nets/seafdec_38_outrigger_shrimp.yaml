@@ -198,8 +198,8 @@ notes:
 - 'Uniones con su razón en el plano: 1/1 (430 × 38 mm con 430 × 40 mm, 5 %), 3/4 (360 × 40 mm con 480
   × 30 mm) y 1/1 (330 × 30 mm con 330 × 25 mm, 17 %).'
 - 'El plano no da boyas, lastre, portones ni tangones: el caso usa la eslora del documento y los valores
-  por defecto del motor (portón de la A-3 escalado por potencia y tangones de 24 pies a 20°, Knake et
-  al. 1958).'
+  por defecto del motor (portón de la A-3 escalado por potencia, tangones de 24 pies a 20° de Knake et
+  al. 1958 y tijera de 70 m del INIDEP), que no son los de la flota tailandesa.'
 provenance:
   panels.UW.mesh_mm:
     kind: transcribed

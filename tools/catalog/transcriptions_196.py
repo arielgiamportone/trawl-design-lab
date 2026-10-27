@@ -164,8 +164,9 @@ def _rope(
 _SHARED_NOTE = "Paño del cuerpo dibujado una vez en el plano, común al dorso y al vientre."
 _RIG_NOTE = (
     "El plano no da boyas, lastre, portones ni tangones: el caso usa la eslora del documento y "
-    "los valores por defecto del motor (portón de la A-3 escalado por potencia y tangones de "
-    "24 pies a 20°, Knake et al. 1958)."
+    "los valores por defecto del motor (portón de la A-3 escalado por potencia, tangones de "
+    "24 pies a 20° de Knake et al. 1958 y tijera de 70 m del INIDEP), que no son los de la "
+    "flota tailandesa."
 )
 _SHRIMP = "camarón (shrimp)"
 
