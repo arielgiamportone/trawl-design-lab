@@ -263,3 +263,14 @@ def test_price_list_reader_reports_bad_rows() -> None:
     assert {("value", 2), ("unit", 4), ("duplicate", 5)} <= codes
     missing = read_prices("a;b\n1;2\n", "p.csv")
     assert missing.issues[0].code == "columns" and not missing.prices
+
+
+def test_grilletes_sin_precio_no_dejan_incompleta_la_lista() -> None:
+    from trawlkit.cost import bill_of_materials
+    from trawlkit.model import run
+    from trawlkit.api.service import build_case
+
+    bom = bill_of_materials(run(build_case()), {})
+    shackles = next(ln for ln in bom.lines if ln.key == "shackles")
+    assert shackles.optional and shackles.cost is None
+    assert bom.missing_prices == sum(ln.cost is None for ln in bom.lines) - 1

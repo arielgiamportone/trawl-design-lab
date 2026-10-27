@@ -57,6 +57,9 @@ class BomLine:
     price_source: str | None = None
     cost: float | None = None
     note: str | None = None
+    #: Línea de cantidad supuesta (grilletes): suma al total si tiene precio, pero sin precio no
+    #: deja incompleta la lista (no cuenta en ``missing_prices``).
+    optional: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -146,6 +149,7 @@ def bill_of_materials(
         item_id: str | None,
         name: str | None = None,
         note: str | None = None,
+        optional: bool = False,
     ) -> None:
         item = _component(kind, item_id) if kind else None
         price = _price_for(item, item_id, unit, px) or _price_for(None, key, unit, px)
@@ -163,6 +167,7 @@ def bill_of_materials(
                 currency=None if price is None else price.currency,
                 price_source=None if price is None else price.source,
                 cost=None if cost is None else round(cost, 2),
+                optional=optional,
                 note=note,
             )
         )
@@ -288,13 +293,14 @@ def bill_of_materials(
             per=n // 2,
             load=load_t,
         ),
+        optional=True,
     )
 
     totals: dict[str, float] = {}
     for ln in lines:
         if ln.cost is not None and ln.currency:
             totals[ln.currency] = round(totals.get(ln.currency, 0.0) + ln.cost, 2)
-    missing = sum(ln.cost is None for ln in lines)
+    missing = sum(ln.cost is None and not ln.optional for ln in lines)
     return BillOfMaterials(lines=lines, totals=totals, missing_prices=missing)
 
 

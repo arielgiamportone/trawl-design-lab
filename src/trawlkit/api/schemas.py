@@ -323,6 +323,10 @@ class BomLineOut(BaseModel):
     price_source: str | None = None
     cost: float | None = None
     note: str | None = None
+    optional: bool = Field(
+        default=False,
+        description="Cantidad supuesta: sin precio no deja incompleta la lista",
+    )
 
 
 class BomOut(BaseModel):
