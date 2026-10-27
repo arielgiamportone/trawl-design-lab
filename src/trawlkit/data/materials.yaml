@@ -30,3 +30,901 @@ constants:
 notes:
 - Los coeficientes de peso en el agua (G36/I36) sólo figuran en la fila 36 de la hoja; se aplican a ambos
   hilos de PA.
+properties_source: Informe de investigación de materiales (Fase 19.1, consultas del 2026-10-27)
+properties_notes:
+- Tabla de materiales con fuentes (Fase 19.1). No sale del Excel; tools/extract/reference.py la conserva
+  al regenerar este archivo. La lee trawlkit.materials.material_table.
+- Cada valor lleva source (clave de docs/referencias.bib o de references) y kind (transcribed = copiado
+  de la fuente; derived = calculado a partir de valores transcriptos, fórmula en note; assumed = la fuente
+  no se encontró y se conserva el valor que ya usaba el motor, A VERIFICAR).
+- Klust (1982, 1983) no se pudo consultar; ningún valor está transcripto de Klust.
+properties:
+  PA:
+    name: Poliamida (nylon)
+    family: fibre
+    aliases:
+    - NYLON
+    - PA6
+    - POLIAMIDA
+    density_kg_m3:
+      value: 1140
+      unit: kg/m³
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, «Density of materials»; también dealteris1990 Tabla 1.1 y bexco2004 (PA6 1,14)
+    weight_in_water_seawater:
+      value: 0.1
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tablas de textiles pp. 2–3
+    weight_in_water_freshwater:
+      value: 0.12
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tablas de textiles pp. 2–3
+    fibre_tenacity_n_tex:
+      value: 0.746
+      unit: N/tex
+      basis: fibra
+      kind: derived
+      source: bexco2004
+      page: «Fiber properties», p. 14
+      note: 850 N/mm² transcripto ÷ ρ = 1140 kg/m³ (= 76 gf/tex)
+    twine_tenacity_dry_gf_tex:
+      value: 53.8
+      range:
+      - 48.0
+      - 62.0
+      unit: gf/tex
+      basis: hilo de red seco sin nudo (columna A)
+      kind: derived
+      source: prado1990
+      page: cap. 3, tablas de hilo PA torcido (29 filas) y trenzado (18 filas)
+      note: A[kgf]·1000/Rtex; mediana del torcido; rango = mín–máx de torcido y trenzado
+    twine_tenacity_wet_knot_gf_tex:
+      value: 28.3
+      unit: gf/tex
+      basis: hilo de red mojado con nudo (columna B)
+      kind: derived
+      source: prado1990
+      page: cap. 3, tabla de hilo PA torcido
+      note: B[kgf]·1000/Rtex, mediana
+    wet_knot_ratio:
+      value: 0.53
+      range:
+      - 0.45
+      - 0.67
+      unit: B/A
+      kind: derived
+      source: prado1990
+      page: cap. 3, tabla de hilo PA torcido
+      note: rotura mojado con nudo / seco sin nudo, mediana (mín–máx)
+    wet_dry_ratio:
+      value: 0.9
+      range:
+      - 0.85
+      - 0.95
+      unit: mojado/seco
+      kind: transcribed
+      source: dealteris1990
+      page: Tabla 1.1, p. 11 (85–95 %); sambasivan2012 p. 45 da 85–90 %
+      note: rango transcripto; el valor es el punto medio
+    knot_ratio:
+      value: 0.59
+      range:
+      - 0.56
+      - 0.62
+      unit: con nudo/sin nudo
+      kind: derived
+      source: prado1990
+      note: (B/A) / (mojado/seco) = 0,53 / (0,85–0,95), con dealteris1990; supone que los efectos se multiplican
+    rope_tenacity_gf_tex:
+      value: 31.8
+      range:
+      - 28.8
+      - 32.1
+      unit: gf/tex
+      basis: cabo, seco
+      kind: derived
+      source: prado1990
+      page: cap. 3, tabla de cabos de fibra sintética
+      note: R[kgf]/(10·w[kg/100 m]), mediana (mín–máx)
+    elongation_break_pct:
+      value: 18.0
+      unit: '%'
+      basis: fibra
+      kind: transcribed
+      source: bexco2004
+      page: p. 14 («elongation to break (yield)»)
+    rope_elongation_75pct_mbl_pct:
+      value: 25.0
+      unit: '%'
+      basis: cabo Ø14 mm al 75 % de la rotura (no a la rotura)
+      kind: transcribed
+      source: ramos1999
+      page: Tabla 6
+    fibre_modulus_n_tex:
+      value: 4.8
+      unit: N/tex
+      basis: fibra (Enkalon PA6)
+      kind: transcribed
+      source: bexco2004
+      page: pp. 10–11 (datos Acordis)
+    fibre_modulus_gpa:
+      value: 5.5
+      unit: GPa
+      basis: fibra (tabla de la p. 14, 5500 N/mm²)
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    twine_modulus_gpa:
+      value: 2.0
+      unit: GPa
+      basis: hilo de red, sobre el área del círculo π·d²/4
+      kind: assumed
+      source: legue2025
+      note: 'A VERIFICAR: no se encontró una medición del hilo PA anudado. Se conserva el valor del simulador
+        (2 GPa); da 2,30 N/tex para R1280tex Ø1,37 mm, del orden de 4,8 N/tex (bexco2004) × 0,45–0,51
+        (cociente hilo/fibra del HDPE trenzado, legue2025) = 2,2–2,4 N/tex.'
+    rope_ea_n_per_mm2:
+      value: 118
+      unit: N por mm² de d² (EA = k·d²)
+      basis: cabo de nylon, rigidez tangente al 10 % de extensión media (cabo trabajado y mojado)
+      kind: transcribed
+      source: orcina_ropewire
+      note: EA = 1,18·10⁵·d² kN con d en m (OrcaFlex) = 118·d_mm² N; con carga de ola ≈ el doble
+  PES:
+    name: Poliéster
+    family: fibre
+    aliases:
+    - PET
+    - POLIESTER
+    - POLIÉSTER
+    - POLYESTER
+    density_kg_m3:
+      value: 1380
+      unit: kg/m³
+      kind: transcribed
+      source: prado1990
+      page: cap. 3; también dealteris1990 Tabla 1.1 y bexco2004
+    weight_in_water_seawater:
+      value: 0.26
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tablas de textiles pp. 2–3
+    weight_in_water_freshwater:
+      value: 0.28
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tablas de textiles pp. 2–3
+    fibre_tenacity_n_tex:
+      value: 0.761
+      unit: N/tex
+      basis: fibra
+      kind: derived
+      source: bexco2004
+      page: p. 14
+      note: 1050 N/mm² ÷ 1380 kg/m³ (= 78 gf/tex)
+    twine_tenacity_dry_gf_tex:
+      value: 55.1
+      range:
+      - 48.6
+      - 58.7
+      unit: gf/tex
+      basis: hilo de red seco sin nudo (columna A)
+      kind: derived
+      source: prado1990
+      page: cap. 3, tabla de hilo PES torcido (17 filas)
+      note: A[kgf]·1000/Rtex, mediana (mín–máx)
+    twine_tenacity_wet_knot_gf_tex:
+      value: 23.9
+      unit: gf/tex
+      basis: hilo de red mojado con nudo (columna B)
+      kind: derived
+      source: prado1990
+      note: B[kgf]·1000/Rtex, mediana
+    wet_knot_ratio:
+      value: 0.43
+      range:
+      - 0.41
+      - 0.48
+      unit: B/A
+      kind: derived
+      source: prado1990
+      note: mediana (mín–máx)
+    wet_dry_ratio:
+      value: 1.0
+      unit: mojado/seco
+      kind: transcribed
+      source: dealteris1990
+      page: Tabla 1.1, p. 11
+    knot_ratio:
+      value: 0.43
+      unit: con nudo/sin nudo
+      kind: derived
+      source: prado1990
+      note: (B/A) / 1,00
+    rope_tenacity_gf_tex:
+      value: 19.6
+      range:
+      - 18.6
+      - 21.1
+      unit: gf/tex
+      basis: cabo, seco
+      kind: derived
+      source: prado1990
+      note: R[kgf]/(10·w[kg/100 m]), mediana (mín–máx)
+    elongation_break_pct:
+      value: 12.5
+      unit: '%'
+      basis: fibra
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    rope_elongation_75pct_mbl_pct:
+      value: 19.0
+      unit: '%'
+      basis: cabo Ø14 mm al 75 % de la rotura
+      kind: transcribed
+      source: ramos1999
+      page: Tabla 6
+    fibre_modulus_n_tex:
+      value: 6.5
+      unit: N/tex
+      basis: fibra (Diolen 855)
+      kind: transcribed
+      source: bexco2004
+      page: pp. 10–11
+    fibre_modulus_gpa:
+      value: 9.0
+      unit: GPa
+      basis: fibra (9000 N/mm²)
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    twine_modulus_gpa:
+      value: 3.27
+      unit: GPa
+      basis: hilo de red, sobre π·d²/4
+      kind: derived
+      source: bexco2004
+      note: 2 GPa (PA, supuesto) × 9000/5500 (cociente de módulos de fibra, bexco2004 p. 14)
+    rope_ea_n_per_mm2:
+      value: 1090
+      unit: N por mm² de d²
+      basis: cabo de poliéster, rigidez tangente al 10 % de extensión media
+      kind: transcribed
+      source: orcina_ropewire
+      note: EA = 1,09·10⁶·d² kN con d en m = 1090·d_mm² N
+  PE:
+    name: Polietileno (HDPE)
+    family: fibre
+    aliases:
+    - HDPE
+    - POLIETILENO
+    density_kg_m3:
+      value: 950
+      range:
+      - 940
+      - 960
+      unit: kg/m³
+      kind: transcribed
+      source: prado1990
+      page: cap. 3 (0,95; «0,94–0,96»); legue2025 mide 956 en monofilamento HDPE
+    weight_in_water_seawater:
+      value: -0.08
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, textiles que flotan
+    weight_in_water_freshwater:
+      value: -0.05
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, textiles que flotan
+    fibre_tenacity_n_tex:
+      value: 0.392
+      unit: N/tex
+      basis: monofilamento HDPE de arrastre, seco
+      kind: derived
+      source: legue2025
+      page: Tabla 1
+      note: 21,4 N / 54,6 tex (= 40 gf/tex; 368 MPa)
+    twine_tenacity_dry_gf_tex:
+      value: 34.1
+      range:
+      - 27.0
+      - 39.5
+      unit: gf/tex
+      basis: hilo de red seco sin nudo (columna A)
+      kind: derived
+      source: prado1990
+      page: cap. 3, tabla de PE torcido o trenzado (13 filas)
+      note: A[kgf]·1000/Rtex, mediana (mín–máx)
+    twine_tenacity_wet_knot_gf_tex:
+      value: 23.9
+      unit: gf/tex
+      basis: hilo de red mojado con nudo (columna B)
+      kind: derived
+      source: prado1990
+      note: B[kgf]·1000/Rtex, mediana; se excluye la fila 1760 tex con B > A (errata del Workbook)
+    wet_knot_ratio:
+      value: 0.72
+      range:
+      - 0.67
+      - 0.74
+      unit: B/A
+      kind: derived
+      source: prado1990
+      note: mediana (mín–máx), 12 filas
+    wet_dry_ratio:
+      value: 1.1
+      unit: mojado/seco
+      kind: transcribed
+      source: dealteris1990
+      page: Tabla 1.1, p. 11 (110 %); sambasivan2012 p. 45 coincide
+    knot_ratio:
+      value: 0.7
+      unit: con nudo/sin nudo
+      basis: hilo HDPE trenzado, nudo de tejedor, seco
+      kind: transcribed
+      source: legue2025
+      page: §3.1 («30 % lower strength»); 0,72/1,10 = 0,65 según prado1990
+    rope_tenacity_gf_tex:
+      value: 20.0
+      range:
+      - 18.8
+      - 23.5
+      unit: gf/tex
+      basis: cabo, seco
+      kind: derived
+      source: prado1990
+      note: R[kgf]/(10·w[kg/100 m]), mediana (mín–máx)
+    elongation_break_pct:
+      value: 40.5
+      unit: '%'
+      basis: monofilamento HDPE de arrastre
+      kind: transcribed
+      source: legue2025
+      page: Tabla 1
+    rope_elongation_75pct_mbl_pct:
+      value: 16.0
+      unit: '%'
+      basis: cabo Ø14 mm al 75 % de la rotura
+      kind: transcribed
+      source: ramos1999
+      page: Tabla 6
+    fibre_modulus_n_tex:
+      value: 1.99
+      unit: N/tex
+      basis: monofilamento HDPE (pendiente 0–5 %)
+      kind: derived
+      source: legue2025
+      page: Tabla 1
+      note: E = 1,90 GPa transcripto ÷ 956 kg/m³
+    fibre_modulus_gpa:
+      value: 1.9
+      unit: GPa
+      basis: monofilamento HDPE (pendiente 0–5 %)
+      kind: transcribed
+      source: legue2025
+      page: Tabla 1
+    twine_modulus_gpa:
+      value: 0.6
+      range:
+      - 0.58
+      - 0.62
+      unit: GPa
+      basis: hilo de red, sobre π·d²/4
+      kind: derived
+      source: legue2025
+      page: Tabla 2 (EA 7314 N para Ø4 mm y 14 615 N para Ø5,5 mm)
+      note: EA/(π·d²/4) = 0,58 GPa (Ø4 mm) y 0,62 GPa (Ø5,5 mm); se toma el promedio
+  PP:
+    name: Polipropileno
+    family: fibre
+    aliases:
+    - POLIPROPILENO
+    - POLYPROPYLENE
+    density_kg_m3:
+      value: 910
+      range:
+      - 900
+      - 920
+      unit: kg/m³
+      kind: transcribed
+      source: prado1990
+      page: cap. 3 («0,91–0,92»; 0,90 en la tabla de textiles que flotan); dealteris1990 y bexco2004 0,91
+    weight_in_water_seawater:
+      value: -0.14
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, textiles que flotan (calculado allí con ρ = 0,90)
+    weight_in_water_freshwater:
+      value: -0.11
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, textiles que flotan
+    fibre_tenacity_n_tex:
+      value: 0.549
+      unit: N/tex
+      basis: fibra
+      kind: derived
+      source: bexco2004
+      page: p. 14
+      note: 500 N/mm² ÷ 910 kg/m³ (= 56 gf/tex)
+    twine_tenacity_dry_gf_tex:
+      value: 48.9
+      range:
+      - 32.6
+      - 61.9
+      unit: gf/tex
+      basis: hilo de red seco sin nudo (columna A)
+      kind: derived
+      source: prado1990
+      page: cap. 3, PP torcido de filamento continuo (15 filas) y de fibra cortada (12 filas)
+      note: mediana del filamento continuo; rango = mín de fibra cortada a máx de filamento continuo
+    twine_tenacity_wet_knot_gf_tex:
+      value: 25.2
+      unit: gf/tex
+      basis: hilo de red mojado con nudo (columna B)
+      kind: derived
+      source: prado1990
+      note: mediana del filamento continuo
+    wet_knot_ratio:
+      value: 0.53
+      range:
+      - 0.5
+      - 0.62
+      unit: B/A
+      kind: derived
+      source: prado1990
+      note: filamento continuo, mediana (mín–máx)
+    wet_dry_ratio:
+      value: 1.0
+      unit: mojado/seco
+      kind: transcribed
+      source: dealteris1990
+      page: Tabla 1.1, p. 11
+    knot_ratio:
+      value: 0.53
+      unit: con nudo/sin nudo
+      kind: derived
+      source: prado1990
+      note: (B/A) / 1,00, filamento continuo
+    rope_tenacity_gf_tex:
+      value: 29.7
+      range:
+      - 26.9
+      - 32.4
+      unit: gf/tex
+      basis: cabo, seco
+      kind: derived
+      source: prado1990
+      note: R[kgf]/(10·w[kg/100 m]), mediana (mín–máx)
+    elongation_break_pct:
+      value: 12.0
+      unit: '%'
+      basis: fibra
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    rope_elongation_75pct_mbl_pct:
+      value: 10.0
+      unit: '%'
+      basis: cabo Ø14 mm al 75 % de la rotura
+      kind: transcribed
+      source: ramos1999
+      page: Tabla 6
+    fibre_modulus_n_tex:
+      value: 4.6
+      unit: N/tex
+      basis: fibra
+      kind: derived
+      source: bexco2004
+      page: p. 14
+      note: 4200 N/mm² ÷ 910 kg/m³
+    fibre_modulus_gpa:
+      value: 4.2
+      unit: GPa
+      basis: fibra (4200 N/mm²)
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    twine_modulus_gpa:
+      value: 1.53
+      unit: GPa
+      basis: hilo de red, sobre π·d²/4
+      kind: derived
+      source: bexco2004
+      note: 2 GPa (PA, supuesto) × 4200/5500 (cociente de módulos de fibra, bexco2004 p. 14)
+    rope_ea_n_per_mm2:
+      value: 1060
+      unit: N por mm² de d²
+      basis: cabo de polipropileno, rigidez tangente al 10 % de extensión media
+      kind: transcribed
+      source: orcina_ropewire
+      note: EA = 1,06·10⁶·d² kN con d en m = 1060·d_mm² N
+  HMPE:
+    name: Polietileno de ultra alto peso molecular (Dyneema)
+    family: fibre
+    aliases:
+    - UHMWPE
+    - DYNEEMA
+    - DYNEEMA SK78
+    - SPECTRA
+    density_kg_m3:
+      value: 970
+      range:
+      - 970
+      - 975
+      unit: kg/m³
+      kind: transcribed
+      source: bexco2004
+      page: tabla de fibras (Dyneema 0,97); mennens_dynice78 0,97; minifibers_dyneema 0,975
+    weight_in_water_seawater:
+      value: -0.052
+      unit: peso en agua / peso en aire
+      kind: derived
+      source: prado1990
+      note: 1 − 1,026/0,975 (fórmula de prado1990 con ρ de bexco2004/minifibers_dyneema)
+    weight_in_water_freshwater:
+      value: -0.026
+      unit: peso en agua / peso en aire
+      kind: derived
+      source: prado1990
+      note: 1 − 1/0,975
+    fibre_tenacity_n_tex:
+      value: 3.5
+      unit: N/tex
+      basis: fibra Dyneema SK78
+      kind: transcribed
+      source: mennens_dynice78
+      note: 357 gf/tex; bexco2004 da 3300 N/mm² (3,40 N/tex) para PE de gel
+    wet_dry_ratio:
+      value: 1.0
+      unit: mojado/seco
+      kind: transcribed
+      source: bexco2004
+      note: cualitativo («Strength & fatigue do not change in water»)
+    rope_tenacity_gf_tex:
+      value: 169
+      range:
+      - 147
+      - 183
+      unit: gf/tex
+      basis: cabo Dynice 78
+      kind: derived
+      source: mennens_dynice78
+      note: 100·MBL[t]/w[kg/100 m], mediana (mín–máx)
+    elongation_break_pct:
+      value: 3.5
+      range:
+      - 3.5
+      - 4.0
+      unit: '%'
+      basis: fibra (PE de gel)
+      kind: transcribed
+      source: bexco2004
+      page: p. 14; mennens_dynice78 3,7 %; cabo Ø14 al 75 % de la rotura 4 % (ramos1999)
+    fibre_modulus_n_tex:
+      value: 110
+      unit: N/tex
+      basis: fibra Dyneema
+      kind: transcribed
+      source: bexco2004
+      page: pp. 10–11; mennens_dynice78 da 120 N/tex (SK78)
+    fibre_modulus_gpa:
+      value: 85
+      unit: GPa
+      basis: fibra (PE de gel, 85 000 N/mm²)
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    twine_modulus_gpa:
+      value: 30.9
+      unit: GPa
+      basis: hilo de red, sobre π·d²/4
+      kind: derived
+      source: bexco2004
+      note: 2 GPa (PA, supuesto) × 85 000/5500 (cociente de módulos de fibra, bexco2004 p. 14)
+    pending:
+    - 'A VERIFICAR: relación de nudo del hilo HMPE (no encontrada; Klust no consultado).'
+    - 'A VERIFICAR: EA de cabos HMPE (no encontrada como relación; sólo la cota EA ≤ 120 N/tex × tex).'
+  steel_wire_rope:
+    name: Cable de acero
+    family: steel
+    aliases:
+    - STEEL
+    - ACERO
+    - WIRE
+    - CABLE DE ACERO
+    density_kg_m3:
+      value: 7800
+      range:
+      - 7800
+      - 7860
+      unit: kg/m³
+      basis: acero (alambre)
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tabla de metales (7,8); bexco2004 da 7,86
+    weight_in_water_seawater:
+      value: 0.87
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tabla de metales
+    weight_in_water_freshwater:
+      value: 0.87
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tabla de metales
+    wire_tenacity_mpa:
+      value: 2160
+      unit: N/mm²
+      basis: alambre
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    elongation_break_pct:
+      value: 1.1
+      unit: '%'
+      basis: alambre
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    steel_modulus_gpa:
+      value: 200
+      unit: GPa
+      basis: alambre
+      kind: transcribed
+      source: bexco2004
+      page: p. 14
+    metallic_area_factor:
+      value: 0.455
+      unit: área metálica / (π·d²/4)
+      basis: 6x19
+      kind: transcribed
+      source: orcina_ropewire
+      note: datos del «HER Group Marine Equipment & Wire Rope Handbook»
+    metallic_modulus_fc_gpa:
+      value: 103
+      unit: GPa
+      basis: 6x19 alma de fibra, sobre el área metálica
+      kind: transcribed
+      source: orcina_ropewire
+    metallic_modulus_iwrc_gpa:
+      value: 113
+      unit: GPa
+      basis: 6x19 alma de acero (IWRC), sobre el área metálica
+      kind: transcribed
+      source: orcina_ropewire
+    effective_modulus_fc_gpa:
+      value: 46.9
+      unit: GPa
+      basis: 6x19 alma de fibra, sobre el área nominal π·d²/4
+      kind: derived
+      source: orcina_ropewire
+      note: 103 GPa × 0,455
+    effective_modulus_iwrc_gpa:
+      value: 51.4
+      unit: GPa
+      basis: 6x19 IWRC, sobre el área nominal π·d²/4
+      kind: derived
+      source: orcina_ropewire
+      note: 113 GPa × 0,455
+    ea_fc_n_per_mm2:
+      value: 36700
+      unit: N por mm² de d²
+      basis: 6x19 alma de fibra
+      kind: transcribed
+      source: orcina_ropewire
+      note: EA = 3,67·10⁷·d² kN con d en m = 36 700·d_mm² N
+    ea_iwrc_n_per_mm2:
+      value: 40400
+      unit: N por mm² de d²
+      basis: 6x19 IWRC
+      kind: transcribed
+      source: orcina_ropewire
+      note: EA = 4,04·10⁷·d² kN con d en m = 40 400·d_mm² N
+    modulus_6x7_fc_gpa:
+      value: 61.8
+      unit: GPa
+      basis: 6x7+FC, sobre el círculo circunscripto, coeficiente de seguridad 5
+      kind: derived
+      source: certex_fi_wire
+      note: 6300 kp/mm² × 9,80665
+    modulus_6x36_fc_gpa:
+      value: 49.0
+      unit: GPa
+      basis: 6x36+FC, sobre el círculo circunscripto, coeficiente de seguridad 5
+      kind: derived
+      source: certex_fi_wire
+      note: 5000 kp/mm² × 9,80665
+    constructional_extension_fc_pct:
+      value: 0.5
+      range:
+      - 0.25
+      - 0.75
+      unit: '% del largo'
+      basis: alargamiento inicial (no elástico), alma de fibra, coef. de seguridad 5 (8–3)
+      kind: transcribed
+      source: bridon2020crane
+      page: p. 46; certex_fi_wire da los mismos valores
+    weight_k_kg_m_mm2:
+      value: 0.00362
+      range:
+      - 0.00243
+      - 0.00453
+      unit: kg/m por mm² de d²
+      kind: derived
+      source: prado1990
+      note: w/d², 6x19 (9/9/1); rango = 6x12 (prado1990) a Dyform 6x26 IWRC (bridon2023)
+    mbl_k_t_mm2:
+      value: 0.048
+      range:
+      - 0.0302
+      - 0.0744
+      unit: t por mm² de d²
+      kind: derived
+      source: prado1990
+      note: R/d², 6x19 (9/9/1) grado 145 kgf/mm²; rango = 6x12 (prado1990) a Dyform 6x26 IWRC (bridon2023)
+    pending:
+    - 'A VERIFICAR: módulo específico de 6x19 (9/9/1) y 6x24 (15/9/FC) (bridon2023 no lo da); se usa el
+      del grupo 6x19.'
+    - 'A VERIFICAR: factor de peso en el agua del cable con alma de fibra o de polímero como conjunto.'
+  combination_steel_pp:
+    name: Cabo combinado (acero + PP)
+    family: combination
+    aliases:
+    - COMBINADO
+    - COMBINADO (PP + ACERO)
+    - COMBINATION
+    - COMBINATION ROPE
+    weight_k_kg_m_mm2:
+      value: 0.00074
+      range:
+      - 0.00064
+      - 0.00128
+      unit: kg/m por mm² de d²
+      kind: derived
+      source: prado1990
+      page: cap. 3, «Combination wire (2)»
+      note: w/d², mediana de 3 cordones (Ø10–18); el máximo es de 6 cordones (mediana 0,00107)
+    mbl_k_t_mm2:
+      value: 0.0093
+      range:
+      - 0.0093
+      - 0.016
+      unit: t por mm² de d²
+      kind: derived
+      source: prado1990
+      page: cap. 3, «Combination wire (2)»
+      note: R/d², medianas de 3 cordones (0,0093) y 6 cordones (0,0160)
+    weight_in_water_seawater:
+      value: 0.087
+      unit: peso en agua / peso en aire
+      kind: assumed
+      source: giamportone2024
+      note: 'A VERIFICAR: no encontrado; se conserva el 0,087 del libro Excel (Flot!F37, Flot!G191).'
+    rope_ea_n:
+      value: 1.0e6
+      unit: N
+      basis: relinga combinada (lima y burlón)
+      kind: assumed
+      note: 'A VERIFICAR: EA del cabo combinado no encontrada; se conserva el valor del simulador.'
+    pending:
+    - 'A VERIFICAR: cabo combinado con cubierta de PE (no encontrado).'
+  chain_steel:
+    name: Cadena de acero
+    family: steel
+    aliases:
+    - CHAIN
+    - CADENA
+    density_kg_m3:
+      value: 7800
+      unit: kg/m³
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tabla de metales
+    weight_in_water_seawater:
+      value: 0.87
+      unit: peso en agua / peso en aire
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, tabla de metales
+    weight_k_kg_m_mm2:
+      value: 0.0225
+      range:
+      - 0.02
+      - 0.0235
+      unit: kg/m por mm² de diámetro de eslabón
+      basis: cadena común (5–20 mm)
+      kind: derived
+      source: prado1990
+      page: cap. 3, «Hardware – Chains»
+      note: w/d², mediana (mín–máx)
+    mbl_k_t_mm2:
+      value: 0.1257
+      unit: t por mm² de diámetro de eslabón
+      basis: cadena de alta resistencia
+      kind: derived
+      source: prado1990
+      page: cap. 3, «Hardware – Chains» (6,158–45,37 tf)
+      note: BS/d², constante en la tabla
+    swl_fraction:
+      value: 0.2
+      unit: carga de trabajo / rotura
+      kind: transcribed
+      source: prado1990
+      page: cap. 3, «Hardware – Chains» (SWL ≈ BS/5)
+    pending:
+    - 'A VERIFICAR: reparto eslabón largo ≈ 0,018 / corto ≈ 0,023 kg/m/mm² (comentario del validador,
+      sin fuente).'
+references:
+  prado1990:
+    title: Prado & Dremière, Fisherman's Workbook (FAO, 1990), cap. 3 «Materials and accessories»
+    url: https://www.fao.org/4/ah827e/AH827E03.htm
+    accessed: '2026-10-27'
+  dealteris1990:
+    title: DeAlteris & Castro, Practical Twinework for Fishermen and Gear Technologists (URI, 1990)
+    url: https://repository.library.noaa.gov/view/noaa/42456/noaa_42456_DS1.pdf
+    accessed: '2026-10-27'
+  sambasivan2012:
+    title: Sambasivan, Different types of netting materials & their properties (CMFRI, 2012)
+    url: http://eprints.cmfri.org.in/9169/1/5_M.K.Sambasivan.pdf
+    accessed: '2026-10-27'
+  ramos1999:
+    title: Ramos, Chemical and physical properties of synthetic fibres ... Cape Verde (UNU-FTP, 1999)
+    url: https://www.grocentre.is/static/gro/publication/196/document/ramos99-ff.pdf
+    accessed: '2026-10-27'
+  bexco2004:
+    title: Bexco & Vryhof, Polyester & Dyneema Mooring Ropes Manual 2004 (DeepRope)
+    url: https://ocw.tudelft.nl/wp-content/uploads/deepropemanual.pdf
+    accessed: '2026-10-27'
+  legue2025:
+    title: Le Gué et al., Biodegradable twine for trawl fishing (Mar. Pollut. Bull. 211, 2025)
+    url: https://archimer.ifremer.fr/doc/00928/103995/115957.pdf
+    accessed: '2026-10-27'
+  moe2007:
+    title: Moe et al., Tensile properties for netting materials used in aquaculture net cages (2007)
+    url: https://hdl.handle.net/11250/236414
+    accessed: '2026-10-27'
+  orcina_ropewire:
+    title: 'OrcaFlex Help: Rope/wire: Axial and bending stiffness'
+    url: https://www.orcina.com/webhelp/OrcaFlex/Content/html/Ropewire,Axialandbendingstiffness.htm
+    accessed: '2026-10-27'
+  certex_fi_wire:
+    title: Certex Finland, Steel wire ropes – technical description
+    url: https://www.certex.fi/en/technical-info/steel-wire-rope/technical-description
+    accessed: '2026-10-27'
+  bridon2020crane:
+    title: Bridon-Bekaert, Cranes & Industrial (Crane Catalog 03/2020)
+    url: https://www.bekaert.com/content/dam/bbrg-myrope/products/technical-sheets/Cranes%20and%20Industrial.pdf
+    accessed: '2026-10-27'
+  bridon2023:
+    title: Bridon-Bekaert 2023 Fishing Catalogue
+  pfeifer_6x19w:
+    title: PFEIFER 6x19W-FC datasheet (Rev. 1/2017)
+  mennens_dynice78:
+    title: Mennens, DYNICE 78 Rope Durapur – product information and technical data
+    url: https://www.mennens.nl/en_GB/download/productpage/204590
+    accessed: '2026-10-27'
+  minifibers_dyneema:
+    title: 'MiniFIBERS, Technical Data Sheet: Dyneema SK Crimped Staple'
+    url: https://www.minifibers.com/files/TD/PI-TDS_Dyneema-SK-Crimped-Staple.pdf
+    accessed: '2026-10-27'
+  giamportone2024:
+    title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
+  klust1982:
+    title: Klust, Netting Materials for Fishing Gear (FAO, 1982)
+    note: NO consultado (sin texto completo accesible, octubre de 2026)

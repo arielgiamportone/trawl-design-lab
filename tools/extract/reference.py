@@ -609,6 +609,19 @@ def warps() -> dict[str, Any]:
     return {"kind": "warps", "source": src(TABLAS, "B337:G343"), "items": items}
 
 
+#: Bloques de ``materials.yaml`` que no salen del Excel (tabla de materiales con fuentes, Fase
+#: 19.1): se conservan tal cual al regenerar.
+MATERIALS_KEPT_KEYS = ("properties_source", "properties_notes", "properties", "references")
+
+
+def _kept_material_blocks() -> dict[str, Any]:
+    path = DATA / "materials.yaml"
+    if not path.exists():
+        return {}
+    old = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    return {k: old[k] for k in MATERIALS_KEPT_KEYS if k in old}
+
+
 def materials() -> dict[str, Any]:
     items = []
     coef_sea = to_num(cell(TABLAS, "G36"))
@@ -642,6 +655,7 @@ def materials() -> dict[str, Any]:
             "Los coeficientes de peso en el agua (G36/I36) sólo figuran en la fila 36 de la hoja; "
             "se aplican a ambos hilos de PA."
         ],
+        **_kept_material_blocks(),
     }
 
 
