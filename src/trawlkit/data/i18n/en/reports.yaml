@@ -95,6 +95,9 @@ Rotura del cable seleccionado: Breaking load of selected warp
 Rotura mínima requerida: Required minimum breaking load
 Cable a comprar: Warp to purchase
 Velocidad máxima remolcable: Maximum towing speed
+Tensión de cada cable a la velocidad de diseño: Tension in each warp at the design speed
+Estiramiento elástico del cable: Elastic stretch of the warp
+Coeficiente de seguridad del cable: Warp safety factor
 RN estándar a {speed}: Standard RN at {speed}
 ROB a {speed}: ROB at {speed}
 Tauti (lima): Tauti (headrope)

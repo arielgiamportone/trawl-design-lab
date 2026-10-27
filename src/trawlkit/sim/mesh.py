@@ -51,9 +51,19 @@ punto de remolque del portón, que se fija en ``y = ±DP/2``, ``z = alto del por
 
 Detalles y valores por defecto
 ------------------------------
-* EA del hilo = ``E·π d²/4`` con ``E = 2 GPa`` (PA, rango 1–3 GPa); relingas combinadas
-  ``EA = 10⁶ N``; bridas y patentes de acero ``EA = 4·10⁶ N`` con el peso sumergido del cable
-  del motor. Las deformaciones de trabajo quedan por debajo del 0,5 %.
+* Materiales (Fase 19.1, :func:`trawlkit.materials.material_table`): cada panel toma la densidad
+  y el módulo de su hilo de ``Panel.material`` (PA si no está en la tabla). Peso sumergido del
+  hilo ``g/rendimiento · (1 − ρ_agua/ρ_material)``: el PA (1140 kg/m³) y el PES pesan en el agua,
+  el PE y el PP flotan. EA del hilo = ``E·π d²/4`` con ``E`` = 2 GPa para PA (supuesto, del orden
+  de la fibra × el cociente hilo/fibra medido), 0,60 GPa para PE (legue2025) y el de PA escalado
+  por el cociente de módulos de fibra para PES (3,27), PP (1,53) y HMPE (30,9 GPa).
+* Relingas: EA de :class:`Rigging` (del cabo del motor por la relación ``EA = k·d²`` de su
+  material; combinadas ``10⁶ N``, supuesto «A VERIFICAR»). Cable de remolque: 6x19 con
+  ``EA = 36 700·d_mm²`` N (alma de fibra; 40 400 con alma de acero), es decir un módulo efectivo
+  de 46,9 GPa (51,4) sobre el área nominal (OrcaFlex/HER). Bridas y patentes: la misma relación
+  si se conoce su diámetro (``Rigging.bridle_diameter_mm``); si no, ``4·10⁶ N`` (supuesto,
+  6x19 de Ø10,4 mm), con el peso sumergido del cable del motor. Las deformaciones de trabajo del
+  paño y de los cables quedan por debajo del 0,5 %.
 * La punta de ala (A, B) tiene un borde de boca de 3 mallas; se reduce a un punto (evita
   triángulos de relación de aspecto ~20, rígidos y lentos de relajar) y las puntas de lima y
   burlón se unen con una barra ``wing_end`` del largo estirado de esos dos bordes (6 mallas).
@@ -75,14 +85,30 @@ import numpy.typing as npt
 from trawlkit.drawing.layout import Band, NetLayout, PanelShape, layout_net
 from trawlkit.i18n import t
 from trawlkit.io.schema import NetSpec, Panel
+from trawlkit.materials import (
+    DEFAULT_ROPE_EA_N,
+    polymer_density,
+    wire_rope_ea_n,
+)
+from trawlkit.materials import (
+    twine_modulus_pa as material_twine_modulus_pa,
+)
 from trawlkit.netting import orientation_coefficients
 from trawlkit.topology import equivalent_two_panel
 
 FloatArray = npt.NDArray[np.float64]
 IntArray = npt.NDArray[np.int64]
 
-#: Densidad de la poliamida (PA6) [kg/m³].
+#: Densidad de la poliamida (PA6) [kg/m³]. Desde la Fase 19.1 cada panel usa la densidad de su
+#: material (:func:`trawlkit.materials.polymer_density`); se conserva como referencia.
 RHO_PA = 1140.0
+#: Densidad del agua de mar del simulador [kg/m³].
+RHO_SEA = 1024.0
+#: EA de bridas y patentes cuando no se conoce su diámetro [N] (supuesto «A VERIFICAR»: el
+#: motor no dimensiona el cable de las bridas; equivale a un 6x19 con alma de fibra de Ø10,4 mm
+#: con ``EA = 36 700·d_mm²``, OrcaFlex/HER). Con el diámetro del cable de remolque (12–13 mm)
+#: sería ≈ 6·10⁶ N: la AV simulada de la A-3 sube 0,3 % y la relajación tarda el doble.
+DEFAULT_BRIDLE_EA_N = 4.0e6
 #: Aceleración de la gravedad [m/s²].
 GRAVITY = 9.80665
 #: Ángulo de reposo entre las dos familias de hilos de la malla rómbica [°] (A VERIFICAR: el
@@ -142,6 +168,35 @@ class Rigging:
     warp_diameter_mm: float = 12.0
     vessel_bhp: float = 150.0  # potencia del buque (tope de la potencia de remolque)
     door_length_m: float = 1.9
+    # Rigidez axial [N] (Fase 19.1). None = valor por defecto: relingas combinadas 10⁶ N
+    # (supuesto «A VERIFICAR»); bridas y patentes, cable 6x19 de ``bridle_diameter_mm`` si se
+    # conoce y si no :data:`DEFAULT_BRIDLE_EA_N`; cable de remolque, 6x19 de ``warp_diameter_mm``
+    # con alma ``warp_core`` (``EA = k·d²``, OrcaFlex/HER).
+    headrope_ea_n: float | None = None
+    footrope_ea_n: float | None = None
+    bridle_ea_n: float | None = None
+    bridle_diameter_mm: float | None = None
+    warp_ea_n: float | None = None
+    warp_core: str = "FC"
+
+    def rope_ea(self, which: str) -> float:
+        """EA de la lima (``headrope``) o del burlón (``footrope``) [N]."""
+        ea = self.headrope_ea_n if which == "headrope" else self.footrope_ea_n
+        return DEFAULT_ROPE_EA_N if ea is None else float(ea)
+
+    def wire_ea(self) -> float:
+        """EA de bridas y patentes [N]: dato, cable 6x19 de ``bridle_diameter_mm`` o supuesto."""
+        if self.bridle_ea_n is not None:
+            return float(self.bridle_ea_n)
+        if self.bridle_diameter_mm is not None:
+            return wire_rope_ea_n(self.bridle_diameter_mm, self.warp_core)
+        return DEFAULT_BRIDLE_EA_N
+
+    def warp_ea(self) -> float:
+        """EA del cable de remolque [N] (módulo efectivo sobre el área nominal)."""
+        if self.warp_ea_n is not None:
+            return float(self.warp_ea_n)
+        return wire_rope_ea_n(self.warp_diameter_mm, self.warp_core)
 
 
 @dataclass(frozen=True)
@@ -271,7 +326,23 @@ def _runnage(panel: Panel) -> float:
     if panel.rtex:
         return 1e6 / float(panel.rtex)
     d = panel.twine_diameter_mm / 1000.0
-    return 1.0 / (RHO_PA * math.pi * d * d / 4.0 * 0.6)  # hilo torcido: ~60 % de relleno
+    rho = polymer_density(panel.material)
+    return 1.0 / (rho * math.pi * d * d / 4.0 * 0.6)  # hilo torcido: ~60 % de relleno
+
+
+def twine_weight_water_n_m(panel: Panel) -> float:
+    """Peso sumergido del hilo del panel [N/m]: ``g/rendimiento · (1 − ρ_agua/ρ_material)``.
+
+    Negativo para los hilos que flotan (PE, PP, HMPE).
+    """
+    return GRAVITY / _runnage(panel) * (1.0 - RHO_SEA / polymer_density(panel.material))
+
+
+def twine_ea_n(panel: Panel, modulus_pa: float | None = None) -> float:
+    """EA de un hilo del panel [N]: ``E·π d²/4`` con el módulo de su material (o ``modulus_pa``)."""
+    e = material_twine_modulus_pa(panel.material) if modulus_pa is None else modulus_pa
+    d = panel.twine_diameter_mm / 1000.0
+    return e * math.pi * d * d / 4.0
 
 
 @dataclass
@@ -405,13 +476,17 @@ def build_model(
     rigging: Rigging,
     *,
     resolution: int = 8,
-    twine_modulus_pa: float = 2.0e9,
-    rope_ea_n: float = 1.0e6,
-    wire_ea_n: float = 4.0e6,
+    twine_modulus_pa: float | None = None,
+    rope_ea_n: float | None = None,
+    wire_ea_n: float | None = None,
     coupled_doors: bool = False,
     warp_segments: int = 10,
 ) -> NetModel:
     """Discretiza ``spec`` con el aparejo ``rigging`` (ver el docstring del módulo).
+
+    ``twine_modulus_pa`` (módulo de todos los hilos), ``rope_ea_n`` (las dos relingas) y
+    ``wire_ea_n`` (bridas y patentes) reemplazan, si se dan, los valores por material y del
+    aparejo (:class:`Rigging`); ``None`` usa la tabla de materiales.
 
     ``resolution`` es la cantidad nominal de divisiones por panel: el ancho de cada ala tiene
     ``resolution // 2`` columnas, la bocana ``2·⌈resolution/6⌉`` y las filas de cada franja son
@@ -470,8 +545,8 @@ def build_model(
                 uf.union(int(ids[0, 0]), int(k))
         a = mesh_m / 2.0
         d = panel.twine_diameter_mm / 1000.0
-        ea = twine_modulus_pa * math.pi * d * d / 4.0
-        w = GRAVITY / _runnage(panel) * (1.0 - 1024.0 / RHO_PA)
+        ea = twine_ea_n(panel, twine_modulus_pa)
+        w = twine_weight_water_n_m(panel)
         key = f"{plane}:{panel.id}:{shape.side}"
         n_cols = xx.shape[1] - 1
         for r_ in range(xx.shape[0] - 1):
@@ -551,11 +626,7 @@ def build_model(
             bosom=cg[0].nodes[0, n_w : n_w + n_b + 1][::-1],  # de derecha a izquierda
             collapsed=_collapses_top(tip_panel),
             wing_end_m=tip_panel.meshes_top * tip_panel.mesh_mm / 1000.0,
-            wing_end_ea=twine_modulus_pa
-            * math.pi
-            * (tip_panel.twine_diameter_mm / 1000.0) ** 2
-            / 4.0
-            * max(2 * tip_panel.meshes_top, 1),
+            wing_end_ea=twine_ea_n(tip_panel, twine_modulus_pa) * max(2 * tip_panel.meshes_top, 1),
             tip_r=int(rg[0].nodes[0, 0]),
             tip_l=int(lg[0].nodes[0, 0]),
             codend_end=cg[-1].nodes[-1, :],
@@ -679,7 +750,7 @@ def build_model(
         for k in range(path_.size - 1):
             bars.append((int(path_[k]), int(path_[k + 1])))
             l0.append(float(seg[k]))
-            ea.append(rope_ea_n)
+            ea.append(rigging.rope_ea(name) if rope_ea_n is None else rope_ea_n)
             bd.append(dmm / 1000.0)
             bw.append(wkgf * GRAVITY)
             kinds.append(name)
@@ -723,7 +794,7 @@ def build_model(
             # (su arrastre no es de la red).
             bars.append((a_, b_))
             l0.append(ln)
-            ea.append(wire_ea_n)
+            ea.append(rigging.wire_ea() if wire_ea_n is None else wire_ea_n)
             bd.append(0.0)
             bw.append(rigging.wire_water_kgf_m * GRAVITY)
             kinds.append(kind)
@@ -731,8 +802,9 @@ def build_model(
     warp_nodes: list[IntArray] = []
     if coupled_doors:
         # Cable de remolque: del portón al buque (pasteca), en línea recta como forma inicial.
-        # EA de cable de acero (módulo efectivo ~100 GPa sobre el área nominal).
-        warp_ea = 1.0e11 * math.pi * (rigging.warp_diameter_mm / 1000.0) ** 2 / 4.0
+        # EA de cable de acero 6x19: módulo efectivo 46,9 GPa (alma de fibra) o 51,4 GPa (IWRC)
+        # sobre el área nominal π·d²/4 (OrcaFlex/HER; 103–113 GPa sobre el área metálica).
+        warp_ea = rigging.warp_ea()
         for k, sgn in ((0, 1.0), (1, -1.0)):
             door = np.asarray(x_list[doors[k]], dtype=float)
             dz = rigging.depth_m - door[2]

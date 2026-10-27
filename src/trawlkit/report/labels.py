@@ -38,6 +38,9 @@ SUMMARY_LABELS: dict[str, tuple[str, str]] = {
     "warp_min_breaking_load_kgf": (N_("Rotura mínima requerida"), "kgf"),
     "warp_quantity_m": (N_("Cable a comprar"), "m"),
     "max_speed_kn": (N_("Velocidad máxima remolcable"), "kn"),
+    "warp_tension_kgf": (N_("Tensión de cada cable a la velocidad de diseño"), "kgf"),
+    "warp_stretch_m": (N_("Estiramiento elástico del cable"), "m"),
+    "warp_safety_factor": (N_("Coeficiente de seguridad del cable"), ""),
 }
 
 

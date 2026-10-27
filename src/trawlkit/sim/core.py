@@ -212,7 +212,8 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
     """Aparejo de la red estándar a partir del resultado del motor (modo del caso).
 
     Las relingas salen del motor (largo corregido de ala y bocana), salvo que la spec traiga los
-    largos del plano (``wing_m`` y ``bosom_m`` de la relinga, redes del catálogo).
+    largos del plano (``wing_m`` y ``bosom_m`` de la relinga, redes del catálogo). La rigidez
+    axial (Fase 19.1) sale del material de cada cabo y del cable de remolque elegido.
     """
     dims = r.dimensions.std
     fl = r.floats
@@ -234,6 +235,7 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         float(dims.footrope.wing_corrected_m),
         float(dims.footrope.bosom_corrected_m),
     )
+    warp_core, warp_ea = _warp_stiffness(r)
     return Rigging(
         door_spread_m=float(r.doors.spread_m if door_spread_m is None else door_spread_m),
         upper_bridle_m=float(r.bridles.lengths.upper_m),
@@ -278,7 +280,51 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         warp_diameter_mm=float(r.warps.diameter_mm),
         vessel_bhp=float(r.case.vessel.bhp),
         door_length_m=float(r.doors.door.length_m or 1.9),
+        headrope_ea_n=_rope_ea_n(fl.headrope_rope.id, float(fl.headrope_rope.diameter_mm)),
+        footrope_ea_n=_rope_ea_n(
+            r.ballast.footrope_rope.id, float(r.ballast.footrope_rope.diameter_mm)
+        ),
+        warp_core=warp_core,
+        warp_ea_n=warp_ea,
     )
+
+
+def _rope_ea_n(rope_id: str, diameter_mm: float) -> float | None:
+    """EA de una relinga del motor [N] (Fase 19.1); ``None`` = supuesto por defecto (10⁶ N).
+
+    Si el cabo está en el catálogo de componentes se usa :func:`trawlkit.components.
+    axial_stiffness` (``ea_kn`` de la ficha, rotura/alargamiento o la relación del material); si
+    sólo está en el catálogo del libro, la relación ``EA = k·d²`` de su material.
+    """
+    from trawlkit.components import RopeItem, axial_stiffness, get_component
+    from trawlkit.io import load_catalogue
+    from trawlkit.materials import rope_ea_n
+
+    try:
+        comp = get_component("rope", rope_id)
+    except KeyError:
+        comp = None
+    if isinstance(comp, RopeItem):
+        got = axial_stiffness(comp)
+        return None if got is None else got[0] * 1000.0
+    for item in load_catalogue("ropes").items:
+        if item.get("id") == rope_id:
+            return rope_ea_n(str(item.get("material") or ""), diameter_mm)
+    return None
+
+
+def _warp_stiffness(r: DesignResult) -> tuple[str, float | None]:
+    """Alma del cable de remolque (``FC``/``IWRC``) y EA del cable elegido por el motor [N].
+
+    Es la del estiramiento del motor (:class:`~trawlkit.rigging.WarpStretch`): ficha del
+    componente o módulo efectivo del 6x19 sobre el área nominal.
+    """
+    from trawlkit.materials import wire_core
+
+    st = r.warps.stretch
+    if st is not None:
+        return st.core, st.ea_n
+    return wire_core(None, r.warps.selection.construction), None
 
 
 def _door_water_kgf(r: DesignResult) -> float:

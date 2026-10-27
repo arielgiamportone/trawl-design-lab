@@ -77,6 +77,7 @@ from trawlkit.rigging import (
     WarpCylinderDrag,
     WarpLoads,
     WarpSelection,
+    WarpStretch,
     WarpWeight,
 )
 from trawlkit.units import KNOT_TO_MS
@@ -645,6 +646,9 @@ class WarpStage:
     loads: WarpLoads
     selection: WarpSelection
     quantity_m: float
+    #: Tensión, rigidez y estiramiento elástico del cable elegido a la velocidad de diseño
+    #: (Fase 19.1; no está en el libro).
+    stretch: WarpStretch | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -748,6 +752,12 @@ class DesignResult:
                 "max_speed_kn": self.performance.design.max_speed_kn,
             }
         )
+        st = self.warps.stretch
+        if st is not None and case.compat is Compat.CORRECTED:
+            # Fase 19.1 (fuera del libro: sólo en modo corregido).
+            out["warp_tension_kgf"] = st.tension_kgf
+            out["warp_stretch_m"] = st.stretch_m
+            out["warp_safety_factor"] = st.safety_factor
         if case.seabed is not None:
             out["seabed"] = case.seabed
             out["seabed_friction_kgf"] = self.performance.seabed_friction_kgf
@@ -1494,7 +1504,40 @@ def _stage_warps(
         loads=loads,
         selection=selection,
         quantity_m=rigging.warp_quantity_m(warp_m, case.warp_spare_fraction),  # Cab!D12
+        stretch=_warp_stretch(angles, loads, selection, warp_m),
     )
+
+
+def _warp_stretch(
+    angles: WarpAngles,
+    loads: WarpLoads,
+    selection: WarpSelection,
+    warp_m: float,
+) -> WarpStretch:
+    """Estiramiento elástico del cable elegido (Fase 19.1): ΔL = T·L/EA a la velocidad de diseño.
+
+    EA del componente del catálogo si el cable está en él (:func:`trawlkit.components.
+    axial_stiffness`: ``ea_kn`` de la ficha o el módulo efectivo según el alma); si no, el del
+    6x19 con alma de fibra sobre el área nominal (:func:`trawlkit.materials.wire_rope_ea_n`).
+    El ángulo del cable es siempre acos(cos δ1 · cos δ2), también en modo EXCEL (no es una celda
+    del libro).
+    """
+    from trawlkit.components import WireItem, axial_stiffness, get_component
+    from trawlkit.materials import wire_core, wire_rope_ea_n
+
+    try:
+        comp = get_component("wire", selection.id)
+    except KeyError:
+        comp = None
+    got = axial_stiffness(comp) if isinstance(comp, WireItem) else None
+    if isinstance(comp, WireItem) and got is not None:
+        core = wire_core(comp.core, comp.construction)
+        ea_n, kind = got[0] * 1000.0, got[1].kind.value
+    else:
+        core = wire_core(None, selection.construction)
+        ea_n, kind = wire_rope_ea_n(selection.diameter_mm, core), "derived"
+    alpha = rigging.warp_attack_angle_deg(angles.declination_deg, angles.divergence_deg)
+    return rigging.warp_stretch(loads, selection, warp_m, alpha, ea_n, kind, core)
 
 
 def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:

@@ -39,8 +39,17 @@ from trawlkit.io.schema import (
     DoorCoefficients,
     NetSpec,
     Provenance,
+    ProvenanceKind,
     SourceDocument,
     _Model,
+)
+from trawlkit.materials import (
+    ea_from_breaking_load_n,
+    material_table,
+    rope_ea_n,
+    twine_modulus_pa,
+    wire_core,
+    wire_rope_ea_n,
 )
 from trawlkit.netcheck import Issue
 
@@ -121,6 +130,8 @@ class TwineItem(ComponentBase):
         default=None, gt=0, description="Con nudo (mojado si la fuente lo indica)"
     )
     knotted: bool = True
+    elongation_pct: float | None = Field(default=None, gt=0, description="Alargamiento de rotura")
+    ea_kn: float | None = Field(default=None, gt=0, description="Rigidez axial EA [kN]")
 
 
 class WireItem(ComponentBase):
@@ -133,6 +144,8 @@ class WireItem(ComponentBase):
     weight_kg_per_m: float = Field(gt=0)
     breaking_load_t: float = Field(gt=0, description="Carga de rotura mínima [t]")
     galvanised: bool = True
+    elongation_pct: float | None = Field(default=None, gt=0, description="Alargamiento de rotura")
+    ea_kn: float | None = Field(default=None, gt=0, description="Rigidez axial EA [kN]")
 
 
 class RopeItem(ComponentBase):
@@ -144,6 +157,8 @@ class RopeItem(ComponentBase):
     diameter_mm: float = Field(gt=0)
     weight_kg_per_m: float = Field(gt=0)
     breaking_load_t: float = Field(gt=0)
+    elongation_pct: float | None = Field(default=None, gt=0, description="Alargamiento de rotura")
+    ea_kn: float | None = Field(default=None, gt=0, description="Rigidez axial EA [kN]")
 
 
 class DoorItem(ComponentBase):
@@ -350,16 +365,18 @@ def generic_for(item: ComponentBase) -> ComponentBase | None:
 # Validador físico
 # ---------------------------------------------------------------------------------------------
 
-#: Densidad de los materiales [kg/m³].
-DENSITY_KG_M3: dict[str, float] = {
-    "PA": 1140.0,
-    "PE": 950.0,
-    "PP": 910.0,
-    "PES": 1380.0,
-    "UHMWPE": 970.0,
-    "HMPE": 970.0,
-    "steel": 7850.0,
-}
+
+def _densities() -> dict[str, float]:
+    tab = material_table()
+    names = {"PA": "PA", "PE": "PE", "PP": "PP", "PES": "PES", "UHMWPE": "HMPE", "HMPE": "HMPE"}
+    out = {k: tab[v].value("density_kg_m3") for k, v in names.items()}
+    out["steel"] = tab["steel_wire_rope"].value("density_kg_m3")
+    return {k: float(v) for k, v in out.items() if v is not None}
+
+
+#: Densidad de los materiales [kg/m³], de la tabla de materiales con fuentes
+#: (:func:`trawlkit.materials.material_table`, Fase 19.1).
+DENSITY_KG_M3: dict[str, float] = _densities()
 
 #: Rangos plausibles de cada verificación (mínimo, máximo).
 #: Peso del cable de acero por mm² de diámetro [kg/m/mm²]: 6x12 con almas de fibra en los
@@ -403,6 +420,133 @@ def _range(
     )
 
 
+def _below(item: ComponentBase, value: float, lo: float, code: str, what: str) -> Issue | None:
+    if value >= lo:
+        return None
+    return _issue(
+        item,
+        "warning",
+        code,
+        t("{what} = {value:.4g} por debajo de {lo:g}", what=what, value=value, lo=lo),
+    )
+
+
+#: Margen del validador alrededor de los rangos de la tabla de materiales (tenacidad y
+#: alargamiento): los rangos son el mínimo y el máximo de unas pocas tablas (redondeos de la
+#: fuente, variación entre fabricantes). Sólo decide cuándo avisar; no es un dato del material.
+TABLE_RANGE_MARGIN = 0.10
+
+
+def _widen(lo: float, hi: float) -> tuple[float, float]:
+    return lo * (1.0 - TABLE_RANGE_MARGIN), hi * (1.0 + TABLE_RANGE_MARGIN)
+
+
+def tenacity_range_gf_tex(material: str, kind: str) -> tuple[float, float] | None:
+    """Rango de tenacidad del material [gf/tex] para el validador (``kind``: ``twine`` o ``rope``).
+
+    Hilo: seco sin nudo (Workbook, prado1990); cabo: seco (Workbook; HMPE de mennens_dynice78).
+    Es el rango de la tabla ± :data:`TABLE_RANGE_MARGIN`; ``None`` si la tabla no lo trae para
+    ese material.
+    """
+    m = material_table().find(material)
+    key = "twine_tenacity_dry_gf_tex" if kind == "twine" else "rope_tenacity_gf_tex"
+    v = m.get(key) if m is not None else None
+    if v is None:
+        return None
+    return _widen(*(v.range or (v.value, v.value)))
+
+
+def elongation_range_pct(material: str) -> tuple[float, float] | None:
+    """Alargamientos de la tabla para el material [%]: (mínimo, máximo).
+
+    Junta el alargamiento de rotura (fibra, monofilamento o alambre) y el del cabo al 75 % de la
+    rotura (ramos1999), ± :data:`TABLE_RANGE_MARGIN`; con un solo dato (acero) el máximo es
+    infinito: el cable se alarga al menos lo que su alambre. ``None`` si la tabla no trae
+    alargamientos para el material.
+    """
+    m = material_table().find(material)
+    if m is None:
+        return None
+    vals: list[float] = []
+    for key in ("elongation_break_pct", "rope_elongation_75pct_mbl_pct"):
+        v = m.get(key)
+        if v is not None:
+            vals += [v.value, *(v.range or ())]
+    if not vals:
+        return None
+    lo, hi = _widen(min(vals), max(vals))
+    return (lo, hi) if max(vals) > min(vals) else (lo, math.inf)
+
+
+#: Aceleración de la gravedad para pasar kgf a N.
+_G = 9.80665
+
+
+def _breaking_load_n(item: ComponentBase) -> float | None:
+    if isinstance(item, TwineItem):
+        return item.breaking_load_kgf * _G if item.breaking_load_kgf else None
+    if isinstance(item, WireItem | RopeItem):
+        return item.breaking_load_t * 1000.0 * _G
+    return None
+
+
+def axial_stiffness(item: ComponentBase) -> tuple[float, Provenance] | None:
+    """Rigidez axial EA [kN] de un hilo, cabo o cable, con su procedencia.
+
+    En orden: ``ea_kn`` del ítem (dato de la ficha); si no, ``EA ≈ rotura / alargamiento de
+    rotura`` cuando el ítem trae ``elongation_pct`` (derivada, secante); si no, la relación del
+    material de la tabla de materiales (:mod:`trawlkit.materials`): ``EA = k·d²`` de OrcaFlex
+    para cabos de PA, PES y PP, del cable 6x19 según el alma, y ``E·π·d²/4`` para el hilo. El
+    cabo combinado no tiene relación con fuente: devuelve el supuesto del simulador (1·10⁶ N,
+    «A VERIFICAR»). ``None`` para otros tipos o si la tabla no trae relación (cabo PE, HMPE).
+    """
+    if not isinstance(item, TwineItem | RopeItem | WireItem):
+        return None
+    if item.ea_kn is not None:
+        prov = item.provenance.get("ea_kn") or Provenance(
+            kind=ProvenanceKind.TRANSCRIBED, note=t("EA de la ficha del componente")
+        )
+        return item.ea_kn, prov
+    mbl = _breaking_load_n(item)
+    if item.elongation_pct is not None and mbl is not None:
+        return ea_from_breaking_load_n(mbl, item.elongation_pct) / 1000.0, Provenance(
+            kind=ProvenanceKind.DERIVED,
+            note=t(
+                "EA ≈ rotura / alargamiento de rotura = {mbl:.0f} N / {eps:g} %",
+                mbl=mbl,
+                eps=item.elongation_pct,
+            ),
+        )
+    tab = material_table()
+    if isinstance(item, WireItem):
+        core = wire_core(item.core, item.construction)
+        sv = tab["steel_wire_rope"].get(
+            "ea_iwrc_n_per_mm2" if core == "IWRC" else "ea_fc_n_per_mm2"
+        )
+        ea = wire_rope_ea_n(item.diameter_mm, core)
+    elif isinstance(item, RopeItem):
+        m = tab.find(item.material)
+        sv = None if m is None else (m.get("rope_ea_n_per_mm2") or m.get("rope_ea_n"))
+        ea_n = rope_ea_n(item.material, item.diameter_mm)
+        if ea_n is None or sv is None:
+            return None
+        ea = ea_n
+    else:
+        m = tab.find(item.material)
+        sv = None if m is None else m.get("twine_modulus_gpa")
+        if sv is None:
+            return None
+        ea = twine_modulus_pa(item.material) * math.pi * (item.diameter_mm / 1000.0) ** 2 / 4.0
+    assert sv is not None
+    kind = ProvenanceKind.ASSUMED if sv.to_verify else ProvenanceKind.DERIVED
+    note = (
+        t("supuesto de la tabla de materiales (sin fuente), A VERIFICAR")
+        if sv.to_verify
+        else t("relación del material ({unit}) de la tabla de materiales", unit=sv.unit or "")
+    )
+    return ea / 1000.0, Provenance(kind=kind, document=sv.source, note=note)
+
+
 def check(item: ComponentBase) -> list[Issue]:
     """Coherencia física de un componente (lista vacía si todo cierra)."""
     issues: list[Issue | None] = []
@@ -418,6 +562,17 @@ def check(item: ComponentBase) -> list[Issue]:
             area = math.pi / 4.0 * (item.diameter_mm / 1000.0) ** 2
             fill = item.weight_kg_per_m / (area * DENSITY_KG_M3[mat])
             issues.append(_range(item, fill, ROPE_FILL, "weight", t("llenado del cabo")))
+        rng = tenacity_range_gf_tex(item.material, "rope")
+        if rng is not None:
+            issues.append(
+                _range(
+                    item,
+                    item.breaking_load_t / item.weight_kg_per_m,
+                    rng,
+                    "tenacity",
+                    t("tenacidad del cabo [gf/tex] según el material"),
+                )
+            )
     elif isinstance(item, TwineItem):
         if item.rtex and item.runnage_m_per_kg:
             expect = 1e6 / item.rtex
@@ -447,6 +602,17 @@ def check(item: ComponentBase) -> list[Issue]:
                     t("tenacidad [gf/tex]"),
                 )
             )
+            rng = tenacity_range_gf_tex(item.material, "twine")
+            if rng is not None:
+                issues.append(
+                    _range(
+                        item,
+                        item.breaking_load_kgf * 1000.0 / rtex,
+                        rng,
+                        "tenacity_material",
+                        t("tenacidad seca sin nudo [gf/tex] según el material"),
+                    )
+                )
         if (
             item.knot_breaking_load_kgf
             and item.breaking_load_kgf
@@ -516,6 +682,16 @@ def check(item: ComponentBase) -> list[Issue]:
                         ),
                     )
                 )
+    if isinstance(item, TwineItem | RopeItem | WireItem) and item.elongation_pct is not None:
+        material = "steel" if isinstance(item, WireItem) else item.material
+        rng_e = elongation_range_pct(material)
+        if rng_e is not None:
+            what = t("alargamiento de rotura [%] según el material")
+            issues.append(
+                _below(item, item.elongation_pct, rng_e[0], "elongation", what)
+                if math.isinf(rng_e[1])
+                else _range(item, item.elongation_pct, rng_e, "elongation", what)
+            )
     if item.generic_of is not None and generic_for(item) is None:
         issues.append(
             _issue(
@@ -585,11 +761,14 @@ __all__ = [
     "TwineItem",
     "WireItem",
     "apply_twine",
+    "axial_stiffness",
     "check",
+    "elongation_range_pct",
     "generic_for",
     "get_component",
     "load_components",
     "parse_component",
     "summary",
+    "tenacity_range_gf_tex",
     "user_components",
 ]

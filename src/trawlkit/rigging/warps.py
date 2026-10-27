@@ -11,6 +11,7 @@ sufijo diga ``_m``, ángulos en grados.
 from __future__ import annotations
 
 import csv
+import math
 from collections.abc import Sequence
 from dataclasses import dataclass
 from functools import cache
@@ -438,6 +439,83 @@ def select_warp(
         weight_kg_per_m=float(chosen["weight_kg_per_m"]),
         breaking_load_t=float(chosen["breaking_load_t"]),
         satisfies_breaking_load=float(chosen["breaking_load_t"]) * 1000.0 >= min_breaking_load_kgf,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Estiramiento elástico (Fase 19.1)
+# ---------------------------------------------------------------------------
+
+
+def warp_tension_kgf(working_load_kgf: float, attack_angle_deg: float, n_warps: int = 2) -> float:
+    """Tensión de cada cable T = (R / n) / cos α [kgf].
+
+    ``working_load_kgf`` es la resistencia total del arte a la velocidad de diseño (Rem!E267) y
+    α el ángulo del cable con la dirección de avance, acos(cos δ1 · cos δ2)
+    (:func:`warp_attack_angle_deg`). Desprecia el peso propio del cable (catenaria).
+    """
+    return working_load_kgf / n_warps / float(np.cos(np.radians(attack_angle_deg)))
+
+
+def warp_elastic_stretch_m(
+    tension_kgf: float, length_m: float, ea_n: float, g_m_s2: float = G
+) -> float:
+    """Estiramiento elástico del cable ΔL = T·L / EA [m] (T en kgf, EA en N).
+
+    Es el alargamiento elástico bajo la tensión de trabajo; no incluye el alargamiento inicial de
+    construcción del cable nuevo (0,25–0,75 % del largo con alma de fibra, bridon2020crane), que
+    es permanente y se pierde con el uso.
+    """
+    return tension_kgf * g_m_s2 * length_m / ea_n
+
+
+@dataclass(frozen=True)
+class WarpStretch:
+    """Tensión, rigidez y estiramiento elástico de cada cable a la velocidad de diseño.
+
+    ``ea_n`` es la rigidez axial del cable elegido (ficha del componente o módulo efectivo del
+    6x19 sobre el área nominal, :func:`trawlkit.materials.wire_rope_ea_n`) y ``ea_kind`` su
+    procedencia; ``safety_factor`` = rotura del cable elegido / carga de trabajo (la regla del
+    libro, Rem!E267:E272, que compara la resistencia total con la rotura de un cable).
+    """
+
+    attack_angle_deg: float
+    tension_kgf: float
+    core: str
+    ea_n: float
+    ea_kind: str
+    strain: float
+    stretch_m: float
+    safety_factor: float
+
+    def to_dict(self) -> dict[str, Any]:
+        """Representación serializable."""
+        return dataclass_to_dict(self)
+
+
+def warp_stretch(
+    loads: WarpLoads,
+    selection: WarpSelection,
+    length_m: float,
+    attack_angle_deg: float,
+    ea_n: float,
+    ea_kind: str,
+    core: str,
+    n_warps: int = 2,
+) -> WarpStretch:
+    """:class:`WarpStretch` del cable elegido con la carga de trabajo de :class:`WarpLoads`."""
+    tension = warp_tension_kgf(loads.working_load_kgf, attack_angle_deg, n_warps)
+    stretch = warp_elastic_stretch_m(tension, length_m, ea_n)
+    working = loads.working_load_kgf
+    return WarpStretch(
+        attack_angle_deg=attack_angle_deg,
+        tension_kgf=tension,
+        core=core,
+        ea_n=ea_n,
+        ea_kind=ea_kind,
+        strain=stretch / length_m,
+        stretch_m=stretch,
+        safety_factor=selection.breaking_load_t * 1000.0 / working if working > 0 else math.inf,
     )
 
 

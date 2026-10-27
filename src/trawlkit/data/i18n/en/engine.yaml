@@ -534,3 +534,12 @@ lima (relinga superior): headrope (upper rope)
 burlón (relinga inferior): footrope (lower rope)
 paño del dorso: top panel netting
 paño del vientre: belly netting
+# Fase 19.1: materiales con fuentes (validador de componentes, rigidez axial)
+'{what} = {value:.4g} por debajo de {lo:g}': '{what} = {value:.4g} below {lo:g}'
+EA de la ficha del componente: EA from the component datasheet
+'EA ≈ rotura / alargamiento de rotura = {mbl:.0f} N / {eps:g} %': 'EA ≈ breaking load / elongation at break = {mbl:.0f} N / {eps:g} %'
+supuesto de la tabla de materiales (sin fuente), A VERIFICAR: assumption of the material table (no source), TO BE VERIFIED
+'relación del material ({unit}) de la tabla de materiales': 'material relation ({unit}) from the material table'
+tenacidad del cabo [gf/tex] según el material: rope tenacity [gf/tex] for the material
+tenacidad seca sin nudo [gf/tex] según el material: dry unknotted tenacity [gf/tex] for the material
+alargamiento de rotura [%] según el material: elongation at break [%] for the material
