@@ -3,13 +3,14 @@
 :func:`handle` atiende un pedido ``(método, ruta, cuerpo)`` como lo haría la API FastAPI
 (:mod:`trawlkit.api.app`) y devuelve ``(estado HTTP, cuerpo JSON)``, sin FastAPI ni red: la app
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
-lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
-optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15), la economía de
-la operación (Fase 16), el banco de ejercicios y los laboratorios (Fase 17), la lista de precios
-del usuario (Fase 19.2) y, desde la Fase 18, la simulación (forma, lance, explorador,
-selectividad, incertidumbre y calibración), los planos SVG, el informe HTML y XLSX y los
-registros de sensores, con guardas de costo propias del teléfono (:data:`PHONE_LIMITS`). Los
-PDF, el refinamiento con scipy y el aula devuelven 503 con un mensaje que lo explica.
+lista de materiales, el armado con componentes, la elección de portones (Fase 19.3), el
+validador de aportes, la disposición 2D, la optimización por malla, los lotes (Fase 14), la
+guía de construcción (Fase 15), la economía de la operación (Fase 16), el banco de ejercicios
+y los laboratorios (Fase 17), la lista de precios del usuario (Fase 19.2) y, desde la Fase 18,
+la simulación (forma, lance, explorador, selectividad, incertidumbre y calibración), los
+planos SVG, el informe HTML y XLSX y los registros de sensores, con guardas de costo propias
+del teléfono (:data:`PHONE_LIMITS`). Los PDF, el refinamiento con scipy y el aula devuelven
+503 con un mensaje que lo explica.
 
 Usa los mismos modelos de pedido y respuesta que la API (:mod:`trawlkit.api.schemas`) y las
 mismas funciones de :mod:`trawlkit.api.service`; ``tests/test_offline.py`` compara cada ruta con
@@ -309,6 +310,34 @@ def _optimize_components(_m: re.Match[str], _q_: Query, body: Any) -> Any:
             max_twines=req.max_twines,
         )
     return _dump(sc.ComponentOptimizeResponse, out)
+
+
+def _door_polars(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
+    return _dump(list[sc.DoorTypePolarOut], service.door_type_polars())
+
+
+def _doors_select(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.DoorSelectRequest, body)
+    with service.user_items(req.components):
+        case = service.build_case(
+            net=req.net,
+            vessel=req.vessel,
+            door=req.door,
+            class_vessels=req.class_vessels,
+            compat=req.compat,
+            params=req.params,
+        )
+        out = service.select_doors_case(
+            case,
+            brands=req.brands,
+            region=req.region,
+            generic_only=req.generic_only,
+            types=req.types,
+            margin=req.margin,
+            max_results=req.max_results,
+            include_light=req.include_light,
+        )
+    return _dump(sc.DoorSelectResponse, out)
 
 
 def _optimize(_m: re.Match[str], _q_: Query, body: Any) -> Any:
@@ -639,6 +668,7 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("GET", re.compile(rf"/catalog/components/{_KIND}/{_ID}"), _component),
     ("GET", re.compile(r"/catalog/vessels"), _vessels),
     ("GET", re.compile(r"/catalog/doors"), _doors),
+    ("GET", re.compile(r"/catalog/door-polars"), _door_polars),
     ("GET", re.compile(r"/catalog/seabeds"), _seabeds),
     ("GET", re.compile(r"/catalog/fouling"), _fouling),
     ("GET", re.compile(r"/catalog/species"), _species),
@@ -656,6 +686,7 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/economics/compare"), _economics_compare),
     ("POST", re.compile(r"/optimize"), _optimize),
     ("POST", re.compile(r"/optimize/components"), _optimize_components),
+    ("POST", re.compile(r"/doors/select"), _doors_select),
     ("POST", re.compile(r"/optimize/scaled-net"), _scaled_net),
     ("POST", re.compile(r"/batch/parse"), _batch_parse),
     ("POST", re.compile(r"/batch/run"), _batch_run),

@@ -302,23 +302,32 @@ def _excel_door(door_id: str) -> dict[str, Any]:
     return next(d for d in raw["doors"] if d["id"] == door_id)
 
 
-def _polar(door_id: str, scale_cl: float = 1.0) -> list[dict[str, Any]]:
-    out = []
-    for c in _excel_door(door_id)["coefficients"]:
-        if c.get("cl") is None or c.get("cd") is None:
-            continue
-        out.append({"angle_deg": c["angle_deg"], "cl": round(c["cl"] * scale_cl, 3), "cd": c["cd"]})
-    return out
+def _type_polar(door_type: str) -> Any:
+    from trawlkit.rigging.polars import polar_for_type
+
+    return polar_for_type(door_type)
 
 
+def _polar_prov(door_type: str, kind: str | None = None, note: str | None = None) -> dict:
+    """Procedencia de la polar del tipo, como dict (``kind``/``note`` la pisan)."""
+    p = _type_polar(door_type).provenance()
+    d = p.model_dump(mode="json", exclude_none=True)
+    if kind:
+        d["kind"] = kind
+    if note:
+        d["note"] = note + "; " + d["note"]
+    return d
+
+
+#: Nota de las polares del plano y del oval: son las hojas de Seafish 1993 que el libro Excel de
+#: la A-3 tomó tal cual.
 FLAT_POLAR_NOTE = (
-    "polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias "
-    "B259:D264); su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura "
-    "(Lange 1993)"
+    "hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la "
+    "polar del libro Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí"
 )
 OVAL_POLAR_NOTE = (
-    "polar del portón oval polivalente (Morgère) del libro Excel de la A-3 (Tablas de "
-    "Referencias B281:D286)"
+    "hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA 1993 (App. IV-17), igual a la "
+    "polar del libro Excel de la A-3 (Tablas de Referencias B281:D286)"
 )
 
 
@@ -369,7 +378,8 @@ def door_generics() -> list[dict[str, Any]]:
             },
         }
 
-    flat = _polar("fao_flat_wood_a3")
+    flat = _type_polar("flat").coefficient_dicts()
+    flat_prov = prov("sfia1993", page="Appendix IV-3 (PDF p. 133)", note=FLAT_POLAR_NOTE)
     for hp, length, height, area, weight in src.DOOR_FLAT:
         out.append(
             base(
@@ -384,11 +394,12 @@ def door_generics() -> list[dict[str, Any]]:
                 area,
                 weight,
                 flat,
-                prov("giamportone2024", "derived", note=FLAT_POLAR_NOTE),
+                flat_prov,
                 0.6,
             )
         )
-    oval = _polar("morgere_polivalente_oval")
+    oval = _type_polar("oval").coefficient_dicts()
+    oval_prov = prov("sfia1993", page="Appendix IV-17 (PDF p. 148)", note=OVAL_POLAR_NOTE)
     for hp, length, height, area, weight in src.DOOR_OVAL:
         out.append(
             base(
@@ -401,12 +412,11 @@ def door_generics() -> list[dict[str, Any]]:
                 area,
                 weight,
                 oval,
-                prov("giamportone2024", "derived", note=OVAL_POLAR_NOTE),
+                oval_prov,
                 0.87,
             )
         )
-    k = src.CL_MAX["v"] / 0.93
-    vpolar = _polar("fao_flat_wood_a3", scale_cl=k)
+    vpolar = _type_polar("v").coefficient_dicts()
     for hp, area, weight in src.DOOR_V:
         length = math.sqrt(area / 0.5)
         height = 0.5 * length
@@ -421,12 +431,7 @@ def door_generics() -> list[dict[str, Any]]:
                 area,
                 (weight, weight),
                 vpolar,
-                prov(
-                    "lange1993",
-                    "assumed",
-                    note=f"polar del portón plano con CL × {k:.3f}: el portón en V plano tiene "
-                    "CL máximo 0,70–0,85 (Lange 1993) frente a 0,95 del plano; CD sin cambio",
-                ),
+                _polar_prov("v"),
                 0.87,
                 dims_prov=prov(
                     WB,
@@ -436,7 +441,8 @@ def door_generics() -> list[dict[str, Any]]:
                 ),
             )
         )
-    for i, (hp, h, length, area, weight) in enumerate(src.DOOR_SUBERKRUB):
+    hpolar = _type_polar("high_aspect").coefficient_dicts()
+    for hp, h, length, area, weight in src.DOOR_SUBERKRUB:
         out.append(
             base(
                 f"door_suberkrub_{area:g}m2".replace(".", "_"),
@@ -449,23 +455,21 @@ def door_generics() -> list[dict[str, Any]]:
                 h,
                 area,
                 weight,
-                oval,
-                prov(
-                    "giamportone2024",
-                    "assumed",
-                    note="no hay polar publicada del Süberkrüb; se usa la del portón oval "
-                    "cambado (" + OVAL_POLAR_NOTE + ")",
+                hpolar,
+                _polar_prov(
+                    "high_aspect",
+                    note="no hay polar publicada del Süberkrüb; se usa la de un portón pelágico "
+                    "cambado de alta relación de aspecto medido (H/L del Süberkrüb ≈ 2,3)",
                 ),
                 0.87,
             )
         )
-        del i
     return out
 
 
 def door_rebyc() -> list[dict[str, Any]]:
     page = "Tabla 5 y texto «Puertas de arrastre»"
-    flat = _polar("fao_flat_wood_a3")
+    flat = _type_polar("flat").coefficient_dicts()
     out = []
     for label, length, height, use in src.DOOR_REBYC:
         out.append(
@@ -490,10 +494,151 @@ def door_rebyc() -> list[dict[str, Any]]:
                     "hp_range": prov(
                         "zuniga2006", page="Tabla 1", note="potencia de la flota: 165–520 hp"
                     ),
-                    "coefficients": prov("giamportone2024", "assumed", note=FLAT_POLAR_NOTE),
+                    "coefficients": prov(
+                        "sfia1993",
+                        "assumed",
+                        "Appendix IV-3 (PDF p. 133)",
+                        "la flota usa puertas planas de madera; se supone la polar del modelo "
+                        "plano de madera de Seafish (" + FLAT_POLAR_NOTE + ")",
+                    ),
                 },
             }
         )
+    return out
+
+
+# --- Portones de fabricante (Fase 19.3) -------------------------------------------------------
+
+
+def _nearest_door(
+    generics: list[dict[str, Any]], types: tuple[str, ...], area: float
+) -> str | None:
+    return nearest_generic(generics, lambda g: g["area_m2"], area, lambda g: g["type"] in types)
+
+
+#: Coeficiente de peso en el agua de un portón de acero (1 − 1025/7850), como los genéricos en V,
+#: oval y Süberkrüb.
+STEEL_WATER_COEF = 0.87
+
+
+def vonin_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Vónin Storm 2, Tornado y Twister: superficie y peso transcriptos, medidas supuestas."""
+    out: list[dict[str, Any]] = []
+    for product, d in src.VONIN_DOORS.items():
+        page = f"{d['url']} («SIZES AND WEIGHTS»)"
+        ar = d["aspect_ratio"]
+        ar_used = ar if ar is not None else src.VONIN_DOORS["Tornado"]["aspect_ratio"]
+        ar_note = (
+            f"el fabricante da sólo la superficie y la relación de aspecto {ar:g}; se supone "
+            "superficie = largo × alto (A VERIFICAR)"
+            if ar is not None
+            else f"el fabricante no da medidas ni relación de aspecto; se supone la del Tornado "
+            f"({ar_used:g}) y superficie = largo × alto (A VERIFICAR)"
+        )
+        tp = _type_polar(d["type"])
+        notes = [f"Uso: {d['use']}."]
+        if d.get("claim"):
+            notes.append(f"Dato del fabricante, no usado en el cálculo: {d['claim']}.")
+        for area, weight in d["points"]:
+            length = math.sqrt(area / ar_used)
+            height = ar_used * length
+            item = {
+                "id": f"door_vonin_{d['slug']}_{area:g}m2".replace(".", "_"),
+                "name": f"Vónin {product} {area:g} m²",
+                "brand": "Vónin",
+                "product": product,
+                "country": "FO",
+                "regions": ["europe"],
+                "type": d["type"],
+                "length_m": round(length, 3),
+                "height_m": round(height, 3),
+                "area_m2": area,
+                "weight_air_kg": float(weight),
+                "weight_water_coefficient": STEEL_WATER_COEF,
+                "coefficients": tp.coefficient_dicts(),
+                "notes": notes,
+                "provenance": {
+                    "area_m2": prov("vonin_doors", page=page),
+                    "weight_air_kg": prov(
+                        "vonin_doors",
+                        page=page,
+                        note="la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)",
+                    ),
+                    "length_m": prov("vonin_doors", "assumed", page, ar_note),
+                    "height_m": prov("vonin_doors", "assumed", page, ar_note),
+                    "coefficients": tp.provenance(applied_to=f"Vónin {product}").model_dump(
+                        mode="json", exclude_none=True
+                    ),
+                },
+            }
+            gen = _nearest_door(
+                generics, ("suberkrub",) if d["type"] == "high_aspect" else ("v",), area
+            )
+            if gen:
+                item["generic_of"] = gen
+            out.append(item)
+    return out
+
+
+def morgere_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Morgère 2025: superficie transcripta, peso «sur demande» (falta), medidas supuestas."""
+    from trawlkit.rigging.polars import get_polar, polar_for_type
+
+    out: list[dict[str, Any]] = []
+    for product, d in src.MORGERE_DOORS.items():
+        page = f"Catalogue 2025, {d['page']}"
+        model = get_polar(d["polar"])
+        ar = model.model["aspect_ratio"]
+        ratio = model.model["area_ratio"]
+        pts = [c.model_dump(include={"angle_deg", "cl", "cd"}) for c in model.usable(with_max=True)]
+        tp = polar_for_type(d["type"])
+        polar_prov = prov(
+            "sfia1993",
+            "assumed",
+            model.source.page,
+            f"Morgère no publica la polar; se usa la hoja «{model.name}» de Seafish 1993 (el "
+            "mismo diseño, ensayado en 1993: A VERIFICAR que el modelo actual conserve la forma)",
+        )
+        for point in d["points"]:
+            if len(point) == 3:
+                code, length, area = point
+                height = area / (length * ratio)
+                dims_l = prov("morgere2025", page=page)
+                dims_h = prov("morgere2025", "assumed", page, d["shape_note"])
+            else:
+                code, area = point
+                length = math.sqrt(area / (ar * ratio))
+                height = ar * length
+                dims_l = dims_h = prov("morgere2025", "assumed", page, d["shape_note"])
+            item = {
+                "id": f"door_morgere_{code.lower().replace('.', '_')}",
+                "name": f"Morgère {product} {code} ({area:g} m²)",
+                "brand": "Morgère",
+                "product": product,
+                "country": "FR",
+                "regions": ["europe"],
+                "type": d["type"],
+                "length_m": round(length, 3),
+                "height_m": round(height, 3),
+                "area_m2": area,
+                "coefficients": pts,
+                "notes": [
+                    f"Uso: {d['use']}.",
+                    "Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso "
+                    "publicado.",
+                    f"Polar del tipo ({tp.type}) como alternativa: {tp.polar_ids[0]}.",
+                ],
+                "provenance": {
+                    "area_m2": prov("morgere2025", page=page, note=f"modelo {code}"),
+                    "length_m": dims_l,
+                    "height_m": dims_h,
+                    "coefficients": polar_prov,
+                },
+            }
+            gen = _nearest_door(generics, ("oval",) if d["type"] == "oval" else ("v",), area)
+            if gen:
+                item["generic_of"] = gen
+            out.append(item)
     return out
 
 
@@ -1236,6 +1381,14 @@ def excel_items(kind: str) -> list[dict[str, Any]]:
                     for f in ("length_m", "height_m", "area_m2", "weight_air_kg", "coefficients")
                 },
             }
+            item["provenance"]["coefficients"] = prov(
+                "giamportone2024",
+                "excel",
+                note=d["source"]
+                + ": "
+                + (FLAT_POLAR_NOTE if d["type"].startswith("flat") else OVAL_POLAR_NOTE)
+                + " (fuente primaria: sfia1993)",
+            )
             if item["brand"]:
                 item["generic_of"] = "door_oval_100hp"
             out.append(item)
@@ -1378,9 +1531,12 @@ def main() -> int:
     write("shackle", "hampidjan", [HAMP], van_beest_shackles())
     write("shackle", "crosby", ["crosby_g209"], crosby_shackles())
     write("chain", "excel_a3", ["giamportone2024"], excel_items("chain"))
-    write("door", "generic_workbook", [WB, "lange1993", "giamportone2024"], door_generics())
-    write("door", "rebyc_colombia", ["zuniga2006"], door_rebyc())
-    write("door", "excel_a3", ["giamportone2024"], excel_items("door"))
+    dg = door_generics()
+    write("door", "generic_workbook", [WB, "sfia1993", "mellibovsky2018"], dg)
+    write("door", "rebyc_colombia", ["zuniga2006", "sfia1993"], door_rebyc())
+    write("door", "vonin", ["vonin_doors", "sfia1993", "mellibovsky2018"], vonin_doors(dg))
+    write("door", "morgere_2025", ["morgere2025", "sfia1993"], morgere_doors(dg))
+    write("door", "excel_a3", ["giamportone2024", "sfia1993"], excel_items("door"))
 
     from trawlkit import components as comp
 

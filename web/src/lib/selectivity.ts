@@ -79,6 +79,7 @@ export function selectivityRequest(base: DesignRequest, f: SelForm): Selectivity
     mesh_bending_factor: 1,
     door_cl_factor: 1,
     door_cd_factor: 1,
+    dynamic_door_polar: true,
   };
   return {
     net: base.net,

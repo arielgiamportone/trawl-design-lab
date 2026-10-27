@@ -34,6 +34,9 @@ from trawlkit.api.schemas import (
     ConstructionGuideOut,
     DesignRequest,
     DesignResponse,
+    DoorSelectRequest,
+    DoorSelectResponse,
+    DoorTypePolarOut,
     EconomicsCompareOut,
     EconomicsCompareRequest,
     EconomicsOut,
@@ -227,6 +230,41 @@ def list_vessels(
 def list_doors() -> list[Door]:
     """Portones del catálogo con su polar CL/CD."""
     return list(service.door_presets().values())
+
+
+@app.get("/catalog/door-polars", response_model=list[DoorTypePolarOut])
+def list_door_polars() -> list[dict[str, Any]]:
+    """Polar representativa de cada tipo de portón, con su fuente y el ángulo recomendado."""
+    return service.door_type_polars()
+
+
+@app.post("/doors/select", response_model=DoorSelectResponse)
+def select_doors(req: DoorSelectRequest) -> dict[str, Any]:
+    """Portones del catálogo que alcanzan la superficie equivalente del caso (Fase 19.3).
+
+    Superficie requerida por portón del caso (Port!F215) llevada a cada portón con
+    A₂ = A₁·CL₁/CL₂ más 10 % al pasar a un portón de más CL (Seafish 1993), con el control del
+    peso (FAO Workbook), el ángulo de ataque recomendado y el largo de las patas de gallo.
+    """
+    with service.user_items(req.components):
+        case = service.build_case(
+            net=req.net,
+            vessel=req.vessel,
+            door=req.door,
+            class_vessels=req.class_vessels,
+            compat=req.compat,
+            params=req.params,
+        )
+        return service.select_doors_case(
+            case,
+            brands=req.brands,
+            region=req.region,
+            generic_only=req.generic_only,
+            types=req.types,
+            margin=req.margin,
+            max_results=req.max_results,
+            include_light=req.include_light,
+        )
 
 
 @app.get("/catalog/fouling", response_model=list[FoulingOut])

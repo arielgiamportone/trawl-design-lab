@@ -5,6 +5,11 @@ sources:
 - key: giamportone2024
   title: Libro Excel de cálculo de la red FAO A-3 (Giamportone)
   accessed: '2026-10-25'
+- key: sfia1993
+  title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
+    (contrato CEE FAR TE 1 214)
+  url: https://www.seafish.org/media/1peahnrq/otterboard_performance_and_behaviour.pdf
+  accessed: '2026-10-27'
 items:
 - id: fao_flat_wood_a3
   name: Porton plano de madera con bastidor de hierro FAO para A3,B3,C3
@@ -57,7 +62,9 @@ items:
     coefficients:
       kind: excel
       document: giamportone2024
-      note: Tablas de Referencias!A245:E264
+      note: 'Tablas de Referencias!A245:E264: hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3),
+        igual número por número a la polar del libro Excel de la A-3 (Tablas de Referencias B259:D264),
+        que la tomó de allí (fuente primaria: sfia1993)'
 - id: morgere_polivalente_oval
   name: Morgere Polivalente Oval
   type: oval
@@ -109,5 +116,7 @@ items:
     coefficients:
       kind: excel
       document: giamportone2024
-      note: Tablas de Referencias!A267:E286
+      note: 'Tablas de Referencias!A267:E286: hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA
+        1993 (App. IV-17), igual a la polar del libro Excel de la A-3 (Tablas de Referencias B281:D286)
+        (fuente primaria: sfia1993)'
   generic_of: door_oval_100hp

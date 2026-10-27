@@ -51,7 +51,9 @@ of $C_L$: the ratio $C_L/C_D$ (efficiency) falls from there on and each extra kg
 costs more and more pull. The book works at $\alpha = 32°$ ($C_L = 0.93$, $C_D = 0.71$,
 $C_L/C_D = 1.31$) with the FAO flat wooden otter board with an iron frame for the A3/B3/C3 nets; the
 catalogue also includes a Morgère polyvalent oval otter board, more efficient
-($C_L/C_D \approx 1.6$ at 27–30°).
+($C_L/C_D \approx 1.6$ at 27–30°). The two polars of the book are, number for number, the «Flat
+Wooden» and «Morgère Polyvalent Ovale» data sheets of the Seafish, IFREMER and DIFTA flume tank
+study {cite:p}`sfia1993` (see below).
 
 ### Door spread: the “per metre” rule
 
@@ -147,6 +149,75 @@ $$ (eq-15-delta)
 The usual values of $\delta$ for bottom trawling are between 10 and 20°; larger angles increase the
 herding but also the drag of the rigging.
 
+### Polar library by otter board type
+
+The primary source of the book's polars is the report *Otterboard Performance and Behaviour*
+{cite:p}`sfia1993`: 26 otter board models tested in the flume tanks of Hull, Boulogne and
+Hirtshals, at 0.9 m/s over the moving belt (the $C_D$ includes the belt friction), at 25 to 45°
+angle of attack. Each data sheet of Appendix IV gives the model dimensions, the aspect ratio $H/L$,
+the area ratio, the weight in air and in water, $C_L$ and $C_D$ every 5° and the maximum $C_L$ with
+its angle. The A-3 Excel workbook {cite:p}`giamportone2024` copied two of them as they are: «Flat
+Wooden» (App. IV-3) and «Morgère Polyvalent Ovale» (App. IV-17; the «0» at 25° in the Excel sheet
+is an angle that was not tested, marked «–» by Seafish).
+
+`trawlkit` keeps the 26 sheets, transcribed and checked page by page, in
+`trawlkit/data/door_polars.yaml`, together with the tables of the Thyborøn 15 VF pelagic door
+(aspect ratio 2.5) and the Grilli Fly (1.91) by {cite:t}`mellibovsky2018`, measured in the St
+John's flume tank and in a wind tunnel. `rigging.polar_for_type` gives a representative polar per
+type:
+
+| Type | Polar | Provenance |
+|---|---|---|
+| flat | «Flat Wooden» sheet | transcribed |
+| vee | mean of Reference Vee, Blooe Tech and Munkebo, as {cite:t}`sfia1993` recommend (section 3-16) | derived |
+| oval | «Morgère Polyvalent Ovale» sheet | transcribed |
+| cambered (slotted) | mean of Net Tec, Perfect Patent B and the 125" Thyborøn Type 2 | derived |
+| multi-foil | mean of Bison 3 Slots, Hydrofin, Morgère Polyfoil and Fjørtoft (30–45°) | derived |
+| high-aspect pelagic (Süberkrüb) | Thyborøn 15 VF in the flume tank: linear $C_L$ and quadratic $C_D$ fitted to the 11 points | derived |
+
+Up to Phase 19.2 the catalogue vee polar was the flat polar with $C_L$ multiplied by 0.775/0.93,
+and the Süberkrüb polar was the oval one: neither was measured. For the pelagic door,
+{cite:t}`mellibovsky2018` find that the flume tank gives 20–30 % less than the wind tunnel and
+attribute it to an error in the nominal flume tank speed; the «theoretical» Süberkrüb values of
+{cite:t}`scharfe1955` ($C_L/C_D \approx 14$ at 9.5°, without ground contact) are not used and
+remain a low-confidence reference. No manufacturer publishes the polar of its boards: the Vónin
+{cite:p}`vonin_doors` (area and weight) and Morgère {cite:p}`morgere2025` (area; the weight is
+«sur demande» and left empty) boards carry the polar of their type marked as *assumed*. Vónin's
+claim of a $C_L$ of 4.39 for the Twister is kept as a note, not as data.
+
+In corrected mode `rigging.door_polar` interpolates linearly between the tabulated angles and, up to
+5° outside the measured range, extrapolates with the end segment and warns (the `door_polar:` note
+of the result); `EXCEL` mode still asks for an angle of the table, like the book's `LOOKUP`.
+
+### Choosing the otter board: equivalent area
+
+The engine gives the required area per otter board $A_1$ (`Port!F215`) for the case board, with its
+$C_D$. To change the type of otter board while keeping the spreading force, {cite:t}`sfia1993`
+(App. III-9) set $A_1\,C_{L1} = A_2\,C_{L2}$:
+
+$$
+A_2 = A_1\,\frac{C_{L1}}{C_{L2}}, \qquad L_2 = \sqrt{\frac{A_1\,C_{L1}}{C_{L2}\,AR_2\,C_{A2}}}
+$$ (eq-15-equivalente)
+
+with $C_L$ at the working angle of each board, $AR_2 = H_2/L_2$ and $C_{A2}$ the area ratio.
+Because boards of the same type perform differently (the Munkebo gives 27 % more $C_L$ than the
+other two vees), when changing to a board with a higher $C_L$ they recommend adding **10 %** to the
+calculated area (section 3-16). The tool `trawlkit.door_selection.select_doors` (and
+`POST /doors/select`, «Choose otter boards» in the app) applies the rule to the whole filtered
+components catalogue and also:
+
+- takes $C_{L2}$ at the case angle if the board is of the same type and otherwise at the
+  recommended angle of attack of the type: flat 35–40°, vee and oval 35°, Süberkrüb 15°
+  {cite:p}`prado1990`; cambered 34–37° and multi-foil 40–45° (angle of maximum $C_L$ on the Seafish
+  sheets);
+- leaves high-aspect pelagic boards out of a bottom trawl: they are unstable at the low towing
+  speeds of bottom trawling ({cite:t}`sfia1993`, §2.2.1);
+- compares the weight with the *Fisherman's Workbook* weight for the type and area: the table gives
+  the maximum weight used and notes that with a lighter material a board may weigh up to 50 % less
+  {cite:p}`prado1990`; a lighter board is flagged and one without a published weight is warned;
+- gives the backstrop length: each leg no less than the board length and up to 1.5 times
+  ({cite:t}`sfia1993`, §2.2.3).
+
 ## Coefficients
 
 | Symbol | Value | Unit | Source | Cell |
@@ -155,7 +226,9 @@ herding but also the drag of the rigging.
 | $a$ (distance between towing blocks) | 2.5 | m | Tipo de buques [vessel types] | `Port!D6` |
 | correction factor of $D_s$ | 1.15 | — | — | `Port!D28` |
 | $\alpha$ otter board | 32 | ° | chosen row of the polar | `Port!C134` |
-| $C_L$, $C_D$ at 32° | 0.93; 0.71 | — | FAO catalogue {cite:p}`faocatalogue` | `Port!D134:E134` |
+| $C_L$, $C_D$ at 32° | 0.93; 0.71 | — | {cite:t}`sfia1993`, «Flat Wooden» sheet (through the Excel workbook) | `Port!D134:E134` |
+| equivalent-area margin | 10 | % | {cite:t}`sfia1993`, section 3-16 | — |
+| backstrops / board length | 1–1.5 | — | {cite:t}`sfia1993`, §2.2.3 | — |
 | $S$ FAO otter board | 1.805 | m² | catalogue | `Port!D122` |
 | $p$ (ROB / FT) | 0.15–0.30 (0.20) | — | {cite:t}`fridman1986` | `Port!E146:H146`, `D210` |
 | $\alpha_b$ between bridles | 4.8 | ° | {cite:t}`martini` | `Port!F39` |
@@ -185,6 +258,8 @@ herding but also the drag of the rigging.
 | `Port!E97:G99` | crowfoot | `rigging.crowfoot_m` |
 | `Port!D110` | angle $\delta$ | `rigging.attack_angle_deg` |
 | whole sheet | `doors` and `bridles` stages | `model.run` → `result.doors`, `result.bridles` |
+| — (Phase 19.3) | measured polars and polar per type | `rigging.load_door_polars`, `rigging.polar_for_type` |
+| — (Phase 19.3) | choice of the catalogue otter board | `door_selection.select_doors`, `POST /doors/select` |
 
 ## Assumptions and limits
 
@@ -377,6 +452,56 @@ trawling speed; at 3.5 kn it already consumes 38 %. That is why the average of $
 and 4 kn (≈ 1.66 m² per otter board for 150 HP) is somewhat smaller than the chosen otter board.
 Note that the total drag of chapter {doc}`19_ventana_velocidad` (corrected mode) adds the sheet's
 “ROB”, that is, the drag of **one** otter board.
+
+The polar library compares the otter board types ({numref}`fig-15-tipos`): the flat board has the
+lowest maximum $C_L$; the slotted cambered boards reach 1.4–1.5; the multi-foil boards keep gaining
+$C_L$ up to 40–45°; the high-aspect pelagic board gives a lot of $C_L$ with little $C_D$ at low
+angles.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+mystnb:
+  figure:
+    caption: |
+      Representative polar of each otter board type (`rigging.polar_for_type`). Top $C_L$, bottom
+      $C_D$. Flat and oval: Seafish/IFREMER/DIFTA (1993) sheets; vee, cambered and multi-foil: mean
+      of several sheets; pelagic: fit to the points of the Thyborøn 15 VF in the flume tank
+      (Mellibovsky et al. 2018), which the wind tunnel gives 20–30 % higher.
+    name: fig-15-tipos
+---
+from trawlkit.rigging.polars import DOOR_TYPE_LABEL, DOOR_TYPES
+from trawlkit.i18n import t as _t
+
+fig, axes = P.plt.subplots(2, 1, figsize=(7, 6.6), sharex=True)
+for slot, kind in enumerate(DOOR_TYPES, start=1):
+    tp = rigging.polar_for_type(kind)
+    ang = [c.angle_deg for c in tp.coefficients]
+    P.line(axes[0], ang, [c.cl for c in tp.coefficients], slot, _t(DOOR_TYPE_LABEL[kind]))
+    P.line(axes[1], ang, [c.cd for c in tp.coefficients], slot, _t(DOOR_TYPE_LABEL[kind]))
+axes[0].set_title("Lift $C_L$")
+axes[1].set_title("Drag $C_D$")
+axes[1].set_xlabel("Angle of attack α [°]")
+P.legend(axes[1], loc="upper left", fontsize=8)
+P.finish(fig)
+```
+
+Choosing the otter board for the book's case (corrected mode): the required area per otter board
+with the FAO board at 32° is carried over to every catalogue board with {eq}`eq-15-equivalente`. The
+A-3 board is among the candidates, and it is the tightest flat board.
+
+```{code-cell} ipython3
+from trawlkit.door_selection import select_doors
+
+sel = select_doors(P.fao_result(150, "corrected"))
+assert any(c.id == "fao_flat_wood_a3" for c in sel.candidates)
+print(f"Required area per otter board: {sel.required_m2:.2f} m²")
+for c in sel.candidates[:6]:
+    weight = "no weight" if c.weight_air_kg is None else f"{c.weight_air_kg:.0f} kg"
+    extra = " (+10 %)" if c.margin_applied else ""
+    print(f"{c.name[:44]:44s} {c.area_m2:5.2f} m² ≥ {c.required_m2:4.2f}{extra:8s} "
+          f"margin {100 * c.area_margin:4.1f} %  {weight}")
+```
 
 ## Exercises
 

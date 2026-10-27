@@ -3,8 +3,9 @@
 :func:`optimise_components` busca en una grilla discreta sobre los componentes del catálogo
 (:mod:`trawlkit.components`), filtrados por marca, región o «sólo genéricos»:
 
-* **Portón**: los del rango de potencia del buque y los de superficie cercana a la requerida
-  por el caso base (Port!F215), los ``max_doors`` más cercanos, más el del caso.
+* **Portón**: el del caso más los ``max_doors − 1`` del catálogo que alcanzan la superficie
+  equivalente a la requerida por el caso base (Port!F215) con la regla de Seafish
+  (:mod:`trawlkit.door_selection`, Fase 19.3), del más justo al más holgado.
 * **Boyas**: las que aguantan la profundidad del caso, de diámetros cercanos a 200 mm; el número
   de boyas lo da el motor para la flotación requerida (Flot!F72:F82).
 * **Hilo** de los paños (salvo el copo): el del plano y los ``max_twines`` más delgados cuya
@@ -163,6 +164,13 @@ def _filters(case: DesignCase) -> dict[str, Any]:
 def _door_candidates(
     case: DesignCase, required_m2: float, ids: Sequence[str] | None, n: int
 ) -> list[Door]:
+    """Portón del caso más los ``n − 1`` del catálogo filtrado más justos para el caso.
+
+    Desde la Fase 19.3 se eligen con la regla de la superficie equivalente de Seafish
+    (:func:`trawlkit.door_selection.select_doors`: A₂ = A₁·CL₁/CL₂, +10 % al pasar a más CL),
+    sin los portones marcados como livianos. Si la regla no deja ninguno, se usa el criterio
+    anterior: rango de potencia del buque o superficie entre 0,9 y 2 veces la requerida.
+    """
     if ids is not None:
         out = []
         for i in ids:
@@ -170,9 +178,36 @@ def _door_candidates(
             assert isinstance(item, DoorItem)
             out.append(item.to_door())
         return out
+    from trawlkit.door_selection import select_doors
+
+    flt = _filters(case)
+    picked: list[Door] = []
+    try:
+        sel = select_doors(
+            case,
+            brands=flt.get("brands"),
+            region=flt.get("region"),
+            generic_only=bool(flt.get("generic_only", False)),
+            max_results=60,
+            include_light=False,
+        )
+    except ValueError:
+        sel = None
+    if sel is not None:
+        for cand in sel.candidates:
+            if cand.id == case.door.id or len(picked) >= max(n - 1, 0):
+                continue
+            try:
+                item = get_component("door", cand.id)
+            except KeyError:
+                continue
+            assert isinstance(item, DoorItem)
+            picked.append(item.to_door())
+    if picked:
+        return [case.door, *picked]
     hp = float(case.vessel.bhp)
     pool: list[tuple[float, Door]] = []
-    for item in load_components("door", **_filters(case)):
+    for item in load_components("door", **flt):
         assert isinstance(item, DoorItem)
         door = item.to_door()
         area = float(door.area_m2 or 0.0)

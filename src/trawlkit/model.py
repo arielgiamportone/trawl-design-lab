@@ -1740,6 +1740,21 @@ def run(case: DesignCase) -> DesignResult:
         warps = replace(warps, winch=winch)
         notes.extend(winch.warnings)
     notes.extend(_propeller_notes(case, power, performance))
+    if (
+        case.compat is Compat.CORRECTED
+        and not case.is_pair
+        and rigging.polar_extrapolated(case.door, case.door_attack_angle_deg)
+    ):
+        notes.append(
+            t(
+                "door_polar: el ángulo de ataque {angle:g}° cae fuera de los ángulos medidos de "
+                "la polar de {door}; CL = {cl:.3f} y CD = {cd:.3f} son extrapolados",
+                angle=case.door_attack_angle_deg,
+                door=case.door.id,
+                cl=doors.polar.cl,
+                cd=doors.polar.cd,
+            )
+        )
     if case.compat is Compat.CORRECTED:
         notes.append(
             t(

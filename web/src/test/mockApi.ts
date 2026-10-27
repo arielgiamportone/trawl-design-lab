@@ -26,6 +26,7 @@ import bom from './fixtures/bom.json';
 import componentKinds from './fixtures/component_kinds.json';
 import componentsWire from './fixtures/components_wire.json';
 import optimizeComponents from './fixtures/optimize_components.json';
+import doorsSelect from './fixtures/doors_select.json';
 import batchParse from './fixtures/batch_parse.json';
 import batchRun from './fixtures/batch_run.json';
 import construction from './fixtures/construction.json';
@@ -40,6 +41,7 @@ import teachingLabs from './fixtures/teaching_labs.json';
 
 export const fixtures = {
   design,
+  doorsSelect,
   designExcel,
   doors,
   errata,
@@ -196,6 +198,7 @@ export function mockApi(
       });
     }
     if (path === '/optimize/components') return json(optimizeComponents);
+    if (path === '/doors/select') return json(doorsSelect);
     if (path === '/design') {
       if (overrides.design) return overrides.design(body as Record<string, unknown>);
       return json((body as { compat?: string }).compat === 'excel' ? designExcel : design);

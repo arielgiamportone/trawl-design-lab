@@ -4,12 +4,16 @@ import { AssemblyPanel } from './comp/AssemblyPanel';
 import { BillOfMaterials } from './comp/BillOfMaterials';
 import { ComponentCatalog } from './comp/ComponentCatalog';
 import { ContributeForm } from './comp/ContributeForm';
+import { DoorSelector } from './comp/DoorSelector';
 
-const VIEWS = ['catalogo', 'materiales', 'armar', 'aportar'] as const;
+const VIEWS = ['catalogo', 'materiales', 'armar', 'portones', 'aportar'] as const;
 
 type View = (typeof VIEWS)[number];
 
-/** Pestaña «Componentes» (Fase 13): catálogo, lista de materiales, armado óptimo y aportes. */
+/**
+ * Pestaña «Componentes» (Fase 13): catálogo, lista de materiales, armado óptimo, elección de
+ * portones (Fase 19.3) y aportes.
+ */
 export function Components() {
   const [view, setView] = useState<View>('catalogo');
   const T = useT().components;
@@ -26,6 +30,7 @@ export function Components() {
       {view === 'catalogo' && <ComponentCatalog />}
       {view === 'materiales' && <BillOfMaterials />}
       {view === 'armar' && <AssemblyPanel />}
+      {view === 'portones' && <DoorSelector />}
       {view === 'aportar' && <ContributeForm />}
     </div>
   );

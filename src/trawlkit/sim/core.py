@@ -14,6 +14,7 @@ import numpy.typing as npt
 from trawlkit.i18n import t
 from trawlkit.io.schema import NetSpec
 from trawlkit.model import DesignCase, DesignResult, run
+from trawlkit.rigging import door_polar_table
 from trawlkit.sim.mesh import NetModel, Rigging, build_model, interpolate_shape
 from trawlkit.sim.meshstate import MeshState, mesh_state
 from trawlkit.sim.scenario import Scenario
@@ -103,6 +104,9 @@ class SimResult:
     fouling_tri: FloatArray = field(default_factory=lambda: np.zeros(0))
     #: Forma de la malla de cada triángulo (zoom por malla, selectividad).
     mesh: MeshState | None = None
+    #: Ángulo de ataque y coeficientes de los portones acoplados (Fase 19.3): modo («fixed» o
+    #: «dynamic»), ángulo, CL, CD, ángulos del cable y de la patente; vacío = portones fijos.
+    door_attack: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self, *, geometry: bool = True) -> dict[str, Any]:
         """Representación serializable (``geometry=False`` omite nodos y conectividad)."""
@@ -136,6 +140,7 @@ class SimResult:
             "warp_tension_kgf": self.warp_tension_kgf,
             "door_positions_m": [list(d) for d in self.door_positions_m],
             "operation": dict(self.operation),
+            "door_attack": dict(self.door_attack),
         }
         if geometry:
             out.update(
@@ -286,6 +291,11 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         ),
         warp_core=warp_core,
         warp_ea_n=warp_ea,
+        door_polar=tuple(
+            (float(p.angle_deg), float(p.cl), float(p.cd))
+            for p in sorted(door_polar_table(r.doors.door), key=lambda q: q.angle_deg)
+        ),
+        door_attack_angle_deg=float(r.case.door_attack_angle_deg),
     )
 
 
@@ -533,7 +543,38 @@ def _result(
         ),
         fouling_tri=np.zeros(0) if ff_fouling is None else ff_fouling.copy(),
         mesh=mesh_state(model, x, catch_fill),
+        door_attack=_door_attack(model, x, relaxed),
     )
+
+
+def _door_attack(model: NetModel, x: FloatArray, relaxed: RelaxResult) -> dict[str, Any]:
+    """Ángulo de ataque de los portones acoplados (Fase 19.3; vacío con portones fijos).
+
+    Con la polar fija se informa también el ángulo que daría la polar dinámica con la forma
+    resuelta (``target_deg``), para ver cuánto se aparta del ángulo del caso.
+    """
+    if not model.coupled_doors:
+        return {}
+    if relaxed.door:
+        return dict(relaxed.door)
+    from trawlkit.sim.doors import calibrate_nw, rig_angles_deg, seafish_attack_angle
+
+    nodes = (int(model.doors[0]), int(model.warp_nodes[0][1]), int(model.junctions[0]))
+    b0, g0 = rig_angles_deg(model.x0, *nodes)
+    beta, gamma = rig_angles_deg(x, *nodes)
+    target = seafish_attack_angle(beta, gamma, calibrate_nw(model.door_angle_deg, b0, g0))
+    return {
+        "mode": "fixed",
+        "angle_deg": model.door_angle_deg,
+        "angle_case_deg": model.door_angle_deg,
+        "target_deg": target,
+        "cl": model.door_cl,
+        "cd": model.door_cd,
+        "beta_deg": beta,
+        "gamma_deg": gamma,
+        "beta_ref_deg": b0,
+        "gamma_ref_deg": g0,
+    }
 
 
 def operation_outputs(
@@ -702,6 +743,8 @@ def simulate(
             mdl,
             door_cl=mdl.door_cl * scenario.door_cl_factor,
             door_cd=mdl.door_cd * scenario.door_cd_factor,
+            door_cl_factor=scenario.door_cl_factor,
+            door_cd_factor=scenario.door_cd_factor,
         )
     mu_door: float | None = None
     catch_v = catch_w = 0.0
@@ -745,6 +788,7 @@ def simulate(
         fouling=fouling_zones,
         fouling_gains=gains,
         mesh_bending=_mesh_bending(mdl, scenario),
+        door_dynamic=bool(coupled and scenario is not None and scenario.dynamic_door_polar),
     )
     if x_init is not None and x_init.shape != mdl.x0.shape:
         x_init = None

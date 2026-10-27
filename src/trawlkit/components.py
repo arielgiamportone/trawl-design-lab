@@ -742,6 +742,16 @@ def check(item: ComponentBase) -> list[Issue]:
             issues.append(
                 _range(item, item.weight_air_kg / item.area_m2, DOOR_KG_M2, "weight", "kg/m²")
             )
+        elif not item.weight_water_kg:
+            # Fase 19.3: hay fabricantes que no publican el peso («sur demande»); no se inventa.
+            issues.append(
+                _issue(
+                    item,
+                    "warning",
+                    "weight_missing",
+                    t("sin peso publicado: no se puede verificar el peso en el agua del portón"),
+                )
+            )
         usable = [c for c in item.coefficients if c.cl is not None and c.cd is not None]
         if not usable:
             issues.append(_issue(item, "error", "polar", t("sin coeficientes CL/CD")))

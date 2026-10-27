@@ -239,7 +239,7 @@ digitalizadas de documentos de la FAO:
 
 ## Componentes, lista de materiales y aportes
 
-La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cuatro secciones:
+La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cinco secciones:
 
 - **Catálogo**: paño e hilo, cables, cabos, portones, boyas, cadenas y grilletes, con filtros por marca,
   región y «sólo genéricos». La ficha muestra la fuente, la procedencia valor por valor, las
@@ -257,6 +257,14 @@ La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cuatro secciones:
   por litro o menor costo), región del puerto y «sólo genéricos». Muestra el armado recomendado,
   alternativas (una genérica si el mejor lleva marcas), las restricciones que no se cumplen y
   «Aplicar al caso».
+- **Elegir portón** (Fase 19.3, `POST /doors/select`): lleva la superficie requerida por portón
+  del caso a cada portón del catálogo con la regla de la superficie equivalente de Seafish
+  ($A_2 = A_1 C_{L1}/C_{L2}$, más 10 % al pasar a más $C_L$; {doc}`15_portones_aparejo`). Filtros:
+  tipo de portón, región del puerto y «sólo genéricos». La tabla da, por candidato, tipo,
+  superficie, superficie requerida, margen, peso en aire (o «sin peso publicado»; «liviano» si pesa
+  menos de la mitad del máximo del *Fisherman's Workbook*), ángulo de ataque recomendado y largo de
+  las patas de gallo, con los avisos del motor; «Usar este portón» lo pone en el caso. «Reglas y
+  fuentes» cita cada regla. Funciona sin conexión.
 - **Aportar**: formulario por tipo, validado con `POST /components/check`. El aporte se guarda en el
   caso (también en el proyecto exportado) como «aporte, sin verificar» y se envía a la API en
   `components` sólo si se marca «Usar mis aportes». «Exportar» baja el JSON y «Proponer al

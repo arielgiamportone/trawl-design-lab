@@ -118,7 +118,9 @@ def test_generic_doors_work_with_the_engine_polar() -> None:
     assert 0.8 < polar.cl < 1.0
     v = get_component("door", "door_v_200hp")
     assert isinstance(v, DoorItem)
-    assert door_polar(v.to_door(), 32.0).cl < polar.cl
+    # Fase 19.3: la polar en V es la media medida de Seafish (sin 32°: se interpola).
+    assert v.provenance["coefficients"].document == "sfia1993"
+    assert 0.95 < door_polar(v.to_door(), 32.0, interpolate=True).cl < 1.1
     rebyc = [d for d in load_components("door", region="latam") if d.country == "CO"]
     assert len(rebyc) == 4
 

@@ -70,9 +70,12 @@ diez medidas por línea de producto):
   Hampidjan Nylex, Kraft (Polysteel), Danline, DynIce 75 y Prima (burlón de HMPE), y el cabo
   combinado de cerco de Randers Reb.
 * **Portones**: superficie y peso por potencia del *Workbook* para portones planos, ovales, en V y
-  Süberkrüb; la polar de cada tipo sale de la plana del libro Excel (C_L máx. 0,93, consistente con
-  0,95 de {cite}`lange1993`) o de la Morgère, escalada para el portón en V; y cuatro puertas de la
-  flota camaronera del Caribe colombiano {cite}`zuniga2006`.
+  Süberkrüb, con la polar medida de su tipo (Fase 19.3, {doc}`15_portones_aparejo`): las hojas de
+  Seafish/IFREMER/DIFTA {cite}`sfia1993` para el plano, el oval y la media de los tres en V, y el
+  Thyborøn 15 VF de {cite}`mellibovsky2018` para el Süberkrüb; cuatro puertas de la flota
+  camaronera del Caribe colombiano {cite}`zuniga2006`; Vónin Storm 2, Tornado y Twister
+  (superficie y peso, {cite}`vonin_doors`) y Morgère OvalFoil, PolyFoil y PFPE (superficie; peso
+  «sur demande», {cite}`morgere2025`), con la polar del tipo como supuesta.
 * **Boyas y cadenas**: flotación y profundidad máxima por diámetro, peso por metro por eslabón;
   boyas de arrastre de Atlantic Floats y cadenas de eslabón largo Trygg y Trawlex (catálogo de
   Hampidjan) y Gunnebo LLZ de grado 6 galvanizada {cite}`gunnebo_llz`.
@@ -304,7 +307,8 @@ Leída de vuelta, la planilla da los mismos {glue:}`prices_back` precios.
 ## Armado óptimo con lo que se consigue
 
 `trawlkit.optimize.optimise_components` busca en una grilla discreta sobre el catálogo filtrado:
-portones del rango de potencia del buque o de superficie cercana a la requerida (Port!F215), boyas
+portones que alcanzan la superficie equivalente a la requerida (Port!F215) con la regla de Seafish
+({doc}`15_portones_aparejo`; antes, los del rango de potencia del buque), boyas
 que aguantan la profundidad de pesca, hilos que llegan al 90 % de la rotura del hilo del plano, y el
 cable más delgado que cumple el diámetro y la rotura a la velocidad de trabajo. Cada armado se
 evalúa con las restricciones del optimizador del capítulo 20 (tiro con reserva, red abierta, cable,
@@ -379,8 +383,8 @@ cuentas ni datos personales.
 * Los genéricos son **ajustes** a tablas de referencia, no productos: un cable o un hilo real del
   mismo diámetro puede pesar o romper ±10 % distinto. La ficha de cada ítem dice qué valor es de
   fábrica y cuál es derivado o supuesto.
-* Las polares de los portones genéricos son las de su tipo (plano, oval, en V), no medidas de cada
-  modelo; ningún fabricante publica C_L/C_D.
+* Las polares de los portones genéricos y de fabricante son las de su tipo (medidas en modelos de
+  tanque de flujo), no de cada modelo; ningún fabricante publica C_L/C_D.
 * Casi no hay fichas abiertas de proveedores latinoamericanos ni de tamaños chicos: los aportes
   cubren ese hueco y se distinguen siempre de los datos con fuente.
 * Los precios son orientativos y del usuario; el optimizador por costo pone primero los armados con

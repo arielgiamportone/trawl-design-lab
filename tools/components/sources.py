@@ -81,6 +81,34 @@ DOCS: dict[str, dict[str, Any]] = {
         "url": "https://kitocrosby.com/product/gunnebo-industries-long-link-chain-llz-grade-6/",
         "accessed": "2026-10-27",
     },
+    "sfia1993": {
+        "key": "sfia1993",
+        "title": "Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard "
+        "Performance and Behaviour (contrato CEE FAR TE 1 214)",
+        "url": "https://www.seafish.org/media/1peahnrq/otterboard_performance_and_behaviour.pdf",
+        "accessed": "2026-10-27",
+    },
+    "mellibovsky2018": {
+        "key": "mellibovsky2018",
+        "title": "Mellibovsky, Prat-Farran, Notti y Sala (2018). Otterboard hydrodynamic "
+        "performance testing in flume tank and wind tunnel facilities. Ocean Eng. 149:238–244",
+        "url": "https://hdl.handle.net/2117/116734",
+        "accessed": "2026-10-27",
+    },
+    "vonin_doors": {
+        "key": "vonin_doors",
+        "title": "Vónin P/F, portones Storm 2, Tornado y Twister: tamaños y pesos (páginas de "
+        "producto)",
+        "url": "https://www.vonin.com/fishing/trawl-doors/",
+        "accessed": "2026-10-27",
+    },
+    "morgere2025": {
+        "key": "morgere2025",
+        "title": "Morgère S.A., Catalogue 2025: Imaginer la pêche de demain",
+        "url": "https://www.morgere.com/wp-content/uploads/2025/06/"
+        "catalogue-morgere-2025-filiere-peche-fr.pdf",
+        "accessed": "2026-10-27",
+    },
     "giamportone2024": {
         "key": "giamportone2024",
         "title": "Libro Excel de cálculo de la red FAO A-3 (Giamportone)",
@@ -442,9 +470,10 @@ DOOR_SUBERKRUB: list[tuple[tuple[float, float], float, float, float, tuple[float
     ((700, 800), 3.00, 1.33, 4.00, (400, 430)),
 ]
 
-# Coeficiente de sustentación máximo por tipo (Lange 1993, que cita a Lange 1976, Ward y
-# Strickland/Seafish y SFIA-IFREMER-DIFTA): plano rectangular 0,95; V plano 0,70–0,85.
-CL_MAX = {"flat": 0.95, "v": 0.775}
+# Polares de los genéricos (Fase 19.3): las da la biblioteca de polares medidas
+# (``trawlkit/data/door_polars.yaml``, :func:`trawlkit.rigging.polars.polar_for_type`). Hasta la
+# Fase 19.2 la polar en V era la del plano con CL × 0,775/0,93 (CL máximo de Lange 1993) y la del
+# Süberkrüb, la del oval: ninguna de las dos era medida.
 
 # --- Portones de la flota camaronera del Caribe colombiano (Zúñiga et al., FAO REBYC) -------
 # Planos rectangulares de madera, medidos en pies × pulgadas; uso y potencia de la flota.
@@ -454,6 +483,152 @@ DOOR_REBYC: list[tuple[str, float, float, str]] = [
     ("9'x36\"", 9 * 0.3048, 36 * 0.0254, "37,7 % de la flota; redes japonesas de 42'"),
     ("10'x40\"", 10 * 0.3048, 40 * 0.0254, "buque de 520 hp con red de 52'"),
 ]
+
+# --- Portones de fabricante (Fase 19.3) ------------------------------------------------------
+# Ningún fabricante publica la polar CL/CD: los portones usan la polar de su tipo
+# (``polar_for_type``) con procedencia «supuesta». Datos puntuales: hasta 10 tamaños por línea.
+
+#: Vónin (páginas de producto, «SIZES AND WEIGHTS»): superficie [m²] → peso [kg]. La columna dice
+#: sólo «WEIGHT»; se toma por portón (A VERIFICAR). Storm 2: portón de fondo de cuatro perfiles,
+#: «ASPECT RATIO 1,2 (STANDARD)»; Tornado: pelágico de cinco perfiles, «ASPECT RATIO 3,0
+#: (STANDARD)», ángulo de ataque de 21 a 48°; Twister: pelágico regulable (no da la relación de
+#: aspecto; dice «With a CL value of 4.39» y «The CL/CD ratio varies between 3.16 and 3.60»).
+VONIN_DOORS: dict[str, dict[str, Any]] = {
+    "Storm 2": {
+        "slug": "storm2",
+        "url": "https://www.vonin.com/product/vonin-storm/",
+        "type": "multifoil",
+        "aspect_ratio": 1.2,
+        "use": "fondo, cuatro perfiles",
+        # 14 tamaños publicados (3–16 m²); se toman 10.
+        "points": [
+            (3.0, 1050),
+            (4.0, 1450),
+            (5.0, 2100),
+            (6.0, 2850),
+            (7.0, 3375),
+            (8.0, 3900),
+            (10.0, 4900),
+            (12.0, 5950),
+            (14.0, 7000),
+            (16.0, 7800),
+        ],
+    },
+    "Tornado": {
+        "slug": "tornado",
+        "url": "https://www.vonin.com/product/vonin-tornado/",
+        "type": "high_aspect",
+        "aspect_ratio": 3.0,
+        "use": "pelágico, cinco perfiles; ángulo de ataque de 21 a 48° según el fabricante",
+        # 11 tamaños publicados (3–13 m²); se toman 10.
+        "points": [
+            (3.0, 1050),
+            (4.0, 1450),
+            (5.0, 1850),
+            (6.0, 2200),
+            (7.0, 2600),
+            (8.0, 3000),
+            (9.0, 3400),
+            (10.0, 3800),
+            (11.0, 4200),
+            (13.0, 5000),
+        ],
+    },
+    "Twister": {
+        "slug": "twister",
+        "url": "https://www.vonin.com/product/vonin-twister/",
+        "type": "high_aspect",
+        "aspect_ratio": None,
+        "use": "pelágico regulable desde el puente (persianas)",
+        "claim": "el fabricante declara «a CL value of 4.39» y CL/CD de 3,16 a 3,60 según las "
+        "persianas y el ángulo de ataque; no publica la polar",
+        "points": [
+            (6.0, 2100),
+            (7.0, 2475),
+            (8.0, 2850),
+            (9.0, 3250),
+            (10.0, 3650),
+            (11.0, 3975),
+            (12.0, 4300),
+            (13.0, 4700),
+        ],
+    },
+}
+
+#: Morgère, catálogo 2025: «Les panneaux Morgère ne sont pas standardisés : leur taille et leur
+#: poids sont adaptés à chaque type de bateau» (p. 9); pesos «SUR DEMANDE / PERSONNALISABLE».
+#: Se cargan los modelos con hoja de Seafish 1993 del mismo diseño (para medidas y polar); de los
+#: demás (Proto NG, V Champion, Champion, Osprey, Exocet) no hay medidas ni polar publicadas.
+#: ``points``: (modelo, superficie [m²]) o (modelo, largo [m], superficie [m²]) para el PFPE.
+MORGERE_DOORS: dict[str, dict[str, Any]] = {
+    "OvalFoil": {
+        "slug": "ovalfoil",
+        "page": "p. 25",
+        "type": "oval",
+        "polar": "sfia1993_morgere_polyvalent_ovale",
+        "shape_note": "«forme emblématique du Polyvalent»: proporciones del modelo Morgère "
+        "Polyvalent Ovale de Seafish 1993 (AR 0,68, relación de superficie 0,80)",
+        "use": "fondo, fondos duros",
+        # 21 tamaños (OF0–OF20); se toman 10.
+        "points": [
+            ("OF0", 0.59),
+            ("OF02", 1.34),
+            ("OF04", 2.18),
+            ("OF06", 3.08),
+            ("OF08", 4.19),
+            ("OF10", 5.1),
+            ("OF12", 5.82),
+            ("OF14", 6.96),
+            ("OF16", 8.57),
+            ("OF20", 13.44),
+        ],
+    },
+    "PolyFoil": {
+        "slug": "polyfoil",
+        "page": "p. 27",
+        "type": "multifoil",
+        "polar": "sfia1993_morgere_polyfoil",
+        "shape_note": "proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, "
+        "relación de superficie 0,94)",
+        "use": "fondo, aguas profundas; «premier panneau multi-foils»",
+        # 19 tamaños (PF0–PF18); se toman 10.
+        "points": [
+            ("PF0", 0.67),
+            ("PF02", 1.52),
+            ("PF04", 2.28),
+            ("PF06", 3.19),
+            ("PF08", 4.26),
+            ("PF10", 5.13),
+            ("PF12", 5.78),
+            ("PF14", 6.98),
+            ("PF16", 8.55),
+            ("PF18", 10.96),
+        ],
+    },
+    "PFPE": {
+        "slug": "pfpe",
+        "page": "p. 23",
+        "type": "multifoil",
+        "polar": "sfia1993_morgere_polyfoil",
+        "shape_note": "«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el "
+        "catálogo da el largo; el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish "
+        "1993 (0,94)",
+        "use": "fondo, langostino y camarón",
+        # 17 tamaños (PFPE01–PFPE12) con largo; se toman 10.
+        "points": [
+            ("PFPE01", 1.40, 1.20),
+            ("PFPE02", 1.60, 1.52),
+            ("PFPE03", 1.80, 1.88),
+            ("PFPE03.5", 1.90, 2.08),
+            ("PFPE05.5", 2.30, 2.95),
+            ("PFPE06.5", 2.5, 3.44),
+            ("PFPE07.5", 2.7, 3.98),
+            ("PFPE09", 2.9, 4.68),
+            ("PFPE10", 3.0, 5.13),
+            ("PFPE12", 3.2, 5.78),
+        ],
+    },
+}
 
 # --- Fabricantes: datos puntuales ------------------------------------------------------------
 

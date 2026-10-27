@@ -2262,6 +2262,68 @@
     }
    }
   },
+  "/catalog/door-polars": {
+   "get": {
+    "summary": "List Door Polars",
+    "description": "Polar representativa de cada tipo de portón, con su fuente y el ángulo recomendado.",
+    "operationId": "list_door_polars_catalog_door_polars_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/DoorTypePolarOut"
+         },
+         "type": "array",
+         "title": "Response List Door Polars Catalog Door Polars Get"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/doors/select": {
+   "post": {
+    "summary": "Select Doors",
+    "description": "Portones del catálogo que alcanzan la superficie equivalente del caso (Fase 19.3).\n\nSuperficie requerida por portón del caso (Port!F215) llevada a cada portón con\nA₂ = A₁·CL₁/CL₂ más 10 % al pasar a un portón de más CL (Seafish 1993), con el control del\npeso (FAO Workbook), el ángulo de ataque recomendado y el largo de las patas de gallo.",
+    "operationId": "select_doors_doors_select_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/DoorSelectRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DoorSelectResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/catalog/fouling": {
    "get": {
     "summary": "List Fouling",
@@ -4508,6 +4570,45 @@
     ],
     "title": "AssignmentViewOut",
     "description": "Tarea con los ítems del alumno (vacío para el docente)."
+   },
+   "AttackAngleOut": {
+    "properties": {
+     "min_deg": {
+      "type": "number",
+      "title": "Min Deg"
+     },
+     "max_deg": {
+      "type": "number",
+      "title": "Max Deg"
+     },
+     "document": {
+      "type": "string",
+      "title": "Document"
+     },
+     "page": {
+      "type": "string",
+      "title": "Page"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "min_deg",
+     "max_deg",
+     "document",
+     "page",
+     "kind",
+     "note"
+    ],
+    "title": "AttackAngleOut",
+    "description": "Rango de ángulo de ataque recomendado de un tipo de portón, con su fuente."
    },
    "BallastZoneOut": {
     "properties": {
@@ -6876,6 +6977,211 @@
     "title": "Door",
     "description": "Portón (puerta) de arrastre."
    },
+   "DoorCandidateOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "name": {
+      "type": "string",
+      "title": "Name"
+     },
+     "type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Type"
+     },
+     "type_label": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Type Label"
+     },
+     "brand": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Brand"
+     },
+     "generic": {
+      "type": "boolean",
+      "title": "Generic"
+     },
+     "area_m2": {
+      "type": "number",
+      "title": "Area M2"
+     },
+     "length_m": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Length M"
+     },
+     "weight_air_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Air Kg"
+     },
+     "weight_water_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Water Kg"
+     },
+     "angle_deg": {
+      "type": "number",
+      "title": "Angle Deg"
+     },
+     "cl": {
+      "type": "number",
+      "title": "Cl"
+     },
+     "cd": {
+      "type": "number",
+      "title": "Cd"
+     },
+     "required_m2": {
+      "type": "number",
+      "title": "Required M2"
+     },
+     "margin_applied": {
+      "type": "boolean",
+      "title": "Margin Applied"
+     },
+     "area_margin": {
+      "type": "number",
+      "title": "Area Margin"
+     },
+     "ok": {
+      "type": "boolean",
+      "title": "Ok"
+     },
+     "weight_status": {
+      "type": "string",
+      "enum": [
+       "ok",
+       "light",
+       "missing",
+       "no_reference"
+      ],
+      "title": "Weight Status"
+     },
+     "weight_reference_kg": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Weight Reference Kg"
+     },
+     "attack_angle": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AttackAngleOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "backstrop_m": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "number"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Backstrop M"
+     },
+     "hp_ok": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hp Ok"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Warnings"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "type",
+     "type_label",
+     "brand",
+     "generic",
+     "area_m2",
+     "length_m",
+     "weight_air_kg",
+     "weight_water_kg",
+     "angle_deg",
+     "cl",
+     "cd",
+     "required_m2",
+     "margin_applied",
+     "area_margin",
+     "ok",
+     "weight_status",
+     "weight_reference_kg",
+     "attack_angle",
+     "backstrop_m",
+     "hp_ok",
+     "warnings"
+    ],
+    "title": "DoorCandidateOut",
+    "description": "Un portón del catálogo evaluado para el caso."
+   },
    "DoorCoefficients": {
     "properties": {
      "angle_deg": {
@@ -6912,6 +7218,286 @@
     ],
     "title": "DoorCoefficients",
     "description": "Coeficientes hidrodinámicos de un portón a un ángulo de ataque."
+   },
+   "DoorSelectRequest": {
+    "properties": {
+     "net": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/NetSpec"
+       }
+      ],
+      "title": "Net",
+      "default": "fao_a3_standard"
+     },
+     "vessel": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Vessel"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Vessel"
+     },
+     "door": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "$ref": "#/components/schemas/Door"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Door"
+     },
+     "class_vessels": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Class Vessels"
+     },
+     "compat": {
+      "type": "string",
+      "enum": [
+       "excel",
+       "corrected"
+      ],
+      "title": "Compat",
+      "default": "corrected"
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params"
+     },
+     "components": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "maxItems": 50,
+      "title": "Components"
+     },
+     "brands": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array",
+        "maxItems": 20
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Brands"
+     },
+     "region": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Region"
+     },
+     "generic_only": {
+      "type": "boolean",
+      "title": "Generic Only",
+      "default": false
+     },
+     "types": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array",
+        "maxItems": 8
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Types"
+     },
+     "margin": {
+      "type": "number",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Margin",
+      "default": 0.1
+     },
+     "max_results": {
+      "type": "integer",
+      "maximum": 60.0,
+      "minimum": 1.0,
+      "title": "Max Results",
+      "default": 20
+     },
+     "include_light": {
+      "type": "boolean",
+      "title": "Include Light",
+      "default": true
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "DoorSelectRequest",
+    "description": "Elección de portones del catálogo para el caso (``POST /doors/select``, Fase 19.3).\n\n``net``, ``vessel``, ``door``, ``class_vessels``, ``compat`` y ``params`` como en\n``DesignRequest``: el caso da la superficie requerida por portón (Port!F215) y el CL del\nportón del caso. ``brands``/``region``/``generic_only`` filtran el catálogo de componentes;\n``types`` limita los tipos (``flat``, ``v``, ``oval``, ``cambered``, ``multifoil``,\n``high_aspect``); ``margin`` es el margen al pasar a un portón de más CL (Seafish: 10 %)."
+   },
+   "DoorSelectResponse": {
+    "properties": {
+     "required_m2": {
+      "type": "number",
+      "title": "Required M2"
+     },
+     "case_door": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Case Door"
+     },
+     "candidates": {
+      "items": {
+       "$ref": "#/components/schemas/DoorCandidateOut"
+      },
+      "type": "array",
+      "title": "Candidates"
+     },
+     "rejected": {
+      "type": "integer",
+      "title": "Rejected"
+     },
+     "margin": {
+      "type": "number",
+      "title": "Margin"
+     },
+     "rules": {
+      "items": {
+       "additionalProperties": {
+        "type": "string"
+       },
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Rules"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
+     }
+    },
+    "type": "object",
+    "required": [
+     "required_m2",
+     "case_door",
+     "candidates",
+     "rejected",
+     "margin",
+     "rules",
+     "notes"
+    ],
+    "title": "DoorSelectResponse",
+    "description": "Resultado de ``POST /doors/select``."
+   },
+   "DoorTypePolarOut": {
+    "properties": {
+     "type": {
+      "type": "string",
+      "title": "Type"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "method": {
+      "type": "string",
+      "title": "Method"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "polar_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Polar Ids"
+     },
+     "documents": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Documents"
+     },
+     "pages": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Pages"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     },
+     "coefficients": {
+      "items": {
+       "additionalProperties": {
+        "type": "number"
+       },
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Coefficients"
+     },
+     "attack_angle": {
+      "$ref": "#/components/schemas/AttackAngleOut"
+     }
+    },
+    "type": "object",
+    "required": [
+     "type",
+     "label",
+     "method",
+     "kind",
+     "polar_ids",
+     "documents",
+     "pages",
+     "note",
+     "coefficients",
+     "attack_angle"
+    ],
+    "title": "DoorTypePolarOut",
+    "description": "Polar representativa de un tipo de portón (``GET /catalog/door-polars``)."
    },
    "DynamitRow": {
     "properties": {
@@ -11441,12 +12027,17 @@
       "minimum": 0.3,
       "title": "Door Cd Factor",
       "default": 1.0
+     },
+     "dynamic_door_polar": {
+      "type": "boolean",
+      "title": "Dynamic Door Polar",
+      "default": true
      }
     },
     "additionalProperties": false,
     "type": "object",
     "title": "ScenarioIn",
-    "description": "Condiciones del lance para la simulación (ver ``trawlkit.sim.scenario``).\n\n``catch_kg`` captura en el copo; ``catch_bulk_density`` densidad aparente (organismos y agua\nintersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos\n(peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo\nde fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y\nde los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio)."
+    "description": "Condiciones del lance para la simulación (ver ``trawlkit.sim.scenario``).\n\n``catch_kg`` captura en el copo; ``catch_bulk_density`` densidad aparente (organismos y agua\nintersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos\n(peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo\nde fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y\nde los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio);\n``dynamic_door_polar`` recalcula su CL y CD al ángulo de ataque de la forma resuelta."
    },
    "SeabedOut": {
     "properties": {

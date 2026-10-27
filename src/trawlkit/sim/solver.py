@@ -66,10 +66,12 @@ que la relajación explícita converge de forma robusta.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 import numpy as np
 import numpy.typing as npt
 
+from trawlkit.sim.doors import DoorDynamics, calibrate_nw, rig_angles_deg
 from trawlkit.sim.mesh import NetModel
 
 FloatArray = npt.NDArray[np.float64]
@@ -100,6 +102,8 @@ class Params:
     fouling_gains: tuple[float, float, float] = (1.5, 0.3, 2.0)
     #: Módulo de flexión del hilo para la rigidez de apertura de la malla [Pa] (0 = sin ella).
     mesh_bending: float = 0.0
+    #: Polar dinámica de los portones acoplados (Fase 19.3, :mod:`trawlkit.sim.doors`).
+    door_dynamic: bool = False
 
 
 @dataclass(frozen=True)
@@ -180,8 +184,11 @@ class ForceField:
             fk = 0.5 * p.rho * p.knot_cd * area_k * model.tri_area * p.speed_ms**2 / 3.0
             np.add.at(drag_float, model.tri.ravel(), np.repeat(fk, 3))
         const = model.point_load.copy()
+        self.door_q = 0.5 * p.rho * model.door_area_m2 * p.speed_ms**2
+        self.door_cl, self.door_cd = model.door_cl, model.door_cd
+        self.door_dyn: DoorDynamics | None = None
         if model.coupled_doors:
-            q = 0.5 * p.rho * model.door_area_m2 * p.speed_ms**2
+            q = self.door_q
             for k in model.doors:
                 out = 1.0 if model.x0[k, 1] > 0 else -1.0
                 drag_float[k] += model.door_cd * q
@@ -191,6 +198,8 @@ class ForceField:
         const[:, 2] += buoy
         self.const = const.ravel()
         self.point_drag = drag_float
+        if model.coupled_doors and p.door_dynamic and model.door_polar.shape[0] >= 2:
+            self.door_dyn = self._door_dynamics()
         self.free = np.ones(n, dtype=bool)
         self.free[model.fixed] = False
         # Rozamiento por nodo y altura del "fondo" de cada nodo (centro del portón).
@@ -215,6 +224,52 @@ class ForceField:
         self._ring_of = ring_of
         tri_ring = ring_of[model.tri]
         self._tri_ring = np.where((tri_ring >= 0).all(axis=1), tri_ring.max(axis=1), -1)
+
+    def _door_nodes(self) -> tuple[int, int, int]:
+        m = self.model
+        return int(m.doors[0]), int(m.warp_nodes[0][1]), int(m.junctions[0])
+
+    def _door_dynamics(self) -> DoorDynamics:
+        """Estado inicial de la polar dinámica, calibrado con la forma de diseño (``x0``)."""
+        m = self.model
+        polar = m.door_polar[np.argsort(m.door_polar[:, 0])]
+        beta, gamma = rig_angles_deg(m.x0, *self._door_nodes())
+        lo, hi = float(polar[0, 0]), float(polar[-1, 0])
+        angle = min(max(m.door_angle_deg, lo), hi)
+        dyn = DoorDynamics(
+            polar=polar,
+            n_w=calibrate_nw(m.door_angle_deg, beta, gamma),
+            angle_deg=angle,
+            angle_case_deg=m.door_angle_deg,
+            beta_ref_deg=beta,
+            gamma_ref_deg=gamma,
+            cl_factor=m.door_cl_factor,
+            cd_factor=m.door_cd_factor,
+            beta_deg=beta,
+            gamma_deg=gamma,
+            target_deg=m.door_angle_deg,
+        )
+        self._set_door_coefficients(*dyn.coefficients())
+        return dyn
+
+    def _set_door_coefficients(self, cl: float, cd: float) -> None:
+        """Cambia el CL y el CD de los portones en las cargas constantes."""
+        q = self.door_q
+        dcl, dcd = cl - self.door_cl, cd - self.door_cd
+        for k in self.model.doors:
+            out = 1.0 if self.model.x0[k, 1] > 0 else -1.0
+            self.const[3 * k] += dcd * q
+            self.const[3 * k + 1] += out * dcl * q
+            self.point_drag[k] += dcd * q
+        self.door_cl, self.door_cd = cl, cd
+
+    def update_doors(self, x: FloatArray) -> None:
+        """Polar dinámica: nuevo ángulo de ataque con la forma ``x`` y su CL y CD."""
+        dyn = self.door_dyn
+        if dyn is None:
+            return
+        dyn.step(*rig_angles_deg(x, *self._door_nodes()))
+        self._set_door_coefficients(*dyn.coefficients())
 
     @property
     def has_catch(self) -> bool:
@@ -392,6 +447,7 @@ class RelaxResult:
     drag_mean: float  # arrastre medio en la última ventana [N]
     drag_std: float  # desvío del arrastre en la última ventana [N]
     catch: dict[str, float] = field(default_factory=dict)  # zona de la captura (update_catch)
+    door: dict[str, Any] = field(default_factory=dict)  # polar dinámica (vacío = CL/CD fijos)
 
 
 def nodal_stiffness(model: NetModel) -> FloatArray:
@@ -484,6 +540,7 @@ def relax(
         check = it % check_every == 0
         if check:
             ff.update_catch(x)
+            ff.update_doors(x)
         f, full = ff.evaluate(x, full=check)
         if symmetric:
             f = 0.5 * (f + f[mirror] * flip)
@@ -544,4 +601,5 @@ def relax(
         float(tail[:, 4].mean()),
         float(tail[:, 4].std()),
         dict(ff.catch_info),
+        ff.door_dyn.to_dict() if ff.door_dyn is not None else {},
     )

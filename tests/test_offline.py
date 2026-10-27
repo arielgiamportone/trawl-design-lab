@@ -27,6 +27,7 @@ GETS = [
     "/catalog/components/shackle/crosby_g209_1_2in",
     "/catalog/vessels",
     "/catalog/doors",
+    "/catalog/door-polars",
     "/catalog/seabeds",
     "/params",
     "/errata",
@@ -108,6 +109,8 @@ POSTS: list[tuple[str, dict[str, object]]] = [
         "/optimize/components",
         {"net": "fao_wb_bt2p_60hp", "max_doors": 2, "max_floats": 2, "max_twines": 2},
     ),
+    ("/doors/select", {"max_results": 5}),
+    ("/doors/select", {"net": "fao_wb_bt2p_60hp", "types": ["v", "oval"], "generic_only": True}),
     ("/optimize", {"grid": {"n_s": 3, "n_v": 3}, "refine": False}),
     ("/optimize/scaled-net", {"net": "fao_a3_standard", "s": 1.1}),
     (

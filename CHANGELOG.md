@@ -13,6 +13,26 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Portones en profundidad (Fase 19.3)**: biblioteca de polares medidas
+  (`data/door_polars.yaml`, `trawlkit.rigging.polars`): las 26 hojas de datos del tanque de flujo
+  de Seafish/IFREMER/DIFTA 1993 (`sfia1993`, verificadas contra la imagen de cada página) y las
+  tablas del Thyborøn 15 VF y del Grilli Fly de Mellibovsky et al. (2018), con fuente, página y
+  condiciones de ensayo; `polar_for_type` da una polar por tipo (plano, en V, oval, cambado,
+  multiperfil, pelágico de alta relación de aspecto). Las polares plana y oval del libro Excel
+  son las hojas «Flat Wooden» y «Morgère Polyvalent Ovale» de Seafish (citadas como fuente
+  primaria); los portones genéricos en V y Süberkrüb del catálogo pasan a polares medidas (antes,
+  la plana escalada y la oval). Portones de fabricante: Vónin Storm 2, Tornado y Twister
+  (superficie y peso) y Morgère OvalFoil, PolyFoil y PFPE (superficie; peso «sur demande», vacío
+  y con aviso), con la polar del tipo marcada como supuesta; el catálogo pasa a 563 ítems. En
+  modo corregido la polar se interpola y se extrapola hasta 5° con aviso. Elección de portones
+  (`trawlkit.door_selection`, `POST /doors/select`, también sin conexión, y «Elegir portón» en
+  Componentes): superficie equivalente $A_2 = A_1 C_{L1}/C_{L2}$ + 10 % (Seafish), peso contra el
+  *Fisherman's Workbook*, ángulo de ataque recomendado y patas de gallo de 1–1,5 L; el armado con
+  componentes elige sus portones candidatos con la misma regla. `GET /catalog/door-polars`. En la
+  simulación con portones acoplados, polar dinámica por defecto (`Scenario.dynamic_door_polar`):
+  el ángulo de ataque sale de la forma resuelta (método simplificado de Seafish, App. III-13) y
+  el $C_L$/$C_D$ se leen de la polar completa; en la A-3 a 3 kn el portón pasa de 32° a 35,4° y
+  la separación de portones de 46,6 a 44,3 m. Capítulos 15 y 22 y la página de la app.
 - **Más componentes (Fase 19.2)**: el catálogo pasa de 290 a 505 ítems con fuente por dato:
   Hampidjan (paños de PE, PA y HMPE, cables, cabos con alargamiento, cadenas, boyas y grilletes,
   verificados contra la imagen de cada página), Garware (hilos torcidos como borrador, cabos),

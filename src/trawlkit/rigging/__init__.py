@@ -29,11 +29,13 @@ from trawlkit.rigging.bridles import (
     sweeps_martini_m,
 )
 from trawlkit.rigging.doors import (
+    MAX_EXTRAPOLATION_DEG,
     ROB_SHARES,
     CentreOfPressure,
     DoorForces,
     DoorPolar,
     MomentBalance,
+    PolarExtrapolationWarning,
     RequiredArea,
     centre_of_pressure_m,
     door_drag_share_kgf,
@@ -45,6 +47,7 @@ from trawlkit.rigging.doors import (
     door_spread_m,
     door_weight_water_kg,
     moment_balance,
+    polar_extrapolated,
     required_area_m2,
     required_area_overall_m2,
     required_area_summary,
@@ -66,6 +69,18 @@ from trawlkit.rigging.floats import (
     flotation_fridman_average_kgf,
     flotation_koyama_kgf,
     flotation_prado_kgf,
+)
+from trawlkit.rigging.polars import (
+    ATTACK_ANGLES,
+    BACKSTROP_RATIO,
+    DOOR_TYPES,
+    EQUIVALENT_AREA_MARGIN,
+    AttackAngleRange,
+    TypePolar,
+    attack_angle_range,
+    canonical_type,
+    load_door_polars,
+    polar_for_type,
 )
 from trawlkit.rigging.ropes import (
     ROPE_WATER_WEIGHT_COEF,
@@ -142,6 +157,19 @@ from trawlkit.rigging.warps import (
 )
 
 __all__ = [
+    "ATTACK_ANGLES",
+    "BACKSTROP_RATIO",
+    "DOOR_TYPES",
+    "EQUIVALENT_AREA_MARGIN",
+    "MAX_EXTRAPOLATION_DEG",
+    "AttackAngleRange",
+    "PolarExtrapolationWarning",
+    "TypePolar",
+    "attack_angle_range",
+    "canonical_type",
+    "load_door_polars",
+    "polar_extrapolated",
+    "polar_for_type",
     "Range",
     "Seabed",
     "seabed",

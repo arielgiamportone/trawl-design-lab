@@ -19,6 +19,7 @@ export const DEFAULT_SCENARIO: ScenarioIn = {
   mesh_bending_factor: 1,
   door_cl_factor: 1,
   door_cd_factor: 1,
+  dynamic_door_polar: true,
 };
 
 /** Escenario completo a partir de los campos que cambian. */

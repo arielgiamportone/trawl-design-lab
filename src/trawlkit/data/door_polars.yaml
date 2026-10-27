@@ -1,0 +1,482 @@
+# Biblioteca de polares de portones (Fase 19.3): coeficientes CL/CD medidos, con su fuente.
+#
+# * sfia1993: las 26 hojas de datos del Apéndice IV de Seafish/IFREMER/DIFTA (1993), ensayos de
+#   modelos en tanque de flujo. Transcriptas de la imagen de cada página del PDF escaneado y
+#   verificadas una por una (2026-10-27). «null» = el ángulo no se ensayó («-» en la hoja).
+# * mellibovsky2018: Tablas 2 y 3 (Thyborøn 15 VF y Grilli Fly), tanque de flujo (FT) y túnel de
+#   viento (WT) a los mismos ángulos; capa de texto del manuscrito aceptado, comprobada.
+#
+# Las polares representativas por tipo (media de varias hojas o ajuste) no se guardan aquí: las
+# calcula trawlkit.rigging.polars.polar_for_type con la regla escrita en TYPE_POLARS.
+conditions:
+  sfia1993_flume:
+    document: sfia1993
+    facility: tanques de flujo de Hull (Seafish), Boulogne (IFREMER) y Hirtshals (DIFTA)
+    speed_ms: 0.9
+    reynolds: 5.0e5
+    page: 'Sección 3-2 y 3-3 (págs. del PDF 47-48); Apéndice III-9 y III-11 (págs. 123 y 125)'
+    note: >-
+      Modelos a escala sobre la cinta del tanque, que corre a la velocidad del agua, 0,9 m/s aprox.
+      (sección 3-2): el CD incluye el rozamiento con la cinta (App. III-9). Ángulos de 25 a 45° con
+      escora constante, cable a 6° de la vertical. CL y CD sobre la superficie proyectada A (ejemplo
+      del App. III-11). Reynolds ≈ 5e5 (derivado:
+      V·L/ν con L ≈ 0,7 m). Los métodos de cálculo dan un ángulo unos 4° mayor que el que el portón
+      toma en el mar (App. III-11). Escala: CL varió hasta 6 % y CD hasta 14 % entre dos tamaños
+      del mismo diseño (sección 3-15).
+  mellibovsky2018_ft:
+    document: mellibovsky2018
+    facility: tanque de flujo del Marine Institute, St John's (Terranova), 8 × 4 × 22,25 m
+    reynolds: 2.3e5
+    page: 'pág. 5 del manuscrito aceptado'
+    note: >-
+      Ensayo del 10 de septiembre de 2014; V nominal 0,95 m/s (Thyborøn) y 0,7 m/s (Grilli), Re ≈ 2,3e5
+      con la cuerda. Portones aparejados con cable adelante y dos líneas de brida atrás. Los
+      coeficientes del tanque quedan 20-30 % (Thyborøn) y 15-20 % (Grilli, α bajo) por debajo del túnel
+      de viento; los autores lo atribuyen sobre todo a un error de la velocidad nominal del tanque
+      (≈ 11 % y 8 %), así que el valor real puede estar entre ambos.
+  mellibovsky2018_wt:
+    document: mellibovsky2018
+    facility: túnel de viento MariKom (Rostock), sección abierta de 1,4 m
+    page: 'págs. 4-5 y Tablas 2-3 del manuscrito aceptado'
+    note: >-
+      Predicción del túnel de viento (Mellibovsky et al. 2015) interpolada a los mismos ángulos α y β
+      medidos en el tanque. Sin fondo ni rozamiento.
+polars:
+- id: sfia1993_reference_vee
+  name: "Reference Vee"
+  type: v
+  description: "Vee without camber. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-2 (PDF p. 132)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.74, height_m: 0.48, area_m2: 0.347, aspect_ratio: 0.65, area_ratio: 0.98, weight_air_kg: 15.7, weight_water_kg: 13.7}
+  max_cl: {angle_deg: 28, cl: 0.97, cd: 0.61}
+  coefficients:
+  - {angle_deg: 25, cl: 0.96, cd: 0.55}
+  - {angle_deg: 30, cl: 0.96, cd: 0.64}
+  - {angle_deg: 35, cl: 0.89, cd: 0.74}
+  - {angle_deg: 40, cl: 0.82, cd: 0.83}
+  - {angle_deg: 45, cl: 0.79, cd: 0.93}
+- id: sfia1993_flat_wooden
+  name: "Flat Wooden"
+  type: flat
+  description: "Flat with wooden panels. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-3 (PDF p. 133)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.764, height_m: 0.38, area_m2: 0.285, aspect_ratio: 0.5, area_ratio: 0.98, weight_air_kg: 13.4, weight_water_kg: 8.0}
+  max_cl: {angle_deg: 32, cl: 0.93, cd: 0.71}
+  coefficients:
+  - {angle_deg: 25, cl: 0.8, cd: 0.53}
+  - {angle_deg: 30, cl: 0.92, cd: 0.67}
+  - {angle_deg: 35, cl: 0.86, cd: 0.74}
+  - {angle_deg: 40, cl: 0.78, cd: 0.79}
+  - {angle_deg: 45, cl: 0.76, cd: 0.89}
+- id: sfia1993_bison_1_slot
+  name: "Bison 1 Slot"
+  type: cambered
+  description: "Cambered with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-4 (PDF p. 134)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.671, height_m: 0.422, area_m2: 0.261, aspect_ratio: 0.63, area_ratio: 0.92, weight_air_kg: 11.4, weight_water_kg: 9.9}
+  max_cl: {angle_deg: 39, cl: 1.38, cd: 0.88}
+  coefficients:
+  - {angle_deg: 25, cl: 1.11, cd: 0.52}
+  - {angle_deg: 30, cl: 1.23, cd: 0.63}
+  - {angle_deg: 35, cl: 1.34, cd: 0.76}
+  - {angle_deg: 40, cl: 1.38, cd: 0.91}
+  - {angle_deg: 45, cl: 1.27, cd: 1.03}
+- id: sfia1993_bison_3_slots
+  name: "Bison 3 Slots"
+  type: multifoil
+  description: "Four cambered foils. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-5 (PDF p. 135)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.673, height_m: 0.423, area_m2: 0.263, aspect_ratio: 0.63, area_ratio: 0.92, weight_air_kg: 11.4, weight_water_kg: 9.9}
+  max_cl: {angle_deg: 43, cl: 1.3, cd: 0.92}
+  coefficients:
+  - {angle_deg: 25, cl: 0.84, cd: 0.45}
+  - {angle_deg: 30, cl: 0.99, cd: 0.55}
+  - {angle_deg: 35, cl: 1.14, cd: 0.67}
+  - {angle_deg: 40, cl: 1.27, cd: 0.82}
+  - {angle_deg: 45, cl: 1.29, cd: 0.98}
+- id: sfia1993_blooe_tech
+  name: "Blooe Tech"
+  type: v
+  description: "Vee with plastic panels. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-6 (PDF p. 137)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.73, height_m: 0.469, area_m2: 0.34, aspect_ratio: 0.64, area_ratio: 0.99, weight_air_kg: 11.8, weight_water_kg: 9.2}
+  max_cl: {angle_deg: 29, cl: 0.99, cd: 0.58}
+  coefficients:
+  - {angle_deg: 25, cl: 0.94, cd: 0.52}
+  - {angle_deg: 30, cl: 0.99, cd: 0.6}
+  - {angle_deg: 35, cl: 0.92, cd: 0.68}
+  - {angle_deg: 40, cl: 0.88, cd: 0.76}
+  - {angle_deg: 45, cl: 0.85, cd: 0.84}
+- id: sfia1993_dan_green_kb
+  name: "Dan-Green Type KB"
+  type: cambered
+  description: "Cambered with slots. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-7 (PDF p. 138)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.73, height_m: 0.45, area_m2: 0.325, aspect_ratio: 0.62, area_ratio: 0.99, weight_air_kg: 17.5, weight_water_kg: 15.3}
+  max_cl: {angle_deg: 31, cl: 1.28, cd: 0.91}
+  coefficients:
+  - {angle_deg: 25, cl: 1.2, cd: 0.74}
+  - {angle_deg: 30, cl: 1.28, cd: 0.89}
+  - {angle_deg: 35, cl: 1.2, cd: 0.99}
+  - {angle_deg: 40, cl: 1.11, cd: 1.07}
+  - {angle_deg: 45, cl: 1.05, cd: 1.17}
+- id: sfia1993_dan_green_sv
+  name: "Dan-Green Type SV"
+  type: cambered
+  description: "Cambered. Tested with closed gates and upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-8 (PDF p. 139)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.71, height_m: 0.42, area_m2: 0.295, aspect_ratio: 0.59, area_ratio: 0.99, weight_air_kg: 12.3, weight_water_kg: 10.7}
+  max_cl: {angle_deg: 31, cl: 1.16, cd: 0.86}
+  coefficients:
+  - {angle_deg: 25, cl: 1.08, cd: 0.68}
+  - {angle_deg: 30, cl: 1.16, cd: 0.83}
+  - {angle_deg: 35, cl: 1.07, cd: 0.93}
+  - {angle_deg: 40, cl: 0.97, cd: 1.01}
+  - {angle_deg: 45, cl: null, cd: null}
+- id: sfia1993_euronete_portuguese
+  name: "Euronete \"Portuguese\""
+  type: cambered
+  description: "Cambered with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-9 (PDF p. 140)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.75, height_m: 0.417, area_m2: 0.275, aspect_ratio: 0.56, area_ratio: 0.88, weight_air_kg: 11.0, weight_water_kg: 8.6}
+  max_cl: {angle_deg: 31, cl: 1.02, cd: 0.67}
+  coefficients:
+  - {angle_deg: 25, cl: 0.87, cd: 0.5}
+  - {angle_deg: 30, cl: 1.01, cd: 0.65}
+  - {angle_deg: 35, cl: 0.95, cd: 0.76}
+  - {angle_deg: 40, cl: 0.87, cd: 0.81}
+  - {angle_deg: 45, cl: 0.82, cd: 0.89}
+- id: sfia1993_fjortoft_multi_foil
+  name: "Fjørtoft Multi Foil"
+  type: multifoil
+  description: "Four cambered foils. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-10 (PDF p. 141)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.7, height_m: 0.485, area_m2: 0.34, aspect_ratio: 0.69, area_ratio: 1.0, weight_air_kg: 27.1, weight_water_kg: 23.6}
+  max_cl: {angle_deg: 35, cl: 1.18, cd: 0.89}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 1.1, cd: 0.76}
+  - {angle_deg: 35, cl: 1.18, cd: 0.89}
+  - {angle_deg: 40, cl: 1.11, cd: 0.98}
+  - {angle_deg: 45, cl: 0.99, cd: 1.04}
+- id: sfia1993_hinriksson_poly_ice
+  name: "Hinriksson Poly-Ice"
+  type: oval
+  description: "Cambered oval with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-11 (PDF p. 142)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.748, height_m: 0.51, area_m2: 0.304, aspect_ratio: 0.68, area_ratio: 0.8, weight_air_kg: 12.7, weight_water_kg: 11.1}
+  max_cl: {angle_deg: 32, cl: 1.19, cd: 0.79}
+  coefficients:
+  - {angle_deg: 25, cl: 1.1, cd: 0.62}
+  - {angle_deg: 30, cl: 1.18, cd: 0.75}
+  - {angle_deg: 35, cl: 1.16, cd: 0.85}
+  - {angle_deg: 40, cl: 1.01, cd: 0.91}
+  - {angle_deg: 45, cl: 0.87, cd: 1.0}
+- id: sfia1993_hydrofin_multifoil
+  name: "Hydrofin Multifoil"
+  type: multifoil
+  description: "Five foils. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-12 (PDF p. 143)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.673, height_m: 0.45, area_m2: 0.301, aspect_ratio: 0.67, area_ratio: 0.99, weight_air_kg: 11.8, weight_water_kg: 10.3}
+  max_cl: {angle_deg: 42, cl: 1.35, cd: 0.94}
+  coefficients:
+  - {angle_deg: 25, cl: 1.04, cd: 0.49}
+  - {angle_deg: 30, cl: 1.14, cd: 0.58}
+  - {angle_deg: 35, cl: 1.24, cd: 0.75}
+  - {angle_deg: 40, cl: 1.34, cd: 0.89}
+  - {angle_deg: 45, cl: 1.24, cd: 0.99}
+- id: sfia1993_le_beon_lbr
+  name: "Le Béon Panneau à Roue Type LBR"
+  type: other
+  description: "Otterboard with large wheel. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-13 (PDF p. 144)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.78, height_m: 0.455, area_m2: 0.307, aspect_ratio: 0.58, area_ratio: 0.87, weight_air_kg: 12.3, weight_water_kg: 10.7}
+  max_cl: {angle_deg: 41, cl: 0.86, cd: 0.83}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: null, cd: null}
+  - {angle_deg: 35, cl: null, cd: null}
+  - {angle_deg: 40, cl: 0.85, cd: 0.8}
+  - {angle_deg: 45, cl: 0.84, cd: 0.93}
+- id: sfia1993_le_beon_hydrostable
+  name: "Le Béon Hydrostable"
+  type: cambered
+  description: "Cambered. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-14 (PDF p. 145)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.765, height_m: 0.4, area_m2: 0.294, aspect_ratio: 0.52, area_ratio: 0.96, weight_air_kg: 13.0, weight_water_kg: 11.5}
+  max_cl: {angle_deg: 38, cl: 1.11, cd: 0.85}
+  coefficients:
+  - {angle_deg: 25, cl: 0.94, cd: 0.53}
+  - {angle_deg: 30, cl: 1.04, cd: 0.65}
+  - {angle_deg: 35, cl: 1.11, cd: 0.78}
+  - {angle_deg: 40, cl: 1.1, cd: 0.88}
+  - {angle_deg: 45, cl: 0.89, cd: 0.91}
+- id: sfia1993_lindholmen
+  name: "Lindholmen"
+  type: cambered
+  description: "Spherical with two slots. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-15 (PDF p. 146)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.58, height_m: 0.58, area_m2: 0.264, aspect_ratio: 1.0, area_ratio: 0.78, weight_air_kg: 10.0, weight_water_kg: 8.7}
+  max_cl: {angle_deg: 34, cl: 1.51, cd: 0.89}
+  coefficients:
+  - {angle_deg: 25, cl: 1.31, cd: 0.62}
+  - {angle_deg: 30, cl: 1.46, cd: 0.8}
+  - {angle_deg: 35, cl: 1.5, cd: 0.91}
+  - {angle_deg: 40, cl: 1.35, cd: 1.01}
+  - {angle_deg: 45, cl: 1.2, cd: 1.17}
+- id: sfia1993_morgere_polyfoil
+  name: "Morgère Polyfoil"
+  type: multifoil
+  description: "Five cambered foils. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-16 (PDF p. 147)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.734, height_m: 0.45, area_m2: 0.311, aspect_ratio: 0.61, area_ratio: 0.94, weight_air_kg: 14.4, weight_water_kg: 12.6}
+  max_cl: {angle_deg: 43, cl: 1.24, cd: 0.87}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 0.93, cd: 0.49}
+  - {angle_deg: 35, cl: 1.13, cd: 0.65}
+  - {angle_deg: 40, cl: 1.23, cd: 0.8}
+  - {angle_deg: 45, cl: 1.23, cd: 0.9}
+- id: sfia1993_morgere_polyvalent_ovale
+  name: "Morgère Polyvalent Ovale"
+  type: oval
+  description: "Cambered oval with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-17 (PDF p. 148)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.66, height_m: 0.45, area_m2: 0.238, aspect_ratio: 0.68, area_ratio: 0.8, weight_air_kg: 12.7, weight_water_kg: 11.2}
+  max_cl: {angle_deg: 27, cl: 1.22, cd: 0.75}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 1.2, cd: 0.77}
+  - {angle_deg: 35, cl: 1.04, cd: 0.79}
+  - {angle_deg: 40, cl: 0.95, cd: 0.84}
+  - {angle_deg: 45, cl: 0.88, cd: 0.92}
+- id: sfia1993_morgere_polyvalent_r
+  name: "Morgère Polyvalent Type R"
+  type: cambered
+  description: "Cambered with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-18 (PDF p. 149)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.715, height_m: 0.42, area_m2: 0.271, aspect_ratio: 0.59, area_ratio: 0.9, weight_air_kg: 12.4, weight_water_kg: 11.0}
+  max_cl: {angle_deg: 34, cl: 1.04, cd: 0.68}
+  coefficients:
+  - {angle_deg: 25, cl: 0.92, cd: 0.42}
+  - {angle_deg: 30, cl: 1.02, cd: 0.55}
+  - {angle_deg: 35, cl: 1.04, cd: 0.71}
+  - {angle_deg: 40, cl: 0.92, cd: 0.73}
+  - {angle_deg: 45, cl: 0.88, cd: 0.79}
+- id: sfia1993_morgere_w_horizontal
+  name: "Morgère W Horizontal"
+  type: cambered
+  description: "Cambered vee. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-19 (PDF p. 150)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.8, height_m: 0.42, area_m2: 0.304, aspect_ratio: 0.53, area_ratio: 0.9, weight_air_kg: 15.4, weight_water_kg: 13.4}
+  max_cl: {angle_deg: 34, cl: 1.41, cd: 0.96}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 1.31, cd: 0.81}
+  - {angle_deg: 35, cl: 1.39, cd: 0.99}
+  - {angle_deg: 40, cl: 1.04, cd: 0.88}
+  - {angle_deg: 45, cl: 0.95, cd: 0.97}
+- id: sfia1993_morgere_w_vertical
+  name: "Morgère W Vertical"
+  type: high_aspect
+  description: "High aspect ratio cambered. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-20 (PDF p. 151)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.535, height_m: 0.71, area_m2: 0.33, aspect_ratio: 1.33, area_ratio: 0.87, weight_air_kg: 12.8, weight_water_kg: 11.2}
+  max_cl: {angle_deg: 26, cl: 1.32, cd: 0.6}
+  coefficients:
+  - {angle_deg: 25, cl: 1.32, cd: 0.57}
+  - {angle_deg: 30, cl: 1.28, cd: 0.7}
+  - {angle_deg: 35, cl: 1.17, cd: 0.79}
+  - {angle_deg: 40, cl: 1.02, cd: 0.84}
+  - {angle_deg: 45, cl: null, cd: null}
+- id: sfia1993_munkebo
+  name: "Munkebo"
+  type: v
+  description: "Vee without camber. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-21 (PDF p. 152)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.816, height_m: 0.42, area_m2: 0.332, aspect_ratio: 0.51, area_ratio: 0.97, weight_air_kg: 10.8, weight_water_kg: 9.4}
+  max_cl: {angle_deg: 33, cl: 1.28, cd: 0.92}
+  coefficients:
+  - {angle_deg: 25, cl: 1.11, cd: 0.62}
+  - {angle_deg: 30, cl: 1.25, cd: 0.83}
+  - {angle_deg: 35, cl: 1.26, cd: 0.95}
+  - {angle_deg: 40, cl: 1.08, cd: 0.99}
+  - {angle_deg: 45, cl: 0.99, cd: 1.06}
+- id: sfia1993_net_tec
+  name: "Net Tec"
+  type: cambered
+  description: "Cambered vee. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-22 (PDF p. 153)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.686, height_m: 0.427, area_m2: 0.288, aspect_ratio: 0.62, area_ratio: 0.98, weight_air_kg: 22.0, weight_water_kg: 19.2}
+  max_cl: {angle_deg: 34, cl: 1.48, cd: 1.05}
+  coefficients:
+  - {angle_deg: 25, cl: 1.26, cd: 0.76}
+  - {angle_deg: 30, cl: 1.41, cd: 0.91}
+  - {angle_deg: 35, cl: 1.47, cd: 1.07}
+  - {angle_deg: 40, cl: 1.23, cd: 1.12}
+  - {angle_deg: 45, cl: 1.01, cd: 1.17}
+- id: sfia1993_perfect_new_oval
+  name: "Perfect New Oval"
+  type: oval
+  description: "Cambered oval with one slot. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-23 (PDF p. 154)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.8, height_m: 0.525, area_m2: 0.33, aspect_ratio: 0.66, area_ratio: 0.79, weight_air_kg: 16.2, weight_water_kg: 14.1}
+  max_cl: {angle_deg: 37, cl: 1.5, cd: 1.03}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 1.45, cd: 0.87}
+  - {angle_deg: 35, cl: 1.49, cd: 0.98}
+  - {angle_deg: 40, cl: 1.45, cd: 1.09}
+  - {angle_deg: 45, cl: 1.21, cd: 1.2}
+- id: sfia1993_perfect_patent_b
+  name: "Perfect Patent B"
+  type: cambered
+  description: "Cambered vee with one slot. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-24 (PDF p. 155)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.715, height_m: 0.48, area_m2: 0.329, aspect_ratio: 0.67, area_ratio: 0.96, weight_air_kg: 13.0, weight_water_kg: 11.3}
+  max_cl: {angle_deg: 36, cl: 1.5, cd: 0.88}
+  coefficients:
+  - {angle_deg: 25, cl: 1.36, cd: 0.6}
+  - {angle_deg: 30, cl: 1.45, cd: 0.73}
+  - {angle_deg: 35, cl: 1.5, cd: 0.86}
+  - {angle_deg: 40, cl: 1.4, cd: 0.96}
+  - {angle_deg: 45, cl: 1.21, cd: 1.05}
+- id: sfia1993_thyboron_type2_66
+  name: "Thyborøn Type 2 66\""
+  type: cambered
+  description: "Cambered vee with one slot. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-25 (PDF p. 156)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.69, height_m: 0.395, area_m2: 0.271, aspect_ratio: 0.57, area_ratio: 0.99, weight_air_kg: 10.2, weight_water_kg: 8.9}
+  max_cl: {angle_deg: 36, cl: 1.49, cd: 1.03}
+  coefficients:
+  - {angle_deg: 25, cl: 1.33, cd: 0.68}
+  - {angle_deg: 30, cl: 1.41, cd: 0.84}
+  - {angle_deg: 35, cl: 1.48, cd: 1.0}
+  - {angle_deg: 40, cl: 1.31, cd: 1.12}
+  - {angle_deg: 45, cl: null, cd: null}
+- id: sfia1993_thyboron_type2_125
+  name: "Thyborøn Type 2 125\""
+  type: cambered
+  description: "Cambered vee with one slot. Tested with upper plate vertical."
+  source: {document: sfia1993, page: 'Appendix IV-26 (PDF p. 157)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.67, height_m: 0.42, area_m2: 0.279, aspect_ratio: 0.63, area_ratio: 0.99, weight_air_kg: 11.0, weight_water_kg: 9.6}
+  max_cl: {angle_deg: 37, cl: 1.49, cd: 0.95}
+  coefficients:
+  - {angle_deg: 25, cl: 1.32, cd: 0.59}
+  - {angle_deg: 30, cl: 1.42, cd: 0.74}
+  - {angle_deg: 35, cl: 1.49, cd: 0.89}
+  - {angle_deg: 40, cl: 1.39, cd: 1.03}
+  - {angle_deg: 45, cl: 1.13, cd: 1.09}
+- id: sfia1993_vergoz_panneau_z
+  name: "Vergoz Panneau Z"
+  type: other
+  description: "Z-shaped. Tested in upright condition."
+  source: {document: sfia1993, page: 'Appendix IV-27 (PDF p. 158)', figure: hoja de datos}
+  conditions: sfia1993_flume
+  model: {length_m: 0.748, height_m: 0.39, area_m2: 0.285, aspect_ratio: 0.52, area_ratio: 0.98, weight_air_kg: 11.8, weight_water_kg: 10.3}
+  max_cl: {angle_deg: 28, cl: 0.88, cd: 0.51}
+  coefficients:
+  - {angle_deg: 25, cl: null, cd: null}
+  - {angle_deg: 30, cl: 0.85, cd: 0.53}
+  - {angle_deg: 35, cl: 0.76, cd: 0.57}
+  - {angle_deg: 40, cl: 0.72, cd: 0.64}
+  - {angle_deg: 45, cl: 0.69, cd: 0.74}
+- id: mellibovsky2018_thyboron_15vf_ft
+  name: "Thyborøn 15 VF (tanque de flujo)"
+  type: high_aspect
+  description: "Portón pelágico (volador) de alta relación de aspecto (AR 2,5; p. 4 del manuscrito)."
+  source: {document: mellibovsky2018, page: 'Table 2 (p. 16); Table 1 (p. 15)', figure: Fig. 3}
+  conditions: mellibovsky2018_ft
+  model: {length_m: 0.320, height_m: 0.790, area_m2: 0.260, aspect_ratio: 2.50, weight_air_kg: 8.90, weight_water_kg: 7.43}
+  coefficients:
+  - {angle_deg: 13.6, cl: 0.87, cd: 0.293, beta_deg: 2.69}
+  - {angle_deg: 16.5, cl: 0.98, cd: 0.273, beta_deg: 2.58}
+  - {angle_deg: 16.9, cl: 0.94, cd: 0.303, beta_deg: 1.69}
+  - {angle_deg: 19.5, cl: 1.0, cd: 0.293, beta_deg: 2.53}
+  - {angle_deg: 20.0, cl: 1.19, cd: 0.343, beta_deg: -4.99}
+  - {angle_deg: 20.4, cl: 1.25, cd: 0.367, beta_deg: -2.1}
+  - {angle_deg: 21.2, cl: 1.18, cd: 0.326, beta_deg: 4.15}
+  - {angle_deg: 21.4, cl: 1.29, cd: 0.381, beta_deg: -1.43}
+  - {angle_deg: 24.0, cl: 1.46, cd: 0.45, beta_deg: -0.83}
+  - {angle_deg: 33.4, cl: 1.72, cd: 0.53, beta_deg: 3.5}
+  - {angle_deg: 35.6, cl: 1.9, cd: 0.628, beta_deg: 3.11}
+- id: mellibovsky2018_thyboron_15vf_wt
+  name: "Thyborøn 15 VF (túnel de viento)"
+  type: high_aspect
+  description: "Portón pelágico (volador) de alta relación de aspecto (AR 2,5; p. 4 del manuscrito)."
+  source: {document: mellibovsky2018, page: 'Table 2 (p. 16); Table 1 (p. 15)', figure: Fig. 3}
+  conditions: mellibovsky2018_wt
+  model: {length_m: 0.320, height_m: 0.790, area_m2: 0.260, aspect_ratio: 2.50, weight_air_kg: 8.90, weight_water_kg: 7.43}
+  coefficients:
+  - {angle_deg: 13.6, cl: 1.1, cd: 0.316, beta_deg: 2.69}
+  - {angle_deg: 16.5, cl: 1.27, cd: 0.361, beta_deg: 2.58}
+  - {angle_deg: 16.9, cl: 1.3, cd: 0.369, beta_deg: 1.69}
+  - {angle_deg: 19.5, cl: 1.44, cd: 0.414, beta_deg: 2.53}
+  - {angle_deg: 20.0, cl: 1.54, cd: 0.449, beta_deg: -4.99}
+  - {angle_deg: 20.4, cl: 1.55, cd: 0.451, beta_deg: -2.1}
+  - {angle_deg: 21.2, cl: 1.52, cd: 0.444, beta_deg: 4.15}
+  - {angle_deg: 21.4, cl: 1.6, cd: 0.472, beta_deg: -1.43}
+  - {angle_deg: 24.0, cl: 1.74, cd: 0.531, beta_deg: -0.83}
+  - {angle_deg: 33.4, cl: 2.11, cd: 0.756, beta_deg: 3.5}
+  - {angle_deg: 35.6, cl: 2.19, cd: 0.818, beta_deg: 3.11}
+- id: mellibovsky2018_grilli_fly_ft
+  name: "Grilli Fly (tanque de flujo)"
+  type: high_aspect
+  description: "Portón pelágico (volador), AR 1,91 (p. 4 del manuscrito)."
+  source: {document: mellibovsky2018, page: 'Table 3 (p. 18); Table 1 (p. 15)', figure: Fig. 4}
+  conditions: mellibovsky2018_ft
+  model: {length_m: 0.374, height_m: 0.714, area_m2: 0.267, aspect_ratio: 1.91, weight_air_kg: 9.36, weight_water_kg: 8.12}
+  coefficients:
+  - {angle_deg: 18.0, cl: 1.2, cd: 0.324, beta_deg: 0.89}
+  - {angle_deg: 20.2, cl: 1.26, cd: 0.377, beta_deg: 1.55}
+  - {angle_deg: 20.7, cl: 1.29, cd: 0.368, beta_deg: -0.04}
+  - {angle_deg: 23.3, cl: 1.34, cd: 0.447, beta_deg: 0.59}
+  - {angle_deg: 25.9, cl: 1.45, cd: 0.589, beta_deg: 1.14}
+  - {angle_deg: 26.9, cl: 1.37, cd: 0.592, beta_deg: 1.2}
+  - {angle_deg: 27.0, cl: 1.45, cd: 0.62, beta_deg: -0.28}
+  - {angle_deg: 28.8, cl: 1.3, cd: 0.616, beta_deg: -0.9}
+  - {angle_deg: 29.1, cl: 1.26, cd: 0.651, beta_deg: 0.45}
+  - {angle_deg: 31.9, cl: 1.33, cd: 0.652, beta_deg: 0.46}
+- id: mellibovsky2018_grilli_fly_wt
+  name: "Grilli Fly (túnel de viento)"
+  type: high_aspect
+  description: "Portón pelágico (volador), AR 1,91 (p. 4 del manuscrito)."
+  source: {document: mellibovsky2018, page: 'Table 3 (p. 18); Table 1 (p. 15)', figure: Fig. 4}
+  conditions: mellibovsky2018_wt
+  model: {length_m: 0.374, height_m: 0.714, area_m2: 0.267, aspect_ratio: 1.91, weight_air_kg: 9.36, weight_water_kg: 8.12}
+  coefficients:
+  - {angle_deg: 18.0, cl: 1.38, cd: 0.396, beta_deg: 0.89}
+  - {angle_deg: 20.2, cl: 1.49, cd: 0.456, beta_deg: 1.55}
+  - {angle_deg: 20.7, cl: 1.51, cd: 0.474, beta_deg: -0.04}
+  - {angle_deg: 23.3, cl: 1.57, cd: 0.548, beta_deg: 0.59}
+  - {angle_deg: 25.9, cl: 1.57, cd: 0.614, beta_deg: 1.14}
+  - {angle_deg: 26.9, cl: 1.5, cd: 0.634, beta_deg: 1.2}
+  - {angle_deg: 27.0, cl: 1.49, cd: 0.64, beta_deg: -0.28}
+  - {angle_deg: 28.8, cl: 1.37, cd: 0.678, beta_deg: -0.9}
+  - {angle_deg: 29.1, cl: 1.36, cd: 0.679, beta_deg: 0.45}
+  - {angle_deg: 31.9, cl: 1.2, cd: 0.704, beta_deg: 0.46}

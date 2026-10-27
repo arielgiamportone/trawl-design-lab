@@ -178,6 +178,11 @@ class Rigging:
     bridle_diameter_mm: float | None = None
     warp_ea_n: float | None = None
     warp_core: str = "FC"
+    # Polar completa del portón (ángulo [°], CL, CD) y ángulo de ataque del caso [°] (Fase 19.3):
+    # la polar dinámica de los portones acoplados (``Scenario.dynamic_door_polar``) la lee para
+    # recalcular CL y CD al ángulo que resulta de la geometría resuelta.
+    door_polar: tuple[tuple[float, float, float], ...] = ()
+    door_attack_angle_deg: float = 32.0
 
     def rope_ea(self, which: str) -> float:
         """EA de la lima (``headrope``) o del burlón (``footrope``) [N]."""
@@ -274,6 +279,12 @@ class NetModel:
     door_weight_n: float = 0.0
     door_floor_m: float = 0.0  # altura del nodo del portón sobre la zapata [m]
     warp_length_m: float = 0.0  # largo de cable filado del modelo acoplado [m]
+    #: Polar del portón (filas ángulo [°], CL, CD) y ángulo de ataque del caso (Fase 19.3).
+    door_polar: FloatArray = field(default_factory=lambda: np.zeros((0, 3)))
+    door_angle_deg: float = 0.0
+    #: Factores de la polar (escenario: calibración e incertidumbre) para la polar dinámica.
+    door_cl_factor: float = 1.0
+    door_cd_factor: float = 1.0
     #: Red pelágica: trabaja a media agua, sin la restricción del fondo (Fase 12).
     floor_free: bool = False
 
@@ -913,6 +924,8 @@ def build_model(
         door_weight_n=rigging.door_weight_water_kgf * GRAVITY,
         door_floor_m=rigging.door_height_m / 2.0,
         warp_length_m=rigging.warp_length_m if coupled_doors else 0.0,
+        door_polar=np.asarray(rigging.door_polar, dtype=float).reshape(-1, 3),
+        door_angle_deg=float(rigging.door_attack_angle_deg),
         floor_free=spec.family == "pelagic",
     )
 

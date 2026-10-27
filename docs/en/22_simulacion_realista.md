@@ -144,11 +144,45 @@ $$
 - W_\text{water}\,\hat{\mathbf{z}} - \mu_\text{door} R\,\hat{\mathbf{x}}_\text{forward} ,
 $$ (eq-22-door)
 
-with $C_L$ and $C_D$ from its polar at the angle of attack of the case (32° for the FAO otter
-board), its weight in water and the friction of the shoe. The warp is a chain of ten steel bars
+with $C_L$ and $C_D$ from its polar (at the angle of attack of the case, 32° for the FAO otter
+board, or at the one given by the solved shape with the dynamic polar, see below), its weight in water and the friction of the shoe. The warp is a chain of ten steel bars
 with their weight and their Morison drag, from the otter board to the vessel's towing block, fixed
 at the working depth and at half the gallows spread. The door spread $D_P$ is no longer an input:
 it comes from the equilibrium with the net, the bridles and the sweeps.
+
+### Dynamic otter board polar
+
+Since Phase 19.3 (`Scenario.dynamic_door_polar`, on by default) $C_L$ and $C_D$ are not those at the
+case angle: the angle of attack comes from the solved shape with the simplified method of
+{cite:t}`sfia1993` (App. III-13): with a constant centre of pressure $t_p$ and the resultant normal
+to the board, the board is in equilibrium when the lines of the warp and of the sweep cross on the
+line of action of the resultant,
+
+$$
+n_w + (t_w - t_p)\tan(\alpha + \beta) = n_b + (t_b - t_p)\tan(\alpha - \gamma),
+$$ (eq-22-angulo)
+
+with $\beta$ and $\gamma$ the angles of the warp and of the sweep to the water in the horizontal
+plane and $(t, n)$ the attachment points in board lengths (those of the Seafish «Reference Vee»
+example). The warp attachment $n_w$ is calibrated so that, in the design geometry (board at the
+engine spread and straight warp to the towing block), the angle is that of the case: the method
+provides the sensitivity of the angle to the geometry. The angle is updated at every convergence
+check with a relaxation factor of 0.3, a maximum step of 1° and clipped to the measured range of the
+polar; with `False` the fixed $C_L$ and $C_D$ come back.
+
+```{code-cell} ipython3
+FIX = simulate(R, V, resolution=RES, scenario=Scenario(seabed="mud", dynamic_door_polar=False))
+DYN = simulate(R, V, resolution=RES, scenario=Scenario(seabed="mud"))
+assert FIX.converged and DYN.converged
+for name, s in (("fixed polar", FIX), ("dynamic polar", DYN)):
+    a = s.door_attack
+    print(f"{name:15s} α = {a['angle_deg']:5.2f}°  CL = {a['cl']:.3f}  CD = {a['cd']:.3f}  "
+          f"DP = {s.door_spread_m:5.2f} m  AH = {s.ah_m:5.2f} m  AV = {s.av_m:.2f} m")
+```
+
+In the book's case the solved shape opens the warp and the sweeps more than the design geometry and
+the board goes from 32° to about 35°, already beyond the maximum $C_L$ of the flat board: $C_L$
+drops, the door spread and the horizontal opening close a little and the vertical opening grows.
 
 ## Validation: door spread
 
@@ -265,8 +299,9 @@ for sb in (None, "mud", "rock"):
   effect of live fish swimming nor the catch that escapes.
 - **Seabed**: flat Coulomb friction, without penetration or mobilized sediment (footprint and
   penetration arrive in delivery 11.2). The coefficients are estimates with a range.
-- **Otter boards**: constant angle of attack and polar (their pitch and roll are not solved); the
-  shoe rests on the seabed and its centre sits at half height.
+- **Otter boards**: the angle of attack comes from the Seafish simplified method with assumed
+  attachment points (those of the «Reference Vee» example) calibrated to the case angle; their pitch
+  and roll are not solved; the shoe rests on the seabed and its centre sits at half height.
 - **Warps**: ten straight bars with weight and Morison drag (the catenary comes out of the
   equilibrium); the vessel is a fixed point.
 - **Drag**: the netting gap with respect to DynamiT ({doc}`21_simulacion`) is still there; the

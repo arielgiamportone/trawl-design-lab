@@ -700,6 +700,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/catalog/door-polars": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Door Polars
+         * @description Polar representativa de cada tipo de portón, con su fuente y el ángulo recomendado.
+         */
+        get: operations["list_door_polars_catalog_door_polars_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/doors/select": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Select Doors
+         * @description Portones del catálogo que alcanzan la superficie equivalente del caso (Fase 19.3).
+         *
+         *     Superficie requerida por portón del caso (Port!F215) llevada a cada portón con
+         *     A₂ = A₁·CL₁/CL₂ más 10 % al pasar a un portón de más CL (Seafish 1993), con el control del
+         *     peso (FAO Workbook), el ángulo de ataque recomendado y el largo de las patas de gallo.
+         */
+        post: operations["select_doors_doors_select_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/catalog/fouling": {
         parameters: {
             query?: never;
@@ -1654,6 +1698,24 @@ export interface components {
             item_list?: components["schemas"]["StudentItemOut"][];
         };
         /**
+         * AttackAngleOut
+         * @description Rango de ángulo de ataque recomendado de un tipo de portón, con su fuente.
+         */
+        AttackAngleOut: {
+            /** Min Deg */
+            min_deg: number;
+            /** Max Deg */
+            max_deg: number;
+            /** Document */
+            document: string;
+            /** Page */
+            page: string;
+            /** Kind */
+            kind: string;
+            /** Note */
+            note: string;
+        };
+        /**
          * BallastZoneOut
          * @description Zona de lastre del burlón con el lastre mínimo y el máximo.
          */
@@ -2561,6 +2623,60 @@ export interface components {
             [key: string]: unknown;
         };
         /**
+         * DoorCandidateOut
+         * @description Un portón del catálogo evaluado para el caso.
+         */
+        DoorCandidateOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Type */
+            type: string | null;
+            /** Type Label */
+            type_label: string | null;
+            /** Brand */
+            brand: string | null;
+            /** Generic */
+            generic: boolean;
+            /** Area M2 */
+            area_m2: number;
+            /** Length M */
+            length_m: number | null;
+            /** Weight Air Kg */
+            weight_air_kg: number | null;
+            /** Weight Water Kg */
+            weight_water_kg: number | null;
+            /** Angle Deg */
+            angle_deg: number;
+            /** Cl */
+            cl: number;
+            /** Cd */
+            cd: number;
+            /** Required M2 */
+            required_m2: number;
+            /** Margin Applied */
+            margin_applied: boolean;
+            /** Area Margin */
+            area_margin: number;
+            /** Ok */
+            ok: boolean;
+            /**
+             * Weight Status
+             * @enum {string}
+             */
+            weight_status: "ok" | "light" | "missing" | "no_reference";
+            /** Weight Reference Kg */
+            weight_reference_kg: number | null;
+            attack_angle: components["schemas"]["AttackAngleOut"] | null;
+            /** Backstrop M */
+            backstrop_m: number[] | null;
+            /** Hp Ok */
+            hp_ok: boolean | null;
+            /** Warnings */
+            warnings: string[];
+        };
+        /**
          * DoorCoefficients
          * @description Coeficientes hidrodinámicos de un portón a un ángulo de ataque.
          */
@@ -2573,6 +2689,120 @@ export interface components {
             cd?: number | null;
         } & {
             [key: string]: unknown;
+        };
+        /**
+         * DoorSelectRequest
+         * @description Elección de portones del catálogo para el caso (``POST /doors/select``, Fase 19.3).
+         *
+         *     ``net``, ``vessel``, ``door``, ``class_vessels``, ``compat`` y ``params`` como en
+         *     ``DesignRequest``: el caso da la superficie requerida por portón (Port!F215) y el CL del
+         *     portón del caso. ``brands``/``region``/``generic_only`` filtran el catálogo de componentes;
+         *     ``types`` limita los tipos (``flat``, ``v``, ``oval``, ``cambered``, ``multifoil``,
+         *     ``high_aspect``); ``margin`` es el margen al pasar a un portón de más CL (Seafish: 10 %).
+         */
+        DoorSelectRequest: {
+            /**
+             * Net
+             * @default fao_a3_standard
+             */
+            net: string | components["schemas"]["NetSpec"];
+            /** Vessel */
+            vessel?: string | components["schemas"]["Vessel"] | null;
+            /** Door */
+            door?: string | components["schemas"]["Door"] | null;
+            /** Class Vessels */
+            class_vessels?: string[] | null;
+            /**
+             * Compat
+             * @default corrected
+             * @enum {string}
+             */
+            compat: "excel" | "corrected";
+            /** Params */
+            params?: {
+                [key: string]: unknown;
+            };
+            /** Components */
+            components?: {
+                [key: string]: unknown;
+            }[];
+            /** Brands */
+            brands?: string[] | null;
+            /** Region */
+            region?: string | null;
+            /**
+             * Generic Only
+             * @default false
+             */
+            generic_only: boolean;
+            /** Types */
+            types?: string[] | null;
+            /**
+             * Margin
+             * @default 0.1
+             */
+            margin: number;
+            /**
+             * Max Results
+             * @default 20
+             */
+            max_results: number;
+            /**
+             * Include Light
+             * @default true
+             */
+            include_light: boolean;
+        };
+        /**
+         * DoorSelectResponse
+         * @description Resultado de ``POST /doors/select``.
+         */
+        DoorSelectResponse: {
+            /** Required M2 */
+            required_m2: number;
+            /** Case Door */
+            case_door: {
+                [key: string]: unknown;
+            };
+            /** Candidates */
+            candidates: components["schemas"]["DoorCandidateOut"][];
+            /** Rejected */
+            rejected: number;
+            /** Margin */
+            margin: number;
+            /** Rules */
+            rules: {
+                [key: string]: string;
+            }[];
+            /** Notes */
+            notes: string[];
+        };
+        /**
+         * DoorTypePolarOut
+         * @description Polar representativa de un tipo de portón (``GET /catalog/door-polars``).
+         */
+        DoorTypePolarOut: {
+            /** Type */
+            type: string;
+            /** Label */
+            label: string;
+            /** Method */
+            method: string;
+            /** Kind */
+            kind: string;
+            /** Polar Ids */
+            polar_ids: string[];
+            /** Documents */
+            documents: string[];
+            /** Pages */
+            pages: string[];
+            /** Note */
+            note: string;
+            /** Coefficients */
+            coefficients: {
+                [key: string]: number;
+            }[];
+            attack_angle: components["schemas"]["AttackAngleOut"];
         };
         /**
          * DynamitRow
@@ -4376,7 +4606,8 @@ export interface components {
          *     intersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos
          *     (peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo
          *     de fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y
-         *     de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio).
+         *     de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio);
+         *     ``dynamic_door_polar`` recalcula su CL y CD al ángulo de ataque de la forma resuelta.
          */
         ScenarioIn: {
             /**
@@ -4446,6 +4677,11 @@ export interface components {
              * @default 1
              */
             door_cd_factor: number;
+            /**
+             * Dynamic Door Polar
+             * @default true
+             */
+            dynamic_door_polar: boolean;
         };
         /**
          * SeabedOut
@@ -6598,6 +6834,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Door"][];
+                };
+            };
+        };
+    };
+    list_door_polars_catalog_door_polars_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DoorTypePolarOut"][];
+                };
+            };
+        };
+    };
+    select_doors_doors_select_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DoorSelectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DoorSelectResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

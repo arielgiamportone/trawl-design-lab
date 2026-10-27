@@ -415,6 +415,100 @@ class ComponentOptimizeResponse(BaseModel):
     notes: list[str]
 
 
+class DoorSelectRequest(BaseModel):
+    """Elección de portones del catálogo para el caso (``POST /doors/select``, Fase 19.3).
+
+    ``net``, ``vessel``, ``door``, ``class_vessels``, ``compat`` y ``params`` como en
+    ``DesignRequest``: el caso da la superficie requerida por portón (Port!F215) y el CL del
+    portón del caso. ``brands``/``region``/``generic_only`` filtran el catálogo de componentes;
+    ``types`` limita los tipos (``flat``, ``v``, ``oval``, ``cambered``, ``multifoil``,
+    ``high_aspect``); ``margin`` es el margen al pasar a un portón de más CL (Seafish: 10 %).
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    net: str | NetSpec = "fao_a3_standard"
+    vessel: str | Vessel | None = None
+    door: str | Door | None = None
+    class_vessels: list[str] | None = None
+    compat: Literal["excel", "corrected"] = "corrected"
+    params: dict[str, Any] = Field(default_factory=dict)
+    components: list[dict[str, Any]] = Field(default_factory=list, max_length=50)
+    brands: list[str] | None = Field(default=None, max_length=20)
+    region: str | None = None
+    generic_only: bool = False
+    types: list[str] | None = Field(default=None, max_length=8)
+    margin: float = Field(default=0.1, ge=0.0, le=1.0)
+    max_results: int = Field(default=20, ge=1, le=60)
+    include_light: bool = True
+
+
+class AttackAngleOut(BaseModel):
+    """Rango de ángulo de ataque recomendado de un tipo de portón, con su fuente."""
+
+    min_deg: float
+    max_deg: float
+    document: str
+    page: str
+    kind: str
+    note: str
+
+
+class DoorCandidateOut(BaseModel):
+    """Un portón del catálogo evaluado para el caso."""
+
+    id: str
+    name: str
+    type: str | None
+    type_label: str | None
+    brand: str | None
+    generic: bool
+    area_m2: float
+    length_m: float | None
+    weight_air_kg: float | None
+    weight_water_kg: float | None
+    angle_deg: float
+    cl: float
+    cd: float
+    required_m2: float
+    margin_applied: bool
+    area_margin: float
+    ok: bool
+    weight_status: Literal["ok", "light", "missing", "no_reference"]
+    weight_reference_kg: float | None
+    attack_angle: AttackAngleOut | None
+    backstrop_m: list[float] | None
+    hp_ok: bool | None
+    warnings: list[str]
+
+
+class DoorSelectResponse(BaseModel):
+    """Resultado de ``POST /doors/select``."""
+
+    required_m2: float
+    case_door: dict[str, Any]
+    candidates: list[DoorCandidateOut]
+    rejected: int
+    margin: float
+    rules: list[dict[str, str]]
+    notes: list[str]
+
+
+class DoorTypePolarOut(BaseModel):
+    """Polar representativa de un tipo de portón (``GET /catalog/door-polars``)."""
+
+    type: str
+    label: str
+    method: str
+    kind: str
+    polar_ids: list[str]
+    documents: list[str]
+    pages: list[str]
+    note: str
+    coefficients: list[dict[str, float]]
+    attack_angle: AttackAngleOut
+
+
 class BatchFile(BaseModel):
     """Planilla del lote: CSV como texto o XLSX en base64."""
 
@@ -552,7 +646,8 @@ class ScenarioIn(BaseModel):
     intersticial) que fija el volumen ocupado; ``catch_body_density`` densidad de los organismos
     (peso sumergido); ``catch_cp`` coeficiente de presión de la bola de captura; ``seabed`` tipo
     de fondo (``GET /catalog/seabeds``); ``mu_gear``/``mu_door`` imponen el rozamiento del tren y
-    de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio).
+    de los portones; ``coupled_doors`` libera los portones (la separación sale del equilibrio);
+    ``dynamic_door_polar`` recalcula su CL y CD al ángulo de ataque de la forma resuelta.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -576,6 +671,9 @@ class ScenarioIn(BaseModel):
     door_cl_factor: float = Field(default=1.0, ge=0.3, le=2.0)
     """Factor sobre la sustentación de la polar del portón (calibración, incertidumbre)."""
     door_cd_factor: float = Field(default=1.0, ge=0.3, le=2.0)
+    dynamic_door_polar: bool = True
+    """Polar dinámica de los portones acoplados (Fase 19.3): CL y CD al ángulo de ataque que da
+    la forma resuelta (método de Seafish 1993); ``false`` = CL y CD fijos al ángulo del caso."""
 
 
 class FoulingOut(BaseModel):

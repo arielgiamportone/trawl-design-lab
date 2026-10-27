@@ -14,7 +14,8 @@ rueda: los presets (`fao_a3_standard`, `fao_a3_modified`, …) funcionan fuera d
 | `vessels.yaml` | Buques de 150 y 180 BHP | `VesselCatalogue` |
 | `vessels/*.yaml` | Flota argentina (Fase 19.4): tipos de buque con las medias publicadas (INIDEP, FAO, CFP) y buques con características publicadas, con fuente y procedencia por campo (no salen del Excel) | `VesselCatalogue` |
 | `reference/kartha1966_trawlers.yaml` | Hélices y tiro medido de ocho arrastreros de la India (Kartha y Roy Choudhury 1966), para validar el tiro por la hélice | YAML |
-| `doors.yaml` | Portón plano FAO de madera y Morgère polivalente oval, con CL/CD por ángulo | `DoorCatalogue` |
+| `doors.yaml` | Portón plano FAO de madera y Morgère polivalente oval, con CL/CD por ángulo. Las polares son, número por número, las hojas «Flat Wooden» y «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993, `sfia1993`, App. IV-3 y IV-17), que llegaron al libro Excel | `DoorCatalogue` |
+| `door_polars.yaml` | Biblioteca de polares de portones (Fase 19.3, no sale del Excel): las 26 hojas del App. IV de `sfia1993` y las tablas de `mellibovsky2018` (Thyborøn 15 VF y Grilli Fly), con fuente, página y condiciones de ensayo | `trawlkit.rigging.polars` |
 | `floats.yaml`, `ropes.yaml`, `chains.yaml`, `warps.yaml`, `materials.yaml` | Catálogos | `Catalogue` |
 | `reference/*.csv` | Proporciones de Nomura, razones de corte, factor K de nudos, catenaria, ángulos útiles, altura de brazo dan leno, profundidad→cable filado | CSV |
 | `reference/power_coefficients.yaml` | Coeficientes empíricos de potencia disponible (Fridman, Prado-Dremière, Koyama, Nomura, Hamuro) | YAML |

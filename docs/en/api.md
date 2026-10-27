@@ -27,6 +27,8 @@ the interactive documentation is at `http://127.0.0.1:8000/docs`. The full contr
 | POST | `/prices/export` | Price list as CSV or XLSX (`format`), with the bill-of-materials lines without a price as a template. |
 | GET | `/catalog/vessels` | Vessels of the catalogue. |
 | GET | `/catalog/doors` | Otter boards of the catalogue with their CL/CD polar. |
+| GET | `/catalog/door-polars` | Representative polar of each otter board type (Phase 19.3), with its source and the recommended angle of attack. |
+| POST | `/doors/select` | Catalogue otter boards that reach the equivalent area of the case ($A_2 = A_1 C_{L1}/C_{L2}$ + 10 %, Seafish 1993), with weight, angle of attack and backstrops; filters `brands`, `region`, `generic_only`, `types`. |
 | GET | `/catalog/fouling` | Fouling and clogging scenarios of the net (level per zone). |
 | GET | `/catalog/species` | Species for selectivity, with the shape of their cross-section (TO BE VERIFIED). |
 | GET | `/catalog/seabeds` | Seabed types with the friction of the ground gear and of the otter boards (nominal and range). |

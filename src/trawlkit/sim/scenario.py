@@ -17,7 +17,10 @@ rozamiento único con el fondo y los portones fijos a la separación del motor. 
   es un nodo libre con la sustentación y el arrastre de su polar (C_L, C_D al ángulo de ataque
   del caso), su peso en el agua, el rozamiento con el fondo y el cable de remolque discretizado
   hasta el buque. La separación entre portones sale del equilibrio y cambia con la captura y con
-  el fondo, como observaron Priour y de la Prada (2015, *Ocean Eng.* 94:94).
+  el fondo, como observaron Priour y de la Prada (2015, *Ocean Eng.* 94:94). Con
+  ``dynamic_door_polar`` (Fase 19.3) el C_L y el C_D salen de la polar completa al ángulo de
+  ataque que dan los ángulos del cable y de la patente en la forma resuelta (ver
+  :mod:`trawlkit.sim.doors`).
 """
 
 from __future__ import annotations
@@ -146,6 +149,10 @@ class Scenario:
     #: calibración; 1 = la polar del catálogo).
     door_cl_factor: float = 1.0
     door_cd_factor: float = 1.0
+    #: Polar dinámica de los portones acoplados (Fase 19.3): CL y CD al ángulo de ataque que
+    #: resulta de la geometría resuelta (método simplificado de Seafish 1993, App. III-13) en vez
+    #: del valor fijo al ángulo del caso.
+    dynamic_door_polar: bool = True
 
     def __post_init__(self) -> None:
         """Valida rangos físicos."""

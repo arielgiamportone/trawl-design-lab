@@ -87,7 +87,11 @@ valor, y los de marca dicen a qué **genérico** equivalen.
 | `crosby_g209` | Crosby, catálogo general p. 24 | Grilletes G-209 (Fase 19.2) | 10 tamaños |
 | `pfeifer_6x19w` | PFEIFER 6x19W-FC | Cables chicos de 6 a 16 mm | 6 tamaños |
 | `zuniga2006` | FAO REBYC, flota camaronera del Caribe colombiano | Puertas planas de madera de 6'×28" a 10'×40" usadas en la flota | Medidas *transcriptas*, polar supuesta (la del portón plano) |
-| `lange1993` | Lange (ICES 1993) | Sustentación máxima del portón plano (0,95) y en V (0,70–0,85) | Polar del portón en V *supuesta*: la del plano con el CL escalado |
+| `lange1993` | Lange (ICES 1993) | Sustentación máxima del portón plano (0,95) y en V (0,70–0,85) | Hasta la Fase 19.2, la polar en V *supuesta* (la del plano con el CL escalado); desde la 19.3 sólo referencia |
+| `sfia1993` | Seafish/IFREMER/DIFTA (1993), *Otterboard Performance and Behaviour* | 26 hojas de polar de modelos en tanque de flujo (Fase 19.3); fuente primaria de las polares plana y oval del libro Excel | Polares *transcriptas* de la imagen de cada página; por tipo, hoja tal cual o media (*derivada*) |
+| `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polares del Thyborøn 15 VF y del Grilli Fly en tanque de flujo y túnel de viento (Fase 19.3) | Tablas *transcriptas*; la polar del Süberkrüb, ajuste *derivado* |
+| `vonin_doors` | Vónin, páginas de producto | Portones Storm 2, Tornado y Twister (Fase 19.3) | Superficie y peso *transcriptos*, 8–10 tamaños por línea; medidas y polar *supuestas* |
+| `morgere2025` | Morgère, catálogo 2025 | Portones OvalFoil, PolyFoil y PFPE (Fase 19.3) | Superficie (y largo del PFPE) *transcriptos*, 10 tamaños por línea; sin peso («sur demande»); medidas y polar de la hoja de Seafish del mismo diseño, *supuestas* |
 | `giamportone2024` | Libro Excel de la A-3 | Cabos Moscuzza, cadenas Trawlex, cables 6x19 Seale, boyas, hilos PA y los dos portones con su polar | Procedencia *Excel* |
 
 Criterios:

@@ -72,9 +72,12 @@ line):
   Maxibraid; Hampidjan Nylex, Kraft (Polysteel), Danline, DynIce 75 and Prima (HMPE footrope), and
   the Randers Reb combination seine rope.
 * **Otter boards**: area and weight by power from the *Workbook* for flat, oval, V and Süberkrüb
-  otter boards; the polar of each type comes from the flat board of the Excel workbook (C_L max.
-  0.93, consistent with 0.95 in {cite}`lange1993`) or from the Morgère one, scaled for the V board;
-  and four boards from the shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`.
+  otter boards, with the measured polar of their type (Phase 19.3, {doc}`15_portones_aparejo`): the
+  Seafish/IFREMER/DIFTA sheets {cite}`sfia1993` for the flat, the oval and the mean of the three V
+  boards, and the Thyborøn 15 VF of {cite}`mellibovsky2018` for the Süberkrüb; four boards from the
+  shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`; Vónin Storm 2, Tornado and Twister
+  (area and weight, {cite}`vonin_doors`) and Morgère OvalFoil, PolyFoil and PFPE (area; weight «sur
+  demande», {cite}`morgere2025`), with the type polar as assumed.
 * **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link;
   Atlantic Floats trawl floats and Trygg and Trawlex long-link chains (Hampidjan catalogue) and
   Gunnebo LLZ grade 6 galvanised chain {cite}`gunnebo_llz`.
@@ -308,9 +311,10 @@ Read back, the spreadsheet gives the same {glue:}`prices_back` prices.
 ## Optimal rigging with what is available
 
 `trawlkit.optimize.optimise_components` searches a discrete grid over the filtered catalogue:
-otter boards within the power range of the vessel or with an area close to the required one
-(Port!F215), floats that withstand the fishing depth, twines that reach 90 % of the breaking load
-of the drawing's twine, and the thinnest warp that meets the diameter and the breaking load at the
+otter boards that reach the area equivalent to the required one (Port!F215) with the Seafish rule
+({doc}`15_portones_aparejo`; before, those within the power range of the vessel), floats that
+withstand the fishing depth, twines that reach 90 % of the breaking load of the drawing's twine,
+and the thinnest warp that meets the diameter and the breaking load at the
 working speed. Each rigging is evaluated with the constraints of the optimizer of chapter 20 (pull
 with reserve, open net, warp, otter board, speed range) plus the depth of the floats and the
 breaking load of the twine, at the best speed of the 0.05 kn grid, and is ranked by **minimum
@@ -383,8 +387,8 @@ There are no accounts and no personal data.
 * The generics are **fits** to reference tables, not products: a real wire rope or twine of the
   same diameter may weigh or break ±10 % differently. The data sheet of each item says which value
   is from the manufacturer and which is derived or assumed.
-* The polars of the generic otter boards are those of their type (flat, oval, V), not measurements
-  of each model; no manufacturer publishes C_L/C_D.
+* The polars of the generic and manufacturer otter boards are those of their type (measured on
+  flume tank models), not of each model; no manufacturer publishes C_L/C_D.
 * There are hardly any open data sheets from Latin American suppliers or for small sizes: the
   contributions cover that gap and are always distinguished from the sourced data.
 * The prices are indicative and the user's own; the cost optimizer ranks first the riggings with

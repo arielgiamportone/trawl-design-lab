@@ -139,11 +139,46 @@ $$
 - W_\text{agua}\,\hat{\mathbf{z}} - \mu_\text{portón} R\,\hat{\mathbf{x}}_\text{avance} ,
 $$ (eq-22-door)
 
-con $C_L$ y $C_D$ de su polar al ángulo de ataque del caso (32° para el portón FAO), su peso en el
+con $C_L$ y $C_D$ de su polar (al ángulo de ataque del caso, 32° para el portón FAO, o al que da
+la forma resuelta con la polar dinámica, ver abajo), su peso en el
 agua y el rozamiento de la zapata. El cable de remolque es una cadena de diez barras de acero con
 su peso y su arrastre de Morison, desde el portón hasta la pasteca del buque, fija a la profundidad
 de trabajo y a media separación de pastecas. La separación de portones $D_P$ ya no es un dato:
 sale del equilibrio con la red, las bridas y las patentes.
+
+### Polar dinámica del portón
+
+Desde la Fase 19.3 (`Scenario.dynamic_door_polar`, activo por defecto) el $C_L$ y el $C_D$ no son
+los del ángulo del caso: el ángulo de ataque sale de la forma resuelta con el método simplificado
+de {cite:t}`sfia1993` (App. III-13): con el centro de presión $t_p$ constante y la resultante normal
+al portón, el portón está en equilibrio cuando las rectas del cable y de la patente se cortan sobre
+la línea de acción de la resultante,
+
+$$
+n_w + (t_w - t_p)\tan(\alpha + \beta) = n_b + (t_b - t_p)\tan(\alpha - \gamma),
+$$ (eq-22-angulo)
+
+con $\beta$ y $\gamma$ los ángulos del cable y de la patente con el agua en el plano horizontal y
+$(t, n)$ los amarres en largos de portón (los del ejemplo del «Reference Vee» de Seafish). El amarre
+del cable $n_w$ se calibra para que, en la geometría de diseño (portón a la separación del motor y
+cable recto hasta la pasteca), el ángulo sea el del caso: el método aporta la sensibilidad del
+ángulo a la geometría. El ángulo se actualiza en cada control de convergencia con un factor de
+relajación 0,3, un paso máximo de 1° y recortado al rango medido de la polar; con `False` vuelven el
+$C_L$ y el $C_D$ fijos.
+
+```{code-cell} ipython3
+FIX = simulate(R, V, resolution=RES, scenario=Scenario(seabed="mud", dynamic_door_polar=False))
+DYN = simulate(R, V, resolution=RES, scenario=Scenario(seabed="mud"))
+assert FIX.converged and DYN.converged
+for name, s in (("polar fija", FIX), ("polar dinámica", DYN)):
+    a = s.door_attack
+    print(f"{name:15s} α = {a['angle_deg']:5.2f}°  CL = {a['cl']:.3f}  CD = {a['cd']:.3f}  "
+          f"DP = {s.door_spread_m:5.2f} m  AH = {s.ah_m:5.2f} m  AV = {s.av_m:.2f} m")
+```
+
+En el caso del libro la forma resuelta abre el cable y las patentes más que la geometría de diseño
+y el portón pasa de 32° a unos 35°, ya más allá del $C_L$ máximo del portón plano: baja el $C_L$,
+la separación de portones y la abertura horizontal se cierran un poco y la vertical crece.
 
 ## Validación: separación de portones
 
@@ -260,8 +295,9 @@ for sb in (None, "mud", "rock"):
   los peces vivos que nadan ni la captura que se escapa.
 - **Fondo**: rozamiento de Coulomb plano, sin penetración ni sedimento movilizado (la huella y la
   penetración llegan en la entrega 11.2). Los coeficientes son estimaciones con rango.
-- **Portones**: ángulo de ataque y polar constantes (no se resuelve su cabeceo ni su balanceo);
-  la zapata apoya en el fondo y su centro queda a media altura.
+- **Portones**: el ángulo de ataque sale del método simplificado de Seafish con amarres supuestos
+  (los del ejemplo del «Reference Vee») calibrados al ángulo del caso; no se resuelve su cabeceo
+  ni su balanceo; la zapata apoya en el fondo y su centro queda a media altura.
 - **Cables**: diez barras rectas con peso y Morison (la catenaria sale del equilibrio); el buque es
   un punto fijo.
 - **Resistencia**: la brecha del paño frente a DynamiT ({doc}`21_simulacion`) sigue presente; las

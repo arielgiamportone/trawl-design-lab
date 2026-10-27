@@ -244,7 +244,7 @@ FAO documents:
 
 ## Components, bill of materials and contributions
 
-The **“Components”** tab ({doc}`34_componentes`) has four sections:
+The **“Components”** tab ({doc}`34_componentes`) has five sections:
 
 - **Catalogue**: netting and twine, wire ropes, ropes, otter boards, floats, chains and shackles,
   with filters by brand, region and “Generic only”. The sheet shows the source, the value-by-value
@@ -263,6 +263,14 @@ The **“Components”** tab ({doc}`34_componentes`) has four sections:
   litre or lowest cost), port region and “Generic only”. It shows the recommended rigging,
   alternatives (a generic one if the best carries brands), the constraints that are not met and
   “Apply to the case”.
+- **Choose otter boards** (Phase 19.3, `POST /doors/select`): carries the required area per otter
+  board of the case over to every catalogue board with the Seafish equivalent-area rule
+  ($A_2 = A_1 C_{L1}/C_{L2}$, plus 10 % when changing to a higher $C_L$;
+  {doc}`15_portones_aparejo`). Filters: otter board type, port region and “Generic only”. For each
+  candidate the table gives type, area, required area, margin, weight in air (or “no published
+  weight”; “light” if it weighs less than half the *Fisherman's Workbook* maximum), recommended
+  angle of attack and backstrop length, with the engine warnings; “Use this board” puts it in the
+  case. “Rules and sources” cites each rule. It works offline.
 - **Contribute**: form per type, validated with `POST /components/check`. The contribution is
   saved in the case (also in the exported project) as “contribution, not verified” and is sent to
   the API in `components` only if “Use my contributions in the calculation and the rigging” is

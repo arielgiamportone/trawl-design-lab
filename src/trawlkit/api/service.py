@@ -626,6 +626,44 @@ def design_bom(case: DesignCase, prices: dict[str, dict[str, Any]] | None = None
     return out
 
 
+def door_type_polars() -> list[dict[str, Any]]:
+    """Polar representativa de cada tipo de portón (Fase 19.3, biblioteca de polares)."""
+    from trawlkit.rigging.polars import DOOR_TYPES, polar_for_type
+
+    return [polar_for_type(k).to_dict() for k in DOOR_TYPES]
+
+
+def select_doors_case(
+    case: DesignCase,
+    *,
+    brands: list[str] | None = None,
+    region: str | None = None,
+    generic_only: bool = False,
+    types: list[str] | None = None,
+    margin: float = 0.1,
+    max_results: int = 20,
+    include_light: bool = True,
+) -> dict[str, Any]:
+    """Corre :func:`trawlkit.door_selection.select_doors` y lo serializa."""
+    from trawlkit.door_selection import select_doors
+
+    try:
+        sel = select_doors(
+            case,
+            brands=brands,
+            region=region,
+            generic_only=generic_only,
+            types=types,
+            margin=margin,
+            max_results=max_results,
+            include_light=include_light,
+        )
+    except (ValueError, ZeroDivisionError, IndexError) as exc:
+        raise BadRequestError(t("no se pueden elegir portones: {exc}", exc=exc)) from exc
+    out: dict[str, Any] = to_jsonable(sel.to_dict())
+    return out
+
+
 def optimize_components_case(
     case: DesignCase,
     *,

@@ -7,6 +7,11 @@ sources:
     arrastre camaronero del mar Caribe de Colombia'
   url: https://www.fao.org/fileadmin/user_upload/rebyc-2015/documents/CARACTERIZACION_TECNOLOGICA_FLOTA_DE_ARRASTRE_DE_CAMARON_CARIBE_2006.pdf
   accessed: '2026-10-25'
+- key: sfia1993
+  title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
+    (contrato CEE FAR TE 1 214)
+  url: https://www.seafish.org/media/1peahnrq/otterboard_performance_and_behaviour.pdf
+  accessed: '2026-10-27'
 items:
 - id: door_rebyc_6ftx28in
   name: Puerta plana de madera 6'x28" (flota camaronera del Caribe colombiano)
@@ -66,9 +71,11 @@ items:
       note: 'potencia de la flota: 165–520 hp'
     coefficients:
       kind: assumed
-      document: giamportone2024
-      note: polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias B259:D264);
-        su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura (Lange 1993)
+      document: sfia1993
+      page: Appendix IV-3 (PDF p. 133)
+      note: la flota usa puertas planas de madera; se supone la polar del modelo plano de madera de Seafish
+        (hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la polar
+        del libro Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí)
 - id: door_rebyc_8ftx36in
   name: Puerta plana de madera 8'x36" (flota camaronera del Caribe colombiano)
   type: flat_wood
@@ -109,9 +116,11 @@ items:
       note: 'potencia de la flota: 165–520 hp'
     coefficients:
       kind: assumed
-      document: giamportone2024
-      note: polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias B259:D264);
-        su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura (Lange 1993)
+      document: sfia1993
+      page: Appendix IV-3 (PDF p. 133)
+      note: la flota usa puertas planas de madera; se supone la polar del modelo plano de madera de Seafish
+        (hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la polar
+        del libro Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí)
 - id: door_rebyc_9ftx36in
   name: Puerta plana de madera 9'x36" (flota camaronera del Caribe colombiano)
   type: flat_wood
@@ -152,9 +161,11 @@ items:
       note: 'potencia de la flota: 165–520 hp'
     coefficients:
       kind: assumed
-      document: giamportone2024
-      note: polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias B259:D264);
-        su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura (Lange 1993)
+      document: sfia1993
+      page: Appendix IV-3 (PDF p. 133)
+      note: la flota usa puertas planas de madera; se supone la polar del modelo plano de madera de Seafish
+        (hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la polar
+        del libro Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí)
 - id: door_rebyc_10ftx40in
   name: Puerta plana de madera 10'x40" (flota camaronera del Caribe colombiano)
   type: flat_wood
@@ -195,6 +206,8 @@ items:
       note: 'potencia de la flota: 165–520 hp'
     coefficients:
       kind: assumed
-      document: giamportone2024
-      note: polar del portón plano rectangular del libro Excel de la A-3 (Tablas de Referencias B259:D264);
-        su CL máximo (0,93) coincide con el 0,95 del portón plano de la literatura (Lange 1993)
+      document: sfia1993
+      page: Appendix IV-3 (PDF p. 133)
+      note: la flota usa puertas planas de madera; se supone la polar del modelo plano de madera de Seafish
+        (hoja «Flat Wooden» de Seafish/IFREMER/DIFTA 1993 (App. IV-3), igual número por número a la polar
+        del libro Excel de la A-3 (Tablas de Referencias B259:D264), que la tomó de allí)

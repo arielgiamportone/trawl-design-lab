@@ -51,7 +51,9 @@ está justo antes del máximo de $C_L$: la relación $C_L/C_D$ (eficiencia) cae 
 cada kgf de abertura extra cuesta cada vez más tiro. El libro trabaja a $\alpha = 32°$
 ($C_L = 0{,}93$, $C_D = 0{,}71$, $C_L/C_D = 1{,}31$) con el portón plano de madera y bastidor de
 hierro de la FAO para las redes A3/B3/C3; el catálogo incluye también un portón ovalado
-polivalente Morgère, más eficiente ($C_L/C_D \approx 1{,}6$ a 27–30°).
+polivalente Morgère, más eficiente ($C_L/C_D \approx 1{,}6$ a 27–30°). Las dos polares del libro
+son, número por número, las hojas «Flat Wooden» y «Morgère Polyvalent Ovale» del ensayo en tanque
+de flujo de Seafish, IFREMER y DIFTA {cite:p}`sfia1993` (ver más abajo).
 
 ### Separación entre portones: la regla "al metro"
 
@@ -147,6 +149,74 @@ $$ (eq-15-delta)
 Los valores habituales de $\delta$ para arrastre de fondo están entre 10 y 20°; ángulos mayores
 aumentan el arreo pero también la resistencia del aparejo.
 
+### Biblioteca de polares por tipo de portón
+
+La fuente primaria de las polares del libro es el informe *Otterboard Performance and Behaviour*
+{cite:p}`sfia1993`: 26 modelos de portón ensayados en los tanques de flujo de Hull, Boulogne y
+Hirtshals, a 0,9 m/s sobre la cinta móvil (el $C_D$ incluye el rozamiento con la cinta), de 25 a
+45° de ataque. Cada hoja de datos del Apéndice IV da las medidas del modelo, la relación de
+aspecto $H/L$, la relación de superficie, el peso en aire y en agua, $C_L$ y $C_D$ cada 5° y el
+$C_L$ máximo con su ángulo. El libro Excel de la A-3 {cite:p}`giamportone2024` copió dos de ellas
+tal cual: «Flat Wooden» (App. IV-3) y «Morgère Polyvalent Ovale» (App. IV-17; el «0» a 25° de la
+hoja Excel es un ángulo no ensayado, marcado «–» en Seafish).
+
+`trawlkit` guarda las 26 hojas, transcriptas y verificadas página por página, en
+`trawlkit/data/door_polars.yaml`, junto con las tablas del portón pelágico Thyborøn 15 VF
+(relación de aspecto 2,5) y del Grilli Fly (1,91) de {cite:t}`mellibovsky2018`, medidas en el
+tanque de flujo de St John's y en túnel de viento. `rigging.polar_for_type` da una polar
+representativa por tipo:
+
+| Tipo | Polar | Procedencia |
+|---|---|---|
+| plano | hoja «Flat Wooden» | transcripta |
+| en V | media de Reference Vee, Blooe Tech y Munkebo, como recomienda {cite:t}`sfia1993` (sección 3-16) | derivada |
+| oval | hoja «Morgère Polyvalent Ovale» | transcripta |
+| cambado (con ranura) | media de Net Tec, Perfect Patent B y Thyborøn Type 2 de 125" | derivada |
+| multiperfil | media de Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft (30–45°) | derivada |
+| pelágico de alta relación de aspecto (Süberkrüb) | Thyborøn 15 VF en tanque de flujo: $C_L$ lineal y $C_D$ cuadrático ajustados a los 11 puntos | derivada |
+
+Hasta la Fase 19.2 la polar en V del catálogo era la del portón plano con $C_L$ multiplicado por
+0,775/0,93 y la del Süberkrüb era la del oval: ninguna era medida. Para el pelágico,
+{cite:t}`mellibovsky2018` encuentran que el tanque de flujo da 20–30 % menos que el túnel de viento
+y lo atribuyen a un error de la velocidad nominal del tanque; los valores «teóricos» del Süberkrüb
+de {cite:t}`scharfe1955` ($C_L/C_D \approx 14$ a 9,5°, sin fondo) no se usan: quedan como
+referencia de confianza baja. Ningún fabricante publica la polar de sus portones: los de Vónin
+{cite:p}`vonin_doors` (superficie y peso) y Morgère {cite:p}`morgere2025` (superficie; el peso es
+«sur demande» y queda vacío) llevan la polar de su tipo marcada como *supuesta*. La afirmación de
+Vónin de un $C_L$ de 4,39 para el Twister queda como nota, no como dato.
+
+En modo corregido `rigging.door_polar` interpola linealmente entre los ángulos tabulados y, hasta
+5° fuera del rango medido, extrapola con el tramo extremo y avisa (la nota `door_polar:` del
+resultado); el modo `EXCEL` sigue pidiendo un ángulo de la tabla, como el `LOOKUP` del libro.
+
+### Elección del portón: superficie equivalente
+
+El motor da la superficie requerida por portón $A_1$ (`Port!F215`) para el portón del caso, con su
+$C_D$. Para cambiar de tipo de portón conservando la fuerza de abertura, {cite:t}`sfia1993`
+(App. III-9) igualan $A_1\,C_{L1} = A_2\,C_{L2}$:
+
+$$
+A_2 = A_1\,\frac{C_{L1}}{C_{L2}}, \qquad L_2 = \sqrt{\frac{A_1\,C_{L1}}{C_{L2}\,AR_2\,C_{A2}}}
+$$ (eq-15-equivalente)
+
+con $C_L$ al ángulo de trabajo de cada portón, $AR_2 = H_2/L_2$ y $C_{A2}$ la relación de
+superficie. Como portones del mismo tipo rinden distinto (el Munkebo da 27 % más $C_L$ que los
+otros dos en V), al pasar a un portón de más $C_L$ recomiendan sumar **10 %** a la superficie
+calculada (sección 3-16). La herramienta `trawlkit.door_selection.select_doors` (y
+`POST /doors/select`, «Elegir portón» en la app) aplica la regla a todo el catálogo de componentes
+filtrado y además:
+
+- toma $C_{L2}$ al ángulo del caso si el portón es del mismo tipo y, si no, al ángulo de ataque
+  recomendado del tipo: plano 35–40°, en V y oval 35°, Süberkrüb 15° {cite:p}`prado1990`;
+  cambados 34–37° y multiperfil 40–45° (ángulo de $C_L$ máximo de las hojas de Seafish);
+- deja fuera los pelágicos de alta relación de aspecto en una red de fondo: son inestables a las
+  velocidades bajas del arrastre de fondo ({cite:t}`sfia1993`, §2.2.1);
+- compara el peso con el del *Fisherman's Workbook* para el tipo y la superficie: la tabla da el
+  peso máximo usado y aclara que con un material liviano un portón puede pesar hasta 50 % menos
+  {cite:p}`prado1990`; un portón más liviano se marca y uno sin peso publicado se avisa;
+- da el largo de las patas de gallo (*backstrops*): cada una no menos que el largo del portón y
+  hasta 1,5 veces ({cite:t}`sfia1993`, §2.2.3).
+
 ## Coeficientes
 
 | Símbolo | Valor | Unidad | Fuente | Celda |
@@ -155,7 +225,9 @@ aumentan el arreo pero también la resistencia del aparejo.
 | $a$ (distancia entre pastecas) | 2,5 | m | Tipo de buques | `Port!D6` |
 | factor de corrección de $D_s$ | 1,15 | — | — | `Port!D28` |
 | $\alpha$ portón | 32 | ° | fila elegida de la polar | `Port!C134` |
-| $C_L$, $C_D$ a 32° | 0,93; 0,71 | — | catálogo FAO {cite:p}`faocatalogue` | `Port!D134:E134` |
+| $C_L$, $C_D$ a 32° | 0,93; 0,71 | — | {cite:t}`sfia1993`, hoja «Flat Wooden» (vía el libro Excel) | `Port!D134:E134` |
+| margen de superficie equivalente | 10 | % | {cite:t}`sfia1993`, sección 3-16 | — |
+| patas de gallo / largo del portón | 1–1,5 | — | {cite:t}`sfia1993`, §2.2.3 | — |
 | $S$ portón FAO | 1,805 | m² | catálogo | `Port!D122` |
 | $p$ (ROB / FT) | 0,15–0,30 (0,20) | — | {cite:t}`fridman1986` | `Port!E146:H146`, `D210` |
 | $\alpha_b$ entre bridas | 4,8 | ° | {cite:t}`martini` | `Port!F39` |
@@ -185,6 +257,8 @@ aumentan el arreo pero también la resistencia del aparejo.
 | `Port!E97:G99` | pie de gallo | `rigging.crowfoot_m` |
 | `Port!D110` | ángulo $\delta$ | `rigging.attack_angle_deg` |
 | hoja completa | etapa `doors` y `bridles` | `model.run` → `result.doors`, `result.bridles` |
+| — (Fase 19.3) | polares medidas y polar por tipo | `rigging.load_door_polars`, `rigging.polar_for_type` |
+| — (Fase 19.3) | elección del portón del catálogo | `door_selection.select_doors`, `POST /doors/select` |
 
 ## Supuestos y límites
 
@@ -378,6 +452,56 @@ típica de arrastre de fondo; a 3,5 kn ya consume el 38 %. Por eso el promedio d
 $S_{req}$ entre 2 y 4 kn (≈ 1,66 m² por portón para 150 HP) es algo menor que el portón elegido.
 Nótese que la resistencia total del capítulo {doc}`19_ventana_velocidad` (modo corregido) suma el
 "ROB" de la hoja, es decir, la resistencia de **un** portón.
+
+La biblioteca de polares compara los tipos de portón ({numref}`fig-15-tipos`): el plano tiene el
+$C_L$ máximo más bajo; los cambados con ranura llegan a 1,4–1,5; los multiperfil siguen ganando
+$C_L$ hasta 40–45°; el pelágico de alta relación de aspecto da mucho $C_L$ con poco $C_D$ a
+ángulos bajos.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+mystnb:
+  figure:
+    caption: |
+      Polar representativa de cada tipo de portón (`rigging.polar_for_type`). Arriba $C_L$, abajo
+      $C_D$. Plano y oval: hojas de Seafish/IFREMER/DIFTA (1993); en V, cambado y multiperfil:
+      media de varias hojas; pelágico: ajuste a los puntos del Thyborøn 15 VF en tanque de flujo
+      (Mellibovsky et al. 2018), que el túnel de viento da 20–30 % más altos.
+    name: fig-15-tipos
+---
+from trawlkit.rigging.polars import DOOR_TYPE_LABEL, DOOR_TYPES
+from trawlkit.i18n import t as _t
+
+fig, axes = P.plt.subplots(2, 1, figsize=(7, 6.6), sharex=True)
+for slot, kind in enumerate(DOOR_TYPES, start=1):
+    tp = rigging.polar_for_type(kind)
+    ang = [c.angle_deg for c in tp.coefficients]
+    P.line(axes[0], ang, [c.cl for c in tp.coefficients], slot, _t(DOOR_TYPE_LABEL[kind]))
+    P.line(axes[1], ang, [c.cd for c in tp.coefficients], slot, _t(DOOR_TYPE_LABEL[kind]))
+axes[0].set_title("Sustentación $C_L$")
+axes[1].set_title("Arrastre $C_D$")
+axes[1].set_xlabel("Ángulo de ataque α [°]")
+P.legend(axes[1], loc="upper left", fontsize=8)
+P.finish(fig)
+```
+
+La elección del portón para el caso del libro (modo corregido): la superficie requerida por portón
+con el portón FAO a 32° se lleva a cada portón del catálogo con {eq}`eq-15-equivalente`. El portón
+de la A-3 aparece entre los candidatos, y es el plano más justo.
+
+```{code-cell} ipython3
+from trawlkit.door_selection import select_doors
+
+sel = select_doors(P.fao_result(150, "corrected"))
+assert any(c.id == "fao_flat_wood_a3" for c in sel.candidates)
+print(f"Superficie requerida por portón: {sel.required_m2:.2f} m²")
+for c in sel.candidates[:6]:
+    peso = "sin peso" if c.weight_air_kg is None else f"{c.weight_air_kg:.0f} kg"
+    extra = " (+10 %)" if c.margin_applied else ""
+    print(f"{c.name[:44]:44s} {c.area_m2:5.2f} m² ≥ {c.required_m2:4.2f}{extra:8s} "
+          f"margen {100 * c.area_margin:4.1f} %  {peso}")
+```
 
 ## Ejercicios
 

@@ -27,6 +27,8 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/prices/export` | Lista de precios en CSV o XLSX (`format`), con las líneas de la lista de materiales sin precio como plantilla. |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
+| GET | `/catalog/door-polars` | Polar representativa de cada tipo de portón (Fase 19.3), con su fuente y el ángulo de ataque recomendado. |
+| POST | `/doors/select` | Portones del catálogo que alcanzan la superficie equivalente del caso ($A_2 = A_1 C_{L1}/C_{L2}$ + 10 %, Seafish 1993), con peso, ángulo de ataque y patas de gallo; filtros `brands`, `region`, `generic_only`, `types`. |
 | GET | `/catalog/fouling` | Escenarios de ensuciamiento y colmatación de la red (nivel por zona). |
 | GET | `/catalog/species` | Especies para la selectividad, con la forma de su sección transversal (A VERIFICAR). |
 | GET | `/catalog/seabeds` | Tipos de fondo con el rozamiento del tren y de los portones (nominal y rango). |

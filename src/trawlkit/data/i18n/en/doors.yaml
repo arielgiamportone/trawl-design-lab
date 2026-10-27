@@ -1,0 +1,84 @@
+# Catálogo inglés de la Fase 19.3 (portones: biblioteca de polares, elección y polar
+# dinámica). Lo verifica tests/test_i18n.py; las {variables} se mantienen iguales.
+'no se pueden elegir portones: {exc}': 'cannot select otter boards: {exc}'
+'sin peso publicado: no se puede verificar el peso en el agua del portón': 'no published weight: the otter
+  board weight in water cannot be checked'
+superficie equivalente A₂ = A₁·CL₁/CL₂: equivalent area A₂ = A₁·CL₁/CL₂
+margen de 10 % al pasar a un portón de más CL: 10 % margin when changing to a higher-CL otter board
+'peso: el Workbook da el máximo usado; con material liviano, hasta 50 % menos': 'weight: the Workbook
+  gives the maximum used; with a lighter material, up to 50 % less'
+patas de gallo de 1 a 1,5 veces el largo del portón: backstrops 1 to 1.5 times the otter board length
+ángulo de ataque recomendado por tipo: recommended angle of attack per type
+CL extrapolado fuera de la polar medida: CL extrapolated outside the measured polar
+'sin peso publicado: pedir el peso al fabricante': 'no published weight: ask the manufacturer'
+? 'peso {w:.0f} kg: menos de la mitad del máximo del Workbook para el tipo y la superficie ({ref:.0f}
+  kg); puede no apoyar bien en el fondo'
+: 'weight {w:.0f} kg: less than half the Workbook maximum for the type and area ({ref:.0f} kg); it may
+  not keep good bottom contact'
+rango de potencia del catálogo {lo:g}–{hi:g} hp (buque de {hp:g} hp): catalogue power range {lo:g}–{hi:g}
+  hp ({hp:g} hp vessel)
+el aparejo en pareja no lleva portones: a pair trawl rig has no otter boards
+? '{n} portones de otro tipo de pesca descartados: los pelágicos de alta relación de aspecto (Süberkrüb)
+  son inestables a las velocidades bajas del arrastre de fondo (Seafish 1993, §2.2.1) y una red pelágica
+  no lleva portones de fondo'
+: '{n} otter boards for another kind of fishing left out: high-aspect pelagic boards (Süberkrüb) are unstable
+  at the low towing speeds of bottom trawling (Seafish 1993, §2.2.1) and a pelagic trawl does not use
+  bottom boards'
+ningún portón del catálogo filtrado alcanza la superficie equivalente: no otter board of the filtered
+  catalogue reaches the equivalent area
+superficie requerida por portón {a:.2f} m² con {door} (CL {cl:.2f} a {angle:g}°): required area per otter
+  board {a:.2f} m² with {door} (CL {cl:.2f} at {angle:g}°)
+? 'door_polar: el ángulo de ataque {angle:g}° cae fuera de los ángulos medidos de la polar de {door};
+  CL = {cl:.3f} y CD = {cd:.3f} son extrapolados'
+: 'door_polar: the angle of attack {angle:g}° falls outside the measured angles of the {door} polar; CL
+  = {cl:.3f} and CD = {cd:.3f} are extrapolated'
+'ángulo de ataque {angle:g}° fuera de la polar medida de {door} ({lo:g}–{hi:g}°): CL y CD extrapolados': 'angle
+  of attack {angle:g}° outside the measured polar of {door} ({lo:g}–{hi:g}°): CL and CD extrapolated'
+'polar de portón desconocida: {id!r}': 'unknown otter board polar: {id!r}'
+hoja «Flat Wooden» de Seafish (1993), la misma polar del libro Excel de la A-3: Seafish (1993) «Flat Wooden»
+  data sheet, the same polar as the A-3 Excel workbook
+? 'media de los tres portones en V sin camber ensayados por Seafish (Reference Vee, Blooe Tech y Munkebo):
+  la sección 3-16 recomienda promediarlos'
+: 'mean of the three uncambered vee boards tested by Seafish (Reference Vee, Blooe Tech and Munkebo):
+  section 3-16 recommends averaging them'
+hoja «Morgère Polyvalent Ovale» de Seafish (1993), la del libro Excel de la A-3: Seafish (1993) «Morgère
+  Polyvalent Ovale» data sheet, the one in the A-3 Excel workbook
+? media de los portones en V cambados que Seafish cita como de CL máximo 1,4–1,5 (Net Tec, Perfect Patent
+  B y Thyborøn Type 2 de 125"; sección 3-14)
+: mean of the cambered vee boards that Seafish quotes with a maximum CL of 1.4–1.5 (Net Tec, Perfect Patent
+  B and the 125" Thyborøn Type 2; section 3-14)
+? media de los cuatro portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft)
+  a los ángulos que ensayaron todos (30–45°)
+: mean of the four Seafish multi-foil boards (Bison 3 Slots, Hydrofin, Morgère Polyfoil and Fjørtoft)
+  at the angles tested for all of them (30–45°)
+? 'Thyborøn 15 VF (AR 2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático
+  ajustados a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+  a un error de la velocidad del tanque'
+: 'Thyborøn 15 VF (AR 2.5) in the flume tank (Mellibovsky et al. 2018, Table 2): linear CL and quadratic
+  CD fitted to the 11 measured points (13.6–35.6°). The wind tunnel gives 20–30 % more; the authors attribute
+  it to an error in the flume tank speed'
+'portón rectangular plano: 35–40°': 'flat rectangular board: 35–40°'
+'portón rectangular en V: 35°; Seafish (sección 3-14): trabajo «alrededor de 35°»': 'rectangular vee board:
+  35°; Seafish (section 3-14): working range «around 35°»'
+'portón oval: 35°': 'oval board: 35°'
+? ángulo de CL máximo de Net Tec, Perfect Patent B y Thyborøn Type 2 (34–37°); en el mar el portón toma
+  unos 4° menos que lo calculado (App. III-11)
+: angle of maximum CL of Net Tec, Perfect Patent B and Thyborøn Type 2 (34–37°); at sea the board takes
+  about 4° less than calculated (App. III-11)
+? 'los multiperfil tienen el CL máximo a ángulos altos (sección 3-15): 42–43° en las hojas de Bison 3
+  Slots, Hydrofin y Morgère Polyfoil'
+: 'multi-foil boards have their maximum CL at high angles (section 3-15): 42–43° on the Bison 3 Slots,
+  Hydrofin and Morgère Polyfoil sheets'
+'portón rectangular cambado (Süberkrüb): 15°; el Thyborøn 15 VF tiene su mejor CL/CD hacia 15° (Mellibovsky et al. 2015)': 'rectangular
+  cambered board (Süberkrüb): 15°; the Thyborøn 15 VF has its best CL/CD near 15° (Mellibovsky et al.
+  2015)'
+'{applied}: el fabricante no publica la polar; se usa la del tipo ({note})': '{applied}: the manufacturer
+  does not publish the polar; the type polar is used ({note})'
+'tipo de portón sin polar representativa: {type!r}': 'otter board type without a representative polar:
+  {type!r}'
+Plano rectangular: Flat rectangular
+En V: Vee
+Oval cambado: Cambered oval
+Cambado (con ranura): Cambered (slotted)
+Multiperfil: Multi-foil
+Pelágico de alta relación de aspecto (Süberkrüb): High-aspect pelagic (Süberkrüb)

@@ -88,7 +88,11 @@ to.
 | `crosby_g209` | Crosby, general catalogue p. 24 | G-209 shackles (Phase 19.2) | 10 sizes |
 | `pfeifer_6x19w` | PFEIFER 6x19W-FC | Small wire ropes from 6 to 16 mm | 6 sizes |
 | `zuniga2006` | FAO REBYC, shrimp fleet of the Colombian Caribbean | Flat wooden doors from 6'×28" to 10'×40" used in the fleet | Dimensions *transcribed*, polar assumed (that of the flat otter board) |
-| `lange1993` | Lange (ICES 1993) | Maximum lift of the flat otter board (0.95) and V-board (0.70–0.85) | Polar of the V-board *assumed*: that of the flat board with the CL scaled |
+| `lange1993` | Lange (ICES 1993) | Maximum lift of the flat otter board (0.95) and V-board (0.70–0.85) | Up to Phase 19.2, the *assumed* V-board polar (that of the flat board with the CL scaled); since 19.3 only a reference |
+| `sfia1993` | Seafish/IFREMER/DIFTA (1993), *Otterboard Performance and Behaviour* | 26 polar sheets of flume tank models (Phase 19.3); primary source of the flat and oval polars of the Excel workbook | Polars *transcribed* from the image of each page; per type, the sheet as it is or a mean (*derived*) |
+| `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polars of the Thyborøn 15 VF and the Grilli Fly in the flume tank and the wind tunnel (Phase 19.3) | Tables *transcribed*; the Süberkrüb polar, a *derived* fit |
+| `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, 8–10 sizes per line; dimensions and polar *assumed* |
+| `morgere2025` | Morgère, 2025 catalogue | OvalFoil, PolyFoil and PFPE otter boards (Phase 19.3) | Area (and PFPE length) *transcribed*, 10 sizes per line; no weight («sur demande»); dimensions and polar from the Seafish sheet of the same design, *assumed* |
 | `giamportone2024` | Excel workbook of the A-3 | Moscuzza ropes, Trawlex chains, Seale 6x19 wire ropes, floats, PA twines and the two otter boards with their polar | *Excel* provenance |
 
 Criteria:

@@ -9,6 +9,7 @@ Convenciones: fuerzas en kgf, velocidades en m/s, longitudes en m, ángulos en g
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
 from typing import Any
 
@@ -16,6 +17,7 @@ import numpy as np
 
 from trawlkit.compat import Compat
 from trawlkit.excel import FloatOrArray, as_array, dataclass_to_dict, ret
+from trawlkit.i18n import t
 from trawlkit.io import Door, load_doors
 from trawlkit.units import RHO_SEAWATER, G
 
@@ -240,29 +242,73 @@ def select_door(door_id: str) -> Door:
     raise KeyError(f"portón desconocido: {door_id!r}")
 
 
+#: Extrapolación máxima fuera del rango de la polar en modo corregido [°] (Fase 19.3).
+MAX_EXTRAPOLATION_DEG = 5.0
+
+
+class PolarExtrapolationWarning(UserWarning):
+    """El ángulo de ataque cae fuera de los ángulos medidos de la polar y se extrapola."""
+
+
+def _usable_points(door: Door) -> list[tuple[float, float, float]]:
+    return sorted(
+        (c.angle_deg, c.cl, c.cd)
+        for c in door.coefficients
+        if c.cl is not None and c.cd is not None
+    )
+
+
+def polar_extrapolated(door: Door, angle_deg: float) -> bool:
+    """Si ``angle_deg`` cae fuera de los ángulos con coeficientes de la polar del portón."""
+    pts = _usable_points(door)
+    return bool(pts) and not pts[0][0] <= angle_deg <= pts[-1][0]
+
+
 def door_polar(door: Door, angle_deg: float, *, interpolate: bool = False) -> DoorPolar:
     """CL, CD y CL/CD del portón al ángulo de ataque dado (Port!C132:F137; fila 134 = 32°).
 
     Por defecto el ángulo debe existir en la polar del catálogo, como el ``LOOKUP`` del libro;
-    ``cl_cd = CL/CD`` (Tab!E259:E264). Con ``interpolate`` (portones del catálogo de componentes,
-    cuya polar no siempre tiene 32°) se interpola linealmente entre los dos ángulos vecinos con
-    coeficientes; fuera del rango de la polar sigue siendo ``KeyError``.
+    ``cl_cd = CL/CD`` (Tab!E259:E264). Con ``interpolate`` (modo corregido y portones del
+    catálogo de componentes, cuya polar no siempre tiene 32°) se interpola linealmente entre los
+    dos ángulos vecinos con coeficientes; hasta :data:`MAX_EXTRAPOLATION_DEG` fuera del rango
+    medido se extrapola con el tramo extremo y se avisa (:class:`PolarExtrapolationWarning`);
+    más allá es ``KeyError``.
     """
     for coef in door.coefficients:
         if coef.angle_deg == angle_deg:
             if coef.cl is None or coef.cd is None:
+                if interpolate:
+                    break
                 raise ValueError(f"sin coeficientes para {door.id!r} a {angle_deg}°")
             return DoorPolar(angle_deg=angle_deg, cl=coef.cl, cd=coef.cd, cl_cd=coef.cl / coef.cd)
     if interpolate:
-        pts = sorted(
-            (c.angle_deg, c.cl, c.cd)
-            for c in door.coefficients
-            if c.cl is not None and c.cd is not None
-        )
+        pts = _usable_points(door)
         for (a0, l0, d0), (a1, l1, d1) in zip(pts, pts[1:], strict=False):
-            if a0 < angle_deg < a1:
-                t = (angle_deg - a0) / (a1 - a0)
-                cl, cd = l0 + t * (l1 - l0), d0 + t * (d1 - d0)
+            if a0 <= angle_deg <= a1:
+                f = (angle_deg - a0) / (a1 - a0)
+                cl, cd = l0 + f * (l1 - l0), d0 + f * (d1 - d0)
+                return DoorPolar(angle_deg=angle_deg, cl=cl, cd=cd, cl_cd=cl / cd)
+        if len(pts) >= 2:
+            lo, hi = pts[0][0], pts[-1][0]
+            below = lo - MAX_EXTRAPOLATION_DEG <= angle_deg < lo
+            above = hi < angle_deg <= hi + MAX_EXTRAPOLATION_DEG
+            if below or above:
+                (a0, l0, d0), (a1, l1, d1) = pts[:2] if below else pts[-2:]
+                f = (angle_deg - a0) / (a1 - a0)
+                cl = max(l0 + f * (l1 - l0), 0.0)
+                cd = max(d0 + f * (d1 - d0), 1e-3)
+                warnings.warn(
+                    t(
+                        "ángulo de ataque {angle:g}° fuera de la polar medida de {door} "
+                        "({lo:g}–{hi:g}°): CL y CD extrapolados",
+                        angle=angle_deg,
+                        door=door.id,
+                        lo=lo,
+                        hi=hi,
+                    ),
+                    PolarExtrapolationWarning,
+                    stacklevel=2,
+                )
                 return DoorPolar(angle_deg=angle_deg, cl=cl, cd=cd, cl_cd=cl / cd)
     raise KeyError(f"ángulo {angle_deg}° no está en la polar de {door.id!r}")
 

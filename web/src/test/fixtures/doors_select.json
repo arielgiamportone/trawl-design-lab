@@ -1,0 +1,264 @@
+{
+  "required_m2": 1.656481733771439,
+  "case_door": {
+    "id": "fao_flat_wood_a3",
+    "type": "flat_wood_iron_frame",
+    "area_m2": 1.805,
+    "angle_deg": 32.0,
+    "cl": 0.93,
+    "cd": 0.71,
+    "required_area_m2": 1.656481733771439,
+    "ok": true
+  },
+  "candidates": [
+    {
+      "id": "door_oval_300hp",
+      "name": "Portón oval cambado 1.9 × 1.1 m (300 hp)",
+      "type": "oval",
+      "type_label": "Oval cambado",
+      "brand": null,
+      "generic": true,
+      "area_m2": 1.65,
+      "length_m": 1.9,
+      "weight_air_kg": 310.0,
+      "weight_water_kg": 269.7,
+      "angle_deg": 35.0,
+      "cl": 1.04,
+      "cd": 0.79,
+      "required_m2": 1.6294046285078676,
+      "margin_applied": true,
+      "area_margin": 0.012639814035015018,
+      "ok": true,
+      "weight_status": "ok",
+      "weight_reference_kg": 310.0,
+      "attack_angle": {
+        "min_deg": 35.0,
+        "max_deg": 35.0,
+        "document": "prado1990",
+        "page": "Workbook, «Otter boards: proportions, angles of attack» (PDF p. 95)",
+        "kind": "transcribed",
+        "note": "portón oval: 35°"
+      },
+      "backstrop_m": [
+        1.9,
+        2.8499999999999996
+      ],
+      "hp_ok": false,
+      "warnings": [
+        "rango de potencia del catálogo 300–300 hp (buque de 150 hp)"
+      ]
+    },
+    {
+      "id": "fao_flat_wood_a3",
+      "name": "Porton plano de madera con bastidor de hierro FAO para A3,B3,C3",
+      "type": "flat_wood_iron_frame",
+      "type_label": "Plano rectangular",
+      "brand": null,
+      "generic": true,
+      "area_m2": 1.805,
+      "length_m": 1.9,
+      "weight_air_kg": 135.0,
+      "weight_water_kg": 80.595,
+      "angle_deg": 32.0,
+      "cl": 0.93,
+      "cd": 0.71,
+      "required_m2": 1.656481733771439,
+      "margin_applied": false,
+      "area_margin": 0.08965886142940915,
+      "ok": true,
+      "weight_status": "ok",
+      "weight_reference_kg": 183.94886363636363,
+      "attack_angle": {
+        "min_deg": 35.0,
+        "max_deg": 40.0,
+        "document": "prado1990",
+        "page": "Workbook, «Otter boards: proportions, angles of attack» (PDF p. 95)",
+        "kind": "transcribed",
+        "note": "portón rectangular plano: 35–40°"
+      },
+      "backstrop_m": [
+        1.9,
+        2.8499999999999996
+      ],
+      "hp_ok": null,
+      "warnings": []
+    },
+    {
+      "id": "door_morgere_pf02",
+      "name": "Morgère PolyFoil PF02 (1.52 m²)",
+      "type": "multifoil",
+      "type_label": "Multiperfil",
+      "brand": "Morgère",
+      "generic": false,
+      "area_m2": 1.52,
+      "length_m": 1.628,
+      "weight_air_kg": null,
+      "weight_water_kg": null,
+      "angle_deg": 42.5,
+      "cl": 1.2383333333333333,
+      "cd": 0.8583333333333334,
+      "required_m2": 1.3684367270375632,
+      "margin_applied": true,
+      "area_margin": 0.11075650774920809,
+      "ok": true,
+      "weight_status": "missing",
+      "weight_reference_kg": null,
+      "attack_angle": {
+        "min_deg": 40.0,
+        "max_deg": 45.0,
+        "document": "sfia1993",
+        "page": "Section 3-15 (PDF p. 60); Appendix IV-5, IV-12, IV-16",
+        "kind": "derived",
+        "note": "los multiperfil tienen el CL máximo a ángulos altos (sección 3-15): 42–43° en las hojas de Bison 3 Slots, Hydrofin y Morgère Polyfoil"
+      },
+      "backstrop_m": [
+        1.628,
+        2.4419999999999997
+      ],
+      "hp_ok": null,
+      "warnings": [
+        "sin peso publicado: pedir el peso al fabricante"
+      ]
+    },
+    {
+      "id": "door_morgere_pfpe02",
+      "name": "Morgère PFPE PFPE02 (1.52 m²)",
+      "type": "multifoil",
+      "type_label": "Multiperfil",
+      "brand": "Morgère",
+      "generic": false,
+      "area_m2": 1.52,
+      "length_m": 1.6,
+      "weight_air_kg": null,
+      "weight_water_kg": null,
+      "angle_deg": 42.5,
+      "cl": 1.2383333333333333,
+      "cd": 0.8583333333333334,
+      "required_m2": 1.3684367270375632,
+      "margin_applied": true,
+      "area_margin": 0.11075650774920809,
+      "ok": true,
+      "weight_status": "missing",
+      "weight_reference_kg": null,
+      "attack_angle": {
+        "min_deg": 40.0,
+        "max_deg": 45.0,
+        "document": "sfia1993",
+        "page": "Section 3-15 (PDF p. 60); Appendix IV-5, IV-12, IV-16",
+        "kind": "derived",
+        "note": "los multiperfil tienen el CL máximo a ángulos altos (sección 3-15): 42–43° en las hojas de Bison 3 Slots, Hydrofin y Morgère Polyfoil"
+      },
+      "backstrop_m": [
+        1.6,
+        2.4000000000000004
+      ],
+      "hp_ok": null,
+      "warnings": [
+        "sin peso publicado: pedir el peso al fabricante"
+      ]
+    },
+    {
+      "id": "door_flat_200hp",
+      "name": "Portón plano rectangular 2 × 1 m (200 hp)",
+      "type": "flat",
+      "type_label": "Plano rectangular",
+      "brand": null,
+      "generic": true,
+      "area_m2": 2.0,
+      "length_m": 2.0,
+      "weight_air_kg": 205.0,
+      "weight_water_kg": 123.0,
+      "angle_deg": 32.0,
+      "cl": 0.93,
+      "cd": 0.71,
+      "required_m2": 1.656481733771439,
+      "margin_applied": false,
+      "area_margin": 0.2073782398109798,
+      "ok": true,
+      "weight_status": "ok",
+      "weight_reference_kg": 205.0,
+      "attack_angle": {
+        "min_deg": 35.0,
+        "max_deg": 40.0,
+        "document": "prado1990",
+        "page": "Workbook, «Otter boards: proportions, angles of attack» (PDF p. 95)",
+        "kind": "transcribed",
+        "note": "portón rectangular plano: 35–40°"
+      },
+      "backstrop_m": [
+        2.0,
+        3.0
+      ],
+      "hp_ok": true,
+      "warnings": []
+    },
+    {
+      "id": "door_v_200hp",
+      "name": "Portón en V de 2.1 m² (200 hp)",
+      "type": "v",
+      "type_label": "En V",
+      "brand": null,
+      "generic": true,
+      "area_m2": 2.1,
+      "length_m": 2.05,
+      "weight_air_kg": 400.0,
+      "weight_water_kg": 348.0,
+      "angle_deg": 35.0,
+      "cl": 1.023,
+      "cd": 0.79,
+      "required_m2": 1.6564817337714395,
+      "margin_applied": true,
+      "area_margin": 0.2677471518015284,
+      "ok": true,
+      "weight_status": "ok",
+      "weight_reference_kg": 400.0,
+      "attack_angle": {
+        "min_deg": 35.0,
+        "max_deg": 35.0,
+        "document": "prado1990",
+        "page": "Workbook, «Otter boards: proportions, angles of attack» (PDF p. 95)",
+        "kind": "transcribed",
+        "note": "portón rectangular en V: 35°; Seafish (sección 3-14): trabajo «alrededor de 35°»"
+      },
+      "backstrop_m": [
+        2.05,
+        3.0749999999999997
+      ],
+      "hp_ok": true,
+      "warnings": []
+    }
+  ],
+  "rejected": 11,
+  "margin": 0.1,
+  "rules": [
+    {
+      "rule": "superficie equivalente A₂ = A₁·CL₁/CL₂",
+      "document": "sfia1993",
+      "page": "Appendix III-9 (PDF p. 123)"
+    },
+    {
+      "rule": "margen de 10 % al pasar a un portón de más CL",
+      "document": "sfia1993",
+      "page": "Section 3-16 (PDF p. 61)"
+    },
+    {
+      "rule": "peso: el Workbook da el máximo usado; con material liviano, hasta 50 % menos",
+      "document": "prado1990",
+      "page": "Workbook, «Otter boards: properties of the principal types» (PDF p. 97)"
+    },
+    {
+      "rule": "patas de gallo de 1 a 1,5 veces el largo del portón",
+      "document": "sfia1993",
+      "page": "Section 2-14, §2.2.3 (PDF p. 37)"
+    },
+    {
+      "rule": "ángulo de ataque recomendado por tipo",
+      "document": "prado1990",
+      "page": "Workbook, «Otter boards: proportions, angles of attack» (PDF p. 95)"
+    }
+  ],
+  "notes": [
+    "28 portones de otro tipo de pesca descartados: los pelágicos de alta relación de aspecto (Süberkrüb) son inestables a las velocidades bajas del arrastre de fondo (Seafish 1993, §2.2.1) y una red pelágica no lleva portones de fondo",
+    "superficie requerida por portón 1.66 m² con fao_flat_wood_a3 (CL 0.93 a 32°)"
+  ]
+}

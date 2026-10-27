@@ -75,6 +75,10 @@ export type EconomicsCompareOut = S['EconomicsCompareOut'];
 export type ComponentOptimizeRequest = S['ComponentOptimizeRequest'];
 export type ComponentOptimizeResponse = S['ComponentOptimizeResponse'];
 export type AssemblyOut = S['AssemblyOut'];
+export type DoorSelectRequest = S['DoorSelectRequest'];
+export type DoorSelectResponse = S['DoorSelectResponse'];
+export type DoorCandidateOut = S['DoorCandidateOut'];
+export type DoorTypePolar = S['DoorTypePolarOut'];
 export type BatchFile = S['BatchFile'];
 export type BatchParseRequest = S['BatchParseRequest'];
 export type BatchParseResponse = S['BatchParseResponse'];
@@ -347,6 +351,10 @@ export const api = {
   ): Promise<ComponentOptimizeResponse> {
     const res = await post('/optimize/components', req, signal);
     return (await res.json()) as ComponentOptimizeResponse;
+  },
+  async selectDoors(req: DoorSelectRequest, signal?: AbortSignal): Promise<DoorSelectResponse> {
+    const res = await post('/doors/select', req, signal);
+    return (await res.json()) as DoorSelectResponse;
   },
   async batchParse(req: BatchParseRequest, signal?: AbortSignal): Promise<BatchParseResponse> {
     const res = await post('/batch/parse', req, signal);
