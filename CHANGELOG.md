@@ -5,6 +5,13 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+### Cambiado
+- **Inglés completo en los datos (Fase 19.0)**: los tipos de fondo, los escenarios de
+  ensuciamiento y las especies se traducen en el motor (`data/i18n/en/data.yaml`), así llegan en
+  inglés a la API, la app y el libro; el rótulo de L50 de la incertidumbre usa el nombre traducido.
+  En inglés, las siglas de hélice son FP, FP+N, CP y CP+N (motor, informes, ejercicios, app y
+  libro); en español siguen PF, PF+T, PV y PV+T.
+
 ### Agregado
 - **Libro completo en inglés (Fase 18.5)**: `docs/en/`, con los mismos capítulos y archivos que
   el libro en español, publicado en `/trawl-design-lab/en/`. Las celdas ejecutan el mismo código:
