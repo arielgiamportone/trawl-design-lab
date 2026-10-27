@@ -1,0 +1,86 @@
+# Catálogo inglés de la Fase 19.5: aparejos de tangones, gemelo y vara (motor, lista de
+# materiales, esquema del aparejo y validador).
+buque {name} de la flota ({hp:g} hp), el que indica la red: fleet vessel {name} ({hp:g} hp), the one the net names
+portón {name} del catálogo de componentes ({area:.2f} m²), el que indica la red: otter board {name} from the component catalogue ({area:.2f} m²), the one the net names
+'arrastre de vara: el portón del caso no se usa': 'beam trawling: the case''s otter board is not used'
+' ({n} redes)': ' ({n} nets)'
+Tijeras (dos ramas por red): Bridles from the boom warp (two legs per net)
+Cable de acero Ø{d:g} mm: Steel wire Ø{d:g} mm
+'{n} cables del largo filado más {pct:.0f} % de reserva': '{n} warps of the paid-out length plus {pct:.0f} % spare'
+Portones ({n}): Otter boards ({n})
+Muerto central (trineo): Centre clump (sled)
+Muerto central: Centre clump
+'{kg:.0f} kg en aire': '{kg:.0f} kg in air'
+Varas de {m:.2f} m: Beams of {m:.2f} m
+Vara Ø{d:g} m: Beam Ø{d:g} m
+Patines de la vara: Beam trawl shoes
+Patín de {h:.2f} m: Shoe of {h:.2f} m
+Cadenas espantadoras: Tickler chains
+Cadena espantadora: Tickler chain
+'{shoe:g} de patín y {net:g} de red por vara (medianas de C056/20, tabla 3; A VERIFICAR)': '{shoe:g} shoe and {net:g} net ticklers per beam (medians of C056/20, table 3; TO BE VERIFIED)'
+tijera {length} m: bridle {length} m
+muerto {kg} kg: clump {kg} kg
+vara {length} m: beam {length} m
+ancho barrido {width} m: swept width {width} m
+'las redes se superponen {gap} m: desfasarlas o alargar los tangones': 'the nets overlap {gap} m: stagger them or lengthen the booms'
+el esquema del aparejo es para tangones, gemelo o vara: the rig diagram is for outrigger, twin or beam rigs
+'{net} — esquema del aparejo': '{net} — rig diagram'
+'Aparejo de tangones: dos redes': 'Outrigger rig: two nets'
+'Aparejo gemelo: dos redes y muerto central': 'Twin rig: two nets and a centre clump'
+Arrastre de vara: Beam trawl
+tangón {length} m a {angle}°: boom {length} m at {angle}°
+tijera de {m:g} m (INIDEP, Roth y Rubio 2022): bridle of {m:g} m (INIDEP, Roth and Rubio 2022)
+cable de la tijera de {d:g} mm (Roth y Rubio 2022): bridle wire of {d:g} mm (Roth and Rubio 2022)
+tangón de 24 pies (7,32 m; Knake et al. 1958, FL 470): 24-foot boom (7.32 m; Knake et al. 1958, FL 470)
+tangón a 20° de la horizontal (FL 470): boom at 20° above the horizontal (FL 470)
+muerto de {kg:.0f} kg = 1,5 × el portón (Seafish, regla práctica): clump of {kg:.0f} kg = 1.5 × the otter board (Seafish, rule of thumb)
+'área frontal del muerto {a:.3f} m² del trineo de Bullis y Floyd (1972): 32 × 8 pulgadas (supuesto)': 'clump frontal area {a:.3f} m² from the Bullis and Floyd (1972) sled: 32 × 8 inches (assumption)'
+'vara de {m:.2f} m: ancho total de Eigaard et al. (2016, TBB_{metier}) para {kw:.0f} kW repartido en {n} varas': 'beam of {m:.2f} m: total width of Eigaard et al. (2016, TBB_{metier}) for {kw:.0f} kW shared by {n} beams'
+dos varas por buque (Eigaard et al. 2016): two beams per vessel (Eigaard et al. 2016)
+'cadenas espantadoras: sí (peces)': 'tickler chains: yes (fish)'
+'cadenas espantadoras: no (crustáceos; Eigaard et al. 2016)': 'tickler chains: no (crustaceans; Eigaard et al. 2016)'
+vara, patines y cadenas de buques {cls} de C056/20 (Rijnsdorp et al. 2020, tablas 2, 8 y 9): beam, shoes and chains of {cls} vessels from C056/20 (Rijnsdorp et al. 2020, tables 2, 8 and 9)
+chicos (≤ 221 kW): small (≤ 221 kW)
+grandes (> 221 kW): large (> 221 kW)
+tangones: outrigger
+gemelo: twin
+vara: beam
+? 'multirig: aparejo de {label} con {n} redes; ancho barrido {swept:.1f} m; la resistencia total suma las redes, {doors} portones y {warps} cables'
+: 'multirig: {label} rig with {n} nets; swept width {swept:.1f} m; the total drag adds the nets, {doors} otter boards and {warps} warps'
+? 'multirig_overlap: con tangones de {length:.2f} m a {angle:g}° las redes de {spread:.1f} m de DP se superponen {gap:.1f} m; hace falta un tangón de al menos {need:.2f} m o redes desfasadas (FL 470: una red 25 brazas más a popa)'
+: 'multirig_overlap: with {length:.2f} m booms at {angle:g}° the nets of {spread:.1f} m door spread overlap by {gap:.1f} m; a boom of at least {need:.2f} m or staggered nets are needed (FL 470: one net 25 fathoms further astern)'
+? 'watson_door_area: portón de {area:.2f} m² fuera del rango de Watson et al. (1984) para esta relinga: {lo:.2f}–{hi:.2f} m² (70–80 pulg²/pie, abertura 70–75 % de la relinga)'
+: 'watson_door_area: otter board of {area:.2f} m² outside the Watson et al. (1984) range for this headline: {lo:.2f}–{hi:.2f} m² (70–80 in²/ft, spread 70–75 % of the headline)'
+? 'twin_clump: cada portón abre una red contra el muerto central (sin sustentación); la separación por red es portón–muerto ({spread:.1f} m)'
+: 'twin_clump: each otter board spreads one net against the centre clump (no lift); the per-net spread is board to clump ({spread:.1f} m)'
+'twin_clump_weight: el portón no trae peso; indique clump_weight_kg para el rozamiento del muerto': 'twin_clump_weight: the otter board has no weight; give clump_weight_kg for the clump friction'
+? 'outrigger_warp: un cable por red desde la punta del tangón con tijera a los dos portones (FL 470); la geometría de cada red se calcula como un arrastre con portones del libro'
+: 'outrigger_warp: one warp per net from the boom tip with a bridle to both otter boards (FL 470); the geometry of each net is computed as the book''s otter trawl'
+? 'beam_trawl: vara de {length:.2f} m (abertura horizontal) y patines de {height:.2f} m (abertura vertical); sin portones ni boyas; la red se calcula con la RN de diseño (Aberdeen), de la misma forma que la ec. 10 de C056/20'
+: 'beam_trawl: beam of {length:.2f} m (horizontal opening) and shoes of {height:.2f} m (vertical opening); no otter boards or floats; the net uses the design net drag (Aberdeen), of the same form as eq. 10 of C056/20'
+'beam_weight: sin peso de la vara y los patines (beam_weight_kg) no se calcula su rozamiento con el fondo': 'beam_weight: without the weight of the beam and shoes (beam_weight_kg) their seabed friction is not computed'
+'cfp_res7_2018: eslora {loa:.1f} m mayor que 40 m (art. 3 c)': 'cfp_res7_2018: length {loa:.1f} m over 40 m (art. 3 c)'
+'cfp_res7_2018: potencia {hp:.0f} hp mayor que 2000 hp (art. 3 c)': 'cfp_res7_2018: power {hp:.0f} hp over 2000 hp (art. 3 c)'
+rig debe ser uno de {rigs}, no {rig!r}: rig must be one of {rigs}, not {rig!r}
+'{name} debe ser positivo': '{name} must be positive'
+'{name} no puede ser negativo': '{name} cannot be negative'
+boom_angle_deg debe estar entre 0 y 90°: boom_angle_deg must be between 0 and 90°
+beam_count debe ser 1 o 2: beam_count must be 1 or 2
+? 'los costados no coinciden estación por estación con el dorso: la red equivalente de 2 paneles los reparte por largo estirado (aproximación)'
+: 'the side panels do not match the top panel station by station: the equivalent 2-panel net shares them out by stretched length (approximation)'
+Aparejo: Rig
+Redes del aparejo: Nets in the rig
+Separación de los puntos de remolque de cada red: Towing-point spread of each net
+Separación entre portones exteriores: Spread between outer otter boards
+Ancho barrido total: Total swept width
+Largo de cada vara: Length of each beam
+Punta del tangón desde la crujía: Boom tip from the centreline
+Huelgo entre las redes: Gap between the nets
+Peso del muerto central: Centre clump weight
+Una red con su aparejo a {speed}: One net with its rigging at {speed}
+Resistencia de todo el arte a {speed}: Drag of the whole gear at {speed}
+portones, pareja, tangones, gemelo o vara: otter, pair, outrigger, twin or beam
+'cfp_res7_2018: alto del portón {h:.2f} m: {verdict} (máximo 1,50 m, art. 4)': 'cfp_res7_2018: otter board height {h:.2f} m: {verdict} (maximum 1.50 m, art. 4)'
+'cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki): {verdict} (máximo 1,50 m, art. 4)': 'cfp_res7_2018: vertical opening {av:.2f} m (Suzuki): {verdict} (maximum 1.50 m, art. 4)'
+dentro del límite: within the limit
+por encima del límite: above the limit

@@ -120,8 +120,9 @@ curl -s -X POST http://127.0.0.1:8000/simulate \
 ```
 
 It accepts from 1 to 9 speeds between 0.5 and 6 kn, `resolution` from 2 to 10 (4 by default), the
-twine coefficients `cn`/`ct`, `knot_factor`, `door_spread_m` and `include_geometry` (nodes and
-triangles of the shape, heavy). For each speed it returns the `SimResult` (openings, drag,
+twine coefficients `cn`/`ct`, `knot_factor`, `door_spread_m`, `include_geometry` (nodes and
+triangles of the shape, heavy) and `params`, the case parameters as in `POST /design` (for
+example the rig: `{"rig": "twin"}`; {doc}`26_aparejos_dobles_y_vara`). For each speed it returns the `SimResult` (openings, drag,
 convergence), the SVG projections (plan, profile and front) of the first three speeds, the
 engine's empirical quantities at the same speeds and, for the unedited standard FAO A-3 net, the
 comparison with DynamiT. Each speed takes from ~1 s (resolution 2–4) to ~20 s (resolution

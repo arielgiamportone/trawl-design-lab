@@ -40,6 +40,7 @@ export const charts: Messages['charts'] = {
   composition: {
     title: (speed: string) => `Breakdown of the total drag at ${speed}`,
     sub: 'Net + floats + warps + otter boards (ROB)',
+    subRig: 'All the nets of the rig; “otter boards” includes the centre clump or the beams',
     net: 'Net',
     total: 'Total',
     note: (variant: string, net: string, floats: string, warps: string, doors: string) =>

@@ -26,7 +26,12 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
   },
   {
     title: 'drag',
-    match: (k) => k.startsWith('rn_std_') || k.startsWith('rob_') || k === 'max_speed_kn',
+    match: (k) =>
+      k.startsWith('rn_std_') ||
+      k.startsWith('rob_') ||
+      k.startsWith('net_total_') ||
+      k.startsWith('total_drag_') ||
+      k === 'max_speed_kn',
   },
   {
     title: 'rigging',
@@ -38,6 +43,15 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
         'crowfoot_extension_m',
         'upper_bridle_m',
         'lower_bridle_m',
+        'rig',
+        'n_nets',
+        'net_spread_m',
+        'door_spread_total_m',
+        'swept_width_m',
+        'beam_length_m',
+        'boom_tip_offset_m',
+        'nets_gap_m',
+        'clump_weight_kg',
       ].includes(k),
   },
   {

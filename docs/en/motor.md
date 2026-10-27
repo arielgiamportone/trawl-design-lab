@@ -32,6 +32,7 @@ Around that core, which reproduces the workbook, grew modules that the Excel did
 | `trawlkit.sim` | Equilibrium shape of the net (netting elements, Morison, FIRE relaxation), haul scenario, mesh state, uncertainty and calibration | {doc}`21_simulacion` to {doc}`25_incertidumbre_calibracion` |
 | `trawlkit.selectivity`, `trawlkit.sensors` | Lengths retained per species according to the deformed mesh; reading of sensor logs | {doc}`24_malla_selectividad`, {doc}`25_incertidumbre_calibracion` |
 | `trawlkit.catalog`, `.topology`, `.netcheck`, `.provenance` | Design case of each net of the FAO catalogue, topologies other than the A-3, consistency validator and value-by-value provenance | {doc}`33_catalogo_fao` |
+| `trawlkit.rigging.multirig`, `trawlkit.drawing.rig` | Outrigger, twin and beam rigs: `RigStage` (nets, otter boards, warps, bridle, clump, beam), swept width and rig diagram | {doc}`26_aparejos_dobles_y_vara` |
 | `trawlkit.components`, `trawlkit.cost` | Components catalogue with generic equivalents; bill of materials and indicative cost | {doc}`34_componentes` |
 | `trawlkit.construction` | Construction guide: cutting sheet, netting to buy, joinings, mounting on the ropes, floats, ballast and rope cuts | {doc}`36_construccion` |
 | `trawlkit.economics` | Economics of the operation: fuel, catch, costs by item, margin and break-even price by speed; comparison of nets with savings and payback | {doc}`37_economia` |
@@ -70,6 +71,8 @@ ballast       Flot!D153:I245            Koyama, Prado, Fridman (F1' + F2' − W 
     │
 warps         Cables de Remolque        angles δ1-δ3, Ø (EHP, Águila), CD, Rw, total R (+ROB in
     │                                   corrected mode), weight, loads ×4, selection from the catalogue
+multirig                                outrigger, twin or beam (Phase 19.5): all the nets, otter boards,
+    │                                   warps, bridle, clump or beam; warps by what they tow
 performance                             FT (FP and CP+N) against R(v) → maximum towable speed
 ```
 

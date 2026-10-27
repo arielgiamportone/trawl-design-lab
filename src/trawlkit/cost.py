@@ -205,7 +205,12 @@ def bill_of_materials(
         "headrope", t("Lima (relinga superior)") + per, nets * dims.headrope_m, "m", "rope", head.id
     )
     add(
-        "footrope", t("Burlón (relinga inferior)") + per, nets * dims.footrope_m, "m", "rope", foot.id
+        "footrope",
+        t("Burlón (relinga inferior)") + per,
+        nets * dims.footrope_m,
+        "m",
+        "rope",
+        foot.id,
     )
 
     # Bridas y patentes (dos lados de cada red; la vara no las lleva).

@@ -196,6 +196,10 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
     if t.get("measured"):
         # Mediciones del documento (abertura, velocidad, cable): datos de validación.
         spec["measured"] = t["measured"]
+    if t.get("simulated"):
+        # Resultados de un simulador publicados en el documento (p. ej. DynamiT): no son
+        # mediciones, sólo referencia (Fase 19.5).
+        spec["simulated"] = t["simulated"]
     spec["notes"] = list(t.get("notes", []))
     spec["provenance"] = prov
     return spec

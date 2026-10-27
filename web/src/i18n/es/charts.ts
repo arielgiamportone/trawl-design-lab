@@ -39,6 +39,7 @@ export const charts = {
   composition: {
     title: (speed: string) => `Composición de la resistencia total a ${speed}`,
     sub: 'Red + boyas + cables + portones (ROB)',
+    subRig: 'Todas las redes del aparejo; «portones» incluye el muerto central o las varas',
     net: 'Red',
     total: 'Total',
     note: (variant: string, net: string, floats: string, warps: string, doors: string) =>

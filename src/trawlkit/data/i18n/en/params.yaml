@@ -52,7 +52,21 @@ Rem!D271: Rem!D271
 Rem!E267 = H123 (resistencia total a 3.5 kn): Rem!E267 = H123 (total drag at 3.5 kn)
 Cab!D12 = 2·Ls + 0.5·Ls: Cab!D12 = 2·Ls + 0.5·Ls
 Rem!E191:H199: Rem!E191:H199
-'"otter" o "pair" (None → net.rig o "otter")': '"otter" or "pair" (None → net.rig or "otter")'
 'pareja: separación de puntas de ala (None → ½ lima)': 'pair trawl: wingtip spread (None → ½ headrope)'
 tipo de fondo (data/seabed.yaml); None = sin rozamiento extra: seabed type (data/seabed.yaml); None = no extra friction
 velocidades de la RN en summary(): RN speeds in summary()
+otter, pair, outrigger, twin o beam (None → net.rig o "otter"): otter, pair, outrigger, twin or beam (None → net.rig or "otter")
+tangón (None → 24 pies, Knake et al. 1958): outrigger boom (None → 24 ft, Knake et al. 1958)
+'tangón (None → 20°, Knake et al. 1958; vara: 30°)': 'outrigger boom (None → 20°, Knake et al. 1958; beam: 30°)'
+'pie del tangón desde la crujía (FL 470: al pie del palo)': 'boom heel from the centreline (FL 470: at the foot of the mast)'
+tijera de cada red (None → 70 m, INIDEP 043/2022): bridle of each net (None → 70 m, INIDEP 043/2022)
+tijera (None → 22 mm, INIDEP 043/2022): bridle (None → 22 mm, INIDEP 043/2022)
+muerto del gemelo (None → 1,5 portones, Seafish): twin rig clump (None → 1.5 otter boards, Seafish)
+muerto (None → trineo de Bullis y Floyd 1972): clump (None → sled of Bullis and Floyd 1972)
+varas por buque (None → 2, Eigaard et al. 2016): beams per vessel (None → 2, Eigaard et al. 2016)
+largo de cada vara (None → Eigaard et al. 2016 por kW): length of each beam (None → Eigaard et al. 2016 by kW)
+diámetro de la vara (None → C056/20, tabla 2): beam diameter (None → C056/20, table 2)
+área frontal de un patín (None → C056/20, tabla 2): frontal area of one shoe (None → C056/20, table 2)
+alto del patín (None → C056/20, tabla 2): shoe height (None → C056/20, table 2)
+cadenas espantadoras (None → sí, salvo crustáceos): tickler chains (None → yes, except crustaceans)
+vara y patines en aire (None → sin rozamiento): beam and shoes in air (None → no friction)

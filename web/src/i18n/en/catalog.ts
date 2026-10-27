@@ -9,6 +9,22 @@ export const catalog: Messages['catalog'] = {
   rig: {
     otter: 'Otter boards',
     pair: 'Pair',
+    outrigger: 'Outrigger (booms)',
+    twin: 'Twin',
+    beam: 'Beam trawl',
+  },
+  rigSelect: {
+    label: 'Rig',
+    fromNet: (rig: string) => `The net's own (${rig})`,
+    help: {
+      otter: 'One net with its pair of otter boards.',
+      pair: 'One net towed by two vessels, without otter boards.',
+      outrigger:
+        'Two identical nets, one from each boom, each with its pair of otter boards and its warp (shrimp fleet).',
+      twin: 'Two nets side by side: otter boards outside and a centre clump; two warps.',
+      beam: 'The beam sets the horizontal opening; no otter boards. One or two beams from the booms.',
+    } as Record<string, string>,
+    params: 'Boom length, bridle, clump and beam: in “Advanced parameters”.',
   },
   kind: {
     excel: 'Excel workbook',

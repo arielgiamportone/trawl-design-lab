@@ -5,6 +5,7 @@ import { toDisplay, unitLabel } from '../../lib/units';
 import { hpLabel, hpMatches, isDraft, RIG_LABEL } from '../../lib/catalog';
 import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
+import { RigSelect } from '../RigSelect';
 import { ChoiceCards } from './ChoiceCards';
 
 export function StepNet() {
@@ -112,6 +113,7 @@ export function StepNet() {
           ))}
         </select>
       </div>
+      <RigSelect />
     </>
   );
 }

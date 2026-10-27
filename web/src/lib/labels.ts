@@ -70,6 +70,15 @@ export const SUMMARY_UNITS: Record<string, string> = {
   warp_stretch_m: 'm',
   warp_safety_factor: '',
   max_speed_kn: 'kn',
+  rig: '',
+  n_nets: 'u',
+  net_spread_m: 'm',
+  door_spread_total_m: 'm',
+  swept_width_m: 'm',
+  beam_length_m: 'm',
+  boom_tip_offset_m: 'm',
+  nets_gap_m: 'm',
+  clump_weight_kg: 'kg',
 };
 
 /** Etiqueta (idioma activo) y unidad métrica de cada clave fija del resumen. */
@@ -90,6 +99,8 @@ export function label(key: string): readonly [string, string] {
   if (name !== undefined) return [name, SUMMARY_UNITS[key] ?? ''];
   if (key.startsWith('rn_std_')) return [L.rnStd(speedOf(key.slice(7))), 'kgf'];
   if (key.startsWith('rob_')) return [L.rob(speedOf(key.slice(4))), 'kgf'];
+  if (key.startsWith('net_total_')) return [L.netTotal(speedOf(key.slice(10))), 'kgf'];
+  if (key.startsWith('total_drag_')) return [L.totalDrag(speedOf(key.slice(11))), 'kgf'];
   return [key, ''];
 }
 

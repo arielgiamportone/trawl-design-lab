@@ -8,6 +8,23 @@ export const catalog = {
   rig: {
     otter: 'Portones',
     pair: 'Pareja',
+    outrigger: 'Tangones',
+    twin: 'Gemelo',
+    beam: 'Vara',
+  },
+  /** Selector de aparejo del caso (Fase 19.5). */
+  rigSelect: {
+    label: 'Aparejo',
+    fromNet: (rig: string) => `El de la red (${rig})`,
+    help: {
+      otter: 'Una red con su par de portones.',
+      pair: 'Una red remolcada por dos buques, sin portones.',
+      outrigger:
+        'Dos redes iguales, una desde cada tangón, cada una con su par de portones y su cable (flota langostinera).',
+      twin: 'Dos redes lado a lado: portones afuera y un muerto central; dos cables.',
+      beam: 'La vara fija la abertura horizontal; sin portones. Una o dos varas desde los tangones.',
+    } as Record<string, string>,
+    params: 'Largo del tangón, tijera, muerto y vara: en «Parámetros avanzados».',
   },
   kind: {
     excel: 'Libro Excel',

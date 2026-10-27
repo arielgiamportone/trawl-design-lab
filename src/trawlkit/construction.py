@@ -764,7 +764,8 @@ def rope_cuts(result: DesignResult, dims: NetDimensions, eye_m: float) -> tuple[
                 2,
             )
         )
-    if result.case.rig != "pair" and (result.case.net.rig or "otter") != "pair":
+    # Sin bridas ni patentes en la pareja y en la vara (Fase 19.5: las puntas de ala van a la vara).
+    if result.case.rig_kind not in ("pair", "beam"):
         items += [
             (
                 "bridle_upper",

@@ -96,7 +96,8 @@ the parameters. There are four steps:
 2. **Net**: the net, whether it is compared with another, and the otter boards. The nets suited
    to the power of the chosen vessel are offered (the A-3 and those of the FAO catalogue whose
    trial range, ±25 %, includes it); “See all” removes the filter. Drafts of the catalogue do not
-   appear.
+   appear. The **Rig** selector follows the net's rig by default and switches to otter boards,
+   pair, outrigger, twin or beam ({doc}`26_aparejos_dobles_y_vara`).
 3. **Operation**: the planned towing speed (slider) and the depth.
 4. **Result**: a diagnosis with traffic lights. It says whether the power is enough at that speed
    (available pull against the demand of net, otter boards and warps, interpolated to the chosen
@@ -141,7 +142,14 @@ switch is in the header and the browser remembers the choice.
   sequential blue scale up to the 95th percentile. The headrope and footrope, the bridles and
   sweeps, the floats and the seabed are shown. It is rotated with the mouse or a finger, there are
   perspective, plan, profile and front views, and a PNG can be downloaded. Without WebGL the SVG
-  projections remain.
+  projections remain. With outrigger, twin or beam rigs one net is simulated and the view repeats
+  it on each side (behind each boom, on each side of the clump or one per beam); the simulation
+  receives the rig parameters of the case.
+- **Rig** (case panel and guided mode; Phase 19.5): the net's own by default; with outrigger, twin
+  or beam rigs the summary adds the nets of the rig, the total swept width and the drag of the
+  whole gear, and the bill of materials counts the nets, otter boards, bridles, clump or beams.
+  The boom length, bridle, clump and beam are edited in "Advanced parameters", in the units of the
+  chosen system.
 
 ## Progressive haul: catch, seabed and coupled otter boards
 
@@ -232,8 +240,8 @@ The fifth view of “Simulation”, **“Uncertainty and calibration”**
 The **“FAO catalogue”** tab of Expert mode ({doc}`33_catalogo_fao`) lists the nets digitized from
 FAO documents:
 
-- **Filters**: text, family (bottom, pelagic), rigging (otter boards, pair), source and vessel
-  power. Drafts stay hidden except with “Show drafts”.
+- **Filters**: text, family (bottom, pelagic), rigging (otter boards, pair, outrigger, twin,
+  beam), source and vessel power. Drafts stay hidden except with “Show drafts”.
 - **Badges**: pair, 4 panels, pelagic, draft and validator warnings or errors.
 - **Net sheet**: the source with a link to the document and the provenance bar (transcribed,
   derived, assumed, Excel). It also shows the validator's warnings and the value-by-value

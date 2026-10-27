@@ -383,7 +383,7 @@ def beam_drag(
     metier: str,
     twine_area_m2: float | None = None,
 ) -> BeamDrag:
-    """Resistencia de los componentes de una vara a las velocidades ``v_ms`` (ver :class:`BeamDrag`)."""
+    """Resistencia de los componentes de una vara a ``v_ms`` (ver :class:`BeamDrag`)."""
     data = BEAM_CLASSES[cls]
     v = np.asarray(v_ms, dtype=float)
     beam = drag_kgf(CD_BEAM, diameter_m * length_m, v)
@@ -407,9 +407,7 @@ def beam_drag(
         ground_gear_kgf=ground,
         ticklers_kgf=tick,
         total_kgf=beam + shoes + ground + tick,
-        net_c056_kgf=np.zeros(0)
-        if twine_area_m2 is None
-        else net_drag_c056_kgf(twine_area_m2, v),
+        net_c056_kgf=np.zeros(0) if twine_area_m2 is None else net_drag_c056_kgf(twine_area_m2, v),
     )
 
 
@@ -424,7 +422,7 @@ class DepesteleCheck:
     measured: dict[str, float]
 
     def ratio(self, key: str) -> float:
-        """Cociente modelo/medición de un componente (``netting``, ``chains``, ``shoes``, ``total``)."""
+        """Cociente modelo/medición (``netting``, ``chains``, ``shoes`` o ``total``)."""
         ref = {
             "netting": self.measured["lower_netting_n"],
             "chains": self.measured["chains_n"],

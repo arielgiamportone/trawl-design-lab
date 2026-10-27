@@ -28,6 +28,9 @@ material y Rtex del hilo, cortes (`AB`, `1N2B`…) y largos de relingas en metro
 | Pajot y Crockett (1981), *Trials of two-boat bottom trawling in Bangladesh*, BOBP/WP/13 | `bobpwp13` | https://www.fao.org/4/ad953e/ad953e00.pdf | Ap. 3: pareja, 464 × 80 mm; ap. 4: pareja, 368 × 120 mm | Aparejo de pareja |
 | Pajot, Crockett, Pandurangan y Ramamoorthy (1982), *Further trials of mechanised trawling for food fish in Tamil Nadu*, BOBP/WP/20 | `bobpwp20` | https://www.fao.org/4/ad960e/ad960e00.pdf | Ap. 1: pescado y camarón, un barco; ap. 2: gran abertura, un barco; ap. 3: gran abertura, pareja | Portones y aparejo de los aps. 1 y 2 |
 | Schärfe (1983), *Midwater trawling trials for lantern fish… Gulf of Oman*, FI:DP/GLO/82/001 | `scharfe1983` | https://www.fao.org/4/x6567e/x6567e00.htm | Aps. 5 a 8: arrastres pelágicos de 4 paneles (krill 1420 × 200 mm; Harstad 1436 × 200 mm; krill con boca de 800 y 1600 mm) | Aparejo |
+| Roth y Rubio (2022), *Evaluación de la red presentada por la empresa Pesquera Deseado SAU*, INIDEP ITO 043/22 | `roth2022ito043` | https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf | Figs. 4 y 5: redes tangoneras de langostino exportadas de DynamiT (dorso, vientre y costado; Fase 19.5) | Aparejo de tangones (tijera de 70 m, portones de 540 kg) y resultados de DynamiT |
+| SEAFDEC (2016), *The Catalogue Bottom Trawl Net Designs of Thailand*, TD/RES/141 | `seafdec2016thai` | https://repository.seafdec.or.th/handle/20.500.12067/1826 | 102 planos vectoriales; plano 03: arrastre de vara para camarón (Fase 19.5) | Sin vara, patines ni lastre |
+| Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: red gemela 380 × 70 mm (escaneo; no digitalizada) | Trineo central de 125 kg y bridas |
 
 Documentos revisados que **no** traen planos de red completos:
 - BOBP/WP/21 (cubierta y maquinaria);
@@ -69,6 +72,10 @@ capítulo {doc}`33_catalogo_fao`):
 | `scharfe_krill_front800` | Schärfe ap. 7 | publicada | dorso y vientre con alas distintas (mitades del plano) |
 | `scharfe_krill_front1600` | Schärfe ap. 8 | borrador | alto del ala del vientre y Rtex del ala |
 | pelágica de 4 paneles | Workbook, AH827E133 | no digitalizada | figura de 450 px: el frente de 800 mm no se lee |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | borrador | empalme cuerpo de Dyneema–copo (20 %); rótulos de corte 3N4B, 19N7B y 5N1B que no dan el cambio de ancho; costados repartidos por largo; tramo delantero del costado no modelado; buque y portón supuestos |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | borrador | empalme cuerpo–copo (20 %); corte del dorso; rótulo del ala sobreimpreso; costados repartidos por largo |
+| `seafdec_03_beam_shrimp` | SEAFDEC 2016 plano 03 | borrador | copo de 32 mm unido 1/1 al cuerpo de 51 mm (37 %); U1 supuesto; Rtex del denier |
+| gemela 380 × 70 mm | Seafish IR 1310 fig. 5 | no digitalizada | escaneo con notación británica (filas de media malla, cortes S/SB/SK, conteos de medio paño) |
 
 
 ## Componentes del arte (Fase 13)

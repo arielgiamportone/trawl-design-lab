@@ -162,6 +162,8 @@ design:
   vessel_length_m: 17.0
   beam_count: 2
 notes:
+- 'BORRADOR: el plano une 1/1 el cuerpo de 50 mallas de 51 mm al copo de 50 mallas de 32 mm (37 % de diferencia
+  de largo estirado) y no da U1, la vara ni los patines.'
 - 'El hilo va en denier: 380d/15 en alas, cielo y primer cuerpo; 380d/12 en el cuerpo trasero y el copo.'
 - 'El plano no da la vara, los patines, las cadenas ni el lastre: el caso usa los valores por defecto
   del motor para la vara (Eigaard et al. 2016 y C056/20).'

@@ -41,6 +41,16 @@ SUMMARY_LABELS: dict[str, tuple[str, str]] = {
     "warp_tension_kgf": (N_("Tensión de cada cable a la velocidad de diseño"), "kgf"),
     "warp_stretch_m": (N_("Estiramiento elástico del cable"), "m"),
     "warp_safety_factor": (N_("Coeficiente de seguridad del cable"), ""),
+    # Fase 19.5: tangones, gemelo y vara.
+    "rig": (N_("Aparejo"), ""),
+    "n_nets": (N_("Redes del aparejo"), "u"),
+    "net_spread_m": (N_("Separación de los puntos de remolque de cada red"), "m"),
+    "door_spread_total_m": (N_("Separación entre portones exteriores"), "m"),
+    "swept_width_m": (N_("Ancho barrido total"), "m"),
+    "beam_length_m": (N_("Largo de cada vara"), "m"),
+    "boom_tip_offset_m": (N_("Punta del tangón desde la crujía"), "m"),
+    "nets_gap_m": (N_("Huelgo entre las redes"), "m"),
+    "clump_weight_kg": (N_("Peso del muerto central"), "kg"),
 }
 
 
@@ -53,6 +63,12 @@ def label(key: str) -> tuple[str, str]:
         return (t("RN estándar a {speed}", speed=key[7:-4].replace("_", ".")), "kgf")
     if key.startswith("rob_"):
         return (t("ROB a {speed}", speed=key[4:-4].replace("_", ".")), "kgf")
+    if key.startswith("net_total_"):
+        speed = key[10:-4].replace("_", ".")
+        return (t("Una red con su aparejo a {speed}", speed=speed), "kgf")
+    if key.startswith("total_drag_"):
+        speed = key[11:-4].replace("_", ".")
+        return (t("Resistencia de todo el arte a {speed}", speed=speed), "kgf")
     return (key, "")
 
 

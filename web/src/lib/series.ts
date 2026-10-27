@@ -108,17 +108,26 @@ export interface CompositionRow {
 /** Composición de la resistencia total a la velocidad de índice ``i``. */
 export function composition(d: DesignData, i: number): CompositionRow[] {
   const r = d.result;
-  const floats = at(r.floats.drag_kgf, i) ?? 0;
-  const warps = at(r.warps.drag_kgf, i) ?? 0;
+  const mr = r.multirig;
+  // Tangones, gemelo o vara (Fase 19.5): todas las redes; «portones» suma el muerto o las varas.
+  const n = mr?.n_nets ?? 1;
+  const floats = mr?.kind === 'beam' ? 0 : n * (at(r.floats.drag_kgf, i) ?? 0);
+  const warps = mr
+    ? (at(mr.warp_drag_kgf, i) ?? 0) + (mr.bridle_drag_kgf ? (at(mr.bridle_drag_kgf, i) ?? 0) : 0)
+    : (at(r.warps.drag_kgf, i) ?? 0);
   // Par de portones (el motor expone la resistencia de ambos en rig_drag_kgf).
-  const doors = at(r.doors.rig_drag_kgf, i) ?? 0;
+  const doors = mr
+    ? (at(mr.doors_drag_kgf, i) ?? 0) +
+      (mr.clump_drag_kgf ? (at(mr.clump_drag_kgf, i) ?? 0) : 0) +
+      (mr.beam ? n * (at(mr.beam.total_kgf, i) ?? 0) : 0)
+    : (at(r.doors.rig_drag_kgf, i) ?? 0);
   const mk = (variant: string, rn: number): CompositionRow => ({
     variant,
-    rn,
+    rn: n * rn,
     floats,
     warps,
     doors,
-    total: rn + floats + warps + doors,
+    total: n * rn + floats + warps + doors,
   });
   const V = msg().labels.variantsTitle;
   const rows = [mk(V.std, at(r.drag.rn.std, i) ?? 0)];

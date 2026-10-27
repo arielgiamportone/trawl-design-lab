@@ -32,7 +32,13 @@ from trawlkit.topology import has_sides
 IDS = sorted(p.stem for p in NETS_DIR.glob("*.yaml"))
 SPECS = {i: load_net(i) for i in IDS}
 FAMILY = {"bottom": "bottom", "semi_pelagic": "semi-pelagic", "pelagic": "pelagic"}
-RIG = {"otter": "otter boards", "pair": "pair"}
+RIG = {
+    "otter": "otter boards",
+    "pair": "pair",
+    "outrigger": "outrigger",
+    "twin": "twin",
+    "beam": "beam",
+}
 
 
 def num(x: float, nd: int = 1) -> str:
@@ -65,7 +71,7 @@ It serves three purposes:
 - **Designing from a proven net**: each net comes with the vessel, the otter board and the depth it
   was trialled with, and the app computes it with that case.
 - **Testing the engine beyond the A-3**: pair trawls, 4-panel and pelagic nets, from 20 to 113 m
-  of headrope.
+  of headrope, and (Phase 19.5) outrigger and beam trawl nets of 7 to 35 m.
 - **Validating against measurements**: Schärfe (1983) measured the opening of two of his nets at
   sea.
 
@@ -77,6 +83,11 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
   trawls for one and two boats, Bay of Bengal, 1980–82), the *Fisherman's Workbook*
   {cite}`prado1990` and Schärfe's report {cite}`scharfe1983` (4-panel pelagic nets of the R/V
   *Dr. Fridtjof Nansen*). The classic FAO catalogues of designs are not online.
+- **Phase 19.5**: the INIDEP outrigger shrimp nets (ITO 043/2022, figs. 4 and 5)
+  {cite}`roth2022ito043` and a shrimp beam trawl from the SEAFDEC Thai catalogue (plan 03)
+  {cite}`seafdec2016thai`, with their rigs (outrigger and beam; {doc}`26_aparejos_dobles_y_vara`).
+  All three stay as drafts: their codends do not join the body in stretched length, as the plans
+  draw them.
 - **Reading**: each figure was rasterized at 300 dpi (or the image embedded in the PDF was taken)
   and read number by number. No figure is stored in the repository (© FAO): only the data.
 - **Provenance per value**: each number is *transcribed* (read from the figure), *derived*
@@ -258,7 +269,9 @@ the nets ready for a 4-sided simulator with real bridles and front weights, as a
 | Fridman door spread | `door_spread_rule` | `"excel"` for the workbook's rule |
 | 4-panel net = equivalent 2 panels | `trawlkit.topology` | — (4-sided simulator: future) |
 | Generic vessel scaled from the A-3 | `catalog.generic_vessel` | Choose a vessel in the app |
-| Side wings not modelled | Schärfe nets | — |
+| Side wings not modelled | Schärfe and INIDEP nets | — |
+| Side panels shared out by stretched length | INIDEP nets | `trawlkit.topology` |
+| Vessel and door of the outrigger net | `design.vessel_id`, `design.door_id` | Choose a vessel or a door in the app |
 
 ## Using the catalogue
 

@@ -17,6 +17,17 @@ export interface SimGeometry {
   float_nodes: number[];
   ah_m: number;
   av_m: number;
+  /**
+   * Tangones, gemelo o vara (Fase 19.5): se simula una red y la vista la replica con estos
+   * desplazamientos laterales [m] (``y`` de la simulación).
+   */
+  rig?: { kind: string; n_nets: number; offsets_m: number[] };
+}
+
+/** Desplazamientos laterales de las copias de la red (``[0]`` = una sola red). */
+export function rigOffsets(g: SimGeometry): number[] {
+  const o = g.rig?.offsets_m;
+  return o && o.length > 0 ? o : [0];
 }
 
 /** Rampa secuencial azul (claro → oscuro) de la paleta de referencia. */
@@ -97,38 +108,53 @@ export function buildBuffers(
   const touching = mode === 'contact' ? contactTriangles(g) : null;
   const restColor = rampColor(0, ramp);
   const hitColor = rampColor(0, [contactColor, contactColor]);
-  const positions = new Float32Array(g.triangles.length * 9);
-  const colors = new Float32Array(g.triangles.length * 9);
-  g.triangles.forEach((tri, k) => {
-    const c = touching
-      ? touching[k]
-        ? hitColor
-        : restColor
-      : rampColor((tensions[k] ?? 0) / range[1], ramp);
-    tri.forEach((n, j) => {
-      const p = toThree(g.nodes[n] ?? [0, 0, 0]);
-      positions.set(p, k * 9 + j * 3);
-      colors.set(c, k * 9 + j * 3);
+  // Tangones, gemelo o vara: una copia de la red por desplazamiento lateral.
+  const offsets = rigOffsets(g);
+  const nt = g.triangles.length;
+  const at = (n: number, dy: number): [number, number, number] => {
+    const p = g.nodes[n] ?? [0, 0, 0];
+    return toThree([p[0], p[1] + dy, p[2]]);
+  };
+  const positions = new Float32Array(nt * 9 * offsets.length);
+  const colors = new Float32Array(nt * 9 * offsets.length);
+  offsets.forEach((dy, copy) => {
+    g.triangles.forEach((tri, k) => {
+      const c = touching
+        ? touching[k]
+          ? hitColor
+          : restColor
+        : rampColor((tensions[k] ?? 0) / range[1], ramp);
+      tri.forEach((n, j) => {
+        const i = (copy * nt + k) * 9 + j * 3;
+        positions.set(at(n, dy), i);
+        colors.set(c, i);
+      });
     });
   });
   const ropes: number[] = [];
   const rigging: number[] = [];
-  g.bars.forEach(([a, b], k) => {
-    const kind = g.bar_kind[k] ?? '';
-    const target = kind === 'headrope' || kind === 'footrope' ? ropes : rigging;
-    target.push(...toThree(g.nodes[a] ?? [0, 0, 0]), ...toThree(g.nodes[b] ?? [0, 0, 0]));
-  });
-  const floats = new Float32Array(g.float_nodes.flatMap((n) => toThree(g.nodes[n] ?? [0, 0, 0])));
+  const floatPts: number[] = [];
+  for (const dy of offsets) {
+    g.bars.forEach(([a, b], k) => {
+      const kind = g.bar_kind[k] ?? '';
+      const target = kind === 'headrope' || kind === 'footrope' ? ropes : rigging;
+      target.push(...at(a, dy), ...at(b, dy));
+    });
+    for (const n of g.float_nodes) floatPts.push(...at(n, dy));
+  }
+  const floats = new Float32Array(floatPts);
 
   // El encuadre sigue al paño (no a las patentes, que llegan hasta los portones).
   const netNodes = new Set(g.triangles.flat());
   const min = [Infinity, Infinity, Infinity];
   const max = [-Infinity, -Infinity, -Infinity];
-  for (const i of netNodes) {
-    const p = toThree(g.nodes[i] ?? [0, 0, 0]);
-    for (let i = 0; i < 3; i++) {
-      min[i] = Math.min(min[i] as number, p[i] as number);
-      max[i] = Math.max(max[i] as number, p[i] as number);
+  for (const dy of offsets) {
+    for (const n of netNodes) {
+      const p = at(n, dy);
+      for (let i = 0; i < 3; i++) {
+        min[i] = Math.min(min[i] as number, p[i] as number);
+        max[i] = Math.max(max[i] as number, p[i] as number);
+      }
     }
   }
   const center = [0, 1, 2].map((i) => ((min[i] as number) + (max[i] as number)) / 2) as [

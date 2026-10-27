@@ -13,6 +13,7 @@ import { isSimGeometry } from '../lib/sim3d';
 import {
   compareRows,
   MAX_SIM_SPEEDS,
+  rigParams,
   SIM_RESOLUTION,
   SIM_SECONDS_PER_SPEED,
   SIM_SPEEDS,
@@ -219,6 +220,8 @@ function SpeedSweep() {
       door_spread_m: null,
       include_geometry: view3d,
     };
+    const rp = rigParams(committed.params);
+    if (rp) req.params = rp;
     const key = JSON.stringify(req);
     remember(REQ_KEY, key);
     setStartedAt(Date.now());

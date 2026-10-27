@@ -12,6 +12,39 @@ import {
   type FmtUOptions,
 } from './units';
 
+/** Parámetros del caso que definen el aparejo (Fase 19.5): van también a ``POST /simulate``. */
+export const RIG_PARAMS = [
+  'rig',
+  'pair_wing_spread_m',
+  'boom_length_m',
+  'boom_angle_deg',
+  'boom_heel_offset_m',
+  'outrigger_bridle_m',
+  'outrigger_bridle_diameter_mm',
+  'clump_weight_kg',
+  'clump_frontal_area_m2',
+  'beam_count',
+  'beam_length_m',
+  'beam_diameter_m',
+  'beam_shoe_area_m2',
+  'beam_shoe_height_m',
+  'beam_ticklers',
+  'beam_weight_kg',
+] as const;
+
+/**
+ * Parámetros del aparejo del caso para la simulación (``undefined`` si el caso no cambia el
+ * aparejo de la red: el pedido queda igual que antes).
+ */
+export function rigParams(
+  params: Record<string, unknown> | null | undefined,
+): Record<string, unknown> | undefined {
+  if (!params) return undefined;
+  const out: Record<string, unknown> = {};
+  for (const k of RIG_PARAMS) if (params[k] !== undefined) out[k] = params[k];
+  return Object.keys(out).length ? out : undefined;
+}
+
 /** Velocidades ofrecidas [kn] (las de la tabla de DynamiT). */
 export const SIM_SPEEDS = [1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
 export const MAX_SIM_SPEEDS = 3;

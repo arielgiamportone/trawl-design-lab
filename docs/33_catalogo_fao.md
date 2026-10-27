@@ -33,7 +33,13 @@ from trawlkit.topology import has_sides
 IDS = sorted(p.stem for p in NETS_DIR.glob("*.yaml"))
 SPECS = {i: load_net(i) for i in IDS}
 FAMILY = {"bottom": "fondo", "semi_pelagic": "semipelágica", "pelagic": "pelágica"}
-RIG = {"otter": "portones", "pair": "pareja"}
+RIG = {
+    "otter": "portones",
+    "pair": "pareja",
+    "outrigger": "tangones",
+    "twin": "gemelo",
+    "beam": "vara",
+}
 
 
 def num(x: float, nd: int = 1) -> str:
@@ -66,7 +72,7 @@ Sirve para tres cosas:
 - **Diseñar a partir de una red probada**: cada red trae el buque, el portón y la profundidad
   para los que se ensayó, y la app la calcula con ese caso.
 - **Probar el motor fuera de la A-3**: redes de pareja, de 4 paneles y pelágicas, de 20 a 113 m
-  de relinga.
+  de relinga, y (Fase 19.5) redes de tangones y de vara de 7 a 35 m.
 - **Validar contra mediciones**: Schärfe (1983) midió la abertura de dos de sus redes en el mar.
 
 ## Fuentes y método
@@ -77,6 +83,11 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
   gran abertura de uno y dos barcos, golfo de Bengala, 1980–82), el *Fisherman's Workbook*
   {cite}`prado1990` y el informe de Schärfe {cite}`scharfe1983` (redes pelágicas de 4 paneles del
   B/I *Dr. Fridtjof Nansen*). Los catálogos clásicos de diseños de la FAO no están en línea.
+- **Fase 19.5**: las redes tangoneras de langostino del INIDEP (ITO 043/2022, figs. 4 y 5)
+  {cite}`roth2022ito043` y una red de vara para camarón del catálogo tailandés de la SEAFDEC
+  (plano 03) {cite}`seafdec2016thai`, con su aparejo (tangones y vara; {doc}`26_aparejos_dobles_y_vara`).
+  Las tres quedan como borrador: sus copos no empalman en largo estirado con el cuerpo, como
+  dibujan los planos.
 - **Lectura**: cada figura se rasterizó a 300 ppp (o se tomó la imagen embebida del PDF) y se
   leyó número por número. Ninguna figura se guarda en el repositorio (© FAO): sólo los datos.
 - **Procedencia por valor**: cada número es *transcripto* (leído en la figura), *derivado*
@@ -256,7 +267,9 @@ listas para un simulador de 4 caras con malletas y pesos delanteros reales, como
 | Separación de portones de Fridman | `door_spread_rule` | `"excel"` para la regla del libro |
 | Red de 4 paneles = 2 paneles equivalentes | `trawlkit.topology` | — (simulador de 4 caras: futuro) |
 | Buque genérico escalado de la A-3 | `catalog.generic_vessel` | Elegir un buque en la app |
-| Alas de los costados no modeladas | redes de Schärfe | — |
+| Alas de los costados no modeladas | redes de Schärfe y del INIDEP | — |
+| Costados repartidos por largo estirado | redes del INIDEP | `trawlkit.topology` |
+| Buque y portón de la red tangonera | `design.vessel_id`, `design.door_id` | Elegir un buque o un portón en la app |
 
 ## Usar el catálogo
 

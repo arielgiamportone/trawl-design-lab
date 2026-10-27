@@ -28,7 +28,7 @@ def test_catalogue_net_is_consistent_and_sourced(net_id: str) -> None:
     spec = load_net(net_id)
     assert spec.id == net_id
     assert spec.family in ("bottom", "semi_pelagic", "pelagic")
-    assert spec.rig in ("otter", "pair")
+    assert spec.rig in ("otter", "pair", "outrigger", "twin", "beam")
     assert spec.sources and spec.sources[0].url
     if spec.status == "published":
         assert errors(spec) == []

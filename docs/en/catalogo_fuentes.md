@@ -28,6 +28,9 @@ and Rtex of the twine, cuts (`AB`, `1N2B`…) and rope lengths in metres.
 | Pajot and Crockett (1981), *Trials of two-boat bottom trawling in Bangladesh*, BOBP/WP/13 | `bobpwp13` | https://www.fao.org/4/ad953e/ad953e00.pdf | App. 3: pair, 464 × 80 mm; app. 4: pair, 368 × 120 mm | Pair rigging |
 | Pajot, Crockett, Pandurangan and Ramamoorthy (1982), *Further trials of mechanised trawling for food fish in Tamil Nadu*, BOBP/WP/20 | `bobpwp20` | https://www.fao.org/4/ad960e/ad960e00.pdf | App. 1: fish and shrimp, one boat; app. 2: high-opening, one boat; app. 3: high-opening, pair | Otter boards and rigging of apps. 1 and 2 |
 | Schärfe (1983), *Midwater trawling trials for lantern fish… Gulf of Oman*, FI:DP/GLO/82/001 | `scharfe1983` | https://www.fao.org/4/x6567e/x6567e00.htm | Apps. 5 to 8: 4-panel pelagic trawls (krill 1420 × 200 mm; Harstad 1436 × 200 mm; krill with 800 and 1600 mm front) | Rigging |
+| Roth and Rubio (2022), *Evaluación de la red presentada por la empresa Pesquera Deseado SAU*, INIDEP ITO 043/22 | `roth2022ito043` | https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf | Figs. 4 and 5: shrimp outrigger nets exported from DynamiT (top, bottom and side; Phase 19.5) | Outrigger rigging (70 m bridle, 540 kg doors) and DynamiT results |
+| SEAFDEC (2016), *The Catalogue Bottom Trawl Net Designs of Thailand*, TD/RES/141 | `seafdec2016thai` | https://repository.seafdec.or.th/handle/20.500.12067/1826 | 102 vector plans; plan 03: shrimp beam trawl (Phase 19.5) | No beam, shoes or ballast |
+| Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: 380 × 70 mm twin net (scan; not digitized) | 125 kg centre sledge and bridles |
 
 Documents reviewed that do **not** carry complete net plans:
 - BOBP/WP/21 (deck and machinery);
@@ -69,6 +72,10 @@ chapter {doc}`33_catalogo_fao`):
 | `scharfe_krill_front800` | Schärfe app. 7 | published | upper and lower panels with different wings (halves of the plan) |
 | `scharfe_krill_front1600` | Schärfe app. 8 | draft | depth of the lower wing and Rtex of the wing |
 | 4-panel pelagic | Workbook, AH827E133 | not digitized | 450 px figure: the 800 mm front cannot be read |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | draft | Dyneema body–codend seam (20 %); cut labels 3N4B, 19N7B and 5N1B that do not give the width change; sides shared out by length; front part of the side not modelled; vessel and door assumed |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | draft | body–codend seam (20 %); top panel cut; overprinted wing label; sides shared out by length |
+| `seafdec_03_beam_shrimp` | SEAFDEC 2016 plan 03 | draft | 32 mm codend joined 1:1 to the 51 mm body (37 %); U1 assumed; Rtex from denier |
+| 380 × 70 mm twin | Seafish IR 1310 fig. 5 | not digitized | scan in British notation (rows of half meshes, S/SB/SK cuts, half-panel counts) |
 
 
 ## Gear components (Phase 13)

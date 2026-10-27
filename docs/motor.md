@@ -31,6 +31,7 @@ Alrededor de ese núcleo, que reproduce el libro, crecieron módulos que el Exce
 | `trawlkit.sim` | Forma de equilibrio de la red (elementos de paño, Morison, relajación FIRE), escenario de lance, estado de malla, incertidumbre y calibración | {doc}`21_simulacion` a {doc}`25_incertidumbre_calibracion` |
 | `trawlkit.selectivity`, `trawlkit.sensors` | Tallas retenidas por especie según la malla deformada; lectura de registros de sensores | {doc}`24_malla_selectividad`, {doc}`25_incertidumbre_calibracion` |
 | `trawlkit.catalog`, `.topology`, `.netcheck`, `.provenance` | Caso de diseño de cada red del catálogo FAO, topologías distintas de la A-3, validador de consistencia y procedencia valor por valor | {doc}`33_catalogo_fao` |
+| `trawlkit.rigging.multirig`, `trawlkit.drawing.rig` | Tangones, gemelo y vara: etapa `RigStage` (redes, portones, cables, tijera, muerto, vara), ancho barrido y esquema del aparejo | {doc}`26_aparejos_dobles_y_vara` |
 | `trawlkit.components`, `trawlkit.cost` | Catálogo de componentes con equivalentes genéricos; lista de materiales y costo orientativo | {doc}`34_componentes` |
 | `trawlkit.construction` | Guía de construcción: hoja de corte, paño a comprar, uniones con tomas, montaje en relingas, boyas, lastre y cortes de cabos | {doc}`36_construccion` |
 | `trawlkit.economics` | Economía de la operación: gasoil, captura, costos por rubro, margen y precio de equilibrio por velocidad; comparación de redes con ahorro y repago | {doc}`37_economia` |
@@ -69,6 +70,8 @@ ballast       Flot!D153:I245            Koyama, Prado, Fridman (F1' + F2' − W 
     │
 warps         Cables de Remolque        ángulos δ1-δ3, Ø (EHP, Águila), CD, Rw, R total (+ROB en
     │                                   modo corregido), peso, cargas ×4, selección del catálogo
+multirig                                tangones, gemelo o vara (Fase 19.5): todas las redes, portones,
+    │                                   cables, tijera, muerto o vara; cables por lo que remolcan
 performance                             FT (PF y PV+T) frente a R(v) → velocidad máxima remolcable
 ```
 

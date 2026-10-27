@@ -93,7 +93,9 @@ todos los parámetros. Son cuatro pasos:
 1. **Buque**: el buque del catálogo (potencia, eslora) y el tipo de hélice.
 2. **Red**: la red, si se compara con otra y los portones. Se ofrecen las redes adecuadas a la
    potencia del buque elegido (la A-3 y las del catálogo FAO cuyo rango de ensayo, ±25 %, la
-   incluye); «Ver todas» quita el filtro. Los borradores del catálogo no aparecen.
+   incluye); «Ver todas» quita el filtro. Los borradores del catálogo no aparecen. El selector
+   **Aparejo** sigue por defecto el de la red y permite pasar a portones, pareja, tangones,
+   gemelo o vara ({doc}`26_aparejos_dobles_y_vara`).
 3. **Operación**: la velocidad de arrastre prevista (control deslizante) y la profundidad.
 4. **Resultado**: un diagnóstico con semáforos. Dice si alcanza la potencia a esa velocidad
    (tiro disponible frente a la demanda de red, portones y cables, interpolados a la velocidad
@@ -138,7 +140,14 @@ conmutador «Guiado / Experto» está en la cabecera y el navegador recuerda la 
   que se descarga sólo al abrirla). El paño se colorea por la tensión del hilo con una escala
   secuencial azul hasta el percentil 95. Se ven la lima y el burlón, las bridas y patentes, las
   boyas y el fondo. Se gira con el mouse o con el dedo, hay vistas de perspectiva, planta, perfil y
-  frente, y se puede descargar un PNG. Sin WebGL quedan las proyecciones SVG.
+  frente, y se puede descargar un PNG. Sin WebGL quedan las proyecciones SVG. Con tangones,
+  gemelo o vara se simula una red y la vista la repite a cada lado (detrás de cada tangón, a cada
+  lado del muerto o una por vara); la simulación recibe los parámetros del aparejo del caso.
+- **Aparejo** (panel del caso y modo guiado; Fase 19.5): por defecto el de la red; con tangones,
+  gemelo o vara el resumen agrega las redes del aparejo, el ancho barrido total y la resistencia de
+  todo el arte, y la lista de materiales cuenta las redes, los portones, las tijeras, el muerto o
+  las varas. El largo del tangón, la tijera, el muerto y la vara se editan en «Parámetros
+  avanzados», con las unidades del sistema elegido.
 
 ## Lance progresivo: captura, fondo y portones acoplados
 
@@ -227,7 +236,8 @@ La quinta vista de «Simulación», **«Incertidumbre y calibración»**
 La pestaña **«Catálogo FAO»** del modo experto ({doc}`33_catalogo_fao`) lista las redes
 digitalizadas de documentos de la FAO:
 
-- **Filtros**: texto, familia (fondo, pelágica), aparejo (portones, pareja), fuente y potencia
+- **Filtros**: texto, familia (fondo, pelágica), aparejo (portones, pareja, tangones, gemelo,
+  vara), fuente y potencia
   del buque. Los borradores quedan ocultos salvo con «Mostrar borradores».
 - **Insignias**: pareja, 4 paneles, pelágica, borrador y avisos o errores del validador.
 - **Ficha de la red**: la fuente con enlace al documento y la barra de procedencia (transcripto,

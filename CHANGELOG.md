@@ -13,6 +13,34 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Tangones, gemelo y vara (Fase 19.5)**: `rig` acepta `outrigger` (dos redes desde los tangones,
+  cada una con su par de portones y un cable con tijera), `twin` (dos redes, portones afuera y
+  muerto central) y `beam` (vara sin portones, una o dos). Nueva etapa `RigStage`
+  (`result.multirig`, `trawlkit.rigging.multirig`): suma redes, portones, cables, tijeras, muerto
+  y componentes de la vara (vara y patines por la ec. 1 y tren y cadenas por metro de la tabla 9 de
+  Rijnsdorp et al. 2020, WMR C056/20), el rozamiento con el fondo de todo el arte y el ancho
+  barrido (con tangones, de portón exterior a portón exterior con la punta del tangón a $L\cos\theta$
+  de la crujía); cada cable se dimensiona con lo que remolca. Valores por defecto sólo de fuentes:
+  tangón de 24 pies a 20° (Knake et al. 1958), tijera de 70 m de 22 mm (INIDEP ITO 043/2022),
+  muerto de 1,5 portones (Seafish, regla práctica) con el trineo de Bullis y Floyd (1972), dos
+  varas y su ancho por kW (Eigaard et al. 2016), vara, patines y cadenas por clase de buque
+  (C056/20); control del portón por pie de relinga de Watson et al. (1984) y de los límites de la
+  Res. CFP 7/2018 (portones y abertura vertical ≤ 1,5 m, eslora ≤ 40 m, ≤ 2000 hp) con tangones.
+  Nuevas claves del resumen (`n_nets`, `swept_width_m`, `door_spread_total_m`, `net_spread_m`,
+  `total_drag_*kn_kgf`, `net_total_*kn_kgf`…), lista de materiales con redes, portones, tijeras,
+  muerto, varas, patines y cadenas, esquema en planta del aparejo (`trawlkit.drawing.rig_plan_svg`,
+  también en la lámina técnica) y simulación de una red con sus puntos de remolque fijos (la vara
+  fija las puntas de ala en sus extremos) replicada en la vista 3D. Los portones y la pareja no
+  cambian. Redes nuevas del catálogo (borradores): las tangoneras de langostino del INIDEP
+  (ITO 043/2022, figs. 4 y 5) y la red de vara para camarón n.º 03 de la SEAFDEC (2016); las
+  redes de 4 paneles cuyos costados no coinciden estación por estación se reparten por largo
+  estirado (`trawlkit.topology`). `catalog_case` toma buque de la flota y portón del catálogo
+  (`design.vessel_id`, `design.door_id`) y los parámetros del aparejo de la red. API:
+  `POST /simulate` acepta `params`. App: selector de aparejo en el panel del caso y en el modo
+  guiado, filtro del catálogo por los aparejos nuevos, parámetros en unidades imperiales,
+  español e inglés. Capítulo nuevo 26 (`docs/26_aparejos_dobles_y_vara.md`) con un caso argentino (red del
+  INIDEP en el tangonero típico, frente a DynamiT), un caso gemelo y uno de vara contrastado con
+  Depestele et al. (2016).
 - **Portones en profundidad (Fase 19.3)**: biblioteca de polares medidas
   (`data/door_polars.yaml`, `trawlkit.rigging.polars`): las 26 hojas de datos del tanque de flujo
   de Seafish/IFREMER/DIFTA 1993 (`sfia1993`, verificadas contra la imagen de cada página) y las

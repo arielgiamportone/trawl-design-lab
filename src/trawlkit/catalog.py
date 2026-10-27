@@ -171,9 +171,7 @@ def catalog_case(
         vessel = generic_vessel(hp, None if length is None else float(length))
         if spec.vessel_hp is None:
             notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
-        rule = (
-            t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
-        )
+        rule = t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
         notes.append(
             t(
                 "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "

@@ -10,6 +10,9 @@ export type ProvenanceKind = 'excel' | 'transcribed' | 'derived' | 'assumed';
 /** Familias de red en el idioma activo (objeto vivo: se lee al usarlo). */
 export const FAMILY_LABEL: Record<string, string> = liveRecord(() => msg().catalog.family);
 
+/** Aparejos que calcula el motor (``trawlkit.rigging.multirig.RIGS``; Fase 19.5). */
+export const RIGS = ['otter', 'pair', 'outrigger', 'twin', 'beam'] as const;
+
 /** Aparejos en el idioma activo (lo importa también el asistente: ``wizard/StepNet``). */
 export const RIG_LABEL: Record<string, string> = liveRecord(() => msg().catalog.rig);
 

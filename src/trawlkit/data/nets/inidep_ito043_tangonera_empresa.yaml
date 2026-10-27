@@ -192,7 +192,7 @@ design:
   outrigger_bridle_m: 70.0
   outrigger_bridle_diameter_mm: 22.0
   speed_kn: 3.5
-measured:
+simulated:
 - speed_kn: 3.5
   vertical_opening_m: 1.5
   horizontal_opening_m: 14.0
@@ -200,6 +200,9 @@ measured:
   warp_tension_kgf: 3559.6
   note: 'resultados de la simulación DynamiT 2 del INIDEP (p. 6): modelo, no mediciones'
 notes:
+- 'BORRADOR: el plano une el cuerpo de 30 mallas de 160 mm del dorso a un copo de 100 mallas de 60 mm
+  (20 % de diferencia de largo estirado), el corte 1N4B del dorso no da el cambio de ancho del paño (236
+  → 30 en 132 filas) y el rótulo de corte del ala está sobreimpreso.'
 - 'Cabos del plano: A combinado 22 mm 11,00 m; B 3,75 m; G 6,00 m (lima 35,5 m); M cable mixto 24 mm 10,00
   m; N 3,75 m; R 5,00 m (burlón 32,5 m); H cable mixto 24 mm 3,15 m.'
 - 'Aparejo de las tres simulaciones (pp. 1 y 5): tijera de 70 m de cable de acero de 22 mm, cable de arrastre

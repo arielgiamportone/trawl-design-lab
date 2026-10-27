@@ -53,7 +53,6 @@ nombre del caso: case name
 nombre o matrícula del buque: vessel name or registration
 número de boyas: number of floats
 paneles iguales (2 en las alas): identical panels (2 on the wings)
-portones o pareja: otter or pair
 potencia de diseño máxima [hp]: maximum design power [hp]
 potencia de diseño mínima [hp]: minimum design power [hp]
 potencia del motor (hp; admite kW): engine power (hp; kW accepted)
@@ -288,7 +287,6 @@ hace falta la distancia entre pastecas (gallows_m o vessel.beam_m): the gallows 
 hace falta el puntal (vessel_depth_m o vessel.depth_m): the hull depth is required (vessel_depth_m or vessel.depth_m)
 rob_share debe estar entre 0 y 1: rob_share must be between 0 and 1
 door_spread_rule debe ser 'excel' o 'fridman': door_spread_rule must be 'excel' or 'fridman'
-rig debe ser 'otter' o 'pair', no {rig!r}: rig must be 'otter' or 'pair', not {rig!r}
 pair_wing_spread_m debe ser positivo: pair_wing_spread_m must be positive
 el portón {door!r} necesita area_m2 y length_m: otter board {door!r} needs area_m2 and length_m
 ft_propeller {prop!r} no tiene KF de Fridman tabulado: ft_propeller {prop!r} has no tabulated Fridman KF

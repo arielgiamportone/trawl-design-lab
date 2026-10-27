@@ -24,6 +24,7 @@ parts:
       - file: 23_mar_real
       - file: 24_malla_selectividad
       - file: 25_incertidumbre_calibracion
+      - file: 26_aparejos_dobles_y_vara
   - caption: Caso de estudio y validación
     chapters:
       - file: 30_caso_beagle

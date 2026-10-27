@@ -42,8 +42,10 @@ def _door(cx: float, cy: float) -> svg.Element:
 
 
 def rig_elements(result: DesignResult, x: float, y: float, w: float, h: float) -> list[svg.Element]:
-    """Elementos del esquema del aparejo en el rectángulo ``(x, y, w, h)`` (vacío sin tangones,
-    gemelo ni vara)."""
+    """Elementos del esquema del aparejo en el rectángulo ``(x, y, w, h)``.
+
+    Vacío si el caso no es de tangones, gemelo ni vara.
+    """
     mr = result.multirig
     if mr is None:
         return []
@@ -77,8 +79,8 @@ def rig_elements(result: DesignResult, x: float, y: float, w: float, h: float) -
     ]
     out.append(svg.polygon(hull, cls="panel"))
     y_boom = y_v + 0.55 * v_len
-    y_gear = y + 0.55 * h  # portones o vara
-    net_len = 0.30 * h
+    y_gear = y + 0.50 * h  # portones o vara
+    net_len = 0.22 * h
     labels: list[tuple[tuple[float, float], str, str]] = []
     if lay is not None:
         for sgn in (1.0, -1.0):
@@ -87,13 +89,13 @@ def rig_elements(result: DesignResult, x: float, y: float, w: float, h: float) -
             out.append(svg.circle((tip, y_boom), 2.0, cls="line"))
         labels.append(
             (
-                (cx + 0.5 * lay.tip_offset_m * k, y_boom - 5),
+                (cx + lay.tip_offset_m * k + 4.0, y_v + 4.0),
                 t(
                     "tangón {length} m a {angle}°",
                     length=_m(mr.boom_length_m or 0.0),
                     angle=dec(mr.boom_angle_deg or 0.0, 0),
                 ),
-                "small mid",
+                "small",
             )
         )
     if mr.kind == "outrigger" and lay is not None:
@@ -109,9 +111,9 @@ def rig_elements(result: DesignResult, x: float, y: float, w: float, h: float) -
             out += _net(tip, y_gear + 10.0, half * 0.75, net_len)
         labels.append(
             (
-                (cx + lay.tip_offset_m * k, y_gear - 40.0),
+                (cx + lay.tip_offset_m * k + 4.0, y_gear - 26.0),
                 t("tijera {length} m", length=_m(mr.bridle_m or 0.0)),
-                "small mid",
+                "small",
             )
         )
     elif mr.kind == "twin":
@@ -158,7 +160,7 @@ def rig_elements(result: DesignResult, x: float, y: float, w: float, h: float) -
             )
         )
     # Ancho barrido (cota) al pie.
-    y_dim = y + h - 18.0
+    y_dim = y + h - 20.0
     half_sw = 0.5 * mr.swept_width_m * k
     out.append(svg.line((cx - half_sw, y_dim), (cx + half_sw, y_dim), cls="line"))
     for sgn in (1.0, -1.0):

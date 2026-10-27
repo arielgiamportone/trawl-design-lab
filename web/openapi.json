@@ -10668,7 +10668,10 @@
         "type": "string",
         "enum": [
          "otter",
-         "pair"
+         "pair",
+         "outrigger",
+         "twin",
+         "beam"
         ]
        },
        {
@@ -12657,6 +12660,12 @@
         "type": "null"
        }
       ]
+     },
+     "params": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Params",
+      "description": "Parámetros del caso como en DesignRequest (p. ej. el aparejo: rig, tangones, muerto o vara)"
      }
     },
     "additionalProperties": false,

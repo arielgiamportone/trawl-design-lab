@@ -7,6 +7,7 @@ import { countEdits } from '../lib/panels';
 import { useCase } from '../state/useCase';
 import type { Compat } from '../state/model';
 import { ParamsForm } from './ParamsForm';
+import { RigSelect } from './RigSelect';
 import { MyVesselForm } from './MyVesselForm';
 import { myVesselFrom, vesselTypes } from '../lib/vessel';
 import { usesMyVessel } from '../state/model';
@@ -229,6 +230,8 @@ export function CasePanel() {
           </p>
         )}
       </div>
+
+      <RigSelect />
 
       <fieldset className="field" style={{ border: 0, padding: 0, margin: '12px 0 0' }}>
         <legend

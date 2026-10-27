@@ -50,6 +50,16 @@ export interface DesignResult {
     rn: StdMod<Series>;
   };
   doors: { forces: { drag_kgf: Series; lift_kgf: Series }; rig_drag_kgf: Series };
+  /** Tangones, gemelo o vara (Fase 19.5): todo el aparejo; ausente con portones o pareja. */
+  multirig?: {
+    kind: string;
+    n_nets: number;
+    warp_drag_kgf: Series;
+    doors_drag_kgf: Series;
+    bridle_drag_kgf: Series | null;
+    clump_drag_kgf: Series | null;
+    beam: { total_kgf: Series } | null;
+  };
   floats: { drag_kgf: Series };
   warps: {
     drag_kgf: Series;

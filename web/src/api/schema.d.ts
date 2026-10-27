@@ -4065,7 +4065,7 @@ export interface components {
             /** Family */
             family?: ("bottom" | "semi_pelagic" | "pelagic") | null;
             /** Rig */
-            rig?: ("otter" | "pair") | null;
+            rig?: ("otter" | "pair" | "outrigger" | "twin" | "beam") | null;
             /**
              * Vessel Hp
              * @description Potencia del buque de diseño [hp] (mín, máx)
@@ -4941,6 +4941,13 @@ export interface components {
              */
             mu?: number | null;
             scenario?: components["schemas"]["ScenarioIn"] | null;
+            /**
+             * Params
+             * @description Parámetros del caso como en DesignRequest (p. ej. el aparejo: rig, tangones, muerto o vara)
+             */
+            params?: {
+                [key: string]: unknown;
+            };
         };
         /**
          * SimulateResponse

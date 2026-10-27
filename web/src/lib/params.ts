@@ -43,6 +43,8 @@ export const PARAM_UNITS: Record<string, string> = {
   warp_nhp_hp: 'HP',
   warp_design_speed_kn: 'kn',
   report_speeds_kn: 'kn',
+  clump_frontal_area_m2: 'm²',
+  beam_shoe_area_m2: 'm²',
 };
 
 const SUFFIX_UNITS: [RegExp, string][] = [
@@ -166,6 +168,9 @@ export function paramMeta(p: ParamInfo): ParamMeta {
   } else if (p.name === 'seabed') {
     meta.kind = 'enum';
     meta.options = Object.entries(SEABED_LABELS).map(([value, label]) => ({ value, label }));
+  } else if (p.name === 'rig') {
+    meta.kind = 'enum';
+    meta.options = Object.entries(msg().catalog.rig).map(([value, label]) => ({ value, label }));
   }
   return meta;
 }
@@ -176,6 +181,7 @@ export function defaultText(meta: ParamMeta): string {
   const M = msg();
   const unit = meta.unit ?? '';
   if (meta.name === 'seabed' && d == null) return M.labels.paramDefaults.noSeabed;
+  if (meta.name === 'rig' && d == null) return M.labels.paramDefaults.rigFromNet;
   if (meta.kind === 'bool') return d ? M.common.yes : M.common.no;
   if (meta.kind === 'strlist' && d == null) return M.labels.paramDefaults.all;
   if (d === null || d === undefined) return M.labels.paramDefaults.auto;

@@ -57,7 +57,6 @@ from trawlkit.net import NetGeometry
 from trawlkit.performance import SpeedWindow, speed_window
 from trawlkit.power import FridmanSummary, PowerCurves
 from trawlkit.propulsion import PropellerPull, WinchCheck
-from trawlkit.rigging import multirig
 from trawlkit.rigging import (
     BallastChain,
     BallastDistribution,
@@ -82,6 +81,7 @@ from trawlkit.rigging import (
     WarpSelection,
     WarpStretch,
     WarpWeight,
+    multirig,
 )
 from trawlkit.units import KNOT_TO_MS
 from trawlkit.vessel import PowerBudget, power_budget
@@ -1859,7 +1859,11 @@ def _stage_rig(
     dims = dimensions.std
     sources: list[str] = []
     layout: multirig.OutriggerLayout | None = None
-    extra = {"bridle": None, "clump_w": None, "clump_a": None, "clump_d": None, "beam": None}
+    bridle: tuple[float, float, FloatArray] | None = None
+    clump_w: float | None = None
+    clump_a: float | None = None
+    clump_d: FloatArray | None = None
+    beam_drag: multirig.BeamDrag | None = None
     watson_area: tuple[float, float] | None = None
     watson_spread: tuple[float, float] | None = None
     vertical = float(spread.vertical.suzuki_m)
@@ -1876,9 +1880,9 @@ def _stage_rig(
         if case.outrigger_bridle_diameter_mm is None:
             sources.append(t("cable de la tijera de {d:g} mm (Roth y Rubio 2022)", d=bridle_d))
         # Dos ramas de tijera por red, con el CD del cable de remolque.
-        bridle = _arr(rigging.warp_drag_kgf(warps.cd, bridle_d / 1000.0, bridle_m, v_ms, 2))
-        extra["bridle"] = (bridle_m, bridle_d, bridle)
-        per_extra = 2.0 * door_one + rw_one + bridle
+        bridle_kgf = _arr(rigging.warp_drag_kgf(warps.cd, bridle_d / 1000.0, bridle_m, v_ms, 2))
+        bridle = (bridle_m, bridle_d, bridle_kgf)
+        per_extra = 2.0 * door_one + rw_one + bridle_kgf
         assert boom_l is not None
         if case.boom_length_m is None:
             sources.append(t("tangón de 24 pies (7,32 m; Knake et al. 1958, FL 470)"))
@@ -1912,7 +1916,6 @@ def _stage_rig(
                 )
             )
         clump_d = multirig.drag_kgf(multirig.CD_SLED, clump_a, v_ms)
-        extra.update(clump_w=clump_w, clump_a=clump_a, clump_d=clump_d)
         per_extra = door_one + rw_one + 0.5 * clump_d
         net_spread = doors.spread_m
         door_total = 2.0 * doors.spread_m
@@ -1967,7 +1970,7 @@ def _stage_rig(
             metier=metier,
             twine_area_m2=float(geometry.std.solid_surface_m2),
         )
-        extra["beam"] = beam
+        beam_drag = beam
         rb = zero  # la lima va a la vara: sin boyas
         per_extra = beam.total_kgf + rw_one
         net_spread = case.beam_length
@@ -1992,7 +1995,6 @@ def _stage_rig(
     system = Pair(n * per_net.std, n * per_net.mod)
     demand = Pair(system.std + friction, system.mod + friction)
     warp_load = system if kind == "twin" else per_net
-    bridle = extra["bridle"]
     return RigStage(
         kind=kind,
         n_nets=n,
@@ -2014,10 +2016,10 @@ def _stage_rig(
         bridle_m=None if bridle is None else bridle[0],
         bridle_diameter_mm=None if bridle is None else bridle[1],
         bridle_drag_kgf=None if bridle is None else n * bridle[2],
-        clump_weight_kg=extra["clump_w"],
-        clump_frontal_area_m2=extra["clump_a"],
-        clump_drag_kgf=extra["clump_d"],
-        beam=extra["beam"],
+        clump_weight_kg=clump_w,
+        clump_frontal_area_m2=clump_a,
+        clump_drag_kgf=clump_d,
+        beam=beam_drag,
         watson_door_area_m2=watson_area,
         watson_spread_m=watson_spread,
         sources=tuple(sources),
@@ -2125,7 +2127,7 @@ def _rig_notes(case: DesignCase, result: RigStage, doors: DoorStage) -> list[str
             t(
                 "beam_trawl: vara de {length:.2f} m (abertura horizontal) y patines de "
                 "{height:.2f} m (abertura vertical); sin portones ni boyas; la red se calcula con "
-                "la RN de diseño (Aberdeen), equivalente a la ec. 10 de C056/20",
+                "la RN de diseño (Aberdeen), de la misma forma que la ec. 10 de C056/20",
                 length=result.net_spread_m,
                 height=result.vertical_opening_m,
             )
@@ -2168,25 +2170,23 @@ def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
         ok = h <= limit
         out.append(
             t(
-                "cfp_res7_2018: alto del portón {h:.2f} m {verdict} el máximo de 1,50 m (art. 4)",
+                "cfp_res7_2018: alto del portón {h:.2f} m: {verdict} (máximo 1,50 m, art. 4)",
                 h=h,
-                verdict=t("dentro de") if ok else t("supera"),
+                verdict=t("dentro del límite") if ok else t("por encima del límite"),
             )
         )
     av = float(result.spread.vertical.suzuki_m)
     out.append(
         t(
-            "cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki) {verdict} el máximo de "
-            "1,50 m (art. 4)",
+            "cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki): {verdict} (máximo 1,50 m, "
+            "art. 4)",
             av=av,
-            verdict=t("dentro de") if av <= limit else t("supera"),
+            verdict=t("dentro del límite") if av <= limit else t("por encima del límite"),
         )
     )
     loa = case.vessel.loa_m or case.vessel.length_m
     if loa is not None and loa > 40.0:
-        out.append(
-            t("cfp_res7_2018: eslora {loa:.1f} m mayor que 40 m (art. 3 c)", loa=float(loa))
-        )
+        out.append(t("cfp_res7_2018: eslora {loa:.1f} m mayor que 40 m (art. 3 c)", loa=float(loa)))
     if case.vessel.bhp > 2000.0:
         out.append(
             t(
@@ -2315,9 +2315,7 @@ def run(case: DesignCase) -> DesignResult:
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
     multi: RigStage | None = None
     if case.is_multi:  # Fase 19.5: tangones, gemelo o vara
-        multi = _stage_rig(
-            case, dimensions, geometry, drag, doors, spread, floats, ballast, warps
-        )
+        multi = _stage_rig(case, dimensions, geometry, drag, doors, spread, floats, ballast, warps)
         warps = _rig_warps(case, warps, multi)
         notes.extend(_rig_notes(case, multi, doors))
     performance = _stage_performance(case, power, warps, ballast, multi)

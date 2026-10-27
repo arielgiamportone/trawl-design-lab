@@ -236,7 +236,7 @@ function CompositionCard({ d, idx, speed }: { d: DesignData; idx: number; speed:
     <ChartCard
       id="composicion"
       title={C.title(speedLabel)}
-      sub={C.sub}
+      sub={d.result.multirig ? C.subRig : C.sub}
       legend={COMPONENTS.map((s) => ({ name: s.name, color: c[s.color], kind: 'rect' as const }))}
       table={
         <DataTable

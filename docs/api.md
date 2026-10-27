@@ -117,8 +117,9 @@ curl -s -X POST http://127.0.0.1:8000/simulate \
 ```
 
 Acepta de 1 a 9 velocidades entre 0,5 y 6 kn, `resolution` de 2 a 10 (4 por defecto), los
-coeficientes del hilo `cn`/`ct`, `knot_factor`, `door_spread_m` e `include_geometry` (nodos y
-triángulos de la forma, pesado). Devuelve por velocidad el `SimResult` (aberturas, arrastre,
+coeficientes del hilo `cn`/`ct`, `knot_factor`, `door_spread_m`, `include_geometry` (nodos y
+triángulos de la forma, pesado) y `params`, los parámetros del caso como en `POST /design` (por
+ejemplo el aparejo: `{"rig": "twin"}`; {doc}`26_aparejos_dobles_y_vara`). Devuelve por velocidad el `SimResult` (aberturas, arrastre,
 convergencia), las proyecciones SVG (planta, perfil y frente) de las tres primeras velocidades, las
 magnitudes empíricas del motor a las mismas velocidades y, para la red FAO A-3 estándar sin editar,
 la comparación con DynamiT. Cada velocidad tarda de ~1 s (resolución 2–4) a ~20 s (resolución

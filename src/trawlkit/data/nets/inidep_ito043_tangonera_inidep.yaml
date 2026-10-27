@@ -222,7 +222,7 @@ design:
   outrigger_bridle_m: 70.0
   outrigger_bridle_diameter_mm: 22.0
   speed_kn: 3.5
-measured:
+simulated:
 - speed_kn: 3.5
   vertical_opening_m: 1.3
   horizontal_opening_m: 14.0
@@ -230,6 +230,9 @@ measured:
   warp_tension_kgf: 3777.2
   note: 'resultados de la simulación DynamiT 3 del INIDEP (p. 6): modelo, no mediciones'
 notes:
+- 'BORRADOR: el plano une el cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso) a un copo de
+  100 mallas de 60 mm (20 % de diferencia de largo estirado) y tres rótulos de corte (U1, U2, L3) no dan
+  el cambio de ancho de su paño.'
 - 'Cabos del plano: A combinado 22 mm 11,00 m; B combinado 22 mm 3,75 m; E combinado 22 mm 6,00 m (lima:
   2 × (11,00 + 3,75) + 6,00 = 35,5 m); O cable mixto 24 mm 10,00 m; P 3,75 m; S 5,00 m (burlón: 2 × (10,00
   + 3,75) + 5,00 = 32,5 m); J cable mixto 24 mm 3,15 m (borde delantero del costado); costuras de 2 y

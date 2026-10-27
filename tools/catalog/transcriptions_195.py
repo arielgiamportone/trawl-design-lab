@@ -119,8 +119,8 @@ _ROPES_5 = (
 )
 _RIG_NOTE = (
     "Aparejo de las tres simulaciones (pp. 1 y 5): tijera de 70 m de cable de acero de 22 mm, "
-    "cable de arrastre de acero de 24 mm con alma de acero, portones rectangulares planos de madera "
-    "con refuerzos de acero de 540 kg cada uno, 3,5 nudos; tangones del B/P «Atlántico 1»."
+    "cable de arrastre de acero de 24 mm con alma de acero, portones rectangulares planos de "
+    "madera con refuerzos de acero de 540 kg cada uno, 3,5 nudos; tangones del B/P «Atlántico 1»."
 )
 
 _DESIGN_INIDEP: dict[str, tuple[Any, str, str | None]] = {
@@ -249,7 +249,7 @@ INIDEP_5: dict[str, Any] = {
         "pieces_note": "alas = O + P = 10,00 + 3,75 m; bocana = S = 5,00 m",
     },
     "design": _DESIGN_INIDEP,
-    "measured": [
+    "simulated": [
         {
             "speed_kn": 3.5,
             "vertical_opening_m": 1.3,
@@ -266,6 +266,9 @@ INIDEP_5: dict[str, Any] = {
         "warp": "acero de 24 mm con alma de acero",
     },
     "notes": [
+        "BORRADOR: el plano une el cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso) a "
+        "un copo de 100 mallas de 60 mm (20 % de diferencia de largo estirado) y tres rótulos de "
+        "corte (U1, U2, L3) no dan el cambio de ancho de su paño.",
         _ROPES_5,
         _RIG_NOTE,
         "Paños del plano: #1 28,80 m² y 62,26 kg; LOW 25,95 m² y 57,76 kg; SIDE 9,92 m² y "
@@ -375,7 +378,7 @@ INIDEP_4: dict[str, Any] = {
         "pieces_note": "alas = M + N = 10,00 + 3,75 m; bocana = R = 5,00 m",
     },
     "design": _DESIGN_INIDEP,
-    "measured": [
+    "simulated": [
         {
             "speed_kn": 3.5,
             "vertical_opening_m": 1.5,
@@ -388,6 +391,10 @@ INIDEP_4: dict[str, Any] = {
     ],
     "rigging": INIDEP_5["rigging"],
     "notes": [
+        "BORRADOR: el plano une el cuerpo de 30 mallas de 160 mm del dorso a un copo de 100 "
+        "mallas de 60 mm (20 % de diferencia de largo estirado), el corte 1N4B del dorso no da el "
+        "cambio de ancho del paño (236 → 30 en 132 filas) y el rótulo de corte del ala está "
+        "sobreimpreso.",
         "Cabos del plano: A combinado 22 mm 11,00 m; B 3,75 m; G 6,00 m (lima 35,5 m); M cable "
         "mixto 24 mm 10,00 m; N 3,75 m; R 5,00 m (burlón 32,5 m); H cable mixto 24 mm 3,15 m.",
         _RIG_NOTE,
@@ -490,6 +497,8 @@ SEAFDEC_03: dict[str, Any] = {
         ),
     },
     "notes": [
+        "BORRADOR: el plano une 1/1 el cuerpo de 50 mallas de 51 mm al copo de 50 mallas de 32 mm "
+        "(37 % de diferencia de largo estirado) y no da U1, la vara ni los patines.",
         "El hilo va en denier: 380d/15 en alas, cielo y primer cuerpo; 380d/12 en el cuerpo "
         "trasero y el copo.",
         "El plano no da la vara, los patines, las cadenas ni el lastre: el caso usa los valores "
