@@ -13,6 +13,18 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Física de materiales (Fase 19.1)**: tabla de materiales con fuente por dato
+  (`data/materials.yaml`, `trawlkit.materials.material_table()`): densidad, peso en el agua,
+  tenacidad seca y húmeda, pérdida por nudo, alargamiento y rigidez de PA, PES, PE, PP, HMPE,
+  cable de acero (módulo efectivo de 6x19 con alma de fibra o de acero), cabo combinado y cadena.
+  La simulación usa la densidad y la rigidez de cada paño según su material (antes trataba todo
+  paño como poliamida: el PE y el PP pesaban de más) y la rigidez de cabos y cable según material y
+  diámetro (el cable era unas dos veces más rígido de lo que dan las fuentes). Componentes con
+  `elongation_pct` y `ea_kn` opcionales y controles nuevos en el validador. En modo corregido el
+  resumen suma la tensión de cada cable a la velocidad de diseño, su estiramiento elástico y su
+  coeficiente de seguridad. Las redes de PE del catálogo simulan con más abertura vertical; la A-3
+  (PA) no cambia. Sección de materiales en el capítulo 12. Los datos sin fuente publicada quedan
+  «A VERIFICAR».
 - **Libro completo en inglés (Fase 18.5)**: `docs/en/`, con los mismos capítulos y archivos que
   el libro en español, publicado en `/trawl-design-lab/en/`. Las celdas ejecutan el mismo código:
   las tablas y avisos del motor, los números (punto decimal) y los ejercicios salen en inglés

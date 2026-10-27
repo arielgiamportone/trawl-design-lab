@@ -101,6 +101,52 @@ of meshes, $W = \frac{(T_1+T_2)/2}{T}\cdot\frac{N_p}{N}\cdot S_N$, and the weigh
 $W_a = W\,(1 - \rho_w/\rho)$ with $\rho_w = 1025$ kg/m³. For polyamide ($\rho = 1140$ kg/m³) the
 weight in water is barely 10 % of the weight in air.
 
+### Materials: weight in water, strength and stiffness
+
+The twine material decides three things the design uses: the **weight in water** (polyamide and
+polyester sink; polyethylene and polypropylene float), the **strength** (dry twine tenacity and
+the loss when wet and knotted) and the **stiffness** (how much it stretches under load). The
+engine takes these values from a table with a source for every value (`data/materials.yaml`): the
+weight in water and the twine tenacity come from the Workbook tables {cite:p}`prado1990`, the
+wet/dry ratio from {cite:t}`dealteris1990`, the fibre properties from {cite:t}`bexco2004` and the
+stiffness of a braided polyethylene twine measured by {cite:t}`legue2025`. Whatever could not be
+found in a published source is marked TO BE VERIFIED (for example the modulus of polyamide twine,
+kept at 2 GPa because it matches the fibres in order of magnitude).
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import _plots_v as PV
+from trawlkit.materials import material_table
+
+_T = material_table()
+_NAMES = {"PA": "Polyamide (nylon)", "PES": "Polyester", "PE": "Polyethylene",
+          "PP": "Polypropylene", "HMPE": "HMPE (Dyneema)"}
+
+
+def _v(m, k, nd=2):
+    x = m.value(k)
+    return "—" if x is None else f"{x:.{nd}f}"
+
+
+PV.md_table(
+    ["Material", "Density [kg/m³]", "Weight in sea water", "Dry tenacity [gf/tex]",
+     "Wet/dry", "Elongation at break [%]", "Twine modulus [GPa]"],
+    [
+        [_NAMES[k], _v(m, "density_kg_m3", 0), _v(m, "weight_in_water_seawater"),
+         _v(m, "twine_tenacity_dry_gf_tex", 1), _v(m, "wet_dry_ratio"),
+         _v(m, "elongation_break_pct", 1), _v(m, "twine_modulus_gpa")]
+        for k, m in _T.materials.items() if k in _NAMES
+    ],
+)
+```
+
+The simulation uses the density and stiffness of each panel according to its material, and the
+stiffness of the ropes and the warp according to the material and the diameter (steel wire rope
+with the effective modulus of the full cross-section, about 47–51 GPa for 6x19). That is why a
+polyethylene net simulates lighter in the water and more elastic than the same net in polyamide.
+In corrected mode the engine also reports the tension in each warp at the design speed, its
+elastic stretch and its safety factor.
+
 ## Coefficients
 
 | Quantity | Value | Unit | Source | Excel cell |

@@ -66,6 +66,9 @@ export const SUMMARY_UNITS: Record<string, string> = {
   warp_breaking_load_t: 't',
   warp_min_breaking_load_kgf: 'kgf',
   warp_quantity_m: 'm',
+  warp_tension_kgf: 'kgf',
+  warp_stretch_m: 'm',
+  warp_safety_factor: '',
   max_speed_kn: 'kn',
 };
 

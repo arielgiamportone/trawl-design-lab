@@ -98,6 +98,50 @@ $W = \frac{(T_1+T_2)/2}{T}\cdot\frac{N_p}{N}\cdot S_N$, y el peso en agua es
 $W_a = W\,(1 - \rho_w/\rho)$ con $\rho_w = 1025$ kg/m³. Para poliamida ($\rho = 1140$ kg/m³) el
 peso en agua es apenas el 10 % del peso en aire.
 
+### Materiales: peso en el agua, resistencia y rigidez
+
+El material del hilo decide tres cosas que el diseño usa: el **peso en el agua** (la poliamida y el
+poliéster se hunden; el polietileno y el polipropileno flotan), la **resistencia** (tenacidad del
+hilo seco y la pérdida al mojarse y al anudar) y la **rigidez** (cuánto se estira bajo carga). El
+motor toma esos valores de una tabla con fuente por dato (`data/materials.yaml`): el peso en el agua
+y la tenacidad de los hilos salen de las tablas del Workbook {cite:p}`prado1990`, la relación
+húmedo/seco de {cite:t}`dealteris1990`, las propiedades de las fibras de {cite:t}`bexco2004` y la
+rigidez de un hilo trenzado de polietileno medido por {cite:t}`legue2025`. Lo que no se encontró en
+una fuente publicada queda marcado «A VERIFICAR» (por ejemplo, el módulo del hilo de poliamida, que
+se mantiene en 2 GPa porque coincide en orden de magnitud con las fibras).
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import _plots_v as PV
+from trawlkit.materials import material_table
+
+_T = material_table()
+
+
+def _v(m, k, nd=2):
+    x = m.value(k)
+    return "—" if x is None else f"{x:.{nd}f}".replace(".", ",")
+
+
+PV.md_table(
+    ["Material", "Densidad [kg/m³]", "Peso en agua de mar", "Tenacidad seca [gf/tex]",
+     "Húmedo/seco", "Alargamiento a rotura [%]", "Módulo del hilo [GPa]"],
+    [
+        [m.name, _v(m, "density_kg_m3", 0), _v(m, "weight_in_water_seawater"),
+         _v(m, "twine_tenacity_dry_gf_tex", 1), _v(m, "wet_dry_ratio"),
+         _v(m, "elongation_break_pct", 1), _v(m, "twine_modulus_gpa")]
+        for k, m in _T.materials.items() if k in ("PA", "PES", "PE", "PP", "HMPE")
+    ],
+)
+```
+
+La simulación usa la densidad y la rigidez de cada paño según su material, y la rigidez de los
+cabos y del cable según el material y el diámetro (el cable de acero con el módulo efectivo de la
+sección completa, unos 47–51 GPa para 6x19). Por eso una red de polietileno simula más liviana en
+el agua y más elástica que la misma red de poliamida. El motor informa además, en modo corregido,
+la tensión de cada cable a la velocidad de diseño, su estiramiento elástico y su coeficiente de
+seguridad.
+
 ## Coeficientes
 
 | Magnitud | Valor | Unidad | Fuente | Celda del Excel |
