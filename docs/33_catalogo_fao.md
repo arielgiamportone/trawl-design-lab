@@ -72,7 +72,7 @@ Sirve para tres cosas:
 - **Diseñar a partir de una red probada**: cada red trae el buque, el portón y la profundidad
   para los que se ensayó, y la app la calcula con ese caso.
 - **Probar el motor fuera de la A-3**: redes de pareja, de 4 paneles y pelágicas, de 20 a 113 m
-  de relinga, y (Fase 19.5) redes de tangones y de vara de 7 a 35 m.
+  de relinga, y (Fases 19.5 y 19.6) redes de tangones y de vara de 7 a 35 m.
 - **Validar contra mediciones**: Schärfe (1983) midió la abertura de dos de sus redes en el mar.
 
 ## Fuentes y método
@@ -88,6 +88,14 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
   (plano 03) {cite}`seafdec2016thai`, con su aparejo (tangones y vara; {doc}`26_aparejos_dobles_y_vara`).
   Las tres quedan como borrador: sus copos no empalman en largo estirado con el cuerpo, como
   dibujan los planos.
+- **Fase 19.6**: ocho redes más del catálogo de la SEAFDEC, elegidas por aparejo y tamaño de
+  buque (datos puntuales, no el catálogo entero): cinco camaroneras con tangón de 75 a 150 hp
+  (planos 31, 33, 35, 38 y 39), la red de vara n.º 30 (165 hp) y dos redes de peces con portones
+  (planos 21 y 22, de 250 y 365 hp). Cinco cierran y se publican; tres quedan como borrador
+  porque el plano une 1/1 (o con una razón corta) paños de malleros muy distintos. Las redes
+  camaroneras del golfo de México de la NOAA (Bullis 1951; Gutherz et al. 1974) no se
+  digitalizaron: cosen las alas a lo largo del cuerpo, una topología que el motor no arma (ver
+  {doc}`catalogo_fuentes`).
 - **Lectura**: cada figura se rasterizó a 300 ppp (o se tomó la imagen embebida del PDF) y se
   leyó número por número. Ninguna figura se guarda en el repositorio (© FAO): sólo los datos.
 - **Procedencia por valor**: cada número es *transcripto* (leído en la figura), *derivado*
@@ -144,6 +152,10 @@ El validador se escribió para atrapar errores de lectura, y los atrapó:
   ser un fruncido extremo o un mallero mal leído. La red de krill con frente de 1600 mm no deja
   leer el alto del ala del vientre, y la de pescado y camarón de BOBP/WP/20 está escaneada a
   107 ppp. Las tres quedan para revisar con el original.
+- **SEAFDEC (Fase 19.6)**: el validador confirmó cada plano con sus propios rótulos (cortes, razones
+  de unión impresas y lima = 2 × ala + bocana). Quedaron dos avisos honestos de lectura: las alas
+  del plano 38 se leen 1N2B y el ensanche pide 1N3B, y el cuerpo de 38 mm del plano 39 se lee 2N2B
+  y pide 1N2B. En el plano 31 los rótulos de las alas no suman la lima total: se toma el total.
 - La red pelágica de 4 paneles del *Workbook* (figura de 450 px) **no se digitalizó**. El cuerpo
   se lee y cierra (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), pero el frente de 800 mm no se
   lee lo suficiente para armar una red sin inventar números.
@@ -158,31 +170,35 @@ El validador se escribió para atrapar errores de lectura, y los atrapó:
 - **Separación de portones** por la DPA de Fridman ({doc}`16_aberturas`), porque la regla «al
   metro» del libro sólo vale para las pastecas de la A-3.
 
-Con ese caso, el motor y el simulador dan, a 3 kn:
+Con ese caso, el motor y el simulador dan, a 3 kn (el simulador, sólo en las redes publicadas; en
+los borradores queda «—»):
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 RES = {}
 for i in IDS:
     r = run(catalog_case(i).case)
-    sim = simulate(r, 3.0, resolution=2, coarse_resolution=None)
+    # El simulador corre sólo en las redes publicadas (tiempo de compilación del libro).
+    sim = (
+        simulate(r, 3.0, resolution=2, coarse_resolution=None) if i in PUBLISHED else None
+    )
     RES[i] = (r, sim)
 rows = []
 ratio = []
 for i in IDS:
     r, sim = RES[i]
     s = r.summary()
-    if SPECS[i].family == "bottom":
+    if sim is not None and SPECS[i].family == "bottom":
         ratio.append(s["rn_std_3kn_kgf"] / sim.drag_kgf)
     rows.append([
         i,
         num(s["headrope_m"]),
         num(s["horizontal_opening_m"]),
-        num(sim.ah_m),
+        "—" if sim is None else num(sim.ah_m),
         num(s["vertical_opening_m"]),
-        num(sim.av_m),
+        "—" if sim is None else num(sim.av_m),
         num(s["rn_std_3kn_kgf"], 0),
-        num(sim.drag_kgf, 0),
+        "—" if sim is None else num(sim.drag_kgf, 0),
     ])
 PV.md_table(
     [

@@ -130,12 +130,12 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 18](https://img.shields.io/badge/redes-18-1c5cab) ![componentes: 563](https://img.shields.io/badge/componentes-563-1c5cab) ![rutas API: 79](https://img.shields.io/badge/rutas%20API-79-1c5cab) ![capítulos: 40](https://img.shields.io/badge/cap%C3%ADtulos-40-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 26](https://img.shields.io/badge/redes-26-1c5cab) ![componentes: 564](https://img.shields.io/badge/componentes-564-1c5cab) ![rutas API: 79](https://img.shields.io/badge/rutas%20API-79-1c5cab) ![capítulos: 40](https://img.shields.io/badge/cap%C3%ADtulos-40-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
-| Redes en el catálogo | 18 (12 publicadas, 6 borradores), con procedencia valor por valor |
-| Componentes | 563 en 7 tipos (243 genéricos y datos puntuales de 15 marcas) |
+| Redes en el catálogo | 26 (17 publicadas, 9 borradores), con procedencia valor por valor |
+| Componentes | 564 en 7 tipos (244 genéricos y datos puntuales de 15 marcas) |
 | Métodos de resistencia de la red | 13 |
 | Erratas del Excel documentadas y corregidas | 26 |
 | Valores de referencia del Excel | 697, reproducidos con rtol 1e-6 en modo `excel` |

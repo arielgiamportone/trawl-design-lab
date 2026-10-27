@@ -71,7 +71,7 @@ It serves three purposes:
 - **Designing from a proven net**: each net comes with the vessel, the otter board and the depth it
   was trialled with, and the app computes it with that case.
 - **Testing the engine beyond the A-3**: pair trawls, 4-panel and pelagic nets, from 20 to 113 m
-  of headrope, and (Phase 19.5) outrigger and beam trawl nets of 7 to 35 m.
+  of headrope, and (Phases 19.5 and 19.6) outrigger and beam trawl nets of 7 to 35 m.
 - **Validating against measurements**: Schärfe (1983) measured the opening of two of his nets at
   sea.
 
@@ -88,6 +88,13 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
   {cite}`seafdec2016thai`, with their rigs (outrigger and beam; {doc}`26_aparejos_dobles_y_vara`).
   All three stay as drafts: their codends do not join the body in stretched length, as the plans
   draw them.
+- **Phase 19.6**: eight more nets from the SEAFDEC catalogue, chosen by rig and vessel size (spot
+  data, not the whole catalogue): five shrimp outrigger nets of 75 to 150 hp (plans 31, 33, 35, 38
+  and 39), beam trawl no. 30 (165 hp) and two fish otter trawls (plans 21 and 22, 250 and
+  365 hp). Five close and are published; three stay as drafts because the plan joins panels of
+  very different mesh sizes 1/1 (or with a short ratio). The NOAA Gulf of Mexico shrimp trawls
+  (Bullis 1951; Gutherz et al. 1974) were not digitized: they sew the wings along the body, a
+  topology the engine does not build (see {doc}`catalogo_fuentes`).
 - **Reading**: each figure was rasterized at 300 dpi (or the image embedded in the PDF was taken)
   and read number by number. No figure is stored in the repository (© FAO): only the data.
 - **Provenance per value**: each number is *transcribed* (read from the figure), *derived*
@@ -144,6 +151,11 @@ The validator was written to catch reading errors, and it caught them:
   an extreme gather or a misread mesh count. The krill net with a 1600 mm front does not let one
   read the depth of the belly wing, and the fish and shrimp net of BOBP/WP/20 is scanned at
   107 dpi. All three remain to be reviewed against the original.
+- **SEAFDEC (Phase 19.6)**: the validator confirmed each plan with its own labels (cuts, printed
+  joining ratios and headrope = 2 × wing + bosom). Two honest reading warnings remain: the wings
+  of plan 38 read 1N2B and the widening calls for 1N3B, and the 38 mm body of plan 39 reads 2N2B
+  and calls for 1N2B. In plan 31 the wing labels do not add up to the total headrope: the total
+  is taken.
 - The 4-panel pelagic net of the *Workbook* (a 450 px figure) **was not digitized**. The body can
   be read and closes (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), but the 800 mm front cannot be
   read well enough to build a net without inventing numbers.
@@ -159,31 +171,35 @@ The validator was written to catch reading errors, and it caught them:
 - **Door spread** from the Fridman DPA ({doc}`16_aberturas`), because the workbook's “per metre”
   rule only holds for the blocks of the A-3.
 
-With that case, the engine and the simulator give, at 3 kn:
+With that case, the engine and the simulator give, at 3 kn (the simulator only on the published
+nets; drafts show “—”):
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 RES = {}
 for i in IDS:
     r = run(catalog_case(i).case)
-    sim = simulate(r, 3.0, resolution=2, coarse_resolution=None)
+    # The simulator runs only on the published nets (book build time).
+    sim = (
+        simulate(r, 3.0, resolution=2, coarse_resolution=None) if i in PUBLISHED else None
+    )
     RES[i] = (r, sim)
 rows = []
 ratio = []
 for i in IDS:
     r, sim = RES[i]
     s = r.summary()
-    if SPECS[i].family == "bottom":
+    if sim is not None and SPECS[i].family == "bottom":
         ratio.append(s["rn_std_3kn_kgf"] / sim.drag_kgf)
     rows.append([
         i,
         num(s["headrope_m"]),
         num(s["horizontal_opening_m"]),
-        num(sim.ah_m),
+        "—" if sim is None else num(sim.ah_m),
         num(s["vertical_opening_m"]),
-        num(sim.av_m),
+        "—" if sim is None else num(sim.av_m),
         num(s["rn_std_3kn_kgf"], 0),
-        num(sim.drag_kgf, 0),
+        "—" if sim is None else num(sim.drag_kgf, 0),
     ])
 PV.md_table(
     [

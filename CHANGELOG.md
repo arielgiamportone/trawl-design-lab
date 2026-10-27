@@ -13,6 +13,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Redes de planos públicos (Fase 19.6)**: ocho redes del catálogo tailandés de la SEAFDEC (2016,
+  TD/RES/141) leídas de cada plano con procedencia por valor (`tools/catalog/transcriptions_196.py`):
+  camaroneras con tangón n.º 31, 33, 38 y 39 (75–150 hp, publicadas) y 35 (borrador), red de vara
+  n.º 30 (165 hp, publicada) y redes de peces con portones n.º 21 y 22 (250 y 365 hp, borradores:
+  copos unidos con malleros muy distintos). U1 derivado de la bocana de cada cara, Rtex del denier
+  (n·den/9), eslora del buque del plano. Portón plano de madera de 30 × 15 pulgadas de la red de
+  prueba de 16 pies de la NOAA (Fishery Facts 9) en el catálogo de componentes
+  (`door_noaa_ff9_30x15in`, polar supuesta). Las redes de Bullis (1951) y de Fishery Facts 9 no
+  se digitalizaron (alas cosidas a lo largo del cuerpo; hilo de algodón sin conversión a Rtex
+  citable) y las tangoneras del INIDEP siguen como borrador tras releer la fig. 5; el registro
+  está en `docs/catalogo_fuentes.md`. El capítulo 33 simula sólo las redes publicadas.
 - **Tangones, gemelo y vara (Fase 19.5)**: `rig` acepta `outrigger` (dos redes desde los tangones,
   cada una con su par de portones y un cable con tijera), `twin` (dos redes, portones afuera y
   muerto central) y `beam` (vara sin portones, una o dos). Nueva etapa `RigStage`

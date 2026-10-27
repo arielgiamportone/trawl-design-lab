@@ -141,12 +141,12 @@ similarity, refinement and rigging:
 ## Indicators
 
 <!-- indicadores:inicio -->
-![nets: 18](https://img.shields.io/badge/nets-18-1c5cab) ![components: 563](https://img.shields.io/badge/components-563-1c5cab) ![API routes: 79](https://img.shields.io/badge/API%20routes-79-1c5cab) ![chapters: 40](https://img.shields.io/badge/chapters-40-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![nets: 26](https://img.shields.io/badge/nets-26-1c5cab) ![components: 564](https://img.shields.io/badge/components-564-1c5cab) ![API routes: 79](https://img.shields.io/badge/API%20routes-79-1c5cab) ![chapters: 40](https://img.shields.io/badge/chapters-40-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicator | Value |
 |---|---|
-| Nets in the catalogue | 18 (12 published, 6 drafts), with value-by-value provenance |
-| Components | 563 in 7 kinds (243 generic, spot data from 15 brands) |
+| Nets in the catalogue | 26 (17 published, 9 drafts), with value-by-value provenance |
+| Components | 564 in 7 kinds (244 generic, spot data from 15 brands) |
 | Net drag methods | 13 |
 | Excel errata documented and fixed | 26 |
 | Excel reference values | 697, reproduced at rtol 1e-6 in `excel` mode |

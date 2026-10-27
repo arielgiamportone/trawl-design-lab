@@ -331,6 +331,16 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 | `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | outrigger | draft |
 | `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | outrigger | draft |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plan 03 {cite:p}`seafdec2016thai` | beam | draft |
+| `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plan 31 (14 m, 75 hp) | outrigger | published |
+| `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plan 33 (20 m, 90 hp) | outrigger | published |
+| `seafdec_38_outrigger_shrimp` | SEAFDEC 2016, plan 38 (13.5 m, 100 hp) | outrigger | published |
+| `seafdec_39_outrigger_shrimp` | SEAFDEC 2016, plan 39 (16 m, 150 hp) | outrigger | published |
+| `seafdec_35_outrigger_shrimp` | SEAFDEC 2016, plan 35 (15 m, 112 hp) | outrigger | draft |
+| `seafdec_30_beam_shrimp` | SEAFDEC 2016, plan 30 (11 m, 165 hp) | beam | published |
+
+The Thai nets of Phase 19.6 are the first **published** outrigger and beam nets of the catalogue: their
+plans give the net and the vessel, but not the outriggers, the doors or the beam, so their case uses
+the defaults of this chapter (which are not those of the Thai fleet).
 
 The 380 × 70 mm Seafish twin-rig plan {cite:p}`arkley1987ir1310` was not digitised: it is a scan in
 British notation (rows of half meshes, S, SB and SK cuts, half-panel counts) that cannot be checked

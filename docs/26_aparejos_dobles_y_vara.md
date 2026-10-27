@@ -332,6 +332,16 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 | `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | tangones | borrador |
 | `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | tangones | borrador |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plano 03 {cite:p}`seafdec2016thai` | vara | borrador |
+| `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plano 31 (14 m, 75 hp) | tangones | publicada |
+| `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plano 33 (20 m, 90 hp) | tangones | publicada |
+| `seafdec_38_outrigger_shrimp` | SEAFDEC 2016, plano 38 (13,5 m, 100 hp) | tangones | publicada |
+| `seafdec_39_outrigger_shrimp` | SEAFDEC 2016, plano 39 (16 m, 150 hp) | tangones | publicada |
+| `seafdec_35_outrigger_shrimp` | SEAFDEC 2016, plano 35 (15 m, 112 hp) | tangones | borrador |
+| `seafdec_30_beam_shrimp` | SEAFDEC 2016, plano 30 (11 m, 165 hp) | vara | publicada |
+
+Las redes tailandesas de la Fase 19.6 son las primeras redes de tangones y de vara **publicadas** del
+catálogo: sus planos dan la red y el buque, pero no los tangones, los portones ni la vara, así que
+su caso usa los valores por defecto de este capítulo (que no son los de la flota tailandesa).
 
 El plano gemelo de Seafish de 380 × 70 mm {cite:p}`arkley1987ir1310` no se digitalizó: es un
 escaneo con notación británica (filas de media malla, cortes S, SB y SK, conteos de medio paño)
