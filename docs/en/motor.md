@@ -70,7 +70,7 @@ ballast       Flot!D153:I245            Koyama, Prado, Fridman (F1' + F2' − W 
     │
 warps         Cables de Remolque        angles δ1-δ3, Ø (EHP, Águila), CD, Rw, total R (+ROB in
     │                                   corrected mode), weight, loads ×4, selection from the catalogue
-performance                             FT (PF and PV+T) against R(v) → maximum towable speed
+performance                             FT (FP and CP+N) against R(v) → maximum towable speed
 ```
 
 Two details explain the order: the workbook is circular between Dickson and the Fridman openings

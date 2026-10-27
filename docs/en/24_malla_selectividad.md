@@ -45,14 +45,11 @@ RES = 3
 CASE = standard_case()
 SC = Scenario(seabed="mixed", catch_kg=300, mesh_bending=True)
 
-# English common names of the species (the catalogue data/species.yaml is in Spanish).
-SPECIES_EN = {"hake_hubbsi": "Argentine hake", "hake_european": "European hake", "cod": "Cod",
-              "haddock": "Haddock", "nephrops": "Norway lobster",
-              "pleoticus": "Argentine red shrimp", "plaice": "Plaice", "sole": "Sole"}
+from trawlkit.i18n import tr
 
 
 def sp_name(s) -> str:
-    return SPECIES_EN.get(s.id, s.name)
+    return tr(s.name)
 
 
 def num(x: float, nd: int = 1) -> str:

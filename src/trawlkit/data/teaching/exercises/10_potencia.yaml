@@ -27,9 +27,11 @@ exercises:
     en:
       title: Fridman's available towing pull
       statement: >
-        A trawler of {bhp} HP with a {helice} propeller tows at {v} kn. Calculate the available
+        A trawler of {bhp} HP with propeller type {helice} tows at {v} kn. Calculate the available
         towing pull F_T according to Fridman, F_T = BHP·(K_F − 0.7·v), with K_F = 10 for a
-        fixed-pitch propeller (PF) and 15 for a controllable-pitch propeller in a nozzle (PV+T).
+        fixed-pitch propeller (FP) and 15 for a controllable-pitch propeller in a nozzle (CP+N).
+      choices:
+        helice: {PF: FP, PV+T: CP+N}
       vars:
         bhp: Brake power
         helice: Propeller
@@ -37,7 +39,7 @@ exercises:
       answers:
         ft_kgf: Available towing pull F_T
       hints:
-        - With a {helice} propeller, K_F is 10 (PF) or 15 (PV+T).
+        - With propeller type {helice}, K_F is 10 (FP) or 15 (CP+N).
         - Speed goes in knots, without converting it.
       explanation: >
         K_F = {kf}; F_T = {bhp}·({kf} − 0.7·{v}) = {ft_kgf} kgf. The faster the tow, the lower the
@@ -64,10 +66,12 @@ exercises:
     en:
       title: Prado and Dremière's bollard pull
       statement: >
-        Estimate the bollard pull of a {bhp} HP vessel with a {helice} propeller using Prado and
-        Dremière's rule: BP = BHP·0.9·(pct/100)·1000 kgf, with pct = 1.10 (PF, fixed pitch), 1.20
-        (PF+T, fixed pitch in a nozzle), 1.25 (PV, controllable pitch) and 1.40 (PV+T, controllable
+        Estimate the bollard pull of a {bhp} HP vessel with propeller type {helice} using Prado and
+        Dremière's rule: BP = BHP·0.9·(pct/100)·1000 kgf, with pct = 1.10 (FP, fixed pitch), 1.20
+        (FP+N, fixed pitch in a nozzle), 1.25 (CP, controllable pitch) and 1.40 (CP+N, controllable
         pitch in a nozzle).
+      choices:
+        helice: {PF: FP, PF+T: FP+N, PV: CP, PV+T: CP+N}
       vars:
         bhp: Brake power
         helice: Propeller
@@ -108,10 +112,12 @@ exercises:
     en:
       title: Towing power and pull while fishing (Prado)
       statement: >
-        For a {bhp} HP vessel with a {helice} propeller: (a) average the bollard pull by percentage
+        For a {bhp} HP vessel with propeller type {helice}: (a) average the bollard pull by percentage
         with the bollard pull by the K factor from Prado's table; (b) calculate the apparent
         nominal power APN = 0.09·BP; (c) the towing power P = 0.75·K·APN with K = {k}; (d) the pull
         while fishing at {v} kn, BPF = 150·P/v.
+      choices:
+        helice: {PF: FP, PV+T: CP+N}
       vars:
         bhp: Brake power
         helice: Propeller

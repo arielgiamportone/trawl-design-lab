@@ -28,7 +28,7 @@ from typing import Any
 
 import yaml
 
-from trawlkit.i18n import t
+from trawlkit.i18n import t, tr
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.rigging.seabed import Range, Seabed, seabed, seabeds
 
@@ -66,7 +66,12 @@ class Fouling:
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
-        return {"id": self.id, "name": self.name, "zones": dict(self.zones), "notes": self.notes}
+        return {
+            "id": self.id,
+            "name": tr(self.name),
+            "zones": dict(self.zones),
+            "notes": tr(self.notes),
+        }
 
 
 @cache

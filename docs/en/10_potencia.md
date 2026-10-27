@@ -73,10 +73,10 @@ $$
 F_T = P\,(K_F - 0.7\,v)
 $$ (eq-fridman-ft)
 
-$K_F$ [kgf/HP] is the bollard pull per horsepower: 10 for a fixed pitch propeller (PF, Spanish *paso fijo*) and 15 for a
-controllable pitch propeller with nozzle (PV+T, *paso variable con tobera*). The slope $0.7\,P$ expresses that, as it moves
+$K_F$ [kgf/HP] is the bollard pull per horsepower: 10 for a fixed pitch propeller (FP, Spanish *paso fijo*) and 15 for a
+controllable pitch propeller with nozzle (CP+N, *paso variable con tobera*). The slope $0.7\,P$ expresses that, as it moves
 forward, the propeller loses thrust because its effective angle of attack decreases. It is the only
-one of the five formulas with a **finite bollard pull** ($F_T(0) = K_F P$): for 150 BHP and PF,
+one of the five formulas with a **finite bollard pull** ($F_T(0) = K_F P$): for 150 BHP and FP,
 1,500 kgf.
 
 ### Prado and Dremière (FAO)
@@ -87,7 +87,7 @@ $$
 BP = \mathrm{BHP}\cdot 0.9\cdot \frac{p}{100}\ \ [\mathrm{t}],
 $$ (eq-prado-bp)
 
-with $p$ = 1.10 (PF), 1.20 (PF+T), 1.25 (PV) and 1.40 (PV+T), that is, between 9.9 and 12.6 kgf per
+with $p$ = 1.10 (FP), 1.20 (FP+N), 1.25 (CP) and 1.40 (CP+N), that is, between 9.9 and 12.6 kgf per
 BHP. The workbook averages it with a second estimate, $BP_K = K\cdot\mathrm{BHP}/1000$, with $K$
 tabulated by power and propeller. From the average bollard pull an apparent nominal power is
 obtained and, from it, the power available for trawling:
@@ -122,7 +122,7 @@ What changes is how $P_e$ is estimated:
   use), $K_2 = 0.85$ (sea state), $K_3$ = 0.17–0.29 (propulsive efficiency according to the size of
   the trawler; the workbook uses 0.17) and 0.8 the fraction of the demand attributed to the net.
 * **Hamuro** {cite:p}`hamuro`: $P_e = P_s = K_1K_2K_3\,\mathrm{NHP}$, with $K_1 = 0.825$, $K_2 = 0.85$ and
-  $K_3$ between 0.20 (PF, high RPM) and 0.30 (PV+T, high RPM).
+  $K_3$ between 0.20 (FP, high RPM) and 0.30 (CP+N, high RPM).
 
 The form {eq}`eq-potencia-constante` diverges as $v \to 0$: at 1 kn it predicts pulls of 2 to 4 t for
 a vessel whose bollard pull is 1.5–1.9 t, which is physically impossible. These formulas only make
@@ -134,12 +134,12 @@ design is Fridman's: it is linear, bounded and conservative at low speed.
 
 | Coefficient | Value | Unit | Source | Excel cell |
 |---|---|---|---|---|
-| $K_F$ fixed pitch / PV+T | 10 / 15 | kgf/HP | Fridman | `PotOK!D10`, `F10` |
+| $K_F$ fixed pitch / CP+N | 10 / 15 | kgf/HP | Fridman | `PotOK!D10`, `F10` |
 | Fridman slope | 0.7 | kgf/(HP·kn) | Fridman | `PotOK!E10` |
 | Fractions of BHP (nominal, pull) | 0.33 / 0.33 | — | Fridman | `Pot!C24`, `C26` |
 | Losses (propeller, waves, friction, wake, air) | 0.35 / 0.27 / 0.18 / 0.17 / 0.03 | — | Fridman | `Pot!C27:C31` |
-| Bollard pull $p$ (PF, PF+T, PV, PV+T) | 1.10 / 1.20 / 1.25 / 1.40 | % | Prado | `PotOK!A49:A55` |
-| Bollard pull $K$ (150 HP, PF) | 11.23 | t/1000 HP | Prado | `PotOK!K52:L55` |
+| Bollard pull $p$ (FP, FP+N, CP, CP+N) | 1.10 / 1.20 / 1.25 / 1.40 | % | Prado | `PotOK!A49:A55` |
+| Bollard pull $K$ (150 HP, FP) | 11.23 | t/1000 HP | Prado | `PotOK!K52:L55` |
 | APN / available fraction | 0.09 / 0.75 | — | Prado | `PotOK!B73`, `K68` |
 | Trawling $K$ | 0.20–0.30 | — | Prado | `PotOK!K68:L77` |
 | Koyama $K$ / load | 0.15 / 0.6 | — | Koyama | `PotOK!M165`, `C169` |
@@ -163,7 +163,7 @@ The values are in `src/trawlkit/data/reference/power_coefficients.yaml`, generat
 | `PotOK!K171:L179` | Koyama | `trawlkit.power.koyama_pull_series_kgf` |
 | `PotOK!E216:F224` | Nomura | `trawlkit.power.nomura_pull_series_kgf` |
 | `PotOK!F259:L266`, `E272:H280` | Hamuro | `hamuro_ps_table`, `hamuro_pull_series_kgf` |
-| `PotOK!L11:O19` | Fridman summary (PF and PV+T) | `trawlkit.power.summary` |
+| `PotOK!L11:O19` | Fridman summary (FP and CP+N) | `trawlkit.power.summary` |
 | — | The five curves for one vessel | `trawlkit.power.power_curves` |
 
 ## Assumptions and limits
@@ -204,7 +204,7 @@ P.md_table(["BHP", "Nominal HP", "Net pull", "Propeller", "Waves",
 ```
 
 The five pull curves with the **fixed pitch** configuration that the workbook uses as worst case
-(Prado: average of the six fixed pitch rows, `C123`; Hamuro: PF at low RPM, `E272`), checked against
+(Prado: average of the six fixed pitch rows, `C123`; Hamuro: FP at low RPM, `E272`), checked against
 the Excel values:
 
 ```{code-cell} ipython3
@@ -258,7 +258,7 @@ for ax, bhp in zip(axes, (150, 180)):
     ax.plot(v, rn, color=P.INK_2, lw=1.2, label="Design RN (Aberdeen)", zorder=2)
     bp = power.bollard_pull_kgf(bhp, PF)
     ax.axhline(bp, color=P.MUTED, lw=1, zorder=1)
-    ax.annotate(f"bollard pull PF = {P.fmt(bp, 0)} kgf", xy=(5.0, bp), xytext=(0, 4),
+    ax.annotate(f"bollard pull FP = {P.fmt(bp, 0)} kgf", xy=(5.0, bp), xytext=(0, 4),
                 textcoords="offset points", ha="right", fontsize=8, color=P.INK_2)
     ax.set_title(f"{bhp} BHP, fixed pitch propeller")
     ax.set_xlabel("Towing speed [kn]")

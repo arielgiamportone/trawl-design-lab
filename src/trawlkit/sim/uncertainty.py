@@ -26,7 +26,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
-from trawlkit.i18n import N_, t
+from trawlkit.i18n import N_, t, tr
 from trawlkit.sim.core import (
     DEFAULT_CN,
     DEFAULT_CT,
@@ -362,7 +362,7 @@ def uncertainty(
 
     for s in species:
         sp = species_of(s)
-        extra[f"l50_{s}"] = (f"L50 {sp.name.lower()}", sp.unit)
+        extra[f"l50_{s}"] = (f"L50 {(tr(sp.name) or sp.name).lower()}", sp.unit)
     for row in samples:
         sc_i, cn_i, ct_i = _apply(inps, row, sc, cn, ct)
         r = simulate(

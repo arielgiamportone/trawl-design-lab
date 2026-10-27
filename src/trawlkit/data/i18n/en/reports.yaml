@@ -102,10 +102,10 @@ Tauti (burlón): Tauti (footrope)
 Nomura 150 HP (tiro): Nomura 150 HP (pull)
 Nomura 180 HP (tiro): Nomura 180 HP (pull)
 Aberdeen pelágica: Aberdeen pelagic
-Paso fijo (PF): Fixed pitch (PF)
-Paso fijo con tobera (PF+T): Fixed pitch with nozzle (PF+T)
-Paso variable (PV): Controllable pitch (PV)
-Paso variable con tobera (PV+T): Controllable pitch with nozzle (PV+T)
+Paso fijo (PF): Fixed pitch (FP)
+Paso fijo con tobera (PF+T): Fixed pitch with nozzle (FP+N)
+Paso variable (PV): Controllable pitch (CP)
+Paso variable con tobera (PV+T): Controllable pitch with nozzle (CP+N)
 superior: upper
 inferior: lower
 lateral: side

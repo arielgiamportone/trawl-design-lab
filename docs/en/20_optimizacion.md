@@ -134,16 +134,16 @@ as a preliminary check of the rigging.
 | `Mec!P164:P172` | Fridman DPA by speed | $A_H$, constraint $g_2$ |
 | `Mec!L211` | geometric DPA | cap on $A_H$, threshold of $g_2$ |
 | `Mec!O272:O280`, `F246` | Fridman AV, Prado maximum AV | $A_V$ |
-| `PotOK!L11:O19` | $F_T$ PF and PV+T | $g_1$ |
+| `PotOK!L11:O19` | $F_T$ FP and CP+N | $g_1$ |
 | `Rem!H118` (+ ROB) | $R_T$ | $g_1$, $g_3$, $E$ |
 | `Rem!E110`, `Cab!D11` | minimum Ø, warp catalogue | $g_3$ |
 | `Port!F215` | required area per otter board | $g_4$ |
 
 ## Results for the FAO A-3 case
 
-The four combinations of the book are optimized: 150 and 180 HP, fixed pitch propeller (PF) and
-controllable pitch propeller with nozzle (PV+T). The book's rule calls for otter boards larger than
-the 1.805 m² FAO board for 180 HP with PF (≈ 2.0 m²) and for PV+T (≈ 2.7 and 3.2 m²): in those cases
+The four combinations of the book are optimized: 150 and 180 HP, fixed pitch propeller (FP) and
+controllable pitch propeller with nozzle (CP+N). The book's rule calls for otter boards larger than
+the 1.805 m² FAO board for 180 HP with FP (≈ 2.0 m²) and for CP+N (≈ 2.7 and 3.2 m²): in those cases
 an otter board similar to the book's (same polar) is used, with the required area rounded up to
 0.05 m² (`scale_door`). Without that change $g_4$ is not met at any point.
 
@@ -169,7 +169,7 @@ from trawlkit.optimize import Evaluator, evaluate, optimise, pareto_front, scale
 
 VESSELS = {v.id: v for v in load_vessels().vessels}
 DOOR = load_doors().doors[0]
-PROPS = {"fixed_pitch": "PF", "variable_pitch_nozzle": "PV+T"}
+PROPS = {"fixed_pitch": "FP", "variable_pitch_nozzle": "CP+N"}
 CONFIGS = [(hp, prop) for hp in (150, 180) for prop in PROPS]
 
 
@@ -253,7 +253,7 @@ mystnb:
       Feasible region (green) in the speed–scale plane for the scaled FAO A-3 net, with contours
       of area swept per hour (thousands of m²/h). The dashed line is the book's net ($s = 1$). The
       markers are the area optimum (circle) and the volume optimum (square). Top 150 HP, bottom
-      180 HP; left fixed pitch (PF) and right controllable pitch with nozzle (PV+T), each with its
+      180 HP; left fixed pitch (FP) and right controllable pitch with nozzle (CP+N), each with its
       own otter board.
     name: fig-20-mapa
 ---
@@ -320,7 +320,7 @@ tags: [hide-input]
 mystnb:
   markdown_format: myst
 ---
-# First points of the front (150 HP, PF) according to the optimizer with a 17 × 11 grid.
+# First points of the front (150 HP, FP) according to the optimizer with a 17 × 11 grid.
 r = RES[((150, "fixed_pitch"), "area")]
 lines = ["| $s$ | $v$ [kn] | $A_H$ [m] | Area [m²/h] | $R_T/A_H$ | $R_T$ [kgf] | Margin |",
          "|---|---|---|---|---|---|---|"]
@@ -344,7 +344,7 @@ $A_H$ depends mostly on the rigging (otter board spread, sweeps and bridles), no
 net: when the net is made smaller, the geometric DPA falls much less than $s$ (from ≈ 13.8 m to
 ≈ 11.4 m between $s = 1$ and $s = 0.6$), while the drag falls ≈ $s^2$ and frees pull to go
 faster. That is why the area optimum lies at the lower edge of the scale ($s ≈ 0.6$–0.66) and at
-the maximum speed the pull allows: ≈ 3.2 kn with 150 HP and PF, ≈ 3.8 kn with PV+T. With 180 HP the
+the maximum speed the pull allows: ≈ 3.2 kn with 150 HP and FP, ≈ 3.8 kn with CP+N. With 180 HP the
 optimum barely moves. This result is only as good as the $A_H$ model: it assumes that the catch is
 proportional to the area between the wing ends, which is reasonable for species that the gear
 herds (squat lobster, flatfish) and optimistic for species that escape from a slow net.
@@ -354,27 +354,27 @@ headrope is flattened as $R_N$ grows), so the volume $A_H A_V v$ has an interior
 optimum lies at $s ≈ 0.83$–0.89 and 2.3–2.6 kn, with plenty of pull reserve (30–90 %): it is set
 not by the power but by the vertical opening model, at the point where Fridman's AV drops below the
 cap of {eq}`eq-20-av`. That is why it is the same with 150 and 180 HP and fixed pitch, and changes
-with PV+T only because the larger otter board opens the net more. It is the result most sensitive
+with CP+N only because the larger otter board opens the net more. It is the result most sensitive
 to the assumptions of the chapter.
 
 **The work per m² swept always favours the smallest and slowest.** $R_T/A_H$ grows with $v$ and
 with $s$, so minimizing it alone leads to the corner $(s_{\min}, v_{\min})$. That is why it is
 presented as a Pareto front ({numref}`fig-20-pareto`): for each area swept per hour, the front
 gives the least work per m², and the designer chooses the point according to the cost of fuel and
-of sea time. Along the front, going from ≈ 30,000 to ≈ 65,000 m²/h with 150 HP and PF triples the
+of sea time. Along the front, going from ≈ 30,000 to ≈ 65,000 m²/h with 150 HP and FP triples the
 work per m².
 
-**The propeller matters more than the power.** Changing from PF to PV+T with the same engine
-enlarges the feasible region much more than changing from 150 to 180 HP: with PV+T the book's net is
+**The propeller matters more than the power.** Changing from FP to CP+N with the same engine
+enlarges the feasible region much more than changing from 150 to 180 HP: with CP+N the book's net is
 feasible from 1.5 kn up to ≈ 2.7 kn (150 HP) or ≈ 2.9 kn (180 HP), and the maximum feasible scale
 rises to ≈ 1.3 (150 HP) and to more than 1.4 (180 HP), against ≈ 1.02 and ≈ 1.06 with fixed pitch.
-According to the book's rule, PV+T requires otter boards of 2.7–3.25 m², considerably larger than
+According to the book's rule, CP+N requires otter boards of 2.7–3.25 m², considerably larger than
 the 1.805 m² FAO board.
 
 **The book's net is dominated.** In all four cases the $s = 1$ points lie above the Pareto front
 ({numref}`fig-20-pareto`): for the same area swept per hour there is a smaller net, towed faster,
 that achieves it with less work per m². With fixed pitch the difference is ≈ 50 % (the original net
-can only go at 2–2.3 kn); with PV+T, ≈ 10–25 %.
+can only go at 2–2.3 kn); with CP+N, ≈ 10–25 %.
 
 ## Assumptions and limits
 

@@ -117,7 +117,7 @@ rows = [
     row("Minimum breaking load of the warp", lambda r: r.warps.loads.min_breaking_load_kgf / 1000, 2, "t"),
     row("Selected warp", lambda r: f"{r.warps.selection.diameter_mm:.0f} mm, "
         f"{V.fmt(r.warps.selection.breaking_load_t, 2)} t"),
-    row("Maximum speed (150 HP, PF, standard)", lambda r: r.performance.design.max_speed_kn, 2, "kn"),
+    row("Maximum speed (150 HP, FP, standard)", lambda r: r.performance.design.max_speed_kn, 2, "kn"),
 ]
 V.md_table(["Result (150 BHP)", "Corrected", "Excel", "Δ corrected vs Excel"], rows)
 ```
@@ -187,8 +187,8 @@ V.sheet_svg(C150, "mod")
 
 The speed window ({doc}`19_ventana_velocidad`) is the interval in which Fridman's pull $F_T(v)$
 exceeds the total drag $R_T(v) = R_N + R_B + R_W + R_{OB}$. The demand does not depend on the
-vessel; the pull does, and it depends both on the power and on the propeller: fixed pitch (PF,
-$K_F = 10$) or controllable pitch with nozzle (PV+T, $K_F = 15$).
+vessel; the pull does, and it depends both on the power and on the propeller: fixed pitch (FP,
+$K_F = 10$) or controllable pitch with nozzle (CP+N, $K_F = 15$).
 
 ```{code-cell} ipython3
 ---
@@ -196,7 +196,7 @@ tags: [hide-input]
 mystnb:
   figure:
     caption: |
-      Fridman pull (PF and PV+T) against the total drag of the standard and the modified net,
+      Fridman pull (FP and CP+N) against the total drag of the standard and the modified net,
       corrected mode. The shaded area is the viable window with a fixed-pitch propeller and the
       standard net; the rings mark the maximum towable speed $v^*$ of each combination.
     name: fig-30-ventana
@@ -220,8 +220,8 @@ for ax, r, bhp in zip(axes, (C150, C180), (150, 180)):
         ax.plot([w.max_speed_kn], [y], "o", ms=11, mfc="none", mec=V.INK_2, mew=1.2, zorder=4)
         ax.annotate(f"v* = {V.fmt(w.max_speed_kn, 2)} kn", (w.max_speed_kn, y), xytext=(8, -14),
                     textcoords="offset points", fontsize=8.5, color=V.INK_2)
-    V.end_label(ax, 5.0, pf[-1], "Fₜ PF", dy=-2)
-    V.end_label(ax, 5.0, pvt[-1], "Fₜ PV+T")
+    V.end_label(ax, 5.0, pf[-1], "Fₜ FP", dy=-2)
+    V.end_label(ax, 5.0, pvt[-1], "Fₜ CP+N")
     ax.set_title(f"{bhp} BHP")
     ax.set_xlabel("Towing speed [kn]")
     ax.set_xlim(1, 5)
@@ -234,7 +234,7 @@ plt.show()
 
 ```{code-cell} ipython3
 :tags: [hide-input]
-combos = [("fixed_pitch", "PF"), ("variable_pitch_nozzle", "PV+T")]
+combos = [("fixed_pitch", "FP"), ("variable_pitch_nozzle", "CP+N")]
 rows = []
 for bhp, rc, re_ in ((150, C150, E150), (180, C180, E180)):
     for key, lab in combos:
@@ -253,7 +253,7 @@ Three readings:
   with nozzle, without touching the engine, takes the limit to 2.97 kn (150 HP) and 3.27 kn
   (180 HP): +0.70 and +0.75 kn, against the +0.25 kn that 30 more HP provide with fixed pitch.
 * **The margin is narrow.** The net alone already uses almost all the pull: at 2.5 kn the drag of
-  the standard net is 82 % of the total demand and equals 97 % of the PF pull of the 150 HP vessel.
+  the standard net is 82 % of the total demand and equals 97 % of the FP pull of the 150 HP vessel.
 * **The corrected mode is more demanding**: it adds the drag of the two otter boards to the demand
   and corrects the standard codend, which in the Excel workbook appeared heavier than the modified
   one (the speed differences are computed in the table above).
@@ -338,9 +338,9 @@ V.md_table(
     [
         ["Minimum speed", f"≈ {V.fmt(v_min, 1)} kn",
          f"Fridman DPA ≥ 85 % of AH = {V.fmt(ah, 1)} m"],
-        ["Maximum speed, 150 HP", f"PF: {V.fmt(C150.performance.windows['fixed_pitch_mod'].max_speed_kn, 2)} kn · PV+T: "
+        ["Maximum speed, 150 HP", f"FP: {V.fmt(C150.performance.windows['fixed_pitch_mod'].max_speed_kn, 2)} kn · CP+N: "
          f"{V.fmt(C150.performance.windows['variable_pitch_nozzle_mod'].max_speed_kn, 2)} kn", "Fₜ ≥ Rₜ, modified net"],
-        ["Maximum speed, 180 HP", f"PF: {V.fmt(C180.performance.windows['fixed_pitch_mod'].max_speed_kn, 2)} kn · PV+T: "
+        ["Maximum speed, 180 HP", f"FP: {V.fmt(C180.performance.windows['fixed_pitch_mod'].max_speed_kn, 2)} kn · CP+N: "
          f"{V.fmt(C180.performance.windows['variable_pitch_nozzle_mod'].max_speed_kn, 2)} kn", "Fₜ ≥ Rₜ, modified net"],
         ["Warp", f"Ø {ws.selection.diameter_mm:.0f} mm ({ws.selection.construction}), "
          f"breaking load {V.fmt(ws.selection.breaking_load_t, 2)} t; {V.fmt(ws.warp_m, 0)} m paid out, "

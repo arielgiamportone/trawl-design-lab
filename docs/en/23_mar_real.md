@@ -61,9 +61,7 @@ $$ (eq-23-fouling)
 :tags: [remove-input]
 import _plots_v as PV
 
-# English names of the catalogue entries (the catalogue data/fouling.yaml is in Spanish).
-FOULING_EN = {"clean": "Clean net", "algae_wings": "Algae on the wings",
-              "jellyfish_codend": "Jellyfish in the codend", "general": "General fouling"}
+from trawlkit.i18n import tr
 
 g = fouling_coefficients()
 glue("gd", f"{g['diameter_gain']:.1f}", display=False)
@@ -72,7 +70,7 @@ glue("gw", f"{g['weight_gain']:.1f}", display=False)
 PV.md_table(
     ["Scenario", "Wings", "Body", "Codend"],
     [
-        [FOULING_EN.get(f.id, f.name), *(f"{f.zones[z]:.1f}" for z in ("wings", "body", "codend"))]
+        [tr(f.name), *(f"{f.zones[z]:.1f}" for z in ("wings", "body", "codend"))]
         for f in fouling_catalogue()
     ],
 )

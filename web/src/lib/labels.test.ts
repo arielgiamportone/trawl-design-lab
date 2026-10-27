@@ -27,7 +27,7 @@ describe('labels', () => {
     expect(label('rn_std_3_5kn_kgf')).toEqual(['Standard RN at 3.5 kn', 'kgf']);
     expect(SUMMARY_LABELS.max_speed_kn).toEqual(['Maximum towing speed', 'kn']);
     expect(DRAG_METHODS.find(([k]) => k === 'tauti_headrope')?.[1]).toBe('Tauti (headrope)');
-    expect(PROPELLER_LABELS.variable_pitch_nozzle).toBe('Controllable pitch with nozzle (PV+T)');
+    expect(PROPELLER_LABELS.variable_pitch_nozzle).toBe('Controllable pitch with nozzle (CP+N)');
     expect(Object.values(SEABED_LABELS)).toContain('Mud');
     setLang('es');
     expect(PROPELLER_LABELS.fixed_pitch).toBe('Paso fijo (PF)');

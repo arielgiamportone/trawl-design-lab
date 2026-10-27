@@ -126,15 +126,8 @@ glue("n_unc", str(UD["n"]), display=False)
 ```{code-cell} ipython3
 :tags: [remove-input]
 digits = {"kgf": 0, "L/h": 1, "cm": 1}
-# The species name inside the L50 label comes from the Spanish catalogue data/species.yaml.
-SPECIES_EN = {"merluza común": "Argentine hake"}
-
-
 def out_label(o) -> str:
-    lab = o["label"]
-    for es_name, en_name in SPECIES_EN.items():
-        lab = lab.replace(es_name, en_name)
-    return lab
+    return o["label"]
 
 
 PV.md_table(

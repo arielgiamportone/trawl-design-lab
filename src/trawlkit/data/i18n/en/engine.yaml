@@ -3,7 +3,7 @@
 variant 'mod' requiere net_modified: variant 'mod' requires net_modified
 Buque de {hp:g} hp: '{hp:g} hp vessel'
 '{key} = {value} m escalado del buque de la A-3': '{key} = {value} m scaled from the A-3 vessel'
-'hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y PV con tobera)': 'propeller {prop}: the pull is computed as fixed pitch (the book only tabulates PF and PV with nozzle)'
+'hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y PV con tobera)': 'propeller {prop}: the pull is computed as fixed pitch (the book only tabulates FP and CP with nozzle)'
 planilla del usuario: user spreadsheet
 Red cargada desde una planilla del usuario (sin verificar).: Net loaded from a user spreadsheet (not verified).
 escala por semejanza s₀ = √({hp:g} / {design:g}) = {s0:.3f} (superficie de paño ∝ potencia): similarity scale s₀ = √({hp:g} / {design:g}) = {s0:.3f} (netting area ∝ power)
@@ -36,7 +36,7 @@ diámetro del hilo [mm]: twine diameter [mm]
 eslora [m]: length overall [m]
 especie objetivo: target species
 fondo, semipelágica, pelágica: bottom, semipelagic, pelagic
-'hélice: PF, PF+T, PV, PV+T': 'propeller: PF (fixed pitch), PF+T (fixed pitch + nozzle), PV (variable pitch), PV+T (variable pitch + nozzle)'
+'hélice: PF, PF+T, PV, PV+T': 'propeller: FP (fixed pitch), FP+N (fixed pitch + nozzle), CP (variable pitch), CP+N (variable pitch + nozzle)'
 id de un buque del catálogo o nombre de uno de la flota: id of a catalogue vessel or name of one in the fleet
 id de una red del catálogo o nombre de una red cargada: id of a catalogue net or name of an uploaded net
 id del portón (catálogo o componentes): otter board id (catalogue or components)

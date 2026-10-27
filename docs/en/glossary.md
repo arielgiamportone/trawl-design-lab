@@ -21,7 +21,7 @@ Spanish one, with a short definition. It is sorted by the English term.
 | Flotación | Buoyancy | Upward force provided by floats on the headrope; it keeps the net mouth open vertically. |
 | Calibración | Calibration | Adjustment of model coefficients so that results match measurements. |
 | Copo, bolsa | Codend | The rear end of the net, where the catch accumulates. |
-| Hélice de paso variable (PV) | Controllable pitch propeller (PV) | Propeller whose blade pitch can be changed in operation. |
+| Hélice de paso variable (PV) | Controllable pitch propeller (CP) | Propeller whose blade pitch can be changed in operation. |
 | Pies de gallo | Crowfoot | Short legs that split a line into two or more attachment points. |
 | Corte | Cut | Way in which a netting panel is cut on the diagonal to change its width, given as a code (e.g. 1N2B). |
 | Razón de corte | Cutting rate | Ratio between the meshes lost in width and the meshes advanced in depth by a cut. |
@@ -30,7 +30,7 @@ Spanish one, with a short definition. It is sorted by the English term.
 | Túnel | Extension | Untapered section of netting between the body and the codend. |
 | Índice de filtración | Filtration index | Ratio $d/l$ of twine diameter to mesh size, summed over the net. |
 | Marea | Fishing trip | A voyage of the vessel from port to the fishing ground and back. |
-| Hélice de paso fijo (PF) | Fixed pitch propeller (PF) | Propeller whose blade pitch cannot be changed. |
+| Hélice de paso fijo (PF) | Fixed pitch propeller (FP) | Propeller whose blade pitch cannot be changed. |
 | Flota | Fleet | A group of vessels, in this book used for projecting nets onto many vessels at once. |
 | Boya | Float | Buoyant sphere attached to the headrope. |
 | Burlón, relinga inferior | Footrope | Lower rope of the net mouth, in contact with the seabed. |

@@ -109,10 +109,7 @@ and a range, and the BENTHIS penetration class {cite:p}`eigaard2016`:
 :tags: [remove-input]
 import _plots_v as PV
 
-# English names of the catalogue entries (the catalogue data/seabed.yaml is in Spanish).
-SEABED_EN = {"mud": "Mud", "sand": "Sand", "mixed": "Intermediate (mixed)",
-             "gravel": "Gravel and shell", "rock": "Rock or stone"}
-PENETRATION_EN = {"alta": "high", "media": "medium", "baja": "low"}
+from trawlkit.i18n import tr
 
 
 def es(x: float) -> str:
@@ -122,10 +119,10 @@ PV.md_table(
     ["Seabed", "μ groundgear and netting", "μ otter board", "Penetration"],
     [
         [
-            SEABED_EN.get(s.id, s.name),
+            tr(s.name),
             f"{es(s.mu_gear.nominal)} ({es(s.mu_gear.low)}–{es(s.mu_gear.high)})",
             f"{es(s.mu_door.nominal)} ({es(s.mu_door.low)}–{es(s.mu_door.high)})",
-            PENETRATION_EN.get(s.penetration, s.penetration),
+            tr(s.penetration),
         ]
         for s in seabeds()
     ],

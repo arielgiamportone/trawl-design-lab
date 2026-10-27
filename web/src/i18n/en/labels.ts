@@ -63,10 +63,10 @@ export const labels: Messages['labels'] = {
     average_kgf: 'Average',
   },
   propellers: {
-    fixed_pitch: 'Fixed pitch (PF)',
-    fixed_pitch_nozzle: 'Fixed pitch with nozzle (PF+T)',
-    variable_pitch: 'Controllable pitch (PV)',
-    variable_pitch_nozzle: 'Controllable pitch with nozzle (PV+T)',
+    fixed_pitch: 'Fixed pitch (FP)',
+    fixed_pitch_nozzle: 'Fixed pitch with nozzle (FP+N)',
+    variable_pitch: 'Controllable pitch (CP)',
+    variable_pitch_nozzle: 'Controllable pitch with nozzle (CP+N)',
   },
   planes: { upper: 'upper', lower: 'lower', side: 'side' },
   sections: {

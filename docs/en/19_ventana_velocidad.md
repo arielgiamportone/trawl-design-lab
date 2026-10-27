@@ -33,7 +33,7 @@ The book adopts as design pull the straight line of {cite:t}`fridman1986`:
 
 $$
 F_T(v) = P\,(K_F - 0.7\,v) \quad [\text{kgf}], \qquad
-K_F = \begin{cases} 10 & \text{fixed pitch propeller (PF)} \\ 15 & \text{controllable pitch with nozzle (PV+T)} \end{cases}
+K_F = \begin{cases} 10 & \text{fixed pitch propeller (FP)} \\ 15 & \text{controllable pitch with nozzle (CP+N)} \end{cases}
 $$ (eq-19-ft)
 
 with $P$ in HP and $v$ in knots. The coefficient $K_F$ is the bollard pull per HP; the slope
@@ -79,7 +79,7 @@ demand within the interval and $v^*$ stays on the safe side.
 
 | Cell(s) | Calculation | Function |
 |---|---|---|
-| `PotOK!L11:O19` | Fridman $F_T$ (PF and PV+T, 150 and 180 HP) | `power.summary`, `power.fridman_towing_force_kgf` |
+| `PotOK!L11:O19` | Fridman $F_T$ (FP and CP+N, 150 and 180 HP) | `power.summary`, `power.fridman_towing_force_kgf` |
 | `Rem!H118:I126` | $R_T$ (standard and modified) | `rigging.total_drag_kgf` (erratum `warp_total_omits_doors`) |
 | — | demand with any combination of terms | `performance.total_demand_kgf` |
 | — | margin, feasible speeds and $v^*$ | `performance.speed_window` |
@@ -155,9 +155,9 @@ mystnb:
   figure:
     caption: |
       Speed window of the 150 HP vessel with the standard FAO A-3 net. Fridman pull with a fixed
-      pitch propeller (PF) and a controllable pitch propeller with nozzle (PV+T) against the total
+      pitch propeller (FP) and a controllable pitch propeller with nozzle (CP+N) against the total
       drag of the Excel workbook ($R_N + R_B + R_W$) and of the corrected mode (which adds
-      $R_{OB}$). The shaded area is the feasible design window (PF, Excel); the rings mark $v^*$.
+      $R_{OB}$). The shaded area is the feasible design window (FP, Excel); the rings mark $v^*$.
     name: fig-19-ventana
 ---
 P.setup()
@@ -170,16 +170,16 @@ pf, pvt = win.available_kgf, r.performance.windows["variable_pitch_nozzle_std"].
 vv = np.linspace(kn[0], win.max_speed_kn, 60)
 ax.fill_between(vv, np.interp(vv, kn, win.demand_kgf), np.interp(vv, kn, pf),
                 color=P.GOOD, alpha=0.12, lw=0)
-ax.annotate("feasible window\n(PF, Excel)", (1.45, 1050), color=P.INK_2, fontsize=9, ha="center")
+ax.annotate("feasible window\n(FP, Excel)", (1.45, 1050), color=P.INK_2, fontsize=9, ha="center")
 
-P.line(ax, kn, pf, 1, "$F_T$ fixed pitch (PF)")
-P.line(ax, kn, pvt, 7, "$F_T$ controllable pitch + nozzle (PV+T)")
+P.line(ax, kn, pf, 1, "$F_T$ fixed pitch (FP)")
+P.line(ax, kn, pvt, 7, "$F_T$ controllable pitch + nozzle (CP+N)")
 P.line(ax, kn, win.demand_kgf, 2, "$R_T$ Excel ($R_N+R_B+R_W$)")
 P.line(ax, kn, rc.performance.design.demand_kgf, 4, "$R_T$ corrected ($+R_{OB}$)")
 
-marks = ((win, "$v^*$ PF, Excel", (2.8, 850)),
-         (r.performance.windows["variable_pitch_nozzle_std"], "$v^*$ PV+T, Excel", (2.05, 2700)),
-         (rc.performance.design, "$v^*$ PF, corrected", (2.8, 550)))
+marks = ((win, "$v^*$ FP, Excel", (2.8, 850)),
+         (r.performance.windows["variable_pitch_nozzle_std"], "$v^*$ CP+N, Excel", (2.05, 2700)),
+         (rc.performance.design, "$v^*$ FP, corrected", (2.8, 550)))
 for w, lab, xy in marks:
     vs = w.max_speed_kn
     y = float(np.interp(vs, kn, w.available_kgf))
@@ -196,7 +196,7 @@ P.finish(fig)
 
 ### Sensitivity
 
-The table varies one factor at a time on the design case (150 HP, PF, standard net, Excel mode).
+The table varies one factor at a time on the design case (150 HP, FP, standard net, Excel mode).
 
 ```{code-cell} ipython3
 ---
@@ -222,11 +222,11 @@ rows = [
     ("+ $R_{OB}$ of one otter board", vmax(pf, rn, rb, rw, rob)),
     ("+ $R_{OB}$ of both otter boards (corrected mode)", vmax(pf, rn, rb, rw, 2 * rob)),
     ("Modified net", r.performance.windows["fixed_pitch_mod"].max_speed_kn),
-    ("PV+T propeller", vmax(pvt, rn, rb, rw)),
-    ("180 HP vessel (PF)", r180.performance.design.max_speed_kn),
-    ("180 HP vessel (PV+T)",
+    ("CP+N propeller", vmax(pvt, rn, rb, rw)),
+    ("180 HP vessel (FP)", r180.performance.design.max_speed_kn),
+    ("180 HP vessel (CP+N)",
      r180.performance.windows["variable_pitch_nozzle_std"].max_speed_kn),
-    ("Full corrected mode (PF)", rc.performance.design.max_speed_kn),
+    ("Full corrected mode (FP)", rc.performance.design.max_speed_kn),
 ]
 lines = ["| Variant | $v^*$ [kn] | Δ [kn] |", "|---|---|---|"]
 for name, v in rows:

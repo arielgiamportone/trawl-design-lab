@@ -46,7 +46,7 @@ import numpy as np
 import numpy.typing as npt
 import yaml
 
-from trawlkit.i18n import t
+from trawlkit.i18n import t, tr
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.io.schema import MeshOrientation, NetSpec, Panel, Section
 from trawlkit.netting import orientation_coefficients
@@ -95,7 +95,7 @@ class FishShape:
         """Representación serializable."""
         return {
             "id": self.id,
-            "name": self.name,
+            "name": tr(self.name),
             "scientific_name": self.scientific_name,
             "group": self.group,
             "measure": self.measure,
@@ -106,7 +106,7 @@ class FishShape:
             "width": self.width,
             "compression": self.compression,
             "cv": self.cv,
-            "notes": self.notes,
+            "notes": tr(self.notes),
         }
 
 
@@ -233,7 +233,7 @@ class SelectivityCurve:
         """Representación serializable."""
         out: dict[str, Any] = {
             "species": self.species.id,
-            "name": self.species.name,
+            "name": tr(self.species.name),
             "measure": self.species.measure,
             "unit": self.species.unit,
             "lengths": np.round(self.lengths, 2).tolist(),

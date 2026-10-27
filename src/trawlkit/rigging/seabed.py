@@ -13,6 +13,7 @@ from typing import Any
 
 import yaml
 
+from trawlkit.i18n import tr
 from trawlkit.io.loader import DATA_DIR
 
 
@@ -41,7 +42,7 @@ class Seabed:
         """Representación serializable."""
         return {
             "id": self.id,
-            "name": self.name,
+            "name": tr(self.name),
             "aliases": list(self.aliases),
             "mu_gear": {
                 "nominal": self.mu_gear.nominal,
@@ -51,8 +52,8 @@ class Seabed:
                 "nominal": self.mu_door.nominal,
                 "range": [self.mu_door.low, self.mu_door.high],
             },
-            "penetration": self.penetration,
-            "notes": self.notes,
+            "penetration": tr(self.penetration),
+            "notes": tr(self.notes),
         }
 
 

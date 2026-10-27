@@ -114,7 +114,7 @@ rows_def = [
     ("warp_undersized", "Warp",
      lambda r: r.warps.selection.diameter_mm, 0, "mm", "warp_total_omits_doors"),
     ("sweep_degrees_of_sine", "Martini sweeps", lambda r: r.bridles.sweeps_martini_m, 2, "m", ""),
-    ("warp_total_omits_doors", "v* (150 HP, PF)",
+    ("warp_total_omits_doors", "v* (150 HP, FP)",
      lambda r: r.performance.design.max_speed_kn, 2, "kn", "all"),
 ]
 CARRY = {SS: "codend Sₛ", "hamuro_sin_degrees": "Hamuro sine",
