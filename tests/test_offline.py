@@ -23,6 +23,8 @@ GETS = [
     "/catalog/components/wire?generic=true",
     "/catalog/components/rope?brand=Garware&region=south_asia",
     "/catalog/components/door/door_flat_75hp",
+    "/catalog/components/shackle?brand=Crosby",
+    "/catalog/components/shackle/crosby_g209_1_2in",
     "/catalog/vessels",
     "/catalog/doors",
     "/catalog/seabeds",
@@ -123,6 +125,16 @@ POSTS: list[tuple[str, dict[str, object]]] = [
             "mode": "cases",
         },
     ),
+    (
+        "/prices/parse",
+        {
+            "file": {
+                "filename": "p.csv",
+                "content": "clave;precio;moneda;unidad;fecha\ndoors;800;USD;u.;2026-10\n",
+            },
+        },
+    ),
+    ("/design/bom", {"params": {"chain_id": "gunnebo_llz_9mm"}}),
 ]
 
 
@@ -172,6 +184,22 @@ def test_binary_batch_routes() -> None:
     assert base64.b64decode(wrapped["binary"]) == api_csv
     pdf = offline.handle("POST", "/batch/export?format=pdf", json.dumps(body))
     assert pdf[0] == 503
+
+
+def test_binary_price_routes() -> None:
+    body = {
+        "prices": {"doors": {"value": 800, "currency": "USD", "unit": "unit", "date": "2026-10"}},
+        "lines": [{"key": "floats", "label": "Boyas", "unit": "unit"}],
+    }
+    for fmt in ("csv", "xlsx"):
+        status, out = offline.handle("POST", f"/prices/export?format={fmt}", json.dumps(body))
+        assert status == 200 and isinstance(out, offline.Binary)
+        api = client.post(f"/prices/export?format={fmt}", json=body)
+        if fmt == "csv":
+            assert out.data == api.content
+        else:
+            assert out.media == api.headers["content-type"]
+    assert offline.handle("POST", "/prices/export?format=pdf", json.dumps(body))[0] == 422
 
 
 def test_server_only_routes_and_json_wrapper() -> None:

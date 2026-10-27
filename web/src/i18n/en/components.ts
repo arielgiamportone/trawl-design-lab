@@ -8,6 +8,7 @@ export const components: Messages['components'] = {
     door: 'Otter board',
     float: 'Float',
     chain: 'Chain',
+    shackle: 'Shackle',
   },
   region: {
     global: 'Worldwide',
@@ -50,6 +51,10 @@ export const components: Messages['components'] = {
     max_depth_m: 'Max. depth',
     link: 'Link',
     link_diameter_mm: 'Ø',
+    size: 'Size',
+    wll_t: 'Working load limit (WLL)',
+    pin_diameter_mm: 'Pin Ø',
+    weight_kg: 'Weight',
   },
   contrib: {
     twine: {
@@ -88,6 +93,12 @@ export const components: Messages['components'] = {
       weight_kg_per_m: 'Weight',
       breaking_load_t: 'Breaking load',
     },
+    shackle: {
+      size: 'Nominal size (1/2 in, 13 mm)',
+      body_diameter_mm: 'Body diameter',
+      wll_t: 'Working load limit (WLL)',
+      weight_kg: 'Weight of one piece',
+    },
   },
   csv: {
     head: ['Item', 'Component', 'Quantity', 'Unit', 'Unit price', 'Currency', 'Cost', 'Note'],
@@ -109,7 +120,7 @@ export const components: Messages['components'] = {
     aportar: 'Contribute',
   },
   intro:
-    'Netting, wire ropes, ropes, otter boards, floats and chains from manufacturers and their generic equivalents, with the source of every value. Prices are always indicative.',
+    'Netting, wire ropes, ropes, otter boards, floats, chains and shackles from manufacturers and their generic equivalents, with the source of every value. Prices are always indicative.',
   section: 'Components section',
   kindLabel: 'Component type',
   filters: 'Component filters',
@@ -154,6 +165,16 @@ export const components: Messages['components'] = {
   priceOf: (label: string, unit: string) => `Price of ${label} per ${unit}`,
   noPrice: 'no price',
   total: 'Indicative total',
+  priceList: 'Price list',
+  importPrices: 'Import prices (CSV or XLSX)',
+  exportPricesCsv: 'Export prices (CSV)',
+  exportPricesXlsx: 'Export prices (XLSX)',
+  priceListHelp:
+    'The price list has one row per price: key (component or line id), price, currency, unit (kg, m or unit), date and source. Export the template, fill it in with your supplier’s prices and import it again: it is used in the bill of materials, rigging by cost and the economics, and it is saved with the project. The catalogue has no prices.',
+  pricesImported: (n: number, rows: number) =>
+    `${n} ${n === 1 ? 'price' : 'prices'} imported from ${rows} ${rows === 1 ? 'row' : 'rows'}.`,
+  row: (n: number) => `Row ${n}`,
+  pricesFile: 'prices',
   missingLines: (n: number) =>
     `${n} ${n === 1 ? 'line' : 'lines'} without a price: the total does not include ${n === 1 ? 'it' : 'them'}.`,
   objective: {

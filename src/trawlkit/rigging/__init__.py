@@ -5,9 +5,11 @@ no dependen de los módulos de red ni de potencia.
 """
 
 from trawlkit.rigging.ballast import (
+    BallastChain,
     BallastDistribution,
     BallastLimits,
     adjust_chain_weight_kg,
+    ballast_chain,
     ballast_even_kg_m,
     ballast_fridman_kg,
     ballast_koyama_kg,
@@ -71,6 +73,7 @@ from trawlkit.rigging.ropes import (
     rope_weight_air_kg,
     rope_weight_in_water_kg,
     select_rope,
+    select_rope_component,
     wingtip_reinforcement_m,
 )
 from trawlkit.rigging.seabed import Range, Seabed, seabed, seabeds
@@ -153,6 +156,7 @@ __all__ = [
     "ROB_SHARES",
     "ROPE_WATER_WEIGHT_COEF",
     "WARP_CD_TABLE",
+    "BallastChain",
     "BallastDistribution",
     "BallastLimits",
     "BridleLengths",
@@ -177,6 +181,7 @@ __all__ = [
     "WarpWeight",
     "adjust_chain_weight_kg",
     "attack_angle_deg",
+    "ballast_chain",
     "ballast_even_kg_m",
     "ballast_fridman_kg",
     "ballast_koyama_kg",
@@ -229,6 +234,7 @@ __all__ = [
     "rope_weight_in_water_kg",
     "select_door",
     "select_rope",
+    "select_rope_component",
     "select_warp",
     "stretched_circumference_m",
     "sweeps_dremiere_m",

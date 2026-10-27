@@ -1,0 +1,509 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: shackle
+sources:
+- key: crosby_g209
+  title: The Crosby Group, G-209 / S-209 Screw Pin Anchor Shackles (Crosby General Catalog, p. 24)
+  url: https://www.thecrosbygroup.com/wp-content/uploads/catalog/2022/en/24.pdf
+  accessed: '2026-10-27'
+items:
+- id: crosby_g209_3_8in
+  name: Crosby G-209 3/8 in, grillete de perno roscado 1 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 3/8 in
+  body_diameter_mm: 9.7
+  pin_diameter_mm: 11.2
+  wll_t: 1.0
+  design_factor: 6.0
+  breaking_load_t: 6.0
+  weight_kg: 0.14
+  notes:
+  - Código G-209 1018419; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 1 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_1_2in
+  name: Crosby G-209 1/2 in, grillete de perno roscado 2 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 1/2 in
+  body_diameter_mm: 12.7
+  pin_diameter_mm: 15.7
+  wll_t: 2.0
+  design_factor: 6.0
+  breaking_load_t: 12.0
+  weight_kg: 0.33
+  notes:
+  - Código G-209 1018455; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 2 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_5_8in
+  name: Crosby G-209 5/8 in, grillete de perno roscado 3.25 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 5/8 in
+  body_diameter_mm: 15.7
+  pin_diameter_mm: 19.1
+  wll_t: 3.25
+  design_factor: 6.0
+  breaking_load_t: 19.5
+  weight_kg: 0.62
+  notes:
+  - Código G-209 1018473; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 3.25 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_3_4in
+  name: Crosby G-209 3/4 in, grillete de perno roscado 4.75 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 3/4 in
+  body_diameter_mm: 19.1
+  pin_diameter_mm: 22.4
+  wll_t: 4.75
+  design_factor: 6.0
+  breaking_load_t: 28.5
+  weight_kg: 1.07
+  notes:
+  - Código G-209 1018491; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 4.75 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_7_8in
+  name: Crosby G-209 7/8 in, grillete de perno roscado 6.5 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 7/8 in
+  body_diameter_mm: 22.4
+  pin_diameter_mm: 25.4
+  wll_t: 6.5
+  design_factor: 6.0
+  breaking_load_t: 39.0
+  weight_kg: 1.64
+  notes:
+  - Código G-209 1018516; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 6.5 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_1in
+  name: Crosby G-209 1 in, grillete de perno roscado 8.5 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 1 in
+  body_diameter_mm: 25.4
+  pin_diameter_mm: 28.4
+  wll_t: 8.5
+  design_factor: 6.0
+  breaking_load_t: 51.0
+  weight_kg: 2.28
+  notes:
+  - Código G-209 1018534; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 8.5 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_1_1_4in
+  name: Crosby G-209 1-1/4 in, grillete de perno roscado 12 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 1-1/4 in
+  body_diameter_mm: 32.8
+  pin_diameter_mm: 35.1
+  wll_t: 12.0
+  design_factor: 6.0
+  breaking_load_t: 72.0
+  weight_kg: 4.31
+  notes:
+  - Código G-209 1018570; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 12 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_1_1_2in
+  name: Crosby G-209 1-1/2 in, grillete de perno roscado 17 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 1-1/2 in
+  body_diameter_mm: 38.9
+  pin_diameter_mm: 41.4
+  wll_t: 17.0
+  design_factor: 6.0
+  breaking_load_t: 102.0
+  weight_kg: 7.8
+  notes:
+  - Código G-209 1018614; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 17 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_2in
+  name: Crosby G-209 2 in, grillete de perno roscado 35 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 2 in
+  body_diameter_mm: 52.8
+  pin_diameter_mm: 57.2
+  wll_t: 35.0
+  design_factor: 6.0
+  breaking_load_t: 210.0
+  weight_kg: 20.4
+  notes:
+  - Código G-209 1018650; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 35 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza
+- id: crosby_g209_2_1_2in
+  name: Crosby G-209 2-1/2 in, grillete de perno roscado 55 t
+  brand: Crosby
+  product: G-209
+  country: US
+  regions:
+  - global
+  - north_america
+  - latam
+  - europe
+  type: bow
+  size: 2-1/2 in
+  body_diameter_mm: 69.1
+  pin_diameter_mm: 69.9
+  wll_t: 55.0
+  design_factor: 6.0
+  breaking_load_t: 330.0
+  weight_kg: 38.9
+  notes:
+  - Código G-209 1018678; galvanizado en caliente; grado 6.
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota D
+    pin_diameter_mm:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+    design_factor:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: «6:1 Design Factor»
+    breaking_load_t:
+      kind: derived
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: 6 × WLL = 6 × 55 t
+    weight_kg:
+      kind: transcribed
+      document: crosby_g209
+      page: Crosby, «G-209 / S-209 Screw Pin Anchor Shackles», p. 24
+      note: peso de una pieza

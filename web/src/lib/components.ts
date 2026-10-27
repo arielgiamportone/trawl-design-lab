@@ -7,9 +7,17 @@ import { liveRecord } from './liveRecord';
 import { loadJson, saveJson } from './storage';
 import { getUnits, toCanonical, toDisplay, unitLabel } from './units';
 
-export type ComponentKind = 'twine' | 'wire' | 'rope' | 'door' | 'float' | 'chain';
+export type ComponentKind = 'twine' | 'wire' | 'rope' | 'door' | 'float' | 'chain' | 'shackle';
 
-export const COMPONENT_KINDS: ComponentKind[] = ['twine', 'wire', 'rope', 'door', 'float', 'chain'];
+export const COMPONENT_KINDS: ComponentKind[] = [
+  'twine',
+  'wire',
+  'rope',
+  'door',
+  'float',
+  'chain',
+  'shackle',
+];
 
 /** Tipos de componente en el idioma activo (objeto vivo: se lee al usarlo). */
 export const COMPONENT_LABEL: Record<ComponentKind, string> = liveRecord(
@@ -92,6 +100,13 @@ const COLUMN_FIELDS: Record<ComponentKind, [string, string?][]> = {
     ['link_diameter_mm', 'mm'],
     ['weight_kg_per_m', 'kg/m'],
     ['breaking_load_t', 't'],
+  ],
+  shackle: [
+    ['size'],
+    ['wll_t', 't'],
+    ['breaking_load_t', 't'],
+    ['pin_diameter_mm', 'mm'],
+    ['weight_kg', 'kg'],
   ],
 };
 
@@ -292,6 +307,56 @@ export function savePrices(prices: Record<string, Price>): void {
   saveJson(PRICES_KEY, prices);
 }
 
+/** Normaliza una lista de precios leída de un proyecto (descarta los precios inválidos). */
+export function sanitizePrices(raw: unknown): Record<string, Price> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const out: Record<string, Price> = {};
+  for (const [k, p] of Object.entries(raw as Record<string, Partial<Price>>)) {
+    if (
+      p &&
+      typeof p.value === 'number' &&
+      p.value >= 0 &&
+      typeof p.currency === 'string' &&
+      (p.unit === 'kg' || p.unit === 'm' || p.unit === 'unit')
+    ) {
+      out[k] = {
+        value: p.value,
+        currency: p.currency,
+        unit: p.unit,
+        date: String(p.date ?? ''),
+        source: String(p.source ?? msg().components.priceSource),
+      };
+    }
+  }
+  return out;
+}
+
+/**
+ * Precios importados sobre los que ya había: los de la planilla reemplazan a los de la misma
+ * clave y el resto se conserva.
+ */
+export function mergePrices(
+  current: Record<string, Price>,
+  imported: Record<string, Price>,
+): Record<string, Price> {
+  return { ...current, ...sanitizePrices(imported) };
+}
+
+/** Líneas de la lista de materiales para la plantilla de precios (``POST /prices/export``). */
+export function priceLines(bom: Bom | undefined): {
+  key: string;
+  label: string;
+  unit: string;
+  component_id?: string | null;
+}[] {
+  return (bom?.lines ?? []).map((l) => ({
+    key: l.key,
+    label: l.component_name ? `${l.label}: ${l.component_name}` : l.label,
+    unit: l.unit,
+    component_id: l.component_id ?? null,
+  }));
+}
+
 // -- Aportes de usuarios ----------------------------------------------------------------------
 
 export interface ContribField {
@@ -326,6 +391,7 @@ const CONTRIB_UNITS: Record<ComponentKind, [string, string?][]> = {
     ['weight_kg_per_m', 'kg/m'],
     ['breaking_load_t', 't'],
   ],
+  shackle: [['size'], ['body_diameter_mm', 'mm'], ['wll_t', 't'], ['weight_kg', 'kg']],
 };
 
 /** Campos del formulario de aporte por tipo (además de nombre, marca, país y fuente). */

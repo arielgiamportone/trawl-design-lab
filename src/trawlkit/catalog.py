@@ -79,6 +79,25 @@ def generic_vessel(bhp: float, length_m: float | None = None) -> Vessel:
     )
 
 
+def complete_vessel(v: Vessel) -> tuple[Vessel, list[str]]:
+    """Completa manga y puntal que faltan escalando el buque de la A-3 (Fase 19.4).
+
+    El catálogo de la flota no inventa medidas que la fuente no da; para calcular un caso se
+    escalan del buque de 150 hp de la A-3 con la razón de esloras (o la raíz cúbica de la
+    potencia, sin eslora), como :func:`trawlkit.catalog.generic_vessel`, y se anota.
+    """
+    missing = [k for k in ("length_m", "beam_m", "depth_m") if getattr(v, k) is None]
+    if not missing:
+        return v, []
+    gen = generic_vessel(v.bhp, v.length_m)
+    update = {k: getattr(gen, k) for k in missing}
+    notes = [
+        t("{key} = {value} m escalado del buque de la A-3", key=k, value=val)
+        for k, val in update.items()
+    ]
+    return v.model_copy(update=update), notes
+
+
 def _reference_door() -> Door:
     return next(d for d in load_doors().doors if d.id == REFERENCE_DOOR_ID)
 

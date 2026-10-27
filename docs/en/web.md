@@ -246,15 +246,19 @@ FAO documents:
 
 The **“Components”** tab ({doc}`34_componentes`) has four sections:
 
-- **Catalogue**: netting and twine, wire ropes, ropes, otter boards, floats and chains, with
-  filters by brand, region and “Generic only”. The sheet shows the source, the value-by-value
+- **Catalogue**: netting and twine, wire ropes, ropes, otter boards, floats, chains and shackles,
+  with filters by brand, region and “Generic only”. The sheet shows the source, the value-by-value
   provenance, the validator's remarks and the equivalent generic. “Use in the case” fixes the
   component (`warp_id`, `float_id`, `twine_id`, `chain_id`, the otter board or the headrope and
   footrope ropes).
 - **Bill of materials** (`POST /design/bom`): what to buy and how much, with the price the user
   enters per line (it stays in the browser). It is downloaded as CSV (separator “;” and decimal
   comma) or printed or saved as PDF from the browser. Lines without a price say so and do not add
-  zero.
+  zero. **Price list** (Phase 19.2): “Import prices” reads a CSV or XLSX (`POST /prices/parse`;
+  key = component or line id, price, currency, unit, date and source) and shows the rows with
+  errors; “Export prices” downloads the list as CSV or XLSX (`POST /prices/export`) with the lines
+  without a price left empty, as a template. The prices are also saved in the project (`prices`
+  field), and opening a project adds them to those of the browser. It works offline.
 - **Rig from the catalogue** (`POST /optimize/components`): objective (lowest drag, most area per
   litre or lowest cost), port region and “Generic only”. It shows the recommended rigging,
   alternatives (a generic one if the best carries brands), the constraints that are not met and

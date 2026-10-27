@@ -1,0 +1,248 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: chain
+sources:
+- key: gunnebo_llz
+  title: Gunnebo Industries / Kito Crosby, Long Link Chain LLZ, Grade 6, hot-dip galvanized (datos del
+    producto)
+  url: https://kitocrosby.com/product/gunnebo-industries-long-link-chain-llz-grade-6/
+  accessed: '2026-10-27'
+items:
+- id: gunnebo_llz_9mm
+  name: Gunnebo LLZ grado 6 Ø9 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-9-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 9.0
+  grade: '6'
+  weight_kg_per_m: 1.4
+  breaking_load_t: 7.8
+  generic_of: chain_ht_10mm
+  notes:
+  - Paso 53 mm, ancho exterior 14.3 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_13mm
+  name: Gunnebo LLZ grado 6 Ø13 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-13-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 13.0
+  grade: '6'
+  weight_kg_per_m: 2.9
+  breaking_load_t: 16.3
+  generic_of: chain_ht_13mm
+  notes:
+  - Paso 80 mm, ancho exterior 21.1 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_16mm
+  name: Gunnebo LLZ grado 6 Ø16 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-16-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 16.0
+  grade: '6'
+  weight_kg_per_m: 4.6
+  breaking_load_t: 24.7
+  generic_of: chain_ht_16mm
+  notes:
+  - Paso 100 mm, ancho exterior 27 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_19mm
+  name: Gunnebo LLZ grado 6 Ø19 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-19-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 19.0
+  grade: '6'
+  weight_kg_per_m: 6.5
+  breaking_load_t: 34.8
+  generic_of: chain_ht_19mm
+  notes:
+  - Paso 99 mm, ancho exterior 28.5 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_22mm
+  name: Gunnebo LLZ grado 6 Ø22 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-22-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 22.0
+  grade: '6'
+  weight_kg_per_m: 8.7
+  breaking_load_t: 46.6
+  generic_of: chain_ht_19mm
+  notes:
+  - Paso 120 mm, ancho exterior 36 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_25mm
+  name: Gunnebo LLZ grado 6 Ø25 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-25-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 25.0
+  grade: '6'
+  weight_kg_per_m: 12.0
+  breaking_load_t: 60.0
+  generic_of: null
+  notes:
+  - Paso 140 mm, ancho exterior 37 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'
+- id: gunnebo_llz_32mm
+  name: Gunnebo LLZ grado 6 Ø32 mm (eslabón largo, galvanizada)
+  brand: Gunnebo Industries
+  product: LLZ-32-6
+  country: SE
+  regions:
+  - global
+  - europe
+  - north_america
+  link: largo
+  link_diameter_mm: 32.0
+  grade: '6'
+  weight_kg_per_m: 19.0
+  breaking_load_t: 98.3
+  generic_of: null
+  notes:
+  - Paso 170 mm, ancho exterior 44 mm. Galvanizada en caliente; factor de diseño 4:1; «no apta para izaje»
+    (NS 9415, acuicultura y pesca).
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: d nom.
+    weight_kg_per_m:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+    breaking_load_t:
+      kind: transcribed
+      document: gunnebo_llz
+      page: Gunnebo Industries Long Link Chain LLZ, tabla métrica
+      note: 'la columna métrica dice «kg» pero son toneladas (columna imperial: 17 191 lb = 7,8 t para
+        9 mm)'

@@ -34,6 +34,7 @@ import numpy as np
 import numpy.typing as npt
 import yaml
 
+from trawlkit.i18n import t
 from trawlkit.io.loader import DATA_DIR
 from trawlkit.io.schema import PropellerType, Vessel
 from trawlkit.units import KNOT_TO_MS
@@ -67,9 +68,14 @@ FRIDMAN_KF: dict[PropellerType, float] = {
 #: Fridman: pendiente de la caída de FT con la velocidad (``0.7·v``).
 FRIDMAN_SPEED_SLOPE: float = 0.7
 
+# A VERIFICAR (Fase 19.4): la regla BP = BHP·0.9·{1.10, 1.20, 1.25, 1.40}/100 [t] viene del libro
+# Excel (giamportone2024); no se halló en el texto del Fisherman's Workbook (Prado y Dremière 1990,
+# PDF pp. 98-99), que da BP0 = 10-12 kgf/BHP con hélice fija y 13-16 kgf por HP de APN con paso
+# variable o tobera. Circula como regla práctica de remolcadores atribuida a Germanischer Lloyd
+# (anker2022bollard, fuente secundaria). Los números no se cambian: reproducen el libro Excel.
 #: Prado: factor base del bollard pull (``BHP·0.9``).
 PRADO_BASE_FACTOR: float = 0.9
-#: Prado: porcentaje por tipo de hélice (``A49:A55``: 1.10/1.20/1.25/1.40).
+#: Prado: porcentaje por tipo de hélice (``A49:A55``: 1.10/1.20/1.25/1.40). A VERIFICAR (arriba).
 PRADO_PROPELLER_PERCENT: dict[PropellerType, float] = {
     PropellerType.FIXED_PITCH: 1.10,
     PropellerType.FIXED_PITCH_NOZZLE: 1.20,
@@ -89,7 +95,8 @@ PRADO_T_TO_HP: float = 100.0 / 1.36
 PRADO_APN_FACTOR: float = 0.09
 #: Prado: fracción de la APN disponible para el arrastre (``K68 = 0.75·K·APN``).
 PRADO_AVAILABLE_FRACTION: float = 0.75
-#: Prado: constante HP → kgf·kn de ``BPF = 150·P/v`` (``C88``).
+#: Prado: constante HP → kgf·kn de ``BPF = 150·P/v`` (``C88``). A VERIFICAR (Fase 19.4): en el
+#: Workbook las fórmulas de «BP when fishing» son imágenes y no se pudo cotejar; viene del Excel.
 PRADO_BPF_CONVERSION: float = 150.0
 
 
@@ -227,12 +234,21 @@ def _rows_for(
 def fridman_kf(propeller: PropellerType) -> float:
     """KF de Fridman para la hélice (``D10`` → 10 paso fijo; ``F10`` → 15 paso variable + tobera).
 
-    El Excel sólo tabula estas dos configuraciones; para PF+T y PV se lanza ``ValueError``.
+    El Excel sólo tabula estas dos configuraciones; para PF+T y PV se lanza ``ValueError``. No se
+    halló una fuente publicada con el KF de esas hélices (Fase 19.4: el libro de Fridman de 1986
+    no está en línea), así que no se interpola: el caso debe indicar ``fridman_kf``.
     """
     try:
         return FRIDMAN_KF[propeller]
     except KeyError:
-        raise ValueError(f"Fridman KF not tabulated for propeller {propeller.value!r}") from None
+        raise ValueError(
+            t(
+                "KF de Fridman no tabulado para la hélice {prop!r}: el libro sólo da PF (10) y "
+                "PV+T (15) y no se halló una fuente publicada para PF+T ni PV; indique "
+                "fridman_kf (o el diámetro de la hélice para ver el tiro por la hélice)",
+                prop=propeller.value,
+            )
+        ) from None
 
 
 def fridman_towing_force_kgf(
@@ -272,9 +288,10 @@ def prado_k_factor(propeller: PropellerType, bhp: float) -> float:
 def bollard_pull_kgf(
     bhp: float, propeller: PropellerType | float, base_factor: float = PRADO_BASE_FACTOR
 ) -> float:
-    """Bollard pull (tiro a punto fijo) de Prado & Dremiere.
+    """Bollard pull (tiro a punto fijo) de Prado & Dremiere según el libro Excel.
 
     ``BP = BHP·0.9·(pct/100)·1000`` con ``pct`` = 1.10 (PF), 1.20 (PF+T), 1.25 (PV), 1.40 (PV+T).
+    A VERIFICAR: la regla no está en el texto del Workbook (ver :data:`PRADO_BASE_FACTOR`).
     ``propeller`` admite el tipo de hélice o el porcentaje directamente. Unidades: kgf. Autor:
     Prado & Dremiere (FAO). Celda ``B60 = (C10*(0.9)*(1.1/100)*1000)`` (150 HP);
     ``D60 = C22*0.9*(1.1/100)*1000`` (180 HP).

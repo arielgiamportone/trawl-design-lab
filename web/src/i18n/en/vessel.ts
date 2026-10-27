@@ -1,0 +1,61 @@
+import type { Messages } from '../es';
+
+/** «My vessel» and the fleet catalogue (Phase 19.4). */
+export const vessel: Messages['vessel'] = {
+  useMine: 'Use my vessel',
+  useMineHelp:
+    'Enter your vessel’s data. Only the power is required; a missing beam or depth is scaled from the A-3 vessel (with a warning).',
+  backToCatalogue: 'Back to the catalogue',
+  startFrom: 'Start from the selected vessel',
+  legend: 'My vessel',
+  name: 'Name (optional)',
+  bhp: 'Brake power (BHP)',
+  length: 'Length',
+  beam: 'Beam',
+  depth: 'Depth',
+  pitch: 'Propeller type',
+  pitchFixed: 'Fixed pitch',
+  pitchVariable: 'Controllable pitch',
+  nozzle: 'With nozzle (Kort)',
+  diameter: 'Propeller diameter (optional)',
+  diameterHelp:
+    'With the diameter, the engine adds the propeller-based pull (Wärtsilä formula) as one more method.',
+  winch: 'Warp capacity per drum (optional)',
+  winchHelp: 'Compared with the warp paid out plus the book’s reserve.',
+  region: 'Port region',
+  noRegion: 'Not given',
+  optional: 'optional',
+  defaultName: (bhp: number) => `My ${bhp} hp vessel`,
+  summary: (bhp: string, length: string) => `My vessel: ${bhp} BHP${length ? ` · ${length}` : ''}`,
+  errors: {
+    required: 'Required.',
+    notNumber: 'Not a number.',
+    positive: 'Must be greater than zero.',
+    range: (lo: number, hi: number) => `Outside the accepted range (${lo}–${hi}, metric).`,
+    beamVsLength: 'The beam cannot exceed the length.',
+    noKf: 'The book only tabulates Fridman’s KF for fixed pitch without nozzle and controllable pitch with nozzle (no source was found for the other two). Choose one of those or set fridman_kf in the advanced parameters.',
+  },
+  filters: {
+    type: 'Vessel type',
+    region: 'Region',
+    allTypes: 'All types',
+    allRegions: 'All regions',
+    book: 'Book vessels (A-3)',
+    showing: (n: number, total: number) => `${n} of ${total} vessels`,
+    none: 'No catalogue vessel matches the filter.',
+  },
+  types: {
+    rada_ria: 'Inshore (rada/ría)',
+    costero: 'Coastal',
+    fresquero: 'Fresh-fish trawler',
+    congelador: 'Freezer trawler',
+    tangonero: 'Outrigger shrimp trawler',
+    investigacion: 'Research',
+    otro: 'Other',
+  },
+  propellerModel: 'Propeller (Wärtsilä)',
+  propellerModelHelp:
+    'Propeller-based pull: (D·P)^(2/3)·k1·k2/9.81 (Wärtsilä) scaled with actuator-disc theory; an optimistic bound.',
+  typical: 'typical',
+  draft: 'provisional',
+};

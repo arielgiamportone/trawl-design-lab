@@ -112,6 +112,7 @@ PROPELLER_LABELS: dict[str, str] = {
     "fixed_pitch_nozzle": N_("Paso fijo con tobera (PF+T)"),
     "variable_pitch": N_("Paso variable (PV)"),
     "variable_pitch_nozzle": N_("Paso variable con tobera (PV+T)"),
+    "propeller_model": N_("Hélice (Wärtsilä)"),
 }
 
 PLANE_LABELS: dict[str, str] = {
@@ -299,6 +300,24 @@ def power_table(result: DesignResult) -> Table:
         cols.append(Column(f"ft_pf_{vid}", f"FT Fridman PF {tag}", "kgf"))
         cols.append(Column(f"ft_pvt_{vid}", f"FT Fridman PV+T {tag}", "kgf"))
         series += [s.ft_fixed_pitch_kgf, s.ft_variable_pitch_nozzle_kgf]
+    note = ""
+    pp = result.power.propeller
+    if pp is not None:
+        # Fase 19.4: método extra con el diámetro de la hélice (no está en el libro).
+        cols.append(Column("propeller_kgf", f"{t('Hélice (Wärtsilä)')} {bhp}", "kgf"))
+        series.append(pp.towing_kgf)
+        note = t(
+            "Hélice (Wärtsilä): BP = (D·P_D)^(2/3)·k1·k2/9,81 con D = {d:g} m, P_D = 0,9·BHP = "
+            "{pd:.0f} kW, k1 = {k1:g}, k2 = {k2:g}; tiro a punto fijo {bp:.2f} t ({kgf:.1f} "
+            "kgf/BHP), escalado con el disco actuador a potencia constante. Fuente: {source}.",
+            d=pp.diameter_m,
+            pd=pp.delivered_kw,
+            k1=pp.k1,
+            k2=pp.k2,
+            bp=pp.bollard_pull_t,
+            kgf=pp.kgf_per_bhp,
+            source=pp.source,
+        )
     rows = tuple((v, *(_f(s[i]) for s in series)) for i, v in enumerate(_speeds(result)))
     return Table(
         key="potencia",
@@ -308,6 +327,7 @@ def power_table(result: DesignResult) -> Table:
         ),
         columns=tuple(cols),
         rows=rows,
+        note=note,
         source="'Potencia Disponible Arrastre OK'!L11:O19, B10:G30, A160:L280",
     )
 

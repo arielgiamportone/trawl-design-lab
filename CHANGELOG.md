@@ -13,6 +13,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Buques y flota argentina (Fase 19.4)**: `Vessel` suma campos opcionales de casco, motor,
+  hélice (diámetro, paso, palas, tobera, tiro medido), maniobra (pórticos, guinche, tambor, cable),
+  tipo de buque, región, puerto, fuentes, procedencia y estado; los YAML existentes cargan igual.
+  Catálogo `data/vessels/*.yaml` con tipos de la flota (medias publicadas de rada o ría, costeros,
+  fresqueros, congeladores y tangoneros) y buques con características publicadas (Holmberg,
+  Cánepa, Angelescu, Mar Argentino; Oca Balda y San Severo provisorios), cada valor con su fuente;
+  `GET /catalog/vessels` filtra por tipo, región y estado. Tiro por la hélice
+  (`trawlkit.propulsion`, Wärtsilä y disco actuador) sólo cuando el buque trae el diámetro de la
+  hélice: columna extra en la tabla de potencia y ventana `propeller_model`, sin cambiar el caso
+  del libro. Controles del guinche (capacidad del tambor, tiro frente a la tensión del cable, 80 %
+  del tiro a punto fijo, 1/3 de la rotura) y pórticos del buque en la geometría. «Mi buque» en el
+  modo guiado y en el experto (imperial o métrico, se envía en métrico). Capítulo 39 «La flota
+  argentina». Los factores de Prado del libro quedan marcados A VERIFICAR (no están en el texto del
+  Workbook).
 - **Física de materiales (Fase 19.1)**: tabla de materiales con fuente por dato
   (`data/materials.yaml`, `trawlkit.materials.material_table()`): densidad, peso en el agua,
   tenacidad seca y húmeda, pérdida por nudo, alargamiento y rigidez de PA, PES, PE, PP, HMPE,

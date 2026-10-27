@@ -147,3 +147,62 @@ def distribute_ballast_max(
         bosom_kg_m=bosom / bosom_m,
         wings_kg_m=wings / wings_m,
     )
+
+
+@dataclass(frozen=True)
+class BallastChain:
+    """Lastre con una cadena del catálogo de componentes (Fase 19.2; no está en el libro).
+
+    El libro da el lastre en kg (Flot!F225:F226, plomos o cadena) y la cadena de reglaje en kg
+    (Flot!H224). Con una cadena elegida (``DesignCase.chain_id``), esos kg se pasan a metros con
+    su peso por metro en aire, y se da el peso en el agua de esos metros:
+    ``W_agua = L · kg/m · (1 − ρ_mar/ρ_acero)``.
+    """
+
+    id: str
+    name: str
+    weight_kg_per_m: float
+    water_coefficient: float
+    min_m: float
+    max_m: float
+    adjust_m: float
+    water_weight_min_kgf: float
+    water_weight_max_kgf: float
+    breaking_load_t: float | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """Representación serializable."""
+        return dataclass_to_dict(self)
+
+
+def ballast_chain(
+    chain_id: str,
+    name: str,
+    weight_kg_per_m: float,
+    min_kg: float,
+    max_kg: float,
+    adjust_kg: float,
+    water_coefficient: float,
+    breaking_load_t: float | None = None,
+) -> BallastChain:
+    """Metros de cadena para el lastre mínimo, el máximo y el reglaje: kg / (kg/m) [m].
+
+    ``water_coefficient`` = 1 − ρ_mar/ρ_acero (:func:`trawlkit.materials.
+    weight_in_water_coefficient` con la densidad del acero de la tabla de materiales).
+    """
+    if weight_kg_per_m <= 0:
+        raise ValueError("el peso por metro de la cadena debe ser > 0")
+    lmin = min_kg / weight_kg_per_m
+    lmax = max_kg / weight_kg_per_m
+    return BallastChain(
+        id=chain_id,
+        name=name,
+        weight_kg_per_m=weight_kg_per_m,
+        water_coefficient=water_coefficient,
+        min_m=lmin,
+        max_m=lmax,
+        adjust_m=adjust_kg / weight_kg_per_m,
+        water_weight_min_kgf=lmin * weight_kg_per_m * water_coefficient,
+        water_weight_max_kgf=lmax * weight_kg_per_m * water_coefficient,
+        breaking_load_t=breaking_load_t,
+    )

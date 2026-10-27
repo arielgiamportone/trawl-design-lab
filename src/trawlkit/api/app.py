@@ -61,6 +61,9 @@ from trawlkit.api.schemas import (
     OptimizeResponse,
     ParamInfo,
     PlanView,
+    PriceExportRequest,
+    PriceParseRequest,
+    PriceParseResponse,
     ProvenanceRow,
     ReportFormat,
     ScaledNetRequest,
@@ -211,9 +214,13 @@ def check_component(req: ComponentCheckRequest) -> dict[str, Any]:
 
 
 @app.get("/catalog/vessels", response_model=list[Vessel])
-def list_vessels() -> list[Vessel]:
-    """Buques del catálogo."""
-    return list(service.vessel_presets().values())
+def list_vessels(
+    vessel_type: Annotated[str | None, Query(alias="type")] = None,
+    region: str | None = None,
+    status: str | None = None,
+) -> list[Vessel]:
+    """Buques del catálogo: los de la A-3 y la flota argentina (filtros: tipo, región, estado)."""
+    return service.vessel_list(vessel_type, region, status)
 
 
 @app.get("/catalog/doors", response_model=list[Door])
@@ -548,6 +555,39 @@ def batch_template(
 ) -> Response:
     """Plantilla de planilla (flota, redes o casos) con ejemplos y hoja de ayuda."""
     data, media, name = service.batch_template(kind, format)
+    return Response(
+        data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
+    )
+
+
+PriceFormat = Literal["csv", "xlsx"]
+
+
+@app.post("/prices/parse", response_model=PriceParseResponse)
+def prices_parse(req: PriceParseRequest) -> dict[str, Any]:
+    """Lee una lista de precios (CSV o XLSX): clave, precio, moneda, unidad, fecha y fuente."""
+    return service.prices_parse(req.file.model_dump(), req.currency)
+
+
+@app.post(
+    "/prices/export",
+    response_class=Response,
+    responses={
+        200: {
+            "content": {
+                "text/csv": {},
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {},
+            }
+        }
+    },
+)
+def prices_export(req: PriceExportRequest, format: PriceFormat = "csv") -> Response:  # noqa: A002
+    """Lista de precios en CSV o XLSX (con las líneas sin precio como plantilla)."""
+    data, media, name = service.prices_export(
+        {k: v.model_dump() for k, v in req.prices.items()},
+        [ln.model_dump() for ln in req.lines],
+        format,
+    )
     return Response(
         data, media_type=media, headers={"Content-Disposition": f'attachment; filename="{name}"'}
     )

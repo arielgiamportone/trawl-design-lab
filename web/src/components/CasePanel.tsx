@@ -7,6 +7,9 @@ import { countEdits } from '../lib/panels';
 import { useCase } from '../state/useCase';
 import type { Compat } from '../state/model';
 import { ParamsForm } from './ParamsForm';
+import { MyVesselForm } from './MyVesselForm';
+import { myVesselFrom, vesselTypes } from '../lib/vessel';
+import { usesMyVessel } from '../state/model';
 
 /** Redes agrupadas por documento de origen, para el selector. */
 function netGroups(nets: CatalogItem[]): [string, CatalogItem[]][] {
@@ -37,6 +40,9 @@ export function CasePanel() {
   const vessel = catalogs.vessels.find((v) => v.id === vesselValue);
   const door = catalogs.doors.find((d) => d.id === doorValue);
   const edited = countEdits(specs.std, state.edits.std) + countEdits(specs.mod, state.edits.mod);
+  const V = T.vessel;
+  const mine = usesMyVessel(state);
+  const types = vesselTypes(catalogs.vessels);
 
   return (
     <aside className="card card-pad case-panel" aria-labelledby={`${ids}-title`}>
@@ -144,22 +150,53 @@ export function CasePanel() {
         <select
           id={`${ids}-vessel`}
           value={vesselValue}
+          disabled={mine}
           onChange={(e) => update({ vessel: e.target.value || null, fromBatch: null })}
         >
           {fromPlan && <option value="">{C.vesselFromPlan}</option>}
-          {catalogs.vessels.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.name ?? v.id}
-            </option>
+          {catalogs.vessels
+            .filter((v) => !v.vessel_type)
+            .map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.name ?? v.id}
+              </option>
+            ))}
+          {types.map((type) => (
+            <optgroup key={type} label={V.types[type] ?? type}>
+              {catalogs.vessels
+                .filter((v) => v.vessel_type === type)
+                .map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name ?? v.id}
+                    {v.status === 'draft' ? ` (${V.draft})` : ''}
+                  </option>
+                ))}
+            </optgroup>
           ))}
         </select>
-        {vessel && (
+        {vessel && !mine && (
           <p className="help">
             {vessel.bhp} BHP
             {vessel.length_m ? ` · ${C.length(fmtU(vessel.length_m, 'm'))}` : ''}
           </p>
         )}
+        <label className="check">
+          <input
+            type="checkbox"
+            checked={mine}
+            onChange={(e) =>
+              update((s) => ({
+                ...s,
+                useMyVessel: e.target.checked,
+                fromBatch: null,
+                myVessel: s.myVessel ?? (e.target.checked ? myVesselFrom(vessel) : null),
+              }))
+            }
+          />
+          {V.useMine}
+        </label>
       </div>
+      {mine && <MyVesselForm />}
 
       <div className="field">
         <label htmlFor={`${ids}-door`}>{C.door}</label>

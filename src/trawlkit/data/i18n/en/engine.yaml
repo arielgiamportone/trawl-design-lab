@@ -543,3 +543,34 @@ supuesto de la tabla de materiales (sin fuente), A VERIFICAR: assumption of the 
 tenacidad del cabo [gf/tex] según el material: rope tenacity [gf/tex] for the material
 tenacidad seca sin nudo [gf/tex] según el material: dry unknotted tenacity [gf/tex] for the material
 alargamiento de rotura [%] según el material: elongation at break [%] for the material
+# Fase 19.2: más componentes (grilletes, lista de precios, cadena de lastre)
+Grillete: Shackle
+kg por mm³ del cuerpo: kg per mm³ of body
+WLL [t] por mm²: WLL [t] per mm²
+'rotura {mbl:g} t menor que la carga de trabajo {wll:g} t': 'breaking load {mbl:g} t below the working load limit {wll:g} t'
+rotura / WLL: breaking load / WLL
+perno / cuerpo: pin / body
+'{kg:.0f} kg de lastre máximo a {kgm:g} kg/m ({water:.0f} kgf en el agua)': '{kg:.0f} kg of maximum ballast at {kgm:g} kg/m ({water:.0f} kgf in water)'
+Grilletes de las uniones del aparejo: Shackles for the rigging connections
+'Grillete de WLL ≥ {load:.2g} t': 'Shackle with WLL ≥ {load:.2g} t'
+'{n} grilletes ({per} por banda, supuesto) con WLL ≥ {load:.2g} t, la carga de trabajo del arte (Rem!E267)': '{n} shackles ({per} per side, assumed) with WLL ≥ {load:.2g} t, the working load of the gear (Rem!E267)'
+'format: csv o xlsx': 'format: csv or xlsx'
+precios: prices
+la planilla está vacía: the spreadsheet is empty
+'faltan columnas: {cols} (se esperan clave, precio, moneda, unidad, fecha y fuente)': 'missing columns: {cols} (expected key, price, currency, unit, date and source)'
+'demasiadas filas: {n} (máximo {max})': 'too many rows: {n} (maximum {max})'
+'lista de precios {file}': 'price list {file}'
+'precio inválido: {v!r}': 'invalid price: {v!r}'
+'unidad inválida: {u!r} (use kg, m o unidad)': 'invalid unit: {u!r} (use kg, m or unit)'
+'moneda inválida: {c!r} (código ISO de 3 letras)': 'invalid currency: {c!r} (3-letter ISO code)'
+'fecha inválida {d!r}: se usa {month}': 'invalid date {d!r}: {month} is used'
+'clave repetida {key!r}: vale esta fila': 'repeated key {key!r}: this row applies'
+Precios: Prices
+'formato: csv o xlsx': 'format: csv or xlsx'
+clave: key
+descripción: description
+precio: price
+moneda: currency
+unidad: unit
+fecha: date
+fuente: source

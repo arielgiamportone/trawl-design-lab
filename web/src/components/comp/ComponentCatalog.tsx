@@ -9,6 +9,7 @@ import {
   brands,
   cellText,
   columns,
+  CASE_PARAM,
   COMPONENT_KINDS,
   COMPONENT_LABEL,
   DEFAULT_COMPONENT_FILTERS,
@@ -252,7 +253,7 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
               {T.useFootrope}
             </button>
           </>
-        ) : (
+        ) : item.kind === 'door' || CASE_PARAM[item.kind] ? (
           <button
             type="button"
             className="btn primary"
@@ -261,7 +262,7 @@ function ComponentCard({ item, onSelect }: { item: Component; onSelect: (id: str
           >
             {active ? T.isCase : T.useInCase}
           </button>
-        )}
+        ) : null}
         {generic && (
           <button type="button" className="btn" onClick={() => onSelect(generic.id)}>
             {T.seeGeneric(generic.name)}

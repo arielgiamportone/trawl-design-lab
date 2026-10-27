@@ -23,6 +23,8 @@ the interactive documentation is at `http://127.0.0.1:8000/docs`. The full contr
 | POST | `/batch/run` | Computes the batch: projects a net onto each vessel of the fleet (power-similarity scale, refined, speed and rigging), or computes uploaded cases or nets. Cost guard `TRAWLKIT_MAX_BATCH_SECONDS`. |
 | POST | `/batch/export` | The batch as `csv` (summary), `xlsx` (summary, materials and one panel sheet per scaled net), `pdf` or `html` (sheet per vessel). |
 | GET | `/batch/template` | Spreadsheet template (`kind`: `fleet`, `nets`, `cases`; `format`: `xlsx` with a help sheet, or `csv`). |
+| POST | `/prices/parse` | Reads a user price list (CSV or XLSX; Phase 19.2): key (component or line id), price, currency, unit, date and source. |
+| POST | `/prices/export` | Price list as CSV or XLSX (`format`), with the bill-of-materials lines without a price as a template. |
 | GET | `/catalog/vessels` | Vessels of the catalogue. |
 | GET | `/catalog/doors` | Otter boards of the catalogue with their CL/CD polar. |
 | GET | `/catalog/fouling` | Fouling and clogging scenarios of the net (level per zone). |

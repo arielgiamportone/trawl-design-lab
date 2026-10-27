@@ -4,9 +4,11 @@ from trawlkit.io.loader import (
     DATA_DIR,
     load_catalogue,
     load_doors,
+    load_fleet,
     load_net,
     load_vessels,
     load_yaml,
+    vessel_files,
 )
 from trawlkit.io.schema import (
     Catalogue,
@@ -22,6 +24,7 @@ from trawlkit.io.schema import (
     Species,
     Vessel,
     VesselCatalogue,
+    VesselType,
 )
 
 __all__ = [
@@ -39,9 +42,12 @@ __all__ = [
     "Species",
     "Vessel",
     "VesselCatalogue",
+    "VesselType",
     "load_catalogue",
     "load_doors",
+    "load_fleet",
     "load_net",
     "load_vessels",
     "load_yaml",
+    "vessel_files",
 ]

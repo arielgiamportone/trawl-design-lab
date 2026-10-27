@@ -2159,19 +2159,79 @@
   "/catalog/vessels": {
    "get": {
     "summary": "List Vessels",
-    "description": "Buques del catálogo.",
+    "description": "Buques del catálogo: los de la A-3 y la flota argentina (filtros: tipo, región, estado).",
     "operationId": "list_vessels_catalog_vessels_get",
+    "parameters": [
+     {
+      "name": "type",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Type"
+      }
+     },
+     {
+      "name": "region",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Region"
+      }
+     },
+     {
+      "name": "status",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Status"
+      }
+     }
+    ],
     "responses": {
      "200": {
       "description": "Successful Response",
       "content": {
        "application/json": {
         "schema": {
+         "type": "array",
          "items": {
           "$ref": "#/components/schemas/Vessel"
          },
-         "type": "array",
          "title": "Response List Vessels Catalog Vessels Get"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
         }
        }
       }
@@ -3338,6 +3398,97 @@
       "content": {
        "text/csv": {},
        "application/octet-stream": {}
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/prices/parse": {
+   "post": {
+    "summary": "Prices Parse",
+    "description": "Lee una lista de precios (CSV o XLSX): clave, precio, moneda, unidad, fecha y fuente.",
+    "operationId": "prices_parse_prices_parse_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PriceParseRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PriceParseResponse"
+        }
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/prices/export": {
+   "post": {
+    "summary": "Prices Export",
+    "description": "Lista de precios en CSV o XLSX (con las líneas sin precio como plantilla).",
+    "operationId": "prices_export_prices_export_post",
+    "parameters": [
+     {
+      "name": "format",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "csv",
+        "xlsx"
+       ],
+       "type": "string",
+       "default": "csv",
+       "title": "Format"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PriceExportRequest"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "text/csv": {},
+       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
       }
      },
      "422": {
@@ -10585,6 +10736,29 @@
     "title": "Plane",
     "description": "Plano (cara) de la red al que pertenece un panel."
    },
+   "PriceExportRequest": {
+    "properties": {
+     "prices": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/PriceIn"
+      },
+      "type": "object",
+      "title": "Prices"
+     },
+     "lines": {
+      "items": {
+       "$ref": "#/components/schemas/PriceLineIn"
+      },
+      "type": "array",
+      "maxItems": 500,
+      "title": "Lines"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "title": "PriceExportRequest",
+    "description": "Lista de precios a exportar (``POST /prices/export``).\n\n``lines``: líneas de la lista de materiales; las que no tienen precio salen vacías, como\nplantilla para completar."
+   },
    "PriceIn": {
     "properties": {
      "value": {
@@ -10629,6 +10803,123 @@
     ],
     "title": "PriceIn",
     "description": "Precio orientativo de un componente o de una línea de la lista de materiales."
+   },
+   "PriceLineIn": {
+    "properties": {
+     "key": {
+      "type": "string",
+      "maxLength": 200,
+      "title": "Key"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 300
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "unit": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 10
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Unit"
+     },
+     "component_id": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 200
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Component Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "key"
+    ],
+    "title": "PriceLineIn",
+    "description": "Línea de la lista de materiales para la plantilla de precios."
+   },
+   "PriceParseRequest": {
+    "properties": {
+     "file": {
+      "$ref": "#/components/schemas/BatchFile"
+     },
+     "currency": {
+      "anyOf": [
+       {
+        "type": "string",
+        "maxLength": 3,
+        "minLength": 3
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Currency"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "file"
+    ],
+    "title": "PriceParseRequest",
+    "description": "Lista de precios del usuario (``POST /prices/parse``): CSV como texto o XLSX en base64.\n\n``currency``: moneda de las filas que no la traen."
+   },
+   "PriceParseResponse": {
+    "properties": {
+     "prices": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/PriceIn"
+      },
+      "type": "object",
+      "title": "Prices"
+     },
+     "rows": {
+      "type": "integer",
+      "title": "Rows"
+     },
+     "issues": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Issues"
+     },
+     "ignored": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Ignored"
+     }
+    },
+    "type": "object",
+    "required": [
+     "prices",
+     "rows",
+     "issues",
+     "ignored"
+    ],
+    "title": "PriceParseResponse",
+    "description": "Precios leídos (clave = id de componente o de línea), filas y observaciones."
    },
    "ProgressOut": {
     "properties": {
@@ -12959,6 +13250,307 @@
       "type": "boolean",
       "title": "High Rpm",
       "default": true
+     },
+     "loa_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Loa M",
+      "description": "Eslora total [m]"
+     },
+     "lpp_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lpp M",
+      "description": "Eslora entre perpendiculares [m]"
+     },
+     "draft_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Draft M",
+      "description": "Calado [m]"
+     },
+     "gross_tonnage": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gross Tonnage",
+      "description": "Arqueo bruto (TRB del registro o GT)"
+     },
+     "engine_kw": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Engine Kw",
+      "description": "Potencia del motor [kW]"
+     },
+     "engine_rpm": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Engine Rpm",
+      "description": "RPM nominales del motor"
+     },
+     "gear_ratio": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gear Ratio",
+      "description": "Reducción (motor:hélice)"
+     },
+     "propeller_diameter_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Propeller Diameter M",
+      "description": "Diámetro de la hélice [m]"
+     },
+     "propeller_pitch_ratio": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Propeller Pitch Ratio",
+      "description": "Paso/diámetro"
+     },
+     "propeller_blades": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "minimum": 2.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Propeller Blades",
+      "description": "Número de palas"
+     },
+     "nozzle": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Nozzle",
+      "description": "Hélice con tobera (debe coincidir con ``propeller``)"
+     },
+     "bollard_pull_t_measured": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Bollard Pull T Measured",
+      "description": "Tiro a punto fijo medido [t]"
+     },
+     "sfc_g_kwh": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sfc G Kwh",
+      "description": "Consumo específico de combustible [g/kWh]"
+     },
+     "gallows_height_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gallows Height M",
+      "description": "Altura de las pastecas sobre el agua [m]"
+     },
+     "gallows_spacing_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Gallows Spacing M",
+      "description": "Distancia entre pastecas (pórticos) [m]"
+     },
+     "winch_pull_t": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Winch Pull T",
+      "description": "Tiro del guinche a medio tambor [t]"
+     },
+     "winch_drum_capacity_m": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Winch Drum Capacity M",
+      "description": "Capacidad de cable de cada tambor [m]"
+     },
+     "warp_diameter_mm": {
+      "anyOf": [
+       {
+        "type": "number",
+        "exclusiveMinimum": 0.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Warp Diameter Mm",
+      "description": "Diámetro del cable para el que vale la capacidad [mm]"
+     },
+     "vessel_type": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/VesselType"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "typical": {
+      "type": "boolean",
+      "title": "Typical",
+      "default": false
+     },
+     "region": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Region",
+      "description": "Región (vocabulario de componentes)"
+     },
+     "home_port": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Home Port"
+     },
+     "status": {
+      "type": "string",
+      "enum": [
+       "published",
+       "draft"
+      ],
+      "title": "Status",
+      "default": "published"
+     },
+     "sources": {
+      "items": {
+       "$ref": "#/components/schemas/SourceDocument"
+      },
+      "type": "array",
+      "title": "Sources"
+     },
+     "provenance": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/Provenance"
+      },
+      "type": "object",
+      "title": "Provenance"
+     },
+     "notes": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Notes"
      }
     },
     "additionalProperties": true,
@@ -12968,7 +13560,21 @@
      "bhp"
     ],
     "title": "Vessel",
-    "description": "Buque pesquero."
+    "description": "Buque pesquero.\n\nLos campos del libro (``bhp``, ``length_m``, ``beam_m``, ``depth_m``, ``displacement_t``,\n``propeller``, ``high_rpm``) alimentan el motor desde la Fase 1. Los demás (Fase 19.4) son\nopcionales: datos de la hélice para el modelo de tiro por diámetro\n(:mod:`trawlkit.propulsion`), de la maniobra (pórtico, guinche y cable) para los controles del\ncaso y de procedencia para el catálogo de la flota (``data/vessels/*.yaml``). ``length_m`` es\nla eslora que usa el motor (la total cuando se conoce; ``loa_m`` la repite y ``lpp_m`` es la\neslora entre perpendiculares)."
+   },
+   "VesselType": {
+    "type": "string",
+    "enum": [
+     "rada_ria",
+     "costero",
+     "fresquero",
+     "congelador",
+     "tangonero",
+     "investigacion",
+     "otro"
+    ],
+    "title": "VesselType",
+    "description": "Tipo de buque (estratos de la flota argentina; FAO 2005, Bertolotti et al. 2001)."
    }
   }
  }

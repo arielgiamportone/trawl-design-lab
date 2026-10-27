@@ -661,7 +661,7 @@ def test_calibrate_endpoint_recovers_example() -> None:
 
 def test_component_catalogue_endpoints() -> None:
     kinds = {k["kind"]: k for k in client.get("/catalog/components").json()}
-    assert set(kinds) == {"twine", "wire", "rope", "door", "float", "chain"}
+    assert set(kinds) == {"twine", "wire", "rope", "door", "float", "chain", "shackle"}
     assert kinds["wire"]["generic"] > 0 and "Bridon-Bekaert" in kinds["wire"]["brands"]
     wires = client.get("/catalog/components/wire", params={"generic": True}).json()
     assert wires and all("brand" not in w for w in wires)

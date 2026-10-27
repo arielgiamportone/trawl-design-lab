@@ -23,6 +23,8 @@ documentación interactiva queda en `http://127.0.0.1:8000/docs`. El contrato co
 | POST | `/batch/run` | Calcula el lote: proyecta una red a cada buque de la flota (escala por semejanza de potencia refinada, velocidad y armado), o calcula casos o redes cargadas. Guarda de costo `TRAWLKIT_MAX_BATCH_SECONDS`. |
 | POST | `/batch/export` | El lote en `csv` (resumen), `xlsx` (resumen, materiales y una hoja de paneles por red escalada), `pdf` o `html` (ficha por buque). |
 | GET | `/batch/template` | Plantilla de planilla (`kind`: `fleet`, `nets`, `cases`; `format`: `xlsx` con hoja de ayuda, o `csv`). |
+| POST | `/prices/parse` | Lee una lista de precios del usuario (CSV o XLSX; Fase 19.2): clave (id de componente o de línea), precio, moneda, unidad, fecha y fuente. |
+| POST | `/prices/export` | Lista de precios en CSV o XLSX (`format`), con las líneas de la lista de materiales sin precio como plantilla. |
 | GET | `/catalog/vessels` | Buques del catálogo. |
 | GET | `/catalog/doors` | Portones del catálogo con su polar CL/CD. |
 | GET | `/catalog/fouling` | Escenarios de ensuciamiento y colmatación de la red (nivel por zona). |

@@ -105,6 +105,19 @@ $$ (eq-prado-bpf)
 
 donde 150 es una constante de conversión ($\approx 75/0{,}5144$ kgf·kn por HP), **no** el BHP.
 
+```{admonition} A VERIFICAR: origen de los factores de Prado
+:class: warning
+Los factores $0{,}9\cdot\{1{,}10;\ 1{,}20;\ 1{,}25;\ 1{,}40\}/100$ de {eq}`eq-prado-bp` y la
+constante 150 de {eq}`eq-prado-bpf` vienen del libro Excel {cite:p}`giamportone2024`. **A VERIFICAR
+(origen: libro Excel; no se halló en el texto del Workbook).** El *Fisherman's Workbook*
+{cite:p}`prado1990` (PDF pp. 98–99) da en cambio un *bollard pull* de 10 a 12 kgf por BHP con hélice
+fija y de 13 a 16 kgf por HP de APN con paso variable o tobera, y sus fórmulas de «BP when fishing»
+son imágenes que no se pudieron cotejar. La regla $\mathrm{BHP}\cdot 0{,}9\cdot f/100$ circula como
+regla práctica de remolcadores atribuida a Germanischer Lloyd {cite:p}`anker2022bollard` (fuente
+secundaria). Los valores del libro (9,9–12,6 kgf/BHP y el factor $K$ de 11,2–13,7) caen dentro de
+los rangos del Workbook, así que `trawlkit` los conserva sin cambios para reproducir el Excel.
+```
+
 ### Koyama, Nomura y Hamuro: potencia constante
 
 Las tres escuelas japonesas parten de una potencia efectiva de remolque $P_e$ [HP] y suponen que se
@@ -130,6 +143,39 @@ sentido en el rango de arrastre (≈ 2,5–4,5 kn), donde la hélice trabaja cer
 Por eso, aunque el libro promedia los cinco métodos, el que alimenta el resto del diseño es el de
 Fridman: es lineal, acotado y conservador a baja velocidad.
 
+### Tiro por la hélice (Wärtsilä, Fase 19.4)
+
+Los cinco métodos anteriores sólo miran el BHP y el tipo de hélice. Cuando se conoce el **diámetro
+de la hélice** $D$ [m], `trawlkit.propulsion` agrega un sexto camino, la forma de la *Encyclopedia
+of Ship Technology* de Wärtsilä {cite:p}`wartsilabollard`:
+
+$$
+T = (D\,P_D)^{2/3}\ [\mathrm{kN}], \qquad BP = \frac{T\,k_1\,k_2}{9{,}81}\ [\mathrm{t}],
+$$ (eq-wartsila)
+
+con $P_D$ [kW] la potencia entregada a la hélice, $k_1 = 0{,}9$ (10 % de pérdidas) y $k_2$ = 1,2–1,4
+con tobera. Sin tobera se toma $k_2 = 1$ y con tobera el punto medio 1,3 (ambos *derivados*: la
+fuente da la tobera como una adición del 20 al 40 %). $P_D = 0{,}9\,\mathrm{BHP}$ es la relación
+entre potencia en el eje y al freno de Kartha y Roy Choudhury {cite:p}`kartha1966`.
+
+Como control, la teoría ideal de cantidad de movimiento (disco actuador, *derivado*) da
+$T^3 = 2\rho A P^2$ para la hélice abierta, es decir $T = 1{,}172\,(D P)^{2/3}$ kN con
+$\rho = 1025$ kg/m³, y $T^3 = 4\rho A P^2$ para una tobera ideal (un factor $2^{1/3} = 1{,}26$, dentro
+del 1,2–1,4 de Wärtsilä). El coeficiente 1 de {eq}`eq-wartsila` equivale a 0,853 veces el ideal.
+
+Para el tiro a la velocidad de arrastre se escala el *bollard pull* con la caída del empuje del
+disco actuador a potencia constante, $T_\text{ideal}(v)/T_\text{ideal}(0)$, y, si se conoce el
+desplazamiento, se resta la resistencia del casco de Kartha y Roy Choudhury, «about 4 lbs/ton of
+displacement». Si el buque trae un tiro a punto fijo **medido**, éste reemplaza al de Wärtsilä. Con
+tobera el FAO FTP 383 {cite:p}`wilson1999` da un aumento del tiro de remolque del 25 al 30 % y
+advierte que por encima de 9 kn la tobera frena más de lo que empuja.
+
+El método sólo entra al caso cuando el buque trae `propeller_diameter_m`: aparece como una columna
+más de la tabla de potencia (con su fuente) y como una ventana de velocidad aparte
+(`propeller_model`), sin reemplazar a Fridman como propulsor de diseño. Sin diámetro, el caso es
+idéntico al del libro. El KF de Fridman para PF+T y PV **no** se completa: no se halló una fuente
+publicada (el libro de Fridman de 1986 no está en línea), así que esas hélices piden `fridman_kf`.
+
 ## Coeficientes
 
 | Coeficiente | Valor | Unidad | Fuente | Celda del Excel |
@@ -145,6 +191,8 @@ Fridman: es lineal, acotado y conservador a baja velocidad.
 | Koyama $K$ / carga | 0,15 / 0,6 | — | Koyama | `PotOK!M165`, `C169` |
 | Nomura $K_1$, $K_2$, $K_3$, fracción red | 0,85 / 0,85 / 0,17 / 0,8 | — | Nomura | `PotOK!L205:L213` |
 | Hamuro $K_1$, $K_2$, $K_3$ | 0,825 / 0,85 / 0,20–0,30 | — | Hamuro | `PotOK!C254`, `F257:L258` |
+| Wärtsilä $k_1$ / $k_2$ con tobera | 0,9 / 1,2–1,4 (1,3) | — | Wärtsilä | — |
+| $P_D/\mathrm{BHP}$; casco | 0,9; 4 lb/t | — | Kartha (1966) | — |
 
 Los valores están en `src/trawlkit/data/reference/power_coefficients.yaml`, generado desde el libro.
 
@@ -165,6 +213,7 @@ Los valores están en `src/trawlkit/data/reference/power_coefficients.yaml`, gen
 | `PotOK!F259:L266`, `E272:H280` | Hamuro | `hamuro_ps_table`, `hamuro_pull_series_kgf` |
 | `PotOK!L11:O19` | Resumen de Fridman (PF y PV+T) | `trawlkit.power.summary` |
 | — | Las cinco curvas para un buque | `trawlkit.power.power_curves` |
+| — | Tiro por la hélice (con diámetro) | `trawlkit.propulsion.propeller_pull` |
 
 ## Supuestos y límites
 
@@ -281,6 +330,52 @@ de Fridman hacia 2,5 kn en el buque de 150 BHP y hacia 2,7 kn en el de 180 BHP; 
 tobera ($K_F = 15$) esos cruces suben a 3,25 y 3,6 kn. Según Koyama o Nomura el cruce baja a
 2,1–2,3 kn. El margen real, una vez sumados portones, cables y boyas, se analiza en
 {doc}`19_ventana_velocidad`.
+
+### Tiro por la hélice: un caso medido
+
+Ningún buque argentino tiene publicados el diámetro de la hélice ni un tiro medido
+({doc}`39_flota_argentina`). El único juego público hallado con ambos es el de ocho camaroneros de la
+India de Kartha y Roy Choudhury {cite:p}`kartha1966`. Para el *boat V* (62,5 BHP a 1500 rpm,
+reducción 3:1, hélice de 35,3 in) la tabla compara {eq}`eq-wartsila`, el ideal y la tensión del
+cable medida a 356 rpm y 2,49 kn:
+
+```{code-cell} ipython3
+import yaml
+from trawlkit import propulsion as pr
+from trawlkit.io import DATA_DIR
+
+ref = yaml.safe_load((DATA_DIR / "reference" / "kartha1966_trawlers.yaml").read_text("utf-8"))
+boat = next(b for b in ref["boats"] if b["id"] == "V")
+meas = ref["measurements"][0]
+HP_MEC = 0.745699872  # BHP de 1966: hp mecánico
+d = boat["diameter_in"] * 0.0254
+p_max = pr.delivered_power_kw(boat["bhp"], hp_to_kw=HP_MEC)
+p = p_max * meas["rpm"] / (boat["engine_rpm"] / boat["gear_ratio"])  # par constante
+bp = pr.bollard_pull_wartsila_t(d, p)
+(pull,) = pr.towing_pull_kgf(bp, d, p, [meas["speed_kn"]], False, boat["displacement_t"])
+medido = meas["warp_tension_lb"] * pr.LB_TO_KG
+P.md_table(
+    ["Magnitud", "Valor"],
+    [
+        ["Diámetro [m]", P.fmt(d, 3)],
+        ["P_D a plena potencia [kW]", P.fmt(p_max, 1)],
+        ["BP Wärtsilä a plena potencia [t]", P.fmt(pr.bollard_pull_wartsila_t(d, p_max), 2)],
+        ["BP ideal a plena potencia [t]", P.fmt(pr.bollard_pull_momentum_t(d, p_max), 2)],
+        ["BP libro (BHP·0,9·1,10/100) [t]", P.fmt(boat["bhp"] * 0.9 * 1.10 / 100, 2)],
+        ["Tiro estimado a 2,49 kn y 356 rpm [kgf]", P.fmt(pull, 0)],
+        ["Tensión del cable medida [kgf]", P.fmt(medido, 0)],
+        ["Estimado / medido", P.fmt(pull / medido, 2)],
+    ],
+)
+```
+
+A plena potencia la fórmula de Wärtsilä da 16,5 kgf/BHP, por encima de los 10–12 kgf/BHP del
+Workbook para hélice fija y de los 9,9 kgf/BHP de la regla del libro: con una hélice grande y lenta
+(reducción 3:1) el tiro por caballo es mayor, que es justamente lo que el diámetro agrega. A la
+velocidad de arrastre el modelo sobrestima la tensión medida en ≈ 25 % (y la tensión ya es 3–15 %
+mayor que el tiro, por la inclinación del cable): el disco actuador es una cota ideal y la hélice
+real de paso fijo pierde más empuje al avanzar. Por eso el resultado se informa como un método más
+y no reemplaza a Fridman.
 
 ## Ejercicios
 

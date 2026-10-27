@@ -168,6 +168,19 @@ export function mockApi(
       return json({ detail: 'El aula no está habilitada en este servidor.' }, 503);
     }
     if (path === '/design/bom') return json(bom);
+    if (path === '/prices/parse')
+      return json({
+        prices: {
+          doors: { value: 450, currency: 'USD', unit: 'unit', date: '2026-10', source: 'p.csv' },
+        },
+        rows: 2,
+        issues: [
+          { level: 'error', code: 'unit', message: 'unidad inválida', row: 2, column: 'unit' },
+        ],
+        ignored: [],
+      });
+    if (path === '/prices/export')
+      return new Response('clave;precio\n', { headers: { 'Content-Type': 'text/csv' } });
     if (path === '/design/construction') return json(construction);
     if (path === '/economics') return json(economics);
     if (path === '/economics/compare') return json(economicsCompare);

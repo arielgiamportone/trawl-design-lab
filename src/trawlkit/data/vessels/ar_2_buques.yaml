@@ -1,0 +1,373 @@
+# Buques argentinos con características publicadas (Fase 19.4). Cada valor cita su fuente; lo
+# derivado lleva la fórmula en la nota. Lo que la fuente no publica queda vacío («A VERIFICAR»):
+# ningún buque argentino tiene diámetro de hélice, RPM de hélice ni tiro a punto fijo publicados.
+# Los de fuente secundaria (enciclopedia, prensa) van como «draft» (provisorios).
+# Potencias en kW → hp con 1 hp métrico = 0,7355 kW (trawlkit.units.HP_TO_KW). Consultas 2026-10-27.
+source: INIDEP (argentina.gob.ar), Giorgini y Buratti (2023), prensa especializada
+vessels:
+- id: bip_holmberg
+  name: BIP Dr. Eduardo L. Holmberg (INIDEP)
+  vessel_type: investigacion
+  region: latam
+  home_port: Mar del Plata
+  status: published
+  bhp: 2100
+  length_m: 61.95
+  loa_m: 61.95
+  beam_m: 11.0
+  engine_kw: 1544.6
+  engine_rpm: 680
+  propeller: variable_pitch
+  propeller_blades: 4
+  high_rpm: true
+  winch_drum_capacity_m: 2000
+  warp_diameter_mm: 24
+  sources:
+  - key: giorgini2023poder
+    title: Comparación del poder de pesca de los buques de investigación pesquera Capitán Cánepa y Dr. Eduardo L. Holmberg
+    url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/8cc9b829-afcc-4965-9f70-b49ac60505d8/content
+    accessed: '2026-10-27'
+    figure: Tabla 1
+    page: '2'
+  - key: inidepholmberg
+    title: BIP Dr. Eduardo L. Holmberg
+    url: https://www.argentina.gob.ar/inidep/mision-funcion/infraestructura/buque-bip-dr-eduardo-holmberg
+    accessed: '2026-10-27'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+      note: 2100 hp; INIDEP da «Motor principal Yanmar de 2100 PS de 680 rpm»
+    length_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+      note: eslora total
+    loa_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+    beam_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+    engine_kw:
+      kind: derived
+      document: inidepholmberg
+      note: 2100 PS × 0,7355 kW/PS = 1544,6 kW
+    engine_rpm:
+      kind: transcribed
+      document: inidepholmberg
+    propeller:
+      kind: transcribed
+      document: inidepholmberg
+      note: '«Una hélice principal de cuatro palas de paso variable»; tobera: NO ENCONTRADO'
+    propeller_blades:
+      kind: transcribed
+      document: inidepholmberg
+    high_rpm:
+      kind: derived
+      note: motor de 680 rpm, por encima del umbral de 300 rpm de Hamuro (PotOK!F255:L258)
+    winch_drum_capacity_m:
+      kind: transcribed
+      document: inidepholmberg
+      note: '«2 tambores principales con capacidad para 2000 m de cable de 24 mm de diámetro cada uno»'
+    warp_diameter_mm:
+      kind: transcribed
+      document: inidepholmberg
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: puntal no publicado; el caso lo escala del buque de la A-3 con la eslora'
+  notes:
+  - 'Hitachi Zosen, Maizuru, 1980. Hélice transversal proel; guinche de pesca hidráulico Kawasaki con 4 tambores auxiliares; pórtico en «A»; tres bodegas refrigeradas (134 m³); gasoil ≈ 7000 L/día.'
+  - 'Red de investigación (Giorgini y Buratti 2023, Tabla 1): relinga superior 35,3 m, burlón 40,3 m, portones «Polivalente» de 1200 kg, separación de portones 84,3 m, abertura de alas 16,7 m, abertura vertical 4,5 m, copo de 103 mm.'
+  - 'NO ENCONTRADO: diámetro de la hélice, reducción, tobera y tiro a punto fijo. Paso variable sin dato de tobera: el KF de Fridman no está tabulado (indicar fridman_kf para calcular un caso).'
+- id: bip_capitan_canepa
+  name: BIP Capitán Cánepa (INIDEP, dado de baja)
+  vessel_type: investigacion
+  region: latam
+  home_port: Mar del Plata
+  status: published
+  bhp: 760
+  length_m: 39.17
+  loa_m: 39.17
+  beam_m: 7.35
+  sources:
+  - key: giorgini2023poder
+    title: Comparación del poder de pesca de los buques de investigación pesquera Capitán Cánepa y Dr. Eduardo L. Holmberg
+    url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/8cc9b829-afcc-4965-9f70-b49ac60505d8/content
+    accessed: '2026-10-27'
+    figure: Tabla 1
+    page: '2'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+    length_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+      note: eslora total
+    loa_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+    beam_m:
+      kind: transcribed
+      document: giorgini2023poder
+      page: '2'
+      figure: Tabla 1
+    home_port:
+      kind: assumed
+      note: 'A VERIFICAR: buque del INIDEP (Mar del Plata); la tabla no da el puerto'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: puntal no publicado; el caso lo escala del buque de la A-3 con la eslora'
+  notes:
+  - 'Red de investigación (Giorgini y Buratti 2023, Tabla 1): relinga superior 28 m, burlón 35 m, portones «Polivalente» de 470 kg, separación de portones 79 m, abertura de alas 15,4 m, abertura vertical 2,65-3 m.'
+  - 'NO ENCONTRADO: hélice, reducción y maniobra.'
+- id: bipo_victor_angelescu
+  name: BIPO Víctor Angelescu (INIDEP)
+  vessel_type: investigacion
+  region: latam
+  status: published
+  bhp: 2855.2
+  length_m: 52.8
+  loa_m: 52.8
+  lpp_m: 47.10
+  beam_m: 12.8
+  depth_m: 5.0
+  draft_m: 4.8
+  engine_kw: 2100
+  service_speed_kn: 11
+  sources:
+  - key: inidepangelescu
+    title: BIPO Víctor Angelescu
+    url: https://www.argentina.gob.ar/inidep/mision-funcion/infraestructura/buque-bip-victor-angelescu
+    accessed: '2026-10-27'
+  provenance:
+    bhp:
+      kind: derived
+      document: inidepangelescu
+      note: 2100 kW / 0,7355 kW/hp = 2855,2 hp (potencia de los motores eléctricos de propulsión)
+    engine_kw:
+      kind: derived
+      document: inidepangelescu
+      note: '«Potencia de Motores eléctricos: 2x1050 KW» → 2 × 1050 = 2100 kW'
+    length_m:
+      kind: transcribed
+      document: inidepangelescu
+      note: eslora total
+    loa_m:
+      kind: transcribed
+      document: inidepangelescu
+    lpp_m:
+      kind: transcribed
+      document: inidepangelescu
+    beam_m:
+      kind: transcribed
+      document: inidepangelescu
+    depth_m:
+      kind: transcribed
+      document: inidepangelescu
+      note: puntal a la cubierta principal
+    draft_m:
+      kind: transcribed
+      document: inidepangelescu
+    service_speed_kn:
+      kind: transcribed
+      document: inidepangelescu
+      note: velocidad de crucero
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo y diámetro de hélice no publicados; valor por defecto del esquema'
+  notes:
+  - 'ARMON Vigo, 2016-2017. Propulsión diésel-eléctrica (generadores de 3250 kVA).'
+  - 'NO ENCONTRADO: hélice y maniobra de pesca.'
+- id: bipo_mar_argentino
+  name: BIPO Mar Argentino (INIDEP)
+  vessel_type: investigacion
+  region: latam
+  status: published
+  bhp: 747.8
+  length_m: 36.0
+  loa_m: 36.0
+  lpp_m: 31.37
+  beam_m: 8.5
+  depth_m: 4.0
+  draft_m: 3.4
+  gross_tonnage: 253
+  engine_kw: 550
+  imo: 9883833
+  service_speed_kn: 10
+  sources:
+  - key: inidepmarargentino
+    title: BIPO Mar Argentino
+    url: https://www.argentina.gob.ar/inidep/mision-funcion/infraestructura/buque-bip-mar-argentino
+    accessed: '2026-10-27'
+  provenance:
+    bhp:
+      kind: derived
+      document: inidepmarargentino
+      note: 550 kW / 0,7355 kW/hp = 747,8 hp
+    engine_kw:
+      kind: transcribed
+      document: inidepmarargentino
+      note: '«Potencia Motor Propulsor 550 kW»'
+    length_m:
+      kind: transcribed
+      document: inidepmarargentino
+      note: eslora total
+    loa_m:
+      kind: transcribed
+      document: inidepmarargentino
+    lpp_m:
+      kind: transcribed
+      document: inidepmarargentino
+    beam_m:
+      kind: transcribed
+      document: inidepmarargentino
+    depth_m:
+      kind: transcribed
+      document: inidepmarargentino
+    draft_m:
+      kind: transcribed
+      document: inidepmarargentino
+      note: calado de trazado 3,40 m; de diseño 4,40 m
+    gross_tonnage:
+      kind: transcribed
+      document: inidepmarargentino
+      note: 253 TRB
+    service_speed_kn:
+      kind: transcribed
+      document: inidepmarargentino
+      note: 10 kn al 75 % de la MCR
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo y diámetro de hélice no publicados; valor por defecto del esquema'
+  notes:
+  - 'Armón Vigo, 2019-2020; IMO 9883833. Diésel-eléctrico según la prensa (fuente secundaria).'
+  - 'NO ENCONTRADO: hélice y maniobra de pesca.'
+- id: bip_oca_balda
+  name: BIP Capitán Oca Balda (provisorio)
+  vessel_type: investigacion
+  region: latam
+  status: draft
+  bhp: 2600
+  length_m: 65.01
+  loa_m: 65.01
+  beam_m: 11.4
+  draft_m: 4.2
+  displacement_t: 1179
+  propeller: variable_pitch
+  service_speed_kn: 12
+  sources:
+  - key: wikipediaocabalda
+    title: Buque Oceanográfico Capitán Oca Balda (Wikipedia en español)
+    url: https://es.wikipedia.org/wiki/Buque_Oceanogr%C3%A1fico_Capit%C3%A1n_Oca_Balda
+    accessed: '2026-10-27'
+  - key: argentinaocabalda
+    title: Un buque para la conservación del mar
+    url: https://www.argentina.gob.ar/noticias/un-buque-para-la-conservacion-del-mar
+    accessed: '2026-10-27'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: wikipediaocabalda
+      note: 'fuente secundaria sin referencias: diésel MAK de 2600 HP'
+    length_m:
+      kind: transcribed
+      document: wikipediaocabalda
+      note: fuente secundaria
+    loa_m:
+      kind: transcribed
+      document: wikipediaocabalda
+    beam_m:
+      kind: transcribed
+      document: wikipediaocabalda
+    draft_m:
+      kind: transcribed
+      document: wikipediaocabalda
+    displacement_t:
+      kind: transcribed
+      document: wikipediaocabalda
+    propeller:
+      kind: transcribed
+      document: wikipediaocabalda
+      note: '«Hélice de paso variable Schaffran»; tobera: NO ENCONTRADO'
+    service_speed_kn:
+      kind: transcribed
+      document: wikipediaocabalda
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: puntal no publicado; el caso lo escala del buque de la A-3 con la eslora'
+  notes:
+  - 'Provisorio: las medidas vienen de una enciclopedia sin referencias. Jansen, Leer, 1983 (argentina.gob.ar); hoy en Parques Nacionales. Timón Becker de flap.'
+  - 'Paso variable sin tobera publicada: el KF de Fridman no está tabulado (indicar fridman_kf para calcular un caso).'
+- id: bp_san_severo
+  name: B/P San Severo (Contessi AC20, provisorio)
+  vessel_type: tangonero
+  region: latam
+  home_port: Rawson
+  status: draft
+  bhp: 926
+  length_m: 20.95
+  loa_m: 20.95
+  beam_m: 7.5
+  depth_m: 3.3
+  propeller_blades: 5
+  service_speed_kn: 10
+  sources:
+  - key: pescare2026sansevero
+    title: Contessi bota el San Severo y refuerza la flota pesquera chubutense
+    url: https://pescare.com.ar/contessi-bota-el-san-severo-y-refuerza-la-flota-pesquera-chubutense/
+    accessed: '2026-10-27'
+  - key: argenports2026sansevero
+    title: Contessi botó el San Severo y advirtió que la crisis de la pesca ya frenó la renovación de la flota
+    url: https://argenports.com/nota/contessi-boto-el-san-severo-y-advirtio-que-la-crisis-de-la-pesca-ya-freno-la-renovacion-de-la-flota/
+    accessed: '2026-10-27'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: pescare2026sansevero
+      note: 'prensa: motor Mitsubishi de 926 HP (modelo «S6R2 T2MPTK3M» según Pescare, «S6RC» según ArgenPorts)'
+    length_m:
+      kind: transcribed
+      document: pescare2026sansevero
+      note: eslora total, prensa
+    loa_m:
+      kind: transcribed
+      document: pescare2026sansevero
+    beam_m:
+      kind: transcribed
+      document: pescare2026sansevero
+      note: manga de trazado
+    depth_m:
+      kind: transcribed
+      document: pescare2026sansevero
+    propeller_blades:
+      kind: transcribed
+      document: argenports2026sansevero
+      note: hélice Kaplan de cinco palas «de fabricación nacional»; reductora ZF
+    service_speed_kn:
+      kind: transcribed
+      document: pescare2026sansevero
+      note: alrededor de 10 kn
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: paso y tobera no publicados; valor por defecto del esquema'
+  notes:
+  - 'Provisorio (prensa). Casco 156 de Contessi, prototipo «AC20», 2026; multipropósito: tangonero, arrastre de fondo y de media agua.'
+  - 'NO ENCONTRADO: diámetro de hélice, reducción y tobera.'

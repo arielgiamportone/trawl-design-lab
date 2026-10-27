@@ -62,7 +62,7 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
           <select id={`${ids}-prop`} value={prop} onChange={(e) => setProp(e.target.value)}>
             {props.map((p) => (
               <option key={p} value={p}>
-                {PROPELLER_LABELS[p] ?? p}
+                {PROPELLER_LABELS[p] ?? (p === 'propeller_model' ? T.vessel.propellerModel : p)}
                 {p === designPropeller(d) ? C.designSuffix : ''}
               </option>
             ))}
@@ -117,7 +117,8 @@ function ChartsBody({ d, stale }: { d: DesignData; stale: boolean }) {
 }
 
 function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string }) {
-  const C = useT().charts.pull;
+  const T = useT();
+  const C = T.charts.pull;
   const u = unitLabel('kgf');
   const raw = pullRows(d, prop);
   const mod = hasModified(d);
@@ -126,6 +127,16 @@ function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string 
   const others = PULL_METHODS.filter(([k]) => k !== 'fridman_kgf');
   const series: SeriesDef[] = [
     ...others.map(([k, name]) => ({ key: k, name: C.pullOf(name), color: c.quiet, quiet: true })),
+    ...(d.result.power.propeller
+      ? [
+          {
+            key: 'propeller_kgf',
+            name: C.pullOf(T.vessel.propellerModel),
+            color: c.quiet,
+            quiet: true,
+          },
+        ]
+      : []),
     {
       key: 'available',
       name: C.available,
@@ -149,7 +160,7 @@ function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string 
       title={C.title}
       sub={vmax !== null ? C.maxSpeed(fmtFixed(vmax, 2)) : C.notEnough}
       legend={legend}
-      note={C.note}
+      note={d.result.power.propeller ? `${C.note} ${T.vessel.propellerModelHelp}` : C.note}
       table={
         <DataTable
           caption={C.caption}

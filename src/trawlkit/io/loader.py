@@ -53,9 +53,39 @@ def load_net(name_or_path: str | Path) -> NetSpec:
     return load_yaml(p, NetSpec)
 
 
+#: Carpeta del catálogo de la flota (Fase 19.4); los buques del libro siguen en ``vessels.yaml``.
+VESSELS_DIR = DATA_DIR / "vessels"
+
+
+def vessel_files() -> list[Path]:
+    """Archivos de buques: ``vessels.yaml`` (los dos de la A-3) y luego ``vessels/*.yaml``."""
+    return [DATA_DIR / "vessels.yaml", *sorted(VESSELS_DIR.glob("*.yaml"))]
+
+
 def load_vessels(path: Path | str | None = None) -> VesselCatalogue:
-    """Carga el catálogo de buques."""
+    """Carga el catálogo de buques del libro (``vessels.yaml``: la clase de la A-3).
+
+    Es la «clase» de buques del libro (150 y 180 BHP): sin ``path`` no incluye la flota de
+    ``vessels/``, que se carga con :func:`load_fleet`.
+    """
     return load_yaml(path or DATA_DIR / "vessels.yaml", VesselCatalogue)
+
+
+def load_fleet() -> VesselCatalogue:
+    """Catálogo completo: los buques del libro primero y después los de ``vessels/*.yaml``.
+
+    El orden es estable (archivo por archivo, en el orden de cada archivo); un id repetido es un
+    error.
+    """
+    vessels = []
+    seen: set[str] = set()
+    for path in vessel_files():
+        for v in load_yaml(path, VesselCatalogue).vessels:
+            if v.id in seen:
+                raise ValueError(f"{path}: duplicated vessel id {v.id!r}")
+            seen.add(v.id)
+            vessels.append(v)
+    return VesselCatalogue(vessels=vessels)
 
 
 def load_doors(path: Path | str | None = None) -> DoorCatalogue:

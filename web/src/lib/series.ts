@@ -60,6 +60,8 @@ export function pullRows(d: DesignData, propeller: string): PullRow[] {
       if (k === 'fridman_kgf') continue;
       row[k] = at(curves[k], i);
     }
+    const prop = d.result.power.propeller;
+    if (prop) row.propeller_kgf = at(prop.towing_kgf, i);
     return row;
   });
 }

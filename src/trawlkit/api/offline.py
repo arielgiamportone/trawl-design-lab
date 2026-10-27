@@ -5,11 +5,11 @@
 web lo usa desde un *Web Worker* cuando no hay conexión. Cubre los catálogos, el diseño, la
 lista de materiales, el armado con componentes, el validador de aportes, la disposición 2D, la
 optimización por malla, los lotes (Fase 14), la guía de construcción (Fase 15), la economía de
-la operación (Fase 16), el banco de ejercicios y los laboratorios (Fase 17) y, desde la Fase 18,
-la simulación (forma, lance, explorador, selectividad, incertidumbre y calibración), los planos
-SVG, el informe HTML y XLSX y los registros de sensores, con guardas de costo propias del
-teléfono (:data:`PHONE_LIMITS`). Los PDF, el refinamiento con scipy y el aula devuelven 503 con
-un mensaje que lo explica.
+la operación (Fase 16), el banco de ejercicios y los laboratorios (Fase 17), la lista de precios
+del usuario (Fase 19.2) y, desde la Fase 18, la simulación (forma, lance, explorador,
+selectividad, incertidumbre y calibración), los planos SVG, el informe HTML y XLSX y los
+registros de sensores, con guardas de costo propias del teléfono (:data:`PHONE_LIMITS`). Los
+PDF, el refinamiento con scipy y el aula devuelven 503 con un mensaje que lo explica.
 
 Usa los mismos modelos de pedido y respuesta que la API (:mod:`trawlkit.api.schemas`) y las
 mismas funciones de :mod:`trawlkit.api.service`; ``tests/test_offline.py`` compara cada ruta con
@@ -160,8 +160,11 @@ def _component(m: re.Match[str], _q_: Query, _b: Any) -> Any:
     return service.component_get(unquote(m["kind"]), unquote(m["id"]))
 
 
-def _vessels(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
-    return _dump(list[Vessel], list(service.vessel_presets().values()))
+def _vessels(_m: re.Match[str], query: Query, _b: Any) -> Any:
+    return _dump(
+        list[Vessel],
+        service.vessel_list(_q(query, "type"), _q(query, "region"), _q(query, "status")),
+    )
 
 
 def _doors(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
@@ -362,6 +365,24 @@ def _batch_template(_m: re.Match[str], query: Query, _b: Any) -> Any:
     if kind not in ("fleet", "nets", "cases") or fmt not in ("xlsx", "csv"):
         raise _HTTPError(422, t("kind: fleet, nets o cases; format: xlsx o csv"))
     data, media, name = service.batch_template(kind, fmt)
+    return Binary(data, media, name)
+
+
+def _prices_parse(_m: re.Match[str], _q_: Query, body: Any) -> Any:
+    req = _body(sc.PriceParseRequest, body)
+    return _dump(sc.PriceParseResponse, service.prices_parse(req.file.model_dump(), req.currency))
+
+
+def _prices_export(_m: re.Match[str], query: Query, body: Any) -> Any:
+    req = _body(sc.PriceExportRequest, body)
+    fmt = _q(query, "format", "csv") or "csv"
+    if fmt not in ("csv", "xlsx"):
+        raise _HTTPError(422, t("format: csv o xlsx"))
+    data, media, name = service.prices_export(
+        {k: v.model_dump() for k, v in req.prices.items()},
+        [ln.model_dump() for ln in req.lines],
+        fmt,
+    )
     return Binary(data, media, name)
 
 
@@ -640,6 +661,8 @@ ROUTES: list[tuple[str, re.Pattern[str], Handler]] = [
     ("POST", re.compile(r"/batch/run"), _batch_run),
     ("POST", re.compile(r"/batch/export"), _batch_export),
     ("GET", re.compile(r"/batch/template"), _batch_template),
+    ("POST", re.compile(r"/prices/parse"), _prices_parse),
+    ("POST", re.compile(r"/prices/export"), _prices_export),
     ("POST", re.compile(r"/simulate"), _simulate),
     ("POST", re.compile(r"/simulate/explore"), _explore),
     ("POST", re.compile(r"/simulate/selectivity"), _selectivity),

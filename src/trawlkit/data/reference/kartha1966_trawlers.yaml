@@ -1,0 +1,27 @@
+# Arrastreros camaroneros de la India con hélice medida y tiro medido en el mar (Fase 19.4).
+# Gopinatha Kartha, T. D. y Roy Choudhury, R. L. (1966). Trawling pull exerted by a trawler.
+# Fishery Technology 3(2): 146-157, doi:10.56093/ft.v3i2.56084 (clave kartha1966).
+# Transcripto de un escaneo con OCR (Tabla I, p. 152; Tabla II, p. 153): cotejar con el PDF.
+# Es el único juego público hallado con diámetro de hélice y tiro medido; no es argentino.
+source: kartha1966
+units: {loa: ft, displacement: t, diameter: in, speed: kn, tension: lb}
+method:
+  shaft_over_bhp: 0.9          # p. 147-148: max SHP = 0,9 × max BHP
+  advance_ratio_trawling: 0.175  # J = 1217·v/(N·d) en la condición de arrastre
+  thrust_deduction: 0.10       # ΔT/T
+  hull_resistance_lb_per_t: 4  # «about 4 lbs/ton of displacement»
+  warp_over_gear_pull: [1.03, 1.15]  # t/t1 = 1/(cos α·cos β)
+  accuracy: '±5 % para buques de 30-60 HP'
+boats:
+- {id: I, loa_ft: 30, displacement_t: 7, bhp: 33, engine_rpm: 1200, gear_ratio: 1.61, diameter_in: 23, pitch_ratio: 0.782}
+- {id: II, loa_ft: 32, displacement_t: 7.42, bhp: 43.5, engine_rpm: 1500, gear_ratio: 2, diameter_in: 25.5, pitch_ratio: 0.706}
+- {id: III, loa_ft: 32, displacement_t: 7.42, bhp: 43.5, engine_rpm: 1500, gear_ratio: 2, diameter_in: 25.5, pitch_ratio: 0.765}
+- {id: IV, loa_ft: 32, displacement_t: 7.42, bhp: 36, engine_rpm: 1500, gear_ratio: 2, diameter_in: 26, pitch_ratio: 0.615}
+- {id: V, loa_ft: 36, displacement_t: 12.25, bhp: 62.5, engine_rpm: 1500, gear_ratio: 3, diameter_in: 35.3, pitch_ratio: 0.722}
+- {id: VI, loa_ft: 36, displacement_t: 12.25, bhp: 62.5, engine_rpm: 1500, gear_ratio: 3, diameter_in: 35.3, pitch_ratio: 0.722}
+- {id: VII, loa_ft: 36, displacement_t: 12.25, bhp: 62.5, engine_rpm: 1500, gear_ratio: 3, diameter_in: 36, pitch_ratio: 0.711}
+- {id: VIII, loa_ft: 36, displacement_t: 12.25, bhp: 62.5, engine_rpm: 1500, gear_ratio: 3, diameter_in: 36, pitch_ratio: 0.711}
+# Tabla II (p. 153): tensión del cable medida a una RPM de arrastre (sólo el ejemplo del informe).
+# A VERIFICAR: «356 rpm» se interpreta como RPM de la hélice (máximo 1500/3 = 500 rpm).
+measurements:
+- {boat: V, rpm: 356, speed_kn: 2.49, warp_tension_lb: 1192}

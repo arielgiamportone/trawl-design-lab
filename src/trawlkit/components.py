@@ -1,4 +1,6 @@
-"""Catálogo de componentes del arte: paño, cables, cabos, portones, boyas y cadenas (Fase 13).
+"""Catálogo de componentes del arte: paño, cables, cabos, portones, boyas, cadenas y grilletes.
+
+Fase 13; los grilletes, desde la Fase 19.2.
 
 Cada componente es un ítem con su fuente y la procedencia de cada valor, como las redes del
 catálogo FAO (:mod:`trawlkit.provenance`):
@@ -56,8 +58,16 @@ from trawlkit.netcheck import Issue
 #: Carpeta de los catálogos de componentes.
 COMPONENTS_DIR = DATA_DIR / "components"
 
-ComponentKind = Literal["twine", "wire", "rope", "door", "float", "chain"]
-KINDS: tuple[ComponentKind, ...] = ("twine", "wire", "rope", "door", "float", "chain")
+ComponentKind = Literal["twine", "wire", "rope", "door", "float", "chain", "shackle"]
+KINDS: tuple[ComponentKind, ...] = (
+    "twine",
+    "wire",
+    "rope",
+    "door",
+    "float",
+    "chain",
+    "shackle",
+)
 
 #: Nombre de cada tipo en castellano (se traduce con ``t`` al usarlo).
 KIND_LABEL: dict[str, str] = {
@@ -67,6 +77,7 @@ KIND_LABEL: dict[str, str] = {
     "door": N_("Portón"),
     "float": N_("Boya"),
     "chain": N_("Cadena"),
+    "shackle": N_("Grillete"),
 }
 
 Status = Literal["published", "user", "draft"]
@@ -217,8 +228,28 @@ class ChainItem(ComponentBase):
     breaking_load_t: float | None = Field(default=None, gt=0)
 
 
+class ShackleItem(ComponentBase):
+    """Grillete (unión de cables, cadenas y portones; Fase 19.2).
+
+    ``wll_t`` es la carga de trabajo (WLL) de la ficha; ``breaking_load_t``, la rotura mínima
+    (en general ``design_factor`` × WLL); ``size`` es el tamaño nominal tal como lo da el
+    fabricante (pulgadas o mm).
+    """
+
+    kind: Literal["shackle"] = "shackle"
+    type: str = Field(default="bow", description="bow (lira), dee (recto)")
+    size: str = Field(description="Tamaño nominal de la ficha (1/2 in, 13 mm)")
+    body_diameter_mm: float = Field(gt=0, description="Diámetro del cuerpo (arco)")
+    pin_diameter_mm: float | None = Field(default=None, gt=0, description="Diámetro del perno")
+    wll_t: float = Field(gt=0, description="Carga de trabajo (WLL) [t]")
+    breaking_load_t: float | None = Field(default=None, gt=0, description="Rotura mínima [t]")
+    design_factor: float | None = Field(default=None, gt=0, description="Rotura / WLL")
+    weight_kg: float = Field(gt=0, description="Peso de una pieza [kg]")
+    galvanised: bool = True
+
+
 Component = Annotated[
-    TwineItem | WireItem | RopeItem | DoorItem | FloatItem | ChainItem,
+    TwineItem | WireItem | RopeItem | DoorItem | FloatItem | ChainItem | ShackleItem,
     Field(discriminator="kind"),
 ]
 _ADAPTER: TypeAdapter[Any] = TypeAdapter(Component)
@@ -230,6 +261,7 @@ MODELS: dict[str, type[ComponentBase]] = {
     "door": DoorItem,
     "float": FloatItem,
     "chain": ChainItem,
+    "shackle": ShackleItem,
 }
 
 
@@ -394,6 +426,15 @@ CHAIN_WEIGHT_K = (0.014, 0.030)
 FLOAT_FRACTION = (0.30, 1.02)
 #: Peso del portón por m² [kg/m²]: madera ≈ 50, acero liviano ≈ 100, pelágico pesado ≈ 700.
 DOOR_KG_M2 = (15.0, 800.0)
+#: Peso del grillete por mm³ de diámetro del cuerpo [kg/mm³]: 1,2·10⁻⁴ (Crosby G-209 de 2½ in)
+#: a 1,6·10⁻⁴ (Green Pin de 13 mm) en las fichas cargadas (Fase 19.2).
+SHACKLE_WEIGHT_K = (0.8e-4, 2.5e-4)
+#: WLL del grillete por mm² de diámetro del cuerpo [t/mm²]: 0,011–0,014 en las fichas cargadas.
+SHACKLE_WLL_K = (0.006, 0.020)
+#: Factor de diseño (rotura / WLL) de grilletes: 4:1 a 6:1 en las normas de izaje; 8 de margen.
+SHACKLE_DESIGN_FACTOR = (4.0, 8.0)
+#: Perno / cuerpo: el perno es igual o algo más grueso que el cuerpo (1,0–1,3 en las fichas).
+SHACKLE_PIN_RATIO = (0.9, 1.6)
 
 
 def _issue(item: ComponentBase, level: str, code: str, msg: str) -> Issue:
@@ -643,6 +684,44 @@ def check(item: ComponentBase) -> list[Issue]:
                 item, item.buoyancy_kgf / sphere, FLOAT_FRACTION, "buoyancy", t("flotación/esfera")
             )
         )
+    elif isinstance(item, ShackleItem):
+        d = item.body_diameter_mm
+        issues.append(
+            _range(
+                item, item.weight_kg / d**3, SHACKLE_WEIGHT_K, "weight", t("kg por mm³ del cuerpo")
+            )
+        )
+        issues.append(_range(item, item.wll_t / d**2, SHACKLE_WLL_K, "wll", t("WLL [t] por mm²")))
+        if item.breaking_load_t is not None:
+            if item.breaking_load_t < item.wll_t:
+                issues.append(
+                    _issue(
+                        item,
+                        "error",
+                        "mbl",
+                        t(
+                            "rotura {mbl:g} t menor que la carga de trabajo {wll:g} t",
+                            mbl=item.breaking_load_t,
+                            wll=item.wll_t,
+                        ),
+                    )
+                )
+            else:
+                issues.append(
+                    _range(
+                        item,
+                        item.breaking_load_t / item.wll_t,
+                        SHACKLE_DESIGN_FACTOR,
+                        "design_factor",
+                        t("rotura / WLL"),
+                    )
+                )
+        if item.pin_diameter_mm is not None:
+            issues.append(
+                _range(
+                    item, item.pin_diameter_mm / d, SHACKLE_PIN_RATIO, "pin", t("perno / cuerpo")
+                )
+            )
     elif isinstance(item, DoorItem):
         shape = item.area_m2 / (item.length_m * item.height_m)
         if not 0.55 <= shape <= 1.05:
@@ -758,6 +837,7 @@ __all__ = [
     "FloatItem",
     "Price",
     "RopeItem",
+    "ShackleItem",
     "TwineItem",
     "WireItem",
     "apply_twine",

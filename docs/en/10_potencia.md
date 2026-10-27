@@ -105,6 +105,20 @@ $$ (eq-prado-bpf)
 
 where 150 is a conversion constant ($\approx 75/0.5144$ kgf·kn per HP), **not** the BHP.
 
+```{admonition} TO BE VERIFIED: origin of Prado's factors
+:class: warning
+The factors $0.9\cdot\{1.10;\ 1.20;\ 1.25;\ 1.40\}/100$ of {eq}`eq-prado-bp` and the constant 150
+of {eq}`eq-prado-bpf` come from the Excel workbook {cite:p}`giamportone2024`. **A VERIFICAR (origin:
+Excel workbook; not found in the text of the Workbook).** The *Fisherman's Workbook*
+{cite:p}`prado1990` (PDF pp. 98–99) instead gives a bollard pull of 10 to 12 kgf per BHP with a fixed
+propeller and 13 to 16 kgf per HP of APN with a controllable-pitch propeller or a nozzle, and its
+«BP when fishing» formulas are images that could not be checked. The rule
+$\mathrm{BHP}\cdot 0.9\cdot f/100$ circulates as a tug-industry rule of thumb attributed to
+Germanischer Lloyd {cite:p}`anker2022bollard` (secondary source). The workbook's values
+(9.9–12.6 kgf/BHP and the factor $K$ of 11.2–13.7) fall inside the Workbook's ranges, so `trawlkit`
+keeps them unchanged to reproduce the Excel.
+```
+
 ### Koyama, Nomura and Hamuro: constant power
 
 The three Japanese schools start from an effective towing power $P_e$ [HP] and assume that it stays
@@ -130,6 +144,39 @@ sense in the trawling range (≈ 2.5–4.5 kn), where the propeller works close 
 That is why, although the workbook averages the five methods, the one that feeds the rest of the
 design is Fridman's: it is linear, bounded and conservative at low speed.
 
+### Propeller-based pull (Wärtsilä, Phase 19.4)
+
+The five methods above only look at the BHP and the propeller type. When the **propeller diameter**
+$D$ [m] is known, `trawlkit.propulsion` adds a sixth route, the form of Wärtsilä's *Encyclopedia of
+Ship Technology* {cite:p}`wartsilabollard`:
+
+$$
+T = (D\,P_D)^{2/3}\ [\mathrm{kN}], \qquad BP = \frac{T\,k_1\,k_2}{9.81}\ [\mathrm{t}],
+$$ (eq-wartsila)
+
+with $P_D$ [kW] the power delivered to the propeller, $k_1 = 0.9$ (10 % losses) and $k_2$ = 1.2–1.4
+with a nozzle. Without a nozzle $k_2 = 1$ and with a nozzle the midpoint 1.3 (both *derived*: the
+source gives the nozzle as a 20 to 40 % addition). $P_D = 0.9\,\mathrm{BHP}$ is the shaft-to-brake
+power ratio of Kartha and Roy Choudhury {cite:p}`kartha1966`.
+
+As a check, ideal momentum theory (actuator disc, *derived*) gives $T^3 = 2\rho A P^2$ for an open
+propeller, i.e. $T = 1.172\,(D P)^{2/3}$ kN with $\rho = 1025$ kg/m³, and $T^3 = 4\rho A P^2$ for an
+ideal duct (a factor $2^{1/3} = 1.26$, inside Wärtsilä's 1.2–1.4). The coefficient 1 of
+{eq}`eq-wartsila` equals 0.853 times the ideal.
+
+For the pull at trawling speed the bollard pull is scaled with the fall of the actuator-disc thrust
+at constant power, $T_\text{ideal}(v)/T_\text{ideal}(0)$, and, when the displacement is known, the
+hull resistance of Kartha and Roy Choudhury, «about 4 lbs/ton of displacement», is subtracted. If
+the vessel carries a **measured** bollard pull, it replaces Wärtsilä's. With a nozzle, FAO FTP 383
+{cite:p}`wilson1999` reports a 25 to 30 % increase in towing force and warns that above 9 kn the
+nozzle drags more than it pushes.
+
+The method only enters the case when the vessel carries `propeller_diameter_m`: it appears as one
+more column of the power table (with its source) and as a separate speed window
+(`propeller_model`), without replacing Fridman as the design propulsor. Without a diameter the case
+is identical to the workbook's. Fridman's KF for FP+N and CP is **not** filled in: no published
+source was found (Fridman's 1986 book is not online), so those propellers require `fridman_kf`.
+
 ## Coefficients
 
 | Coefficient | Value | Unit | Source | Excel cell |
@@ -145,6 +192,8 @@ design is Fridman's: it is linear, bounded and conservative at low speed.
 | Koyama $K$ / load | 0.15 / 0.6 | — | Koyama | `PotOK!M165`, `C169` |
 | Nomura $K_1$, $K_2$, $K_3$, net fraction | 0.85 / 0.85 / 0.17 / 0.8 | — | Nomura | `PotOK!L205:L213` |
 | Hamuro $K_1$, $K_2$, $K_3$ | 0.825 / 0.85 / 0.20–0.30 | — | Hamuro | `PotOK!C254`, `F257:L258` |
+| Wärtsilä $k_1$ / $k_2$ with nozzle | 0.9 / 1.2–1.4 (1.3) | — | Wärtsilä | — |
+| $P_D/\mathrm{BHP}$; hull | 0.9; 4 lb/t | — | Kartha (1966) | — |
 
 The values are in `src/trawlkit/data/reference/power_coefficients.yaml`, generated from the workbook.
 
@@ -165,6 +214,7 @@ The values are in `src/trawlkit/data/reference/power_coefficients.yaml`, generat
 | `PotOK!F259:L266`, `E272:H280` | Hamuro | `hamuro_ps_table`, `hamuro_pull_series_kgf` |
 | `PotOK!L11:O19` | Fridman summary (FP and CP+N) | `trawlkit.power.summary` |
 | — | The five curves for one vessel | `trawlkit.power.power_curves` |
+| — | Propeller-based pull (with diameter) | `trawlkit.propulsion.propeller_pull` |
 
 ## Assumptions and limits
 
@@ -281,6 +331,52 @@ Fridman's pull at around 2.5 kn on the 150 BHP vessel and around 2.7 kn on the 1
 controllable pitch and nozzle ($K_F = 15$) those crossings rise to 3.25 and 3.6 kn. According to
 Koyama or Nomura the crossing drops to 2.1–2.3 kn. The real margin, once otter boards, warps and
 floats are added, is analysed in {doc}`19_ventana_velocidad`.
+
+### Propeller-based pull: a measured case
+
+No Argentine vessel has a published propeller diameter or measured pull
+({doc}`39_flota_argentina`). The only public data set found with both is Kartha and Roy Choudhury's
+eight Indian shrimp trawlers {cite:p}`kartha1966`. For *boat V* (62.5 BHP at 1500 rpm, 3:1
+reduction, 35.3 in propeller) the table compares {eq}`eq-wartsila`, the ideal and the warp tension
+measured at 356 rpm and 2.49 kn:
+
+```{code-cell} ipython3
+import yaml
+from trawlkit import propulsion as pr
+from trawlkit.io import DATA_DIR
+
+ref = yaml.safe_load((DATA_DIR / "reference" / "kartha1966_trawlers.yaml").read_text("utf-8"))
+boat = next(b for b in ref["boats"] if b["id"] == "V")
+meas = ref["measurements"][0]
+HP_MECH = 0.745699872  # 1966 BHP: mechanical hp
+d = boat["diameter_in"] * 0.0254
+p_max = pr.delivered_power_kw(boat["bhp"], hp_to_kw=HP_MECH)
+p = p_max * meas["rpm"] / (boat["engine_rpm"] / boat["gear_ratio"])  # constant torque
+bp = pr.bollard_pull_wartsila_t(d, p)
+(pull,) = pr.towing_pull_kgf(bp, d, p, [meas["speed_kn"]], False, boat["displacement_t"])
+measured = meas["warp_tension_lb"] * pr.LB_TO_KG
+P.md_table(
+    ["Quantity", "Value"],
+    [
+        ["Diameter [m]", P.fmt(d, 3)],
+        ["P_D at full power [kW]", P.fmt(p_max, 1)],
+        ["Wärtsilä BP at full power [t]", P.fmt(pr.bollard_pull_wartsila_t(d, p_max), 2)],
+        ["Ideal BP at full power [t]", P.fmt(pr.bollard_pull_momentum_t(d, p_max), 2)],
+        ["Workbook BP (BHP·0.9·1.10/100) [t]", P.fmt(boat["bhp"] * 0.9 * 1.10 / 100, 2)],
+        ["Estimated pull at 2.49 kn and 356 rpm [kgf]", P.fmt(pull, 0)],
+        ["Measured warp tension [kgf]", P.fmt(measured, 0)],
+        ["Estimated / measured", P.fmt(pull / measured, 2)],
+    ],
+)
+```
+
+At full power Wärtsilä's formula gives 16.5 kgf/BHP, above the Workbook's 10–12 kgf/BHP for a fixed
+propeller and the 9.9 kgf/BHP of the workbook rule: with a large, slow propeller (3:1 reduction) the
+pull per horsepower is higher, which is exactly what the diameter adds. At trawling speed the model
+overestimates the measured tension by ≈ 25 % (and the tension is already 3–15 % above the pull,
+because of the warp inclination): the actuator disc is an ideal bound and a real fixed-pitch
+propeller loses more thrust as it advances. That is why the result is reported as one more method
+and does not replace Fridman.
 
 ## Exercises
 

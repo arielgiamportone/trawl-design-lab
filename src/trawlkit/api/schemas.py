@@ -430,6 +430,51 @@ class BatchParseRequest(BaseModel):
     mode: Literal["fleet", "cases", "nets"] = "fleet"
 
 
+class PriceParseRequest(BaseModel):
+    """Lista de precios del usuario (``POST /prices/parse``): CSV como texto o XLSX en base64.
+
+    ``currency``: moneda de las filas que no la traen.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    file: BatchFile
+    currency: str | None = Field(default=None, min_length=3, max_length=3)
+
+
+class PriceParseResponse(BaseModel):
+    """Precios leídos (clave = id de componente o de línea), filas y observaciones."""
+
+    prices: dict[str, PriceIn]
+    rows: int
+    issues: list[dict[str, Any]]
+    ignored: list[str]
+
+
+class PriceLineIn(BaseModel):
+    """Línea de la lista de materiales para la plantilla de precios."""
+
+    model_config = ConfigDict(extra="ignore")
+
+    key: str = Field(max_length=200)
+    label: str | None = Field(default=None, max_length=300)
+    unit: str | None = Field(default=None, max_length=10)
+    component_id: str | None = Field(default=None, max_length=200)
+
+
+class PriceExportRequest(BaseModel):
+    """Lista de precios a exportar (``POST /prices/export``).
+
+    ``lines``: líneas de la lista de materiales; las que no tienen precio salen vacías, como
+    plantilla para completar.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    prices: dict[str, PriceIn] = Field(default_factory=dict)
+    lines: list[PriceLineIn] = Field(default_factory=list, max_length=500)
+
+
 class BatchRunRequest(BatchParseRequest):
     """Lote (``POST /batch/run`` y ``/batch/export``).
 

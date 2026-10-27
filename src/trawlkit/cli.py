@@ -11,7 +11,7 @@ import typer
 
 from trawlkit import __version__
 from trawlkit.compat import ERRATA, Compat
-from trawlkit.io import load_doors, load_net, load_vessels
+from trawlkit.io import load_doors, load_fleet, load_net, load_vessels
 from trawlkit.model import DesignCase
 from trawlkit.model import run as run_case
 from trawlkit.report.labels import SUMMARY_LABELS, fmt, label, summary_markdown
@@ -93,13 +93,16 @@ def build_case(
         for a in cc.assumptions:
             typer.echo(f"* {a}")
         return cc.case
-    vessels = {v.id: v for v in load_vessels().vessels}
+    from trawlkit.catalog import complete_vessel
+
+    book = {v.id: v for v in load_vessels().vessels}
+    vessels = {v.id: v for v in load_fleet().vessels}  # A-3 primero y la flota (Fase 19.4)
     doors = {d.id: d for d in load_doors().doors}
     try:
         v = vessels[vessel] if vessel else next(iter(vessels.values()))
         d = doors[door] if door else next(iter(doors.values()))
         if class_vessel is None:
-            others = tuple(o for o in vessels.values() if o.id != v.id)
+            others = tuple(o for o in book.values() if o.id != v.id)
         else:
             others = tuple(vessels[c] for c in class_vessel)
     except KeyError as exc:
@@ -108,6 +111,9 @@ def build_case(
         mode = Compat(compat)
     except ValueError as exc:
         raise typer.BadParameter("compat debe ser 'excel' o 'corrected'") from exc
+    v, filled = complete_vessel(v)
+    for a in filled:
+        typer.echo(f"* {a}")
     return DesignCase(
         net=spec,
         vessel=v,
@@ -115,6 +121,7 @@ def build_case(
         net_modified=load_net(modified) if modified else None,
         class_vessels=others,
         compat=mode,
+        assumptions=tuple(filled),
     )
 
 

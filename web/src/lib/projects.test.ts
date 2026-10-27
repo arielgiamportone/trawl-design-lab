@@ -10,6 +10,26 @@ import {
 } from './projects';
 
 describe('proyectos', () => {
+  it('guardan la lista de precios del usuario (y toleran precios inválidos)', () => {
+    const prices = {
+      crosby_g209_5_8in: {
+        value: 12.5,
+        currency: 'USD',
+        unit: 'unit' as const,
+        date: '2026-10',
+        source: 'puerto',
+      },
+    };
+    const file = toProjectFile('Con precios', DEFAULT_CASE, new Date('2026-10-27'), prices);
+    expect(file.prices).toEqual(prices);
+    const raw = JSON.parse(JSON.stringify(file)) as Record<string, unknown>;
+    raw.prices = { ...prices, malo: { value: -1, currency: 'USD', unit: 'kg' } };
+    const back = parseProjectFile(JSON.stringify(raw));
+    expect(back.ok && back.project.prices).toEqual(prices);
+    // Sin precios, el archivo no lleva la clave (como los proyectos viejos).
+    expect('prices' in toProjectFile('x', DEFAULT_CASE, new Date(), {})).toBe(false);
+  });
+
   it('ida y vuelta por archivo, normalizando el caso', () => {
     const state = { ...DEFAULT_CASE, vessel: 'fao_a3_180hp', targetSpeed: 2.6 };
     const file = toProjectFile('  Beagle 180 ', state, new Date('2026-10-19T10:00:00Z'));

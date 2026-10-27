@@ -669,7 +669,7 @@ export interface paths {
         };
         /**
          * List Vessels
-         * @description Buques del catálogo.
+         * @description Buques del catálogo: los de la A-3 y la flota argentina (filtros: tipo, región, estado).
          */
         get: operations["list_vessels_catalog_vessels_get"];
         put?: never;
@@ -1207,6 +1207,46 @@ export interface paths {
         get: operations["batch_template_batch_template_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prices/parse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Prices Parse
+         * @description Lee una lista de precios (CSV o XLSX): clave, precio, moneda, unidad, fecha y fuente.
+         */
+        post: operations["prices_parse_prices_parse_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prices/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Prices Export
+         * @description Lista de precios en CSV o XLSX (con las líneas sin precio como plantilla).
+         */
+        post: operations["prices_export_prices_export_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4087,6 +4127,21 @@ export interface components {
          */
         Plane: "upper" | "lower" | "side";
         /**
+         * PriceExportRequest
+         * @description Lista de precios a exportar (``POST /prices/export``).
+         *
+         *     ``lines``: líneas de la lista de materiales; las que no tienen precio salen vacías, como
+         *     plantilla para completar.
+         */
+        PriceExportRequest: {
+            /** Prices */
+            prices?: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /** Lines */
+            lines?: components["schemas"]["PriceLineIn"][];
+        };
+        /**
          * PriceIn
          * @description Precio orientativo de un componente o de una línea de la lista de materiales.
          */
@@ -4114,6 +4169,49 @@ export interface components {
              * @default usuario
              */
             source: string;
+        };
+        /**
+         * PriceLineIn
+         * @description Línea de la lista de materiales para la plantilla de precios.
+         */
+        PriceLineIn: {
+            /** Key */
+            key: string;
+            /** Label */
+            label?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /** Component Id */
+            component_id?: string | null;
+        };
+        /**
+         * PriceParseRequest
+         * @description Lista de precios del usuario (``POST /prices/parse``): CSV como texto o XLSX en base64.
+         *
+         *     ``currency``: moneda de las filas que no la traen.
+         */
+        PriceParseRequest: {
+            file: components["schemas"]["BatchFile"];
+            /** Currency */
+            currency?: string | null;
+        };
+        /**
+         * PriceParseResponse
+         * @description Precios leídos (clave = id de componente o de línea), filas y observaciones.
+         */
+        PriceParseResponse: {
+            /** Prices */
+            prices: {
+                [key: string]: components["schemas"]["PriceIn"];
+            };
+            /** Rows */
+            rows: number;
+            /** Issues */
+            issues: {
+                [key: string]: unknown;
+            }[];
+            /** Ignored */
+            ignored: string[];
         };
         /**
          * ProgressOut
@@ -5032,6 +5130,14 @@ export interface components {
         /**
          * Vessel
          * @description Buque pesquero.
+         *
+         *     Los campos del libro (``bhp``, ``length_m``, ``beam_m``, ``depth_m``, ``displacement_t``,
+         *     ``propeller``, ``high_rpm``) alimentan el motor desde la Fase 1. Los demás (Fase 19.4) son
+         *     opcionales: datos de la hélice para el modelo de tiro por diámetro
+         *     (:mod:`trawlkit.propulsion`), de la maniobra (pórtico, guinche y cable) para los controles del
+         *     caso y de procedencia para el catálogo de la flota (``data/vessels/*.yaml``). ``length_m`` es
+         *     la eslora que usa el motor (la total cuando se conoce; ``loa_m`` la repite y ``lpp_m`` es la
+         *     eslora entre perpendiculares).
          */
         Vessel: {
             /** Id */
@@ -5058,9 +5164,132 @@ export interface components {
              * @default true
              */
             high_rpm: boolean;
+            /**
+             * Loa M
+             * @description Eslora total [m]
+             */
+            loa_m?: number | null;
+            /**
+             * Lpp M
+             * @description Eslora entre perpendiculares [m]
+             */
+            lpp_m?: number | null;
+            /**
+             * Draft M
+             * @description Calado [m]
+             */
+            draft_m?: number | null;
+            /**
+             * Gross Tonnage
+             * @description Arqueo bruto (TRB del registro o GT)
+             */
+            gross_tonnage?: number | null;
+            /**
+             * Engine Kw
+             * @description Potencia del motor [kW]
+             */
+            engine_kw?: number | null;
+            /**
+             * Engine Rpm
+             * @description RPM nominales del motor
+             */
+            engine_rpm?: number | null;
+            /**
+             * Gear Ratio
+             * @description Reducción (motor:hélice)
+             */
+            gear_ratio?: number | null;
+            /**
+             * Propeller Diameter M
+             * @description Diámetro de la hélice [m]
+             */
+            propeller_diameter_m?: number | null;
+            /**
+             * Propeller Pitch Ratio
+             * @description Paso/diámetro
+             */
+            propeller_pitch_ratio?: number | null;
+            /**
+             * Propeller Blades
+             * @description Número de palas
+             */
+            propeller_blades?: number | null;
+            /**
+             * Nozzle
+             * @description Hélice con tobera (debe coincidir con ``propeller``)
+             */
+            nozzle?: boolean | null;
+            /**
+             * Bollard Pull T Measured
+             * @description Tiro a punto fijo medido [t]
+             */
+            bollard_pull_t_measured?: number | null;
+            /**
+             * Sfc G Kwh
+             * @description Consumo específico de combustible [g/kWh]
+             */
+            sfc_g_kwh?: number | null;
+            /**
+             * Gallows Height M
+             * @description Altura de las pastecas sobre el agua [m]
+             */
+            gallows_height_m?: number | null;
+            /**
+             * Gallows Spacing M
+             * @description Distancia entre pastecas (pórticos) [m]
+             */
+            gallows_spacing_m?: number | null;
+            /**
+             * Winch Pull T
+             * @description Tiro del guinche a medio tambor [t]
+             */
+            winch_pull_t?: number | null;
+            /**
+             * Winch Drum Capacity M
+             * @description Capacidad de cable de cada tambor [m]
+             */
+            winch_drum_capacity_m?: number | null;
+            /**
+             * Warp Diameter Mm
+             * @description Diámetro del cable para el que vale la capacidad [mm]
+             */
+            warp_diameter_mm?: number | null;
+            vessel_type?: components["schemas"]["VesselType"] | null;
+            /**
+             * Typical
+             * @default false
+             */
+            typical: boolean;
+            /**
+             * Region
+             * @description Región (vocabulario de componentes)
+             */
+            region?: string | null;
+            /** Home Port */
+            home_port?: string | null;
+            /**
+             * Status
+             * @default published
+             * @enum {string}
+             */
+            status: "published" | "draft";
+            /** Sources */
+            sources?: components["schemas"]["SourceDocument"][];
+            /** Provenance */
+            provenance?: {
+                [key: string]: components["schemas"]["Provenance"];
+            };
+            /** Notes */
+            notes?: string[];
         } & {
             [key: string]: unknown;
         };
+        /**
+         * VesselType
+         * @description Tipo de buque (estratos de la flota argentina; FAO 2005, Bertolotti et al. 2001).
+         * @enum {string}
+         */
+        VesselType: "rada_ria" | "costero" | "fresquero" | "congelador" | "tangonero" | "investigacion" | "otro";
     };
     responses: never;
     parameters: never;
@@ -6316,7 +6545,11 @@ export interface operations {
     };
     list_vessels_catalog_vessels_get: {
         parameters: {
-            query?: never;
+            query?: {
+                type?: string | null;
+                region?: string | null;
+                status?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -6330,6 +6563,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Vessel"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -7118,6 +7360,75 @@ export interface operations {
                 content: {
                     "text/csv": unknown;
                     "application/octet-stream": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prices_parse_prices_parse_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PriceParseRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PriceParseResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    prices_export_prices_export_post: {
+        parameters: {
+            query?: {
+                format?: "csv" | "xlsx";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PriceExportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/csv": unknown;
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": unknown;
                 };
             };
             /** @description Validation Error */

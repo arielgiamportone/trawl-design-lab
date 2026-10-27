@@ -3,9 +3,9 @@
 kind: wire
 sources:
 - key: bridon2023
+  accessed: '2026-10-27'
   title: Bridon-Bekaert, 2023 Fishing Catalogue
   url: https://www.bekaert.com/content/dam/bbrg-myrope/products/technical-sheets/2023%20Fishing%20Catalogue.pdf
-  accessed: '2026-10-25'
 items:
 - id: bridon_marblue_6x19_991_poly_core_14mm
   name: Bridon-Bekaert Marblue 6x19 (9/9/1) Poly Core Ø14 mm
@@ -412,4 +412,563 @@ items:
       kind: transcribed
       document: bridon2023
       page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_20mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø20 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 20.0
+  weight_kg_per_m: 1.597
+  breaking_load_t: 26.7
+  generic_of: wire_6x19_991_20mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_24mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø24 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 24.0
+  weight_kg_per_m: 2.248
+  breaking_load_t: 38.5
+  generic_of: wire_6x19_991_24mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_28mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø28 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 28.0
+  weight_kg_per_m: 3.174
+  breaking_load_t: 52.4
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_32mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø32 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 32.0
+  weight_kg_per_m: 4.088
+  breaking_load_t: 68.4
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_36mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø36 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 36.0
+  weight_kg_per_m: 5.145
+  breaking_load_t: 86.6
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_starfish_6x26_poly_core_44mm
+  name: Bridon-Bekaert Dyform Starfish 6x26 Poly Core Ø44 mm
+  brand: Bridon-Bekaert
+  product: Dyform Starfish 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 44.0
+  weight_kg_per_m: 7.685
+  breaking_load_t: 129.3
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform Starfish»
+      note: carga mínima
+- id: bridon_dyform_6x26_poly_core_16mm
+  name: Bridon-Bekaert Dyform 6x26 Poly Core Ø16 mm
+  brand: Bridon-Bekaert
+  product: Dyform 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 16.0
+  weight_kg_per_m: 1.033
+  breaking_load_t: 17.1
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: carga mínima
+  notes:
+  - De 20 a 44 mm, los mismos valores que Dyform Starfish; se cargan los tamaños que Starfish no tiene.
+- id: bridon_dyform_6x26_poly_core_18mm
+  name: Bridon-Bekaert Dyform 6x26 Poly Core Ø18 mm
+  brand: Bridon-Bekaert
+  product: Dyform 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: fibra sintética
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.291
+  breaking_load_t: 21.6
+  generic_of: wire_6x19_991_18mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: carga mínima
+  notes:
+  - De 20 a 44 mm, los mismos valores que Dyform Starfish; se cargan los tamaños que Starfish no tiene.
+- id: bridon_dyform_6x26_iwrc_16mm
+  name: Bridon-Bekaert Dyform 6x26 IWRC Ø16 mm
+  brand: Bridon-Bekaert
+  product: Dyform 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 16.0
+  weight_kg_per_m: 1.155
+  breaking_load_t: 19.1
+  generic_of: wire_6x19_991_16mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: carga mínima
+  notes:
+  - De 20 a 44 mm, los mismos valores que Dyform Starfish IWRC.
+- id: bridon_dyform_6x26_iwrc_18mm
+  name: Bridon-Bekaert Dyform 6x26 IWRC Ø18 mm
+  brand: Bridon-Bekaert
+  product: Dyform 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1) compactado
+  core: IWRC
+  diameter_mm: 18.0
+  weight_kg_per_m: 1.453
+  breaking_load_t: 24.1
+  generic_of: wire_6x19_991_18mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Dyform»
+      note: carga mínima
+  notes:
+  - De 20 a 44 mm, los mismos valores que Dyform Starfish IWRC.
+- id: bridon_seabeam_6x26_poly_core_22mm
+  name: Bridon-Bekaert SeaBeam 6x26 Poly Core Ø22 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: fibra sintética
+  diameter_mm: 22.0
+  weight_kg_per_m: 1.744
+  breaking_load_t: 25.7
+  generic_of: wire_6x19_991_22mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_seabeam_6x26_poly_core_26mm
+  name: Bridon-Bekaert SeaBeam 6x26 Poly Core Ø26 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: fibra sintética
+  diameter_mm: 26.0
+  weight_kg_per_m: 2.406
+  breaking_load_t: 35.8
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_seabeam_6x26_poly_core_32mm
+  name: Bridon-Bekaert SeaBeam 6x26 Poly Core Ø32 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 Poly Core
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: fibra sintética
+  diameter_mm: 32.0
+  weight_kg_per_m: 3.6260000000000003
+  breaking_load_t: 54.3
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_seabeam_6x26_iwrc_22mm
+  name: Bridon-Bekaert SeaBeam 6x26 IWRC Ø22 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: IWRC
+  diameter_mm: 22.0
+  weight_kg_per_m: 1.994
+  breaking_load_t: 27.6
+  generic_of: wire_6x19_991_22mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_seabeam_6x26_iwrc_26mm
+  name: Bridon-Bekaert SeaBeam 6x26 IWRC Ø26 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: IWRC
+  diameter_mm: 26.0
+  weight_kg_per_m: 2.762
+  breaking_load_t: 38.6
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_seabeam_6x26_iwrc_32mm
+  name: Bridon-Bekaert SeaBeam 6x26 IWRC Ø32 mm
+  brand: Bridon-Bekaert
+  product: SeaBeam 6x26 IWRC
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x26 (10/5&5/5/1)
+  core: IWRC
+  diameter_mm: 32.0
+  weight_kg_per_m: 4.15
+  breaking_load_t: 58.5
+  generic_of: wire_6x19_991_26mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «Seabeam (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_6x7_10mm
+  name: Bridon-Bekaert 6x7 Ø10 mm
+  brand: Bridon-Bekaert
+  product: 6x7
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x7
+  core: FC
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.33299999999999996
+  breaking_load_t: 5.32
+  generic_of: wire_6x7_fc_10mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_6x7_12mm
+  name: Bridon-Bekaert 6x7 Ø12 mm
+  brand: Bridon-Bekaert
+  product: 6x7
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x7
+  core: FC
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.48100000000000004
+  breaking_load_t: 7.65
+  generic_of: wire_6x7_fc_12mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+      note: carga mínima
+- id: bridon_6x7_14mm
+  name: Bridon-Bekaert 6x7 Ø14 mm
+  brand: Bridon-Bekaert
+  product: 6x7
+  country: BE
+  regions:
+  - global
+  - europe
+  construction: 6x7
+  core: FC
+  diameter_mm: 14.0
+  weight_kg_per_m: 0.654
+  breaking_load_t: 10.42
+  generic_of: wire_6x7_fc_14mm
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+    weight_kg_per_m:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: bridon2023
+      page: Bridon-Bekaert 2023, «6x7 (arrastre a la vara)»
       note: carga mínima

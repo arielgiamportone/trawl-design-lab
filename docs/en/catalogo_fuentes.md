@@ -81,8 +81,11 @@ to.
 | Key | Source | What is taken | How |
 |---|---|---|---|
 | `prado1990` | FAO *Fisherman's Workbook* | PA, PE, PP and PES twines; PA, PE, PES, PP and combination ropes; 6x7, 6x12, 6x19 and 6x24 wire ropes; floats; chains; otter boards by power (flat, oval, V and Süberkrüb) | Generics: law fitted to each table (power or d²), values *derived* at standard sizes with the error of the fit; floats, chains and otter boards *transcribed* |
-| `garware_fisheries` | Garware Technical Fibres (India) | Sapphire and SNG braided PE netting; X2 rope (PP/PE) | 6–8 sizes per line, *transcribed* |
-| `bridon2023` | Bridon-Bekaert, fishing catalogue 2023 | Marblue 6x19 and Dyform Starfish 6x26 wire ropes | 4–5 sizes per line |
+| `garware_fisheries` | Garware Technical Fibres (India) | Sapphire and SNG braided PE netting; 380 D, 500 D, Sapphire twisted and 210 D nylon twisted netting (Phase 19.2); X2, Maxima, PP, PE and Maxibraid ropes | 6–8 sizes per line, *transcribed*; the twisted netting as a *draft* (the data sheet gives no diameter: *assumed* with the *Workbook* fit) |
+| `hampidjan_catalogue` | Hampidjan fishing catalogue (iPaper viewer, 2023) | Magnet, Advant, Utzon and Primanet netting; Nylex, Kraft, Danline, DynIce 75 and Prima ropes; Randers Reb and Oliveira wire ropes; Trygg and Trawlex chains; Green Pin shackles; Atlantic Floats floats (Phase 19.2) | 3–8 sizes per line, read on the image of each page; elongation at break and *derived* EA |
+| `bridon2023` | Bridon-Bekaert, fishing catalogue 2023 | Marblue 6x19, Dyform Starfish 6x26 and (Phase 19.2) Dyform 6x26, SeaBeam 6x26 and 6x7 wire ropes | 2–6 sizes per line |
+| `gunnebo_llz` | Gunnebo Industries / Kito Crosby | LLZ grade 6 galvanised long-link chain (Phase 19.2) | 7 sizes |
+| `crosby_g209` | Crosby, general catalogue p. 24 | G-209 shackles (Phase 19.2) | 10 sizes |
 | `pfeifer_6x19w` | PFEIFER 6x19W-FC | Small wire ropes from 6 to 16 mm | 6 sizes |
 | `zuniga2006` | FAO REBYC, shrimp fleet of the Colombian Caribbean | Flat wooden doors from 6'×28" to 10'×40" used in the fleet | Dimensions *transcribed*, polar assumed (that of the flat otter board) |
 | `lange1993` | Lange (ICES 1993) | Maximum lift of the flat otter board (0.95) and V-board (0.70–0.85) | Polar of the V-board *assumed*: that of the flat board with the CL scaled |
@@ -98,7 +101,7 @@ Criteria:
 - **Physical validator** (`trawlkit.components.check`): weight per metre against diameter,
   breaking load per mm², twine tenacity, buoyancy against the volume of the sphere and otter board
   polar. The app also uses it to review user contributions.
-- **Searched without open data**: Hampidjan, Euronete, Vónin, Usha Martin, Cotesi, Morgère,
+- **Searched without open data**: Euronete, Vónin (its catalogue is Hampidjan's), Usha Martin, Cotesi, Morgère,
   Thyborøn, Injector and Ekkó publish ranges or ask for the data sheet by e-mail. Latin American
   suppliers do not publish data sheets online; for them there are the generics and the
   contributions.

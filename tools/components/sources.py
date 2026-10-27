@@ -9,7 +9,8 @@ Dos clases de datos:
 * **Fichas de fabricantes**: datos puntuales (unos pocos tamaños por línea de producto), citados.
   No se copian tablas enteras.
 
-Cada tabla dice documento, página y unidades. Lectura del 2026-10-25.
+Cada tabla dice documento, página y unidades. Lectura del 2026-10-25; las fuentes de la Fase 19.2
+(Hampidjan, Crosby, Gunnebo y las líneas nuevas de Garware y Bridon-Bekaert), del 2026-10-27.
 """
 
 from __future__ import annotations
@@ -28,12 +29,15 @@ DOCS: dict[str, dict[str, Any]] = {
     },
     "garware_fisheries": {
         "key": "garware_fisheries",
+        # Releído el 2026-10-27 (Fase 19.2): se cargaron más líneas y se comprobaron las de antes.
+        "accessed": "2026-10-27",
         "title": "Garware Technical Fibres, Fisheries brochure (redes de arrastre trenzadas y cabos)",
         "url": "https://www.garwarefibres.com/sites/default/files/brochure/solutions/"
         "Fisheries%20Brochure.pdf",
     },
     "bridon2023": {
         "key": "bridon2023",
+        "accessed": "2026-10-27",
         "title": "Bridon-Bekaert, 2023 Fishing Catalogue",
         "url": "https://www.bekaert.com/content/dam/bbrg-myrope/products/technical-sheets/"
         "2023%20Fishing%20Catalogue.pdf",
@@ -55,6 +59,27 @@ DOCS: dict[str, dict[str, Any]] = {
         "title": "Lange, K. (1993). Design and construction of cambered V-doors. ICES C.M. "
         "1993/B:33",
         "url": "https://www.vliz.be/imisdocs/publications/ocrd/274838.pdf",
+    },
+    "hampidjan_catalogue": {
+        "key": "hampidjan_catalogue",
+        "title": "Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión "
+        "2023-10-11)",
+        "url": "https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/",
+        "accessed": "2026-10-27",
+    },
+    "crosby_g209": {
+        "key": "crosby_g209",
+        "title": "The Crosby Group, G-209 / S-209 Screw Pin Anchor Shackles (Crosby General "
+        "Catalog, p. 24)",
+        "url": "https://www.thecrosbygroup.com/wp-content/uploads/catalog/2022/en/24.pdf",
+        "accessed": "2026-10-27",
+    },
+    "gunnebo_llz": {
+        "key": "gunnebo_llz",
+        "title": "Gunnebo Industries / Kito Crosby, Long Link Chain LLZ, Grade 6, hot-dip "
+        "galvanized (datos del producto)",
+        "url": "https://kitocrosby.com/product/gunnebo-industries-long-link-chain-llz-grade-6/",
+        "accessed": "2026-10-27",
     },
     "giamportone2024": {
         "key": "giamportone2024",
@@ -514,4 +539,553 @@ PFEIFER_6X19W: list[tuple[float, float, float]] = [
     (12, 51.7, 84.1),
     (14, 70.4, 114),
     (16, 91.9, 150),
+]
+
+# --- Fase 19.2: más fabricantes --------------------------------------------------------------
+# Lectura del 2026-10-27. El catálogo de Hampidjan es un visor de páginas (iPaper) sin PDF; su
+# capa de texto desordena columnas, así que cada fila de abajo se leyó en la imagen de la página
+# (``Pages/<n>/Zoom.jpg`` del visor), no en el texto. «p.» es el número de página del visor; la
+# sección del catálogo (p. ej. 10.1) va entre paréntesis.
+
+#: Hampidjan, paño (sección 10): diámetro [mm], rendimiento [m/kg], peso [g/100 m], rotura con
+#: nudo [kg]. La ficha no da la rotura sin nudo ni si el ensayo es en seco o mojado.
+#: ``elongation``: alargamiento [%] del cuadro «Properties» (en Primanet el texto aclara «de
+#: rotura»).
+HAMPIDJAN_TWINE: dict[str, dict[str, Any]] = {
+    "Magnet Standard": {
+        "page": "p. 183 (10.1)",
+        "material": "PE",
+        "construction": "trenzado de 16 hilos con alma",
+        "elongation": 15.0,
+        "points": [
+            (1.8, 675, 148, 82),
+            (3.0, 281, 355, 175),
+            (4.0, 200, 500, 250),
+            (5.0, 128, 782, 390),
+            (6.0, 96, 1040, 525),
+            (8.0, 37, 2728, 1120),
+        ],
+    },
+    "Magnet Compact Green": {
+        "page": "p. 187 (10.5)",
+        "material": "PE",
+        "construction": "trenzado compacto de 16 hilos con alma",
+        "elongation": 15.0,
+        "points": [
+            (1.2, 777, 129, 80),
+            (2.5, 375, 267, 162),
+            (3.0, 258, 387, 223),
+            (4.0, 149, 669, 362),
+            (5.0, 111, 898, 481),
+            (6.0, 53, 1886, 1012),
+        ],
+    },
+    "Magnet Grey": {
+        "page": "p. 188 (10.6)",
+        "material": "PE",
+        "construction": "trenzado de 16 hilos con alma (alta rotura con nudo)",
+        "elongation": 15.0,
+        "points": [
+            (1.0, 974, 103, 59),
+            (1.8, 526, 190, 124),
+            (2.4, 299, 335, 207),
+            (3.1, 186, 535, 350),
+            (5.0, 72, 1380, 743),
+            (7.2, 33, 3030, 1551),
+        ],
+    },
+    "Advant": {
+        "page": "p. 189 (10.7)",
+        "material": "HMPE",
+        "construction": "trenzado de 16 hilos, Dyneema SK62 con alma de PE",
+        "elongation": 9.0,
+        "points": [
+            (1.1, 925, 108, 116),
+            (1.5, 693, 144, 131),
+            (2.0, 435, 230, 209),
+            (2.5, 245, 407, 370),
+        ],
+    },
+    "Utzon": {
+        "page": "p. 191 (10.9)",
+        "material": "PA",
+        "construction": "torcido de 3 cabos, 210 den",
+        "elongation": 28.0,
+        # diámetro, número de hilo (210/n), rendimiento, peso, rotura con nudo.
+        "points": [
+            (0.9, 210 / 18, 2150, 46, 28),
+            (1.4, 210 / 36, 1054, 95, 59),
+            (2.0, 210 / 72, 509, 196, 117),
+            (3.0, 210 / 144, 245, 408, 201),
+            (4.4, 210 / 384, 96, 1042, 629),
+            (9.0, 210 / 1728, 25, 4000, 2300),
+        ],
+        "twine_no": ["210/18", "210/36", "210/72", "210/144", "210/384", "210/1728"],
+    },
+    "Primanet Braid": {
+        "page": "p. 192 (10.10)",
+        "material": "HMPE",
+        "construction": "trenzado de 16 hilos",
+        "elongation": 4.0,
+        "points": [
+            (1.1, 1190, 84, 135),
+            (1.7, 685, 146, 220),
+            (2.5, 316, 316, 425),
+            (3.5, 158, 632, 753),
+            (4.5, 105, 948, 1125),
+            (5.5, 65, 1543, 1790),
+        ],
+    },
+    "Primanet Twist": {
+        "page": "p. 193 (10.11)",
+        "material": "HMPE",
+        "construction": "torcido de 3 cabos",
+        "elongation": 4.8,
+        "points": [
+            (0.9, 1705, 59, 101),
+            (1.1, 1111, 90, 136),
+            (1.4, 824, 121, 178),
+            (1.8, 549, 182, 254),
+            (2.1, 407, 246, 342),
+        ],
+    },
+}
+
+#: Hampidjan, cabos de fibra: diámetro [mm], largo del rollo [m], peso del rollo [kg] (o
+#: ``kg_per_100m``), rotura [t]. ``elongation`` [%] del cuadro «Properties».
+HAMPIDJAN_ROPE: dict[str, dict[str, Any]] = {
+    "Nylex": {
+        "page": "p. 104 (6.2)",
+        "material": "PA",
+        "construction": "trenzado de 12 cabos (red pelágica)",
+        "elongation": 36.0,
+        "points": [
+            (6, 1500, 42.6, 1.3),
+            (10, 470, 36.0, 3.5),
+            (12, 310, 35.8, 4.4),
+            (16, 160, 31.4, 7.6),
+            (24, 300, 119.1, 16.1),
+            (32, 500, 355.7, 26.1),
+        ],
+    },
+    "Kraft rope": {
+        "page": "p. 112 (6.10)",
+        "material": "PP",
+        "construction": "torcido de 3 cordones, Polysteel (mezcla PP/PE)",
+        "elongation": 22.0,
+        "points": [
+            (8, 220, 6.6, 1.3),
+            (12, 220, 14.5, 2.6),
+            (16, 220, 25.5, 4.9),
+            (20, 220, 39.5, 6.5),
+            (24, 220, 57.0, 8.6),
+            (32, 220, 100.0, 15.3),
+        ],
+    },
+    "Danline": {
+        "page": "p. 125 (6.23)",
+        "material": "PP",
+        "construction": "torcido de 3 cordones, Danline",
+        "elongation": 25.0,
+        "note": "filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de "
+        "22 mm no trae peso ni rotura)",
+        "points": [
+            (8, 220, 6.6, 1.2),
+            (12, 220, 14.5, 2.7),
+            (16, 220, 25.5, 4.7),
+            (20, 220, 39.3, 6.9),
+            (24, 220, 57.0, 9.9),
+            (32, 220, 101.2, 16.8),
+        ],
+    },
+    "DynIce 75 Duracoat": {
+        "page": "p. 132 (7.2)",
+        "material": "HMPE",
+        "construction": "trenzado de 12 cabos, Dyneema SK75 impregnado",
+        "elongation": 3.5,
+        "elongation_note": "3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo "
+        "llega a la rotura cerca del 5,5 %)",
+        "kg_per_100m": True,
+        "note": "rotura según ISO 2307; el empalme puede bajarla hasta 10 %",
+        "points": [
+            (4, None, 1.10, 2.0),
+            (8, None, 3.80, 6.7),
+            (12, None, 9.30, 16.4),
+            (16, None, 16.0, 27.4),
+            (24, None, 35.6, 57.8),
+            (36, None, 67.2, 102.9),
+        ],
+    },
+    "Prima Foot rope": {
+        "page": "p. 179 (9.15)",
+        "material": "HMPE",
+        "construction": "12 cabos de HMPE con forro trenzado de PA/PE (burlón)",
+        "elongation": 3.5,
+        "elongation_note": "3,5 % «después de pretensar»",
+        "kg_per_100m": True,
+        "note": "diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307",
+        # diámetro exterior [mm], diámetro interior [mm], kg/100 m, rotura [t].
+        "points": [
+            (43, 22, 68.8, 46.1),
+            (51, 30, 90.5, 91.8),
+            (61, 40, 129.0, 138.8),
+            (67, 46, 154.5, 179.1),
+            (75, 54, 190.0, 216.0),
+        ],
+    },
+}
+
+#: Hampidjan, cabo combinado para redes de cerco (p. 234, 11.18; Randers Reb / Itsaskorda):
+#: cuatro cordones de alambre galvanizado forrados con hilo Danline. Diámetro nominal [mm],
+#: peso aproximado [kg/m], rotura [kp = kgf]. La ficha no da alargamiento.
+HAMPIDJAN_COMBINATION: list[tuple[float, float, float]] = [
+    (18, 0.36, 5950),
+    (20, 0.40, 6400),
+    (24, 0.55, 7800),
+    (28, 0.71, 9800),
+    (32, 0.88, 12200),
+    (38, 1.42, 18500),
+]
+
+#: Hampidjan, cables de arrastre (sección 11): diámetro [mm], kg/m, carga mínima de rotura [t].
+#: La ficha no da alargamiento ni módulo.
+HAMPIDJAN_WIRE: dict[str, dict[str, Any]] = {
+    "Randers Trawl Wire": {
+        "brand": "Randers Reb",
+        "country": "DK",
+        "page": "p. 217 (11.1)",
+        "construction": "6x25 Seale compactado",
+        "construction_note": "la ficha imprime «6X255E + IWRC»; se lee 6x25SE (Seale)",
+        "core": "IWRC",
+        "generic": "6x19_991",
+        "points": [
+            (14, 0.90, 15.4),
+            (18, 1.52, 25.9),
+            (22, 2.12, 36.1),
+            (26, 2.83, 47.8),
+            (30, 3.87, 66.0),
+            (36, 5.37, 91.0),
+        ],
+    },
+    "Super Atlantic 6xK26SW-CWR": {
+        "brand": "Oliveira",
+        "country": "PT",
+        "page": "p. 218 (11.2)",
+        "construction": "6xK26SW compactado",
+        "core": "IWRC",
+        "generic": "6x19_991",
+        "points": [
+            (16, 1.15, 17.1),
+            (20, 1.79, 27.2),
+            (24, 2.57, 39.7),
+            (28, 3.55, 56.2),
+            (32, 4.60, 73.6),
+            (36, 5.80, 93.1),
+        ],
+    },
+    "6xK26SW-CF": {
+        "brand": "Oliveira",
+        "country": "PT",
+        "page": "p. 219 (11.3)",
+        "construction": "6xK26SW compactado",
+        "core": "FC",
+        "generic": "6x19_991",
+        "points": [
+            (20, 1.60, 26.1),
+            (22, 1.92, 31.3),
+            (24, 2.29, 37.2),
+            (26, 2.68, 43.7),
+            (30, 3.61, 58.7),
+            (36, 5.20, 84.6),
+        ],
+    },
+    "Green Strand 6x19 Poly Core": {
+        "brand": "Oliveira",
+        "country": "PT",
+        "page": "p. 222 (11.6)",
+        "construction": "6x19",
+        "core": "FC",
+        "generic": "6x19_1261_fc",
+        "points": [
+            (12, 0.51, 7.8),
+            (14, 0.69, 10.7),
+            (16, 0.95, 14.8),
+            (18, 1.20, 18.6),
+            (20, 1.47, 22.8),
+            (24, 2.04, 31.6),
+        ],
+    },
+    "Green Strand 6x19 IWRC": {
+        "brand": "Oliveira",
+        "country": "PT",
+        "page": "p. 222 (11.6)",
+        "construction": "6x19",
+        "core": "IWRC",
+        "generic": "6x19_991",
+        "points": [
+            (18, 1.36, 20.1),
+            (20, 1.68, 24.8),
+            (22, 1.94, 28.8),
+            (24, 2.32, 34.4),
+            (26, 2.82, 43.0),
+            (32, 4.20, 64.9),
+        ],
+    },
+}
+
+#: Hampidjan, cadena de eslabón largo (sección 12): diámetro [mm], largo interior E [mm],
+#: ancho interior H [mm], carga [t], peso [kg/m]. ``load``: «swl» (carga de trabajo con factor
+#: ``factor``) o «mbl» (rotura).
+HAMPIDJAN_CHAIN: dict[str, dict[str, Any]] = {
+    "Trygg GR80 long link": {
+        "brand": "Trygg",
+        "country": "NO",
+        "page": "p. 240 (12.5)",
+        "grade": "80",
+        "load": "swl",
+        "factor": 5.0,
+        "points": [
+            (9, 57, 16, 2.0, 1.4),
+            (13, 81, 22, 4.2, 2.7),
+            (16, 100, 26, 6.4, 4.8),
+            (19, 100, 28, 9.0, 6.5),
+            (22, 120, 32, 12.1, 8.5),
+            (28, 150, 39, 19.7, 14.0),
+        ],
+    },
+    "Trawlex long link": {
+        "brand": "Trawlex",
+        "country": None,
+        "page": "p. 242 (12.7)",
+        "grade": "Trawlex",
+        "load": "mbl",
+        "note": "se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son "
+        "«profile chain»",
+        "points": [
+            (9, 53, 15, 12.5, 1.4),
+            (11, 63, 18, 18.5, 2.0),
+            (16, 100, 24.5, 40.0, 4.3),
+            (19, 100, 25, 57.0, 6.3),
+            (22, 120, 35.5, 70.0, 8.7),
+            (28, 150, 46, 105.0, 14.4),
+        ],
+    },
+}
+
+#: Hampidjan, grilletes de seguridad Green Pin de Van Beest (p. 275, 13.32): código, WLL [t]
+#: (factor 6:1), A = diámetro del cuerpo [mm], B = diámetro del perno [mm], peso [kg/100 u.].
+HAMPIDJAN_SHACKLE: list[tuple[str, float, float, float, float]] = [
+    ("FH08GPS", 0.75, 8, 10, 10),
+    ("FH12GPS", 2.00, 13, 16, 34),
+    ("FH16GPS", 3.25, 16, 19, 63),
+    ("FH19GPS", 4.75, 19, 22, 95),
+    ("FH25GPS", 8.50, 25, 28, 230),
+    ("FH32GPS", 12.00, 32, 35, 440),
+    ("FH38GPS", 17.00, 38, 42, 750),
+    ("FH50GPS", 35.00, 50, 57, 1892),
+]
+
+#: Hampidjan, boyas de arrastre de Atlantic Floats (p. 314, 15.2): código, diámetro [mm], peso
+#: [g], flotación [g], profundidad máxima [m], profundidad de trabajo [m], montaje.
+HAMPIDJAN_FLOAT: list[tuple[str, float, float, float, float, float, str]] = [
+    ("SA1084", 200, 1300, 2685, 1150, 1050, "agujero central"),
+    ("SA1087", 200, 1760, 2110, 2400, 2000, "agujero central"),
+    ("SA1095", 242, 2433, 4280, 1300, 1100, "agujero central"),
+    ("SA1096", 242, 2822, 3900, 2500, 2000, "agujero central"),
+    ("SA1101", 280, 2490, 8610, 700, 600, "agujero central"),
+    ("SA1103", 280, 3730, 6950, 2000, 1500, "agujero central"),
+    ("SA2080", 200, 1500, 1700, 1850, 1700, "con orejas"),
+]
+
+#: Garware, paño torcido (págs. «Fisheries: Twisted Nets»): construcción, rendimiento [m/kg],
+#: rotura [kgf] (``None`` si la ficha no la da), rotura con nudo [kgf]. La ficha NO da diámetro.
+GARWARE_TWISTED: dict[str, dict[str, Any]] = {
+    "380 D Regular": {
+        "material": "PE",
+        "generic": "PE_twisted",
+        "page": "Garware, «Fisheries: Twisted Nets» (380 D Regular)",
+        "points": [
+            ("380 D/6 PLY", 3450, 9.6, 16),
+            ("380 D/12 PLY", 1688, 18.8, 30),
+            ("380 D/24 PLY", 845, 36.0, 54),
+            ("380 D/48 PLY", 432, 68.5, 110),
+            ("380 D/90 PLY", 225, 135.0, 178),
+            ("380 D/180 PLY", 110, 234.0, 347),
+        ],
+    },
+    "500 D Regular": {
+        "material": "PE",
+        "generic": "PE_twisted",
+        "page": "Garware, «Fisheries: Twisted Nets» (500 D Regular)",
+        "points": [
+            ("500 D/2X3", 2700, 15.30, 20),
+            ("500 D/4X3", 1350, 28.80, 39),
+            ("500 D/6X3", 900, 43.20, 54.7),
+            ("500 D/10X3", 558, 69.30, 86),
+            ("500 D/20X3", 265, 135.00, 190),
+            ("500 D/50X3", 105, 300.00, 370),
+        ],
+    },
+    "Sapphire Twisted 380D": {
+        "material": "PE",
+        "generic": "PE_twisted",
+        "page": "Garware, «Fisheries: Twisted Nets» (Sapphire Twisted 380D)",
+        "points": [
+            ("380 D/3X3", 2400, 18.8, 26),
+            ("380 D/4X3", 1775, 25, 34),
+            ("380 D/6X3", 1125, 38, 51),
+            ("380 D/8X3", 845, 44, 64),
+            ("380 D/10X3", 675, 55, 84),
+            ("380 D/14X3", 482, 75, 110),
+        ],
+    },
+    "Nylon Twisted": {
+        "material": "PA",
+        "generic": "PA_twisted",
+        "page": "Garware, «Fisheries: Twisted Nets» (Nylon Twisted)",
+        "points": [
+            ("210 D/4X3", 3386, 18.0, 22.1),
+            ("210 D/8X3", 1626, 38.0, 41),
+            ("210 D/16X3", 790, 77.0, 82.3),
+            ("210 D/24X3", 527, 115.0, 117),
+            ("210 D/48X3", 260, 212.0, 216),
+            ("210 D/128X3", 82, 511.0, 549),
+        ],
+    },
+}
+
+#: Garware, cabos (págs. «Fisheries: Trawl Ropes»): diámetro [mm], g/m, rotura [kgf].
+GARWARE_ROPES: dict[str, dict[str, Any]] = {
+    "Maxima": {
+        "material": "PP",
+        "construction": "3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)",
+        "points": [
+            (6, 16.8, 750),
+            (8, 30.0, 1350),
+            (12, 65.9, 3000),
+            (16, 115.9, 4800),
+            (20, 181.8, 7600),
+            (24, 259.1, 10500),
+        ],
+    },
+    "PP": {
+        "material": "PP",
+        "construction": "3 cordones, cinta Parapro o monofilamento de PP",
+        "points": [
+            (6, 16.8, 600),
+            (8, 30.0, 1060),
+            (12, 65.9, 2210),
+            (16, 115.9, 3770),
+            (20, 181.8, 5800),
+            (24, 259.1, 8130),
+        ],
+    },
+    "PE": {
+        "material": "PE",
+        "construction": "3 o 4 cordones, PE de alta densidad",
+        "points": [
+            (6, 18.0, 400),
+            (8, 33.0, 700),
+            (12, 72.0, 1540),
+            (16, 128.0, 2800),
+            (20, 200.0, 4300),
+            (24, 295.0, 6100),
+        ],
+    },
+    "Maxibraid": {
+        "material": "PA",
+        "construction": "trenzado de 12 cabos, nylon impregnado",
+        "points": [
+            (6, 33.2, 1400),
+            (8, 55, 2400),
+            (10, 67, 3000),
+            (12, 86, 3700),
+            (16, 159, 6800),
+            (20, 258, 10800),
+        ],
+    },
+}
+
+#: Bridon-Bekaert 2023: construcciones que no estaban (diámetro [mm], kg/100 m, MBL [t]).
+BRIDON_WIRE_MORE: dict[str, dict[str, Any]] = {
+    "Dyform Starfish 6x26 Poly Core": {
+        "construction": "6x26 (10/5&5/5/1) compactado",
+        "core": "fibra sintética",
+        "generic": "6x19_991",
+        "page": "Dyform Starfish",
+        "points": [
+            (20, 159.7, 26.7),
+            (24, 224.8, 38.5),
+            (28, 317.4, 52.4),
+            (32, 408.8, 68.4),
+            (36, 514.5, 86.6),
+            (44, 768.5, 129.3),
+        ],
+    },
+    "Dyform 6x26 Poly Core": {
+        "construction": "6x26 (10/5&5/5/1) compactado",
+        "core": "fibra sintética",
+        "generic": "6x19_991",
+        "page": "Dyform",
+        "note": "de 20 a 44 mm, los mismos valores que Dyform Starfish; se cargan los tamaños "
+        "que Starfish no tiene",
+        "points": [(16, 103.3, 17.1), (18, 129.1, 21.6)],
+    },
+    "Dyform 6x26 IWRC": {
+        "construction": "6x26 (10/5&5/5/1) compactado",
+        "core": "IWRC",
+        "generic": "6x19_991",
+        "page": "Dyform",
+        "note": "de 20 a 44 mm, los mismos valores que Dyform Starfish IWRC",
+        "points": [(16, 115.5, 19.1), (18, 145.3, 24.1)],
+    },
+    "SeaBeam 6x26 Poly Core": {
+        "construction": "6x26 (10/5&5/5/1)",
+        "core": "fibra sintética",
+        "generic": "6x19_991",
+        "page": "Seabeam (arrastre a la vara)",
+        "points": [(22, 174.4, 25.7), (26, 240.6, 35.8), (32, 362.6, 54.3)],
+    },
+    "SeaBeam 6x26 IWRC": {
+        "construction": "6x26 (10/5&5/5/1)",
+        "core": "IWRC",
+        "generic": "6x19_991",
+        "page": "Seabeam (arrastre a la vara)",
+        "points": [(22, 199.4, 27.6), (26, 276.2, 38.6), (32, 415.0, 58.5)],
+    },
+    "6x7": {
+        "construction": "6x7",
+        "core": "FC",
+        "generic": "6x7_fc",
+        "page": "6x7 (arrastre a la vara)",
+        "points": [(10, 33.30, 5.32), (12, 48.10, 7.65), (14, 65.40, 10.42)],
+    },
+}
+
+#: Gunnebo Industries LLZ grado 6 galvanizada (NS 9415; factor 4:1; «no para izaje»): diámetro
+#: [mm], paso P [mm], ancho exterior w1 [mm], rotura mínima [t], peso [kg/m]. La columna métrica
+#: dice «kg» pero los valores son toneladas (la columna imperial: 17 191 lb = 7,8 t).
+GUNNEBO_LLZ: list[tuple[float, float, float, float, float]] = [
+    (9, 53, 14.3, 7.8, 1.4),
+    (13, 80, 21.1, 16.3, 2.9),
+    (16, 100, 27, 24.7, 4.6),
+    (19, 99, 28.5, 34.8, 6.5),
+    (22, 120, 36, 46.6, 8.7),
+    (25, 140, 37, 60.0, 12.0),
+    (32, 170, 44, 98.3, 19.0),
+]
+
+#: Crosby G-209 (grillete de perno roscado, galvanizado; factor 6:1): tamaño nominal [in],
+#: WLL [t], código G-209, peso [kg], B = diámetro del perno [mm], D = diámetro del cuerpo [mm].
+CROSBY_G209: list[tuple[str, float, str, float, float, float]] = [
+    ("3/8", 1.0, "1018419", 0.14, 11.2, 9.7),
+    ("1/2", 2.0, "1018455", 0.33, 15.7, 12.7),
+    ("5/8", 3.25, "1018473", 0.62, 19.1, 15.7),
+    ("3/4", 4.75, "1018491", 1.07, 22.4, 19.1),
+    ("7/8", 6.5, "1018516", 1.64, 25.4, 22.4),
+    ("1", 8.5, "1018534", 2.28, 28.4, 25.4),
+    ("1-1/4", 12.0, "1018570", 4.31, 35.1, 32.8),
+    ("1-1/2", 17.0, "1018614", 7.80, 41.4, 38.9),
+    ("2", 35.0, "1018650", 20.4, 57.2, 52.8),
+    ("2-1/2", 55.0, "1018678", 38.9, 69.9, 69.1),
 ]

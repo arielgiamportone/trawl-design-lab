@@ -46,7 +46,7 @@ from trawlkit import dimensions as dimensions_mod
 from trawlkit import drag as drag_mod
 from trawlkit import net as net_mod
 from trawlkit import power as power_mod
-from trawlkit import rigging
+from trawlkit import propulsion, rigging
 from trawlkit.compat import Compat
 from trawlkit.dimensions import NetDimensions
 from trawlkit.drag import DragAverage, DragInputs, DragTable
@@ -56,7 +56,9 @@ from trawlkit.io import Door, NetSpec, PropellerType, Vessel, load_catalogue
 from trawlkit.net import NetGeometry
 from trawlkit.performance import SpeedWindow, speed_window
 from trawlkit.power import FridmanSummary, PowerCurves
+from trawlkit.propulsion import PropellerPull, WinchCheck
 from trawlkit.rigging import (
+    BallastChain,
     BallastDistribution,
     BallastLimits,
     BridleLengths,
@@ -373,16 +375,23 @@ class DesignCase:
 
     @property
     def gallows_spacing_m(self) -> float:
-        """Distancia entre pastecas (Port!D6)."""
+        """Distancia entre pastecas (Port!D6): ``gallows_m``, la del buque o, si no, su manga."""
         if self.gallows_m is not None:
             return float(self.gallows_m)
+        if self.vessel.gallows_spacing_m is not None:  # Fase 19.4
+            return float(self.vessel.gallows_spacing_m)
         return float(self.vessel.beam_m or 0.0)
 
     @property
     def hull_depth_m(self) -> float:
-        """Puntal del buque (Tipo de buques!B6)."""
+        """Altura de las pastecas sobre el agua (Tipo de buques!B6: el libro usa el puntal).
+
+        ``vessel_depth_m``, la altura de las pastecas del buque (Fase 19.4) o, si no, su puntal.
+        """
         if self.vessel_depth_m is not None:
             return float(self.vessel_depth_m)
+        if self.vessel.gallows_height_m is not None:
+            return float(self.vessel.gallows_height_m)
         return float(self.vessel.depth_m or 0.0)
 
     @property
@@ -449,6 +458,8 @@ class PowerStage:
     ft_propeller: PropellerType
     ft_kgf: FloatArray
     koyama_ehp_hp: float
+    #: Tiro por la hélice (Wärtsilä; Fase 19.4), sólo si el buque trae el diámetro de la hélice.
+    propeller: PropellerPull | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -616,6 +627,8 @@ class BallastStage:
     even_kg_m: float
     distribution_min: BallastDistribution
     distribution_max: BallastDistribution
+    #: Lastre en metros de la cadena del caso (``chain_id``; Fase 19.2; no está en el libro).
+    chain: BallastChain | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -649,6 +662,8 @@ class WarpStage:
     #: Tensión, rigidez y estiramiento elástico del cable elegido a la velocidad de diseño
     #: (Fase 19.1; no está en el libro).
     stretch: WarpStretch | None = None
+    #: Guinche y tambor del buque frente al cable (Fase 19.4; sólo si el buque trae esos datos).
+    winch: WinchCheck | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -761,6 +776,14 @@ class DesignResult:
         if case.seabed is not None:
             out["seabed"] = case.seabed
             out["seabed_friction_kgf"] = self.performance.seabed_friction_kgf
+        pp = self.power.propeller
+        if pp is not None:  # Fase 19.4: sólo con diámetro de hélice
+            out["propeller_bollard_pull_t"] = pp.bollard_pull_t
+            out["propeller_max_speed_kn"] = self.performance.windows[
+                f"{PROPELLER_MODEL_KEY}_std"
+            ].max_speed_kn
+        if self.warps.winch is not None:
+            out["winch_drum_required_m"] = self.warps.winch.drum_required_m
         return out
 
 
@@ -812,6 +835,7 @@ def _stage_power(case: DesignCase) -> PowerStage:
         ft_propeller=case.ft_propeller,
         ft_kgf=_ft_of(fridman, case.ft_propeller),
         koyama_ehp_hp=power_mod.koyama_ehp_hp(power_mod.koyama_bhp_f_hp(v.bhp), k),  # PotOK!C171
+        propeller=propulsion.propeller_pull(v, case.speeds),
     )
 
 
@@ -1025,15 +1049,33 @@ def _stage_doors(
 
 
 def _rope(case: DesignCase, which: str) -> RopeSpec:
-    """Cabo de la lima o del burlón: campo del caso, ``construction`` de la spec o el del libro."""
+    """Cabo de la lima o del burlón: campo del caso, ``construction`` de la spec o el del libro.
+
+    Con filtros de componentes (:func:`component_filters`) y sin cabo elegido en el caso, el de
+    la spec o el del libro es sólo la referencia: se elige del catálogo de componentes filtrado
+    (:func:`trawlkit.rigging.select_rope_component`, Fase 19.2), como los cables y las boyas.
+    """
     chosen = case.headrope_rope if which == "headrope" else case.footrope_rope
+    explicit = chosen is not None
     if chosen is None:
         spec_rope = case.net.headrope if which == "headrope" else case.net.footrope
         extra = (spec_rope.model_extra or {}) if spec_rope is not None else {}
         chosen = extra.get("construction")
     if chosen is None:
         chosen = DEFAULT_HEADROPE_ROPE if which == "headrope" else DEFAULT_FOOTROPE_ROPE
-    return rigging.select_rope(str(chosen))
+    ref = rigging.select_rope(str(chosen))
+    flt = component_filters(case)
+    if explicit or flt is None:
+        return ref
+    from trawlkit.components import RopeItem, get_component, load_components
+
+    try:
+        ref_item = get_component("rope", ref.id)
+    except KeyError:
+        return ref
+    assert isinstance(ref_item, RopeItem)
+    items = [r.model_dump() for r in load_components("rope", **flt)]
+    return rigging.select_rope_component(items, ref, ref_item.material)
 
 
 def component_filters(case: DesignCase) -> dict[str, Any] | None:
@@ -1413,6 +1455,30 @@ def _stage_ballast(
         distribution_max=rigging.distribute_ballast_max(
             limits.max_kg, dims.footrope_m, chain_m=case.adjust_chain_m
         ),
+        chain=_ballast_chain(case, limits, chain),
+    )
+
+
+def _ballast_chain(
+    case: DesignCase, limits: BallastLimits, adjust_kg: float
+) -> BallastChain | None:
+    """Lastre en metros de la cadena ``chain_id`` del catálogo de componentes (Fase 19.2)."""
+    if case.chain_id is None:
+        return None
+    from trawlkit.components import DENSITY_KG_M3, ChainItem, get_component
+    from trawlkit.materials import weight_in_water_coefficient
+
+    item = get_component("chain", case.chain_id)
+    assert isinstance(item, ChainItem)
+    return rigging.ballast_chain(
+        item.id,
+        item.name,
+        item.weight_kg_per_m,
+        limits.min_kg,
+        limits.max_kg,
+        adjust_kg,
+        float(weight_in_water_coefficient(DENSITY_KG_M3["steel"])),
+        item.breaking_load_t,
     )
 
 
@@ -1561,6 +1627,10 @@ def seabed_friction_kgf(case: DesignCase, ballast: BallastStage) -> float:
     return float(gear + doors * sb.mu_door.nominal * door_water)
 
 
+#: Clave de las ventanas de velocidad con el tiro por la hélice (Fase 19.4).
+PROPELLER_MODEL_KEY = "propeller_model"
+
+
 def _stage_performance(
     case: DesignCase, power: PowerStage, warps: WarpStage, ballast: BallastStage
 ) -> PerformanceStage:
@@ -1583,6 +1653,13 @@ def _stage_performance(
             windows[f"{prop.value}_{variant}"] = speed_window(
                 case.speeds, ft, demand.variant(variant)
             )
+    if power.propeller is not None:
+        # Fase 19.4: ventana con el tiro por la hélice (no cambia el propulsor de diseño).
+        ft = power.propeller.towing_kgf * (2.0 if case.is_pair else 1.0)
+        for variant in ("std", "mod"):
+            windows[f"{PROPELLER_MODEL_KEY}_{variant}"] = speed_window(
+                case.speeds, ft, demand.variant(variant)
+            )
     return PerformanceStage(
         windows=windows,
         demand=demand,
@@ -1594,6 +1671,33 @@ def _stage_performance(
 # ---------------------------------------------------------------------------------------------
 # Corrida completa
 # ---------------------------------------------------------------------------------------------
+
+
+def _propeller_notes(
+    case: DesignCase, power: PowerStage, performance: PerformanceStage
+) -> list[str]:
+    """Notas del tiro por la hélice (Fase 19.4)."""
+    pp = power.propeller
+    if pp is None:
+        return []
+    win = performance.windows[f"{PROPELLER_MODEL_KEY}_std"]
+    vmax = win.max_speed_kn
+    out = [
+        t(
+            "propeller_pull: tiro a punto fijo {bp:.2f} t por la hélice de {d:g} m "
+            "({method}; Wärtsilä {w:.2f} t, ideal {ideal:.2f} t) frente a {prado:.2f} t de "
+            "BHP·0,9·f/100 (A VERIFICAR); velocidad máxima con ese tiro: {vmax}",
+            bp=pp.bollard_pull_t,
+            d=pp.diameter_m,
+            method=pp.method,
+            w=pp.bollard_pull_wartsila_t,
+            ideal=pp.bollard_pull_momentum_t,
+            prado=pp.bollard_pull_prado_t,
+            vmax=t("ninguna") if vmax is None else f"{vmax:.2f} kn",
+        )
+    ]
+    out.extend(f"propeller_pull: {n}" for n in pp.notes)
+    return out
 
 
 def run(case: DesignCase) -> DesignResult:
@@ -1631,6 +1735,11 @@ def run(case: DesignCase) -> DesignResult:
     ballast = _stage_ballast(case, dimensions, floats)
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
     performance = _stage_performance(case, power, warps, ballast)
+    winch = propulsion.winch_check(case, power, warps)  # Fase 19.4
+    if winch is not None:
+        warps = replace(warps, winch=winch)
+        notes.extend(winch.warnings)
+    notes.extend(_propeller_notes(case, power, performance))
     if case.compat is Compat.CORRECTED:
         notes.append(
             t(

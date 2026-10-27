@@ -100,6 +100,42 @@ describe('Componentes', () => {
   );
 
   it(
+    'importa y exporta la lista de precios (CSV/XLSX) y la guarda en el navegador',
+    async () => {
+      const { calls } = mockApi();
+      renderApp();
+      await openTab();
+      await userEvent.click(screen.getByRole('button', { name: 'Lista de materiales' }));
+      await screen.findByTestId('bom-total-USD', {}, { timeout: 3000 });
+      const file = new File(['clave;precio;moneda;unidad\ndoors;450;USD;u.\n'], 'p.csv', {
+        type: 'text/csv',
+      });
+      await userEvent.upload(screen.getByLabelText('Importar precios (CSV o XLSX)'), file);
+      expect(await screen.findByTestId('prices-imported')).toHaveTextContent(
+        '1 precio importado de 2 filas.',
+      );
+      expect(screen.getByTestId('prices-imported')).toHaveTextContent('Fila 2: unidad inválida');
+      const req = calls.find((c) => c.url.endsWith('/prices/parse'))?.body as {
+        file: { filename: string; content: string };
+      };
+      expect(req.file.filename).toBe('p.csv');
+      const saved = JSON.parse(localStorage.getItem('trawl-design-lab:prices:v1') ?? '{}');
+      expect(saved.doors.value).toBe(450);
+      await userEvent.click(screen.getByRole('button', { name: 'Exportar precios (XLSX)' }));
+      await waitFor(() =>
+        expect(calls.some((c) => c.url.includes('/prices/export?format=xlsx'))).toBe(true),
+      );
+      const exp = calls.find((c) => c.url.includes('/prices/export'))?.body as {
+        prices: Record<string, unknown>;
+        lines: unknown[];
+      };
+      expect(exp.prices).toHaveProperty('doors');
+      expect(exp.lines.length).toBeGreaterThan(0);
+    },
+    SLOW,
+  );
+
+  it(
     'valida y guarda un aporte, marcado sin verificar',
     async () => {
       mockApi();

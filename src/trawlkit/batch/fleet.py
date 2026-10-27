@@ -85,14 +85,16 @@ def fleet_vessel(rec: dict[str, Any], used: set[str] | None = None) -> FleetVess
                 )
             )
     prop = PropellerType(rec.get("propeller", "fixed_pitch"))
-    vessel = Vessel(
-        id=vid,
-        name=name,
-        bhp=bhp,
-        propeller=prop,
-        high_rpm=gen.high_rpm,
-        displacement_t=gen.displacement_t,
-        **dims,
+    vessel = Vessel.model_validate(
+        {
+            "id": vid,
+            "name": name,
+            "bhp": bhp,
+            "propeller": prop,
+            "high_rpm": gen.high_rpm,
+            "displacement_t": gen.displacement_t,
+            **dims,
+        }
     )
     if prop not in FRIDMAN_KF:
         notes.append(

@@ -1,0 +1,556 @@
+# Tipos de buque de la flota argentina (Fase 19.4): presets TÍPICOS armados con los valores medios
+# publicados de cada estrato. No son buques reales: cada valor cita su tabla y página; lo derivado
+# lleva la fórmula en la nota y lo que la fuente no da queda marcado «A VERIFICAR» (el caso de
+# diseño lo completa escalando el buque de la A-3 y lo anota). Fuentes consultadas el 2026-10-27.
+# Las fuentes no publican manga, puntal, calado ni tipo de hélice por estrato: la hélice queda en
+# el valor por defecto del esquema (paso fijo) como supuesto.
+source: INIDEP, El Mar Argentino y sus Recursos Pesqueros 3 (2001); FAO (2005); CFP Res. 7/2018
+notes:
+- 'Clasificación oficial (FAO 2005, p. 9 del PDF): costera (rada/ría y costera) y de altura (arrastreros fresqueros y congeladores, tangoneros, surimeros, vieira; palangreros; poteros).'
+- 'HP = potencia del motor principal del registro; el motor la usa como BHP (supuesto).'
+- 'TRB = tonelaje de registro bruto; se guarda en gross_tonnage.'
+vessels:
+- id: ar_rada_ria_mdp_e1
+  name: Rada o ría típico (Mar del Plata, estrato I, 1997)
+  typical: true
+  vessel_type: rada_ria
+  region: latam
+  home_port: Mar del Plata
+  status: published
+  bhp: 134.15
+  length_m: 12.99
+  loa_m: 12.99
+  gross_tonnage: 16.29
+  sources:
+  - key: errazti2001costera
+    title: Estratificación y análisis de la eficacia y la eficiencia de la flota costera de pequeña escala del puerto de Mar del Plata
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260609.pdf
+    accessed: '2026-10-27'
+    figure: Tablas 2-3
+    page: '110'
+  - key: fao2005argentina
+    title: 'Resumen informativo sobre la pesca por países: La República Argentina'
+    url: https://www.fao.org/fishery/docs/DOCUMENT/fcp/es/FI_CP_AR.pdf
+    accessed: '2026-10-27'
+    page: '14 (PDF)'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: media del estrato I, 134,15 ± 92,44 HP (N = 79)
+    length_m:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: eslora media del estrato I (rango 8,68-14,95 m)
+    loa_m:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+    gross_tonnage:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: TRB medio del estrato I
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real.
+  - 'Estrato I de la flota de la Sociedad de Patrones Pescadores (1997): 79 buques, eslora 8,68-14,95 m (media 12,99), HP 134,15 ± 92,44, TRB 16,29, tripulación media 3,83.'
+  - 'FAO (2005): la flota de rada o ría tiene «eslora promedio de 10 a 15 metros», casillaje y motor interno, sin frío y con autonomía limitada; 144 registrados en 2005.'
+  - 'Es el análogo publicado más cercano a los buques de 150-180 BHP de la A-3 (150-180 HP cae dentro de una desviación estándar).'
+- id: ar_costero_mdp_e2
+  name: Costero menor típico (Mar del Plata, estrato II, 1997)
+  typical: true
+  vessel_type: costero
+  region: latam
+  home_port: Mar del Plata
+  status: published
+  bhp: 299.26
+  length_m: 16.14
+  loa_m: 16.14
+  gross_tonnage: 27.87
+  sources:
+  - key: errazti2001costera
+    title: Estratificación y análisis de la eficacia y la eficiencia de la flota costera de pequeña escala del puerto de Mar del Plata
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260609.pdf
+    accessed: '2026-10-27'
+    figure: Tablas 2-3
+    page: '110'
+  - key: lasta2001costera
+    title: 'Flota costera argentina: antecedentes y situación actual'
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260608.pdf
+    accessed: '2026-10-27'
+    page: '92'
+  provenance:
+    bhp:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: media del estrato II, 299,26 ± 61,20 HP (N = 23)
+    length_m:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: eslora media del estrato II (rango 14,96-18,23 m)
+    loa_m:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+    gross_tonnage:
+      kind: transcribed
+      document: errazti2001costera
+      page: '110'
+      figure: Tablas 2-3
+      note: TRB medio del estrato II
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real.
+  - 'Estrato II (1997): 23 buques, eslora 14,96-18,23 m (media 16,14), HP 299,26 ± 61,20, TRB 27,87, tripulación media 5,39.'
+  - 'Lasta et al. (2001): la flota costera de 1997 (347 buques) tiene esloras de 8 a 28 m, motores de menos de 550 HP y menos de 100 TRB; «hasta 18 metros (flota costera menor)».'
+- id: ar_costero_grande_1998
+  name: Costero grande típico (incorporados 1989-1998)
+  typical: true
+  vessel_type: costero
+  region: latam
+  status: published
+  bhp: 422.9
+  length_m: 20.97
+  loa_m: 20.97
+  gross_tonnage: 71.2
+  sources:
+  - key: bertolotti2001flota
+    title: Flota pesquera argentina. Evolución durante el período 1960-1998, con una actualización al 2000
+    url: https://www.vliz.be/imisdocs/publications/260605.pdf
+    accessed: '2026-10-27'
+    figure: Tabla 7
+    page: '27'
+  - key: lasta2001costera
+    title: 'Flota costera argentina: antecedentes y situación actual'
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260608.pdf
+    accessed: '2026-10-27'
+    page: 92, 101-105
+  provenance:
+    bhp:
+      kind: derived
+      document: bertolotti2001flota
+      page: '27'
+      figure: Tabla 7
+      note: 16 070 HP / 38 buques = 422,9 HP
+    length_m:
+      kind: transcribed
+      document: bertolotti2001flota
+      page: '27'
+      figure: Tabla 7
+      note: eslora media de los 38 costeros grandes incorporados en 1989-1998
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001flota
+      page: '27'
+      figure: Tabla 7
+    gross_tonnage:
+      kind: derived
+      document: bertolotti2001flota
+      page: '27'
+      figure: Tabla 7
+      note: 2 705 TRB / 38 buques = 71,2 TRB
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media de los incorporados en 1989-1998), no un buque real.
+  - 'Lasta et al. (2001): costeros grandes de 18 a 28 m; Mar del Plata estrato II con 18-28 m y 220-650 HP (p. 101).'
+  - 'Tierra del Fuego (Ushuaia, Canal Beagle): 5 a 7 costeros por año, eslora 9-24 m y 70-600 HP (Lasta et al. 2001, p. 105).'
+- id: ar_fresquero_e1
+  name: Fresquero típico, estrato I (19-28 m)
+  typical: true
+  vessel_type: fresquero
+  region: latam
+  status: published
+  bhp: 510.93
+  length_m: 25.61
+  loa_m: 25.61
+  gross_tonnage: 105.61
+  hold_m3: 142.21
+  sources: &fresqueros
+  - key: bertolotti2001fresqueros
+    title: Estratificación de la flota industrial de buques fresqueros y estimación de los rendimientos
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260606.pdf
+    accessed: '2026-10-27'
+    figure: Tablas 4-5
+    page: 63-64
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '64'
+      figure: Tabla 5
+      note: media del estrato I, 510,93 ± 94,89 HP (N = 56)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+      note: eslora media 25,61 ± 1,83 m (rango 19,00-28,25 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: 63-64
+      figure: Tablas 4-5
+      note: TRB medio del estrato I
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real.
+  - 'Estrato I: 56 buques, eslora 19,00-28,25 m, HP 510,93 ± 94,89, bodega 142,21 m³.'
+  - 'FAO (2005): arrastreros fresqueros de altura de 25 a 63 m; 140 registrados en 2005. En 1998, 99 de 133 tenían puerto base en Mar del Plata (Bertolotti et al. 2001, Tabla 10).'
+- id: ar_fresquero_e2
+  name: Fresquero típico, estrato II (28-39 m)
+  typical: true
+  vessel_type: fresquero
+  region: latam
+  status: published
+  bhp: 710.29
+  length_m: 32.96
+  loa_m: 32.96
+  gross_tonnage: 194.42
+  hold_m3: 206.13
+  sources: *fresqueros
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '64'
+      figure: Tabla 5
+      note: media del estrato II, 710,29 ± 213,63 HP (N = 45)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+      note: eslora media 32,96 ± 3,63 m (rango 28,26-38,95 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: 63-64
+      figure: Tablas 4-5
+      note: TRB medio del estrato II
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real.
+  - 'Estrato II: 45 buques, eslora 28,26-38,95 m, HP 710,29 ± 213,63, bodega 206,13 m³.'
+- id: ar_fresquero_e3
+  name: Fresquero típico, estrato III (39-65 m)
+  typical: true
+  vessel_type: fresquero
+  region: latam
+  status: published
+  bhp: 1311.31
+  length_m: 51.67
+  loa_m: 51.67
+  gross_tonnage: 507.69
+  hold_m3: 391.12
+  sources: *fresqueros
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '64'
+      figure: Tabla 5
+      note: media del estrato III, 1311,31 ± 334,49 HP (N = 33)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+      note: eslora media 51,67 ± 7,25 m (rango 38,96-64,87 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: '63'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001fresqueros
+      page: 63-64
+      figure: Tablas 4-5
+      note: TRB medio del estrato III
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real.
+  - 'Estrato III: 33 buques, eslora 38,96-64,87 m, HP 1311,31 ± 334,49, bodega 391,12 m³.'
+- id: ar_congelador_e1
+  name: Congelador arrastrero típico, estrato I (29-58 m)
+  typical: true
+  vessel_type: congelador
+  region: latam
+  status: published
+  bhp: 1435
+  length_m: 45.87
+  loa_m: 45.87
+  gross_tonnage: 460
+  sources: &congeladores
+  - key: bertolotti2001congeladores
+    title: Estratificación y estimación de los rendimientos de la flota de buques procesadores congeladores arrastreros
+    url: https://www.vliz.be/imisdocs/publications/ocrd/260607.pdf
+    accessed: '2026-10-27'
+    figure: Tablas 4-5
+    page: 81-82
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '82'
+      figure: Tabla 5
+      note: media del estrato I, 1435 ± 561 HP (N = 31)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+      note: eslora media del estrato I (rango 29-58 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: 81-82
+      figure: Tablas 4-5
+      note: TRB medio del estrato I
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real; excluye los surimeros.
+  - 'Estrato I: 31 buques, eslora 29-58 m, HP 1435 ± 561.'
+  - 'FAO (2005): congeladores de 30 a 100 m (mayor frecuencia entre 60 y 80 m); 62 registrados en 2005.'
+- id: ar_congelador_e2
+  name: Congelador arrastrero típico, estrato II (59-83 m)
+  typical: true
+  vessel_type: congelador
+  region: latam
+  status: published
+  bhp: 2348
+  length_m: 70.56
+  loa_m: 70.56
+  gross_tonnage: 1183
+  sources: *congeladores
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '82'
+      figure: Tabla 5
+      note: media del estrato II, 2348 ± 685 HP (N = 45)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+      note: eslora media del estrato II (rango 59-83 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: 81-82
+      figure: Tablas 4-5
+      note: TRB medio del estrato II
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real; excluye los surimeros.
+  - 'Estrato II: 45 buques, eslora 59-83 m, HP 2348 ± 685.'
+- id: ar_congelador_e3
+  name: Congelador arrastrero típico, estrato III (84-110 m)
+  typical: true
+  vessel_type: congelador
+  region: latam
+  status: published
+  bhp: 4159
+  length_m: 98.61
+  loa_m: 98.61
+  gross_tonnage: 2507
+  sources: *congeladores
+  provenance:
+    bhp:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '82'
+      figure: Tabla 5
+      note: media del estrato III, 4159 ± 720 HP (N = 9)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+      note: eslora media del estrato III (rango 84-110 m)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: '81'
+      figure: Tabla 4
+    gross_tonnage:
+      kind: transcribed
+      document: bertolotti2001congeladores
+      page: 81-82
+      figure: Tablas 4-5
+      note: TRB medio del estrato III
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media del estrato), no un buque real; excluye los surimeros.
+  - 'Estrato III: 9 buques, eslora 84-110 m, HP 4159 ± 720.'
+- id: ar_tangonero_1998
+  name: Tangonero típico (langostino, media 1998)
+  typical: true
+  vessel_type: tangonero
+  region: latam
+  status: published
+  bhp: 948.7
+  length_m: 35.38
+  loa_m: 35.38
+  gross_tonnage: 275.5
+  sources:
+  - key: bertolotti2001flota
+    title: Flota pesquera argentina. Evolución durante el período 1960-1998, con una actualización al 2000
+    url: https://www.vliz.be/imisdocs/publications/260605.pdf
+    accessed: '2026-10-27'
+    figure: Tablas 5-6
+    page: '26'
+  - key: cfp2018res7
+    title: 'Resolución CFP N.° 7/2018: medidas de administración de la especie langostino'
+    url: https://cfp.gob.ar/resoluciones/Resolucion%207%20(17-05-18)%20Medidas%20de%20administracion%20langostino.pdf
+    accessed: '2026-10-27'
+    page: 8-9
+  - key: ercoli2001selectividad
+    title: Experiencias de selectividad en los copos de las redes de arrastre y desarrollo de dispositivos selectivos con grillas en la pesquería argentina
+    url: https://www.vliz.be/imisdocs/publications/260610.pdf
+    accessed: '2026-10-27'
+    page: '122'
+  provenance:
+    bhp:
+      kind: derived
+      document: bertolotti2001flota
+      page: '26'
+      figure: Tabla 5
+      note: 55 974 HP / 59 buques = 948,7 HP (1998)
+    length_m:
+      kind: transcribed
+      document: bertolotti2001flota
+      page: '26'
+      figure: Tabla 6
+      note: eslora media de los tangoneros en 1998 (año medio de construcción 1982)
+    loa_m:
+      kind: transcribed
+      document: bertolotti2001flota
+      page: '26'
+      figure: Tabla 6
+    gross_tonnage:
+      kind: derived
+      document: bertolotti2001flota
+      page: '26'
+      figure: Tabla 5
+      note: 16 256 TRB / 59 buques = 275,5 TRB
+    beam_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da manga; el caso la escala del buque de la A-3 con la eslora'
+    depth_m:
+      kind: assumed
+      note: 'A VERIFICAR: la fuente no da puntal; el caso lo escala del buque de la A-3 con la eslora'
+    propeller:
+      kind: assumed
+      note: 'A VERIFICAR: tipo de hélice no publicado; valor por defecto del esquema'
+  notes:
+  - Preset típico (media de 1998), no un buque real. Arrastra dos redes en paralelo con tangones.
+  - 'Res. CFP 7/2018, art. 3 c: eslora de arqueo de hasta 40 m y motor principal de hasta 2000 hp; art. 4: portones y abertura vertical de la red de hasta 150 cm, copo de 45 mm.'
+  - 'Esloras: 27-35 m a comienzos de los noventa y 27-45 m en 1995-1997 (Ercoli et al. 2001, p. 122); 26-39 m según FAO (2005).'
+  - 'Puerto base en 1998: Puerto Deseado 33, Puerto Madryn 26, Comodoro Rivadavia 20, Mar del Plata 4 (Bertolotti et al. 2001, Tabla 10).'

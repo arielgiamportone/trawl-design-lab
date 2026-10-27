@@ -241,13 +241,18 @@ digitalizadas de documentos de la FAO:
 
 La pestaña **«Componentes»** ({doc}`34_componentes`) tiene cuatro secciones:
 
-- **Catálogo**: paño e hilo, cables, cabos, portones, boyas y cadenas, con filtros por marca,
+- **Catálogo**: paño e hilo, cables, cabos, portones, boyas, cadenas y grilletes, con filtros por marca,
   región y «sólo genéricos». La ficha muestra la fuente, la procedencia valor por valor, las
   observaciones del validador y el genérico equivalente. «Usar en el caso» fija el componente
   (`warp_id`, `float_id`, `twine_id`, `chain_id`, el portón o los cabos de lima y burlón).
 - **Lista de materiales** (`POST /design/bom`): qué comprar y cuánto, con el precio que el usuario
   carga por línea (queda en el navegador). Se descarga en CSV (separador «;» y coma decimal) o se
   imprime o guarda en PDF desde el navegador. Las líneas sin precio lo dicen y no suman cero.
+  **Lista de precios** (Fase 19.2): «Importar precios» lee un CSV o XLSX (`POST /prices/parse`;
+  clave = id del componente o de la línea, precio, moneda, unidad, fecha y fuente) y muestra las
+  filas con error; «Exportar precios» baja la lista en CSV o XLSX (`POST /prices/export`) con las
+  líneas sin precio vacías, como plantilla. Los precios se guardan también en el proyecto
+  (campo `prices`), y abrir un proyecto los suma a los del navegador. Funciona sin conexión.
 - **Armar con el catálogo** (`POST /optimize/components`): objetivo (menor resistencia, más área
   por litro o menor costo), región del puerto y «sólo genéricos». Muestra el armado recomendado,
   alternativas (una genérica si el mejor lleva marcas), las restricciones que no se cumplen y

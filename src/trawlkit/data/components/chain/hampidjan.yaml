@@ -1,0 +1,399 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: chain
+sources:
+- key: hampidjan_catalogue
+  title: Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión 2023-10-11)
+  url: https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/
+  accessed: '2026-10-27'
+items:
+- id: hampidjan_trygg_long_link_9mm
+  name: Trygg cadena de eslabón largo Ø9 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 9.0
+  grade: '80'
+  weight_kg_per_m: 1.4
+  breaking_load_t: 10.0
+  generic_of: chain_ht_10mm
+  notes:
+  - Eslabón interior 57 × 16 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 2 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 2 t × factor 5:1 de la ficha
+- id: hampidjan_trygg_long_link_13mm
+  name: Trygg cadena de eslabón largo Ø13 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 13.0
+  grade: '80'
+  weight_kg_per_m: 2.7
+  breaking_load_t: 21.0
+  generic_of: chain_ht_13mm
+  notes:
+  - Eslabón interior 81 × 22 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 4,2 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 4,2 t × factor 5:1 de la ficha
+- id: hampidjan_trygg_long_link_16mm
+  name: Trygg cadena de eslabón largo Ø16 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 16.0
+  grade: '80'
+  weight_kg_per_m: 4.8
+  breaking_load_t: 32.0
+  generic_of: chain_ht_16mm
+  notes:
+  - Eslabón interior 100 × 26 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 6,4 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 6,4 t × factor 5:1 de la ficha
+- id: hampidjan_trygg_long_link_19mm
+  name: Trygg cadena de eslabón largo Ø19 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 19.0
+  grade: '80'
+  weight_kg_per_m: 6.5
+  breaking_load_t: 45.0
+  generic_of: chain_ht_19mm
+  notes:
+  - Eslabón interior 100 × 28 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 9 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 9 t × factor 5:1 de la ficha
+- id: hampidjan_trygg_long_link_22mm
+  name: Trygg cadena de eslabón largo Ø22 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 22.0
+  grade: '80'
+  weight_kg_per_m: 8.5
+  breaking_load_t: 60.5
+  generic_of: chain_ht_19mm
+  notes:
+  - Eslabón interior 120 × 32 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 12,1 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 12,1 t × factor 5:1 de la ficha
+- id: hampidjan_trygg_long_link_28mm
+  name: Trygg cadena de eslabón largo Ø28 mm
+  brand: Trygg
+  product: Trygg GR80 long link
+  country: 'NO'
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 28.0
+  grade: '80'
+  weight_kg_per_m: 14.0
+  breaking_load_t: 98.5
+  generic_of: null
+  notes:
+  - Eslabón interior 150 × 39 mm (largo × ancho).
+  - 'Carga de trabajo (SWL, factor 5:1): 19,7 t.'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trygg GR80 long link», p. 240 (12.5)
+      note: carga de trabajo 19,7 t × factor 5:1 de la ficha
+- id: hampidjan_trawlex_long_link_9mm
+  name: Trawlex cadena de eslabón largo Ø9 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 9.0
+  grade: Trawlex
+  weight_kg_per_m: 1.4
+  breaking_load_t: 12.5
+  generic_of: chain_ht_10mm
+  notes:
+  - Eslabón interior 53 × 15 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t
+- id: hampidjan_trawlex_long_link_11mm
+  name: Trawlex cadena de eslabón largo Ø11 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 11.0
+  grade: Trawlex
+  weight_kg_per_m: 2.0
+  breaking_load_t: 18.5
+  generic_of: chain_ht_10mm
+  notes:
+  - Eslabón interior 63 × 18 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t
+- id: hampidjan_trawlex_long_link_16mm
+  name: Trawlex cadena de eslabón largo Ø16 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 16.0
+  grade: Trawlex
+  weight_kg_per_m: 4.3
+  breaking_load_t: 40.0
+  generic_of: chain_ht_16mm
+  notes:
+  - Eslabón interior 100 × 24.5 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t
+- id: hampidjan_trawlex_long_link_19mm
+  name: Trawlex cadena de eslabón largo Ø19 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 19.0
+  grade: Trawlex
+  weight_kg_per_m: 6.3
+  breaking_load_t: 57.0
+  generic_of: chain_ht_19mm
+  notes:
+  - Eslabón interior 100 × 25 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t
+- id: hampidjan_trawlex_long_link_22mm
+  name: Trawlex cadena de eslabón largo Ø22 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 22.0
+  grade: Trawlex
+  weight_kg_per_m: 8.7
+  breaking_load_t: 70.0
+  generic_of: chain_ht_19mm
+  notes:
+  - Eslabón interior 120 × 35.5 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t
+- id: hampidjan_trawlex_long_link_28mm
+  name: Trawlex cadena de eslabón largo Ø28 mm
+  brand: Trawlex
+  product: Trawlex long link
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  link: largo
+  link_diameter_mm: 28.0
+  grade: Trawlex
+  weight_kg_per_m: 14.4
+  breaking_load_t: 105.0
+  generic_of: null
+  notes:
+  - Eslabón interior 150 × 46 mm (largo × ancho).
+  - 'Nota: se omite la fila de 13 mm (peso impreso «28», errata evidente); 16 y 19 mm son «profile chain».'
+  provenance:
+    link_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawlex long link», p. 242 (12.7)
+      note: «Breaking strength», t

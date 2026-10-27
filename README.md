@@ -130,19 +130,19 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 290](https://img.shields.io/badge/componentes-290-1c5cab) ![rutas API: 75](https://img.shields.io/badge/rutas%20API-75-1c5cab) ![capítulos: 38](https://img.shields.io/badge/cap%C3%ADtulos-38-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 15](https://img.shields.io/badge/redes-15-1c5cab) ![componentes: 505](https://img.shields.io/badge/componentes-505-1c5cab) ![rutas API: 77](https://img.shields.io/badge/rutas%20API-77-1c5cab) ![capítulos: 39](https://img.shields.io/badge/cap%C3%ADtulos-39-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
 | Redes en el catálogo | 15 (12 publicadas, 3 borradores), con procedencia valor por valor |
-| Componentes | 290 en 6 tipos (243 genéricos y datos puntuales de 6 marcas) |
+| Componentes | 505 en 7 tipos (243 genéricos y datos puntuales de 14 marcas) |
 | Métodos de resistencia de la red | 13 |
 | Erratas del Excel documentadas y corregidas | 26 |
 | Valores de referencia del Excel | 697, reproducidos con rtol 1e-6 en modo `excel` |
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
-| Rutas de la API | 75 |
-| Capítulos del libro | 38 · 77 referencias |
+| Rutas de la API | 77 |
+| Capítulos del libro | 39 · 104 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->

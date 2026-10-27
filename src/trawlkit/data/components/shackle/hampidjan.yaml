@@ -1,0 +1,417 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: shackle
+sources:
+- key: hampidjan_catalogue
+  title: Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión 2023-10-11)
+  url: https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/
+  accessed: '2026-10-27'
+items:
+- id: van_beest_green_pin_fh08gps
+  name: Van Beest Green Pin FH08GPS, grillete de seguridad 0.75 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 8 mm
+  body_diameter_mm: 8.0
+  pin_diameter_mm: 10.0
+  wll_t: 0.75
+  design_factor: 6.0
+  breaking_load_t: 4.5
+  weight_kg: 0.1
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 0.75 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 10 kg/100 u. / 100
+- id: van_beest_green_pin_fh12gps
+  name: Van Beest Green Pin FH12GPS, grillete de seguridad 2 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 13 mm
+  body_diameter_mm: 13.0
+  pin_diameter_mm: 16.0
+  wll_t: 2.0
+  design_factor: 6.0
+  breaking_load_t: 12.0
+  weight_kg: 0.34
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 2 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 34 kg/100 u. / 100
+- id: van_beest_green_pin_fh16gps
+  name: Van Beest Green Pin FH16GPS, grillete de seguridad 3.25 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 16 mm
+  body_diameter_mm: 16.0
+  pin_diameter_mm: 19.0
+  wll_t: 3.25
+  design_factor: 6.0
+  breaking_load_t: 19.5
+  weight_kg: 0.63
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 3.25 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 63 kg/100 u. / 100
+- id: van_beest_green_pin_fh19gps
+  name: Van Beest Green Pin FH19GPS, grillete de seguridad 4.75 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 19 mm
+  body_diameter_mm: 19.0
+  pin_diameter_mm: 22.0
+  wll_t: 4.75
+  design_factor: 6.0
+  breaking_load_t: 28.5
+  weight_kg: 0.95
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 4.75 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 95 kg/100 u. / 100
+- id: van_beest_green_pin_fh25gps
+  name: Van Beest Green Pin FH25GPS, grillete de seguridad 8.5 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 25 mm
+  body_diameter_mm: 25.0
+  pin_diameter_mm: 28.0
+  wll_t: 8.5
+  design_factor: 6.0
+  breaking_load_t: 51.0
+  weight_kg: 2.3
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 8.5 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 230 kg/100 u. / 100
+- id: van_beest_green_pin_fh32gps
+  name: Van Beest Green Pin FH32GPS, grillete de seguridad 12 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 32 mm
+  body_diameter_mm: 32.0
+  pin_diameter_mm: 35.0
+  wll_t: 12.0
+  design_factor: 6.0
+  breaking_load_t: 72.0
+  weight_kg: 4.4
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 12 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 440 kg/100 u. / 100
+- id: van_beest_green_pin_fh38gps
+  name: Van Beest Green Pin FH38GPS, grillete de seguridad 17 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 38 mm
+  body_diameter_mm: 38.0
+  pin_diameter_mm: 42.0
+  wll_t: 17.0
+  design_factor: 6.0
+  breaking_load_t: 102.0
+  weight_kg: 7.5
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 17 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 750 kg/100 u. / 100
+- id: van_beest_green_pin_fh50gps
+  name: Van Beest Green Pin FH50GPS, grillete de seguridad 35 t
+  brand: Van Beest
+  product: Green Pin safety bow shackle
+  country: NL
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  type: bow
+  size: 50 mm
+  body_diameter_mm: 50.0
+  pin_diameter_mm: 57.0
+  wll_t: 35.0
+  design_factor: 6.0
+  breaking_load_t: 210.0
+  weight_kg: 18.92
+  notes:
+  - Perno con tuerca y chaveta (tipo de seguridad).
+  provenance:
+    body_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota A
+    pin_diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: cota B
+    wll_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: WLL 6:1
+    design_factor:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: «WLL 6:1»
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 6 × WLL = 6 × 35 t
+    weight_kg:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Shackle, safety type, Green Pin» (Van Beest), p. 275 (13.32)
+      note: 1892 kg/100 u. / 100

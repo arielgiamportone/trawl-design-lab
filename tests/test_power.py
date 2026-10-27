@@ -110,7 +110,7 @@ def test_fridman_kf_golden(key: str, prop: PropellerType) -> None:
 
 @pytest.mark.parametrize("prop", [PropellerType.FIXED_PITCH_NOZZLE, PropellerType.VARIABLE_PITCH])
 def test_fridman_kf_untabulated(prop: PropellerType) -> None:
-    with pytest.raises(ValueError, match="not tabulated"):
+    with pytest.raises(ValueError, match="no tabulado"):
         p.fridman_kf(prop)
 
 
@@ -489,7 +489,7 @@ def test_power_curves_low_rpm_fixed_averages_two_prado_rows() -> None:
 
 def test_power_curves_overrides() -> None:
     v = vessel(150.0).model_copy(update={"propeller": PropellerType.FIXED_PITCH_NOZZLE})
-    with pytest.raises(ValueError, match="not tabulated"):
+    with pytest.raises(ValueError, match="no tabulado"):
         p.power_curves(v, SPEEDS)
     curves = p.power_curves(v, SPEEDS, kf=12.0, nhp=199.5, koyama_k_value=0.18, nomura_k3=0.2)
     assert_close(curves.fridman_kgf, p.fridman_towing_force_kgf(150.0, SPEEDS, 12.0))

@@ -1,0 +1,240 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: float
+sources:
+- key: hampidjan_catalogue
+  title: Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión 2023-10-11)
+  url: https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/
+  accessed: '2026-10-27'
+items:
+- id: atlantic_floats_sa1084
+  name: Atlantic Floats SA1084 Ø200 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1084
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 200.0
+  buoyancy_kgf: 2.685
+  max_depth_m: 1150.0
+  generic_of: float_pl_200mm_0
+  notes:
+  - Peso 1300 g; profundidad de trabajo 1050 m (máxima 1150 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 2685 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa1087
+  name: Atlantic Floats SA1087 Ø200 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1087
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 200.0
+  buoyancy_kgf: 2.11
+  max_depth_m: 2400.0
+  generic_of: float_pl_200mm_0
+  notes:
+  - Peso 1760 g; profundidad de trabajo 2000 m (máxima 2400 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 2110 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa1095
+  name: Atlantic Floats SA1095 Ø242 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1095
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 242.0
+  buoyancy_kgf: 4.28
+  max_depth_m: 1300.0
+  generic_of: float_pl_280mm_1
+  notes:
+  - Peso 2433 g; profundidad de trabajo 1100 m (máxima 1300 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 4280 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa1096
+  name: Atlantic Floats SA1096 Ø242 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1096
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 242.0
+  buoyancy_kgf: 3.9
+  max_depth_m: 2500.0
+  generic_of: float_pl_280mm_1
+  notes:
+  - Peso 2822 g; profundidad de trabajo 2000 m (máxima 2500 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 3900 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa1101
+  name: Atlantic Floats SA1101 Ø280 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1101
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 280.0
+  buoyancy_kgf: 8.61
+  max_depth_m: 700.0
+  generic_of: float_pl_280mm_1
+  notes:
+  - Peso 2490 g; profundidad de trabajo 600 m (máxima 700 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 8610 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa1103
+  name: Atlantic Floats SA1103 Ø280 mm (agujero central)
+  brand: Atlantic Floats
+  product: SA1103
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: agujero central
+  diameter_mm: 280.0
+  buoyancy_kgf: 6.95
+  max_depth_m: 2000.0
+  generic_of: float_pl_280mm_1
+  notes:
+  - Peso 3730 g; profundidad de trabajo 1500 m (máxima 2000 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 6950 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»
+- id: atlantic_floats_sa2080
+  name: Atlantic Floats SA2080 Ø200 mm (con orejas)
+  brand: Atlantic Floats
+  product: SA2080
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: plástico
+  mount: con orejas
+  diameter_mm: 200.0
+  buoyancy_kgf: 1.7
+  max_depth_m: 1850.0
+  generic_of: float_pl_200mm_0
+  notes:
+  - Peso 1500 g; profundidad de trabajo 1700 m (máxima 1850 m).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+    buoyancy_kgf:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: 1700 g / 1000
+    max_depth_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Trawl float» (Atlantic Floats), p. 314 (15.2)
+      note: «Max depth»

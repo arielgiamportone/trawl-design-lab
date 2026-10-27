@@ -1,0 +1,165 @@
+# Catálogo inglés de la Fase 19.4 (flota argentina y tiro por la hélice): «español» → traducción.
+# Lo verifica tests/test_i18n.py; las {variables} se mantienen iguales.
+Hélice (Wärtsilä): Propeller (Wärtsilä)
+? 'Hélice (Wärtsilä): BP = (D·P_D)^(2/3)·k1·k2/9,81 con D = {d:g} m, P_D = 0,9·BHP = {pd:.0f} kW, k1 =
+  {k1:g}, k2 = {k2:g}; tiro a punto fijo {bp:.2f} t ({kgf:.1f} kgf/BHP), escalado con el disco actuador
+  a potencia constante. Fuente: {source}.'
+: 'Propeller (Wärtsilä): BP = (D·P_D)^(2/3)·k1·k2/9.81 with D = {d:g} m, P_D = 0.9·BHP = {pd:.0f} kW,
+  k1 = {k1:g}, k2 = {k2:g}; bollard pull {bp:.2f} t ({kgf:.1f} kgf/BHP), scaled with the actuator disc
+  at constant power. Source: {source}.'
+? 'KF de Fridman no tabulado para la hélice {prop!r}: el libro sólo da PF (10) y PV+T (15) y no se halló
+  una fuente publicada para PF+T ni PV; indique fridman_kf (o el diámetro de la hélice para ver el tiro
+  por la hélice)'
+: 'Fridman KF not tabulated for propeller {prop!r}: the book only gives FP (10) and CP+N (15) and no published
+  source was found for FP+N or CP; set fridman_kf (or the propeller diameter to see the propeller-based
+  pull)'
+? 'propeller_pull: tiro a punto fijo {bp:.2f} t por la hélice de {d:g} m ({method}; Wärtsilä {w:.2f} t,
+  ideal {ideal:.2f} t) frente a {prado:.2f} t de BHP·0,9·f/100 (A VERIFICAR); velocidad máxima con ese
+  tiro: {vmax}'
+: 'propeller_pull: bollard pull {bp:.2f} t from the {d:g} m propeller ({method}; Wärtsilä {w:.2f} t, ideal
+  {ideal:.2f} t) against {prado:.2f} t from BHP·0.9·f/100 (TO BE VERIFIED); maximum speed with that pull:
+  {vmax}'
+tiro a punto fijo medido {bp:.2f} t (Wärtsilä estima {w:.2f} t): measured bollard pull {bp:.2f} t (Wärtsilä
+  estimates {w:.2f} t)
+'tobera: k2 = {k2:g}, punto medio del rango 1,2-1,4 de Wärtsilä (derivado)': 'nozzle: k2 = {k2:g}, midpoint
+  of Wärtsilä''s 1.2-1.4 range (derived)'
+? 'winch_drum_reserve: el tambor ({cap:.0f} m) alcanza para el cable filado ({warp:.0f} m) pero no para
+  la reserva del libro ({need:.0f} m por tambor)'
+: 'winch_drum_reserve: the drum ({cap:.0f} m) holds the warp paid out ({warp:.0f} m) but not the book''s
+  reserve ({need:.0f} m per drum)'
+'winch_drum_short: el tambor ({cap:.0f} m) no alcanza para el cable filado ({warp:.0f} m)': 'winch_drum_short:
+  the drum ({cap:.0f} m) cannot hold the warp paid out ({warp:.0f} m)'
+? 'winch_pull_bollard: el guinche ({pull:.2f} t) tira menos del 80 % del tiro a punto fijo ({bp:.2f} t;
+  Prado y Dremière 1990)'
+: 'winch_pull_bollard: the winch ({pull:.2f} t) pulls less than 80 % of the bollard pull ({bp:.2f} t;
+  Prado and Dremière 1990)'
+? 'winch_pull_breaking: el tiro del guinche ({pull:.2f} t) supera 1/3 de la rotura del cable elegido ({mbl:g}
+  t; Prado y Dremière 1990)'
+: 'winch_pull_breaking: the winch pull ({pull:.2f} t) exceeds 1/3 of the breaking load of the selected
+  warp ({mbl:g} t; Prado and Dremière 1990)'
+? 'winch_pull_tension: el guinche ({pull:.2f} t) tira menos que la tensión de cada cable a la velocidad
+  de diseño ({tension:.0f} kgf)'
+: 'winch_pull_tension: the winch ({pull:.2f} t) pulls less than the tension of each warp at the design
+  speed ({tension:.0f} kgf)'
+? 'winch_warp_diameter: el cable elegido ({d:g} mm) es más grueso que el del guinche ({rated:g} mm); capacidad
+  estimada {cap:.0f} m (∝ 1/d²)'
+: 'winch_warp_diameter: the selected warp ({d:g} mm) is thicker than the winch''s ({rated:g} mm); estimated
+  capacity {cap:.0f} m (∝ 1/d²)'
+Pesquero de rada/ría 150 BHP (el modelo cubre hélice PF y PV+T): Inshore (rada/ría) fishing vessel 150
+  BHP (the model covers FP and CP+N propellers)
+Pesquero de rada/ría 180 BHP (el modelo cubre hélice PF y PV+T): Inshore (rada/ría) fishing vessel 180
+  BHP (the model covers FP and CP+N propellers)
+Rada o ría típico (Mar del Plata, estrato I, 1997): Typical inshore (rada/ría) vessel (Mar del Plata,
+  stratum I, 1997)
+Costero menor típico (Mar del Plata, estrato II, 1997): Typical small coastal vessel (Mar del Plata, stratum
+  II, 1997)
+Costero grande típico (incorporados 1989-1998): Typical large coastal vessel (added 1989-1998)
+Fresquero típico, estrato I (19-28 m): Typical fresh-fish trawler, stratum I (19-28 m)
+Fresquero típico, estrato II (28-39 m): Typical fresh-fish trawler, stratum II (28-39 m)
+Fresquero típico, estrato III (39-65 m): Typical fresh-fish trawler, stratum III (39-65 m)
+Congelador arrastrero típico, estrato I (29-58 m): Typical freezer trawler, stratum I (29-58 m)
+Congelador arrastrero típico, estrato II (59-83 m): Typical freezer trawler, stratum II (59-83 m)
+Congelador arrastrero típico, estrato III (84-110 m): Typical freezer trawler, stratum III (84-110 m)
+Tangonero típico (langostino, media 1998): Typical outrigger shrimp trawler (langostino, 1998 mean)
+BIP Dr. Eduardo L. Holmberg (INIDEP): RV Dr. Eduardo L. Holmberg (INIDEP)
+BIP Capitán Cánepa (INIDEP, dado de baja): RV Capitán Cánepa (INIDEP, decommissioned)
+BIPO Víctor Angelescu (INIDEP): RV Víctor Angelescu (INIDEP)
+BIPO Mar Argentino (INIDEP): RV Mar Argentino (INIDEP)
+BIP Capitán Oca Balda (provisorio): RV Capitán Oca Balda (provisional)
+B/P San Severo (Contessi AC20, provisorio): FV San Severo (Contessi AC20, provisional)
+Preset típico (media del estrato), no un buque real.: Typical preset (stratum mean), not a real vessel.
+? 'Estrato I de la flota de la Sociedad de Patrones Pescadores (1997): 79 buques, eslora 8,68-14,95 m
+  (media 12,99), HP 134,15 ± 92,44, TRB 16,29, tripulación media 3,83.'
+: 'Stratum I of the Sociedad de Patrones Pescadores fleet (1997): 79 vessels, length 8.68-14.95 m (mean
+  12.99), HP 134.15 ± 92.44, GRT 16.29, mean crew 3.83.'
+? 'FAO (2005): la flota de rada o ría tiene «eslora promedio de 10 a 15 metros», casillaje y motor interno,
+  sin frío y con autonomía limitada; 144 registrados en 2005.'
+: 'FAO (2005): the rada/ría fleet has an «average length of 10 to 15 metres», a deckhouse and inboard
+  engine, no refrigeration and limited endurance; 144 registered in 2005.'
+? Es el análogo publicado más cercano a los buques de 150-180 BHP de la A-3 (150-180 HP cae dentro de
+  una desviación estándar).
+: It is the closest published analogue of the A-3's 150-180 BHP vessels (150-180 HP lies within one standard
+  deviation).
+'Estrato II (1997): 23 buques, eslora 14,96-18,23 m (media 16,14), HP 299,26 ± 61,20, TRB 27,87, tripulación media 5,39.': 'Stratum
+  II (1997): 23 vessels, length 14.96-18.23 m (mean 16.14), HP 299.26 ± 61.20, GRT 27.87, mean crew 5.39.'
+? 'Lasta et al. (2001): la flota costera de 1997 (347 buques) tiene esloras de 8 a 28 m, motores de menos
+  de 550 HP y menos de 100 TRB; «hasta 18 metros (flota costera menor)».'
+: 'Lasta et al. (2001): the 1997 coastal fleet (347 vessels) has lengths of 8 to 28 m, engines below 550
+  HP and less than 100 GRT; «up to 18 metres (small coastal fleet)».'
+Preset típico (media de los incorporados en 1989-1998), no un buque real.: Typical preset (mean of the
+  vessels added in 1989-1998), not a real vessel.
+'Lasta et al. (2001): costeros grandes de 18 a 28 m; Mar del Plata estrato II con 18-28 m y 220-650 HP (p. 101).': 'Lasta
+  et al. (2001): large coastal vessels of 18 to 28 m; Mar del Plata stratum II with 18-28 m and 220-650
+  HP (p. 101).'
+'Tierra del Fuego (Ushuaia, Canal Beagle): 5 a 7 costeros por año, eslora 9-24 m y 70-600 HP (Lasta et al. 2001, p. 105).': 'Tierra
+  del Fuego (Ushuaia, Beagle Channel): 5 to 7 coastal vessels per year, length 9-24 m and 70-600 HP (Lasta
+  et al. 2001, p. 105).'
+'Estrato I: 56 buques, eslora 19,00-28,25 m, HP 510,93 ± 94,89, bodega 142,21 m³.': 'Stratum I: 56 vessels,
+  length 19.00-28.25 m, HP 510.93 ± 94.89, hold 142.21 m³.'
+? 'FAO (2005): arrastreros fresqueros de altura de 25 a 63 m; 140 registrados en 2005. En 1998, 99 de
+  133 tenían puerto base en Mar del Plata (Bertolotti et al. 2001, Tabla 10).'
+: 'FAO (2005): offshore fresh-fish trawlers of 25 to 63 m; 140 registered in 2005. In 1998, 99 of 133
+  had Mar del Plata as home port (Bertolotti et al. 2001, Table 10).'
+'Estrato II: 45 buques, eslora 28,26-38,95 m, HP 710,29 ± 213,63, bodega 206,13 m³.': 'Stratum II: 45
+  vessels, length 28.26-38.95 m, HP 710.29 ± 213.63, hold 206.13 m³.'
+'Estrato III: 33 buques, eslora 38,96-64,87 m, HP 1311,31 ± 334,49, bodega 391,12 m³.': 'Stratum III:
+  33 vessels, length 38.96-64.87 m, HP 1311.31 ± 334.49, hold 391.12 m³.'
+Preset típico (media del estrato), no un buque real; excluye los surimeros.: Typical preset (stratum mean),
+  not a real vessel; surimi vessels excluded.
+'Estrato I: 31 buques, eslora 29-58 m, HP 1435 ± 561.': 'Stratum I: 31 vessels, length 29-58 m, HP 1435
+  ± 561.'
+'FAO (2005): congeladores de 30 a 100 m (mayor frecuencia entre 60 y 80 m); 62 registrados en 2005.': 'FAO
+  (2005): freezer trawlers of 30 to 100 m (most between 60 and 80 m); 62 registered in 2005.'
+'Estrato II: 45 buques, eslora 59-83 m, HP 2348 ± 685.': 'Stratum II: 45 vessels, length 59-83 m, HP 2348
+  ± 685.'
+'Estrato III: 9 buques, eslora 84-110 m, HP 4159 ± 720.': 'Stratum III: 9 vessels, length 84-110 m, HP
+  4159 ± 720.'
+Preset típico (media de 1998), no un buque real. Arrastra dos redes en paralelo con tangones.: Typical
+  preset (1998 mean), not a real vessel. Tows two nets in parallel from outriggers.
+? 'Res. CFP 7/2018, art. 3 c: eslora de arqueo de hasta 40 m y motor principal de hasta 2000 hp; art.
+  4: portones y abertura vertical de la red de hasta 150 cm, copo de 45 mm.'
+: 'CFP Res. 7/2018, art. 3 c: tonnage length up to 40 m and main engine up to 2000 hp; art. 4: doors and
+  net vertical opening up to 150 cm, 45 mm codend.'
+'Esloras: 27-35 m a comienzos de los noventa y 27-45 m en 1995-1997 (Ercoli et al. 2001, p. 122); 26-39 m según FAO (2005).': 'Lengths:
+  27-35 m in the early 1990s and 27-45 m in 1995-1997 (Ercoli et al. 2001, p. 122); 26-39 m according
+  to FAO (2005).'
+? 'Puerto base en 1998: Puerto Deseado 33, Puerto Madryn 26, Comodoro Rivadavia 20, Mar del Plata 4 (Bertolotti
+  et al. 2001, Tabla 10).'
+: 'Home port in 1998: Puerto Deseado 33, Puerto Madryn 26, Comodoro Rivadavia 20, Mar del Plata 4 (Bertolotti
+  et al. 2001, Table 10).'
+? Hitachi Zosen, Maizuru, 1980. Hélice transversal proel; guinche de pesca hidráulico Kawasaki con 4 tambores
+  auxiliares; pórtico en «A»; tres bodegas refrigeradas (134 m³); gasoil ≈ 7000 L/día.
+: Hitachi Zosen, Maizuru, 1980. Bow thruster; Kawasaki hydraulic trawl winch with 4 auxiliary drums; A-frame;
+  three refrigerated holds (134 m³); diesel ≈ 7000 L/day.
+? 'Red de investigación (Giorgini y Buratti 2023, Tabla 1): relinga superior 35,3 m, burlón 40,3 m, portones
+  «Polivalente» de 1200 kg, separación de portones 84,3 m, abertura de alas 16,7 m, abertura vertical
+  4,5 m, copo de 103 mm.'
+: 'Survey net (Giorgini and Buratti 2023, Table 1): headrope 35.3 m, footrope 40.3 m, 1200 kg «Polivalente»
+  doors, door spread 84.3 m, wing spread 16.7 m, vertical opening 4.5 m, 103 mm codend.'
+? 'NO ENCONTRADO: diámetro de la hélice, reducción, tobera y tiro a punto fijo. Paso variable sin dato
+  de tobera: el KF de Fridman no está tabulado (indicar fridman_kf para calcular un caso).'
+: 'NOT FOUND: propeller diameter, gear ratio, nozzle and bollard pull. Controllable pitch with no nozzle
+  data: Fridman''s KF is not tabulated (set fridman_kf to compute a case).'
+? 'Red de investigación (Giorgini y Buratti 2023, Tabla 1): relinga superior 28 m, burlón 35 m, portones
+  «Polivalente» de 470 kg, separación de portones 79 m, abertura de alas 15,4 m, abertura vertical 2,65-3
+  m.'
+: 'Survey net (Giorgini and Buratti 2023, Table 1): headrope 28 m, footrope 35 m, 470 kg «Polivalente»
+  doors, door spread 79 m, wing spread 15.4 m, vertical opening 2.65-3 m.'
+'NO ENCONTRADO: hélice, reducción y maniobra.': 'NOT FOUND: propeller, gear ratio and deck gear.'
+ARMON Vigo, 2016-2017. Propulsión diésel-eléctrica (generadores de 3250 kVA).: ARMON Vigo, 2016-2017.
+  Diesel-electric propulsion (3250 kVA generators).
+'NO ENCONTRADO: hélice y maniobra de pesca.': 'NOT FOUND: propeller and fishing deck gear.'
+Armón Vigo, 2019-2020; IMO 9883833. Diésel-eléctrico según la prensa (fuente secundaria).: Armón Vigo,
+  2019-2020; IMO 9883833. Diesel-electric according to the press (secondary source).
+? 'Provisorio: las medidas vienen de una enciclopedia sin referencias. Jansen, Leer, 1983 (argentina.gob.ar);
+  hoy en Parques Nacionales. Timón Becker de flap.'
+: 'Provisional: the dimensions come from an encyclopedia without references. Jansen, Leer, 1983 (argentina.gob.ar);
+  now with National Parks. Becker flap rudder.'
+'Paso variable sin tobera publicada: el KF de Fridman no está tabulado (indicar fridman_kf para calcular un caso).': 'Controllable
+  pitch with no published nozzle: Fridman''s KF is not tabulated (set fridman_kf to compute a case).'
+? 'Provisorio (prensa). Casco 156 de Contessi, prototipo «AC20», 2026; multipropósito: tangonero, arrastre
+  de fondo y de media agua.'
+: 'Provisional (press). Contessi hull 156, «AC20» prototype, 2026; multipurpose: outrigger shrimp trawler,
+  bottom and midwater trawl.'
+'NO ENCONTRADO: diámetro de hélice, reducción y tobera.': 'NOT FOUND: propeller diameter, gear ratio and
+  nozzle.'

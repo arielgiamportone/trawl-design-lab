@@ -22,6 +22,7 @@ import { batch } from './batch';
 import { construction } from './construction';
 import { economics } from './economics';
 import { classroom } from './classroom';
+import { vessel } from './vessel';
 
 export const es = {
   common,
@@ -47,6 +48,7 @@ export const es = {
   construction,
   economics,
   classroom,
+  vessel,
 };
 
 export type Messages = typeof es;

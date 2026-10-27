@@ -1,6 +1,7 @@
 /** Proyectos: guardar/abrir casos con nombre (en el navegador) y exportar/importar archivos. */
 import { msg } from '../i18n';
 import { sanitizeCase, type CaseState } from '../state/model';
+import { loadPrices, sanitizePrices, type Price } from './components';
 import { loadJson, saveJson } from './storage';
 
 export const PROJECT_FORMAT = 'trawl-design-lab/project';
@@ -13,16 +14,29 @@ export interface ProjectFile {
   name: string;
   savedAt: string;
   case: CaseState;
+  /**
+   * Lista de precios del usuario (clave = id de componente o de línea de la lista de
+   * materiales; Fase 19.2). Opcional: los proyectos viejos no la traen.
+   */
+  prices?: Record<string, Price>;
 }
 
-export function toProjectFile(name: string, state: CaseState, now = new Date()): ProjectFile {
-  return {
+/** Proyecto con el caso y, si hay, la lista de precios del usuario (la de este navegador). */
+export function toProjectFile(
+  name: string,
+  state: CaseState,
+  now = new Date(),
+  prices: Record<string, Price> = loadPrices(),
+): ProjectFile {
+  const out: ProjectFile = {
     format: PROJECT_FORMAT,
     version: 1,
     name: name.trim() || msg().state.projects.untitled,
     savedAt: now.toISOString(),
     case: state,
   };
+  if (Object.keys(prices).length) out.prices = prices;
+  return out;
 }
 
 export type ParsedProject = { ok: true; project: ProjectFile } | { ok: false; error: string };
@@ -42,16 +56,16 @@ export function parseProjectFile(text: string): ParsedProject {
   if (r.version !== 1) {
     return { ok: false, error: msg().state.projects.badVersion(String(r.version)) };
   }
-  return {
-    ok: true,
-    project: {
-      format: PROJECT_FORMAT,
-      version: 1,
-      name: typeof r.name === 'string' && r.name.trim() ? r.name : msg().state.projects.imported,
-      savedAt: typeof r.savedAt === 'string' ? r.savedAt : new Date(0).toISOString(),
-      case: sanitizeCase(r.case),
-    },
+  const project: ProjectFile = {
+    format: PROJECT_FORMAT,
+    version: 1,
+    name: typeof r.name === 'string' && r.name.trim() ? r.name : msg().state.projects.imported,
+    savedAt: typeof r.savedAt === 'string' ? r.savedAt : new Date(0).toISOString(),
+    case: sanitizeCase(r.case),
   };
+  const prices = sanitizePrices(r.prices);
+  if (Object.keys(prices).length) project.prices = prices;
+  return { ok: true, project };
 }
 
 /** Nombre de archivo seguro: «Red Beagle 2026» → ``red-beagle-2026.trawl.json``. */

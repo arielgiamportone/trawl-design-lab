@@ -1,0 +1,1770 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: twine
+sources:
+- key: hampidjan_catalogue
+  title: Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión 2023-10-11)
+  url: https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/
+  accessed: '2026-10-27'
+items:
+- id: hampidjan_magnet_standard_1_8mm
+  name: Hampidjan Magnet Standard Ø1.8 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 1.8
+  runnage_m_per_kg: 675.0
+  rtex: 1480.0
+  knot_breaking_load_kgf: 82.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r1410
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 148 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_standard_3mm
+  name: Hampidjan Magnet Standard Ø3 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 3.0
+  runnage_m_per_kg: 281.0
+  rtex: 3550.0
+  knot_breaking_load_kgf: 175.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r3400
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 355 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_standard_4mm
+  name: Hampidjan Magnet Standard Ø4 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 4.0
+  runnage_m_per_kg: 200.0
+  rtex: 5000.0
+  knot_breaking_load_kgf: 250.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r5300
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 500 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_standard_5mm
+  name: Hampidjan Magnet Standard Ø5 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 5.0
+  runnage_m_per_kg: 128.0
+  rtex: 7820.0
+  knot_breaking_load_kgf: 390.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r7680
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 782 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_standard_6mm
+  name: Hampidjan Magnet Standard Ø6 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 6.0
+  runnage_m_per_kg: 96.0
+  rtex: 10400.0
+  knot_breaking_load_kgf: 525.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 1040 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_standard_8mm
+  name: Hampidjan Magnet Standard Ø8 mm (PE trenzado de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Standard
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma
+  diameter_mm: 8.0
+  runnage_m_per_kg: 37.0
+  rtex: 27300.0
+  knot_breaking_load_kgf: 1120.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: peso 2728 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Standard», p. 183 (10.1)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_1_2mm
+  name: Hampidjan Magnet Compact Green Ø1.2 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 1.2
+  runnage_m_per_kg: 777.0
+  rtex: 1290.0
+  knot_breaking_load_kgf: 80.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r1410
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 129 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_2_5mm
+  name: Hampidjan Magnet Compact Green Ø2.5 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 2.5
+  runnage_m_per_kg: 375.0
+  rtex: 2670.0
+  knot_breaking_load_kgf: 162.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r2800
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 267 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_3mm
+  name: Hampidjan Magnet Compact Green Ø3 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 3.0
+  runnage_m_per_kg: 258.0
+  rtex: 3870.0
+  knot_breaking_load_kgf: 223.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r3400
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 387 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_4mm
+  name: Hampidjan Magnet Compact Green Ø4 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 4.0
+  runnage_m_per_kg: 149.0
+  rtex: 6690.0
+  knot_breaking_load_kgf: 362.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r7680
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 669 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_5mm
+  name: Hampidjan Magnet Compact Green Ø5 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 5.0
+  runnage_m_per_kg: 111.0
+  rtex: 8980.0
+  knot_breaking_load_kgf: 481.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 898 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_compact_green_6mm
+  name: Hampidjan Magnet Compact Green Ø6 mm (PE trenzado compacto de 16 hilos con alma)
+  brand: Hampidjan
+  product: Magnet Compact Green
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado compacto de 16 hilos con alma
+  diameter_mm: 6.0
+  runnage_m_per_kg: 53.0
+  rtex: 18900.0
+  knot_breaking_load_kgf: 1012.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: peso 1886 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Compact Green», p. 187 (10.5)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_1mm
+  name: Hampidjan Magnet Grey Ø1 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 1.0
+  runnage_m_per_kg: 974.0
+  rtex: 1030.0
+  knot_breaking_load_kgf: 59.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r1050
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 103 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_1_8mm
+  name: Hampidjan Magnet Grey Ø1.8 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 1.8
+  runnage_m_per_kg: 526.0
+  rtex: 1900.0
+  knot_breaking_load_kgf: 124.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r2170
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 190 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_2_4mm
+  name: Hampidjan Magnet Grey Ø2.4 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 2.4
+  runnage_m_per_kg: 299.0
+  rtex: 3350.0
+  knot_breaking_load_kgf: 207.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r3400
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 335 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_3_1mm
+  name: Hampidjan Magnet Grey Ø3.1 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 3.1
+  runnage_m_per_kg: 186.0
+  rtex: 5350.0
+  knot_breaking_load_kgf: 350.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r5300
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 535 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_5mm
+  name: Hampidjan Magnet Grey Ø5 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 5.0
+  runnage_m_per_kg: 72.0
+  rtex: 13800.0
+  knot_breaking_load_kgf: 743.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 1380 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_magnet_grey_7_2mm
+  name: Hampidjan Magnet Grey Ø7.2 mm (PE trenzado de 16 hilos con alma (alta rotura con nudo))
+  brand: Hampidjan
+  product: Magnet Grey
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PE
+  construction: trenzado de 16 hilos con alma (alta rotura con nudo)
+  diameter_mm: 7.2
+  runnage_m_per_kg: 33.0
+  rtex: 30300.0
+  knot_breaking_load_kgf: 1551.0
+  elongation_pct: 15.0
+  generic_of: twine_pe_twisted_r10100
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: peso 3030 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Magnet Grey», p. 188 (10.6)
+      note: cuadro «Properties»
+- id: hampidjan_advant_1_1mm
+  name: Hampidjan Advant Ø1.1 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Advant
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos, Dyneema SK62 con alma de PE
+  diameter_mm: 1.1
+  runnage_m_per_kg: 925.0
+  rtex: 1080.0
+  knot_breaking_load_kgf: 116.0
+  elongation_pct: 9.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: peso 108 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: cuadro «Properties»
+- id: hampidjan_advant_1_5mm
+  name: Hampidjan Advant Ø1.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Advant
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos, Dyneema SK62 con alma de PE
+  diameter_mm: 1.5
+  runnage_m_per_kg: 693.0
+  rtex: 1440.0
+  knot_breaking_load_kgf: 131.0
+  elongation_pct: 9.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: peso 144 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: cuadro «Properties»
+- id: hampidjan_advant_2mm
+  name: Hampidjan Advant Ø2 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Advant
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos, Dyneema SK62 con alma de PE
+  diameter_mm: 2.0
+  runnage_m_per_kg: 435.0
+  rtex: 2300.0
+  knot_breaking_load_kgf: 209.0
+  elongation_pct: 9.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: peso 230 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: cuadro «Properties»
+- id: hampidjan_advant_2_5mm
+  name: Hampidjan Advant Ø2.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Advant
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos, Dyneema SK62 con alma de PE
+  diameter_mm: 2.5
+  runnage_m_per_kg: 245.0
+  rtex: 4070.0
+  knot_breaking_load_kgf: 370.0
+  elongation_pct: 9.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: peso 407 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Advant», p. 189 (10.7)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_0_9mm
+  name: Hampidjan Utzon Ø0.9 mm (210/18) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 0.9
+  runnage_m_per_kg: 2150.0
+  rtex: 460.0
+  knot_breaking_load_kgf: 28.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_twisted_r390
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/18
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 46 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_1_4mm
+  name: Hampidjan Utzon Ø1.4 mm (210/36) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 1.4
+  runnage_m_per_kg: 1054.0
+  rtex: 950.0
+  knot_breaking_load_kgf: 59.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_twisted_r950
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/36
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 95 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_2mm
+  name: Hampidjan Utzon Ø2 mm (210/72) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 2.0
+  runnage_m_per_kg: 509.0
+  rtex: 1960.0
+  knot_breaking_load_kgf: 117.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_braided_r1950
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/72
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 196 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_3mm
+  name: Hampidjan Utzon Ø3 mm (210/144) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 3.0
+  runnage_m_per_kg: 245.0
+  rtex: 4080.0
+  knot_breaking_load_kgf: 201.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_braided_r4000
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/144
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 408 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_4_4mm
+  name: Hampidjan Utzon Ø4.4 mm (210/384) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 4.4
+  runnage_m_per_kg: 96.0
+  rtex: 10400.0
+  knot_breaking_load_kgf: 629.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_braided_r10500
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/384
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 1042 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_utzon_9mm
+  name: Hampidjan Utzon Ø9 mm (210/1728) (PA torcido de 3 cabos)
+  brand: Hampidjan
+  product: Utzon
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: torcido de 3 cabos, 210 den
+  diameter_mm: 9.0
+  runnage_m_per_kg: 25.0
+  rtex: 40000.0
+  knot_breaking_load_kgf: 2300.0
+  elongation_pct: 28.0
+  generic_of: twine_pa_braided_r14000
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: número de hilo 210/1728
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: peso 4000 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Utzon», p. 191 (10.9)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_1_1mm
+  name: Hampidjan Primanet Braid Ø1.1 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 1.1
+  runnage_m_per_kg: 1190.0
+  rtex: 840.0
+  knot_breaking_load_kgf: 135.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 84 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_1_7mm
+  name: Hampidjan Primanet Braid Ø1.7 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 1.7
+  runnage_m_per_kg: 685.0
+  rtex: 1460.0
+  knot_breaking_load_kgf: 220.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 146 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_2_5mm
+  name: Hampidjan Primanet Braid Ø2.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 2.5
+  runnage_m_per_kg: 316.0
+  rtex: 3160.0
+  knot_breaking_load_kgf: 425.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 316 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_3_5mm
+  name: Hampidjan Primanet Braid Ø3.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 3.5
+  runnage_m_per_kg: 158.0
+  rtex: 6320.0
+  knot_breaking_load_kgf: 753.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 632 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_4_5mm
+  name: Hampidjan Primanet Braid Ø4.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 4.5
+  runnage_m_per_kg: 105.0
+  rtex: 9480.0
+  knot_breaking_load_kgf: 1125.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 948 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_braid_5_5mm
+  name: Hampidjan Primanet Braid Ø5.5 mm (HMPE trenzado de 16 hilos)
+  brand: Hampidjan
+  product: Primanet Braid
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 16 hilos
+  diameter_mm: 5.5
+  runnage_m_per_kg: 65.0
+  rtex: 15400.0
+  knot_breaking_load_kgf: 1790.0
+  elongation_pct: 4.0
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: peso 1543 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Braid», p. 192 (10.10)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_twist_0_9mm
+  name: Hampidjan Primanet Twist Ø0.9 mm (HMPE torcido de 3 cabos)
+  brand: Hampidjan
+  product: Primanet Twist
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: torcido de 3 cabos
+  diameter_mm: 0.9
+  runnage_m_per_kg: 1705.0
+  rtex: 590.0
+  knot_breaking_load_kgf: 101.0
+  elongation_pct: 4.8
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: peso 59 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_twist_1_1mm
+  name: Hampidjan Primanet Twist Ø1.1 mm (HMPE torcido de 3 cabos)
+  brand: Hampidjan
+  product: Primanet Twist
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: torcido de 3 cabos
+  diameter_mm: 1.1
+  runnage_m_per_kg: 1111.0
+  rtex: 900.0
+  knot_breaking_load_kgf: 136.0
+  elongation_pct: 4.8
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: peso 90 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_twist_1_4mm
+  name: Hampidjan Primanet Twist Ø1.4 mm (HMPE torcido de 3 cabos)
+  brand: Hampidjan
+  product: Primanet Twist
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: torcido de 3 cabos
+  diameter_mm: 1.4
+  runnage_m_per_kg: 824.0
+  rtex: 1210.0
+  knot_breaking_load_kgf: 178.0
+  elongation_pct: 4.8
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: peso 121 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_twist_1_8mm
+  name: Hampidjan Primanet Twist Ø1.8 mm (HMPE torcido de 3 cabos)
+  brand: Hampidjan
+  product: Primanet Twist
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: torcido de 3 cabos
+  diameter_mm: 1.8
+  runnage_m_per_kg: 549.0
+  rtex: 1820.0
+  knot_breaking_load_kgf: 254.0
+  elongation_pct: 4.8
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: peso 182 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: cuadro «Properties»
+- id: hampidjan_primanet_twist_2_1mm
+  name: Hampidjan Primanet Twist Ø2.1 mm (HMPE torcido de 3 cabos)
+  brand: Hampidjan
+  product: Primanet Twist
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: torcido de 3 cabos
+  diameter_mm: 2.1
+  runnage_m_per_kg: 407.0
+  rtex: 2460.0
+  knot_breaking_load_kgf: 342.0
+  elongation_pct: 4.8
+  generic_of: null
+  notes:
+  - La ficha da sólo la rotura con nudo (no la rotura sin nudo) y no dice si el ensayo es en seco o mojado.
+  - 'Sin EA derivada: la rotura con nudo no es la rotura del hilo.'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    runnage_m_per_kg:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+    rtex:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: peso 246 g/100 m × 10 = tex
+    knot_breaking_load_kgf:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: «Knot breaking strength»
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Primanet Twist», p. 193 (10.11)
+      note: cuadro «Properties»

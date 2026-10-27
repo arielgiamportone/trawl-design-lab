@@ -7,6 +7,7 @@ export const components = {
     door: 'Portón',
     float: 'Boya',
     chain: 'Cadena',
+    shackle: 'Grillete',
   },
   region: {
     global: 'Todo el mundo',
@@ -51,6 +52,10 @@ export const components = {
     max_depth_m: 'Prof. máx.',
     link: 'Eslabón',
     link_diameter_mm: 'Ø',
+    size: 'Tamaño',
+    wll_t: 'Carga de trabajo (WLL)',
+    pin_diameter_mm: 'Ø perno',
+    weight_kg: 'Peso',
   } as Record<string, string>,
   /** Campos del formulario de aportes (la unidad se agrega aparte, en el sistema activo). */
   contrib: {
@@ -90,6 +95,12 @@ export const components = {
       weight_kg_per_m: 'Peso',
       breaking_load_t: 'Rotura',
     },
+    shackle: {
+      size: 'Tamaño nominal (1/2 in, 13 mm)',
+      body_diameter_mm: 'Diámetro del cuerpo',
+      wll_t: 'Carga de trabajo (WLL)',
+      weight_kg: 'Peso de una pieza',
+    },
   } as Record<string, Record<string, string>>,
   csv: {
     head: [
@@ -121,7 +132,7 @@ export const components = {
     aportar: 'Aportar',
   },
   intro:
-    'Paño, cables, cabos, portones, boyas y cadenas de fabricantes y sus equivalentes genéricos, con la fuente de cada dato. Los precios son siempre orientativos.',
+    'Paño, cables, cabos, portones, boyas, cadenas y grilletes de fabricantes y sus equivalentes genéricos, con la fuente de cada dato. Los precios son siempre orientativos.',
   section: 'Sección de componentes',
   // ComponentCatalog.tsx
   kindLabel: 'Tipo de componente',
@@ -168,6 +179,16 @@ export const components = {
   priceOf: (label: string, unit: string) => `Precio de ${label} por ${unit}`,
   noPrice: 'sin precio',
   total: 'Total orientativo',
+  priceList: 'Lista de precios',
+  importPrices: 'Importar precios (CSV o XLSX)',
+  exportPricesCsv: 'Exportar precios (CSV)',
+  exportPricesXlsx: 'Exportar precios (XLSX)',
+  priceListHelp:
+    'La lista de precios tiene una fila por precio: clave (id del componente o de la línea), precio, moneda, unidad (kg, m o unidad), fecha y fuente. Exporte la plantilla, complétela con los precios de su proveedor y vuelva a importarla: se usa en la lista de materiales, el armado por costo y la economía, y se guarda con el proyecto. El catálogo no trae precios.',
+  pricesImported: (n: number, rows: number) =>
+    `${n} ${n === 1 ? 'precio importado' : 'precios importados'} de ${rows} ${rows === 1 ? 'fila' : 'filas'}.`,
+  row: (n: number) => `Fila ${n}`,
+  pricesFile: 'precios',
   missingLines: (n: number) =>
     `${n} ${n === 1 ? 'línea' : 'líneas'} sin precio: el total no las incluye.`,
   // AssemblyPanel.tsx

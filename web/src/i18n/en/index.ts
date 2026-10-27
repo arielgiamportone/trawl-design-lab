@@ -23,6 +23,7 @@ import { batch } from './batch';
 import { construction } from './construction';
 import { economics } from './economics';
 import { classroom } from './classroom';
+import { vessel } from './vessel';
 
 export const en: Messages = {
   common,
@@ -48,4 +49,5 @@ export const en: Messages = {
   construction,
   economics,
   classroom,
+  vessel,
 };

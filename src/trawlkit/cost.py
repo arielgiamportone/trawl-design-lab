@@ -8,7 +8,11 @@ armar el arte, con cantidades y, si hay precios, el costo:
 * **Bridas y patentes**: dos juegos de bridas superior e inferior y dos patentes (cable de
   acero), salvo en la pareja, donde no hay patentes [m].
 * **Cable de remolque**: cantidad a comprar del cable elegido (``warps.quantity_m``) [m].
-* **Boyas** [unidades], **portones** (2; 0 en la pareja) y **cadena** de lastre y reglaje [m].
+* **Boyas** [unidades], **portones** (2; 0 en la pareja) y **cadena** de lastre y reglaje [m]
+  (los metros de la etapa de lastre, ``ballast.chain``, si el caso eligió una cadena).
+* **Grilletes** [unidades] (Fase 19.2): cantidad supuesta por armado (:data:`SHACKLES_PER_SIDE`)
+  y el grillete más chico del catálogo de componentes con carga de trabajo (WLL) no menor que la
+  carga de trabajo del arte (Rem!E267).
 
 Cada línea dice qué componente se usa (id del catálogo de componentes cuando lo hay) y su
 precio: el del caso (``prices``, cargado por el usuario), el del componente (``price``) o ninguno.
@@ -22,13 +26,19 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
 from typing import TYPE_CHECKING, Any
 
-from trawlkit.components import ComponentBase, Price, get_component
+from trawlkit.components import ComponentBase, Price, ShackleItem, get_component
 from trawlkit.i18n import t
 
 if TYPE_CHECKING:
     from trawlkit.model import DesignResult
 
 Unit = str
+
+#: Grilletes por banda (supuesto de la lista de materiales, Fase 19.2; no hay fuente que dé la
+#: cantidad): con portones, cable–portón, portón–patente, patente–malletas y las dos malletas a
+#: la punta del ala (relinga superior e inferior) = 5; en la pareja, sin portones ni patentes,
+#: cable–malletas y las dos malletas al ala = 3. Las uniones de la red (copo, paños) no cuentan.
+SHACKLES_PER_SIDE: dict[str, int] = {"otter": 5, "pair": 3}
 
 
 @dataclass(frozen=True)
@@ -89,6 +99,23 @@ def _price_for(
     else:
         return None
     return p if p.unit == unit else None
+
+
+def select_shackle(load_t: float, case: Any = None) -> ShackleItem | None:
+    """Grillete más chico del catálogo con WLL ≥ ``load_t`` [t] (a igual WLL, el más liviano).
+
+    Con un caso, respeta sus filtros de componentes (marca, región, genéricos); ``None`` si
+    ningún grillete alcanza la carga.
+    """
+    from trawlkit.components import load_components
+    from trawlkit.model import component_filters
+
+    flt = component_filters(case) if case is not None else None
+    items = [s for s in load_components("shackle", **(flt or {})) if isinstance(s, ShackleItem)]
+    ok = [s for s in items if s.wll_t >= load_t]
+    if not ok:
+        return None
+    return min(ok, key=lambda s: (s.wll_t, s.weight_kg, s.id))
 
 
 def bill_of_materials(
@@ -213,18 +240,22 @@ def bill_of_materials(
         )
 
     # Cadena: reglaje y lastre del burlón (a lo sumo, el máximo del libro).
-    chain = _component("chain", case.chain_id)
+    bc = result.ballast.chain
     ballast_kg = float(result.ballast.limits.max_kg)
-    if chain is not None:
-        kgm = float(chain.weight_kg_per_m)  # type: ignore[attr-defined]
+    if bc is not None:
         add(
             "chain",
             t("Cadena de lastre y reglaje"),
-            ballast_kg / kgm,
+            bc.max_m,
             "m",
             "chain",
-            chain.id,
-            note=t("{kg:.0f} kg de lastre máximo a {kgm:g} kg/m", kg=ballast_kg, kgm=kgm),
+            bc.id,
+            note=t(
+                "{kg:.0f} kg de lastre máximo a {kgm:g} kg/m ({water:.0f} kgf en el agua)",
+                kg=ballast_kg,
+                kgm=bc.weight_kg_per_m,
+                water=bc.water_weight_max_kgf,
+            ),
         )
     else:
         add(
@@ -238,6 +269,27 @@ def bill_of_materials(
             note=t("elija una cadena del catálogo para pasarlo a metros"),
         )
 
+    # Grilletes de las uniones del aparejo (cantidad supuesta; ver SHACKLES_PER_SIDE).
+    load_t = float(result.warps.loads.working_load_kgf) / 1000.0
+    shackle = select_shackle(load_t, case)
+    n = 2 * SHACKLES_PER_SIDE["pair" if case.is_pair else "otter"]
+    add(
+        "shackles",
+        t("Grilletes de las uniones del aparejo"),
+        float(n),
+        "unit",
+        "shackle" if shackle else None,
+        shackle.id if shackle else None,
+        name=None if shackle else t("Grillete de WLL ≥ {load:.2g} t", load=load_t),
+        note=t(
+            "{n} grilletes ({per} por banda, supuesto) con WLL ≥ {load:.2g} t, la carga de "
+            "trabajo del arte (Rem!E267)",
+            n=n,
+            per=n // 2,
+            load=load_t,
+        ),
+    )
+
     totals: dict[str, float] = {}
     for ln in lines:
         if ln.cost is not None and ln.currency:
@@ -246,4 +298,10 @@ def bill_of_materials(
     return BillOfMaterials(lines=lines, totals=totals, missing_prices=missing)
 
 
-__all__ = ["BillOfMaterials", "BomLine", "bill_of_materials"]
+__all__ = [
+    "SHACKLES_PER_SIDE",
+    "BillOfMaterials",
+    "BomLine",
+    "bill_of_materials",
+    "select_shackle",
+]

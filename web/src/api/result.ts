@@ -30,6 +30,14 @@ export interface DesignResult {
       average_kgf: Series;
     };
     ft_propeller: string;
+    /** Tiro por la hélice (Fase 19.4): sólo si el buque trae el diámetro de la hélice. */
+    propeller?: {
+      method: string;
+      source: string;
+      diameter_m: number;
+      bollard_pull_t: number;
+      towing_kgf: Series;
+    } | null;
   };
   drag: {
     table: {

@@ -11,7 +11,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class _Model(BaseModel):
@@ -183,8 +183,35 @@ class NetSpec(_Model):
     provenance: dict[str, Provenance] = Field(default_factory=dict)
 
 
+class VesselType(StrEnum):
+    """Tipo de buque (estratos de la flota argentina; FAO 2005, Bertolotti et al. 2001)."""
+
+    RADA_RIA = "rada_ria"  # flota de rada o ría (costera menor)
+    COSTERO = "costero"  # flota costera (con bodega refrigerada o aislada)
+    FRESQUERO = "fresquero"  # arrastrero fresquero de altura
+    CONGELADOR = "congelador"  # arrastrero procesador congelador
+    TANGONERO = "tangonero"  # langostinero con tangones
+    INVESTIGACION = "investigacion"  # buque de investigación pesquera
+    OTRO = "otro"
+
+
+#: Hélices con tobera (``nozzle``) según :class:`PropellerType`.
+NOZZLE_PROPELLERS: frozenset[PropellerType] = frozenset(
+    {PropellerType.FIXED_PITCH_NOZZLE, PropellerType.VARIABLE_PITCH_NOZZLE}
+)
+
+
 class Vessel(_Model):
-    """Buque pesquero."""
+    """Buque pesquero.
+
+    Los campos del libro (``bhp``, ``length_m``, ``beam_m``, ``depth_m``, ``displacement_t``,
+    ``propeller``, ``high_rpm``) alimentan el motor desde la Fase 1. Los demás (Fase 19.4) son
+    opcionales: datos de la hélice para el modelo de tiro por diámetro
+    (:mod:`trawlkit.propulsion`), de la maniobra (pórtico, guinche y cable) para los controles del
+    caso y de procedencia para el catálogo de la flota (``data/vessels/*.yaml``). ``length_m`` es
+    la eslora que usa el motor (la total cuando se conoce; ``loa_m`` la repite y ``lpp_m`` es la
+    eslora entre perpendiculares).
+    """
 
     id: str
     name: str | None = None
@@ -195,6 +222,84 @@ class Vessel(_Model):
     displacement_t: float | None = None
     propeller: PropellerType = PropellerType.FIXED_PITCH
     high_rpm: bool = True
+    # --- casco (Fase 19.4) --------------------------------------------------------------
+    loa_m: float | None = Field(default=None, gt=0, description="Eslora total [m]")
+    lpp_m: float | None = Field(default=None, gt=0, description="Eslora entre perpendiculares [m]")
+    draft_m: float | None = Field(default=None, gt=0, description="Calado [m]")
+    gross_tonnage: float | None = Field(
+        default=None, gt=0, description="Arqueo bruto (TRB del registro o GT)"
+    )
+    # --- motor y hélice -----------------------------------------------------------------
+    engine_kw: float | None = Field(default=None, gt=0, description="Potencia del motor [kW]")
+    engine_rpm: float | None = Field(default=None, gt=0, description="RPM nominales del motor")
+    gear_ratio: float | None = Field(default=None, gt=0, description="Reducción (motor:hélice)")
+    propeller_diameter_m: float | None = Field(
+        default=None, gt=0, description="Diámetro de la hélice [m]"
+    )
+    propeller_pitch_ratio: float | None = Field(default=None, gt=0, description="Paso/diámetro")
+    propeller_blades: int | None = Field(default=None, ge=2, description="Número de palas")
+    nozzle: bool | None = Field(
+        default=None, description="Hélice con tobera (debe coincidir con ``propeller``)"
+    )
+    bollard_pull_t_measured: float | None = Field(
+        default=None, gt=0, description="Tiro a punto fijo medido [t]"
+    )
+    sfc_g_kwh: float | None = Field(
+        default=None, gt=0, description="Consumo específico de combustible [g/kWh]"
+    )
+    # --- maniobra -----------------------------------------------------------------------
+    gallows_height_m: float | None = Field(
+        default=None, gt=0, description="Altura de las pastecas sobre el agua [m]"
+    )
+    gallows_spacing_m: float | None = Field(
+        default=None, gt=0, description="Distancia entre pastecas (pórticos) [m]"
+    )
+    winch_pull_t: float | None = Field(
+        default=None, gt=0, description="Tiro del guinche a medio tambor [t]"
+    )
+    winch_drum_capacity_m: float | None = Field(
+        default=None, gt=0, description="Capacidad de cable de cada tambor [m]"
+    )
+    warp_diameter_mm: float | None = Field(
+        default=None, gt=0, description="Diámetro del cable para el que vale la capacidad [mm]"
+    )
+    # --- catálogo -----------------------------------------------------------------------
+    vessel_type: VesselType | None = None
+    #: Preset de tipo de buque (valores medios publicados de un estrato), no un casco real.
+    typical: bool = False
+    region: str | None = Field(default=None, description="Región (vocabulario de componentes)")
+    home_port: str | None = None
+    status: Literal["published", "draft"] = "published"
+    sources: list[SourceDocument] = Field(default_factory=list)
+    #: Procedencia por campo (``bhp``, ``length_m``…), como en :class:`NetSpec`.
+    provenance: dict[str, Provenance] = Field(default_factory=dict)
+    notes: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _nozzle_matches_propeller(self) -> Vessel:
+        """``nozzle`` y ``propeller`` deben decir lo mismo.
+
+        Si sólo se da ``nozzle`` (``propeller`` por defecto) se completa la hélice: paso fijo con
+        o sin tobera.
+        """
+        if self.nozzle is None:
+            return self
+        has = self.propeller in NOZZLE_PROPELLERS
+        if self.nozzle == has:
+            return self
+        if "propeller" not in self.model_fields_set:
+            self.propeller = (
+                PropellerType.FIXED_PITCH_NOZZLE if self.nozzle else PropellerType.FIXED_PITCH
+            )
+            return self
+        raise ValueError(
+            f"nozzle={self.nozzle} is inconsistent with propeller={self.propeller.value!r}"
+        )
+
+    @property
+    def has_nozzle(self) -> bool:
+        """Si la hélice tiene tobera (``nozzle`` o, si falta, el tipo de hélice)."""
+        return self.propeller in NOZZLE_PROPELLERS if self.nozzle is None else self.nozzle
 
 
 class DoorCoefficients(_Model):
@@ -232,6 +337,8 @@ class VesselCatalogue(_Model):
     """Catálogo de buques."""
 
     vessels: list[Vessel]
+    source: str | None = None
+    notes: list[str] = Field(default_factory=list)
 
 
 class DoorCatalogue(_Model):

@@ -12,7 +12,12 @@ import {
   filterComponents,
   inCase,
   issueUrl,
+  columns,
+  COMPONENT_KINDS,
+  mergePrices,
   priceKey,
+  priceLines,
+  sanitizePrices,
   sanitizeContributions,
   type Bom,
   type Component,
@@ -20,6 +25,36 @@ import {
 } from './components';
 
 const items = wires as Component[];
+
+describe('grilletes y lista de precios (Fase 19.2)', () => {
+  it('el grillete es un tipo del catálogo con sus columnas', () => {
+    expect(COMPONENT_KINDS).toContain('shackle');
+    expect(columns('shackle').map((c) => c.field)).toEqual([
+      'size',
+      'wll_t',
+      'breaking_load_t',
+      'pin_diameter_mm',
+      'weight_kg',
+    ]);
+  });
+  it('importar precios pisa las mismas claves y descarta los inválidos', () => {
+    const p = { value: 1, currency: 'USD', unit: 'm' as const, date: '2026-10', source: 'a' };
+    const merged = mergePrices({ warps: p, doors: { ...p, unit: 'unit' } }, {
+      warps: { ...p, value: 2 },
+      malo: { ...p, unit: 'ton' },
+    } as never);
+    expect(merged.warps!.value).toBe(2);
+    expect(merged.doors!.unit).toBe('unit');
+    expect(merged).not.toHaveProperty('malo');
+    expect(sanitizePrices([1, 2])).toEqual({});
+  });
+  it('arma las líneas de la plantilla de precios desde la lista de materiales', () => {
+    const lines = priceLines(bom as Bom);
+    expect(lines.length).toBe((bom as Bom).lines.length);
+    expect(lines.every((l) => l.key && l.unit)).toBe(true);
+    expect(priceLines(undefined)).toEqual([]);
+  });
+});
 
 describe('catálogo de componentes', () => {
   it('filtra por genérico, marca y texto', () => {

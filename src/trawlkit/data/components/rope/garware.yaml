@@ -3,9 +3,9 @@
 kind: rope
 sources:
 - key: garware_fisheries
+  accessed: '2026-10-27'
   title: Garware Technical Fibres, Fisheries brochure (redes de arrastre trenzadas y cabos)
   url: https://www.garwarefibres.com/sites/default/files/brochure/solutions/Fisheries%20Brochure.pdf
-  accessed: '2026-10-25'
 items:
 - id: garware_x2_6mm
   name: Garware X2 Ø6 mm (PP/PE tipo Danline)
@@ -271,3 +271,795 @@ items:
       document: garware_fisheries
       page: 'Garware, «Fisheries: Trawl Ropes» (X2)'
       note: kgf de la ficha
+- id: garware_maxima_6mm
+  name: Garware Maxima Ø6 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.016800000000000002
+  breaking_load_t: 0.75
+  generic_of: rope_pp_6mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_maxima_8mm
+  name: Garware Maxima Ø8 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.03
+  breaking_load_t: 1.35
+  generic_of: rope_pp_8mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_maxima_12mm
+  name: Garware Maxima Ø12 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0659
+  breaking_load_t: 3.0
+  generic_of: rope_pp_12mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_maxima_16mm
+  name: Garware Maxima Ø16 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1159
+  breaking_load_t: 4.8
+  generic_of: rope_pp_16mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_maxima_20mm
+  name: Garware Maxima Ø20 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.18180000000000002
+  breaking_load_t: 7.6
+  generic_of: rope_pp_20mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_maxima_24mm
+  name: Garware Maxima Ø24 mm (PP)
+  brand: Garware
+  product: Maxima
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, mezcla de polímeros (equivalente a Danline/Polysteel)
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.2591
+  breaking_load_t: 10.5
+  generic_of: rope_pp_24mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxima)'
+      note: kgf
+- id: garware_pp_6mm
+  name: Garware PP Ø6 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.016800000000000002
+  breaking_load_t: 0.6
+  generic_of: rope_pp_6mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pp_8mm
+  name: Garware PP Ø8 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.03
+  breaking_load_t: 1.06
+  generic_of: rope_pp_8mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pp_12mm
+  name: Garware PP Ø12 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.0659
+  breaking_load_t: 2.21
+  generic_of: rope_pp_12mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pp_16mm
+  name: Garware PP Ø16 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1159
+  breaking_load_t: 3.77
+  generic_of: rope_pp_16mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pp_20mm
+  name: Garware PP Ø20 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.18180000000000002
+  breaking_load_t: 5.8
+  generic_of: rope_pp_20mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pp_24mm
+  name: Garware PP Ø24 mm (PP)
+  brand: Garware
+  product: PP
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PP
+  construction: 3 cordones, cinta Parapro o monofilamento de PP
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.2591
+  breaking_load_t: 8.13
+  generic_of: rope_pp_24mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PP)'
+      note: kgf
+- id: garware_pe_6mm
+  name: Garware PE Ø6 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.018
+  breaking_load_t: 0.4
+  generic_of: rope_pe_6mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_pe_8mm
+  name: Garware PE Ø8 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.033
+  breaking_load_t: 0.7
+  generic_of: rope_pe_8mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_pe_12mm
+  name: Garware PE Ø12 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.072
+  breaking_load_t: 1.54
+  generic_of: rope_pe_12mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_pe_16mm
+  name: Garware PE Ø16 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.128
+  breaking_load_t: 2.8
+  generic_of: rope_pe_16mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_pe_20mm
+  name: Garware PE Ø20 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.2
+  breaking_load_t: 4.3
+  generic_of: rope_pe_20mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_pe_24mm
+  name: Garware PE Ø24 mm (PE)
+  brand: Garware
+  product: PE
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PE
+  construction: 3 o 4 cordones, PE de alta densidad
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.295
+  breaking_load_t: 6.1
+  generic_of: rope_pe_24mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (PE)'
+      note: kgf
+- id: garware_maxibraid_6mm
+  name: Garware Maxibraid Ø6 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0332
+  breaking_load_t: 1.4
+  generic_of: rope_pa_6mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf
+- id: garware_maxibraid_8mm
+  name: Garware Maxibraid Ø8 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.055
+  breaking_load_t: 2.4
+  generic_of: rope_pa_8mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf
+- id: garware_maxibraid_10mm
+  name: Garware Maxibraid Ø10 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.067
+  breaking_load_t: 3.0
+  generic_of: rope_pa_10mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf
+- id: garware_maxibraid_12mm
+  name: Garware Maxibraid Ø12 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.086
+  breaking_load_t: 3.7
+  generic_of: rope_pa_12mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf
+- id: garware_maxibraid_16mm
+  name: Garware Maxibraid Ø16 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.159
+  breaking_load_t: 6.8
+  generic_of: rope_pa_16mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf
+- id: garware_maxibraid_20mm
+  name: Garware Maxibraid Ø20 mm (PA)
+  brand: Garware
+  product: Maxibraid
+  country: IN
+  regions:
+  - global
+  - south_asia
+  - africa
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos, nylon impregnado
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.258
+  breaking_load_t: 10.8
+  generic_of: rope_pa_20mm
+  notes:
+  - La ficha no da alargamiento ni rigidez (sólo «bajo alargamiento»).
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+    weight_kg_per_m:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: g/m
+    breaking_load_t:
+      kind: transcribed
+      document: garware_fisheries
+      page: 'Garware, «Fisheries: Trawl Ropes» (Maxibraid)'
+      note: kgf

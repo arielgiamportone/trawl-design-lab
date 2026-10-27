@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
-import { useMemo, useState } from 'react';
-import { api } from '../../api/client';
+import { useMemo, useState, type ChangeEvent } from 'react';
+import { api, type PriceParseResponse } from '../../api/client';
 import { useT } from '../../i18n';
+import { toBatchFile } from '../../lib/batch';
 import { downloadBlob } from '../../lib/download';
 import {
   bomCsv,
   bomQuantity,
   bomUnitLabel,
   loadPrices,
+  mergePrices,
+  priceLines,
   priceKey,
   priceToCanonical,
   priceToDisplay,
@@ -21,7 +24,8 @@ import { useCase } from '../../state/useCase';
 
 /**
  * Lista de materiales del caso: qué comprar, cuánto y el costo orientativo, para llevar al
- * proveedor (CSV o impresión/PDF). Los precios que carga el usuario quedan en el navegador.
+ * proveedor (CSV o impresión/PDF). Los precios que carga el usuario quedan en el navegador y en
+ * el proyecto; la lista de precios se importa y exporta en CSV o XLSX (Fase 19.2).
  */
 export function BillOfMaterials() {
   const { committed } = useCase();
@@ -30,6 +34,10 @@ export function BillOfMaterials() {
   const [currency, setCurrency] = useState<string>(
     () => Object.values(loadPrices())[0]?.currency ?? 'USD',
   );
+  // Cambia al importar precios: rehace los campos de precio (no controlados).
+  const [version, setVersion] = useState(0);
+  const [imported, setImported] = useState<PriceParseResponse | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
   const body = useMemo(() => (committed ? { ...committed, prices } : null), [committed, prices]);
   const q = useQuery({
     queryKey: ['bom', body],
@@ -59,6 +67,34 @@ export function BillOfMaterials() {
   };
 
   const bom = q.data;
+
+  const importPrices = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setImportError(null);
+    try {
+      const res = await api.pricesParse({ file: await toBatchFile(file), currency });
+      setImported(res);
+      const next = mergePrices(prices, res.prices as Record<string, Price>);
+      setPrices(next);
+      savePrices(next);
+      setVersion((v) => v + 1);
+    } catch (err) {
+      setImported(null);
+      setImportError(err instanceof Error ? err.message : String(err));
+    }
+  };
+  const exportPrices = async (format: 'csv' | 'xlsx') => {
+    setImportError(null);
+    try {
+      const blob = await api.pricesExport({ prices, lines: priceLines(bom) }, format);
+      downloadBlob(blob, `${T.pricesFile}.${format}`);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
   return (
     <div className="bom" data-testid="bom">
       <p className="section-sub">{T.bomIntro}</p>
@@ -88,6 +124,45 @@ export function BillOfMaterials() {
           {T.print}
         </button>
       </div>
+      <div className="catalog-actions no-print" role="group" aria-label={T.priceList}>
+        <label className="btn">
+          {T.importPrices}
+          <input
+            type="file"
+            accept=".csv,.xlsx,text/csv"
+            className="sr-only"
+            aria-label={T.importPrices}
+            onChange={importPrices}
+          />
+        </label>
+        <button type="button" className="btn" onClick={() => void exportPrices('csv')}>
+          {T.exportPricesCsv}
+        </button>
+        <button type="button" className="btn" onClick={() => void exportPrices('xlsx')}>
+          {T.exportPricesXlsx}
+        </button>
+      </div>
+      <p className="help no-print">{T.priceListHelp}</p>
+      {importError && (
+        <p className="alert crit" role="alert">
+          {importError}
+        </p>
+      )}
+      {imported && (
+        <div className="help" role="status" data-testid="prices-imported">
+          <p>{T.pricesImported(Object.keys(imported.prices).length, imported.rows)}</p>
+          {imported.issues.length > 0 && (
+            <ul>
+              {imported.issues.map((i, k) => (
+                <li key={k}>
+                  {i.row != null ? `${T.row(Number(i.row))}: ` : ''}
+                  {String(i.message)}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       {!committed && <p className="empty">{T.bomEmpty}</p>}
       {q.error && (
         <p className="alert crit" role="alert">
@@ -114,7 +189,7 @@ export function BillOfMaterials() {
             </thead>
             <tbody>
               {bom.lines.map((l) => (
-                <tr key={l.key} data-line={l.key}>
+                <tr key={`${l.key}-${version}`} data-line={l.key}>
                   <td>
                     {l.label}
                     {l.note && <p className="help">{l.note}</p>}

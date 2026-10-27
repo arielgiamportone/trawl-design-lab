@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type ChangeEvent } from 'react';
 import { useT } from '../i18n';
+import { loadPrices, mergePrices, savePrices } from '../lib/components';
 import { downloadBlob } from '../lib/download';
 import { fmtDate } from '../lib/format';
 import {
@@ -59,6 +60,8 @@ export function ProjectBar() {
   };
   const open = (p: ProjectFile) => {
     replace(p.case);
+    // La lista de precios del proyecto se suma a la de este navegador (pisa las mismas claves).
+    if (p.prices) savePrices(mergePrices(loadPrices(), p.prices));
     setName(p.name);
     setMessage({ tone: 'good', text: P.opened(p.name) });
   };

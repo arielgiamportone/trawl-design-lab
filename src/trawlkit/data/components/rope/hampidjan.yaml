@@ -1,0 +1,1569 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: rope
+sources:
+- key: hampidjan_catalogue
+  title: Hampiðjan hf., Hampidjan Fishing Catalogue (visor iPaper, 437 págs., versión 2023-10-11)
+  url: https://viewer.ipaper.io/hampidjan/hampidjan-fishing-catalouge/
+  accessed: '2026-10-27'
+items:
+- id: hampidjan_nylex_6mm
+  name: Hampidjan Nylex Ø6 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 6.0
+  weight_kg_per_m: 0.0284
+  breaking_load_t: 1.3
+  elongation_pct: 36.0
+  ea_kn: 35.4
+  generic_of: rope_pa_6mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 42,6 kg / 1500 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 1,3 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_nylex_10mm
+  name: Hampidjan Nylex Ø10 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 10.0
+  weight_kg_per_m: 0.0766
+  breaking_load_t: 3.5
+  elongation_pct: 36.0
+  ea_kn: 95.3
+  generic_of: rope_pa_10mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 36 kg / 470 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 3,5 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_nylex_12mm
+  name: Hampidjan Nylex Ø12 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.1155
+  breaking_load_t: 4.4
+  elongation_pct: 36.0
+  ea_kn: 120.0
+  generic_of: rope_pa_12mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 35,8 kg / 310 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 4,4 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_nylex_16mm
+  name: Hampidjan Nylex Ø16 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1962
+  breaking_load_t: 7.6
+  elongation_pct: 36.0
+  ea_kn: 207.0
+  generic_of: rope_pa_16mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 31,4 kg / 160 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 7,6 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_nylex_24mm
+  name: Hampidjan Nylex Ø24 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.397
+  breaking_load_t: 16.1
+  elongation_pct: 36.0
+  ea_kn: 439.0
+  generic_of: rope_pa_24mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 119 kg / 300 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 16,1 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_nylex_32mm
+  name: Hampidjan Nylex Ø32 mm (PA)
+  brand: Hampidjan
+  product: Nylex
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PA
+  construction: trenzado de 12 cabos (red pelágica)
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.7114
+  breaking_load_t: 26.1
+  elongation_pct: 36.0
+  ea_kn: 711.0
+  generic_of: rope_pa_32mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: peso del rollo 356 kg / 500 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Nylex», p. 104 (6.2)
+      note: EA ≈ rotura / alargamiento de rotura = 26,1 t · 9,807 / 36 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_8mm
+  name: Hampidjan Kraft rope Ø8 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.03
+  breaking_load_t: 1.3
+  elongation_pct: 22.0
+  ea_kn: 57.9
+  generic_of: rope_pp_8mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 6,6 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 1,3 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_12mm
+  name: Hampidjan Kraft rope Ø12 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.06591
+  breaking_load_t: 2.6
+  elongation_pct: 22.0
+  ea_kn: 116.0
+  generic_of: rope_pp_12mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 14,5 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 2,6 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_16mm
+  name: Hampidjan Kraft rope Ø16 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1159
+  breaking_load_t: 4.9
+  elongation_pct: 22.0
+  ea_kn: 218.0
+  generic_of: rope_pp_16mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 25,5 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 4,9 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_20mm
+  name: Hampidjan Kraft rope Ø20 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.1795
+  breaking_load_t: 6.5
+  elongation_pct: 22.0
+  ea_kn: 290.0
+  generic_of: rope_pp_20mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 39,5 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 6,5 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_24mm
+  name: Hampidjan Kraft rope Ø24 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.2591
+  breaking_load_t: 8.6
+  elongation_pct: 22.0
+  ea_kn: 383.0
+  generic_of: rope_pp_24mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 57 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 8,6 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_kraft_rope_32mm
+  name: Hampidjan Kraft rope Ø32 mm (PP)
+  brand: Hampidjan
+  product: Kraft rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Polysteel (mezcla PP/PE)
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.4545
+  breaking_load_t: 15.3
+  elongation_pct: 22.0
+  ea_kn: 682.0
+  generic_of: rope_pp_32mm
+  notes: []
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: peso del rollo 100 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Kraft rope», p. 112 (6.10)
+      note: EA ≈ rotura / alargamiento de rotura = 15,3 t · 9,807 / 22 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_8mm
+  name: Hampidjan Danline Ø8 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.03
+  breaking_load_t: 1.2
+  elongation_pct: 25.0
+  ea_kn: 47.1
+  generic_of: rope_pp_8mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 6,6 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 1,2 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_12mm
+  name: Hampidjan Danline Ø12 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.06591
+  breaking_load_t: 2.7
+  elongation_pct: 25.0
+  ea_kn: 106.0
+  generic_of: rope_pp_12mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 14,5 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 2,7 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_16mm
+  name: Hampidjan Danline Ø16 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.1159
+  breaking_load_t: 4.7
+  elongation_pct: 25.0
+  ea_kn: 184.0
+  generic_of: rope_pp_16mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 25,5 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 4,7 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_20mm
+  name: Hampidjan Danline Ø20 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.1786
+  breaking_load_t: 6.9
+  elongation_pct: 25.0
+  ea_kn: 271.0
+  generic_of: rope_pp_20mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 39,3 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 6,9 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_24mm
+  name: Hampidjan Danline Ø24 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.2591
+  breaking_load_t: 9.9
+  elongation_pct: 25.0
+  ea_kn: 388.0
+  generic_of: rope_pp_24mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 57 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 9,9 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_danline_32mm
+  name: Hampidjan Danline Ø32 mm (PP)
+  brand: Hampidjan
+  product: Danline
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: PP
+  construction: torcido de 3 cordones, Danline
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.46
+  breaking_load_t: 16.8
+  elongation_pct: 25.0
+  ea_kn: 659.0
+  generic_of: rope_pp_32mm
+  notes:
+  - 'Nota de la ficha: filas de rollos de 220 m (las de 55 m repiten el peso del rollo de 220 m; la de
+    22 mm no trae peso ni rotura).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+    weight_kg_per_m:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: peso del rollo 101 kg / 220 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Danline», p. 125 (6.23)
+      note: EA ≈ rotura / alargamiento de rotura = 16,8 t · 9,807 / 25 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_4mm
+  name: Hampidjan DynIce 75 Duracoat Ø4 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 4.0
+  weight_kg_per_m: 0.011000000000000001
+  breaking_load_t: 2.0
+  elongation_pct: 3.5
+  ea_kn: 560.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 2 t · 9,807 / 3,5 % (secante; cota inferior de la rigidez
+        a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_8mm
+  name: Hampidjan DynIce 75 Duracoat Ø8 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 8.0
+  weight_kg_per_m: 0.038
+  breaking_load_t: 6.7
+  elongation_pct: 3.5
+  ea_kn: 1880.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 6,7 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_12mm
+  name: Hampidjan DynIce 75 Duracoat Ø12 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 12.0
+  weight_kg_per_m: 0.09300000000000001
+  breaking_load_t: 16.4
+  elongation_pct: 3.5
+  ea_kn: 4600.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 16,4 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_16mm
+  name: Hampidjan DynIce 75 Duracoat Ø16 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 16.0
+  weight_kg_per_m: 0.16
+  breaking_load_t: 27.4
+  elongation_pct: 3.5
+  ea_kn: 7680.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 27,4 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_24mm
+  name: Hampidjan DynIce 75 Duracoat Ø24 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.35600000000000004
+  breaking_load_t: 57.8
+  elongation_pct: 3.5
+  ea_kn: 16200.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 57,8 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_dynice_75_duracoat_36mm
+  name: Hampidjan DynIce 75 Duracoat Ø36 mm (HMPE)
+  brand: Hampidjan
+  product: DynIce 75 Duracoat
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: trenzado de 12 cabos, Dyneema SK75 impregnado
+  diameter_mm: 36.0
+  weight_kg_per_m: 0.672
+  breaking_load_t: 102.9
+  elongation_pct: 3.5
+  ea_kn: 28800.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: rotura según ISO 2307; el empalme puede bajarla hasta 10 %.'
+  - 'Alargamiento: 3,5 % «después de pretensar» (cabo trabajado; la curva del cabo nuevo llega a la rotura
+    cerca del 5,5 %).'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «DynIce 75 Duracoat», p. 132 (7.2)
+      note: EA ≈ rotura / alargamiento de rotura = 103 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_prima_foot_rope_43mm
+  name: Hampidjan Prima Foot rope Ø43 mm (HMPE)
+  brand: Hampidjan
+  product: Prima Foot rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: 12 cabos de HMPE con forro trenzado de PA/PE (burlón)
+  diameter_mm: 43.0
+  weight_kg_per_m: 0.688
+  breaking_load_t: 46.1
+  elongation_pct: 3.5
+  ea_kn: 12900.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307.'
+  - 'Alargamiento: 3,5 % «después de pretensar».'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: exterior; interior 22 mm
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: EA ≈ rotura / alargamiento de rotura = 46,1 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_prima_foot_rope_51mm
+  name: Hampidjan Prima Foot rope Ø51 mm (HMPE)
+  brand: Hampidjan
+  product: Prima Foot rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: 12 cabos de HMPE con forro trenzado de PA/PE (burlón)
+  diameter_mm: 51.0
+  weight_kg_per_m: 0.905
+  breaking_load_t: 91.8
+  elongation_pct: 3.5
+  ea_kn: 25700.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307.'
+  - 'Alargamiento: 3,5 % «después de pretensar».'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: exterior; interior 30 mm
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: EA ≈ rotura / alargamiento de rotura = 91,8 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_prima_foot_rope_61mm
+  name: Hampidjan Prima Foot rope Ø61 mm (HMPE)
+  brand: Hampidjan
+  product: Prima Foot rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: 12 cabos de HMPE con forro trenzado de PA/PE (burlón)
+  diameter_mm: 61.0
+  weight_kg_per_m: 1.29
+  breaking_load_t: 138.8
+  elongation_pct: 3.5
+  ea_kn: 38900.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307.'
+  - 'Alargamiento: 3,5 % «después de pretensar».'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: exterior; interior 40 mm
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: EA ≈ rotura / alargamiento de rotura = 139 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_prima_foot_rope_67mm
+  name: Hampidjan Prima Foot rope Ø67 mm (HMPE)
+  brand: Hampidjan
+  product: Prima Foot rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: 12 cabos de HMPE con forro trenzado de PA/PE (burlón)
+  diameter_mm: 67.0
+  weight_kg_per_m: 1.545
+  breaking_load_t: 179.1
+  elongation_pct: 3.5
+  ea_kn: 50200.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307.'
+  - 'Alargamiento: 3,5 % «después de pretensar».'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: exterior; interior 46 mm
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: EA ≈ rotura / alargamiento de rotura = 179 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_prima_foot_rope_75mm
+  name: Hampidjan Prima Foot rope Ø75 mm (HMPE)
+  brand: Hampidjan
+  product: Prima Foot rope
+  country: IS
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: HMPE
+  construction: 12 cabos de HMPE con forro trenzado de PA/PE (burlón)
+  diameter_mm: 75.0
+  weight_kg_per_m: 1.9
+  breaking_load_t: 216.0
+  elongation_pct: 3.5
+  ea_kn: 60500.0
+  generic_of: null
+  notes:
+  - 'Nota de la ficha: diámetro exterior (la ficha da interior/exterior); rotura según ISO 2307.'
+  - 'Alargamiento: 3,5 % «después de pretensar».'
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: exterior; interior 54 mm
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: kg/100 m
+    breaking_load_t:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: «Breaking strength», t
+    elongation_pct:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: cuadro «Properties»
+    ea_kn:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Prima Foot rope», p. 179 (9.15)
+      note: EA ≈ rotura / alargamiento de rotura = 216 t · 9,807 / 3,5 % (secante; cota inferior de la
+        rigidez a la carga de trabajo)
+- id: hampidjan_combination_seine_18mm
+  name: Randers Reb cabo combinado de cerco Ø18 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 18.0
+  weight_kg_per_m: 0.36
+  breaking_load_t: 5.95
+  generic_of: rope_combinado_3_18mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 5950 kp / 1000
+- id: hampidjan_combination_seine_20mm
+  name: Randers Reb cabo combinado de cerco Ø20 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 20.0
+  weight_kg_per_m: 0.4
+  breaking_load_t: 6.4
+  generic_of: rope_combinado_6_20mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 6400 kp / 1000
+- id: hampidjan_combination_seine_24mm
+  name: Randers Reb cabo combinado de cerco Ø24 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 24.0
+  weight_kg_per_m: 0.55
+  breaking_load_t: 7.8
+  generic_of: rope_combinado_6_24mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 7800 kp / 1000
+- id: hampidjan_combination_seine_28mm
+  name: Randers Reb cabo combinado de cerco Ø28 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 28.0
+  weight_kg_per_m: 0.71
+  breaking_load_t: 9.8
+  generic_of: rope_combinado_6_24mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 9800 kp / 1000
+- id: hampidjan_combination_seine_32mm
+  name: Randers Reb cabo combinado de cerco Ø32 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 32.0
+  weight_kg_per_m: 0.88
+  breaking_load_t: 12.2
+  generic_of: rope_combinado_6_24mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 12200 kp / 1000
+- id: hampidjan_combination_seine_38mm
+  name: Randers Reb cabo combinado de cerco Ø38 mm (acero + Danline)
+  brand: Randers Reb
+  product: Combination Seine Net Rope
+  country: DK
+  regions:
+  - global
+  - europe
+  - north_america
+  - latam
+  material: combinado
+  construction: 4 cordones de alambre galvanizado forrados con hilo Danline
+  diameter_mm: 38.0
+  weight_kg_per_m: 1.42
+  breaking_load_t: 18.5
+  generic_of: rope_combinado_6_24mm
+  notes:
+  - Cabo de cerco (no de arrastre); en el catálogo de Hampidjan con los logos de Randers Reb e Itsaskorda.
+    La ficha no da alargamiento.
+  provenance:
+    diameter_mm:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: dimensión nominal
+    weight_kg_per_m:
+      kind: transcribed
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: peso aproximado
+    breaking_load_t:
+      kind: derived
+      document: hampidjan_catalogue
+      page: Hampidjan, «Combination Seine Net Rope», p. 234 (11.18)
+      note: 18500 kp / 1000

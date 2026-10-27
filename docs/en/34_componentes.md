@@ -44,7 +44,7 @@ glue("n_brands", len(BRANDS), display=False)
 ## Purpose
 
 A net is not built from the drawing alone: it takes netting, wire ropes, ropes, otter boards,
-floats and chains, and what can be found changes from port to port. This chapter describes the
+floats, chains and shackles, and what can be found changes from port to port. This chapter describes the
 **components catalogue** (Phase 13): {glue:}`n_items` items from {glue:}`n_brands` brands and
 **generic** equivalents, with the source of each value; how the engine uses them for sizing; how
 the **bill of materials** is put together with its indicative cost; and how the optimizer **chooses
@@ -61,16 +61,34 @@ line):
 
 * **Netting and twine**: diameter and breaking load per Rtex for twisted and braided PA, PES, PP
   and PE, with a power fit $y = a\,x^b$ on a logarithmic scale over the tables of the *Workbook*;
-  Garware (India) for braided PE {cite}`garware_fisheries`.
+  Garware (India) for braided PE {cite}`garware_fisheries`; Hampidjan (Iceland) for the Magnet
+  braided PE, the Advant and Primanet Dyneema/HMPE and the Utzon twisted nylon
+  {cite}`hampidjan_catalogue`.
 * **Steel wire ropes**: weight and breaking load with $y = k\,d^2$ over the 6x7, 6x12, 6x19 and
-  6x24 tables of the *Workbook*; Bridon-Bekaert {cite}`bridon2023` and PFEIFER
-  {cite}`pfeifer_6x19w` as manufacturers.
-* **Ropes**: PA, PE, PES, PP and combination steel-and-fibre ropes; Garware X2.
+  6x24 tables of the *Workbook*; Bridon-Bekaert {cite}`bridon2023` (Marblue, Dyform Starfish,
+  Dyform, SeaBeam and 6x7) and PFEIFER {cite}`pfeifer_6x19w` as manufacturers, and the Randers Reb
+  and Oliveira wire ropes (compacted 6xK26 and 6x19 Green Strand) from the Hampidjan catalogue.
+* **Ropes**: PA, PE, PES, PP and combination steel-and-fibre ropes; Garware X2, Maxima, PP, PE and
+  Maxibraid; Hampidjan Nylex, Kraft (Polysteel), Danline, DynIce 75 and Prima (HMPE footrope), and
+  the Randers Reb combination seine rope.
 * **Otter boards**: area and weight by power from the *Workbook* for flat, oval, V and Süberkrüb
   otter boards; the polar of each type comes from the flat board of the Excel workbook (C_L max.
   0.93, consistent with 0.95 in {cite}`lange1993`) or from the Morgère one, scaled for the V board;
   and four boards from the shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`.
-* **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link.
+* **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link;
+  Atlantic Floats trawl floats and Trygg and Trawlex long-link chains (Hampidjan catalogue) and
+  Gunnebo LLZ grade 6 galvanised chain {cite}`gunnebo_llz`.
+* **Shackles** (a new type in Phase 19.2): size, working load limit (WLL), minimum breaking load,
+  weight of one piece and body and pin diameters; Crosby G-209 {cite}`crosby_g209` and Van Beest
+  Green Pin (Hampidjan catalogue). The *Workbook* has no shackle reference table: it is the only
+  type without generics.
+
+The Hampidjan catalogue is a page viewer with no PDF and its text layer scrambles columns: every row
+was read on the image of the page, not in the text. Where the data sheet does not give a value the
+engine needs, the item says so: the Garware twisted netting (380 D, 500 D, Sapphire twisted and
+210 D nylon) has no diameter, so it was loaded as a **draft** with the diameter estimated by the
+*Workbook* fit and the note “A VERIFICAR” (to be verified); drafts do not enter the automatic
+selection.
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -112,12 +130,42 @@ PV.md_table(
 )
 ```
 
+### Elongation and axial stiffness
+
+Hampidjan publishes the **elongation at break** of every netting and rope (not the stiffness);
+Garware, Bridon-Bekaert and the wire ropes do not. Where it exists, the catalogue keeps it
+(`elongation_pct`) and derives the secant axial stiffness $EA \approx R / \varepsilon$ (`ea_kn`,
+“derived” provenance, `trawlkit.materials.ea_from_breaking_load_n`), which the engine uses ahead of
+the generic relations of the material table. For the Hampidjan netting the data sheet only gives the
+**knot** breaking load, so no EA is derived. The secant is a lower bound of the stiffness at the
+working load:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+rows = []
+for rid in (
+    "hampidjan_nylex_16mm",
+    "hampidjan_danline_16mm",
+    "hampidjan_dynice_75_duracoat_16mm",
+    "hampidjan_prima_foot_rope_51mm",
+):
+    r = comp.get_component("rope", rid)
+    rows.append(
+        [r.name, num(r.breaking_load_t, 1), num(r.elongation_pct, 1), num(r.ea_kn, 0)]
+    )
+PV.md_table(["Rope", "Breaking load [t]", "Elongation at break [%]", "EA [kN]"], rows)
+```
+
 ## Physical validation
 
 A component entered by hand may carry a units error or a typo. The validator
 (`trawlkit.components.check`) compares each value with physical ranges of the material: weight per
 metre against $k\,d^2$ (steel, fibre, chain), breaking load against that of the material, twine
-tenacity in gf/tex, buoyancy against the volume of the float and otter board weight per m². For
+tenacity in gf/tex, buoyancy against the volume of the float, otter board weight per m² and, for
+shackles, weight per mm³ of body, working load per mm², breaking load against working load (design
+factor 4:1 to 8:1; a breaking load below the working load is an error) and pin against body. The
+warnings flag values outside the reference tables, not errors: modern PP/PE (Polysteel, Danline)
+and braided nylon ropes break and stretch more than those of the *Workbook* tables. For
 example, a 10 mm wire rope entered with 2 kg/m and 50 t:
 
 ```{code-cell} ipython3
@@ -148,13 +196,64 @@ change** (the golden tests verify it); with the filters `component_brands`, `com
 float, the number of floats comes from the required buoyancy (Flot!F72:F82); with a twine, the
 weight and the drag of the netting are recomputed with its diameter.
 
+**Headrope and footrope from the catalogue** (Phase 19.2). With those filters, the headrope and the
+footrope also come from the filtered catalogue, unless the case chooses a rope (`headrope_rope`,
+`footrope_rope`). The workbook has no rule; the rope of the net (or of the workbook) stays as the
+reference and, among the ropes **of the same material** (a combination rope is replaced by another
+combination rope, which is what gives the rope its weight), the one with the **smallest diameter
+whose diameter and breaking load are not below** the reference is chosen; if none reaches it, the
+one with the highest breaking load (`trawlkit.rigging.select_rope_component`).
+
+**Ballast chain from the catalogue** (`chain_id`). The ballast stage converts the minimum and
+maximum ballast and the adjusting chain of the workbook (Flot!F225:F226, H224) into metres with the
+weight per metre of the chain, and gives the weight in water of those metres,
+$W_\text{water} = L\,w\,(1 - \rho_\text{sea}/\rho_\text{steel})$. The ballast in kg does not
+change: the chain only translates it. With the A-3 and its filters:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+from trawlkit.io import load_doors, load_vessels
+from trawlkit.model import DesignCase
+
+_v = {v.id: v for v in load_vessels().vessels}
+a3 = DesignCase(load_net("fao_a3_standard"), _v["fao_a3_150hp"], load_doors().doors[0])
+rows = []
+for label, kw in (
+    ("Workbook (no filters)", {}),
+    ("Generics only", {"generic_only": True}),
+    ("Region Europe", {"component_region": "europe"}),
+):
+    r = run(dataclasses.replace(a3, **kw))
+    rows.append(
+        [
+            label,
+            r.floats.headrope_rope.description,
+            r.ballast.footrope_rope.description,
+            f"{num(r.ballast.limits.min_kg, 0)}–{num(r.ballast.limits.max_kg, 0)}",
+        ]
+    )
+PV.md_table(["Selection", "Headrope", "Footrope", "Ballast [kg]"], rows)
+rc = run(dataclasses.replace(a3, chain_id="gunnebo_llz_9mm")).ballast.chain
+glue("chain_max_m", num(rc.max_m, 1), display=False)
+glue("chain_min_m", num(rc.min_m, 1), display=False)
+glue("chain_water", num(rc.water_weight_max_kgf, 0), display=False)
+```
+
+With the 9 mm Gunnebo LLZ chain (1.4 kg/m), the A-3 ballast is {glue:text}`chain_min_m` to
+{glue:text}`chain_max_m` m of chain, weighing {glue:text}`chain_water` kgf in water in the maximum case.
+
 ## Bill of materials and indicative cost
 
 `trawlkit.cost.bill_of_materials` puts together the list of what has to be bought: the netting by
 material (the weight in air that `net.analyse` already computes), the headrope and the footrope,
 the bridles and sweeps, the warp (two warps of the length paid out with 50 % spare, Cab!D12), the
-floats, the pair of otter boards and the ballast chain. The prices are **always indicative**: they
-are entered by the user or come from the catalogue with a date and a source. A line without a price
+floats, the pair of otter boards, the ballast chain (in metres, if the case chose a chain) and the
+**shackles** of the rigging connections. The number of shackles is an **assumption** (no source
+gives it): five per side with otter boards (warp–door, door–sweep, sweep–bridles and the two
+bridles to the wing end) and three per side for pair trawling; the size is the smallest shackle of
+the filtered catalogue whose working load limit is not below the working load of the gear
+(Rem!E267). The prices are **always indicative** and entered by the user: the catalogue has no
+prices. A line without a price
 is reported as such and **never counts as zero**. The table uses illustrative prices in a fictitious
 currency (XXX, the ISO code for “no currency”):
 
@@ -181,6 +280,30 @@ glue("bom_total", round(bom.totals.get("XXX", 0)), display=False)
 
 The total with these prices is {glue:}`bom_total` XXX and {glue:}`bom_missing` lines remain without
 a price, which the app asks to fill in before comparing riggings by cost.
+
+### The user's price list
+
+Prices are entered line by line in the app or as a **price list** in CSV or XLSX
+(`trawlkit.prices`, `POST /prices/parse` and `POST /prices/export`): one row per price with the
+**key** (the component id, e.g. `crosby_g209_5_8in`, or the line key, e.g. `netting_pa` or
+`doors`), the price, the currency (ISO 4217), the unit of the line (`kg`, `m` or unit), the date
+and the source. Columns are recognised in Spanish or English, with the separator and decimal comma
+detected; a row with an error is reported with its number and does not stop the rest, and a repeated
+key takes the last row. The export includes, empty, the bill-of-materials lines that still have no
+price, as a template to fill in with the supplier. The same list feeds the bill of materials,
+rigging by cost, the economics of the operation (chapter 37) and the batches, is saved with the
+app **project** and works offline.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+from trawlkit.prices import read_prices, write_prices
+
+price_list = write_prices(prices, "csv", [ln.to_dict() for ln in bom.lines]).decode()
+print("\n".join(price_list.splitlines()[:5]))
+glue("prices_back", len(read_prices(price_list, "prices.csv").prices), display=False)
+```
+
+Read back, the spreadsheet gives the same {glue:}`prices_back` prices.
 
 ## Optimal rigging with what is available
 
@@ -267,4 +390,12 @@ There are no accounts and no personal data.
 * The prices are indicative and the user's own; the cost optimizer ranks first the riggings with
   fewer missing prices.
 * The components optimizer does not scale the net (that is what the one in chapter 20 is for) nor
-  does it change the headrope and footrope ropes, which are chosen by hand.
+  does it change the headrope and footrope ropes: with filters, the automatic selection takes them
+  from the catalogue with the rule above; without filters, they are those of the net or of the
+  workbook.
+* The number of shackles in the bill of materials is an assumption; the size covers the working
+  load of the whole gear, a generous bound for each connection.
+* Several sizes and products were left out on purpose: those that repeat the values of another
+  product (Dyform 6x26 from 20 to 44 mm, Prima Headline, Dyform RL), the purse-seine ones (Dyform
+  SeaPurse), the rows with obvious errata (13 mm Trawlex) and the data sheets with no open table
+  (WireCo, Usha Martin, Euronete, Castro, Mar del Plata suppliers).

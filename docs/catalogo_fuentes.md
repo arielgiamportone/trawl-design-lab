@@ -80,8 +80,11 @@ valor, y los de marca dicen a qué **genérico** equivalen.
 | Clave | Fuente | Qué se toma | Cómo |
 |---|---|---|---|
 | `prado1990` | FAO *Fisherman's Workbook* | Hilos de PA, PE, PP y PES; cabos de PA, PE, PES, PP y combinados; cables 6x7, 6x12, 6x19 y 6x24; boyas; cadenas; portones por potencia (plano, oval, V y Süberkrüb) | Genéricos: ley ajustada a cada tabla (potencia o d²), valores *derivados* a tamaños estándar con el error del ajuste; boyas, cadenas y portones *transcriptos* |
-| `garware_fisheries` | Garware Technical Fibres (India) | Paño de PE trenzado Sapphire y SNG; cabo X2 (PP/PE) | 6–8 tamaños por línea, *transcriptos* |
-| `bridon2023` | Bridon-Bekaert, catálogo de pesca 2023 | Cables Marblue 6x19 y Dyform Starfish 6x26 | 4–5 tamaños por línea |
+| `garware_fisheries` | Garware Technical Fibres (India) | Paño de PE trenzado Sapphire y SNG; paño torcido 380 D, 500 D, Sapphire torcido y nylon 210 D (Fase 19.2); cabos X2, Maxima, PP, PE y Maxibraid | 6–8 tamaños por línea, *transcriptos*; el paño torcido, *borrador* (la ficha no da diámetro: *supuesto* con el ajuste del *Workbook*) |
+| `hampidjan_catalogue` | Hampidjan, catálogo de pesca (visor iPaper, 2023) | Paño Magnet, Advant, Utzon y Primanet; cabos Nylex, Kraft, Danline, DynIce 75 y Prima; cables Randers Reb y Oliveira; cadenas Trygg y Trawlex; grilletes Green Pin; boyas Atlantic Floats (Fase 19.2) | 3–8 tamaños por línea, leídos en la imagen de cada página; alargamiento de rotura y EA *derivada* |
+| `bridon2023` | Bridon-Bekaert, catálogo de pesca 2023 | Cables Marblue 6x19, Dyform Starfish 6x26 y (Fase 19.2) Dyform 6x26, SeaBeam 6x26 y 6x7 | 2–6 tamaños por línea |
+| `gunnebo_llz` | Gunnebo Industries / Kito Crosby | Cadena de eslabón largo LLZ grado 6 galvanizada (Fase 19.2) | 7 tamaños |
+| `crosby_g209` | Crosby, catálogo general p. 24 | Grilletes G-209 (Fase 19.2) | 10 tamaños |
 | `pfeifer_6x19w` | PFEIFER 6x19W-FC | Cables chicos de 6 a 16 mm | 6 tamaños |
 | `zuniga2006` | FAO REBYC, flota camaronera del Caribe colombiano | Puertas planas de madera de 6'×28" a 10'×40" usadas en la flota | Medidas *transcriptas*, polar supuesta (la del portón plano) |
 | `lange1993` | Lange (ICES 1993) | Sustentación máxima del portón plano (0,95) y en V (0,70–0,85) | Polar del portón en V *supuesta*: la del plano con el CL escalado |
@@ -97,7 +100,7 @@ Criterios:
 - **Validador físico** (`trawlkit.components.check`): peso por metro contra diámetro, carga de
   rotura por mm², tenacidad del hilo, flotación frente al volumen de la esfera y polar del
   portón. Lo usa también la app para revisar los aportes de los usuarios.
-- **Buscadas sin datos abiertos**: Hampidjan, Euronete, Vónin, Usha Martin, Cotesi, Morgère,
+- **Buscadas sin datos abiertos**: Euronete, Vónin (su catálogo es el de Hampidjan), Usha Martin, Cotesi, Morgère,
   Thyborøn, Injector y Ekkó publican rangos o piden la ficha por correo. Los proveedores
   latinoamericanos no publican fichas en línea; para ellos están los genéricos y los aportes.
 - **Normas**: ISO 1805 (paño), ISO 2307 (cabos) e ISO 2408 / EN 12385-4 (cables) se citan como

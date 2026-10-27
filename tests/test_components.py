@@ -28,7 +28,12 @@ ENGINE_FIELDS: dict[str, tuple[str, ...]] = {
     "door": ("length_m", "height_m", "area_m2", "coefficients"),
     "float": ("diameter_mm", "buoyancy_kgf"),
     "chain": ("link_diameter_mm", "weight_kg_per_m"),
+    "shackle": ("body_diameter_mm", "wll_t", "weight_kg"),
 }
+
+#: Tipos sin genéricos: no hay tabla de referencia de grilletes (el Workbook no la trae); todos
+#: son de fabricante (Fase 19.2).
+NO_GENERICS = ("shackle",)
 
 #: Máximo de ítems por línea de producto de un fabricante (datos puntuales, no tablas enteras).
 MAX_PER_PRODUCT = 10
@@ -52,7 +57,7 @@ def test_catalogue_is_loaded_unique_and_consistent(kind: str) -> None:
 @pytest.mark.parametrize("kind", KINDS)
 def test_every_kind_has_generics_and_brands_point_to_one(kind: str) -> None:
     items = load_components(kind)
-    assert any(i.is_generic for i in items)
+    assert any(i.is_generic for i in items) or kind in NO_GENERICS
     for it in items:
         if not it.is_generic and it.generic_of is not None:
             g = generic_for(it)

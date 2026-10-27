@@ -265,8 +265,39 @@ def component_check(data: dict[str, Any]) -> dict[str, Any]:
 
 @cache
 def vessel_presets() -> dict[str, Vessel]:
-    """Buques del catálogo por id."""
+    """Buques del catálogo por id: los dos de la A-3 primero y después la flota (Fase 19.4)."""
+    from trawlkit.io import load_fleet
+
+    return {v.id: v for v in load_fleet().vessels}
+
+
+@cache
+def book_vessels() -> dict[str, Vessel]:
+    """Buques de la clase del libro (``vessels.yaml``): la clase por defecto de un caso."""
     return {v.id: v for v in load_vessels().vessels}
+
+
+def vessel_list(
+    vessel_type: str | None = None,
+    region: str | None = None,
+    status: str | None = None,
+) -> list[Vessel]:
+    """Buques del catálogo con filtros (``GET /catalog/vessels``), con nombre y notas traducidos.
+
+    ``vessel_type`` y ``region`` filtran por igualdad; ``status`` = ``published`` o ``draft``.
+    """
+    from trawlkit.i18n import tr
+
+    out = []
+    for v in vessel_presets().values():
+        if vessel_type and (v.vessel_type is None or v.vessel_type.value != vessel_type):
+            continue
+        if region and v.region != region:
+            continue
+        if status and v.status != status:
+            continue
+        out.append(v.model_copy(update={"name": tr(v.name), "notes": [t(n) for n in v.notes]}))
+    return out
 
 
 @cache
@@ -468,13 +499,17 @@ def build_case(
             return case if door is None else dataclasses.replace(case, door=_pick_door(door))
         except (TypeError, ValueError) as exc:
             raise BadRequestError(str(exc)) from exc
+    from trawlkit.catalog import complete_vessel
+
     vessels = vessel_presets()
     v: Vessel = _pick(vessel, vessels, "buque")
+    v, filled = complete_vessel(v)
     d: Door = _pick_door(door)
     if class_vessels is None:
-        others = tuple(o for o in vessels.values() if o.id != v.id)
+        # La clase por defecto es la del libro (A-3), no toda la flota del catálogo.
+        others = tuple(o for o in book_vessels().values() if o.id != v.id)
     else:
-        others = tuple(_pick(c, vessels, "buque") for c in class_vessels)
+        others = tuple(complete_vessel(_pick(c, vessels, "buque"))[0] for c in class_vessels)
     kwargs = _coerce_params(params or {})
     design = (main.model_extra or {}).get("design")
     if "depth_m" not in kwargs and isinstance(design, dict) and design.get("depth_m"):
@@ -489,6 +524,7 @@ def build_case(
             class_vessels=others,
             compat=Compat(compat),
             depth_m=kwargs.pop("depth_m", None),
+            assumptions=tuple(filled),
         )
         return dataclasses.replace(case, **kwargs) if kwargs else case
     except (TypeError, ValueError) as exc:
@@ -1601,6 +1637,35 @@ def _batch_bytes(file: dict[str, Any]) -> bytes | str:
         except (binascii.Error, ValueError) as exc:
             raise BadRequestError(t("el archivo no es base64 válido")) from exc
     return str(file["content"])
+
+
+def prices_parse(file: dict[str, Any], currency: str | None = None) -> dict[str, Any]:
+    """Lee una lista de precios del usuario (CSV o XLSX; Fase 19.2)."""
+    from trawlkit.prices import read_prices
+
+    data = _batch_bytes(file)
+    try:
+        out = read_prices(data, str(file.get("filename") or "precios.csv"), currency=currency)
+    # openpyxl falla con excepciones propias (zip dañado, archivo que no es XLSX).
+    except Exception as exc:
+        raise BadRequestError(t("no se pudo leer la planilla: {exc}", exc=exc)) from exc
+    return out.to_dict()
+
+
+def prices_export(
+    prices: dict[str, dict[str, Any]], lines: list[dict[str, Any]], fmt: str
+) -> tuple[bytes, str, str]:
+    """Lista de precios exportada: (contenido, tipo MIME, nombre de archivo)."""
+    from trawlkit.prices import write_prices
+
+    try:
+        data = write_prices(prices, fmt, lines)
+    except ValueError as exc:
+        raise BadRequestError(str(exc)) from exc
+    name = t("precios")
+    if fmt == "csv":
+        return data, "text/csv; charset=utf-8", f"{name}.csv"
+    return data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", f"{name}.xlsx"
 
 
 def batch_read(file: dict[str, Any], mode: str) -> Any:

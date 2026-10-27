@@ -6,6 +6,7 @@ E182:H191 (burlón). Longitudes en m, diámetros en mm, pesos en kg.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any
 
@@ -61,6 +62,62 @@ def select_rope(name: str) -> RopeSpec:
         diameter_mm=comp.diameter_mm,
         weight_kg_per_m=comp.weight_kg_per_m,
         breaking_load_t=comp.breaking_load_t,
+    )
+
+
+def _material_class(material: str) -> str:
+    """Clase de material de un cabo para comparar: ``combinado`` (acero + fibra) o la fibra."""
+    m = material.strip().lower()
+    return "combinado" if m.startswith("combinado") else m.upper()
+
+
+def select_rope_component(
+    items: Sequence[dict[str, Any]], reference: RopeSpec, reference_material: str
+) -> RopeSpec:
+    """Cabo del catálogo de componentes que reemplaza a ``reference`` (Fase 19.2).
+
+    Es la selección automática de la lima y el burlón cuando el caso filtra los componentes por
+    marca, región o genéricos (``component_brands``, ``component_region``, ``generic_only``),
+    como los cables y las boyas. El libro no trae una regla; se usa ésta, que conserva lo que el
+    cálculo usa del cabo de referencia (el del caso, el de la red o el del libro):
+
+    1. sólo cabos del mismo material que la referencia (el combinado se compara con
+       combinados: es el que pone el peso de la relinga);
+    2. entre ellos, el de menor diámetro con diámetro y carga de rotura no menores que los de la
+       referencia; a igual diámetro, el de peso por metro más cercano;
+    3. si ninguno alcanza, el de mayor carga de rotura.
+
+    ``items`` son ítems del catálogo (``id``, ``name``, ``material``, ``diameter_mm``,
+    ``weight_kg_per_m``, ``breaking_load_t``). Sin cabos del mismo material devuelve la
+    referencia.
+    """
+    cls = _material_class(reference_material)
+    pool = [it for it in items if _material_class(str(it.get("material", ""))) == cls]
+    if not pool:
+        return reference
+    ok = [
+        it
+        for it in pool
+        if float(it["diameter_mm"]) >= reference.diameter_mm - 1e-9
+        and float(it["breaking_load_t"]) >= reference.breaking_load_t - 1e-9
+    ]
+    if ok:
+        chosen = min(
+            ok,
+            key=lambda it: (
+                float(it["diameter_mm"]),
+                abs(float(it["weight_kg_per_m"]) - reference.weight_kg_per_m),
+                str(it["id"]),
+            ),
+        )
+    else:
+        chosen = max(pool, key=lambda it: (float(it["breaking_load_t"]), str(it["id"])))
+    return RopeSpec(
+        id=str(chosen["id"]),
+        description=str(chosen.get("name") or chosen["id"]),
+        diameter_mm=float(chosen["diameter_mm"]),
+        weight_kg_per_m=float(chosen["weight_kg_per_m"]),
+        breaking_load_t=float(chosen["breaking_load_t"]),
     )
 
 

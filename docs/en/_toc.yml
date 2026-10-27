@@ -35,6 +35,7 @@ parts:
       - file: 35_lotes_proyeccion
       - file: 36_construccion
       - file: 37_economia
+      - file: 39_flota_argentina
       - file: erratas
   - caption: Teaching
     chapters:

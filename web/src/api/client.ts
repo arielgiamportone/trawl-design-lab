@@ -21,6 +21,9 @@ export type Door = S['Door'];
 export type ParamInfo = S['ParamInfo'];
 export type Erratum = S['ErratumOut'];
 export type Health = S['Health'];
+export type PriceParseRequest = S['PriceParseRequest'];
+export type PriceParseResponse = S['PriceParseResponse'];
+export type PriceExportRequest = S['PriceExportRequest'];
 export type DesignRequest = S['DesignRequest'];
 export type DesignResponseRaw = S['DesignResponse'];
 export type OptimizeRequest = S['OptimizeRequest'];
@@ -355,6 +358,14 @@ export const api = {
   },
   async batchExport(req: BatchRunRequest, format: BatchFormat, signal?: AbortSignal) {
     const res = await post(`/batch/export?format=${format}`, req, signal);
+    return res.blob();
+  },
+  async pricesParse(req: PriceParseRequest, signal?: AbortSignal): Promise<PriceParseResponse> {
+    const res = await post('/prices/parse', req, signal);
+    return (await res.json()) as PriceParseResponse;
+  },
+  async pricesExport(req: PriceExportRequest, format: 'csv' | 'xlsx', signal?: AbortSignal) {
+    const res = await post(`/prices/export?format=${format}`, req, signal);
     return res.blob();
   },
   async batchTemplate(kind: BatchKind, format: 'xlsx' | 'csv', signal?: AbortSignal) {

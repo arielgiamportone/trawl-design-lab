@@ -4,6 +4,7 @@ import { msg } from '../i18n';
 import { sanitizeContributions, type Component } from '../lib/components';
 import { editErrors, editedSpec, type PanelEdits } from '../lib/panels';
 import { buildParams, type ParamMeta, type ParamValues } from '../lib/params';
+import { myVesselErrors, myVesselToApi, sanitizeMyVessel, type MyVessel } from '../lib/vessel';
 
 export type Compat = 'excel' | 'corrected';
 
@@ -34,6 +35,10 @@ export interface CaseState {
    * id de catálogo). Reemplazan a ``vessel``/``door`` hasta que se elija otro.
    */
   fromBatch: FromBatch | null;
+  /** «Mi buque» (Fase 19.4): datos del buque del usuario (texto en métrico). */
+  myVessel: MyVessel | null;
+  /** Si el caso usa «Mi buque» en lugar del buque del catálogo. */
+  useMyVessel: boolean;
 }
 
 export interface FromBatch {
@@ -64,6 +69,8 @@ export const DEFAULT_CASE: CaseState = {
   contributions: [],
   useContributions: false,
   fromBatch: null,
+  myVessel: null,
+  useMyVessel: false,
 };
 
 export const STORAGE_KEY = 'trawl-design-lab:case:v1';
@@ -96,6 +103,8 @@ export function sanitizeCase(raw: unknown): CaseState {
     contributions: sanitizeContributions(r.contributions),
     useContributions: r.useContributions === true,
     fromBatch: sanitizeFromBatch(r.fromBatch),
+    myVessel: sanitizeMyVessel(r.myVessel),
+    useMyVessel: r.useMyVessel === true && !!r.myVessel,
   };
 }
 
@@ -142,6 +151,12 @@ export function buildRequest(
   const { params, errors: paramErrors } = buildParams(metas, state.params);
   const errors: Record<string, string> = {};
   for (const [k, v] of Object.entries(paramErrors)) errors[`param.${k}`] = v;
+  const mine = usesMyVessel(state) ? state.myVessel : null;
+  if (mine) {
+    for (const [k, v] of Object.entries(myVesselErrors(mine, state.params.fridman_kf ?? ''))) {
+      errors[`vessel.${k}`] = v;
+    }
+  }
   for (const [k, v] of Object.entries(editErrors(state.edits.std))) errors[`std.${k}`] = v;
   if (state.netModified) {
     for (const [k, v] of Object.entries(editErrors(state.edits.mod))) errors[`mod.${k}`] = v;
@@ -163,14 +178,23 @@ export function buildRequest(
   const request: DesignRequest = {
     net,
     net_modified: netModified ?? null,
-    vessel: state.fromBatch?.vessel ?? state.vessel,
+    vessel: state.fromBatch?.vessel ?? (mine ? myVesselToApi(mine) : state.vessel),
     door: state.fromBatch?.door ?? state.door,
     compat: state.compat,
     params,
   };
+  // La región de «Mi buque» elige los componentes si el caso no indica otra.
+  if (mine?.region && params.component_region === undefined) {
+    request.params = { ...params, component_region: mine.region };
+  }
   const components = enabledContributions(state);
   if (components.length) request.components = components;
   return { request, errors, pending };
+}
+
+/** El caso usa «Mi buque» (y no un buque del lote). */
+export function usesMyVessel(state: CaseState): boolean {
+  return state.useMyVessel && !!state.myVessel && !state.fromBatch;
 }
 
 /** Aportes que se envían a la API (sólo si el usuario los habilitó). */
