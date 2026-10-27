@@ -13,6 +13,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Agregado
+- **Más componentes (Fase 19.2)**: el catálogo pasa de 290 a 505 ítems con fuente por dato:
+  Hampidjan (paños de PE, PA y HMPE, cables, cabos con alargamiento, cadenas, boyas y grilletes,
+  verificados contra la imagen de cada página), Garware (hilos torcidos como borrador, cabos),
+  Bridon-Bekaert, Gunnebo y Crosby. Nuevo tipo de componente `shackle` (grillete). Con filtros de
+  marca o región, la lima y el burlón se eligen del catálogo; la cadena del burlón (`chain_id`)
+  da metros y peso en el agua. La lista de materiales suma los grilletes (cantidad supuesta,
+  opcionales: sin precio no dejan incompleto el costo). Lista de precios propia que se importa y
+  exporta (CSV/XLSX, `POST /prices/parse` y `/prices/export`, también sin conexión) y se guarda en
+  el proyecto. Capítulo 34 actualizado.
 - **Buques y flota argentina (Fase 19.4)**: `Vessel` suma campos opcionales de casco, motor,
   hélice (diámetro, paso, palas, tobera, tiro medido), maniobra (pórticos, guinche, tambor, cable),
   tipo de buque, región, puerto, fuentes, procedencia y estado; los YAML existentes cargan igual.

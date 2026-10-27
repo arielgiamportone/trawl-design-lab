@@ -713,7 +713,8 @@ def test_design_bom_and_component_params() -> None:
     bom = client.post("/design/bom", json={"prices": {"doors": price}}).json()
     lines = {ln["key"]: ln for ln in bom["lines"]}
     assert lines["doors"]["cost"] == 900.0 and bom["totals"] == {"USD": 900.0}
-    assert bom["missing_prices"] == len(bom["lines"]) - 1
+    # Sin precio: todo salvo los portones y los grilletes (opcionales).
+    assert bom["missing_prices"] == len(bom["lines"]) - 2
     # Parámetros de componentes: booleano sólo en campos booleanos; portón del catálogo nuevo.
     body = {"params": {"generic_only": True, "warp_id": "wire_6x24_fc_16mm"}}
     r = client.post("/design/bom", json=body)

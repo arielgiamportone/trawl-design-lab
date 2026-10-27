@@ -75,7 +75,8 @@ def test_bill_of_materials_lines_and_missing_prices() -> None:
     keys = [ln.key for ln in bom.lines]
     assert keys[:2] == ["netting_pa", "headrope"]
     assert {"bridles", "sweeps", "warps", "floats", "doors", "ballast"} <= set(keys)
-    assert bom.totals == {} and bom.missing_prices == len(bom.lines)
+    # Los grilletes (cantidad supuesta) son opcionales: sin precio no cuentan como faltantes.
+    assert bom.totals == {} and bom.missing_prices == len(bom.lines) - 1
     by_key = {ln.key: ln for ln in bom.lines}
     assert by_key["warps"].quantity == pytest.approx(r.warps.quantity_m)
     assert by_key["netting_pa"].quantity == pytest.approx(
@@ -114,7 +115,8 @@ def test_bill_of_materials_lines_and_missing_prices() -> None:
     assert lines["floats"].cost is None
     expected = sum(ln.cost or 0.0 for ln in priced.lines)
     assert priced.totals["USD"] == pytest.approx(expected, abs=0.02)
-    assert priced.missing_prices == len(priced.lines) - 4  # malletas, patentes, cable y portones
+    # Con precio: malletas, patentes, cable y portones; los grilletes son opcionales.
+    assert priced.missing_prices == len(priced.lines) - 5
 
 
 def test_bill_of_materials_with_chain_in_metres() -> None:
