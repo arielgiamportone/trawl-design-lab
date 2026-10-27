@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from functools import cache
 from importlib.resources import files
 from pathlib import Path
 from typing import TypeVar
@@ -94,5 +95,16 @@ def load_doors(path: Path | str | None = None) -> DoorCatalogue:
 
 
 def load_catalogue(kind: str, path: Path | str | None = None) -> Catalogue:
-    """Carga un catálogo genérico (``floats``, ``ropes``, ``chains``, ``warps``, ``materials``)."""
-    return load_yaml(path or DATA_DIR / f"{kind}.yaml", Catalogue)
+    """Carga un catálogo genérico (``floats``, ``ropes``, ``chains``, ``warps``, ``materials``).
+
+    Los catálogos del paquete se leen una sola vez por proceso (el motor los consulta en cada
+    corrida y la tabla de materiales es grande); no hay que modificar el objeto devuelto.
+    """
+    if path is None:
+        return _packaged_catalogue(kind)
+    return load_yaml(path, Catalogue)
+
+
+@cache
+def _packaged_catalogue(kind: str) -> Catalogue:
+    return load_yaml(DATA_DIR / f"{kind}.yaml", Catalogue)

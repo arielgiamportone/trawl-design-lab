@@ -113,5 +113,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: false,
+    // Las pruebas que montan la app completa (explorador, lance) pasan de 5 s en los runners de CI.
+    testTimeout: 20000,
   },
 });
