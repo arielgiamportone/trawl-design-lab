@@ -380,3 +380,9 @@ NETS += NETS_195
 from tools.catalog.transcriptions_196 import NETS_196  # noqa: E402
 
 NETS += NETS_196
+
+# Fase 19.8c: redes tangoneras de langostino de INIDEP IAT 27/2019 (Solimeno) e IAT 75/2023
+# (Pesquera Deseado).
+from tools.catalog.transcriptions_198 import NETS_198  # noqa: E402
+
+NETS += NETS_198

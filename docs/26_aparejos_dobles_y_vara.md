@@ -307,6 +307,51 @@ equilibrio aislado (menos tensión con casi la misma $L_R$) da +26 %. La DP medi
 (18,8–19,5 m, otros portones y tijera de 60 m) queda por encima de DynamiT y del equilibrio:
 coherente con el sesgo de DynamiT señalado arriba.
 
+Las redes de IAT 27/2019 {cite:p}`roth2019iat027` e IAT 75/2023 {cite:p}`roth2023iat075`
+(Fase 19.8c) suman cuatro casos con el motor completo y el aparejo de cada informe (IAT 27:
+portones de 4,20 × 1,30 m y 450 kg, tijera de 55 m, bridas de 4 m, 100 m y 4 nudos; IAT 75:
+portones de 4,08 m² y 530 kg, tijera de 70 m, 90 m supuestos y 3,5 nudos). Esos informes no
+publican la separación de portones de DynamiT: se comparan la AH, la AV y la resistencia («resistencia
+al avance» en IAT 27, «tensión» en IAT 75), leídas del campo `simulated` de cada red:
+
+```{code-cell} ipython3
+rows = []
+for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
+               ("inidep_iat027_tangonera_modificada", 4.0),
+               ("inidep_iat075_tangonera_propuesta", 3.5),
+               ("inidep_iat075_tangonera_tradicional", 3.5)):
+    spec = load_net(nid)
+    sim = next(s for s in spec.model_extra["simulated"] if s["speed_kn"] == v)
+    r = run(catalog_case(spec).case)
+    i = r.case.speed_index(v)
+    ah, av = r.spread.horizontal_opening_m, r.spread.vertical_opening_m
+    ref = sim.get("drag_kgf", sim.get("warp_tension_kgf"))
+    rows.append([
+        f"`{nid}` ({"published": "publicada", "draft": "borrador"}[spec.status])",
+        f(v),
+        f"{f(r.doors.spread_m)} / {f(ah)} / {f(av, 2)}",
+        f"— / {f(sim['horizontal_opening_m'])} / {f(sim['vertical_opening_m'])}",
+        f"{f(100 * (ah / sim['horizontal_opening_m'] - 1), 0)} %",
+        f"{f(100 * (av / sim['vertical_opening_m'] - 1), 0)} %",
+        f"{f(r.multirig.per_net.std[i], 0)} / {f(ref, 0)}",
+    ])
+P.md_table(
+    ["Red", "v [kn]", "Motor: DP / AH / AV [m]", "DynamiT", "AH − DynamiT", "AV − DynamiT",
+     "Una red: motor / DynamiT [kgf]"],
+    rows,
+)
+```
+
+La AH queda dentro de ±10 % en las dos redes de IAT 75, pero un 28–30 % por debajo de DynamiT en
+las dos de IAT 27, **fuera de la tolerancia de ±20 %**: con portones de 5,46 m² y tijera de 55 m el
+equilibrio da una DP de 16,9–17,9 m, menor o igual que la AH que publica DynamiT (17,5–17,9 m,
+AH/lima = 0,45–0,46), y con AH/DP = 0,72 la AH del método no puede alcanzarla. La AV (0,04 · lima)
+supera la de DynamiT entre 5 % y 55 %: la red propuesta de IAT 75 no lleva flotadores (0,9 m a
+todas las velocidades) y la regla no corrige por boyas. La resistencia de una red con su aparejo
+queda entre 2 % y 19 % por encima de DynamiT. Dos de estas redes son borradores (el cuerpo no
+empalma con el copo; ver {doc}`33_catalogo_fao`): el motor las calcula, pero su resultado depende
+de esa lectura.
+
 ## Caso argentino: la red tangonera del INIDEP
 
 El INIDEP evaluó en DynamiT una red tangonera propuesta por la empresa Pesquera Deseado y una red
@@ -526,6 +571,10 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 |---|---|---|---|
 | `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | tangones | publicada |
 | `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | tangones | publicada |
+| `inidep_iat027_tangonera_modificada` | INIDEP IAT 27/2019, fig. 3 {cite:p}`roth2019iat027` | tangones | publicada |
+| `inidep_iat027_tangonera_solimeno` | INIDEP IAT 27/2019, fig. 2 | tangones | borrador |
+| `inidep_iat075_tangonera_propuesta` | INIDEP IAT 75/2023, fig. 1 {cite:p}`roth2023iat075` | tangones | borrador |
+| `inidep_iat075_tangonera_tradicional` | INIDEP IAT 75/2023, fig. 2 | tangones | borrador |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plano 03 {cite:p}`seafdec2016thai` | vara | borrador |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plano 31 (14 m, 75 hp) | tangones | publicada |
 | `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plano 33 (20 m, 90 hp) | tangones | publicada |
@@ -541,6 +590,8 @@ su caso usa los valores por defecto de este capítulo (que no son los de la flot
 El plano gemelo de Seafish de 380 × 70 mm {cite:p}`arkley1987ir1310` no se digitalizó: es un
 escaneo con notación británica (filas de media malla, cortes S, SB y SK, conteos de medio paño)
 que no se puede verificar en la imagen con la precisión del resto del catálogo. Los planos
-tipeados de IAT 27/2019 (red Solimeno, original y modificada) e IAT 75/2023 (red tradicional de
-Pesquera Deseado, versión legible de la fig. 2 de ITO 043) quedan para una fase siguiente. Las
-fuentes consultadas están en {doc}`catalogo_fuentes`.
+vectoriales de IAT 27/2019 (red Solimeno, original y modificada) e IAT 75/2023 (redes propuesta y
+tradicional de Pesquera Deseado) se digitalizaron en la Fase 19.8c: la red modificada por el INIDEP
+cierra y se publica; la original no empalma el cuerpo con el copo (el «exceso de material» que
+señala el propio informe) y las dos de IAT 75 tienen el borde de bolsa del vientre rotulado «26»,
+que su corte no da. Las fuentes consultadas están en {doc}`catalogo_fuentes`.

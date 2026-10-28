@@ -310,6 +310,50 @@ alone (lower tension with almost the same $L_R$) gives +26 %. The measured door 
 (18.8–19.5 m, other doors and a 60 m split bridle) lies above DynamiT and the balance: consistent
 with the DynamiT bias noted above.
 
+The nets of IAT 27/2019 {cite:p}`roth2019iat027` and IAT 75/2023 {cite:p}`roth2023iat075`
+(Phase 19.8c) add four cases with the full engine and the rig of each report (IAT 27: 4.20 × 1.30 m
+doors of 450 kg, 55 m split bridle, 4 m bridles, 100 m and 4 knots; IAT 75: doors of 4.08 m² and
+530 kg, 70 m split bridle, 90 m assumed and 3.5 knots). These reports do not publish DynamiT's door
+spread: the AH, the AV and the resistance ("resistencia al avance" in IAT 27, "tensión" in IAT 75)
+are compared, read from the `simulated` field of each net:
+
+```{code-cell} ipython3
+rows = []
+for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
+               ("inidep_iat027_tangonera_modificada", 4.0),
+               ("inidep_iat075_tangonera_propuesta", 3.5),
+               ("inidep_iat075_tangonera_tradicional", 3.5)):
+    spec = load_net(nid)
+    sim = next(s for s in spec.model_extra["simulated"] if s["speed_kn"] == v)
+    r = run(catalog_case(spec).case)
+    i = r.case.speed_index(v)
+    ah, av = r.spread.horizontal_opening_m, r.spread.vertical_opening_m
+    ref = sim.get("drag_kgf", sim.get("warp_tension_kgf"))
+    rows.append([
+        f"`{nid}` ({"published": "published", "draft": "draft"}[spec.status])",
+        f(v),
+        f"{f(r.doors.spread_m)} / {f(ah)} / {f(av, 2)}",
+        f"— / {f(sim['horizontal_opening_m'])} / {f(sim['vertical_opening_m'])}",
+        f"{f(100 * (ah / sim['horizontal_opening_m'] - 1), 0)} %",
+        f"{f(100 * (av / sim['vertical_opening_m'] - 1), 0)} %",
+        f"{f(r.multirig.per_net.std[i], 0)} / {f(ref, 0)}",
+    ])
+P.md_table(
+    ["Net", "v [kn]", "Engine: DS / AH / AV [m]", "DynamiT", "AH − DynamiT", "AV − DynamiT",
+     "One net: engine / DynamiT [kgf]"],
+    rows,
+)
+```
+
+The AH is within ±10 % for the two IAT 75 nets, but 28–30 % below DynamiT for the two IAT 27 nets,
+**outside the ±20 % tolerance**: with doors of 5.46 m² and a 55 m split bridle the balance gives a
+door spread of 16.9–17.9 m, no larger than the AH that DynamiT publishes (17.5–17.9 m, AH/headline
+= 0.45–0.46), and with AH/DS = 0.72 the method's AH cannot reach it. The AV (0.04 · headline)
+exceeds DynamiT's by 5 % to 55 %: the IAT 75 proposed net carries no floats (0.9 m at every speed)
+and the rule does not correct for floats. The resistance of one net with its rig is 2 % to 19 %
+above DynamiT. Two of these nets are drafts (the body does not join the codend; see
+{doc}`33_catalogo_fao`): the engine computes them, but their result depends on that reading.
+
 ## Argentine case: the INIDEP outrigger net
 
 INIDEP evaluated in DynamiT an outrigger net proposed by the company Pesquera Deseado and one of
@@ -528,6 +572,10 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 |---|---|---|---|
 | `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | outrigger | published |
 | `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | outrigger | published |
+| `inidep_iat027_tangonera_modificada` | INIDEP IAT 27/2019, fig. 3 {cite:p}`roth2019iat027` | outrigger | published |
+| `inidep_iat027_tangonera_solimeno` | INIDEP IAT 27/2019, fig. 2 | outrigger | draft |
+| `inidep_iat075_tangonera_propuesta` | INIDEP IAT 75/2023, fig. 1 {cite:p}`roth2023iat075` | outrigger | draft |
+| `inidep_iat075_tangonera_tradicional` | INIDEP IAT 75/2023, fig. 2 | outrigger | draft |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plan 03 {cite:p}`seafdec2016thai` | beam | draft |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plan 31 (14 m, 75 hp) | outrigger | published |
 | `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plan 33 (20 m, 90 hp) | outrigger | published |
@@ -542,7 +590,9 @@ the defaults of this chapter (which are not those of the Thai fleet).
 
 The 380 × 70 mm Seafish twin-rig plan {cite:p}`arkley1987ir1310` was not digitised: it is a scan in
 British notation (rows of half meshes, S, SB and SK cuts, half-panel counts) that cannot be checked
-on the image with the precision of the rest of the catalogue. The typed plans of IAT 27/2019
-(Solimeno net, original and modified) and IAT 75/2023 (traditional Pesquera Deseado net, a legible
-version of ITO 043 fig. 2) are left for a later phase. The sources consulted are in
-{doc}`catalogo_fuentes`.
+on the image with the precision of the rest of the catalogue. The vector plans of IAT 27/2019
+(Solimeno net, original and modified) and IAT 75/2023 (proposed and traditional Pesquera Deseado
+nets) were digitised in Phase 19.8c: the net modified by INIDEP closes and is published; the
+original does not join the body to the codend (the "excess material" the report itself points out)
+and both IAT 75 nets have the lower-panel aft edge labelled "26", which their cut does not give.
+The sources consulted are in {doc}`catalogo_fuentes`.

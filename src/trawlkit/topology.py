@@ -136,8 +136,10 @@ def equivalent_two_panel(spec: NetSpec) -> NetSpec:
 
 
 #: Diferencia admitida entre el largo estirado de los costados y el del cuerpo (sin copo) para
-#: repartirlos por largo (los costados pueden empezar junto a las alas).
-SIDE_LENGTH_TOL = 0.25
+#: repartirlos por largo (los costados pueden empezar junto a las alas). 0,30 desde la Fase
+#: 19.8c: en la red tradicional de INIDEP IAT 75/2023 (fig. 2) el cuerpo del vientre es 25,3 %
+#: más corto que los costados (el vientre no tiene el tramo de 80 mm del dorso).
+SIDE_LENGTH_TOL = 0.30
 
 
 def side_stations_match(sides: list[Panel], chain: list[Panel]) -> bool:
