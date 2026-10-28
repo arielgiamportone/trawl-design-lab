@@ -346,9 +346,10 @@ La AH queda dentro de ±10 % en las dos redes de IAT 75, pero un 28–30 % por d
 las dos de IAT 27, **fuera de la tolerancia de ±20 %**: con portones de 5,46 m² y tijera de 55 m el
 equilibrio da una DP de 16,9–17,9 m, menor o igual que la AH que publica DynamiT (17,5–17,9 m,
 AH/lima = 0,45–0,46), y con AH/DP = 0,72 la AH del método no puede alcanzarla. La AV (0,04 · lima)
-supera la de DynamiT entre 5 % y 55 %: la red propuesta de IAT 75 no lleva flotadores (0,9 m a
-todas las velocidades) y la regla no corrige por boyas. La resistencia de una red con su aparejo
-queda entre 2 % y 19 % por encima de DynamiT. Dos de estas redes son borradores (el cuerpo no
+supera la de DynamiT entre 5 % y 37 %: la regla no corrige por boyas (la red propuesta de IAT 75 se
+compara en la variante con los dos flotadores de 200 mm que recomienda el informe; sin ellos
+DynamiT da 0,9 m a todas las velocidades). La resistencia de una red con su aparejo queda entre
+−1 % y +19 % de la de DynamiT. Dos de estas redes son borradores (el cuerpo no
 empalma con el copo; ver {doc}`33_catalogo_fao`): el motor las calcula, pero su resultado depende
 de esa lectura.
 

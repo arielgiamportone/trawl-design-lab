@@ -25,7 +25,7 @@ NETS_198 = {
 DYNAMIT_198 = {
     "inidep_iat027_tangonera_solimeno": (4.0, 17.5, 1.1, 5853.1),
     "inidep_iat027_tangonera_modificada": (4.0, 17.9, 1.5, 5350.7),
-    "inidep_iat075_tangonera_propuesta": (3.5, 13.7, 0.9, 4211.8),
+    "inidep_iat075_tangonera_propuesta": (3.5, 13.7, 1.1, 4221.3),  # + 2 flotadores
     "inidep_iat075_tangonera_tradicional": (3.5, 13.3, 1.1, 4054.3),
 }
 
@@ -122,8 +122,9 @@ def test_lecturas_a_verificar() -> None:
 def test_aberturas_frente_a_dynamit(net_id: str) -> None:
     v, ah, av, res = DYNAMIT_198[net_id]
     spec = load_net(net_id)
-    sims = {s["speed_kn"]: s for s in (spec.model_extra or {})["simulated"]}
-    assert sims[v]["horizontal_opening_m"] == ah and sims[v]["vertical_opening_m"] == av
+    # La primera simulación a esa velocidad es la de la variante del catálogo.
+    sim = next(s for s in (spec.model_extra or {})["simulated"] if s["speed_kn"] == v)
+    assert sim["horizontal_opening_m"] == ah and sim["vertical_opening_m"] == av
     r = run(catalog_case(spec).case)
     op = r.spread.shrimp
     assert op is not None and op.method == "tijera"

@@ -652,12 +652,27 @@ IAT075_1: dict[str, Any] = {
         "pieces_note": "alas = 3,25 + 2,75 + 5,45 + 3,25 m; bocana = 7,5 m (fig. 1)",
         "pieces": _ROPE_KIND_075,
     },
+    "floats": {
+        "count": 2,
+        "diameter_mm": 200,
+        "kind": "assumed",
+        "note": "el plano no da la flotación de la red; el informe recomienda «colocar dos "
+        "flotadores adicionales de 200 mm» (3 kg de flotación, «sobre la relinga superior, en la "
+        "unión de la base de las alas con el square», pp. 1 y 7) y la simula así: se modela esa "
+        "variante («PROPUESTA + 2 FL»). A VERIFICAR",
+    },
     "design": _DESIGN_075,
     "simulated": _sim(
+        (1.1, 1.1, 1.2, 1.2, 1.3),
+        (13.9, 13.7, 13.3, 13.2, 12.8),
+        (5217.2, 4221.3, 3351.6, 3051.7, 2617.1),
+        _SIM_075 + " (red propuesta con los dos flotadores de 200 mm, la variante del catálogo)",
+    )
+    + _sim(
         (0.9, 0.9, 0.9, 0.9, 0.9),
         (13.9, 13.7, 13.4, 13.2, 12.9),
         (5205.6, 4211.8, 3349.8, 3042.3, 2611.3),
-        _SIM_075 + " (red propuesta, sin flotadores)",
+        _SIM_075 + " (red propuesta sin los dos flotadores agregados)",
     ),
     "rigging": _RIGGING_075,
     "notes": [
@@ -665,9 +680,10 @@ IAT075_1: dict[str, Any] = {
         + _LOWER_26.format(cut=46, cut_m="3,68")
         + " El dorso cierra (26 × 160 mm = 4,16 m frente a 4,20 m). Los costados terminan en 13 "
         "mallas de 140 mm sin cabo de cierre: el plano no dice cómo se unen al copo.",
-        "Con dos flotadores de 200 mm en la relinga superior (3 kg de flotación, «en la unión de "
-        "la base de las alas con el square») DynamiT da AV de 1,1–1,3 m y AH de 12,8–13,9 m "
-        "(tabla 1, p. 5).",
+        "Flotación: se modela la variante con los dos flotadores de 200 mm que recomienda el "
+        "informe (DynamiT: AV de 1,1–1,3 m y AH de 12,8–13,9 m, tabla 1, p. 5); sin ellos la AV "
+        "de DynamiT queda en 0,9 m a todas las velocidades. Sin flotación publicada el motor "
+        "tomaría la del libro (52 boyas), que no corresponde a esta red.",
         "Relingas: 2 × (3,25 + 6,15 + 3,25) + 9,54 = 34,84 m y 2 × (3,25 + 2,75 + 5,45 + 3,25) + "
         "7,5 = 36,9 m; los tramos verticales de 3,25 m (y 2,75 m en el burlón) van por delante de "
         "la punta del ala.",
@@ -700,6 +716,8 @@ _D075_2 = {r[0]: (_D_NY if r[2] == "codend" else _D_TRAD) for r in IAT075_2_PANE
 IAT075_2: dict[str, Any] = {
     **IAT075_1,
     "id": "inidep_iat075_tangonera_tradicional",
+    # El informe no da la flotación de la red tradicional: la del libro, como ITO 043.
+    "floats": None,
     "name": "Red tangonera tradicional de Pesquera Deseado (IAT 75/2023, fig. 2)",
     "description": (
         "Red tangonera de langostino de baja abertura vertical que usa Pesquera Deseado SAU (red "

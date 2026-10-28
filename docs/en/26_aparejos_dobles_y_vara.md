@@ -349,9 +349,10 @@ The AH is within ±10 % for the two IAT 75 nets, but 28–30 % below DynamiT for
 **outside the ±20 % tolerance**: with doors of 5.46 m² and a 55 m split bridle the balance gives a
 door spread of 16.9–17.9 m, no larger than the AH that DynamiT publishes (17.5–17.9 m, AH/headline
 = 0.45–0.46), and with AH/DS = 0.72 the method's AH cannot reach it. The AV (0.04 · headline)
-exceeds DynamiT's by 5 % to 55 %: the IAT 75 proposed net carries no floats (0.9 m at every speed)
-and the rule does not correct for floats. The resistance of one net with its rig is 2 % to 19 %
-above DynamiT. Two of these nets are drafts (the body does not join the codend; see
+exceeds DynamiT's by 5 % to 37 %: the rule does not correct for floats (the IAT 75 proposed net is
+compared in the variant with the two 200 mm floats the report recommends; without them DynamiT
+gives 0.9 m at every speed). The resistance of one net with its rig is within −1 % and +19 % of
+DynamiT's. Two of these nets are drafts (the body does not join the codend; see
 {doc}`33_catalogo_fao`): the engine computes them, but their result depends on that reading.
 
 ## Argentine case: the INIDEP outrigger net

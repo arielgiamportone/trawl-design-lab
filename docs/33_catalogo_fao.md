@@ -176,7 +176,10 @@ El validador se escribió para atrapar errores de lectura, y los atrapó:
   publicados (salvo el «Ny Tr 4 mm» del copo de la fig. 2 de IAT 27 y los Ø3 y Ø1,9 mm de la red
   propuesta de IAT 75): el Rtex y el diámetro del resto son supuestos; el sector de malla cuadrada
   de la red propuesta de IAT 75 no está dimensionado en el plano y no se modela; el corte exterior
-  del ala del vientre de la red tradicional se deriva (no está rotulado).
+  del ala del vientre de la red tradicional se deriva (no está rotulado). La red propuesta se
+  modela con los dos flotadores de 200 mm que recomienda el informe (la flotación de la red no está
+  publicada) y con ellos el simulador ({doc}`21_simulacion`) no converge a 2,5 nudos: queda fuera de la
+  prueba de simulación del catálogo hasta revisarla.
 - La red pelágica de 4 paneles del *Workbook* (figura de 450 px) **no se digitalizó**. El cuerpo
   se lee y cierra (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), pero el frente de 800 mm no se
   lee lo suficiente para armar una red sin inventar números.

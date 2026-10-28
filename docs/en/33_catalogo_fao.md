@@ -176,7 +176,10 @@ The validator was written to catch reading errors, and it caught them:
   (except the codend's "Ny Tr 4 mm" in IAT 27 fig. 2 and the Ø3 and Ø1.9 mm of the IAT 75
   proposed net): the Rtex and diameter of the rest are assumed; the square-mesh section of the
   IAT 75 proposed net is not dimensioned on the plan and is not modelled; the outer cut of the
-  lower wing of the traditional net is derived (not labelled).
+  lower wing of the traditional net is derived (not labelled). The proposed net is modelled with
+  the two 200 mm floats the report recommends (the net's flotation is not published) and with them
+  the simulator ({doc}`21_simulacion`) does not converge at 2.5 knots: it stays out of the catalogue simulation
+  test until it is reviewed.
 - The 4-panel pelagic net of the *Workbook* (a 450 px figure) **was not digitized**. The body can
   be read and closes (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), but the 800 mm front cannot be
   read well enough to build a net without inventing numbers.

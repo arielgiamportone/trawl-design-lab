@@ -171,6 +171,9 @@ footrope:
   bosom_m: 7.5
   description: relinga del plano (material no publicado; cable mixto Ø24 mm supuesto)
   construction: rope_combinado_6_24mm
+floats:
+  count: 2
+  diameter_mm: 200
 rigging:
   doors: rectangulares planos de madera con refuerzos de acero, 4,08 m² y 530 kg cada uno
   bridle: tijera de 70 m de cable de acero de 22 mm
@@ -186,42 +189,79 @@ design:
   speed_kn: 3.5
 simulated:
 - speed_kn: 4.0
+  vertical_opening_m: 1.1
+  horizontal_opening_m: 13.9
+  warp_tension_kgf: 5217.2
+  note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
+    informe no da la separación de portones (red propuesta con los dos flotadores de 200 mm, la variante
+    del catálogo)'
+- speed_kn: 3.5
+  vertical_opening_m: 1.1
+  horizontal_opening_m: 13.7
+  warp_tension_kgf: 4221.3
+  note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
+    informe no da la separación de portones (red propuesta con los dos flotadores de 200 mm, la variante
+    del catálogo)'
+- speed_kn: 3.0
+  vertical_opening_m: 1.2
+  horizontal_opening_m: 13.3
+  warp_tension_kgf: 3351.6
+  note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
+    informe no da la separación de portones (red propuesta con los dos flotadores de 200 mm, la variante
+    del catálogo)'
+- speed_kn: 2.8
+  vertical_opening_m: 1.2
+  horizontal_opening_m: 13.2
+  warp_tension_kgf: 3051.7
+  note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
+    informe no da la separación de portones (red propuesta con los dos flotadores de 200 mm, la variante
+    del catálogo)'
+- speed_kn: 2.5
+  vertical_opening_m: 1.3
+  horizontal_opening_m: 12.8
+  warp_tension_kgf: 2617.1
+  note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
+    informe no da la separación de portones (red propuesta con los dos flotadores de 200 mm, la variante
+    del catálogo)'
+- speed_kn: 4.0
   vertical_opening_m: 0.9
   horizontal_opening_m: 13.9
   warp_tension_kgf: 5205.6
   note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
-    informe no da la separación de portones (red propuesta, sin flotadores)'
+    informe no da la separación de portones (red propuesta sin los dos flotadores agregados)'
 - speed_kn: 3.5
   vertical_opening_m: 0.9
   horizontal_opening_m: 13.7
   warp_tension_kgf: 4211.8
   note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
-    informe no da la separación de portones (red propuesta, sin flotadores)'
+    informe no da la separación de portones (red propuesta sin los dos flotadores agregados)'
 - speed_kn: 3.0
   vertical_opening_m: 0.9
   horizontal_opening_m: 13.4
   warp_tension_kgf: 3349.8
   note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
-    informe no da la separación de portones (red propuesta, sin flotadores)'
+    informe no da la separación de portones (red propuesta sin los dos flotadores agregados)'
 - speed_kn: 2.8
   vertical_opening_m: 0.9
   horizontal_opening_m: 13.2
   warp_tension_kgf: 3042.3
   note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
-    informe no da la separación de portones (red propuesta, sin flotadores)'
+    informe no da la separación de portones (red propuesta sin los dos flotadores agregados)'
 - speed_kn: 2.5
   vertical_opening_m: 0.9
   horizontal_opening_m: 12.9
   warp_tension_kgf: 2611.3
   note: 'resultados de DynamiT del INIDEP (tabla 1, p. 5): modelo, no mediciones; «tensión» en kg; el
-    informe no da la separación de portones (red propuesta, sin flotadores)'
+    informe no da la separación de portones (red propuesta sin los dos flotadores agregados)'
 notes:
 - 'BORRADOR: El vientre termina en «26» mallas de 80 mm (2,08 m) según el plano, sobre el copo de 70 mallas
   de 60 mm (4,20 m); el corte 1N4B del paño daría 46 mallas (3,68 m). Se transcribe como se lee: A VERIFICAR.
   El dorso cierra (26 × 160 mm = 4,16 m frente a 4,20 m). Los costados terminan en 13 mallas de 140 mm
   sin cabo de cierre: el plano no dice cómo se unen al copo.'
-- Con dos flotadores de 200 mm en la relinga superior (3 kg de flotación, «en la unión de la base de las
-  alas con el square») DynamiT da AV de 1,1–1,3 m y AH de 12,8–13,9 m (tabla 1, p. 5).
+- 'Flotación: se modela la variante con los dos flotadores de 200 mm que recomienda el informe (DynamiT:
+  AV de 1,1–1,3 m y AH de 12,8–13,9 m, tabla 1, p. 5); sin ellos la AV de DynamiT queda en 0,9 m a todas
+  las velocidades. Sin flotación publicada el motor tomaría la del libro (52 boyas), que no corresponde
+  a esta red.'
 - 'Relingas: 2 × (3,25 + 6,15 + 3,25) + 9,54 = 34,84 m y 2 × (3,25 + 2,75 + 5,45 + 3,25) + 7,5 = 36,9
   m; los tramos verticales de 3,25 m (y 2,75 m en el burlón) van por delante de la punta del ala.'
 - 'Aparejo de las simulaciones (p. 2): tijera de 70 m de cable de acero de 22 mm, cable de arrastre de
@@ -729,6 +769,22 @@ provenance:
     page: '3'
     figure: Figura 1
     note: alas = 3,25 + 2,75 + 5,45 + 3,25 m; bocana = 7,5 m (fig. 1)
+  floats.count:
+    kind: assumed
+    document: roth2023iat075
+    page: '3'
+    figure: Figura 1
+    note: 'el plano no da la flotación de la red; el informe recomienda «colocar dos flotadores adicionales
+      de 200 mm» (3 kg de flotación, «sobre la relinga superior, en la unión de la base de las alas con
+      el square», pp. 1 y 7) y la simula así: se modela esa variante («PROPUESTA + 2 FL»). A VERIFICAR'
+  floats.diameter_mm:
+    kind: assumed
+    document: roth2023iat075
+    page: '3'
+    figure: Figura 1
+    note: 'el plano no da la flotación de la red; el informe recomienda «colocar dos flotadores adicionales
+      de 200 mm» (3 kg de flotación, «sobre la relinga superior, en la unión de la base de las alas con
+      el square», pp. 1 y 7) y la simula así: se modela esa variante («PROPUESTA + 2 FL»). A VERIFICAR'
   design.vessel_id:
     kind: assumed
     document: roth2023iat075

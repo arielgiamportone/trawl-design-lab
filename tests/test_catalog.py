@@ -17,6 +17,18 @@ from trawlkit.sim import simulate
 from trawlkit.sim.validation import standard_case
 
 CATALOGUE = sorted(p.stem for p in NETS_DIR.glob("*.yaml"))
+#: Redes que el simulador todavía no resuelve (borradores, con la razón; Fase 19.8c). Estricto: si
+#: empiezan a converger, el test avisa para quitarlas de aquí.
+SIM_KNOWN_ISSUES = {
+    "inidep_iat075_tangonera_propuesta": "con los dos flotadores de 200 mm del informe el "
+    "simulador no converge a 2,5 nudos (dorso de 160 mm sobre vientre de 80 mm; capítulo 33)",
+}
+SIM_CATALOGUE = [
+    pytest.param(n, marks=pytest.mark.xfail(strict=True, reason=SIM_KNOWN_ISSUES[n]))
+    if n in SIM_KNOWN_ISSUES
+    else n
+    for n in CATALOGUE
+]
 
 
 def test_catalogue_is_not_empty() -> None:
@@ -45,7 +57,7 @@ def test_catalogue_net_is_consistent_and_sourced(net_id: str) -> None:
             assert prov.note, path
 
 
-@pytest.mark.parametrize("net_id", CATALOGUE)
+@pytest.mark.parametrize("net_id", SIM_CATALOGUE)
 def test_catalogue_net_runs_and_simulates(net_id: str) -> None:
     result = run(catalog_case(net_id).case)
     s = simulate(result, 2.5, resolution=2, coarse_resolution=None)

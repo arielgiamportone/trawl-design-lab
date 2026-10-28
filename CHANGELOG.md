@@ -66,9 +66,11 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   11,20 m sobre copo de 6,00 m: el exceso de paño que señala el informe) y las dos de IAT 75 (el
   vientre se lee «26» mallas y su corte daría 46 y 66: A VERIFICAR). Los hilos que los informes no
   publican se suponen (A VERIFICAR). Validación en el capítulo 26 frente a DynamiT: AH dentro de
-  ±10 % en IAT 75 y 28–30 % por debajo en IAT 27 (fuera de ±20 %); AV +5 a +55 %; resistencia de
-  una red +2 a +19 %. `topology.SIDE_LENGTH_TOL` pasa de 0,25 a 0,30 (la red tradicional de IAT 75
-  tiene el cuerpo del vientre 25 % más corto que los costados). Catálogo: 26 → 30 redes.
+  ±10 % en IAT 75 y 28–30 % por debajo en IAT 27 (fuera de ±20 %); AV +5 a +37 %; resistencia de
+  una red −1 a +19 %. La red propuesta se modela con los dos flotadores de 200 mm que recomienda
+  el informe (sin flotación publicada, el libro le daba 52 boyas). `topology.SIDE_LENGTH_TOL` pasa
+  de 0,25 a 0,30 (la red tradicional de IAT 75 tiene el cuerpo del vientre 25 % más corto que los
+  costados). Catálogo: 26 → 30 redes.
 - **Aberturas de redes camaroneras (Fase 19.7b)**: `DesignCase.opening_method` (`auto` por
   defecto, `book`, `shrimp`) y `shrimp_bridle_m`; módulo `trawlkit.rigging.shrimp`. Con tangones la
   separación de portones sale del equilibrio portón–tijera–red de Roth (2016, INIDEP IAT 72/2016)
