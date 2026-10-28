@@ -18,8 +18,9 @@ from pydantic import ValidationError
 from trawlkit.compat import Compat
 from trawlkit.i18n import N_, t
 from trawlkit.io import load_doors, load_net, load_vessels
-from trawlkit.io.schema import Door, NetSpec, Vessel
+from trawlkit.io.schema import Door, NetSpec, PropellerType, Vessel
 from trawlkit.model import DesignCase, DesignResult, run
+from trawlkit.power import FRIDMAN_KF
 
 #: Campos de ``DesignCase`` que no se sobrescriben vía ``params`` (tienen su propio campo).
 _STRUCTURAL = {
@@ -511,10 +512,31 @@ def build_case(
     else:
         others = tuple(complete_vessel(_pick(c, vessels, "buque"))[0] for c in class_vessels)
     kwargs = _coerce_params(params or {})
-    design = (main.model_extra or {}).get("design")
-    if "depth_m" not in kwargs and isinstance(design, dict) and design.get("depth_m"):
-        # Red del catálogo con buque o portón elegidos: la profundidad sale de la fuente.
-        kwargs["depth_m"] = float(design["depth_m"])
+    if "depth_m" not in kwargs and main.vessel_hp is not None:
+        # Red del catálogo con buque elegido: la profundidad sale de la fuente o, si no la da,
+        # del valor por familia (anotado en las suposiciones del caso).
+        from trawlkit.catalog import default_depth
+
+        kwargs["depth_m"], depth_note = default_depth(main)
+        if depth_note:
+            filled = [*filled, depth_note]
+    if "door_spread_rule" not in kwargs and v.id not in book_vessels():
+        # La regla «al metro» del libro (Port!E13) está calibrada para las pastecas de los
+        # buques de la A-3; con otro buque la separación sale de Fridman (igual que en
+        # trawlkit.catalog.catalog_case).
+        kwargs["door_spread_rule"] = "fridman"
+    if "fridman_kf" not in kwargs and v.propeller not in FRIDMAN_KF:
+        # Hélice sin KF de Fridman en el libro (PF+T, PV): se calcula como paso fijo, lo
+        # conservador, igual que en las planillas de flota (trawlkit.batch.fleet).
+        kwargs["fridman_kf"] = FRIDMAN_KF[PropellerType.FIXED_PITCH]
+        filled = [
+            *filled,
+            t(
+                "hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y "
+                "PV con tobera)",
+                prop=v.propeller.value,
+            ),
+        ]
     try:
         case = DesignCase(
             net=main,

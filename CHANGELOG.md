@@ -12,6 +12,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   En inglés, las siglas de hélice son FP, FP+N, CP y CP+N (motor, informes, ejercicios, app y
   libro); en español siguen PF, PF+T, PV y PV+T.
 
+### Corregido
+- **Error 422 «hace falta la profundidad de trabajo» (Fase 19.7a)**: al elegir un buque con una red
+  del catálogo cuya fuente no da profundidad (INIDEP, SEAFDEC), la API respondía 422. Ahora usa la
+  profundidad por familia, igual que sin buque, y lo anota en las suposiciones del caso. Además:
+  con un buque que no es de la A-3 la separación de portones sale de Fridman (la regla «al metro»
+  del libro daba valores sin sentido y NaN en el cable), y los buques con hélice sin KF de Fridman
+  tabulado (paso variable sin tobera, p. ej. el Holmberg) se calculan como paso fijo con una nota,
+  en lugar de responder 400. Prueba de regresión con todas las redes del catálogo y buques del
+  libro, de la flota y de investigación.
+
 ### Agregado
 - **Redes de planos públicos (Fase 19.6)**: ocho redes del catálogo tailandés de la SEAFDEC (2016,
   TD/RES/141) leídas de cada plano con procedencia por valor (`tools/catalog/transcriptions_196.py`):

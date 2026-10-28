@@ -33,6 +33,28 @@ from trawlkit.model import DEFAULT_SPEEDS_KN, DesignCase
 
 #: Profundidad de trabajo por familia cuando la fuente no la da [m].
 DEFAULT_DEPTH_M = {"bottom": 30.0, "semi_pelagic": 40.0, "pelagic": 60.0}
+
+
+def default_depth(spec: NetSpec) -> tuple[float, str | None]:
+    """Profundidad de trabajo de una red del catálogo y la nota si no la da la fuente.
+
+    Orden: ``design.depth_m`` del plano, ``species.depth_m`` y, si ninguna está, el valor por
+    familia (:data:`DEFAULT_DEPTH_M`) con una nota para las suposiciones del caso.
+    """
+    design = (spec.model_extra or {}).get("design") or {}
+    if isinstance(design, dict) and design.get("depth_m") is not None:
+        return float(design["depth_m"]), None
+    if spec.species is not None and spec.species.depth_m is not None:
+        return float(spec.species.depth_m), None
+    depth = DEFAULT_DEPTH_M.get(spec.family or "bottom", 30.0)
+    note = t(
+        "la fuente no da profundidad: {depth:g} m por familia ({family})",
+        depth=depth,
+        family=spec.family,
+    )
+    return depth, note
+
+
 #: Buque de referencia para escalar eslora, manga y puntal (el de 150 hp de la A-3).
 REFERENCE_VESSEL_ID = "fao_a3_150hp"
 #: Portón de referencia (polar y proporciones): el plano de madera de la A-3.
@@ -234,16 +256,9 @@ def catalog_case(
         notes.append(t("arrastre de pareja: el portón del caso no se usa"))
     if rig == "beam":
         notes.append(t("arrastre de vara: el portón del caso no se usa"))
-    depth = design.get("depth_m")
-    if depth is None:
-        depth = DEFAULT_DEPTH_M.get(spec.family or "bottom", 30.0)
-        notes.append(
-            t(
-                "la fuente no da profundidad: {depth:g} m por familia ({family})",
-                depth=depth,
-                family=spec.family,
-            )
-        )
+    depth, depth_note = default_depth(spec)
+    if depth_note:
+        notes.append(depth_note)
     # La regla «al metro» del libro (Port!E13) está calibrada para las pastecas de la A-3: con
     # otro buque la separación sale de la DPA de Fridman con el portón del caso.
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}
