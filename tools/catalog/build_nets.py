@@ -215,6 +215,10 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
     if t.get("measured"):
         # Mediciones del documento (abertura, velocidad, cable): datos de validación.
         spec["measured"] = t["measured"]
+    if t.get("validation_doors"):
+        # Portones de cada serie de mediciones o simulaciones (Fase 20.2): claves de ``design``
+        # (superficie, medidas, peso y polar) con su nota de procedencia.
+        spec["validation_doors"] = t["validation_doors"]
     if t.get("simulated"):
         # Resultados de un simulador publicados en el documento (p. ej. DynamiT): no son
         # mediciones, sólo referencia (Fase 19.5).
