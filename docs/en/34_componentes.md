@@ -57,7 +57,8 @@ computes **offline** on the phone.
 Almost no manufacturer publishes open tables, let alone for small sizes. That is why each type has
 a **generic family** derived from the tables of FAO's *Fisherman's Workbook* {cite}`prado1990`,
 and the brands are cited **point data**, never complete tables (at most ten sizes per product
-line):
+line; manufacturer otter boards, on the other hand, carry every published size of each line since
+Phase 19.8a, because door selection needs the whole series):
 
 * **Netting and twine**: diameter and breaking load per Rtex for twisted and braided PA, PES, PP
   and PE, with a power fit $y = a\,x^b$ on a logarithmic scale over the tables of the *Workbook*;
@@ -76,8 +77,9 @@ line):
   Seafish/IFREMER/DIFTA sheets {cite}`sfia1993` for the flat, the oval and the mean of the three V
   boards, and the Thyborøn 15 VF of {cite}`mellibovsky2018` for the Süberkrüb; four boards from the
   shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`; Vónin Storm 2, Tornado and Twister
-  (area and weight, {cite}`vonin_doors`) and Morgère OvalFoil, PolyFoil and PFPE (area; weight «sur
-  demande», {cite}`morgere2025`), with the type polar as assumed.
+  (area and weight of the 14, 11 and 8 published sizes, {cite}`vonin_doors`) and Morgère OvalFoil,
+  PolyFoil and PFPE (area of the 21, 19 and 17 catalogue models; weight «sur demande»,
+  {cite}`morgere2025`), with the type polar as assumed.
 * **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link;
   Atlantic Floats trawl floats and Trygg and Trawlex long-link chains (Hampidjan catalogue) and
   Gunnebo LLZ grade 6 galvanised chain {cite}`gunnebo_llz`.

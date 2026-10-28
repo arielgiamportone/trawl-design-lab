@@ -6,6 +6,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Cambiado
+- **Todos los tamaños de los portones de fabricante (Fase 19.8a)**: se quita el tope de 10 tamaños
+  por línea de los portones de Vónin y Morgère; relectura del 2026-10-28 de las páginas de
+  producto de Vónin y del catálogo Morgère 2025. Storm 2 pasa de 10 a 14 tamaños (3–16 m²),
+  Tornado de 10 a 11 (3–13 m²), Twister sigue con sus 8 (6–13 m²); OvalFoil de 10 a 21 (OF0–OF20),
+  PolyFoil de 10 a 19 (PF0–PF18) y PFPE de 10 a 17 con su largo (PFPE01–PFPE12). Los valores ya
+  cargados coinciden con la relectura. Catálogo de portones: 98 → 130 ítems (componentes: 564 →
+  596). El tope de 10 sigue para las demás líneas de fabricante. Prueba nueva: con cada buque del
+  catálogo la elección de portón no falla y la superficie crece con la potencia.
 - **Inglés completo en los datos (Fase 19.0)**: los tipos de fondo, los escenarios de
   ensuciamiento y las especies se traducen en el motor (`data/i18n/en/data.yaml`), así llegan en
   inglés a la API, la app y el libro; el rótulo de L50 de la incertidumbre usa el nombre traducido.

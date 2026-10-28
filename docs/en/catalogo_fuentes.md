@@ -184,15 +184,17 @@ to.
 | `lange1993` | Lange (ICES 1993) | Maximum lift of the flat otter board (0.95) and V-board (0.70–0.85) | Up to Phase 19.2, the *assumed* V-board polar (that of the flat board with the CL scaled); since 19.3 only a reference |
 | `sfia1993` | Seafish/IFREMER/DIFTA (1993), *Otterboard Performance and Behaviour* | 26 polar sheets of flume tank models (Phase 19.3); primary source of the flat and oval polars of the Excel workbook | Polars *transcribed* from the image of each page; per type, the sheet as it is or a mean (*derived*) |
 | `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polars of the Thyborøn 15 VF and the Grilli Fly in the flume tank and the wind tunnel (Phase 19.3) | Tables *transcribed*; the Süberkrüb polar, a *derived* fit |
-| `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, 8–10 sizes per line; dimensions and polar *assumed* |
-| `morgere2025` | Morgère, 2025 catalogue | OvalFoil, PolyFoil and PFPE otter boards (Phase 19.3) | Area (and PFPE length) *transcribed*, 10 sizes per line; no weight («sur demande»); dimensions and polar from the Seafish sheet of the same design, *assumed* |
+| `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, every published size (14, 11 and 8; Phase 19.8a); dimensions and polar *assumed* |
+| `morgere2025` | Morgère, 2025 catalogue | OvalFoil, PolyFoil and PFPE otter boards (Phase 19.3) | Area (and PFPE length) *transcribed*, every catalogue model (21, 19 and 17; Phase 19.8a); no weight («sur demande»); dimensions and polar from the Seafish sheet of the same design, *assumed* |
 | `giamportone2024` | Excel workbook of the A-3 | Moscuzza ropes, Trawlex chains, Seale 6x19 wire ropes, floats, PA twines and the two otter boards with their polar | *Excel* provenance |
 
 Criteria:
 
 - **Point data**: from each manufacturer's product line at most 10 sizes are taken, with the
-  citation. Complete tables or data sheets are not copied, and no data sheet is stored in the
-  repository.
+  citation. Exception since Phase 19.8a: for manufacturer otter boards every published size is
+  loaded (area, weight and length where given), because door selection needs the whole series.
+  Apart from that, complete tables or data sheets are not copied, and no data sheet is stored in
+  the repository.
 - **Generics**: what can be bought at any ship chandler. Their values come from laws fitted to
   the reference tables, not from a brand.
 - **Physical validator** (`trawlkit.components.check`): weight per metre against diameter,

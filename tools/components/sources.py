@@ -501,7 +501,8 @@ DOOR_NOAA_FF9: list[tuple[str, float, float]] = [
 
 # --- Portones de fabricante (Fase 19.3) ------------------------------------------------------
 # Ningún fabricante publica la polar CL/CD: los portones usan la polar de su tipo
-# (``polar_for_type``) con procedencia «supuesta». Datos puntuales: hasta 10 tamaños por línea.
+# (``polar_for_type``) con procedencia «supuesta». Se cargan todos los tamaños que publica cada
+# línea (Fase 19.8a; hasta la 19.3 se tomaban a lo sumo 10). Relectura del 2026-10-28.
 
 #: Vónin (páginas de producto, «SIZES AND WEIGHTS»): superficie [m²] → peso [kg]. La columna dice
 #: sólo «WEIGHT»; se toma por portón (A VERIFICAR). Storm 2: portón de fondo de cuatro perfiles,
@@ -515,7 +516,7 @@ VONIN_DOORS: dict[str, dict[str, Any]] = {
         "type": "multifoil",
         "aspect_ratio": 1.2,
         "use": "fondo, cuatro perfiles",
-        # 14 tamaños publicados (3–16 m²); se toman 10.
+        # 14 tamaños publicados (3–16 m²), todos.
         "points": [
             (3.0, 1050),
             (4.0, 1450),
@@ -523,9 +524,13 @@ VONIN_DOORS: dict[str, dict[str, Any]] = {
             (6.0, 2850),
             (7.0, 3375),
             (8.0, 3900),
+            (9.0, 4400),
             (10.0, 4900),
+            (11.0, 5450),
             (12.0, 5950),
+            (13.0, 6450),
             (14.0, 7000),
+            (15.0, 7500),
             (16.0, 7800),
         ],
     },
@@ -535,7 +540,7 @@ VONIN_DOORS: dict[str, dict[str, Any]] = {
         "type": "high_aspect",
         "aspect_ratio": 3.0,
         "use": "pelágico, cinco perfiles; ángulo de ataque de 21 a 48° según el fabricante",
-        # 11 tamaños publicados (3–13 m²); se toman 10.
+        # 11 tamaños publicados (3–13 m²), todos.
         "points": [
             (3.0, 1050),
             (4.0, 1450),
@@ -546,6 +551,7 @@ VONIN_DOORS: dict[str, dict[str, Any]] = {
             (9.0, 3400),
             (10.0, 3800),
             (11.0, 4200),
+            (12.0, 4600),
             (13.0, 5000),
         ],
     },
@@ -557,6 +563,7 @@ VONIN_DOORS: dict[str, dict[str, Any]] = {
         "use": "pelágico regulable desde el puente (persianas)",
         "claim": "el fabricante declara «a CL value of 4.39» y CL/CD de 3,16 a 3,60 según las "
         "persianas y el ángulo de ataque; no publica la polar",
+        # 8 tamaños publicados (6–13 m²), todos.
         "points": [
             (6.0, 2100),
             (7.0, 2475),
@@ -584,17 +591,28 @@ MORGERE_DOORS: dict[str, dict[str, Any]] = {
         "shape_note": "«forme emblématique du Polyvalent»: proporciones del modelo Morgère "
         "Polyvalent Ovale de Seafish 1993 (AR 0,68, relación de superficie 0,80)",
         "use": "fondo, fondos duros",
-        # 21 tamaños (OF0–OF20); se toman 10.
+        # 21 tamaños (OF0–OF20), todos.
         "points": [
             ("OF0", 0.59),
+            ("OF01", 1.06),
             ("OF02", 1.34),
+            ("OF03", 1.74),
             ("OF04", 2.18),
+            ("OF05", 2.59),
             ("OF06", 3.08),
+            ("OF07", 3.6),
             ("OF08", 4.19),
+            ("OF09", 4.79),
             ("OF10", 5.1),
+            ("OF11", 5.51),
             ("OF12", 5.82),
+            ("OF13", 6.62),
             ("OF14", 6.96),
+            ("OF15", 7.82),
             ("OF16", 8.57),
+            ("OF17", 9.64),
+            ("OF18", 10.96),
+            ("OF19", 11.97),
             ("OF20", 13.44),
         ],
     },
@@ -606,17 +624,26 @@ MORGERE_DOORS: dict[str, dict[str, Any]] = {
         "shape_note": "proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, "
         "relación de superficie 0,94)",
         "use": "fondo, aguas profundas; «premier panneau multi-foils»",
-        # 19 tamaños (PF0–PF18); se toman 10.
+        # 19 tamaños (PF0–PF18), todos.
         "points": [
             ("PF0", 0.67),
+            ("PF01", 1.2),
             ("PF02", 1.52),
+            ("PF03", 1.88),
             ("PF04", 2.28),
+            ("PF05", 2.72),
             ("PF06", 3.19),
+            ("PF07", 3.71),
             ("PF08", 4.26),
+            ("PF09", 4.68),
             ("PF10", 5.13),
+            ("PF11", 5.45),
             ("PF12", 5.78),
+            ("PF13", 6.56),
             ("PF14", 6.98),
+            ("PF15", 7.66),
             ("PF16", 8.55),
+            ("PF17", 9.64),
             ("PF18", 10.96),
         ],
     },
@@ -629,17 +656,24 @@ MORGERE_DOORS: dict[str, dict[str, Any]] = {
         "catálogo da el largo; el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish "
         "1993 (0,94)",
         "use": "fondo, langostino y camarón",
-        # 17 tamaños (PFPE01–PFPE12) con largo; se toman 10.
+        # 17 tamaños (PFPE01–PFPE12) con largo, todos.
         "points": [
             ("PFPE01", 1.40, 1.20),
             ("PFPE02", 1.60, 1.52),
+            ("PFPE02.5", 1.70, 1.70),
             ("PFPE03", 1.80, 1.88),
+            ("PFPE03.2", 1.85, 1.98),
             ("PFPE03.5", 1.90, 2.08),
             ("PFPE05.5", 2.30, 2.95),
+            ("PFPE06", 2.40, 3.19),
+            ("PFPE06.2", 2.45, 3.25),
             ("PFPE06.5", 2.5, 3.44),
+            ("PFPE07", 2.6, 3.71),
             ("PFPE07.5", 2.7, 3.98),
+            ("PFPE08", 2.8, 4.26),
             ("PFPE09", 2.9, 4.68),
             ("PFPE10", 3.0, 5.13),
+            ("PFPE11", 3.1, 5.45),
             ("PFPE12", 3.2, 5.78),
         ],
     },

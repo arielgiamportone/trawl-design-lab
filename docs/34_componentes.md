@@ -56,7 +56,9 @@ ferretería naval, los precios los carga el usuario y la app calcula **sin conex
 Casi ningún fabricante publica tablas abiertas, y menos de tamaños chicos. Por eso cada tipo
 tiene una **familia genérica** derivada de las tablas del *Fisherman's Workbook* de la FAO
 {cite}`prado1990`, y las marcas son **datos puntuales** citados, nunca tablas completas (a lo sumo
-diez medidas por línea de producto):
+diez medidas por línea de producto; los portones de fabricante, en cambio, llevan todos los
+tamaños publicados de cada línea desde la Fase 19.8a, porque la elección de portón necesita la
+serie completa):
 
 * **Paño e hilo**: diámetro y rotura por Rtex para PA torcido y trenzado, PES, PP y PE, con un
   ajuste potencial $y = a\,x^b$ en escala logarítmica sobre las tablas del *Workbook*; Garware
@@ -74,8 +76,9 @@ diez medidas por línea de producto):
   Seafish/IFREMER/DIFTA {cite}`sfia1993` para el plano, el oval y la media de los tres en V, y el
   Thyborøn 15 VF de {cite}`mellibovsky2018` para el Süberkrüb; cuatro puertas de la flota
   camaronera del Caribe colombiano {cite}`zuniga2006`; Vónin Storm 2, Tornado y Twister
-  (superficie y peso, {cite}`vonin_doors`) y Morgère OvalFoil, PolyFoil y PFPE (superficie; peso
-  «sur demande», {cite}`morgere2025`), con la polar del tipo como supuesta.
+  (superficie y peso de los 14, 11 y 8 tamaños publicados, {cite}`vonin_doors`) y Morgère
+  OvalFoil, PolyFoil y PFPE (superficie de los 21, 19 y 17 modelos del catálogo; peso «sur
+  demande», {cite}`morgere2025`), con la polar del tipo como supuesta.
 * **Boyas y cadenas**: flotación y profundidad máxima por diámetro, peso por metro por eslabón;
   boyas de arrastre de Atlantic Floats y cadenas de eslabón largo Trygg y Trawlex (catálogo de
   Hampidjan) y Gunnebo LLZ de grado 6 galvanizada {cite}`gunnebo_llz`.

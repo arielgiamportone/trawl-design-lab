@@ -185,15 +185,17 @@ valor, y los de marca dicen a qué **genérico** equivalen.
 | `lange1993` | Lange (ICES 1993) | Sustentación máxima del portón plano (0,95) y en V (0,70–0,85) | Hasta la Fase 19.2, la polar en V *supuesta* (la del plano con el CL escalado); desde la 19.3 sólo referencia |
 | `sfia1993` | Seafish/IFREMER/DIFTA (1993), *Otterboard Performance and Behaviour* | 26 hojas de polar de modelos en tanque de flujo (Fase 19.3); fuente primaria de las polares plana y oval del libro Excel | Polares *transcriptas* de la imagen de cada página; por tipo, hoja tal cual o media (*derivada*) |
 | `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polares del Thyborøn 15 VF y del Grilli Fly en tanque de flujo y túnel de viento (Fase 19.3) | Tablas *transcriptas*; la polar del Süberkrüb, ajuste *derivado* |
-| `vonin_doors` | Vónin, páginas de producto | Portones Storm 2, Tornado y Twister (Fase 19.3) | Superficie y peso *transcriptos*, 8–10 tamaños por línea; medidas y polar *supuestas* |
-| `morgere2025` | Morgère, catálogo 2025 | Portones OvalFoil, PolyFoil y PFPE (Fase 19.3) | Superficie (y largo del PFPE) *transcriptos*, 10 tamaños por línea; sin peso («sur demande»); medidas y polar de la hoja de Seafish del mismo diseño, *supuestas* |
+| `vonin_doors` | Vónin, páginas de producto | Portones Storm 2, Tornado y Twister (Fase 19.3) | Superficie y peso *transcriptos*, todos los tamaños publicados (14, 11 y 8; Fase 19.8a); medidas y polar *supuestas* |
+| `morgere2025` | Morgère, catálogo 2025 | Portones OvalFoil, PolyFoil y PFPE (Fase 19.3) | Superficie (y largo del PFPE) *transcriptos*, todos los modelos del catálogo (21, 19 y 17; Fase 19.8a); sin peso («sur demande»); medidas y polar de la hoja de Seafish del mismo diseño, *supuestas* |
 | `giamportone2024` | Libro Excel de la A-3 | Cabos Moscuzza, cadenas Trawlex, cables 6x19 Seale, boyas, hilos PA y los dos portones con su polar | Procedencia *Excel* |
 
 Criterios:
 
 - **Datos puntuales**: de cada línea de producto de un fabricante se toman a lo sumo 10 tamaños,
-  con la cita. No se copian tablas ni fichas completas, y ninguna ficha se guarda en el
-  repositorio.
+  con la cita. Excepción desde la Fase 19.8a: de los portones de fabricante se cargan todos los
+  tamaños publicados (superficie, peso y largo cuando los hay), porque la elección de portón
+  necesita la serie completa. Fuera de eso no se copian tablas ni fichas completas, y ninguna
+  ficha se guarda en el repositorio.
 - **Genéricos**: lo que se consigue en cualquier ferretería naval. Sus valores salen de leyes
   ajustadas a las tablas de referencia, no de una marca.
 - **Validador físico** (`trawlkit.components.check`): peso por metro contra diámetro, carga de

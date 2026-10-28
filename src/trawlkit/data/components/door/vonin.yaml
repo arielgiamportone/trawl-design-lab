@@ -366,6 +366,64 @@ items:
         portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
         que ensayaron todos (30–45°))'
   generic_of: door_v_800hp
+- id: door_vonin_storm2_9m2
+  name: Vónin Storm 2 9 m²
+  brand: Vónin
+  product: Storm 2
+  country: FO
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.739
+  height_m: 3.286
+  area_m2: 9.0
+  weight_air_kg: 4400.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 30.0
+    cl: 1.04
+    cd: 0.595
+  - angle_deg: 35.0
+    cl: 1.172
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 1.238
+    cd: 0.872
+  - angle_deg: 45.0
+    cl: 1.188
+    cd: 0.978
+  notes: *id001
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+    weight_air_kg:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+    length_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-5 (PDF p. 135); Appendix IV-12 (PDF p. 143); Appendix IV-16 (PDF p. 147); Appendix
+        IV-10 (PDF p. 141)
+      note: 'Vónin Storm 2: el fabricante no publica la polar; se usa la del tipo (media de los cuatro
+        portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
+        que ensayaron todos (30–45°))'
+  generic_of: door_v_800hp
 - id: door_vonin_storm2_10m2
   name: Vónin Storm 2 10 m²
   brand: Vónin
@@ -378,6 +436,64 @@ items:
   height_m: 3.464
   area_m2: 10.0
   weight_air_kg: 4900.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 30.0
+    cl: 1.04
+    cd: 0.595
+  - angle_deg: 35.0
+    cl: 1.172
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 1.238
+    cd: 0.872
+  - angle_deg: 45.0
+    cl: 1.188
+    cd: 0.978
+  notes: *id001
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+    weight_air_kg:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+    length_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-5 (PDF p. 135); Appendix IV-12 (PDF p. 143); Appendix IV-16 (PDF p. 147); Appendix
+        IV-10 (PDF p. 141)
+      note: 'Vónin Storm 2: el fabricante no publica la polar; se usa la del tipo (media de los cuatro
+        portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
+        que ensayaron todos (30–45°))'
+  generic_of: door_v_800hp
+- id: door_vonin_storm2_11m2
+  name: Vónin Storm 2 11 m²
+  brand: Vónin
+  product: Storm 2
+  country: FO
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.028
+  height_m: 3.633
+  area_m2: 11.0
+  weight_air_kg: 5450.0
   weight_water_coefficient: 0.87
   coefficients:
   - angle_deg: 30.0
@@ -482,6 +598,64 @@ items:
         portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
         que ensayaron todos (30–45°))'
   generic_of: door_v_800hp
+- id: door_vonin_storm2_13m2
+  name: Vónin Storm 2 13 m²
+  brand: Vónin
+  product: Storm 2
+  country: FO
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.291
+  height_m: 3.95
+  area_m2: 13.0
+  weight_air_kg: 6450.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 30.0
+    cl: 1.04
+    cd: 0.595
+  - angle_deg: 35.0
+    cl: 1.172
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 1.238
+    cd: 0.872
+  - angle_deg: 45.0
+    cl: 1.188
+    cd: 0.978
+  notes: *id001
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+    weight_air_kg:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+    length_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-5 (PDF p. 135); Appendix IV-12 (PDF p. 143); Appendix IV-16 (PDF p. 147); Appendix
+        IV-10 (PDF p. 141)
+      note: 'Vónin Storm 2: el fabricante no publica la polar; se usa la del tipo (media de los cuatro
+        portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
+        que ensayaron todos (30–45°))'
+  generic_of: door_v_800hp
 - id: door_vonin_storm2_14m2
   name: Vónin Storm 2 14 m²
   brand: Vónin
@@ -494,6 +668,64 @@ items:
   height_m: 4.099
   area_m2: 14.0
   weight_air_kg: 7000.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 30.0
+    cl: 1.04
+    cd: 0.595
+  - angle_deg: 35.0
+    cl: 1.172
+    cd: 0.74
+  - angle_deg: 40.0
+    cl: 1.238
+    cd: 0.872
+  - angle_deg: 45.0
+    cl: 1.188
+    cd: 0.978
+  notes: *id001
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+    weight_air_kg:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+    length_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
+        × alto (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-5 (PDF p. 135); Appendix IV-12 (PDF p. 143); Appendix IV-16 (PDF p. 147); Appendix
+        IV-10 (PDF p. 141)
+      note: 'Vónin Storm 2: el fabricante no publica la polar; se usa la del tipo (media de los cuatro
+        portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
+        que ensayaron todos (30–45°))'
+  generic_of: door_v_800hp
+- id: door_vonin_storm2_15m2
+  name: Vónin Storm 2 15 m²
+  brand: Vónin
+  product: Storm 2
+  country: FO
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.536
+  height_m: 4.243
+  area_m2: 15.0
+  weight_air_kg: 7500.0
   weight_water_coefficient: 0.87
   coefficients:
   - angle_deg: 30.0
@@ -1099,6 +1331,67 @@ items:
   height_m: 5.745
   area_m2: 11.0
   weight_air_kg: 4200.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes: *id002
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
+    weight_air_kg:
+      kind: transcribed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
+      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+    length_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
+        × alto (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: vonin_doors
+      page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
+        × alto (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Vónin Tornado: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15 VF (AR
+        2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_4m2
+- id: door_vonin_tornado_12m2
+  name: Vónin Tornado 12 m²
+  brand: Vónin
+  product: Tornado
+  country: FO
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.0
+  height_m: 6.0
+  area_m2: 12.0
+  weight_air_kg: 4600.0
   weight_water_coefficient: 0.87
   coefficients:
   - angle_deg: 15.0

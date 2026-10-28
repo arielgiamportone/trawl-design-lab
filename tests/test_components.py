@@ -36,6 +36,8 @@ ENGINE_FIELDS: dict[str, tuple[str, ...]] = {
 NO_GENERICS = ("shackle",)
 
 #: Máximo de ítems por línea de producto de un fabricante (datos puntuales, no tablas enteras).
+#: Los portones quedan fuera: desde la Fase 19.8a se cargan todos los tamaños publicados de cada
+#: línea (la selección de portón necesita la serie completa).
 MAX_PER_PRODUCT = 10
 
 
@@ -67,10 +69,28 @@ def test_every_kind_has_generics_and_brands_point_to_one(kind: str) -> None:
 def test_manufacturer_data_is_spot_data_not_whole_tables() -> None:
     lines: Counter[tuple[str, str]] = Counter()
     for kind in KINDS:
+        if kind == "door":
+            continue
         for it in load_components(kind):
-            if it.brand and it.brand not in ("Moscuzza", "Trawlex", "Morgère"):
+            if it.brand and it.brand not in ("Moscuzza", "Trawlex"):
                 lines[(it.brand, it.product or "")] += 1
     assert lines and max(lines.values()) <= MAX_PER_PRODUCT, lines
+
+
+def test_manufacturer_door_lines_carry_every_published_size() -> None:
+    """Fase 19.8a: todos los tamaños publicados de cada línea de portones de fabricante."""
+    lines: Counter[tuple[str, str]] = Counter()
+    for it in load_components("door"):
+        if it.brand in ("Vónin", "Morgère") and it.product:  # sin línea: el portón del libro
+            lines[(it.brand, it.product or "")] += 1
+    assert lines == {
+        ("Vónin", "Storm 2"): 14,
+        ("Vónin", "Tornado"): 11,
+        ("Vónin", "Twister"): 8,
+        ("Morgère", "OvalFoil"): 21,
+        ("Morgère", "PolyFoil"): 19,
+        ("Morgère", "PFPE"): 17,
+    }
 
 
 def test_filters_brand_region_generic() -> None:

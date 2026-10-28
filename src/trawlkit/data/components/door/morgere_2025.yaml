@@ -63,6 +63,37 @@ items:
       note: 'Morgère no publica la polar; se usa la hoja «Morgère Polyvalent Ovale» de Seafish 1993 (el
         mismo diseño, ensayado en 1993: A VERIFICAR que el modelo actual conserve la forma)'
   generic_of: door_oval_100hp
+- id: door_morgere_of01
+  name: Morgère OvalFoil OF01 (1.06 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 1.396
+  height_m: 0.949
+  area_m2: 1.06
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF01
+    length_m: &id003
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id003
+    coefficients: *id004
+  generic_of: door_oval_100hp
 - id: door_morgere_of02
   name: Morgère OvalFoil OF02 (1.34 m²)
   brand: Morgère
@@ -85,15 +116,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF02
-    length_m: &id003
+    length_m: &id005
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id003
+    height_m: *id005
     coefficients: *id004
   generic_of: door_oval_200hp
+- id: door_morgere_of03
+  name: Morgère OvalFoil OF03 (1.74 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 1.788
+  height_m: 1.216
+  area_m2: 1.74
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF03
+    length_m: &id006
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id006
+    coefficients: *id004
+  generic_of: door_oval_300hp
 - id: door_morgere_of04
   name: Morgère OvalFoil OF04 (2.18 m²)
   brand: Morgère
@@ -116,15 +178,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF04
-    length_m: &id005
+    length_m: &id007
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id005
+    height_m: *id007
     coefficients: *id004
   generic_of: door_oval_400hp
+- id: door_morgere_of05
+  name: Morgère OvalFoil OF05 (2.59 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 2.182
+  height_m: 1.484
+  area_m2: 2.59
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF05
+    length_m: &id008
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id008
+    coefficients: *id004
+  generic_of: door_oval_500hp
 - id: door_morgere_of06
   name: Morgère OvalFoil OF06 (3.08 m²)
   brand: Morgère
@@ -147,15 +240,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF06
-    length_m: &id006
+    length_m: &id009
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id006
+    height_m: *id009
     coefficients: *id004
   generic_of: door_oval_600hp
+- id: door_morgere_of07
+  name: Morgère OvalFoil OF07 (3.6 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 2.572
+  height_m: 1.749
+  area_m2: 3.6
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF07
+    length_m: &id010
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id010
+    coefficients: *id004
+  generic_of: door_oval_800hp
 - id: door_morgere_of08
   name: Morgère OvalFoil OF08 (4.19 m²)
   brand: Morgère
@@ -178,13 +302,44 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF08
-    length_m: &id007
+    length_m: &id011
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id007
+    height_m: *id011
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of09
+  name: Morgère OvalFoil OF09 (4.79 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 2.967
+  height_m: 2.018
+  area_m2: 4.79
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF09
+    length_m: &id012
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id012
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_of10
@@ -209,13 +364,44 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF10
-    length_m: &id008
+    length_m: &id013
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id008
+    height_m: *id013
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of11
+  name: Morgère OvalFoil OF11 (5.51 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 3.183
+  height_m: 2.164
+  area_m2: 5.51
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF11
+    length_m: &id014
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id014
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_of12
@@ -240,13 +426,44 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF12
-    length_m: &id009
+    length_m: &id015
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id009
+    height_m: *id015
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of13
+  name: Morgère OvalFoil OF13 (6.62 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 3.488
+  height_m: 2.372
+  area_m2: 6.62
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF13
+    length_m: &id016
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id016
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_of14
@@ -271,13 +488,44 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF14
-    length_m: &id010
+    length_m: &id017
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id010
+    height_m: *id017
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of15
+  name: Morgère OvalFoil OF15 (7.82 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 3.791
+  height_m: 2.578
+  area_m2: 7.82
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF15
+    length_m: &id018
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id018
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_of16
@@ -302,13 +550,106 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF16
-    length_m: &id011
+    length_m: &id019
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id011
+    height_m: *id019
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of17
+  name: Morgère OvalFoil OF17 (9.64 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 4.21
+  height_m: 2.863
+  area_m2: 9.64
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF17
+    length_m: &id020
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id020
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of18
+  name: Morgère OvalFoil OF18 (10.96 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 4.489
+  height_m: 3.052
+  area_m2: 10.96
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF18
+    length_m: &id021
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id021
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_morgere_of19
+  name: Morgère OvalFoil OF19 (11.97 m²)
+  brand: Morgère
+  product: OvalFoil
+  country: FR
+  regions:
+  - europe
+  type: oval
+  length_m: 4.691
+  height_m: 3.19
+  area_m2: 11.97
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo, fondos duros.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (oval) como alternativa: sfia1993_morgere_polyvalent_ovale.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: modelo OF19
+    length_m: &id022
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 25
+      note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
+        1993 (AR 0,68, relación de superficie 0,80)'
+    height_m: *id022
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_of20
@@ -333,13 +674,13 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: modelo OF20
-    length_m: &id012
+    length_m: &id023
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 25
       note: '«forme emblématique du Polyvalent»: proporciones del modelo Morgère Polyvalent Ovale de Seafish
         1993 (AR 0,68, relación de superficie 0,80)'
-    height_m: *id012
+    height_m: *id023
     coefficients: *id004
   generic_of: door_oval_800hp
 - id: door_morgere_pf0
@@ -353,7 +694,7 @@ items:
   length_m: 1.081
   height_m: 0.659
   area_m2: 0.67
-  coefficients: &id014
+  coefficients: &id025
   - angle_deg: 30.0
     cl: 0.93
     cd: 0.49
@@ -379,19 +720,50 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF0
-    length_m: &id013
+    length_m: &id024
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id013
-    coefficients: &id016
+    height_m: *id024
+    coefficients: &id027
       kind: assumed
       document: sfia1993
       page: Appendix IV-16 (PDF p. 147)
       note: 'Morgère no publica la polar; se usa la hoja «Morgère Polyfoil» de Seafish 1993 (el mismo
         diseño, ensayado en 1993: A VERIFICAR que el modelo actual conserve la forma)'
+  generic_of: door_v_100hp
+- id: door_morgere_pf01
+  name: Morgère PolyFoil PF01 (1.2 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 1.447
+  height_m: 0.882
+  area_m2: 1.2
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF01
+    length_m: &id026
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id026
+    coefficients: *id027
   generic_of: door_v_100hp
 - id: door_morgere_pf02
   name: Morgère PolyFoil PF02 (1.52 m²)
@@ -404,7 +776,7 @@ items:
   length_m: 1.628
   height_m: 0.993
   area_m2: 1.52
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -415,15 +787,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF02
-    length_m: &id015
+    length_m: &id028
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id015
-    coefficients: *id016
+    height_m: *id028
+    coefficients: *id027
   generic_of: door_v_100hp
+- id: door_morgere_pf03
+  name: Morgère PolyFoil PF03 (1.88 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 1.811
+  height_m: 1.105
+  area_m2: 1.88
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF03
+    length_m: &id029
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id029
+    coefficients: *id027
+  generic_of: door_v_200hp
 - id: door_morgere_pf04
   name: Morgère PolyFoil PF04 (2.28 m²)
   brand: Morgère
@@ -435,7 +838,7 @@ items:
   length_m: 1.994
   height_m: 1.216
   area_m2: 2.28
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -446,15 +849,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF04
-    length_m: &id017
+    length_m: &id030
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id017
-    coefficients: *id016
+    height_m: *id030
+    coefficients: *id027
   generic_of: door_v_200hp
+- id: door_morgere_pf05
+  name: Morgère PolyFoil PF05 (2.72 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.178
+  height_m: 1.329
+  area_m2: 2.72
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF05
+    length_m: &id031
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id031
+    coefficients: *id027
+  generic_of: door_v_400hp
 - id: door_morgere_pf06
   name: Morgère PolyFoil PF06 (3.19 m²)
   brand: Morgère
@@ -466,7 +900,7 @@ items:
   length_m: 2.359
   height_m: 1.439
   area_m2: 3.19
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -477,15 +911,46 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF06
-    length_m: &id018
+    length_m: &id032
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id018
-    coefficients: *id016
+    height_m: *id032
+    coefficients: *id027
   generic_of: door_v_500hp
+- id: door_morgere_pf07
+  name: Morgère PolyFoil PF07 (3.71 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.544
+  height_m: 1.552
+  area_m2: 3.71
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF07
+    length_m: &id033
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id033
+    coefficients: *id027
+  generic_of: door_v_600hp
 - id: door_morgere_pf08
   name: Morgère PolyFoil PF08 (4.26 m²)
   brand: Morgère
@@ -497,7 +962,7 @@ items:
   length_m: 2.726
   height_m: 1.663
   area_m2: 4.26
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -508,14 +973,45 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF08
-    length_m: &id019
+    length_m: &id034
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id019
-    coefficients: *id016
+    height_m: *id034
+    coefficients: *id027
+  generic_of: door_v_800hp
+- id: door_morgere_pf09
+  name: Morgère PolyFoil PF09 (4.68 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.857
+  height_m: 1.743
+  area_m2: 4.68
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF09
+    length_m: &id035
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id035
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pf10
   name: Morgère PolyFoil PF10 (5.13 m²)
@@ -528,7 +1024,7 @@ items:
   length_m: 2.991
   height_m: 1.825
   area_m2: 5.13
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -539,14 +1035,45 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF10
-    length_m: &id020
+    length_m: &id036
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id020
-    coefficients: *id016
+    height_m: *id036
+    coefficients: *id027
+  generic_of: door_v_800hp
+- id: door_morgere_pf11
+  name: Morgère PolyFoil PF11 (5.45 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.083
+  height_m: 1.881
+  area_m2: 5.45
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF11
+    length_m: &id037
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id037
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pf12
   name: Morgère PolyFoil PF12 (5.78 m²)
@@ -559,7 +1086,7 @@ items:
   length_m: 3.175
   height_m: 1.937
   area_m2: 5.78
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -570,14 +1097,45 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF12
-    length_m: &id021
+    length_m: &id038
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id021
-    coefficients: *id016
+    height_m: *id038
+    coefficients: *id027
+  generic_of: door_v_800hp
+- id: door_morgere_pf13
+  name: Morgère PolyFoil PF13 (6.56 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.382
+  height_m: 2.063
+  area_m2: 6.56
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF13
+    length_m: &id039
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id039
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pf14
   name: Morgère PolyFoil PF14 (6.98 m²)
@@ -590,7 +1148,7 @@ items:
   length_m: 3.489
   height_m: 2.128
   area_m2: 6.98
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -601,14 +1159,45 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF14
-    length_m: &id022
+    length_m: &id040
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id022
-    coefficients: *id016
+    height_m: *id040
+    coefficients: *id027
+  generic_of: door_v_800hp
+- id: door_morgere_pf15
+  name: Morgère PolyFoil PF15 (7.66 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.655
+  height_m: 2.23
+  area_m2: 7.66
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF15
+    length_m: &id041
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id041
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pf16
   name: Morgère PolyFoil PF16 (8.55 m²)
@@ -621,7 +1210,7 @@ items:
   length_m: 3.861
   height_m: 2.356
   area_m2: 8.55
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -632,14 +1221,45 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF16
-    length_m: &id023
+    length_m: &id042
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id023
-    coefficients: *id016
+    height_m: *id042
+    coefficients: *id027
+  generic_of: door_v_800hp
+- id: door_morgere_pf17
+  name: Morgère PolyFoil PF17 (9.64 m²)
+  brand: Morgère
+  product: PolyFoil
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 4.1
+  height_m: 2.501
+  area_m2: 9.64
+  coefficients: *id025
+  notes:
+  - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: modelo PF17
+    length_m: &id043
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 27
+      note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
+        0,94)
+    height_m: *id043
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pf18
   name: Morgère PolyFoil PF18 (10.96 m²)
@@ -652,7 +1272,7 @@ items:
   length_m: 4.372
   height_m: 2.667
   area_m2: 10.96
-  coefficients: *id014
+  coefficients: *id025
   notes:
   - 'Uso: fondo, aguas profundas; «premier panneau multi-foils».'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -663,14 +1283,14 @@ items:
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: modelo PF18
-    length_m: &id024
+    length_m: &id044
       kind: assumed
       document: morgere2025
       page: Catalogue 2025, p. 27
       note: proporciones del modelo Morgère Polyfoil de Seafish 1993 (AR 0,61, relación de superficie
         0,94)
-    height_m: *id024
-    coefficients: *id016
+    height_m: *id044
+    coefficients: *id027
   generic_of: door_v_800hp
 - id: door_morgere_pfpe01
   name: Morgère PFPE PFPE01 (1.2 m²)
@@ -683,7 +1303,7 @@ items:
   length_m: 1.4
   height_m: 0.912
   area_m2: 1.2
-  coefficients: &id025
+  coefficients: &id045
   - angle_deg: 30.0
     cl: 0.93
     cd: 0.49
@@ -719,7 +1339,7 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: &id026
+    coefficients: &id046
       kind: assumed
       document: sfia1993
       page: Appendix IV-16 (PDF p. 147)
@@ -737,7 +1357,7 @@ items:
   length_m: 1.6
   height_m: 1.011
   area_m2: 1.52
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -758,7 +1378,41 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
+  generic_of: door_v_100hp
+- id: door_morgere_pfpe02_5
+  name: Morgère PFPE PFPE02.5 (1.7 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 1.7
+  height_m: 1.064
+  area_m2: 1.7
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE02.5
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
   generic_of: door_v_100hp
 - id: door_morgere_pfpe03
   name: Morgère PFPE PFPE03 (1.88 m²)
@@ -771,7 +1425,7 @@ items:
   length_m: 1.8
   height_m: 1.111
   area_m2: 1.88
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -792,7 +1446,41 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
+  generic_of: door_v_200hp
+- id: door_morgere_pfpe03_2
+  name: Morgère PFPE PFPE03.2 (1.98 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 1.85
+  height_m: 1.139
+  area_m2: 1.98
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE03.2
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
   generic_of: door_v_200hp
 - id: door_morgere_pfpe03_5
   name: Morgère PFPE PFPE03.5 (2.08 m²)
@@ -805,7 +1493,7 @@ items:
   length_m: 1.9
   height_m: 1.165
   area_m2: 2.08
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -826,7 +1514,7 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_200hp
 - id: door_morgere_pfpe05_5
   name: Morgère PFPE PFPE05.5 (2.95 m²)
@@ -839,7 +1527,7 @@ items:
   length_m: 2.3
   height_m: 1.364
   area_m2: 2.95
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -860,8 +1548,76 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_400hp
+- id: door_morgere_pfpe06
+  name: Morgère PFPE PFPE06 (3.19 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.4
+  height_m: 1.414
+  area_m2: 3.19
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE06
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
+  generic_of: door_v_500hp
+- id: door_morgere_pfpe06_2
+  name: Morgère PFPE PFPE06.2 (3.25 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.45
+  height_m: 1.411
+  area_m2: 3.25
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE06.2
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
+  generic_of: door_v_500hp
 - id: door_morgere_pfpe06_5
   name: Morgère PFPE PFPE06.5 (3.44 m²)
   brand: Morgère
@@ -873,7 +1629,7 @@ items:
   length_m: 2.5
   height_m: 1.464
   area_m2: 3.44
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -894,8 +1650,42 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_500hp
+- id: door_morgere_pfpe07
+  name: Morgère PFPE PFPE07 (3.71 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.6
+  height_m: 1.518
+  area_m2: 3.71
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE07
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
+  generic_of: door_v_600hp
 - id: door_morgere_pfpe07_5
   name: Morgère PFPE PFPE07.5 (3.98 m²)
   brand: Morgère
@@ -907,7 +1697,7 @@ items:
   length_m: 2.7
   height_m: 1.568
   area_m2: 3.98
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -928,8 +1718,42 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_700hp
+- id: door_morgere_pfpe08
+  name: Morgère PFPE PFPE08 (4.26 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 2.8
+  height_m: 1.619
+  area_m2: 4.26
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE08
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
+  generic_of: door_v_800hp
 - id: door_morgere_pfpe09
   name: Morgère PFPE PFPE09 (4.68 m²)
   brand: Morgère
@@ -941,7 +1765,7 @@ items:
   length_m: 2.9
   height_m: 1.717
   area_m2: 4.68
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -962,7 +1786,7 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_800hp
 - id: door_morgere_pfpe10
   name: Morgère PFPE PFPE10 (5.13 m²)
@@ -975,7 +1799,7 @@ items:
   length_m: 3.0
   height_m: 1.819
   area_m2: 5.13
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -996,7 +1820,41 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
+  generic_of: door_v_800hp
+- id: door_morgere_pfpe11
+  name: Morgère PFPE PFPE11 (5.45 m²)
+  brand: Morgère
+  product: PFPE
+  country: FR
+  regions:
+  - europe
+  type: multifoil
+  length_m: 3.1
+  height_m: 1.87
+  area_m2: 5.45
+  coefficients: *id045
+  notes:
+  - 'Uso: fondo, langostino y camarón.'
+  - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
+  - 'Polar del tipo (multifoil) como alternativa: sfia1993_bison_3_slots.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: modelo PFPE11
+    length_m:
+      kind: transcribed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+    height_m:
+      kind: assumed
+      document: morgere2025
+      page: Catalogue 2025, p. 23
+      note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
+        el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
+    coefficients: *id046
   generic_of: door_v_800hp
 - id: door_morgere_pfpe12
   name: Morgère PFPE PFPE12 (5.78 m²)
@@ -1009,7 +1867,7 @@ items:
   length_m: 3.2
   height_m: 1.922
   area_m2: 5.78
-  coefficients: *id025
+  coefficients: *id045
   notes:
   - 'Uso: fondo, langostino y camarón.'
   - 'Peso «sur demande» (Morgère adapta tamaño y peso a cada barco): sin peso publicado.'
@@ -1030,5 +1888,5 @@ items:
       page: Catalogue 2025, p. 23
       note: '«PolyFoil à crevettes» de material «longue vie» en un marco de acero: el catálogo da el largo;
         el alto sale de la relación de superficie del modelo Morgère Polyfoil de Seafish 1993 (0,94)'
-    coefficients: *id026
+    coefficients: *id046
   generic_of: door_v_800hp
