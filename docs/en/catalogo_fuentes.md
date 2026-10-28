@@ -33,7 +33,8 @@ and Rtex of the twine, cuts (`AB`, `1N2B`…) and rope lengths in metres.
 | Bullis (1951), *Gulf of Mexico Shrimp Trawl Designs*, Fishery Leaflet 394 | `bullis1951` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/leaflet394.pdf | Figs. 7, 9 and 10: 40 ft and 100 ft flat trawls and 74 ft balloon trawl (not digitized, Phase 19.6) | Doors of 5, 8 and 12 ft (length only) |
 | Gutherz, Serra and Klima (1974), *Design and Materials Used in Construction of a 16-Foot Shrimp Trawl*, Fishery Facts 9 | `gutherz1974` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf | 16 ft flat try-net (not digitized, Phase 19.6) | 30 × 15 in door, in the component catalogue |
 | Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: 380 × 70 mm twin net (scan; not digitized) | 125 kg centre sledge and bridles |
-| Roth and Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: traditional and proposed Pesquera Deseado nets (vector; not digitised) | 530 kg (ITO 043 gives 540 kg), 4.08 m² doors (p. 3; door area of the ITO 043 nets; Phase 19.7c); DynamiT AH at 2.5–4 knots |
+| Roth and Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: proposed and traditional Pesquera Deseado nets (vector; digitised in Phase 19.8c) | 530 kg (ITO 043 gives 540 kg), 4.08 m² doors (p. 3; door area of the ITO 043 nets; Phase 19.7c); DynamiT AH at 2.5–4 knots |
+| Roth (2019), INIDEP IAT 27/19 | `roth2019iat027` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/0593c738-7dbd-44d4-907e-8cb4ff9bcee9/content | Figs. 2–3: outrigger net of Luis Solimeno e hijos S.A., original redrawn and modified by INIDEP (vector; Phase 19.8c) | 4 m bridles, flat doors of 4.20 × 1.30 m and 450 kg, 55 m split bridle, 5 floats of 200 mm, 140 kg of chain, 100 m and 4 knots (p. 2); DynamiT AH, AV and resistance (p. 6) |
 | Roth, Pisano and Di Leva (2024), INIDEP IAT 94/24 | `roth2024iat094` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/ff36a0e8-9939-4318-9c57-3b3fdd287e04/content | Fig. 1: Iberconsa net 25.4/31.0 m (raster; not digitised) | Measured door spread (18.8–19.5 m) and fishing depths (Phase 19.7b) |
 
 Documents reviewed that do **not** carry complete net plans:
@@ -78,6 +79,10 @@ detail in the provenance of each net and in the chapter {doc}`33_catalogo_fao`):
 | 4-panel pelagic | Workbook, AH827E133 | not digitized | 450 px figure: the 800 mm front cannot be read |
 | `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | published (Phase 19.7c) | codend joined around the circumference (top + bottom 12.12 m against 12.0 m); side ending on the 0.50 m rope N; cut labels 3N4B, 19N7B and 5N1B that do not give the width change; sides shared out by length; front part of the side not modelled; vessel assumed; 4.08 m² door (IAT 75/2023) and 90 m assumed |
 | `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | published (Phase 19.7c) | codend joined around the circumference (12.22 m against 12.0 m); side ending on the 0.50 m rope L; top panel cut; overprinted wing label; sides shared out by length; door and depth as fig. 5 |
+| `inidep_iat027_tangonera_modificada` | INIDEP IAT 27/19 fig. 3 | published (Phase 19.8c) | body of 75 × 80 mm = codend of 100 × 60 mm; twines assumed (TO BE VERIFIED); ropes including the 4 m bridles; front section of the side not modelled; sides shared out by length; rig, door (4.20 × 1.30 m, 450 kg), 100 m and 4 knots from the text |
+| `inidep_iat027_tangonera_solimeno` | INIDEP IAT 27/19 fig. 2 | draft | body of 140 × 80 mm (11.20 m) on a codend of 100 × 60 mm (6.00 m): 46 %, the "excess material" the report points out; inner cut of the lower wing unlabelled; twines assumed except the codend ("Ny Tr 4 mm") |
+| `inidep_iat075_tangonera_propuesta` | INIDEP IAT 75/23 fig. 1 | draft | lower panel labelled "26" × 80 mm (2.08 m) on a codend of 70 × 60 mm (4.20 m), the cut would give 46 (TO BE VERIFIED); square-mesh section not dimensioned; side with no closing rope; Rtex derived from the published Ø; 4.08 m² door (dimensions assumed) and 90 m assumed |
+| `inidep_iat075_tangonera_tradicional` | INIDEP IAT 75/23 fig. 2 | draft | lower panel labelled "26" × 60 mm (1.56 m) on a codend of 70 × 60 mm, the cut would give 66 (TO BE VERIFIED); outer cut of the lower wing derived; twines assumed; sides 25 % longer than the lower body (shared out with a 30 % tolerance) |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016 plan 03 | draft | 32 mm codend joined 1:1 to the 51 mm body (37 %); U1 assumed; Rtex from denier |
 | 380 × 70 mm twin | Seafish IR 1310 fig. 5 | not digitized | scan in British notation (rows of half meshes, S/SB/SK cuts, half-panel counts) |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016 plan 31 | published | wing rope labels (10.00 and 11.20 m) that do not add up to the totals: wing derived from the total; 8/9 joins of 5 and 12 % |
@@ -160,6 +165,16 @@ component catalogue (`door_noaa_ff9_30x15in`, flat wooden type): *transcribed* d
   and IAT 111/2022 {cite}`roth2022iat111` (Morales net, hand-drawn). They were not digitised in this
   phase; their DynamiT results and the door spread measured in IAT 94/2024 validate the shrimp
   opening method ({doc}`26_aparejos_dobles_y_vara`).
+- **INIDEP IAT 27/2019 and IAT 75/2023, Phase 19.8c**: the four vector plans were rasterised at
+  600–1000 dpi and read number by number against the extracted text. The numbers in brackets at
+  the bosoms (78, 123, 156, 116) are the bosom width; in IAT 75 fig. 2, "156 (116) 156" are 60 mm
+  meshes of the body (117 wing meshes of 80 mm = 156 of 60 mm), and with them the lower-panel
+  hanging ratio is 0.76 like the rest. The IAT 27 ropes include the 4 m bridles
+  (2 × (4 + 10.3 + 1.6) + 6 = 37.8 m). **TO BE VERIFIED**: the twines (not published in IAT 27 nor
+  for the IAT 75 traditional net), the "26" of the lower-panel aft edge in both IAT 75 nets (their
+  cut gives 46 and 66), the square-mesh section of the proposed net and the dimensions of the
+  4.08 m² door. No report publishes DynamiT's door spread: the validation compares AH, AV and
+  resistance ({doc}`26_aparejos_dobles_y_vara`).
 
 **What remains.** The Seafish plates (twin nets of IR 1310 and SR 336), the Panicker et al. (1977)
 plan and the REBYC Cuba plans, already identified in Phase 19.5; and a documented conversion of

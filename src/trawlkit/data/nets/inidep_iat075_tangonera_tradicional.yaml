@@ -252,9 +252,9 @@ notes:
   de 60 mm (4,20 m); el corte 1N4B del paño daría 66 mallas (3,96 m). Se transcribe como se lee: A VERIFICAR.
   El dorso cierra (66 × 60 mm = 3,96 m frente a 4,20 m, 6 %). Los costados terminan en 25 mallas de 60
   mm sin cabo de cierre. Además, los costados modelados (69 filas de 80 mm y 272 de 60 mm: 21,84 m estirados,
-  como el cuerpo del dorso) no se pueden repartir sobre el cuerpo del vientre (sólo las 272 filas de 60
-  mm, 16,32 m: 25 %; el vientre no tiene el tramo de 68,5 filas de 80 mm del dorso): el validador lo informa
-  como error de costado.'
+  como el cuerpo del dorso) son un 25 % más largos que el cuerpo del vientre (sólo las 272 filas de 60
+  mm, 16,32 m; el vientre no tiene el tramo de 68,5 filas de 80 mm del dorso): el motor los reparte por
+  largo con la tolerancia de 30 % de trawlkit.topology.SIDE_LENGTH_TOL (Fase 19.8c).'
 - La fig. 2 de ITO 043/2022 lleva el mismo título («red tradicional de baja abertura vertical»), pero
   no se comparó número por número con esta. Lima 2 × (3,25 + 6,15 + 3,25) + 9,54 = 34,84 m; burlón 2 ×
   (3,25 + 2,75 + 8,78 + 3,25) + 5,28 = 41,34 m.

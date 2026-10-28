@@ -99,6 +99,12 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
   camaroneras del golfo de México de la NOAA (Bullis 1951; Gutherz et al. 1974) no se
   digitalizaron: cosen las alas a lo largo del cuerpo, una topología que el motor no arma (ver
   {doc}`catalogo_fuentes`).
+- **Fase 19.8c**: cuatro tangoneras de langostino más del INIDEP, de planos vectoriales: la red
+  de Luis Solimeno e hijos S.A. (original redibujada por el INIDEP y modificada, IAT 27/2019, figs.
+  2 y 3) {cite}`roth2019iat027` y las redes propuesta (2023) y tradicional de Pesquera Deseado
+  (IAT 75/2023, figs. 1 y 2) {cite}`roth2023iat075`, con el aparejo, el portón y las aberturas de
+  DynamiT de cada informe. La modificada cierra y se publica; las otras tres quedan como borrador
+  (ver abajo).
 - **Lectura**: cada figura se rasterizó a 300 ppp (o se tomó la imagen embebida del PDF) y se
   leyó número por número. Ninguna figura se guarda en el repositorio (© FAO): sólo los datos.
 - **Procedencia por valor**: cada número es *transcripto* (leído en la figura), *derivado*
@@ -159,6 +165,18 @@ El validador se escribió para atrapar errores de lectura, y los atrapó:
   de unión impresas y lima = 2 × ala + bocana). Quedaron dos avisos honestos de lectura: las alas
   del plano 38 se leen 1N2B y el ensanche pide 1N3B, y el cuerpo de 38 mm del plano 39 se lee 2N2B
   y pide 1N2B. En el plano 31 los rótulos de las alas no suman la lima total: se toma el total.
+- **INIDEP (Fase 19.8c)**: tres borradores con la razón a la vista. En la red Solimeno original
+  (IAT 27/2019, fig. 2) el cuerpo termina en 140 mallas de 80 mm (11,20 m) sobre un copo de 100 de
+  60 mm (6,00 m) en cada cara (46 %) y el costado termina en una malla, sin cabo de cierre: es el
+  «exceso de material en la parte final del cuerpo» que el propio informe señala y corrige en la
+  red modificada (75 mallas: 6,00 m), que se publica. En las dos redes de IAT 75/2023 el borde de
+  bolsa del vientre se lee «26» (2,08 m en la fig. 1, 1,56 m en la fig. 2) sobre un copo de 70
+  mallas de 60 mm (4,20 m); el corte 1N4B del paño daría 46 y 66 mallas, con las que cerraría:
+  falta verificarlo con el autor (A VERIFICAR). Además, en las cuatro los hilos no están
+  publicados (salvo el «Ny Tr 4 mm» del copo de la fig. 2 de IAT 27 y los Ø3 y Ø1,9 mm de la red
+  propuesta de IAT 75): el Rtex y el diámetro del resto son supuestos; el sector de malla cuadrada
+  de la red propuesta de IAT 75 no está dimensionado en el plano y no se modela; el corte exterior
+  del ala del vientre de la red tradicional se deriva (no está rotulado).
 - La red pelágica de 4 paneles del *Workbook* (figura de 450 px) **no se digitalizó**. El cuerpo
   se lee y cierra (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), pero el frente de 800 mm no se
   lee lo suficiente para armar una red sin inventar números.
@@ -291,6 +309,8 @@ listas para un simulador de 4 caras con malletas y pesos delanteros reales, como
 | Buque y portón de la red tangonera | `design.vessel_id`; portón de 4,08 m² (IAT 75/2023) y 540 kg (ITO 043); 2,86 × 1,43 m supuestos, alto ≤ 1,50 m (Res. CFP 7/2018, art. 4) | Elegir un buque o un portón en la app |
 | Profundidad de las redes de langostino: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | `depth_m` del caso |
 | Unión al copo por la circunferencia | redes del INIDEP (`aft_rope_m`) | — |
+| Hilos de las redes de IAT 27/2019 y de la red tradicional de IAT 75/2023 | Ø y Rtex de los hilos de ITO 043/2022 escalados con d² (A VERIFICAR) | — |
+| Costados repartidos por largo con hasta 30 % de diferencia | `topology.SIDE_LENGTH_TOL` (red tradicional de IAT 75/2023: 25 %) | — |
 
 ## Usar el catálogo
 

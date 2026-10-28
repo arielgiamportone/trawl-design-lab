@@ -26,6 +26,7 @@ from __future__ import annotations
 from typing import Any
 
 from tools.catalog.transcriptions_195 import rows, rtex_from_runnage
+
 from trawlkit.catalog import LANGOSTINO_DEPTH_M
 
 ACCESSED_198 = "2026-10-28"
@@ -100,9 +101,7 @@ _SOURCE_027_3 = {
     "page": "5",
 }
 
-_TWINE_027_NOTE = (
-    "IAT 27/2019 no da los hilos de la red: se supone {what}. A VERIFICAR"
-)
+_TWINE_027_NOTE = "IAT 27/2019 no da los hilos de la red: se supone {what}. A VERIFICAR"
 _D027_120 = ("assumed", _TWINE_027_NOTE.format(what="PE de Ø3 mm (cuerpo de ITO 043/2022)"))
 _D027_80 = (
     "assumed",
@@ -164,7 +163,8 @@ _RIG_NOTE_027 = (
     "fango."
 )
 _ROPES_027 = (
-    "Las relingas del plano suman las bridas de 4 m: la lima publicada ({rs} m) es 2 × ({pieces_s}) "
+    "Las relingas del plano suman las bridas de 4 m: la lima publicada ({rs} m) es "
+    "2 × ({pieces_s}) "
     "+ {bs} m y el burlón ({ri} m) 2 × ({pieces_i}) + {bi} m. El motor toma esos totales (como "
     "ITO 043 e IAT 75); los tramos verticales (bridas de 4 m{legs}) no van sobre el paño y los "
     "tramos sobre el ala son más largos que su borde estirado (53 filas AB de 120 mm = 6,36 m): "
@@ -193,8 +193,13 @@ _HUNG_SIDE_027 = (
 
 
 def _iat027_panels(
-    u_bosom: int, u1_bottom: int, u2: tuple[int, int, str], l_bosom: int, l1_rows: float,
-    l2: tuple[int, int, str], codend_r: float,
+    u_bosom: int,
+    u1_bottom: int,
+    u2: tuple[int, int, str],
+    l_bosom: int,
+    l1_rows: float,
+    l2: tuple[int, int, str],
+    codend_r: float,
 ) -> list[tuple[Any, ...]]:
     """Paños de la red Solimeno (figs. 2 y 3: mismas alas, costados y copo)."""
     u_top = 2 * 86 + u_bosom
@@ -319,7 +324,8 @@ IAT027_2: dict[str, Any] = {
         "12,0 m). Es el «exceso de material en la parte final del cuerpo» que el INIDEP corrige en "
         "la red modificada (fig. 3), no un error de lectura.",
         "El plano corrige la relinga superior del plano original de la empresa (39,40 m, que no "
-        "es la suma de sus tramos) a 37,8 m y la bocana del vientre (66 mallas en lugar de 100); el "
+        "es la suma de sus tramos) a 37,8 m y la bocana del vientre (66 mallas en lugar de 100); "
+        "el "
         "INIDEP recomienda además 5 m en lugar de 6 m en el centro del burlón (pp. 1 y 5).",
         _ROPES_027.format(
             rs="37,8",
@@ -520,9 +526,9 @@ _SIM_075 = (
 )
 
 
-def _sim(av: tuple[float, ...], ah: tuple[float, ...], ten: tuple[float, ...], note: str) -> list[
-    dict[str, Any]
-]:
+def _sim(
+    av: tuple[float, ...], ah: tuple[float, ...], ten: tuple[float, ...], note: str
+) -> list[dict[str, Any]]:
     return [
         {
             "speed_kn": v,
@@ -601,7 +607,9 @@ IAT075_1: dict[str, Any] = {
             S1="14,5 + 141 = 155,5 filas redondeadas a 156",
         ),
         {
-            "UW1": {"mesh_mm": ("transcribed", "160 mm en todo el dorso (p. 2 y columna del plano)")},
+            "UW1": {
+                "mesh_mm": ("transcribed", "160 mm en todo el dorso (p. 2 y columna del plano)")
+            },
             "S1": {"mesh_mm": ("transcribed", "140 mm en los costados (p. 2)")},
         },
     ),
@@ -779,8 +787,8 @@ IAT075_2: dict[str, Any] = {
         "tiene el tramo de 68,5 filas de 80 mm del dorso): el motor los reparte por largo con la "
         "tolerancia de 30 % de trawlkit.topology.SIDE_LENGTH_TOL (Fase 19.8c).",
         "La fig. 2 de ITO 043/2022 lleva el mismo título («red tradicional de baja abertura "
-        "vertical»), pero no se comparó número por número con esta. Lima 2 × (3,25 + 6,15 + 3,25) + 9,54 = 34,84 m; burlón 2 × (3,25 + 2,75 + "
-        "8,78 + 3,25) + 5,28 = 41,34 m.",
+        "vertical»), pero no se comparó número por número con esta. Lima 2 × (3,25 + 6,15 + "
+        "3,25) + 9,54 = 34,84 m; burlón 2 × (3,25 + 2,75 + 8,78 + 3,25) + 5,28 = 41,34 m.",
         _RIG_NOTE_075,
     ],
     "status": "draft",

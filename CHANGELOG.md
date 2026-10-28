@@ -56,6 +56,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro, de la flota y de investigación.
 
 ### Agregado
+- **Tangoneras de IAT 27/2019 e IAT 75/2023 (Fase 19.8c)**: cuatro redes de langostino del INIDEP
+  digitalizadas de planos vectoriales (`tools/catalog/transcriptions_198.py`), con su aparejo,
+  portón y resultados de DynamiT: red Solimeno original (fig. 2) y modificada por el INIDEP
+  (fig. 3) de IAT 27/2019 (portones de 4,20 × 1,30 m y 450 kg, tijera de 55 m, bridas de 4 m,
+  5 flotadores, 140 kg de cadena, 100 m, 4 nudos) y redes propuesta y tradicional de Pesquera
+  Deseado de IAT 75/2023 (portones de 4,08 m² y 530 kg, tijera de 70 m; medidas del portón y 90 m
+  supuestos). La modificada cierra y se **publica**; quedan como borrador la original (cuerpo de
+  11,20 m sobre copo de 6,00 m: el exceso de paño que señala el informe) y las dos de IAT 75 (el
+  vientre se lee «26» mallas y su corte daría 46 y 66: A VERIFICAR). Los hilos que los informes no
+  publican se suponen (A VERIFICAR). Validación en el capítulo 26 frente a DynamiT: AH dentro de
+  ±10 % en IAT 75 y 28–30 % por debajo en IAT 27 (fuera de ±20 %); AV +5 a +55 %; resistencia de
+  una red +2 a +19 %. `topology.SIDE_LENGTH_TOL` pasa de 0,25 a 0,30 (la red tradicional de IAT 75
+  tiene el cuerpo del vientre 25 % más corto que los costados). Catálogo: 26 → 30 redes.
 - **Aberturas de redes camaroneras (Fase 19.7b)**: `DesignCase.opening_method` (`auto` por
   defecto, `book`, `shrimp`) y `shrimp_bridle_m`; módulo `trawlkit.rigging.shrimp`. Con tangones la
   separación de portones sale del equilibrio portón–tijera–red de Roth (2016, INIDEP IAT 72/2016)

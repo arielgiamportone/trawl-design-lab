@@ -98,6 +98,12 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
   very different mesh sizes 1/1 (or with a short ratio). The NOAA Gulf of Mexico shrimp trawls
   (Bullis 1951; Gutherz et al. 1974) were not digitized: they sew the wings along the body, a
   topology the engine does not build (see {doc}`catalogo_fuentes`).
+- **Phase 19.8c**: four more INIDEP red shrimp outrigger nets, from vector plans: the net of Luis
+  Solimeno e hijos S.A. (original redrawn by INIDEP and modified, IAT 27/2019, figs. 2 and 3)
+  {cite}`roth2019iat027` and the proposed (2023) and traditional Pesquera Deseado nets (IAT
+  75/2023, figs. 1 and 2) {cite}`roth2023iat075`, with the rig, the door and the DynamiT openings
+  of each report. The modified net closes and is published; the other three stay as drafts (see
+  below).
 - **Reading**: each figure was rasterized at 300 dpi (or the image embedded in the PDF was taken)
   and read number by number. No figure is stored in the repository (© FAO): only the data.
 - **Provenance per value**: each number is *transcribed* (read from the figure), *derived*
@@ -159,6 +165,18 @@ The validator was written to catch reading errors, and it caught them:
   of plan 38 read 1N2B and the widening calls for 1N3B, and the 38 mm body of plan 39 reads 2N2B
   and calls for 1N2B. In plan 31 the wing labels do not add up to the total headrope: the total
   is taken.
+- **INIDEP (Phase 19.8c)**: three drafts with the reason in view. In the original Solimeno net
+  (IAT 27/2019, fig. 2) the body ends in 140 meshes of 80 mm (11.20 m) on a codend of 100 meshes
+  of 60 mm (6.00 m) on each face (46 %) and the side ends in one mesh, with no closing rope: it is
+  the "excess material at the end of the body" that the report itself points out and corrects in
+  the modified net (75 meshes: 6.00 m), which is published. In both IAT 75/2023 nets the aft edge
+  of the lower panel reads "26" (2.08 m in fig. 1, 1.56 m in fig. 2) on a codend of 70 meshes of
+  60 mm (4.20 m); the panel's 1N4B cut would give 46 and 66 meshes, with which it would close: to
+  be checked with the author (TO BE VERIFIED). Also, in all four the twines are not published
+  (except the codend's "Ny Tr 4 mm" in IAT 27 fig. 2 and the Ø3 and Ø1.9 mm of the IAT 75
+  proposed net): the Rtex and diameter of the rest are assumed; the square-mesh section of the
+  IAT 75 proposed net is not dimensioned on the plan and is not modelled; the outer cut of the
+  lower wing of the traditional net is derived (not labelled).
 - The 4-panel pelagic net of the *Workbook* (a 450 px figure) **was not digitized**. The body can
   be read and closes (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), but the 800 mm front cannot be
   read well enough to build a net without inventing numbers.
@@ -293,6 +311,8 @@ the nets ready for a 4-sided simulator with real bridles and front weights, as a
 | Vessel and door of the outrigger net | `design.vessel_id`; 4.08 m² door (IAT 75/2023) of 540 kg (ITO 043); 2.86 × 1.43 m assumed, height ≤ 1.50 m (Res. CFP 7/2018, art. 4) | Choose a vessel or a door in the app |
 | Depth of the red shrimp nets: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | the case's `depth_m` |
 | Codend joined around the circumference | INIDEP nets (`aft_rope_m`) | — |
+| Twines of the IAT 27/2019 nets and of the IAT 75/2023 traditional net | Ø and Rtex of the ITO 043/2022 twines scaled with d² (TO BE VERIFIED) | — |
+| Side panels shared out by length with up to 30 % difference | `topology.SIDE_LENGTH_TOL` (IAT 75/2023 traditional net: 25 %) | — |
 
 ## Using the catalogue
 
