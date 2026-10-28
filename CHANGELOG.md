@@ -21,6 +21,10 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Diámetro de las boyas de la spec (Fase 19.8)**: cuando la red del catálogo trae sus boyas
+  (`floats.count` y `floats.diameter_mm`), el motor tomaba la cantidad pero elegía el diámetro del
+  catálogo de flotadores (p. ej. 300 mm en lugar de los 200 mm de la IAT 27/2019). Ahora usa el
+  de la spec, con una nota; en modo `excel` y con `float_diameter_mm` explícito no cambia nada.
 - **Fuentes de datos «A VERIFICAR» (Fase 19.8b)**: (1) la regla del tiro a punto fijo
   `BHP·0,9·{1,10; 1,20; 1,25; 1,40}/100` [t] que el libro Excel atribuye a Prado es la regla
   práctica de remolcadores del Cap. P. Zahalka (Association of Hanseatic Marine Underwriters,

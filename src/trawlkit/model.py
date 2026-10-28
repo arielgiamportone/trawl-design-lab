@@ -1514,10 +1514,20 @@ def _stage_floats(
                 target=target,
             )
         )
+    spec_floats = case.net.floats
     if case.float_diameter_mm is not None:
         diameter = float(case.float_diameter_mm)
     elif case.float_id is not None:
         diameter = float(diameters[0])
+    elif (
+        case.float_count is None
+        and spec_floats is not None
+        and spec_floats.diameter_mm is not None
+        and case.compat is not Compat.EXCEL
+    ):
+        # La spec trae el diámetro de sus boyas: se usa ése, no el del catálogo (Fase 19.8).
+        diameter = float(spec_floats.diameter_mm)
+        notes.append(t("float_diameter_mm tomado de la spec ({d:g} mm)", d=diameter))
     elif case.compat is Compat.EXCEL:
         diameter = rigging.float_diameter_for_count_mm(count, counts, _arr(diameters))  # F92
     else:

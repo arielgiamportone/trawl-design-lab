@@ -297,6 +297,7 @@ velocidad {v} kn no está en speeds_kn: speed {v} kn is not in speeds_kn
 : 'flotation_rounding_inconsistent: the Flot!M43:M50 mask applies to the first block of the sheet ({first}), not to the design vessel ({vessel})'
 float_count = {count} boyas {id} (catálogo de componentes): float_count = {count} floats {id} (component catalogue)
 float_count tomado de la spec ({count} boyas): float_count taken from the spec ({count} floats)
+float_diameter_mm tomado de la spec ({d:g} mm): float_diameter_mm taken from the spec ({d:g} mm)
 no hay boyas de {target} mm en el catálogo; fije float_count: there are no {target} mm floats in the catalogue; set float_count
 float_count = {count} boyas de {target:g} mm del catálogo (Flot!F72:F82): float_count = {count} floats of {target:g} mm from the catalogue (Flot!F72:F82)
 ? 'catenary_ratio_hardcoded: fL/L = {fixed} (Mec!O266) frente a {table} de la tabla para DPA/L = {ratio:.2f}; se conserva el valor fijo'
