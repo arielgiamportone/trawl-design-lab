@@ -82,7 +82,9 @@ from trawlkit.rigging import (
     WarpStretch,
     WarpWeight,
     multirig,
+    shrimp,
 )
+from trawlkit.rigging.shrimp import ShrimpOpening, TijeraBalance
 from trawlkit.units import KNOT_TO_MS
 from trawlkit.vessel import PowerBudget, power_budget
 
@@ -291,6 +293,9 @@ class DesignCase:
     beam_shoe_height_m: float | None = None  # alto del patín (None → C056/20, tabla 2)
     beam_ticklers: bool | None = None  # cadenas espantadoras (None → sí, salvo crustáceos)
     beam_weight_kg: float | None = None  # vara y patines en aire (None → sin rozamiento)
+    # --- aberturas de redes camaroneras (Fase 19.7b) -------------------------------------
+    opening_method: str = "auto"  # auto (tangones, gemelo o camaronera → shrimp), book o shrimp
+    shrimp_bridle_m: float | None = None  # cañas portón–ala (None → 3 m, INIDEP IAT 85/2024)
 
     # --- fondo ----------------------------------------------------------------------------
     seabed: str | None = None  # tipo de fondo (data/seabed.yaml); None = sin rozamiento extra
@@ -336,6 +341,14 @@ class DesignCase:
             raise ValueError(t("rob_share debe estar entre 0 y 1"))
         if self.door_spread_rule not in ("excel", "fridman"):
             raise ValueError(t("door_spread_rule debe ser 'excel' o 'fridman'"))
+        if self.opening_method not in shrimp.OPENING_METHODS:
+            raise ValueError(
+                t(
+                    "opening_method debe ser uno de {methods}, no {method!r}",
+                    methods=", ".join(shrimp.OPENING_METHODS),
+                    method=self.opening_method,
+                )
+            )
         if self.rig_kind not in multirig.RIGS:
             raise ValueError(
                 t(
@@ -353,6 +366,7 @@ class DesignCase:
             "beam_diameter_m",
             "beam_shoe_area_m2",
             "beam_shoe_height_m",
+            "shrimp_bridle_m",
         ):
             value = getattr(self, name)
             if value is not None and value <= 0:
@@ -425,6 +439,37 @@ class DesignCase:
         if self.is_beam:
             return int(self.beam_count or multirig.BEAMS_PER_VESSEL)
         return 1
+
+    @property
+    def species_texts(self) -> tuple[str | None, ...]:
+        """Especie objetivo, nombre y nombre científico de la red (para reconocer camaroneras)."""
+        sp = self.net.species
+        return (
+            self.net.target_species,
+            None if sp is None else sp.name,
+            None if sp is None else sp.scientific_name,
+        )
+
+    @property
+    def uses_shrimp_opening(self) -> bool:
+        """Si las aberturas salen del método camaronero (Fase 19.7b, :mod:`~.rigging.shrimp`).
+
+        ``auto``: con tangones o gemelo, o con portones y una red sólo de crustáceos (sin peces en
+        la especie objetivo). Nunca en la pareja ni en la vara (no hay portones).
+        """
+        if self.opening_method == "book" or self.is_pair or self.is_beam:
+            return False
+        if self.opening_method == "shrimp" or self.rig_kind in ("outrigger", "twin"):
+            return True
+        texts = self.species_texts
+        return multirig.is_crustacean(*texts) and not shrimp.has_fish(*texts)
+
+    @property
+    def shrimp_bridle(self) -> float:
+        """Cañas portón–ala del método camaronero [m] (el caso o 3 m, INIDEP IAT 85/2024)."""
+        if self.shrimp_bridle_m is not None:
+            return float(self.shrimp_bridle_m)
+        return shrimp.SHRIMP_BRIDLE_M
 
     @property
     def power_kw(self) -> float:
@@ -625,10 +670,18 @@ class DoorStage:
     force_kgf: FloatArray
     centre_of_pressure: CentreOfPressure
     moments: MomentBalance
+    #: Equilibrio portón–tijera–red a la velocidad de diseño (método camaronero con tangones,
+    #: Fase 19.7b) y la separación que daba la regla del libro; ``None`` en los demás casos.
+    tijera: TijeraBalance | None = None
+    book_spread_m: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        """Representación serializable."""
-        return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
+        """Representación serializable (sin los campos de la Fase 19.7b cuando no aplican)."""
+        return {
+            f.name: _serialise(getattr(self, f.name))
+            for f in fields(self)
+            if not (f.name in ("tijera", "book_spread_m") and getattr(self, f.name) is None)
+        }
 
 
 @dataclass(frozen=True)
@@ -661,10 +714,23 @@ class SpreadStage:
     dpa_over_headrope: float
     catenary_ratio_table: float
     vertical: VerticalOpening
+    #: Aberturas por el método camaronero (Fase 19.7b); ``None`` con el promedio del libro.
+    shrimp: ShrimpOpening | None = None
+
+    @property
+    def vertical_opening_m(self) -> float:
+        """AV informada: la del método camaronero o la de Suzuki (Dim!F60)."""
+        if self.shrimp is not None:
+            return self.shrimp.vertical_opening_m
+        return float(self.vertical.suzuki_m)
 
     def to_dict(self) -> dict[str, Any]:
-        """Representación serializable."""
-        return {f.name: _serialise(getattr(self, f.name)) for f in fields(self)}
+        """Representación serializable (sin ``shrimp`` cuando no aplica)."""
+        return {
+            f.name: _serialise(getattr(self, f.name))
+            for f in fields(self)
+            if not (f.name == "shrimp" and self.shrimp is None)
+        }
 
 
 @dataclass(frozen=True)
@@ -898,7 +964,7 @@ class DesignResult:
             "solid_surface_m2": dims.solid_surface_m2,  # F57
             "working_surface_m2": dims.working_surface_m2,  # F58
             "net_weight_kg": dims.net_weight_kg,  # F59
-            "vertical_opening_m": self.spread.vertical.suzuki_m,  # F60
+            "vertical_opening_m": self.spread.vertical_opening_m,  # F60 (Suzuki o Fase 19.7b)
             "horizontal_opening_m": self.spread.horizontal_opening_m,  # F61
             "working_depth_m": case.working_depth_m,  # F62
             "flotation_total_kgf": self.floats.flotation_rounded_kgf,  # F63
@@ -1173,6 +1239,13 @@ def _stage_doors(
         spread = fridman_door_spread_m(case, drag, rig, polar)
     else:
         spread = rigging.door_spread_m(case.gallows_spacing_m, case.spread_per_m, warp_m)  # E13
+    tijera: TijeraBalance | None = None
+    book_spread: float | None = None
+    if case.uses_shrimp_opening and case.rig_kind == "outrigger":
+        # Fase 19.7b: con tijera la separación no depende del cable filado (Roth 2016).
+        tijera = tijera_spread(case, drag, rig, polar)
+        if tijera.converged:
+            book_spread, spread = spread, tijera.spread_m
     half_div = rigging.warp_divergence_deg(spread, case.gallows_spacing_m, warp_m)  # D21
     corrected = rigging.door_spread_corrected_m(
         warp_m, half_div, case.spread_correction_factor
@@ -1231,6 +1304,38 @@ def _stage_doors(
         force_kgf=force,
         centre_of_pressure=cop,
         moments=moments,
+        tijera=tijera,
+        book_spread_m=book_spread,
+    )
+
+
+def tijera_spread(
+    case: DesignCase, drag: DragStage, rig: RiggingGeometry, polar: DoorPolar
+) -> TijeraBalance:
+    """Equilibrio portón–tijera–red a la velocidad de diseño (Fase 19.7b).
+
+    :func:`~trawlkit.rigging.shrimp.tijera_balance` con la sustentación y la resistencia de un
+    portón del caso (polar al ángulo de ataque), la RN de diseño de la red (Aberdeen), la rama de
+    la tijera ``outrigger_bridle_m`` (70 m, ITO 043/2022) y L_R = cañas + pie de gallo + 0,90 ×
+    largo estirado sin bolsa (punta de ala → copo). La velocidad es la de diseño del cable
+    (``warp_design_speed_kn``, 3,5 nudos como las simulaciones DynamiT del INIDEP).
+    """
+    door = case.door
+    assert door.area_m2 is not None
+    i = case.speed_index(case.warp_design_speed_kn)
+    forces = rigging.door_forces_kgf(door.area_m2, polar.cd, polar.cl, case.speeds_ms)
+    leg = case.outrigger_bridle_m or multirig.OUTRIGGER_BRIDLE_M
+    net_leg = shrimp.net_leg_m(
+        case.shrimp_bridle,
+        rig.crowfoot.length_m + rig.crowfoot.extension_m,
+        rig.towing.net_length_m,
+    )
+    return shrimp.tijera_balance(
+        float(_arr(forces.lift_kgf)[i]),
+        float(_arr(forces.drag_kgf)[i]),
+        float(drag.rn.std[i]),
+        float(leg),
+        net_leg,
     )
 
 
@@ -1502,6 +1607,10 @@ def _stage_spread(
         ah = pair_wing_spread_m(case) if case.is_pair else case.beam_length
         const = ah + 0.0 * case.speeds_ms
         fridman = replace(fridman, dpa_std_m=const, dpa_mod_m=const)
+    shrimp_opening: ShrimpOpening | None = None
+    if case.uses_shrimp_opening:
+        shrimp_opening = shrimp_opening_of(case, d_std, rig, doors, ah)
+        ah = shrimp_opening.horizontal_opening_m
     dpa_over_l = working / d_std.headrope_m  # O265 = O264/O260, O264 = L225
     ratio_table = rigging.catenary_ratio(dpa_over_l)
     if ratio_table != case.catenary_ratio:
@@ -1562,6 +1671,57 @@ def _stage_spread(
         dpa_over_headrope=dpa_over_l,
         catenary_ratio_table=ratio_table,
         vertical=vertical,
+        shrimp=shrimp_opening,
+    )
+
+
+def shrimp_opening_of(
+    case: DesignCase,
+    dims: NetDimensions,
+    rig: RiggingGeometry,
+    doors: DoorStage,
+    book_ah_m: float,
+) -> ShrimpOpening:
+    """Aberturas por el método camaronero (Fase 19.7b, :mod:`trawlkit.rigging.shrimp`).
+
+    Con tijera (tangones) y el equilibrio resuelto: AH = DP·LRw/(LRw + pie de gallo + cañas);
+    si no (gemelo, portones, o sin solución del equilibrio): AH = k·lima con k por familia y la
+    DP del libro. AV = 0,04·lima en los dos casos.
+    """
+    head = float(dims.headrope_m)
+    k = shrimp.headrope_k(*case.species_texts, case.net.name)
+    dp = float(doors.spread_m)
+    tij = doors.tijera
+    lrw = float(rig.towing.net_length_working_m)
+    crowfoot = rig.crowfoot.length_m + rig.crowfoot.extension_m
+    if tij is not None and tij.converged:
+        method = "tijera"
+        ah = shrimp.wing_spread_m(dp, lrw, crowfoot + case.shrimp_bridle)
+    else:
+        method = "headrope_k"
+        ah = k.k * head
+    leg = case.outrigger_bridle_m or multirig.OUTRIGGER_BRIDLE_M
+    return ShrimpOpening(
+        method=method,
+        door_spread_m=dp,
+        horizontal_opening_m=float(ah),
+        vertical_opening_m=shrimp.vertical_opening_m(head),
+        headrope_m=head,
+        ah_over_dp=float(ah / dp) if dp > 0 else float("nan"),
+        ah_over_headrope=float(ah / head),
+        k=k,
+        book_door_spread_m=float(doors.book_spread_m if doors.book_spread_m is not None else dp),
+        book_horizontal_opening_m=float(book_ah_m),
+        bridle_m=case.shrimp_bridle if tij is not None else None,
+        leg_m=float(leg) if tij is not None else None,
+        net_leg_m=(
+            shrimp.net_leg_m(case.shrimp_bridle, crowfoot, rig.towing.net_length_m)
+            if tij is not None
+            else None
+        ),
+        body_stretched_m=float(rig.towing.net_length_m),
+        speed_kn=case.warp_design_speed_kn if tij is not None else None,
+        balance=tij,
     )
 
 
