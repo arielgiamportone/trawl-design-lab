@@ -501,7 +501,7 @@ def build_case(
             return case if door is None else dataclasses.replace(case, door=_pick_door(door))
         except (TypeError, ValueError) as exc:
             raise BadRequestError(str(exc)) from exc
-    from trawlkit.catalog import complete_vessel, source_door, source_params
+    from trawlkit.catalog import complete_vessel, source_door, source_params, source_warp
 
     vessels = vessel_presets()
     v: Vessel = _pick(vessel, vessels, "buque")
@@ -518,6 +518,13 @@ def build_case(
         kwargs = {**source_params(main), **kwargs}
     else:
         d = _pick_door(door)
+    if main.vessel_hp is not None and kwargs.get("warp_id") is None:
+        # Cable de remolque de la fuente (Fase 19.9), como en catalog_case; un warp_id elegido
+        # por el usuario manda.
+        warp_id, warp_notes = source_warp(main)
+        if warp_id is not None:
+            kwargs["warp_id"] = warp_id
+        filled = [*filled, *warp_notes]
     if class_vessels is None:
         # La clase por defecto es la del libro (A-3), no toda la flota del catálogo.
         others = tuple(o for o in book_vessels().values() if o.id != v.id)

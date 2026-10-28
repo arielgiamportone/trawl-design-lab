@@ -258,6 +258,50 @@ def source_params(spec: NetSpec) -> dict[str, Any]:
     return out
 
 
+#: Cable de remolque genérico del Workbook (6x19, 9/9/1, «FC o IWRC») por diámetro: el que se
+#: toma cuando la fuente da el diámetro del cable pero no el fabricante (Fase 19.9).
+SOURCE_WARP_ID = "wire_6x19_991_{diameter:g}mm"
+
+
+def source_warp(spec: NetSpec) -> tuple[str | None, list[str]]:
+    """Cable de remolque que da la fuente de la red y sus notas (Fase 19.9).
+
+    Con ``design.warp_diameter_mm`` (y ``design.warp_core``, el alma) se toma el cable genérico
+    de ese diámetro del catálogo de componentes (:data:`SOURCE_WARP_ID`), sin atribuir
+    fabricante. Si no hay uno de ese diámetro y alma, ``None`` (selección automática) con una
+    nota. Lo usan :func:`catalog_case` y la API; un ``warp_id`` elegido por el usuario manda.
+    """
+    from trawlkit.components import WireItem, get_component
+
+    design = _design(spec)
+    if design.get("warp_diameter_mm") is None:
+        return None, []
+    diameter = float(design["warp_diameter_mm"])
+    core = design.get("warp_core")
+    try:
+        item = get_component("wire", SOURCE_WARP_ID.format(diameter=diameter))
+    except KeyError:
+        item = None
+    if not isinstance(item, WireItem) or (core and str(core) not in str(item.core or "")):
+        return None, [
+            t(
+                "la fuente da un cable de remolque de {diameter:g} mm pero el catálogo de "
+                "componentes no tiene uno genérico de ese diámetro: selección automática",
+                diameter=diameter,
+            )
+        ]
+    return item.id, [
+        t(
+            "cable de remolque de {diameter:g} mm de la fuente{core}: {name} del catálogo de "
+            "componentes (genérico, rotura mínima {mbl:g} t)",
+            diameter=diameter,
+            core=t(" (alma de acero)") if core == "IWRC" else "",
+            name=item.name,
+            mbl=item.breaking_load_t,
+        )
+    ]
+
+
 def catalog_case(
     net: str | NetSpec,
     speeds_kn: Sequence[float] = DEFAULT_SPEEDS_KN,
@@ -310,6 +354,11 @@ def catalog_case(
     # otro buque la separación sale de la DPA de Fridman con el portón del caso.
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}
     kwargs.update(source_params(spec))
+    if overrides.get("warp_id") is None:
+        warp_id, warp_notes = source_warp(spec)
+        if warp_id is not None:
+            kwargs["warp_id"] = warp_id
+        notes.extend(warp_notes)
     kwargs.update(overrides)
     case = DesignCase(
         net=spec,
@@ -327,6 +376,7 @@ __all__ = [
     "LANGOSTINO_DEPTH_M",
     "LANGOSTINO_DEPTH_RANGE_M",
     "RIG_DESIGN_KEYS",
+    "SOURCE_WARP_ID",
     "CatalogCase",
     "catalog_case",
     "design_hp",
@@ -334,4 +384,5 @@ __all__ = [
     "plan_door",
     "source_door",
     "source_params",
+    "source_warp",
 ]

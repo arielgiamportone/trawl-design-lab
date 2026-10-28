@@ -54,6 +54,50 @@ export function isDraft(item: CatalogItem): boolean {
   return item.status === 'draft';
 }
 
+/** Aparejo de la red (``otter`` si no lo indica). */
+export function rigOf(item: CatalogItem | undefined): string {
+  return item?.rig ?? 'otter';
+}
+
+/**
+ * Redes para comparar con ``main``: primero las del mismo aparejo y después el resto, cada grupo
+ * en el orden del catálogo (Fase 19.9).
+ */
+export function comparisonNets(items: CatalogItem[], main: string): CatalogItem[] {
+  const rig = rigOf(items.find((n) => n.id === main));
+  const others = items.filter((n) => n.id !== main);
+  return [...others.filter((n) => rigOf(n) === rig), ...others.filter((n) => rigOf(n) !== rig)];
+}
+
+/** Primera red publicada del mismo aparejo que ``main`` (sin contarla), o ``null``. */
+export function sameRigComparison(items: CatalogItem[], main: string): string | null {
+  const rig = rigOf(items.find((n) => n.id === main));
+  return items.find((n) => n.id !== main && !isDraft(n) && rigOf(n) === rig)?.id ?? null;
+}
+
+/**
+ * Red que se propone para comparar con ``main``: una del mismo aparejo que no sea borrador (con
+ * una langostinera de tangones, otra langostinera); si no hay, la primera del catálogo.
+ */
+export function proposedComparison(items: CatalogItem[], main: string): string | null {
+  return sameRigComparison(items, main) ?? items.find((n) => n.id !== main)?.id ?? null;
+}
+
+/**
+ * Red de comparación al cambiar la red principal a ``main``: si la actual es de otro aparejo, se
+ * reemplaza por una del mismo cuando la hay; si es la misma red, se quita.
+ */
+export function comparisonAfterChange(
+  items: CatalogItem[],
+  main: string,
+  current: string | null,
+): string | null {
+  if (!current || current === main) return null;
+  const byId = (id: string) => items.find((n) => n.id === id);
+  if (rigOf(byId(current)) === rigOf(byId(main))) return current;
+  return sameRigComparison(items, main) ?? current;
+}
+
 /** Redes que cumplen los filtros. */
 export function filterNets(items: CatalogItem[], f: CatalogFilters): CatalogItem[] {
   const text = f.text.trim().toLowerCase();

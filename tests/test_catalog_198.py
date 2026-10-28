@@ -142,3 +142,50 @@ def test_aberturas_frente_a_dynamit(net_id: str) -> None:
     assert r.multirig is not None
     per_net = float(r.multirig.per_net.std[r.case.speed_index(v)])
     assert per_net == pytest.approx(res, rel=0.20)
+
+
+#: Fase 19.9: cable de remolque que da cada fuente (diámetro [mm], alma).
+WARPS_199 = {
+    "inidep_ito043_tangonera_inidep": (24.0, "IWRC"),
+    "inidep_ito043_tangonera_empresa": (24.0, "IWRC"),
+    "inidep_iat075_tangonera_propuesta": (24.0, "IWRC"),
+    "inidep_iat075_tangonera_tradicional": (24.0, "IWRC"),
+    "inidep_iat027_tangonera_solimeno": (22.0, None),
+    "inidep_iat027_tangonera_modificada": (22.0, None),
+}
+
+
+@pytest.mark.parametrize("net_id", sorted(WARPS_199))
+def test_cable_de_remolque_de_la_fuente(net_id: str) -> None:
+    diameter, core = WARPS_199[net_id]
+    spec = load_net(net_id)
+    design = spec.model_extra["design"]
+    assert design["warp_diameter_mm"] == diameter
+    assert design.get("warp_core") == core
+    assert spec.provenance["design.warp_diameter_mm"].kind == "transcribed"
+    cc = catalog_case(net_id)
+    assert cc.case.warp_id == f"wire_6x19_991_{diameter:g}mm"
+    assert any(f"cable de remolque de {diameter:g} mm de la fuente" in a for a in cc.assumptions)
+    res = run(cc.case)
+    assert res.warps.selection.diameter_mm == diameter
+    # Con el cable de la fuente ninguna de las seis queda por debajo de la rotura mínima.
+    assert res.warps.selection.satisfies_breaking_load
+    assert not any(n.startswith("warp_undersized") for n in res.notes)
+    # Por la API (con el buque elegido, como manda la app) sale el mismo cable.
+    case = service.build_case(net=net_id, vessel="ar_tangonero_1998")
+    assert case.warp_id == cc.case.warp_id
+
+
+def test_el_cable_elegido_por_el_usuario_manda() -> None:
+    net = "inidep_ito043_tangonera_inidep"
+    assert catalog_case(net, warp_id="wire_6x19_991_20mm").case.warp_id == "wire_6x19_991_20mm"
+    for kw in ({}, {"vessel": "ar_tangonero_1998"}):
+        case = service.build_case(net=net, params={"warp_id": "wire_6x19_991_20mm"}, **kw)
+        assert case.warp_id == "wire_6x19_991_20mm"
+        assert not any("de la fuente" in a and "cable" in a for a in case.assumptions)
+
+
+def test_la_a3_sigue_con_la_seleccion_del_libro() -> None:
+    assert catalog_case("fao_a3_standard").case.warp_id is None
+    assert service.build_case(net="fao_a3_standard", vessel="fao_a3_150hp").warp_id is None
+    assert service.build_case(net="fao_a3_standard").warp_id is None

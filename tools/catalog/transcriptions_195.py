@@ -173,6 +173,12 @@ _DESIGN_INIDEP: dict[str, tuple[Any, str, str | None]] = {
     "outrigger_bridle_m": (70.0, "transcribed", "tijera de 70 m (pp. 1 y 5)"),
     "outrigger_bridle_diameter_mm": (22.0, "transcribed", "cable de acero de 22 mm"),
     "speed_kn": (3.5, "transcribed", "velocidad de las simulaciones (p. 5)"),
+    "warp_diameter_mm": (
+        24.0,
+        "transcribed",
+        "«cable de arrastre de acero de 24 mm de diámetro con alma de acero» (pp. 1 y 5)",
+    ),
+    "warp_core": ("IWRC", "transcribed", "«con alma de acero» (pp. 1 y 5)"),
 }
 
 # --- Fig. 5: red propuesta por el INIDEP (simulación 3) ---------------------------------------

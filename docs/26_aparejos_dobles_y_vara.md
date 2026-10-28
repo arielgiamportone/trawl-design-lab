@@ -64,6 +64,9 @@ prensa de astilleros. El motor usa los 24 pies y 20° del golfo de México por a
 una revisión de la FAO, citando a Vendeville (1990), da para los tangones de arrastre camaronero
 tropical «an angle of 20 to 30 degrees from the horizontal» {cite:p}`gillett2008` (p. 19), y los
 20° de Knake et al. quedan en el extremo bajo de ese rango.
+El caso de cada tangonera usa el cable de remolque de su fuente (Fase 19.9): 24 mm con alma de acero
+en ITO 043/2022 e IAT 75/2023 y 22 mm en IAT 27/2019, el genérico 6x19 de ese diámetro del catálogo
+de componentes; con él ninguna de las seis queda por debajo de la rotura mínima.
 
 **Gemelo** (`rig: twin`). Dos redes lado a lado remolcadas por dos cables: los portones van por
 fuera y las puntas de ala interiores se unen a un **muerto** o trineo central sin sustentación

@@ -87,3 +87,8 @@ portones, pareja, tangones, gemelo o vara: otter, pair, outrigger, twin or beam
 'cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki): {verdict} (máximo 1,50 m, art. 4)': 'cfp_res7_2018: vertical opening {av:.2f} m (Suzuki): {verdict} (maximum 1.50 m, art. 4)'
 dentro del límite: within the limit
 por encima del límite: above the limit
+? 'la fuente da un cable de remolque de {diameter:g} mm pero el catálogo de componentes no tiene uno genérico de ese diámetro: selección automática'
+: 'the source gives a {diameter:g} mm warp but the component catalogue has no generic warp of that diameter: automatic selection'
+? 'cable de remolque de {diameter:g} mm de la fuente{core}: {name} del catálogo de componentes (genérico, rotura mínima {mbl:g} t)'
+: '{diameter:g} mm warp from the source{core}: {name} from the component catalogue (generic, minimum breaking load {mbl:g} t)'
+' (alma de acero)': ' (steel core)'

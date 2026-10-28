@@ -144,6 +144,12 @@ _DESIGN_027: dict[str, tuple[Any, str, str | None]] = {
         "que el plano suma a las relingas",
     ),
     "speed_kn": (4.0, "transcribed", "«Velocidad de arrastre: 4 Ns» (p. 2)"),
+    "warp_diameter_mm": (
+        22.0,
+        "transcribed",
+        "«Utilización de 350 m de cable de arrastre de acero de 22 mm de diámetro» (p. 2); el "
+        "largo del cable lo sigue calculando el motor por la profundidad",
+    ),
 }
 
 _RIGGING_027 = {
@@ -492,6 +498,12 @@ _DESIGN_075: dict[str, tuple[Any, str, str | None]] = {
         "transcribed",
         "una de las cinco velocidades simuladas (4; 3,5; 3; 2,8 y 2,5 nudos, p. 2), la de ITO 043",
     ),
+    "warp_diameter_mm": (
+        24.0,
+        "transcribed",
+        "«cable de arrastre de acero de 24 mm de diámetro con alma de acero» (p. 2)",
+    ),
+    "warp_core": ("IWRC", "transcribed", "«con alma de acero» (p. 2)"),
 }
 _RIGGING_075 = {
     "doors": "rectangulares planos de madera con refuerzos de acero, 4,08 m² y 530 kg cada uno",

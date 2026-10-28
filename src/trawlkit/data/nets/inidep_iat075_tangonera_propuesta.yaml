@@ -187,6 +187,8 @@ design:
   outrigger_bridle_m: 70.0
   outrigger_bridle_diameter_mm: 22.0
   speed_kn: 3.5
+  warp_diameter_mm: 24.0
+  warp_core: IWRC
 simulated:
 - speed_kn: 4.0
   vertical_opening_m: 1.1
@@ -837,3 +839,15 @@ provenance:
     page: '3'
     figure: Figura 1
     note: una de las cinco velocidades simuladas (4; 3,5; 3; 2,8 y 2,5 nudos, p. 2), la de ITO 043
+  design.warp_diameter_mm:
+    kind: transcribed
+    document: roth2023iat075
+    page: '3'
+    figure: Figura 1
+    note: «cable de arrastre de acero de 24 mm de diámetro con alma de acero» (p. 2)
+  design.warp_core:
+    kind: transcribed
+    document: roth2023iat075
+    page: '3'
+    figure: Figura 1
+    note: «con alma de acero» (p. 2)

@@ -64,6 +64,9 @@ the INIDEP reports, Res. CFP 7/2018 nor the shipyard press give them. The engine
 Mexico's 24 ft and 20° by analogy (assumed); an FAO review, citing Vendeville (1990), gives for
 tropical shrimp outriggers "an angle of 20 to 30 degrees from the horizontal" {cite:p}`gillett2008`
 (p. 19), and Knake et al.'s 20° sits at the low end of that range.
+Each outrigger net's case uses the warp its source gives (Phase 19.9): 24 mm with a steel core in
+ITO 043/2022 and IAT 75/2023 and 22 mm in IAT 27/2019, the generic 6x19 of that diameter from the
+component catalogue; with it none of the six falls below the minimum breaking load.
 
 **Twin** (`rig: twin`). Two nets side by side towed by two warps: the doors are outside and the
 inner wingends join a **clump** or sled in the middle, which has no lift

@@ -72,6 +72,31 @@ test('modo guiado: tangonero con la tangonera del INIDEP (AH, AV y método camar
   expect(new Set(texts).size).toBe(texts.length);
 });
 
+// Fase 19.9: con una langostinera de tangones, la comparación propone otra langostinera (no la A-3).
+test('modo guiado: la comparación de una tangonera propone otra langostinera', async ({ page }) => {
+  await start(page);
+  await page.getByRole('radio', { name: /Tangonero típico \(langostino/ }).check();
+  await page.getByRole('button', { name: /Siguiente →/ }).click();
+  await page
+    .getByRole('radio', { name: /Red tangonera de langostino propuesta por el INIDEP/ })
+    .check();
+  const compare = page.getByRole('checkbox', { name: /Comparar con otra red/ });
+  const other = page.getByRole('combobox', { name: 'Red para comparar' });
+  // La A-3 modificada que venía marcada se reemplaza por otra red de tangones al cambiar de red.
+  if (await compare.isChecked()) {
+    await expect(other).toHaveValue(/^inidep_/);
+    await compare.uncheck();
+  }
+  await compare.check();
+  await expect(other).toHaveValue(/^inidep_(?!ito043_tangonera_inidep$)/);
+  // En el desplegable, primero las langostineras.
+  const first = await other.locator('option').first().getAttribute('value');
+  expect(first).toMatch(/^inidep_/);
+  await page.getByRole('button', { name: /Siguiente →/ }).click();
+  await page.getByRole('button', { name: /Ver resultado →/ }).click();
+  await expect(page.locator('[data-check="opening"]')).toContainText('Boca de cada red');
+});
+
 test('guided mode in English and imperial: the shrimp result has no Spanish', async ({ page }) => {
   await start(page, {
     'trawl-design-lab:lang:v1': 'en',

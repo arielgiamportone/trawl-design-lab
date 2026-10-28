@@ -257,6 +257,7 @@ design:
   outrigger_bridle_diameter_mm: 26.0
   shrimp_bridle_m: 4.0
   speed_kn: 4.0
+  warp_diameter_mm: 22.0
 simulated:
 - speed_kn: 4.0
   vertical_opening_m: 1.1
@@ -1095,3 +1096,10 @@ provenance:
     page: '4'
     figure: Figura 2
     note: '«Velocidad de arrastre: 4 Ns» (p. 2)'
+  design.warp_diameter_mm:
+    kind: transcribed
+    document: roth2019iat027
+    page: '4'
+    figure: Figura 2
+    note: «Utilización de 350 m de cable de arrastre de acero de 22 mm de diámetro» (p. 2); el largo del
+      cable lo sigue calculando el motor por la profundidad

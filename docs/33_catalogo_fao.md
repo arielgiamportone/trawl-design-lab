@@ -105,6 +105,9 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
   (IAT 75/2023, figs. 1 y 2) {cite}`roth2023iat075`, con el aparejo, el portón y las aberturas de
   DynamiT de cada informe. La modificada cierra y se publica; las otras tres quedan como borrador
   (ver abajo).
+- **Fase 19.9**: cada red del INIDEP lleva el cable de remolque de su fuente
+  (`design.warp_diameter_mm`, transcripto): 24 mm con alma de acero en ITO 043/2022 e IAT 75/2023,
+  22 mm en IAT 27/2019; un cable elegido en la app manda.
 - **Lectura**: cada figura se rasterizó a 300 ppp (o se tomó la imagen embebida del PDF) y se
   leyó número por número. Ninguna figura se guarda en el repositorio (© FAO): sólo los datos.
 - **Procedencia por valor**: cada número es *transcripto* (leído en la figura), *derivado*

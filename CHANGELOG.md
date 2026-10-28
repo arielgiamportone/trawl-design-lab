@@ -21,6 +21,16 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Cable de remolque de la fuente y comparación entre langostineras (Fase 19.9)**: (1) las seis
+  tangoneras del INIDEP traen el cable de su fuente (`design.warp_diameter_mm` y `warp_core`,
+  transcriptos): 24 mm con alma de acero en ITO 043/2022 e IAT 75/2023 y 22 mm en IAT 27/2019
+  (antes, 18 mm por la regla de potencia del libro, con aviso `warp_undersized` en tres redes).
+  `catalog.source_warp` toma el genérico `wire_6x19_991_{d}mm` del catálogo de componentes, con
+  una nota; lo usan `catalog_case` y la API, y un `warp_id` elegido manda. Con él ninguna de las
+  seis queda por debajo de la rotura mínima. La A-3 y los valores del libro no cambian. (2) En el
+  modo guiado, «Comparar con otra red» propone primero una red publicada del mismo aparejo (con
+  una tangonera, otra langostinera; con la A-3, la A-3 modificada), el desplegable las ordena
+  primero y, al cambiar de red, una de comparación de otro aparejo se reemplaza por una del mismo.
 - **Tangoneras en la app (Fase 19.8d)**: (1) con un buque elegido y sin portón, una red del
   catálogo usaba el portón de la A-3 (1,8 m²) aunque la app decía «Del plano»: las tangoneras del
   INIDEP abrían a la mitad (AH 6,8 m en lugar de 14,4 m). Ahora la API usa el portón y los

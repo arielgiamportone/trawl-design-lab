@@ -2,7 +2,15 @@ import { useId, useState } from 'react';
 import { useT } from '../../i18n';
 import { fmtNum } from '../../lib/format';
 import { toDisplay, unitLabel } from '../../lib/units';
-import { hpLabel, hpMatches, isDraft, RIG_LABEL } from '../../lib/catalog';
+import {
+  comparisonAfterChange,
+  comparisonNets,
+  hpLabel,
+  hpMatches,
+  isDraft,
+  proposedComparison,
+  RIG_LABEL,
+} from '../../lib/catalog';
 import { useCase } from '../../state/useCase';
 import { HelpTip } from '../HelpTip';
 import { RigSelect } from '../RigSelect';
@@ -18,7 +26,9 @@ export function StepNet() {
   // de la A-3 escalado a la potencia del buque (Fase 19.8d), como en el modo experto.
   const fromPlan = !!net?.vessel_hp;
   const door = state.door ?? (fromPlan ? '' : (catalogs.doors[0]?.id ?? ''));
-  const others = catalogs.nets.filter((n) => n.id !== state.net);
+  // Para comparar, primero las redes del mismo aparejo (Fase 19.9): con una langostinera de
+  // tangones se propone otra langostinera y no la A-3.
+  const others = comparisonNets(catalogs.nets, state.net);
   const [all, setAll] = useState(false);
   const vessel = catalogs.vessels.find((v) => v.id === state.vessel) ?? catalogs.vessels[0];
   const bhp = vessel?.bhp ?? null;
@@ -43,7 +53,7 @@ export function StepNet() {
           update((s) => ({
             ...s,
             net: v,
-            netModified: s.netModified === v ? null : s.netModified,
+            netModified: comparisonAfterChange(catalogs.nets, v, s.netModified),
             edits: { std: {}, mod: {} },
             scaled: null,
           }))
@@ -79,7 +89,7 @@ export function StepNet() {
             onChange={(e) =>
               update((s) => ({
                 ...s,
-                netModified: e.target.checked ? (others[0]?.id ?? null) : null,
+                netModified: e.target.checked ? proposedComparison(catalogs.nets, s.net) : null,
                 edits: { ...s.edits, mod: {} },
               }))
             }

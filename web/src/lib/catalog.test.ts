@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import type { CatalogItem } from '../api/client';
 import {
+  comparisonAfterChange,
+  comparisonNets,
   DEFAULT_FILTERS,
   filterNets,
   hpLabel,
   hpMatches,
   kindShares,
   pathLabel,
+  proposedComparison,
   sources,
 } from './catalog';
 
@@ -76,5 +79,58 @@ describe('catálogo de redes', () => {
     expect(pathLabel('panels.C.meshes_top')).toBe('C · mallas de boca');
     expect(pathLabel('headrope.length_m')).toBe('Lima · largo');
     expect(pathLabel('ballast_kg')).toBe('Lastre');
+  });
+});
+
+describe('red para comparar en el modo guiado (Fase 19.9)', () => {
+  // Orden del catálogo de la API: la A-3 primero, después las demás.
+  const CAT: CatalogItem[] = [
+    item({ id: 'fao_a3_standard' }),
+    item({ id: 'fao_a3_modified' }),
+    item({ id: 'bobp_pair', rig: 'pair', status: 'published' }),
+    item({ id: 'inidep_iat075_tangonera_propuesta', rig: 'outrigger', status: 'draft' }),
+    item({ id: 'inidep_ito043_tangonera_empresa', rig: 'outrigger', status: 'published' }),
+    item({ id: 'inidep_ito043_tangonera_inidep', rig: 'outrigger', status: 'published' }),
+    item({ id: 'seafdec_beam', rig: 'beam', status: 'published' }),
+  ];
+
+  it('con una langostinera de tangones propone otra langostinera publicada', () => {
+    expect(proposedComparison(CAT, 'inidep_ito043_tangonera_inidep')).toBe(
+      'inidep_ito043_tangonera_empresa',
+    );
+  });
+
+  it('con la A-3 sigue proponiendo la A-3 modificada', () => {
+    expect(proposedComparison(CAT, 'fao_a3_standard')).toBe('fao_a3_modified');
+  });
+
+  it('sin otra red del mismo aparejo propone la primera del catálogo', () => {
+    expect(proposedComparison(CAT, 'seafdec_beam')).toBe('fao_a3_standard');
+  });
+
+  it('ordena el desplegable con las del mismo aparejo primero', () => {
+    expect(comparisonNets(CAT, 'inidep_ito043_tangonera_inidep').map((n) => n.id)).toEqual([
+      'inidep_iat075_tangonera_propuesta',
+      'inidep_ito043_tangonera_empresa',
+      'fao_a3_standard',
+      'fao_a3_modified',
+      'bobp_pair',
+      'seafdec_beam',
+    ]);
+  });
+
+  it('al cambiar de red reemplaza la de comparación de otro aparejo', () => {
+    const main = 'inidep_ito043_tangonera_inidep';
+    expect(comparisonAfterChange(CAT, main, 'fao_a3_modified')).toBe(
+      'inidep_ito043_tangonera_empresa',
+    );
+    // Una del mismo aparejo se conserva, aunque sea borrador; la misma red se quita.
+    expect(comparisonAfterChange(CAT, main, 'inidep_iat075_tangonera_propuesta')).toBe(
+      'inidep_iat075_tangonera_propuesta',
+    );
+    expect(comparisonAfterChange(CAT, main, main)).toBeNull();
+    expect(comparisonAfterChange(CAT, main, null)).toBeNull();
+    // Sin otra del mismo aparejo, la elegida queda.
+    expect(comparisonAfterChange(CAT, 'seafdec_beam', 'bobp_pair')).toBe('bobp_pair');
   });
 });

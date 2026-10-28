@@ -225,6 +225,8 @@ design:
   outrigger_bridle_m: 70.0
   outrigger_bridle_diameter_mm: 22.0
   speed_kn: 3.5
+  warp_diameter_mm: 24.0
+  warp_core: IWRC
 simulated:
 - speed_kn: 3.5
   vertical_opening_m: 1.3
@@ -966,3 +968,15 @@ provenance:
     page: '9'
     figure: Figura 5
     note: velocidad de las simulaciones (p. 5)
+  design.warp_diameter_mm:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: «cable de arrastre de acero de 24 mm de diámetro con alma de acero» (pp. 1 y 5)
+  design.warp_core:
+    kind: transcribed
+    document: roth2022ito043
+    page: '9'
+    figure: Figura 5
+    note: «con alma de acero» (pp. 1 y 5)

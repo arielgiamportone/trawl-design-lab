@@ -104,6 +104,9 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
   75/2023, figs. 1 and 2) {cite}`roth2023iat075`, with the rig, the door and the DynamiT openings
   of each report. The modified net closes and is published; the other three stay as drafts (see
   below).
+- **Phase 19.9**: each INIDEP net carries the warp of its source (`design.warp_diameter_mm`,
+  transcribed): 24 mm with a steel core in ITO 043/2022 and IAT 75/2023, 22 mm in IAT 27/2019; a
+  warp chosen in the app takes precedence.
 - **Reading**: each figure was rasterized at 300 dpi (or the image embedded in the PDF was taken)
   and read number by number. No figure is stored in the repository (© FAO): only the data.
 - **Provenance per value**: each number is *transcribed* (read from the figure), *derived*
