@@ -86,8 +86,11 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
 - **Phase 19.5**: the INIDEP outrigger shrimp nets (ITO 043/2022, figs. 4 and 5)
   {cite}`roth2022ito043` and a shrimp beam trawl from the SEAFDEC Thai catalogue (plan 03)
   {cite}`seafdec2016thai`, with their rigs (outrigger and beam; {doc}`26_aparejos_dobles_y_vara`).
-  All three stay as drafts: their codends do not join the body in stretched length, as the plans
-  draw them.
+  All three stayed as drafts: their codends do not join the body in stretched length, as the plans
+  draw them. In Phase 19.7c a new reading showed that in the two INIDEP nets the codend joins
+  around the circumference (top + bottom = codend, 1–2 %) and the side panels end before it, on a
+  0.50 m rope: the validator accepts it as a warning (`codend_join`) and both are published; the
+  beam trawl stays as a draft. Their openings come from the Phase 19.7b shrimp method.
 - **Phase 19.6**: eight more nets from the SEAFDEC catalogue, chosen by rig and vessel size (spot
   data, not the whole catalogue): five shrimp outrigger nets of 75 to 150 hp (plans 31, 33, 35, 38
   and 39), beam trawl no. 30 (165 hp) and two fish otter trawls (plans 21 and 22, 250 and
@@ -287,7 +290,9 @@ the nets ready for a 4-sided simulator with real bridles and front weights, as a
 | Generic vessel scaled from the A-3 | `catalog.generic_vessel` | Choose a vessel in the app |
 | Side wings not modelled | Schärfe and INIDEP nets | — |
 | Side panels shared out by stretched length | INIDEP nets | `trawlkit.topology` |
-| Vessel and door of the outrigger net | `design.vessel_id`, `design.door_id` | Choose a vessel or a door in the app |
+| Vessel and door of the outrigger net | `design.vessel_id`; 4.08 m² door (IAT 75/2023) | Choose a vessel or a door in the app |
+| Depth of the red shrimp nets: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | the case's `depth_m` |
+| Codend joined around the circumference | INIDEP nets (`aft_rope_m`) | — |
 
 ## Using the catalogue
 

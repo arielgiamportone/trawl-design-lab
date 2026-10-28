@@ -33,6 +33,8 @@ and Rtex of the twine, cuts (`AB`, `1N2B`…) and rope lengths in metres.
 | Bullis (1951), *Gulf of Mexico Shrimp Trawl Designs*, Fishery Leaflet 394 | `bullis1951` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/leaflet394.pdf | Figs. 7, 9 and 10: 40 ft and 100 ft flat trawls and 74 ft balloon trawl (not digitized, Phase 19.6) | Doors of 5, 8 and 12 ft (length only) |
 | Gutherz, Serra and Klima (1974), *Design and Materials Used in Construction of a 16-Foot Shrimp Trawl*, Fishery Facts 9 | `gutherz1974` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf | 16 ft flat try-net (not digitized, Phase 19.6) | 30 × 15 in door, in the component catalogue |
 | Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: 380 × 70 mm twin net (scan; not digitized) | 125 kg centre sledge and bridles |
+| Roth and Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: traditional and proposed Pesquera Deseado nets (vector; not digitised) | 530 kg, 4.08 m² doors (door area of the ITO 043 nets; Phase 19.7c); DynamiT AH at 2.5–4 knots |
+| Roth, Pisano and Di Leva (2024), INIDEP IAT 94/24 | `roth2024iat094` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/ff36a0e8-9939-4318-9c57-3b3fdd287e04/content | Fig. 1: Iberconsa net 25.4/31.0 m (raster; not digitised) | Measured door spread (18.8–19.5 m) and fishing depths (Phase 19.7b) |
 
 Documents reviewed that do **not** carry complete net plans:
 - BOBP/WP/21 (deck and machinery);
@@ -74,8 +76,8 @@ detail in the provenance of each net and in the chapter {doc}`33_catalogo_fao`):
 | `scharfe_krill_front800` | Schärfe app. 7 | published | upper and lower panels with different wings (halves of the plan) |
 | `scharfe_krill_front1600` | Schärfe app. 8 | draft | depth of the lower wing and Rtex of the wing |
 | 4-panel pelagic | Workbook, AH827E133 | not digitized | 450 px figure: the 800 mm front cannot be read |
-| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | draft | Dyneema body–codend seam (20 %); cut labels 3N4B, 19N7B and 5N1B that do not give the width change; sides shared out by length; front part of the side not modelled; vessel and door assumed |
-| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | draft | body–codend seam (20 %); top panel cut; overprinted wing label; sides shared out by length |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | published (Phase 19.7c) | codend joined around the circumference (top + bottom 12.12 m against 12.0 m); side ending on the 0.50 m rope N; cut labels 3N4B, 19N7B and 5N1B that do not give the width change; sides shared out by length; front part of the side not modelled; vessel assumed; 4.08 m² door (IAT 75/2023) and 90 m assumed |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | published (Phase 19.7c) | codend joined around the circumference (12.22 m against 12.0 m); side ending on the 0.50 m rope L; top panel cut; overprinted wing label; sides shared out by length; door and depth as fig. 5 |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016 plan 03 | draft | 32 mm codend joined 1:1 to the 51 mm body (37 %); U1 assumed; Rtex from denier |
 | 380 × 70 mm twin | Seafish IR 1310 fig. 5 | not digitized | scan in British notation (rows of half meshes, S/SB/SK cuts, half-panel counts) |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016 plan 31 | published | wing rope labels (10.00 and 11.20 m) that do not add up to the totals: wing derived from the total; 8/9 joins of 5 and 12 % |
@@ -138,6 +140,23 @@ component catalogue (`door_noaa_ff9_30x15in`, flat wooden type): *transcribed* d
   side and 100 + 100 of 60 mm in the codend) and the plan prints no joining ratio: the perimeter of
   the body at that station (16.9 m stretched) still does not close with the codend (12.0 m). Both
   nets stay as drafts.
+- **INIDEP ITO 043/2022, Phase 19.7c**: a new reading of figs. 4 and 5 (embedded image with its
+  mask, on white and enlarged twice) solved the join: the two-panel codend (2 × 100 meshes of 60 mm
+  = 12.0 m) matches the top plus the bottom panel (4.80 + 7.32 = 12.12 m in fig. 5; 4.80 + 7.42 =
+  12.22 m in fig. 4) and the side panels end before the codend, gathered on a 0.50 m rope (N in
+  fig. 5, L in fig. 4; "Length ratio" 0.48) that closes into the seams. The 16.9 m came from adding
+  the sides. The validator now compares the circumference when the sides end on a rope
+  (`aft_rope_m`, `codend_join` warning); both nets close and are published. Panel by panel the
+  join is not 1:1 and the plan does not say how the difference is taken up. The door (4.08 m², from
+  IAT 75/2023 {cite}`roth2023iat075`) and the depth (90 m, red shrimp fleet) stay as sourced
+  assumptions.
+- **INIDEP, other outrigger net plans** (Phase 19.7b): IAT 27/2019 {cite}`roth2019iat027`
+  (Solimeno net, original and modified, figs. 2–3, vector text), IAT 75/2023 (traditional Pesquera
+  Deseado net, typed version of ITO 043 fig. 2, and the 2023 proposal), IAT 85/2024
+  {cite}`roth2024iat085` and IAT 94/2024 {cite}`roth2024iat094` (Iberconsa net 25.4/31.0 m, raster)
+  and IAT 111/2022 {cite}`roth2022iat111` (Morales net, hand-drawn). They were not digitised in this
+  phase; their DynamiT results and the door spread measured in IAT 94/2024 validate the shrimp
+  opening method ({doc}`26_aparejos_dobles_y_vara`).
 
 **What remains.** The Seafish plates (twin nets of IR 1310 and SR 336), the Panicker et al. (1977)
 plan and the REBYC Cuba plans, already identified in Phase 19.5; and a documented conversion of

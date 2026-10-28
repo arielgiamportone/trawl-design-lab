@@ -31,6 +31,19 @@ describe('paramMeta', () => {
     });
     expect(defaultText(meta('generic_only'))).toBe('No');
   });
+  it('método de aberturas (Fase 19.7b) como lista de opciones', () => {
+    const m = paramMeta({
+      name: 'opening_method',
+      type: 'str',
+      default: 'auto',
+      comment: '',
+    } as ParamInfo);
+    expect(m.kind).toBe('enum');
+    expect(m.options?.map((o) => o.value)).toEqual(['auto', 'book', 'shrimp']);
+    expect(defaultText(m)).toMatch(/^Automático/);
+    expect(parseParam(m, 'shrimp')).toEqual({ ok: true, value: 'shrimp' });
+    expect(parseParam(m, 'otro')).toMatchObject({ ok: false });
+  });
   it('placeholder con el valor por defecto', () => {
     expect(defaultText(meta('sweeps_m'))).toBe('25');
     expect(defaultText(meta('spread_per_m'))).toBe('2,65');

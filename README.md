@@ -134,7 +134,7 @@ encadena semejanza, refinado y armado:
 
 | Indicador | Valor |
 |---|---|
-| Redes en el catálogo | 26 (17 publicadas, 9 borradores), con procedencia valor por valor |
+| Redes en el catálogo | 26 (19 publicadas, 7 borradores), con procedencia valor por valor |
 | Componentes | 564 en 7 tipos (244 genéricos y datos puntuales de 15 marcas) |
 | Métodos de resistencia de la red | 13 |
 | Erratas del Excel documentadas y corregidas | 26 |
@@ -142,7 +142,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 79 |
-| Capítulos del libro | 40 · 132 referencias |
+| Capítulos del libro | 40 · 151 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->

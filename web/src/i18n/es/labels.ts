@@ -172,6 +172,8 @@ export const labels = {
     beam_shoe_height_m: 'Alto del patín',
     beam_ticklers: 'Cadenas espantadoras',
     beam_weight_kg: 'Peso de la vara con patines',
+    opening_method: 'Método de aberturas',
+    shrimp_bridle_m: 'Cañas portón–ala (método camaronero)',
   },
   paramDefaults: {
     noSeabed: 'sin rozamiento de fondo',

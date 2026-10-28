@@ -166,6 +166,8 @@ export const labels: Messages['labels'] = {
     beam_shoe_height_m: 'Shoe height',
     beam_ticklers: 'Tickler chains',
     beam_weight_kg: 'Beam and shoes weight',
+    opening_method: 'Opening method',
+    shrimp_bridle_m: 'Door-to-wing bridles (shrimp method)',
     seabed: 'Seabed type (groundgear and otter board friction)',
   },
   paramDefaults: {

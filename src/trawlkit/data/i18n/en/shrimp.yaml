@@ -1,0 +1,29 @@
+# Catálogo inglés de la Fase 19.7b-c: aberturas de redes camaroneras y unión al copo.
+camaronera convencional de EE. UU., medida: conventional US shrimp trawl, measured
+'cfp_res7_2018: abertura vertical {av:.2f} m (método camaronero, 0,04 × lima): {verdict} (máximo 1,50 m, art. 4)': 'cfp_res7_2018: vertical opening {av:.2f} m (shrimp method, 0.04 × headrope): {verdict} (maximum 1.50 m, art. 4)'
+? 'copo unido por la circunferencia: bordes de bolsa del dorso y del vientre {a:.2f} m frente a {b:.2f} m de las bocas del copo ({pct:.0f} %); los costados terminan antes del copo en un cabo de {rope:.2f} m y la diferencia cara por cara se reparte en las costuras'
+: 'codend joined around the circumference: aft edges of the top and bottom panels {a:.2f} m against {b:.2f} m of the codend mouths ({pct:.0f} %); the side panels end before the codend on a {rope:.2f} m rope and the panel-by-panel difference is taken up in the seams'
+dentro: within
+fuera: outside
+? 'la fuente no da profundidad: {depth:g} m de la flota langostinera ({lo:g}–{hi:g} m; INIDEP IC 68/2022, IAT 94/2024 y simulaciones DynamiT a 100 m)'
+: 'the source gives no depth: {depth:g} m of the Argentine red shrimp fleet ({lo:g}–{hi:g} m; INIDEP IC 68/2022, IAT 94/2024 and DynamiT simulations at 100 m)'
+opening_method debe ser uno de {methods}, no {method!r}: opening_method must be one of {methods}, not {method!r}
+red de lengüeta, medida: tongue trawl, measured
+? 'shrimp_opening: AH {ah:.1f} m = DP × LRw/(LRw + pie de gallo + cañas) (triángulos semejantes de Mec!L225 con cañas cortas, no patentes); AH/DP = {r:.2f}: {verdict} de 0,72–0,88 de DynamiT (INIDEP)'
+: 'shrimp_opening: horizontal opening {ah:.1f} m = DS × LRw/(LRw + crowfoot + bridles) (similar triangles of Mec!L225 with short bridles, not sweeps); HO/DS = {r:.2f}: {verdict} the 0.72–0.88 range of DynamiT (INIDEP)'
+? 'shrimp_opening: AH/lima = {r:.2f}, {verdict} de {lo:.2f}–{hi:.2f} ({fam}); DynamiT del INIDEP da 0,36–0,50 en tangoneras argentinas y la separación de portones medida con sensores es 0,74–0,77 × lima (IAT 94/2024); el INIDEP considera que su AH simulada queda «muy por debajo» del ≈ 70 % recomendado (IAT 85/2024): DynamiT puede subestimar'
+: 'shrimp_opening: HO/headrope = {r:.2f}, {verdict} {lo:.2f}–{hi:.2f} ({fam}); INIDEP DynamiT gives 0.36–0.50 for Argentine outrigger trawls and the door spread measured with sensors is 0.74–0.77 × headrope (IAT 94/2024); INIDEP considers its simulated HO "well below" the recommended ≈ 70 % (IAT 85/2024): DynamiT may underestimate'
+? 'shrimp_opening: AV {av:.2f} m = 0,04 × lima (0,03–0,07 en redes de baja abertura con pocas boyas); sin corrección por boyas (Watson et al. 1984, tabla 3: 10–20 boyas multiplican la AV por 1,75–2,9)'
+: 'shrimp_opening: vertical opening {av:.2f} m = 0.04 × headrope (0.03–0.07 for low-opening nets with few floats); no float correction (Watson et al. 1984, table 3: 10–20 floats multiply the vertical opening by 1.75–2.9)'
+? 'shrimp_opening: cañas de {b:g} m supuestas (IAT 85/2024 e ITO 61/2022; rango 2,5–4 m en los aparejos del INIDEP); cambiar con shrimp_bridle_m'
+: 'shrimp_opening: door-to-wing bridles of {b:g} m assumed (IAT 85/2024 and ITO 61/2022; range 2.5–4 m in INIDEP rigs); change with shrimp_bridle_m'
+? 'shrimp_opening: el equilibrio portón–tijera–red no tiene solución (la sustentación del portón supera lo que equilibra la red); se usa el respaldo AH = k·lima y la DP del libro'
+: 'shrimp_opening: the door–bridle–net balance has no solution (the door lift exceeds what the net can balance); the fallback HO = k·headrope and the book door spread are used'
+? 'shrimp_opening: método camaronero con tijera; DP {dp:.1f} m del equilibrio portón–tijera–red a {v:g} nudos (Roth 2016, IAT 72/2016, ecs. 13–17, con la proyección corregida de la ec. 12): rama L_C {lc:g} m, L_R {lr:.1f} m = cañas {b:g} m + pie de gallo + 0,90 × {body:.2f} m de red estirada sin copo; α = {alpha:.1f}°, β = {beta:.1f}°; la regla del libro daba {book:.1f} m'
+: 'shrimp_opening: shrimp method with a split bridle (tijera); door spread {dp:.1f} m from the door–bridle–net balance at {v:g} knots (Roth 2016, IAT 72/2016, eqs. 13–17, with the corrected projection of eq. 12): leg L_C {lc:g} m, L_R {lr:.1f} m = bridles {b:g} m + crowfoot + 0.90 × {body:.2f} m of stretched net without codend; α = {alpha:.1f}°, β = {beta:.1f}°; the book rule gave {book:.1f} m'
+? 'shrimp_opening: método camaronero sin tijera; AH {ah:.1f} m = {k:.2f} × lima ({fam}: {lo:.2f}–{hi:.2f}, {src}); DP {dp:.1f} m de la regla del libro'
+: 'shrimp_opening: shrimp method without a split bridle; horizontal opening {ah:.1f} m = {k:.2f} × headrope ({fam}: {lo:.2f}–{hi:.2f}, {src}); door spread {dp:.1f} m from the book rule'
+? 'shrimp_opening: se omiten la DPA por ángulo de corte ({cut:.1f} m) y la serie de Fridman del promedio del libro (AH del libro {book:.1f} m); opening_method=''book'' vuelve al promedio'
+: 'shrimp_opening: the cut-angle wing spread ({cut:.1f} m) and the Fridman series are left out of the book average (book horizontal opening {book:.1f} m); opening_method=''book'' restores the average'
+tangonera argentina, DynamiT: Argentine outrigger trawl, DynamiT
+'tijera_balance: sustentación y largos deben ser positivos': 'tijera_balance: lift and lengths must be positive'

@@ -116,7 +116,11 @@ def test_tangones(base: DesignCase) -> None:
     # Cada cable remolca una red: carga de trabajo = una red con su aparejo.
     assert r.warps.loads.working_load_kgf == pytest.approx(float(mr.per_net.std[i]))
     assert r.warps.quantity_m == pytest.approx(2.5 * r.warps.warp_m)
-    assert any(n.startswith("multirig_overlap") for n in r.notes)
+    # Con la separación del libro (40 m) las redes de la A-3 se superponen con tangones de 24 pies;
+    # con el método camaronero (Fase 19.7b) la tijera las cierra.
+    book = _run(base, rig="outrigger", opening_method="book")
+    assert any(n.startswith("multirig_overlap") for n in book.notes)
+    assert r.doors.spread_m < book.doors.spread_m
 
 
 def test_gemelo(base: DesignCase) -> None:
@@ -195,8 +199,15 @@ def test_redes_nuevas_validan_y_calculan(net_id: str) -> None:
     spec = load_net(net_id)
     assert spec.rig in ("outrigger", "beam") and spec.family == "bottom"
     issues = check(spec)
-    assert spec.status == "draft"  # los empalmes del copo no cierran: borrador
-    assert any(i.code == "seam" for i in issues)
+    if net_id.startswith("inidep_"):
+        # Fase 19.7c: los costados terminan en un cabo antes del copo y el copo se une por la
+        # circunferencia (dorso + vientre = copo): la red cierra y está publicada.
+        assert spec.status == "published"
+        assert not [i for i in issues if i.level == "error"]
+        assert any(i.code == "codend_join" and i.level == "warning" for i in issues)
+    else:
+        assert spec.status == "draft"  # los empalmes del copo no cierran: borrador
+        assert any(i.code == "seam" for i in issues)
     cc = catalog_case(spec)
     r = run(cc.case)
     assert r.multirig is not None and r.multirig.n_nets == 2

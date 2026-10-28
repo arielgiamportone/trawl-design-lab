@@ -86,8 +86,11 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
 - **Fase 19.5**: las redes tangoneras de langostino del INIDEP (ITO 043/2022, figs. 4 y 5)
   {cite}`roth2022ito043` y una red de vara para camarón del catálogo tailandés de la SEAFDEC
   (plano 03) {cite}`seafdec2016thai`, con su aparejo (tangones y vara; {doc}`26_aparejos_dobles_y_vara`).
-  Las tres quedan como borrador: sus copos no empalman en largo estirado con el cuerpo, como
-  dibujan los planos.
+  Las tres quedaron como borrador: sus copos no empalman en largo estirado con el cuerpo, como
+  dibujan los planos. En la Fase 19.7c una nueva lectura mostró que en las dos del INIDEP el copo
+  se une por la circunferencia (dorso + vientre = copo, 1–2 %) y los costados terminan antes, en
+  un cabo de 0,50 m: el validador lo acepta como aviso (`codend_join`) y ambas se publican; la de
+  vara sigue como borrador. Sus aberturas salen del método camaronero de la Fase 19.7b.
 - **Fase 19.6**: ocho redes más del catálogo de la SEAFDEC, elegidas por aparejo y tamaño de
   buque (datos puntuales, no el catálogo entero): cinco camaroneras con tangón de 75 a 150 hp
   (planos 31, 33, 35, 38 y 39), la red de vara n.º 30 (165 hp) y dos redes de peces con portones
@@ -285,7 +288,9 @@ listas para un simulador de 4 caras con malletas y pesos delanteros reales, como
 | Buque genérico escalado de la A-3 | `catalog.generic_vessel` | Elegir un buque en la app |
 | Alas de los costados no modeladas | redes de Schärfe y del INIDEP | — |
 | Costados repartidos por largo estirado | redes del INIDEP | `trawlkit.topology` |
-| Buque y portón de la red tangonera | `design.vessel_id`, `design.door_id` | Elegir un buque o un portón en la app |
+| Buque y portón de la red tangonera | `design.vessel_id`; portón de 4,08 m² (IAT 75/2023) | Elegir un buque o un portón en la app |
+| Profundidad de las redes de langostino: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | `depth_m` del caso |
+| Unión al copo por la circunferencia | redes del INIDEP (`aft_rope_m`) | — |
 
 ## Usar el catálogo
 

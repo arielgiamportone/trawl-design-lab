@@ -171,6 +171,12 @@ export function paramMeta(p: ParamInfo): ParamMeta {
   } else if (p.name === 'rig') {
     meta.kind = 'enum';
     meta.options = Object.entries(msg().catalog.rig).map(([value, label]) => ({ value, label }));
+  } else if (p.name === 'opening_method') {
+    meta.kind = 'enum';
+    meta.options = Object.entries(msg().catalog.openingMethod).map(([value, label]) => ({
+      value,
+      label,
+    }));
   }
   return meta;
 }
@@ -192,6 +198,7 @@ export function defaultText(meta: ParamMeta): string {
       PROPELLER_LABELS[String(d)] ??
       SEABED_LABELS[String(d)] ??
       REGION_LABEL[String(d)] ??
+      M.catalog.openingMethod[String(d)] ??
       String(d)
     );
   return String(d);

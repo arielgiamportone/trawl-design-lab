@@ -51,7 +51,7 @@ from trawlkit.compat import Compat
 from trawlkit.dimensions import NetDimensions
 from trawlkit.drag import DragAverage, DragInputs, DragTable
 from trawlkit.excel import excel_round
-from trawlkit.i18n import t
+from trawlkit.i18n import N_, t
 from trawlkit.io import Door, NetSpec, PropellerType, Vessel, load_catalogue
 from trawlkit.net import NetGeometry
 from trawlkit.performance import SpeedWindow, speed_window
@@ -294,7 +294,7 @@ class DesignCase:
     beam_ticklers: bool | None = None  # cadenas espantadoras (None → sí, salvo crustáceos)
     beam_weight_kg: float | None = None  # vara y patines en aire (None → sin rozamiento)
     # --- aberturas de redes camaroneras (Fase 19.7b) -------------------------------------
-    opening_method: str = "auto"  # auto (tangones, gemelo o camaronera → shrimp), book o shrimp
+    opening_method: str = "auto"  # auto (tangones o gemelo → shrimp), book o shrimp
     shrimp_bridle_m: float | None = None  # cañas portón–ala (None → 3 m, INIDEP IAT 85/2024)
 
     # --- fondo ----------------------------------------------------------------------------
@@ -454,15 +454,13 @@ class DesignCase:
     def uses_shrimp_opening(self) -> bool:
         """Si las aberturas salen del método camaronero (Fase 19.7b, :mod:`~.rigging.shrimp`).
 
-        ``auto``: con tangones o gemelo, o con portones y una red sólo de crustáceos (sin peces en
-        la especie objetivo). Nunca en la pareja ni en la vara (no hay portones).
+        ``auto``: con tangones o gemelo. Con portones (aunque la red sea de crustáceos, como la
+        langostilla de la A-3) sigue el promedio del libro salvo ``opening_method="shrimp"``.
+        Nunca en la pareja ni en la vara (no hay portones).
         """
         if self.opening_method == "book" or self.is_pair or self.is_beam:
             return False
-        if self.opening_method == "shrimp" or self.rig_kind in ("outrigger", "twin"):
-            return True
-        texts = self.species_texts
-        return multirig.is_crustacean(*texts) and not shrimp.has_fish(*texts)
+        return self.opening_method == "shrimp" or self.rig_kind in ("outrigger", "twin")
 
     @property
     def shrimp_bridle(self) -> float:
@@ -1012,6 +1010,10 @@ class DesignResult:
             ].max_speed_kn
         if self.warps.winch is not None:
             out["winch_drum_required_m"] = self.warps.winch.drum_required_m
+        op = self.spread.shrimp
+        if op is not None:  # Fase 19.7b: método camaronero de aberturas
+            out["opening_method"] = op.method
+            out["door_spread_m"] = op.door_spread_m
         mr = self.multirig
         if mr is not None:  # Fase 19.5: tangones, gemelo o vara
             out["rig"] = mr.kind
@@ -1609,7 +1611,18 @@ def _stage_spread(
         fridman = replace(fridman, dpa_std_m=const, dpa_mod_m=const)
     shrimp_opening: ShrimpOpening | None = None
     if case.uses_shrimp_opening:
-        shrimp_opening = shrimp_opening_of(case, d_std, rig, doors, ah)
+        book_ah = ah
+        if doors.book_spread_m is not None:
+            # AH del promedio del libro con la separación que daba su regla (para comparar).
+            book_ah = rigging.horizontal_opening_m(
+                cut,
+                rigging.dpa_geometric_working_m(
+                    doors.book_spread_m, rig.towing.net_length_working_m, **parts
+                ),
+                rigging.dpa_geometric_m(d_std.footrope_m, doors.book_spread_m, **parts),
+                _arr(table.dpa_std_m),
+            )
+        shrimp_opening = shrimp_opening_of(case, d_std, rig, doors, book_ah)
         ah = shrimp_opening.horizontal_opening_m
     dpa_over_l = working / d_std.headrope_m  # O265 = O264/O260, O264 = L225
     ratio_table = rigging.catenary_ratio(dpa_over_l)
@@ -2026,7 +2039,7 @@ def _stage_rig(
     beam_drag: multirig.BeamDrag | None = None
     watson_area: tuple[float, float] | None = None
     watson_spread: tuple[float, float] | None = None
-    vertical = float(spread.vertical.suzuki_m)
+    vertical = float(spread.vertical_opening_m)  # Suzuki o método camaronero (Fase 19.7b)
     boom_l = case.boom_length
     if kind in ("outrigger", "twin"):
         watson_area = multirig.watson_door_area_m2(dims.headrope_m)
@@ -2302,6 +2315,115 @@ def _rig_notes(case: DesignCase, result: RigStage, doors: DoorStage) -> list[str
     return out
 
 
+def _shrimp_notes(case: DesignCase, spread: SpreadStage) -> list[str]:
+    """Notas del método camaronero de aberturas (Fase 19.7b): método, fuentes y rangos."""
+    op = spread.shrimp
+    if op is None:
+        return []
+    out: list[str] = []
+    tij = op.balance
+    if op.method == "tijera":
+        assert tij is not None and op.net_leg_m is not None and op.leg_m is not None
+        out.append(
+            t(
+                "shrimp_opening: método camaronero con tijera; DP {dp:.1f} m del equilibrio "
+                "portón–tijera–red a {v:g} nudos (Roth 2016, IAT 72/2016, ecs. 13–17, con la "
+                "proyección corregida de la ec. 12): rama L_C {lc:g} m, L_R {lr:.1f} m = cañas "
+                "{b:g} m + pie de gallo + 0,90 × {body:.2f} m de red estirada sin copo; "
+                "α = {alpha:.1f}°, β = {beta:.1f}°; la regla del libro daba {book:.1f} m",
+                dp=op.door_spread_m,
+                v=op.speed_kn or 0.0,
+                lc=op.leg_m,
+                lr=op.net_leg_m,
+                b=op.bridle_m or 0.0,
+                body=op.body_stretched_m or 0.0,
+                alpha=tij.alpha_deg,
+                beta=tij.beta_deg,
+                book=op.book_door_spread_m,
+            )
+        )
+        out.append(
+            t(
+                "shrimp_opening: AH {ah:.1f} m = DP × LRw/(LRw + pie de gallo + cañas) "
+                "(triángulos semejantes de Mec!L225 con cañas cortas, no patentes); "
+                "AH/DP = {r:.2f}: {verdict} de 0,72–0,88 de DynamiT (INIDEP)",
+                ah=op.horizontal_opening_m,
+                r=op.ah_over_dp,
+                verdict=t("dentro") if op.ah_over_dp_in_range else t("fuera"),
+            )
+        )
+        if case.shrimp_bridle_m is None:
+            out.append(
+                t(
+                    "shrimp_opening: cañas de {b:g} m supuestas (IAT 85/2024 e ITO 61/2022; "
+                    "rango 2,5–4 m en los aparejos del INIDEP); cambiar con shrimp_bridle_m",
+                    b=case.shrimp_bridle,
+                )
+            )
+    else:
+        if tij is not None and not tij.converged:
+            out.append(
+                t(
+                    "shrimp_opening: el equilibrio portón–tijera–red no tiene solución (la "
+                    "sustentación del portón supera lo que equilibra la red); se usa el respaldo "
+                    "AH = k·lima y la DP del libro"
+                )
+            )
+        out.append(
+            t(
+                "shrimp_opening: método camaronero sin tijera; AH {ah:.1f} m = {k:.2f} × lima "
+                "({fam}: {lo:.2f}–{hi:.2f}, {src}); DP {dp:.1f} m de la regla del libro",
+                ah=op.horizontal_opening_m,
+                k=op.k.k,
+                fam=t(_SHRIMP_FAMILY[op.k.key]),
+                lo=op.k.low,
+                hi=op.k.high,
+                src=op.k.source,
+                dp=op.door_spread_m,
+            )
+        )
+    out.append(
+        t(
+            "shrimp_opening: AH/lima = {r:.2f}, {verdict} de {lo:.2f}–{hi:.2f} ({fam}); "
+            "DynamiT del INIDEP da 0,36–0,50 en tangoneras argentinas y la separación de "
+            "portones medida con sensores es 0,74–0,77 × lima (IAT 94/2024); el INIDEP considera "
+            "que su AH simulada queda «muy por debajo» del ≈ 70 % recomendado (IAT 85/2024): "
+            "DynamiT puede subestimar",
+            r=op.ah_over_headrope,
+            verdict=t("dentro") if op.k.low <= op.ah_over_headrope <= op.k.high else t("fuera"),
+            lo=op.k.low,
+            hi=op.k.high,
+            fam=t(_SHRIMP_FAMILY[op.k.key]),
+        )
+    )
+    out.append(
+        t(
+            "shrimp_opening: AV {av:.2f} m = 0,04 × lima (0,03–0,07 en redes de baja abertura "
+            "con pocas boyas); sin corrección por boyas (Watson et al. 1984, tabla 3: 10–20 "
+            "boyas multiplican la AV por 1,75–2,9)",
+            av=op.vertical_opening_m,
+        )
+    )
+    out.append(
+        t(
+            "shrimp_opening: se omiten la DPA por ángulo de corte ({cut:.1f} m) y la serie de "
+            "Fridman del promedio del libro (AH del libro {book:.1f} m); opening_method='book' "
+            "vuelve al promedio",
+            cut=spread.dpa_cut_angle_m,
+            book=op.book_horizontal_opening_m,
+        )
+    )
+    return out
+
+
+#: Nombre de cada familia de k (AH = k·lima) en las notas.
+_SHRIMP_FAMILY = {
+    "inidep_dynamit": N_("tangonera argentina, DynamiT"),
+    "us_conventional": N_("camaronera convencional de EE. UU., medida"),
+    "tongue": N_("red de lengüeta, medida"),
+}
+
+
 def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
     """Límites de la Res. CFP 7/2018 para la flota langostinera con tangones (Fase 19.5).
 
@@ -2335,15 +2457,26 @@ def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
                 verdict=t("dentro del límite") if ok else t("por encima del límite"),
             )
         )
-    av = float(result.spread.vertical.suzuki_m)
-    out.append(
-        t(
-            "cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki): {verdict} (máximo 1,50 m, "
-            "art. 4)",
-            av=av,
-            verdict=t("dentro del límite") if av <= limit else t("por encima del límite"),
+    av = float(result.spread.vertical_opening_m)
+    verdict = t("dentro del límite") if av <= limit else t("por encima del límite")
+    if result.spread.shrimp is not None:
+        out.append(
+            t(
+                "cfp_res7_2018: abertura vertical {av:.2f} m (método camaronero, 0,04 × lima): "
+                "{verdict} (máximo 1,50 m, art. 4)",
+                av=av,
+                verdict=verdict,
+            )
         )
-    )
+    else:
+        out.append(
+            t(
+                "cfp_res7_2018: abertura vertical {av:.2f} m (Suzuki): {verdict} (máximo 1,50 m, "
+                "art. 4)",
+                av=av,
+                verdict=verdict,
+            )
+        )
     loa = case.vessel.loa_m or case.vessel.length_m
     if loa is not None and loa > 40.0:
         out.append(t("cfp_res7_2018: eslora {loa:.1f} m mayor que 40 m (art. 3 c)", loa=float(loa)))
@@ -2463,6 +2596,7 @@ def run(case: DesignCase) -> DesignResult:
     doors = _stage_doors(case, power, drag, rig)
     floats = _stage_floats(case, dimensions, power, drag, rig, notes)
     spread = _stage_spread(case, dimensions, drag, rig, doors, floats, notes)
+    notes.extend(_shrimp_notes(case, spread))
     drag = _stage_drag(
         case,
         geometry,

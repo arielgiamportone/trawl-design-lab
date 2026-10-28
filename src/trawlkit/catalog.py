@@ -33,19 +33,42 @@ from trawlkit.model import DEFAULT_SPEEDS_KN, DesignCase
 
 #: Profundidad de trabajo por familia cuando la fuente no la da [m].
 DEFAULT_DEPTH_M = {"bottom": 30.0, "semi_pelagic": 40.0, "pelagic": 60.0}
+#: Profundidad de diseño de la flota langostinera argentina (Fase 19.7b) [m] y su rango: lances
+#: comerciales a 71–87 m (Rubio et al. 2022, INIDEP IC 68/2022, p. 1) y medidos a 86–106 m (Roth,
+#: Pisano y Di Leva 2024, IAT 94/2024, tabla 1); las simulaciones DynamiT de tangoneras del INIDEP
+#: usan 100 m (IAT 27/2019, 85/2024 y 104/2023). Valor elegido dentro de ese rango (supuesto).
+LANGOSTINO_DEPTH_M = 90.0
+LANGOSTINO_DEPTH_RANGE_M: tuple[float, float] = (70.0, 110.0)
 
 
 def default_depth(spec: NetSpec) -> tuple[float, str | None]:
     """Profundidad de trabajo de una red del catálogo y la nota si no la da la fuente.
 
-    Orden: ``design.depth_m`` del plano, ``species.depth_m`` y, si ninguna está, el valor por
-    familia (:data:`DEFAULT_DEPTH_M`) con una nota para las suposiciones del caso.
+    Orden: ``design.depth_m`` del plano, ``species.depth_m``, la de la flota langostinera
+    (:data:`LANGOSTINO_DEPTH_M`, si la especie es el langostino) y, si no, el valor por familia
+    (:data:`DEFAULT_DEPTH_M`), con una nota para las suposiciones del caso.
     """
+    from trawlkit.rigging.shrimp import is_langostino
+
     design = (spec.model_extra or {}).get("design") or {}
     if isinstance(design, dict) and design.get("depth_m") is not None:
         return float(design["depth_m"]), None
     if spec.species is not None and spec.species.depth_m is not None:
         return float(spec.species.depth_m), None
+    sp = spec.species
+    if is_langostino(
+        spec.target_species,
+        None if sp is None else sp.name,
+        None if sp is None else sp.scientific_name,
+    ):
+        lo, hi = LANGOSTINO_DEPTH_RANGE_M
+        return LANGOSTINO_DEPTH_M, t(
+            "la fuente no da profundidad: {depth:g} m de la flota langostinera ({lo:g}–{hi:g} m; "
+            "INIDEP IC 68/2022, IAT 94/2024 y simulaciones DynamiT a 100 m)",
+            depth=LANGOSTINO_DEPTH_M,
+            lo=lo,
+            hi=hi,
+        )
     depth = DEFAULT_DEPTH_M.get(spec.family or "bottom", 30.0)
     note = t(
         "la fuente no da profundidad: {depth:g} m por familia ({family})",
@@ -73,6 +96,7 @@ RIG_DESIGN_KEYS: tuple[str, ...] = (
     "beam_shoe_area_m2",
     "beam_shoe_height_m",
     "beam_weight_kg",
+    "shrimp_bridle_m",
 )
 
 
@@ -281,6 +305,8 @@ def catalog_case(
 
 __all__ = [
     "DEFAULT_DEPTH_M",
+    "LANGOSTINO_DEPTH_M",
+    "LANGOSTINO_DEPTH_RANGE_M",
     "RIG_DESIGN_KEYS",
     "CatalogCase",
     "catalog_case",

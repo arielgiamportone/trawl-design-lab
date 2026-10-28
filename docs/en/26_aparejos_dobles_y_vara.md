@@ -30,6 +30,7 @@ from trawlkit.io import load_net
 from trawlkit.model import run
 from trawlkit.netcheck import check
 from trawlkit.rigging import multirig as M
+from trawlkit.rigging import shrimp as SH
 from trawlkit.sim import simulate
 
 P.setup_style()
@@ -130,16 +131,197 @@ The case takes them as parameters (`boom_length_m`, `boom_angle_deg`, `outrigger
 the **Rig** selector of the case panel and of the guided mode follows the net's rig by default and
 the parameters are edited in "Advanced parameters".
 
+## Openings of shrimp trawls
+
+The workbook's opening average (`Dim!F61`) averages four wing spreads (from the cut angle,
+geometric, geometric with the working net and the Fridman series) and the door spread comes from
+the warp paid out: it was built for fish nets towed with long sweeps. In the INIDEP outrigger net
+the two geometric terms already give DynamiT's 14 m, but the cut-angle wing spread
+($2 b U_2 \tan\alpha$) gives 60 m and the door spread grows with the warp. With a **split bridle**
+(*tijera*) that does not happen: "the door spread cannot be changed with the length of warp paid
+out" {cite:p}`roth2016iat072`. So, with `opening_method="auto"` (the default), outrigger and twin
+rigs use the **shrimp method** (`trawlkit.rigging.shrimp`, Phase 19.7b); `opening_method="book"`
+returns to the workbook average and `"shrimp"` forces it, for instance for a shrimp net with otter
+boards. Otter-board nets (even crustacean ones, such as the A-3 squat lobster net), pair trawls and
+beam trawls do not change, and neither does the workbook's Excel mode.
+
+**Door spread with a split bridle.** Planar balance of a door hanging from one leg of the split
+bridle {cite:p}`roth2016iat072` (eqs. 13–17, with the corrected projection):
+
+$$
+\beta = \arcsin\!\left(\frac{L_C}{L_R}\sin\alpha\right),\qquad
+T\cos\alpha = F_{CD} + \tfrac{R}{2}\cos\beta,\qquad
+F_{CL} = T\sin\alpha + \tfrac{R}{2}\sin\beta,\qquad
+DP = 2\,L_C\sin\alpha
+$$
+
+$F_{CL}$ and $F_{CD}$ are the lift and drag of one door (the case's polar), $R$ the design net drag
+at the design speed (3.5 knots, that of the INIDEP simulations), $L_C$ the bridle leg
+(`outrigger_bridle_m`: 70 m by default; 55–73 m in the INIDEP reports) and $L_R$ the run from the
+door to the point where the net converges: door-to-wing bridles + crowfoot + 0.90 × the stretched
+length of the net without codend (wing tip → codend). The 0.90 is DynamiT's lengthwise reference
+mesh shape (derived from the "Length ratio" column of its rope tables, see the Argentine case).
+The **door-to-wing bridles** (*cañas*) are 3 m by default (IAT 85/2024 {cite:p}`roth2024iat085`
+and ITO 61/2022 {cite:p}`roth2022ito061`; 2.5–4 m in the other INIDEP rigs, assumed) and are
+changed with `shrimp_bridle_m`. α is found by bisection.
+
+**Correction of Roth's eq. (12).** The printed equation is
+$F_{CL} - (F_{CD} + R/2)\sin 2\alpha + (R/2)\sin 2\beta = 0$: it projects the components of eqs. 5–8
+twice and gives $2\sin\alpha\cos\alpha$ where $\sin\alpha$ belongs. With the ITO 043/2022 data
+(4.08 m², $C_L/C_D$ = 0.93/0.71, $R$ = 3777 − 2·$F_{CD}$, $L_C$ = 70 m) the printed form gives door
+spreads no outrigger trawler has; the corrected one brackets DynamiT's 16.2 m:
+
+```{code-cell} ipython3
+import math
+from trawlkit.rigging.doors import door_forces_kgf
+from trawlkit.units import KNOT_TO_MS
+
+fz = door_forces_kgf(4.08, 0.71, 0.93, 3.5 * KNOT_TO_MS)
+FL, FD = float(fz.lift_kgf), float(fz.drag_kgf)
+RN = 3777.2 - 2 * FD
+
+
+def printed_eq12(lc, lr):
+    """Door spread with the printed eq. (12) (root found by scanning α)."""
+    amax = math.asin(min(1.0, lr / lc))
+    g = lambda a: FL - (FD + RN / 2) * math.sin(2 * a) + (RN / 2) * math.sin(
+        2 * math.asin(min(1.0, lc / lr * math.sin(a))))
+    xs = [amax * k / 4000 for k in range(1, 4000)]
+    for a, b in zip(xs, xs[1:]):
+        if g(a) * g(b) < 0:
+            return 2 * lc * math.sin(0.5 * (a + b))
+    return float("nan")
+
+
+P.md_table(
+    ["L_R [m]", "DS, printed eq. (12) [m]", "DS, corrected balance [m]", "DynamiT [m]"],
+    [[f(lr, 0), f(printed_eq12(70.0, lr)), f(SH.tijera_balance(FL, FD, RN, 70.0, lr).spread_m),
+      "16.2"] for lr in (20.0, 25.0, 30.0, 35.0)],
+)
+```
+
+Roth reports agreement within 0.6 m with DynamiT for his 22 m example (table 1), but does not print
+$L_C$ or the door data, so that result could not be reproduced.
+
+**Horizontal opening.** $AH = DP \cdot L_{Rw} / (L_{Rw} + \text{crowfoot} + \text{bridles})$: the
+workbook's similar-triangle ratio (Mec!L225, without the rounding) with the short door-to-wing
+bridles instead of the 25 m sweeps. $AH/DP$ is checked against 0.72–0.88, the range of the INIDEP
+DynamiT simulations with a split bridle (ITO 043, IAT 85, 104 and 111; derived from their tables).
+The cut-angle wing spread and the Fridman series leave the average.
+
+**Fallback without a split bridle** (twin, otter boards, or if the balance has no solution):
+$AH = k \cdot \text{headrope}$ with the workbook door spread and $k$ by family:
+
+```{code-cell} ipython3
+fam = {"inidep_dynamit": "Argentine low-opening outrigger net (DynamiT)",
+       "us_conventional": "Conventional US shrimp trawl, no floats (measured)",
+       "tongue": "Tongue, Mongoose, Cobra trawls (measured)"}
+P.md_table(
+    ["Family", "k", "Range", "Source"],
+    [[fam[h.key], f(h.k, 2), f"{f(h.low, 2)}–{f(h.high, 2)}", h.source]
+     for h in SH.HEADROPE_K.values()],
+)
+```
+
+The sources disagree and the engine says so in the notes of every run. The DynamiT simulations of
+Argentine outrigger nets give $AH/\text{headrope}$ = 0.36–0.50; the door spread **measured** with
+Simrad sensors on the 25.4 m Iberconsa net is 18.8–19.5 m, 0.74–0.77 × the headrope
+{cite:p}`roth2024iat094`, and INIDEP itself considers its simulated AH "well below the recommended
+value (approximately 70 %)" {cite:p}`roth2024iat085`. The diver measurements of Watson et al.
+{cite:p}`watson1984` and Harrington et al. {cite:p}`harrington1988` give 0.62–0.78 for
+conventional US shrimp trawls. DynamiT may be biased low: the only measured/simulated comparison
+(Iberconsa) does not use the same doors (400 kg double-slot Bison doors at sea; 500 kg, 4.5 m² flat
+doors in the simulator).
+
+**Vertical opening.** $AV = 0.04 \cdot \text{headrope}$ (0.03–0.07) for low-opening nets with few
+or no floats: 0.026–0.049 in DynamiT and 0.029–0.080 in the measurements of Watson et al. and
+Harrington et al. There is no float correction: table 3 of Watson et al. shows that 10–20 floats
+multiply the AV by 1.75–2.9, but it gives no continuous relation, and the engine's float count is
+the one the workbook computes, not the net's. Suzuki's AV (4/90 of the circumference) gives 3.2 m
+for the INIDEP net, 2.5 times DynamiT's. The 1.5 m limit of CFP Resolution 7/2018 is checked with
+this AV.
+
+**Design depth.** The Argentine red shrimp fleet fishes at 71–87 m (IC 68/2022
+{cite:p}`rubio2022ic068`) and at 86–106 m (IAT 94/2024); the INIDEP DynamiT simulations of
+outrigger nets use 100 m. Red shrimp nets whose source gives no depth take 90 m (range 70–110 m,
+`trawlkit.catalog.LANGOSTINO_DEPTH_M`; a value chosen within that range); other bottom nets keep
+30 m. With a split bridle the depth changes the warp and its tension, not the door spread.
+
+### Validation
+
+The full engine with the two ITO 043/2022 nets of the catalogue (before: workbook average; after:
+shrimp method) against DynamiT, and the balance alone with the published data of each INIDEP
+simulation ($R$ = tension − 2·$F_{CD}$; $L_R$ from the digitised plan or estimated, TO BE VERIFIED):
+
+```{code-cell} ipython3
+rows = []
+for nid, sim in (("inidep_ito043_tangonera_inidep", "ito043_sim3"),
+                 ("inidep_ito043_tangonera_empresa", "ito043_sim2")):
+    case = catalog_case(nid).case
+    before = run(dataclasses.replace(case, opening_method="book"))
+    after = run(case)
+    dc = next(c for c in SH.DYNAMIT_CASES if c.key == sim)
+    rows.append([
+        f"`{nid}` (engine)",
+        f"{f(before.doors.spread_m)} / {f(before.spread.horizontal_opening_m)} / "
+        f"{f(before.spread.vertical_opening_m, 2)}",
+        f"{f(after.doors.spread_m)} / {f(after.spread.horizontal_opening_m)} / "
+        f"{f(after.spread.vertical_opening_m, 2)}",
+        f"{f(dc.dynamit_spread_m)} / {f(dc.dynamit_ah_m)} / "
+        + ("1.3" if sim == "ito043_sim3" else "1.5"),
+        f"{f(100 * (after.doors.spread_m / dc.dynamit_spread_m - 1), 0)} %",
+        "—",
+    ])
+labels = {
+    "ito043_sim3": "ITO 043/2022, sim. 3 (INIDEP net, fig. 5)",
+    "ito043_sim2": "ITO 043/2022, sim. 2 (company net with 3 mm twine, fig. 4)",
+    "ito043_sim1": "ITO 043/2022, sim. 1 (company net, original materials)",
+    "iat085_iberconsa": "IAT 85/2024, Iberconsa net 25.4/31.0 m (sim. 1)",
+    "iat111_morales": "IAT 111/2022, Morales net 26.30/32.50 m (3 knots)",
+}
+for dc in SH.DYNAMIT_CASES:
+    b = SH.dynamit_case_balance(dc)
+    rows.append([
+        f"{labels[dc.key]} (balance, L_R {f(dc.net_leg_m)} m"
+        + (", estimated" if dc.net_leg_kind == "assumed" else "") + ")",
+        "—",
+        f(b.spread_m),
+        f(dc.dynamit_spread_m),
+        f"{f(100 * (b.spread_m / dc.dynamit_spread_m - 1), 0)} %",
+        "18.8–19.5 (IAT 94/2024)" if dc.key == "iat085_iberconsa" else "—",
+    ])
+P.md_table(
+    ["Case", "Before: DS / AH / AV [m]", "Shrimp method", "DynamiT", "DS − DynamiT",
+     "Measured DS [m]"],
+    rows,
+)
+```
+
+The full engine is within 15 % of DynamiT's door spread and within 10 % of its AH for both nets;
+before, the door spread came out 3.6 to 3.9 times larger. The balance alone is within ±20 % in the
+four cases of the phase report (ITO 043 sims. 1 and 3, IAT 85 Iberconsa, IAT 111 Morales), the
+tolerance the tests fix while $L_R$ does not come from a digitised plan; sim. 2 with the balance
+alone (lighter net, same $L_R$) gives +26 %. The measured door spread of the Iberconsa net
+(18.8–19.5 m, other doors and a 60 m split bridle) lies above DynamiT and the balance: consistent
+with the DynamiT bias noted above.
+
 ## Argentine case: the INIDEP outrigger net
 
 INIDEP evaluated in DynamiT an outrigger net proposed by the company Pesquera Deseado and one of
-its own {cite:p}`roth2022ito043`. Its figure 5 (INIDEP net) is in the catalogue as
-`inidep_ito043_tangonera_inidep`, digitised with the provenance of every value. It is a **draft**:
-the validator flags that the rear Dyneema body (40 meshes of 120 mm in the top panel) joins a codend
-of 100 meshes of 60 mm, a seam the plan draws that way but that does not close in stretched
-length, and three cut labels that do not give the width change of their panel. The side panels of
-the plan do not match the top panel station by station: the engine shares them out by stretched
-length.
+its own {cite:p}`roth2022ito043`. Its figures 5 (INIDEP net) and 4 (company net with 3 mm twine)
+are in the catalogue as `inidep_ito043_tangonera_inidep` and `inidep_ito043_tangonera_empresa`,
+digitised with the provenance of every value, and they are **published** since Phase 19.7c.
+Re-reading the plans showed that the two-panel codend (2 × 100 meshes of 60 mm = 12.0 m) matches
+the sum of the aft edges of the top and bottom panels (4.80 + 7.32 = 12.12 m in fig. 5;
+4.80 + 7.42 = 12.22 m in fig. 4) and that each side panel ends before the codend, gathered on a
+0.50 m rope (N in fig. 5, L in fig. 4) that closes into the seams. The "Length ratio" column of the
+DynamiT rope table confirms it (derived rule: rope length over the netting edge at the reference
+mesh shape, 0.90 lengthwise and 0.436 across; for N, 0.50 / (17 × 0.14 × 0.436) = 0.48, as
+printed). The validator therefore compares the circumference and not panel by panel
+(`codend_join` warning): panel by panel the join is not 1:1 and the plan does not say how the
+difference is taken up. Three cut labels that do not give the width change of their panel (they are
+transcribed as read) and the side panels, which the engine shares out by stretched length, remain
+as warnings.
 
 ```{code-cell} ipython3
 spec = load_net("inidep_ito043_tangonera_inidep")
@@ -151,39 +333,42 @@ P.md_table(
 
 The net names the vessel and door it is computed with: the fleet's **typical outrigger trawler**
 (1998 average, {doc}`39_flota_argentina`), because the report does not publish the length or power
-of the F/V *Atlántico 1*, and the generic flat door of the catalogue closest in weight to the
-report's 540 kg (510 kg, 2.5 × 1.25 m; the door dimensions are not published). The depth is not in
-the report either: 30 m by family. All of it is in the case notes.
+of the F/V *Atlántico 1*, and a 4.08 m² flat door, the area of the 530 kg doors of the same company
+rig in IAT 75/2023 {cite:p}`roth2023iat075`, with the proportions of the catalogue's generic flat
+door (2.86 × 1.43 m; assumed, ITO 043 does not publish the dimensions). The depth is not in the
+report either: 90 m, that of the red shrimp fleet. All of it is in the case notes.
 
 ```{code-cell} ipython3
 cc = catalog_case(spec)
 r = run(cc.case)
+r_book = run(dataclasses.replace(cc.case, opening_method="book"))
 mr = r.multirig
 i = r.case.speed_index(3.5)
 P.md_table(
-    ["Result at 3.5 knots", "trawlkit", "DynamiT (INIDEP, sim. 3)"],
+    ["Result at 3.5 knots", "Workbook", "Shrimp method", "DynamiT (INIDEP, sim. 3)"],
     [
-        ["Horizontal opening AH [m]", f(r.spread.horizontal_opening_m), "14.0"],
-        ["Door spread of one net [m]", f(r.doors.spread_m), "16.2"],
-        ["Vertical opening AV [m] (Suzuki)", f(r.spread.vertical.suzuki_m, 2), "1.3"],
-        ["One net with its rigging [kgf]", f(mr.per_net.std[i], 0), "3777 (warp tension)"],
-        ["Both nets and friction [kgf]", f(mr.demand.std[i], 0), "—"],
-        ["Swept width [m]", f(mr.swept_width_m), "—"],
-        ["Maximum towing speed [kn]", f(r.performance.design.max_speed_kn, 2), "—"],
+        ["Horizontal opening AH [m]", f(r_book.spread.horizontal_opening_m),
+         f(r.spread.horizontal_opening_m), "14.0"],
+        ["Door spread of one net [m]", f(r_book.doors.spread_m), f(r.doors.spread_m), "16.2"],
+        ["Vertical opening AV [m]", f(r_book.spread.vertical_opening_m, 2),
+         f(r.spread.vertical_opening_m, 2), "1.3"],
+        ["One net with its rigging [kgf]", f(r_book.multirig.per_net.std[i], 0),
+         f(mr.per_net.std[i], 0), "3777 (warp tension)"],
+        ["Both nets and friction [kgf]", f(r_book.multirig.demand.std[i], 0),
+         f(mr.demand.std[i], 0), "—"],
+        ["Swept width [m]", f(r_book.multirig.swept_width_m), f(mr.swept_width_m), "—"],
     ],
 )
 ```
 
-The drag of one net with its rigging is close to the warp tension DynamiT gave; the openings are
-not. The workbook's empirical opening methods (Fridman, Suzuki) were built for higher-opening fish
-nets and give, for this low-opening shrimp net, larger horizontal and vertical openings than the
-INIDEP simulator, and the door spread grows with the 25 m sweeps the case takes from the workbook
-because the plan does not give them. The limit of CFP Resolution 7/2018 on the vertical opening
-(1.5 m) is checked in the notes:
+The drag of one net with its rigging does not depend on the opening method and stays within 20 % of
+DynamiT's warp tension (the engine computes it at 90 m, with more warp). The run notes say which
+method was used, with which data and where the openings fall; the limit of CFP Resolution 7/2018 on
+the vertical opening (1.5 m) is checked with the method's AV:
 
 ```{code-cell} ipython3
 for n in r.notes:
-    if n.startswith(("cfp_res7_2018", "multirig_overlap", "watson_door_area")):
+    if n.startswith(("shrimp_opening", "cfp_res7_2018", "multirig_overlap", "watson_door_area")):
         print(n)
 ```
 
@@ -311,10 +496,14 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 
 ## Limits
 
-* The openings of each net come from the workbook methods, tuned for fish nets; for low-opening
-  shrimp nets they overestimate AH and AV (comparison with DynamiT above).
-* With outriggers the geometry of each net is computed as the workbook's otter trawl (two warps
-  from the gallows); the bridle only adds its drag. The nets are assumed centred behind their boom
+* The openings of shrimp trawls come from the Phase 19.7b method, calibrated with INIDEP DynamiT
+  simulations and checked against a single measured series (door spread, IAT 94/2024); no
+  measured AH of an Argentine outrigger net has been published. Its validity: split bridle of
+  55–73 m, flat or Bison doors of 300–600 kg, headrope of 11–40 m, 2.5–4 knots and 30–110 m. The
+  length $L_R$ and the door-to-wing bridles are derived or assumed; the tolerance is ±20 % on the
+  door spread.
+* With outriggers the rest of the geometry of each net (warp, sag, workbook bridles) is computed
+  as the workbook's otter trawl; the split bridle adds its drag and sets the door spread. The nets are assumed centred behind their boom
   tips; the stagger astern is not modelled.
 * The twin clump is a rule of thumb (1.5 doors) and its drag that of a sled of the Bullis and Floyd
   dimensions: there is no published design formula.
@@ -328,8 +517,8 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 
 | Net | Source | Rig | Status |
 |---|---|---|---|
-| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | outrigger | draft |
-| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | outrigger | draft |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | outrigger | published |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | outrigger | published |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plan 03 {cite:p}`seafdec2016thai` | beam | draft |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plan 31 (14 m, 75 hp) | outrigger | published |
 | `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plan 33 (20 m, 90 hp) | outrigger | published |
@@ -338,11 +527,13 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 | `seafdec_35_outrigger_shrimp` | SEAFDEC 2016, plan 35 (15 m, 112 hp) | outrigger | draft |
 | `seafdec_30_beam_shrimp` | SEAFDEC 2016, plan 30 (11 m, 165 hp) | beam | published |
 
-The Thai nets of Phase 19.6 are the first **published** outrigger and beam nets of the catalogue: their
+The Thai nets of Phase 19.6 were the first **published** outrigger and beam nets of the catalogue: their
 plans give the net and the vessel, but not the outriggers, the doors or the beam, so their case uses
 the defaults of this chapter (which are not those of the Thai fleet).
 
 The 380 × 70 mm Seafish twin-rig plan {cite:p}`arkley1987ir1310` was not digitised: it is a scan in
 British notation (rows of half meshes, S, SB and SK cuts, half-panel counts) that cannot be checked
-on the image with the precision of the rest of the catalogue. The sources consulted are in
+on the image with the precision of the rest of the catalogue. The typed plans of IAT 27/2019
+(Solimeno net, original and modified) and IAT 75/2023 (traditional Pesquera Deseado net, a legible
+version of ITO 043 fig. 2) are left for a later phase. The sources consulted are in
 {doc}`catalogo_fuentes`.

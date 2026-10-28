@@ -258,14 +258,21 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
             float_positions_m=(),
             beam_height_m=float(mr.vertical_opening_m),
         )
+    upper_bridle = float(r.bridles.lengths.upper_m)
+    sweeps = float(r.bridles.sweeps_m)
+    op = r.spread.shrimp
+    if op is not None and op.method == "tijera" and op.bridle_m is not None:
+        # Fase 19.7b: con tijera el portón se une a las alas con cañas cortas (una superior y
+        # una inferior), sin patentes (IAT 85/2024, IAT 111/2022).
+        upper_bridle, sweeps = float(op.bridle_m), 0.0
     return Rigging(
         door_spread_m=float(r.doors.spread_m if door_spread_m is None else door_spread_m),
-        upper_bridle_m=float(r.bridles.lengths.upper_m),
+        upper_bridle_m=upper_bridle,
         # La cadena de reglaje se ajusta para que brida inferior + cadena = brida superior (es
         # su función). Con el redondeo del libro (17 + 1,71 = 18,71 m) la inferior quedaría
         # 0,71 m más larga que la superior —más de lo que absorbe la punta de ala— y floja.
-        lower_bridle_m=float(r.bridles.lengths.upper_m),
-        sweeps_m=float(r.bridles.sweeps_m),
+        lower_bridle_m=upper_bridle,
+        sweeps_m=sweeps,
         headrope_wing_m=head[0],
         headrope_bosom_m=head[1],
         footrope_wing_m=foot[0],

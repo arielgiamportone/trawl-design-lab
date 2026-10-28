@@ -13,7 +13,7 @@ vessel_hp:
 - 948.7
 - 948.7
 target_species: langostino patagónico (Pleoticus muelleri)
-status: draft
+status: published
 sources:
 - key: roth2022ito043
   title: 'INIDEP ITO 043/22 (Roth y Rubio 2022), fig. 4: red tangonera de Pesquera Deseado con hilos de
@@ -162,6 +162,7 @@ panels:
   cut_code_x2: AN
   note: Tramo trasero del costado (160 mm, 132 filas); el tramo delantero junto a las alas (20 filas AN:1T6B
     y 63,5 filas AN, 160 mm) no se modela.
+  aft_rope_m: 0.5
 species:
   name: Langostino
   scientific_name: Pleoticus muelleri
@@ -187,8 +188,10 @@ rigging:
   warp: acero de 24 mm con alma de acero
 design:
   vessel_id: ar_tangonero_1998
-  door_id: door_flat_500hp
+  door_length_m: 2.86
+  door_height_m: 1.43
   door_weight_air_kg: 540.0
+  depth_m: 90.0
   outrigger_bridle_m: 70.0
   outrigger_bridle_diameter_mm: 22.0
   speed_kn: 3.5
@@ -200,9 +203,12 @@ simulated:
   warp_tension_kgf: 3559.6
   note: 'resultados de la simulación DynamiT 2 del INIDEP (p. 6): modelo, no mediciones'
 notes:
-- 'BORRADOR: el plano une el cuerpo de 30 mallas de 160 mm del dorso a un copo de 100 mallas de 60 mm
-  (20 % de diferencia de largo estirado), el corte 1N4B del dorso no da el cambio de ancho del paño (236
-  → 30 en 132 filas) y el rótulo de corte del ala está sobreimpreso.'
+- 'Unión al copo: el copo de dos caras (2 × 100 mallas de 60 mm = 12,0 m) se une al dorso (30 × 160 mm
+  = 4,80 m) y al vientre (53 × 140 mm = 7,42 m) alrededor de la boca: 12,22 m frente a 12,0 m (1–2 %).
+  Los costados terminan antes del copo, fruncidos en un cabo de 0,50 m que cierra en las costuras (aft_rope_m),
+  y no suman ancho al copo. Cara por cara la unión no es 1:1 y el plano no dice cómo se reparte la diferencia
+  (el validador lo informa como aviso codend_join). El corte 1N4B del dorso no da el cambio de ancho del
+  paño (236 → 30 en 132 filas) y el rótulo de corte del ala está sobreimpreso (se toma el de la fig. 5).'
 - 'Cabos del plano: A combinado 22 mm 11,00 m; B 3,75 m; G 6,00 m (lima 35,5 m); M cable mixto 24 mm 10,00
   m; N 3,75 m; R 5,00 m (burlón 32,5 m); H cable mixto 24 mm 3,15 m.'
 - 'Aparejo de las tres simulaciones (pp. 1 y 5): tijera de 70 m de cable de acero de 22 mm, cable de arrastre
@@ -714,6 +720,13 @@ provenance:
     page: '8'
     figure: Figura 4
     note: Ø 3 mm del hilo «160 3 mm PCU» en la tabla de materiales del plano
+  panels.S1.aft_rope_m:
+    kind: transcribed
+    document: roth2022ito043
+    page: '8'
+    figure: Figura 4
+    note: 'cabo L de 0,50 m en el borde de bolsa del costado (15 mallas de 160 mm; «Length ratio» 0,48
+      = 0,50 / (15 × 0,16 × 0,436)): el costado termina fruncido antes del copo y cierra en las costuras'
   panels.S1.hanging_ratio:
     kind: assumed
     document: roth2022ito043
@@ -771,20 +784,36 @@ provenance:
     figure: Figura 4
     note: 'B/P «Atlántico 1» (tangonero): el informe no da eslora ni potencia; se usa el tangonero típico
       de la flota argentina (media de 1998)'
-  design.door_id:
+  design.door_length_m:
     kind: assumed
     document: roth2022ito043
     page: '8'
     figure: Figura 4
-    note: 'portones rectangulares planos de madera de 540 kg (pp. 1 y 5) sin medidas publicadas: se toma
-      el portón plano genérico del catálogo de peso más cercano (510 kg, 2,5 × 1,25 m; alto ≤ 1,5 m de
-      la Res. CFP 7/2018). A VERIFICAR'
+    note: 'ITO 043/2022 no da las medidas de los portones de 540 kg (pp. 1 y 5): área de 4,08 m² de los
+      portones planos de 530 kg del mismo aparejo de Pesquera Deseado (Roth y Rubio 2023, IAT 75/2023,
+      p. 3) con la proporción alto/largo 0,5 del portón plano genérico del catálogo (2,5 × 1,25 m): √(4,08/0,5)
+      = 2,86 m. A VERIFICAR'
+  design.door_height_m:
+    kind: assumed
+    document: roth2022ito043
+    page: '8'
+    figure: Figura 4
+    note: 0,5 × 2,86 m (ver door_length_m); por debajo del alto máximo de 1,5 m de la Res. CFP 7/2018,
+      art. 4. A VERIFICAR
   design.door_weight_air_kg:
     kind: transcribed
     document: roth2022ito043
     page: '8'
     figure: Figura 4
     note: portones de madera de 540 kg cada uno
+  design.depth_m:
+    kind: assumed
+    document: roth2022ito043
+    page: '8'
+    figure: Figura 4
+    note: 'ITO 043/2022 no da la profundidad de las simulaciones: 90 m de la flota langostinera (lances
+      a 71–87 m en IC 68/2022 y a 86–106 m en IAT 94/2024; DynamiT a 100 m en IAT 27/2019, 85/2024 y 104/2023).
+      La barra de la fig. 6 está a Y ≈ −90 m, pero el informe no dice que Y sea la profundidad'
   design.outrigger_bridle_m:
     kind: transcribed
     document: roth2022ito043

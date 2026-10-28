@@ -31,8 +31,7 @@ from typing import Any
 from trawlkit.i18n import t
 
 #: Métodos de aberturas de :class:`~trawlkit.model.DesignCase` (``opening_method``): ``auto``
-#: (camaronero con tangones o gemelo, o con una red sólo de crustáceos), ``book`` (el promedio
-#: del libro) o ``shrimp`` (forzado).
+#: (camaronero con tangones o gemelo), ``book`` (el promedio del libro) o ``shrimp`` (forzado).
 OPENING_METHODS: tuple[str, ...] = ("auto", "book", "shrimp")
 
 #: Cañas portón–ala por defecto [m]: 3,0 m en las simulaciones del INIDEP de redes de Pesquera
@@ -93,8 +92,6 @@ HEADROPE_K: dict[str, HeadropeK] = {
 _LANGOSTINO_WORDS = ("langostino", "pleoticus")
 #: Palabras que señalan una red de lengüeta.
 _TONGUE_WORDS = ("tongue", "lengüeta", "lengueta", "mongoose", "cobra")
-#: Palabras que señalan peces en la especie objetivo (red mixta: no es sólo camaronera).
-_FISH_WORDS = ("pez", "peces", "pescado", "fish", "merluza", "hake")
 
 
 def _hay(*texts: str | None) -> str:
@@ -107,14 +104,8 @@ def is_langostino(*texts: str | None) -> bool:
     return any(w in hay for w in _LANGOSTINO_WORDS)
 
 
-def has_fish(*texts: str | None) -> bool:
-    """Si la especie objetivo nombra peces (red mixta de peces y camarón)."""
-    hay = _hay(*texts)
-    return any(w in hay for w in _FISH_WORDS)
-
-
 def headrope_k(*texts: str | None) -> HeadropeK:
-    """k de respaldo por familia: langostino argentino, lengüeta o camaronera convencional."""
+    """Coeficiente k de respaldo: langostino argentino, lengüeta o camaronera convencional."""
     if is_langostino(*texts):
         return HEADROPE_K["inidep_dynamit"]
     hay = _hay(*texts)
@@ -266,6 +257,150 @@ class ShrimpOpening:
         return out
 
 
+@dataclass(frozen=True)
+class DynamitCase:
+    """Simulación DynamiT del INIDEP con los datos que pide :func:`tijera_balance`.
+
+    ``tension_kgf`` es la tensión del cable o la resistencia al avance que publica el informe;
+    la resistencia de la red se toma como ``tension − 2·F_CD`` (informe de la Fase 19.7b, sección
+    5.1). ``cl``/``cd`` son los del informe cuando los da; si no, los del portón plano de la A-3 a
+    32° (0,93/0,71, supuesto). ``net_leg_m`` (L_R) no está impreso en ningún informe:
+    ``net_leg_kind`` dice si sale del plano digitalizado (``derived``) o es una estimación
+    (``assumed``, A VERIFICAR).
+    """
+
+    key: str
+    label: str
+    document: str
+    speed_kn: float
+    door_area_m2: float
+    cl: float
+    cd: float
+    coefficients_kind: str
+    tension_kgf: float
+    leg_m: float
+    net_leg_m: float
+    net_leg_kind: str
+    dynamit_spread_m: float
+    dynamit_ah_m: float | None
+    headrope_m: float
+
+
+#: Casos de validación del equilibrio de la tijera con datos publicados (todos T salvo lo
+#: indicado). ITO 043/2022 p. 6 (3,5 nudos, tijera 70 m; área 4,08 m² de IAT 75/2023);
+#: IAT 85/2024 tabla 2 (Iberconsa, 6 boyas; portones 4,5 m², tijera 70 m, cañas 3 m);
+#: IAT 111/2022 tabla 1 (3 nudos, C_D/C_L 0,72/0,81, portones 3 m², tijera 55 m, cañas 2,5 m).
+DYNAMIT_CASES: tuple[DynamitCase, ...] = (
+    DynamitCase(
+        "ito043_sim3",
+        "ITO 043/2022, sim. 3 (red del INIDEP, fig. 5)",
+        "roth2022ito043",
+        3.5,
+        4.08,
+        0.93,
+        0.71,
+        "assumed",
+        3777.2,
+        70.0,
+        # 3 m de cañas + 0,90 × 34,36 m de red estirada sin copo de la fig. 5 (derivado).
+        3.0 + TIJERA_NET_LENGTH_FACTOR * 34.36,
+        "derived",
+        16.2,
+        14.0,
+        35.5,
+    ),
+    DynamitCase(
+        "ito043_sim2",
+        "ITO 043/2022, sim. 2 (red de la empresa con hilo de 3 mm, fig. 4)",
+        "roth2022ito043",
+        3.5,
+        4.08,
+        0.93,
+        0.71,
+        "assumed",
+        3559.6,
+        70.0,
+        3.0 + TIJERA_NET_LENGTH_FACTOR * 34.56,
+        "derived",
+        16.2,
+        14.0,
+        35.5,
+    ),
+    DynamitCase(
+        "ito043_sim1",
+        "ITO 043/2022, sim. 1 (red de la empresa, materiales originales)",
+        "roth2022ito043",
+        3.5,
+        4.08,
+        0.93,
+        0.71,
+        "assumed",
+        3340.6,
+        70.0,
+        # Misma red que la fig. 4 con otros hilos: mismo largo (supuesto).
+        3.0 + TIJERA_NET_LENGTH_FACTOR * 34.56,
+        "assumed",
+        21.4,
+        16.4,
+        35.5,
+    ),
+    DynamitCase(
+        "iat085_iberconsa",
+        "IAT 85/2024, red Iberconsa 25,4/31,0 m (sim. 1)",
+        "roth2024iat085",
+        3.5,
+        4.5,
+        0.93,
+        0.71,
+        "assumed",
+        4138.1,
+        70.0,
+        30.0,
+        "assumed",
+        16.6,
+        12.0,
+        25.4,
+    ),
+    DynamitCase(
+        "iat111_morales",
+        "IAT 111/2022, red Morales 26,30/32,50 m (3 nudos)",
+        "roth2022iat111",
+        3.0,
+        3.0,
+        0.81,
+        0.72,
+        "transcribed",
+        2218.17,
+        55.0,
+        25.0,
+        "assumed",
+        13.8,
+        12.1,
+        26.3,
+    ),
+)
+
+#: Tolerancia del equilibrio frente a la DP de DynamiT mientras L_R no salga del plano (informe
+#: de la Fase 19.7b, sección 5.1: «expect about ±20 %»).
+DYNAMIT_SPREAD_TOLERANCE = 0.20
+
+
+def dynamit_case_balance(case: DynamitCase) -> TijeraBalance:
+    """Equilibrio de la tijera con los datos de un caso DynamiT (R = tensión − 2·F_CD)."""
+    from trawlkit.rigging.doors import door_forces_kgf
+    from trawlkit.units import KNOT_TO_MS
+
+    forces = door_forces_kgf(case.door_area_m2, case.cd, case.cl, case.speed_kn * KNOT_TO_MS)
+    drag = float(forces.drag_kgf)
+    return tijera_balance(
+        float(forces.lift_kgf),
+        drag,
+        case.tension_kgf - 2.0 * drag,
+        case.leg_m,
+        case.net_leg_m,
+    )
+
+
 def vertical_opening_m(headrope_m: float) -> float:
     """AV = 0,04·lima [m] (redes de baja abertura con pocas o ninguna boya)."""
     return AV_HEADROPE_RATIO * headrope_m
@@ -277,16 +412,19 @@ __all__ = [
     "AV_HEADROPE_RATIO",
     "CFP_AV_LIMIT_M",
     "DYNAMIT_AH_RANGE",
+    "DYNAMIT_CASES",
+    "DYNAMIT_SPREAD_TOLERANCE",
     "HEADROPE_K",
     "MEASURED_DP_RANGE",
     "OPENING_METHODS",
     "SHRIMP_BRIDLE_M",
     "SHRIMP_BRIDLE_RANGE_M",
     "TIJERA_NET_LENGTH_FACTOR",
+    "DynamitCase",
     "HeadropeK",
     "ShrimpOpening",
     "TijeraBalance",
-    "has_fish",
+    "dynamit_case_balance",
     "headrope_k",
     "is_langostino",
     "net_leg_m",

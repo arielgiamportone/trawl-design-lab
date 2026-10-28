@@ -13,6 +13,15 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Redes tangoneras del INIDEP publicadas (Fase 19.7c)**: una nueva lectura de las figs. 4 y 5
+  de ITO 043/2022 mostró que el copo de dos caras (2 × 100 mallas de 60 mm = 12,0 m) se une al
+  dorso más el vientre (12,12 y 12,22 m) y que los costados terminan antes del copo en un cabo de
+  0,50 m (N y L). Los costados llevan ahora `aft_rope_m` (transcripto) y `netcheck` compara la
+  circunferencia cuando los costados terminan en un cabo (aviso `codend_join` en lugar del error
+  de empalme cara por cara). `inidep_ito043_tangonera_inidep` e `inidep_ito043_tangonera_empresa`
+  cierran y pasan a publicadas. Su portón pasa a 4,08 m² (2,86 × 1,43 m; área de IAT 75/2023,
+  proporción del portón genérico, supuesto) y su profundidad a 90 m (supuesto con fuente).
+  `tools/catalog/build_nets.py` acepta datos extra por paño (`panel_extras`).
 - **Error 422 «hace falta la profundidad de trabajo» (Fase 19.7a)**: al elegir un buque con una red
   del catálogo cuya fuente no da profundidad (INIDEP, SEAFDEC), la API respondía 422. Ahora usa la
   profundidad por familia, igual que sin buque, y lo anota en las suposiciones del caso. Además:
@@ -23,6 +32,22 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro, de la flota y de investigación.
 
 ### Agregado
+- **Aberturas de redes camaroneras (Fase 19.7b)**: `DesignCase.opening_method` (`auto` por
+  defecto, `book`, `shrimp`) y `shrimp_bridle_m`; módulo `trawlkit.rigging.shrimp`. Con tangones la
+  separación de portones sale del equilibrio portón–tijera–red de Roth (2016, INIDEP IAT 72/2016)
+  con la proyección corregida de su ec. (12) (la forma impresa da 40–65 m con los datos de ITO
+  043; la corregida 13–19 m frente a 16,2 m de DynamiT); la AH, de la razón de triángulos
+  semejantes con cañas cortas (3 m por defecto) y control de AH/DP = 0,72–0,88; la AV,
+  0,04 × lima (0,03–0,07), con el límite de la Res. CFP 7/2018. Sin tijera (gemelo, o forzado con
+  portones) AH = k·lima por familia (0,43 DynamiT del INIDEP; 0,70 camaroneras de EE. UU., Watson
+  et al. 1984; 0,80 redes de lengüeta). Las notas muestran el método, los datos y los rangos de
+  DynamiT (0,36–0,50 × lima) y medidos (portones a 0,74–0,77 × lima, IAT 94/2024). Las redes con
+  portones (incluida la A-3), la pareja, la vara y el modo Excel no cambian. Red tangonera del
+  INIDEP: DP 58,5 → 17,5 m, AH 29,8 → 14,4 m y AV 3,24 → 1,42 m frente a 16,2 / 14,0 / 1,3 m de
+  DynamiT. Profundidad por defecto de 90 m (70–110 m) para las redes de langostino
+  (`catalog.LANGOSTINO_DEPTH_M`: IC 68/2022, IAT 94/2024 y DynamiT a 100 m). El simulador usa las
+  cañas cortas y sin patentes con el método de la tijera. Tabla de validación en el capítulo 26;
+  parámetros en «Parámetros avanzados» de la app; 19 referencias nuevas del INIDEP y de la NOAA.
 - **Redes de planos públicos (Fase 19.6)**: ocho redes del catálogo tailandés de la SEAFDEC (2016,
   TD/RES/141) leídas de cada plano con procedencia por valor (`tools/catalog/transcriptions_196.py`):
   camaroneras con tangón n.º 31, 33, 38 y 39 (75–150 hp, publicadas) y 35 (borrador), red de vara

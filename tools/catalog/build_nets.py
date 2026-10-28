@@ -107,6 +107,10 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
             panel["cut_code_x2"] = code2
         if pid in t.get("panel_notes", {}):
             panel["note"] = t["panel_notes"][pid]
+        # Datos del plano que no son columnas de la fila (p. ej. ``aft_rope_m``, Fase 19.7c).
+        extras = t.get("panel_extras", {}).get(pid, {})
+        for key, (value, _, _) in extras.items():
+            panel[key] = value
         panels.append(panel)
         for f in ("mesh_mm", "rtex", "meshes_top", "meshes_bottom", "meshes_depth"):
             mark(f"panels.{pid}.{f}")
@@ -125,6 +129,8 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
                 f"d = K·√Rtex con K = {K_PA} para PA (tabla de la FAO A-3), escalado por "
                 f"√(ρ_PA/ρ_{mat}); Rtex {rtex:g}",
             )
+        for key, (_, kind, note) in extras.items():
+            mark(f"panels.{pid}.{key}", kind, note)
         for f, (kind, note) in t.get("overrides", {}).get(pid, {}).items():
             mark(f"panels.{pid}.{f}", kind, note)
         mark(f"panels.{pid}.hanging_ratio", h[1], h[2])

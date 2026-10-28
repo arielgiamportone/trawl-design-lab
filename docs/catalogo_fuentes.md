@@ -33,6 +33,8 @@ material y Rtex del hilo, cortes (`AB`, `1N2B`…) y largos de relingas en metro
 | Bullis (1951), *Gulf of Mexico Shrimp Trawl Designs*, Fishery Leaflet 394 | `bullis1951` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/leaflet394.pdf | Figs. 7, 9 y 10: arrastres planos de 40 y 100 pies y balloon de 74 pies (no digitalizados, Fase 19.6) | Portones de 5, 8 y 12 pies (sólo el largo) |
 | Gutherz, Serra y Klima (1974), *Design and Materials Used in Construction of a 16-Foot Shrimp Trawl*, Fishery Facts 9 | `gutherz1974` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf | Red de prueba plana de 16 pies (no digitalizada, Fase 19.6) | Portón de 30 × 15 pulgadas, en el catálogo de componentes |
 | Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: red gemela 380 × 70 mm (escaneo; no digitalizada) | Trineo central de 125 kg y bridas |
+| Roth y Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: red tradicional y propuesta de Pesquera Deseado (vectoriales; no digitalizadas) | Portones de 530 kg y 4,08 m² (área del portón de las redes de ITO 043; Fase 19.7c); AH de DynamiT a 2,5–4 nudos |
+| Roth, Pisano y Di Leva (2024), INIDEP IAT 94/24 | `roth2024iat094` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/ff36a0e8-9939-4318-9c57-3b3fdd287e04/content | Fig. 1: red Iberconsa 25,4/31,0 m (raster; no digitalizada) | Separación de portones medida (18,8–19,5 m) y profundidades de pesca (Fase 19.7b) |
 
 Documentos revisados que **no** traen planos de red completos:
 - BOBP/WP/21 (cubierta y maquinaria);
@@ -74,8 +76,8 @@ valor en la procedencia de cada red y en el capítulo {doc}`33_catalogo_fao`):
 | `scharfe_krill_front800` | Schärfe ap. 7 | publicada | dorso y vientre con alas distintas (mitades del plano) |
 | `scharfe_krill_front1600` | Schärfe ap. 8 | borrador | alto del ala del vientre y Rtex del ala |
 | pelágica de 4 paneles | Workbook, AH827E133 | no digitalizada | figura de 450 px: el frente de 800 mm no se lee |
-| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | borrador | empalme cuerpo de Dyneema–copo (20 %); rótulos de corte 3N4B, 19N7B y 5N1B que no dan el cambio de ancho; costados repartidos por largo; tramo delantero del costado no modelado; buque y portón supuestos |
-| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | borrador | empalme cuerpo–copo (20 %); corte del dorso; rótulo del ala sobreimpreso; costados repartidos por largo |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/22 fig. 5 | publicada (Fase 19.7c) | copo unido por la circunferencia (dorso + vientre 12,12 m frente a 12,0 m); costado que termina en el cabo N de 0,50 m; rótulos de corte 3N4B, 19N7B y 5N1B que no dan el cambio de ancho; costados repartidos por largo; tramo delantero del costado no modelado; buque supuesto; portón de 4,08 m² (IAT 75/2023) y 90 m supuestos |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/22 fig. 4 | publicada (Fase 19.7c) | copo unido por la circunferencia (12,22 m frente a 12,0 m); costado que termina en el cabo L de 0,50 m; corte del dorso; rótulo del ala sobreimpreso; costados repartidos por largo; portón y profundidad como la fig. 5 |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016 plano 03 | borrador | copo de 32 mm unido 1/1 al cuerpo de 51 mm (37 %); U1 supuesto; Rtex del denier |
 | gemela 380 × 70 mm | Seafish IR 1310 fig. 5 | no digitalizada | escaneo con notación británica (filas de media malla, cortes S/SB/SK, conteos de medio paño) |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016 plano 31 | publicada | rótulos de las alas (10,00 y 11,20 m) que no suman los totales: ala derivada del total; uniones 8/9 de 5 y 12 % |
@@ -140,6 +142,23 @@ madera): medidas *transcriptas*, superficie *derivada* y polar del portón plano
   y 100 + 100 de 60 mm en el copo) y el plano no imprime razón de unión: el perímetro del cuerpo
   en esa estación (16,9 m estirados) sigue sin cerrar con el del copo (12,0 m). Las dos redes
   siguen como borrador.
+- **INIDEP ITO 043/2022, Fase 19.7c**: una nueva lectura de las figs. 4 y 5 (imagen embebida con
+  su máscara, sobre blanco y al doble) resolvió la unión: el copo de dos caras (2 × 100 mallas de
+  60 mm = 12,0 m) coincide con el dorso más el vientre (4,80 + 7,32 = 12,12 m en la fig. 5;
+  4,80 + 7,42 = 12,22 m en la fig. 4) y los costados terminan antes del copo, fruncidos en un cabo
+  de 0,50 m (N en la fig. 5, L en la fig. 4; «Length ratio» 0,48) que cierra en las costuras. Los
+  16,9 m salían de sumar los costados. El validador compara ahora la circunferencia cuando los
+  costados terminan en un cabo (`aft_rope_m`, aviso `codend_join`); las dos redes cierran y se
+  publican. Cara por cara la unión no es 1:1 y el plano no dice cómo se reparte la diferencia.
+  El portón (4,08 m², de IAT 75/2023 {cite}`roth2023iat075`) y la profundidad (90 m, flota
+  langostinera) quedan como supuestos con fuente.
+- **INIDEP, otros planos de tangoneras** (Fase 19.7b): IAT 27/2019 {cite}`roth2019iat027` (red
+  Solimeno, original y modificada, figs. 2–3, texto vectorial), IAT 75/2023 (red tradicional de
+  Pesquera Deseado, versión tipeada de la fig. 2 de ITO 043, y la propuesta de 2023), IAT 85/2024
+  {cite}`roth2024iat085` e IAT 94/2024 {cite}`roth2024iat094` (red Iberconsa 25,4/31,0 m, raster)
+  e IAT 111/2022 {cite}`roth2022iat111` (red Morales, a mano). No se digitalizaron en esta fase;
+  sus resultados de DynamiT y la separación de portones medida en IAT 94/2024 validan el método
+  de aberturas camaronero ({doc}`26_aparejos_dobles_y_vara`).
 
 **Qué queda.** Las planchas de Seafish (gemelas de IR 1310 y SR 336), el plano de Panicker et al.
 (1977) y los de REBYC Cuba, ya identificados en la Fase 19.5; y una conversión documentada de los

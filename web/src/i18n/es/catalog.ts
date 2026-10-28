@@ -12,6 +12,12 @@ export const catalog = {
     twin: 'Gemelo',
     beam: 'Vara',
   },
+  /** Método de aberturas (``opening_method``, Fase 19.7b). */
+  openingMethod: {
+    auto: 'Automático (camaronero con tangones o gemelo)',
+    book: 'Promedio del libro',
+    shrimp: 'Método camaronero (tijera y cañas cortas)',
+  } as Record<string, string>,
   /** Selector de aparejo del caso (Fase 19.5). */
   rigSelect: {
     label: 'Aparejo',

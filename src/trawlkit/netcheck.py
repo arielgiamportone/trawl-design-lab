@@ -17,6 +17,12 @@ cambiado). Las reglas de construcción del paño permiten detectar muchos de ell
 * **Costados** (``side``): en una red de 4 paneles, cada estación del costado (contada desde el
   copo) se cose a la del dorso: mismo alto en mallas y mismo mallero. Es un error, porque el
   motor y el simulador no pueden armar la red equivalente de 2 paneles.
+* **Unión al copo por la circunferencia** (``codend_join``, Fase 19.7c): en las tangoneras del
+  INIDEP los costados terminan antes del copo, fruncidos en un cabo corto que cierra en las
+  costuras (``aft_rope_m`` del costado: cabo N de 0,50 m en ITO 043/2022, fig. 5), y el copo de
+  dos caras se une al dorso y al vientre alrededor de la boca. Entonces se compara la suma de los
+  bordes de bolsa del dorso y del vientre con la de las bocas del copo (no cara por cara); si
+  cierra, la diferencia por cara queda como aviso.
 * **Datos** (``data``): campos que el motor necesita (U1, rendimiento del hilo).
 
 Cada problema es un :class:`Issue` con nivel ``error`` (la red no cierra) o ``warning`` (hay que
@@ -148,6 +154,32 @@ def _cut_issue(panel: Panel, paired: bool) -> Issue | None:
     )
 
 
+def _codend_join(lay: Any) -> tuple[float, float, tuple[str, ...], float] | None:
+    """Unión al copo por la circunferencia (ver el docstring del módulo) o ``None``.
+
+    Sólo con costados que terminan en un cabo antes del copo (``aft_rope_m``) y un copo en el
+    dorso y en el vientre. Devuelve ``(bordes de bolsa, bocas del copo, paños, cabo)`` en metros.
+    """
+    if "side" not in lay.planes or "upper" not in lay.planes or "lower" not in lay.planes:
+        return None
+    sides = [s.panel for s in lay.central("side")]
+    ropes = [(p.model_extra or {}).get("aft_rope_m") for p in sides]
+    if not sides or any(r is None for r in ropes):
+        return None
+    body_m = codend_m = 0.0
+    ids: list[str] = []
+    for plane in ("upper", "lower"):
+        central = [s.panel for s in lay.central(plane)]
+        idx = next((i for i, p in enumerate(central) if p.section.value == "codend"), None)
+        if idx is None or idx == 0:
+            return None
+        prev, cod = central[idx - 1], central[idx]
+        body_m += prev.meshes_bottom * _m(prev)
+        codend_m += cod.meshes_top * _m(cod)
+        ids += [prev.id, cod.id]
+    return body_m, codend_m, tuple(ids), float(ropes[-1] or 0.0)
+
+
 def check(spec: NetSpec) -> list[Issue]:
     """Problemas de consistencia de ``spec`` (lista vacía si la red cierra)."""
     from trawlkit.drawing.layout import layout_net
@@ -188,11 +220,33 @@ def check(spec: NetSpec) -> list[Issue]:
     except (ValueError, KeyError) as exc:
         issues.append(Issue("error", "structure", t("no se puede disponer la red: {exc}", exc=exc)))
         return issues
+    join = _codend_join(lay)
+    join_ok = join is not None and _rel(join[0], join[1]) <= SEAM_WARN
+    if join is not None and join_ok:
+        issues.append(
+            Issue(
+                "warning",
+                "codend_join",
+                t(
+                    "copo unido por la circunferencia: bordes de bolsa del dorso y del vientre "
+                    "{a:.2f} m frente a {b:.2f} m de las bocas del copo ({pct:.0f} %); los "
+                    "costados terminan antes del copo en un cabo de {rope:.2f} m y la "
+                    "diferencia cara por cara se reparte en las costuras",
+                    a=join[0],
+                    b=join[1],
+                    pct=100 * _rel(join[0], join[1]),
+                    rope=join[3],
+                ),
+                join[2],
+            )
+        )
     for plane in lay.planes:
         central = [s.panel for s in lay.central(plane)]
         wings = [s.panel for s in lay.side_chain(plane, "right")]
         label = t(_PLANE_LABEL.get(plane, plane))
         for a, b in zip(central, central[1:], strict=False):
+            if join_ok and b.section.value == "codend" and a.section.value != "codend":
+                continue  # unión al copo por la circunferencia (codend_join)
             if (i := _seam(a, b, label)) is not None:
                 issues.append(i)
         for a, b in zip(wings, wings[1:], strict=False):

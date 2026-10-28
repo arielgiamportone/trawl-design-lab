@@ -123,6 +123,15 @@ _RIG_NOTE = (
     "madera con refuerzos de acero de 540 kg cada uno, 3,5 nudos; tangones del B/P «Atlántico 1»."
 )
 
+#: Unión al copo (Fase 19.7c): relectura de las figs. 4 y 5.
+_JOIN_NOTE = (
+    "Unión al copo: el copo de dos caras (2 × 100 mallas de 60 mm = 12,0 m) se une al dorso "
+    "({top}) y al vientre ({bottom}) alrededor de la boca: {sum} m frente a 12,0 m (1–2 %). Los "
+    "costados terminan antes del copo, fruncidos en un cabo de 0,50 m que cierra en las costuras "
+    "(aft_rope_m), y no suman ancho al copo. Cara por cara la unión no es 1:1 y el plano no dice "
+    "cómo se reparte la diferencia (el validador lo informa como aviso codend_join)."
+)
+
 _DESIGN_INIDEP: dict[str, tuple[Any, str, str | None]] = {
     "vessel_id": (
         "ar_tangonero_1998",
@@ -130,14 +139,29 @@ _DESIGN_INIDEP: dict[str, tuple[Any, str, str | None]] = {
         "B/P «Atlántico 1» (tangonero): el informe no da eslora ni potencia; se usa el "
         "tangonero típico de la flota argentina (media de 1998)",
     ),
-    "door_id": (
-        "door_flat_500hp",
+    "door_length_m": (
+        2.86,
         "assumed",
-        "portones rectangulares planos de madera de 540 kg (pp. 1 y 5) sin medidas publicadas: "
-        "se toma el portón plano genérico del catálogo de peso más cercano (510 kg, 2,5 × 1,25 m; "
-        "alto ≤ 1,5 m de la Res. CFP 7/2018). A VERIFICAR",
+        "ITO 043/2022 no da las medidas de los portones de 540 kg (pp. 1 y 5): área de 4,08 m² de "
+        "los portones planos de 530 kg del mismo aparejo de Pesquera Deseado (Roth y Rubio 2023, "
+        "IAT 75/2023, p. 3) con la proporción alto/largo 0,5 del portón plano genérico del "
+        "catálogo (2,5 × 1,25 m): √(4,08/0,5) = 2,86 m. A VERIFICAR",
+    ),
+    "door_height_m": (
+        1.43,
+        "assumed",
+        "0,5 × 2,86 m (ver door_length_m); por debajo del alto máximo de 1,5 m de la Res. CFP "
+        "7/2018, art. 4. A VERIFICAR",
     ),
     "door_weight_air_kg": (540.0, "transcribed", "portones de madera de 540 kg cada uno"),
+    "depth_m": (
+        90.0,
+        "assumed",
+        "ITO 043/2022 no da la profundidad de las simulaciones: 90 m de la flota langostinera "
+        "(lances a 71–87 m en IC 68/2022 y a 86–106 m en IAT 94/2024; DynamiT a 100 m en IAT "
+        "27/2019, 85/2024 y 104/2023). La barra de la fig. 6 está a Y ≈ −90 m, pero el informe no "
+        "dice que Y sea la profundidad",
+    ),
     "outrigger_bridle_m": (70.0, "transcribed", "tijera de 70 m (pp. 1 y 5)"),
     "outrigger_bridle_diameter_mm": (22.0, "transcribed", "cable de acero de 22 mm"),
     "speed_kn": (3.5, "transcribed", "velocidad de las simulaciones (p. 5)"),
@@ -204,6 +228,17 @@ INIDEP_5: dict[str, Any] = {
         "(20 filas AN:1T6B de 2 a 29 mallas y 63,5 filas AN de 34 mallas, junto a las alas) no "
         "se modela.",
     },
+    "panel_extras": {
+        "S1": {
+            "aft_rope_m": (
+                0.50,
+                "transcribed",
+                "cabo N de 0,50 m en el borde de bolsa del costado (17 mallas de 140 mm; «Length "
+                "ratio» 0,48 = 0,50 / (17 × 0,14 × 0,436)): el costado termina fruncido antes "
+                "del copo y cierra en las costuras",
+            )
+        }
+    },
     "overrides": _merge(
         _twine_overrides(INIDEP_5_PANELS, _TWINE_5),
         {
@@ -266,19 +301,17 @@ INIDEP_5: dict[str, Any] = {
         "warp": "acero de 24 mm con alma de acero",
     },
     "notes": [
-        "BORRADOR: el plano une el cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso) a "
-        "un copo de 100 mallas de 60 mm (20 % de diferencia de largo estirado) y tres rótulos de "
-        "corte (U1, U2, L3) no dan el cambio de ancho de su paño.",
+        _JOIN_NOTE.format(top="40 × 120 mm = 4,80 m", bottom="61 × 120 mm = 7,32 m", sum="12,12")
+        + " Tres rótulos de corte (U1, U2, L3) no dan el cambio de ancho de su paño: se "
+        "transcriben como se leen (el validador lo avisa).",
         _ROPES_5,
         _RIG_NOTE,
         "Paños del plano: #1 28,80 m² y 62,26 kg; LOW 25,95 m² y 57,76 kg; SIDE 9,92 m² y "
         "17,18 kg; total 64,68 m² y 137,21 kg.",
-        "La boca del cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso, 61 en el "
-        "vientre) se une a un copo de 100 mallas de 60 mm en cada cara, como dibuja el plano.",
         "El cabo del burlón es un cable mixto de 24 mm; el motor toma el combinado de 24 mm del "
         "catálogo de componentes para el peso y la resistencia.",
     ],
-    "status": "draft",
+    "status": "published",
 }
 
 # --- Fig. 4: red de la empresa con hilos de 3 mm (simulación 2) -------------------------------
@@ -329,6 +362,17 @@ INIDEP_4: dict[str, Any] = {
         "U1": "236 mallas de boca (el rótulo se superpone a la letra G de la bocana).",
         "S1": "Tramo trasero del costado (160 mm, 132 filas); el tramo delantero junto a las "
         "alas (20 filas AN:1T6B y 63,5 filas AN, 160 mm) no se modela.",
+    },
+    "panel_extras": {
+        "S1": {
+            "aft_rope_m": (
+                0.50,
+                "transcribed",
+                "cabo L de 0,50 m en el borde de bolsa del costado (15 mallas de 160 mm; «Length "
+                "ratio» 0,48 = 0,50 / (15 × 0,16 × 0,436)): el costado termina fruncido antes "
+                "del copo y cierra en las costuras",
+            )
+        }
     },
     "overrides": _merge(
         _twine_overrides(INIDEP_4_PANELS, _TWINE_4),
@@ -391,10 +435,9 @@ INIDEP_4: dict[str, Any] = {
     ],
     "rigging": INIDEP_5["rigging"],
     "notes": [
-        "BORRADOR: el plano une el cuerpo de 30 mallas de 160 mm del dorso a un copo de 100 "
-        "mallas de 60 mm (20 % de diferencia de largo estirado), el corte 1N4B del dorso no da el "
-        "cambio de ancho del paño (236 → 30 en 132 filas) y el rótulo de corte del ala está "
-        "sobreimpreso.",
+        _JOIN_NOTE.format(top="30 × 160 mm = 4,80 m", bottom="53 × 140 mm = 7,42 m", sum="12,22")
+        + " El corte 1N4B del dorso no da el cambio de ancho del paño (236 → 30 en 132 filas) y "
+        "el rótulo de corte del ala está sobreimpreso (se toma el de la fig. 5).",
         "Cabos del plano: A combinado 22 mm 11,00 m; B 3,75 m; G 6,00 m (lima 35,5 m); M cable "
         "mixto 24 mm 10,00 m; N 3,75 m; R 5,00 m (burlón 32,5 m); H cable mixto 24 mm 3,15 m.",
         _RIG_NOTE,
@@ -403,7 +446,7 @@ INIDEP_4: dict[str, Any] = {
         "El cabo del burlón es un cable mixto de 24 mm; el motor toma el combinado de 24 mm del "
         "catálogo de componentes para el peso y la resistencia.",
     ],
-    "status": "draft",
+    "status": "published",
 }
 
 # --- SEAFDEC (2016), plano n.º 03: arrastre de vara para camarón ----------------------------

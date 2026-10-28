@@ -29,6 +29,7 @@ from trawlkit.io import load_net
 from trawlkit.model import run
 from trawlkit.netcheck import check
 from trawlkit.rigging import multirig as M
+from trawlkit.rigging import shrimp as SH
 from trawlkit.sim import simulate
 
 P.setup_style()
@@ -131,15 +132,192 @@ El caso los acepta como parámetros (`boom_length_m`, `boom_angle_deg`, `outrigg
 el selector **Aparejo** del panel del caso y del modo guiado sigue por defecto el de la red y los
 parámetros se editan en «Parámetros avanzados».
 
+## Aberturas de las redes camaroneras
+
+El promedio de aberturas del libro (`Dim!F61`) promedia cuatro DPA (por ángulo de corte,
+geométrica, geométrica con la red trabajando y la serie de Fridman) y la separación de portones
+sale del cable filado: está pensado para redes de pescado remolcadas con patentes largas. En la
+red tangonera del INIDEP los dos términos geométricos ya dan los 14 m de DynamiT, pero la DPA por
+ángulo de corte ($2 b U_2 \tan\alpha$) da 60 m y la separación de portones crece con el cable. Con
+**tijera** eso no pasa: «la separación entre portones no puede ser modificada con la longitud del
+cable de arrastre filado» {cite:p}`roth2016iat072`. Por eso, con `opening_method="auto"` (por
+defecto), los aparejos de tangones y gemelo usan el **método camaronero**
+(`trawlkit.rigging.shrimp`, Fase 19.7b); `opening_method="book"` vuelve al promedio del libro y
+`"shrimp"` lo fuerza, por ejemplo en una red camaronera con portones. Las redes con portones (aun
+las de crustáceos, como la de langostilla de la A-3), la pareja y la vara no cambian, y tampoco el
+modo Excel del libro.
+
+**Separación de portones con tijera.** Equilibrio plano de un portón colgado de una rama de la
+tijera {cite:p}`roth2016iat072` (ecs. 13–17, con la proyección corregida):
+
+$$
+\beta = \arcsin\!\left(\frac{L_C}{L_R}\sin\alpha\right),\qquad
+T\cos\alpha = F_{CD} + \tfrac{R}{2}\cos\beta,\qquad
+F_{CL} = T\sin\alpha + \tfrac{R}{2}\sin\beta,\qquad
+DP = 2\,L_C\sin\alpha
+$$
+
+$F_{CL}$ y $F_{CD}$ son la sustentación y la resistencia de un portón (polar del caso), $R$ la RN
+de diseño de la red a la velocidad de diseño (3,5 nudos, la de las simulaciones del INIDEP),
+$L_C$ la rama de la tijera (`outrigger_bridle_m`: 70 m por defecto; 55–73 m en los informes del
+INIDEP) y $L_R$ el tramo del portón al punto donde converge la red: cañas + pie de gallo + 0,90 ×
+el largo estirado de la red sin copo (punta de ala → copo). El 0,90 es la forma de malla de
+referencia de DynamiT a lo largo (derivada de la columna «Length ratio» de sus tablas de cabos,
+ver el caso argentino). Las **cañas** valen 3 m por defecto (IAT 85/2024 {cite:p}`roth2024iat085`
+e ITO 61/2022 {cite:p}`roth2022ito061`; 2,5–4 m en los demás aparejos del INIDEP, supuesto) y se
+cambian con `shrimp_bridle_m`. α se busca por bisección.
+
+**Corrección de la ec. (12) de Roth.** La ecuación impresa es
+$F_{CL} - (F_{CD} + R/2)\sin 2\alpha + (R/2)\sin 2\beta = 0$: proyecta dos veces las componentes
+de las ecs. 5–8 y da $2\sin\alpha\cos\alpha$ donde va $\sin\alpha$. Con los datos de ITO 043/2022
+(4,08 m², $C_L/C_D$ = 0,93/0,71, $R$ = 3777 − 2·$F_{CD}$, $L_C$ = 70 m) la forma impresa da
+separaciones que ningún tangonero tiene; la corregida encierra los 16,2 m de DynamiT:
+
+```{code-cell} ipython3
+import math
+from trawlkit.rigging.doors import door_forces_kgf
+from trawlkit.units import KNOT_TO_MS
+
+fz = door_forces_kgf(4.08, 0.71, 0.93, 3.5 * KNOT_TO_MS)
+FL, FD = float(fz.lift_kgf), float(fz.drag_kgf)
+RN = 3777.2 - 2 * FD
+
+
+def printed_eq12(lc, lr):
+    """DP con la ec. (12) impresa (raíz por barrido de α)."""
+    amax = math.asin(min(1.0, lr / lc))
+    g = lambda a: FL - (FD + RN / 2) * math.sin(2 * a) + (RN / 2) * math.sin(
+        2 * math.asin(min(1.0, lc / lr * math.sin(a))))
+    xs = [amax * k / 4000 for k in range(1, 4000)]
+    for a, b in zip(xs, xs[1:]):
+        if g(a) * g(b) < 0:
+            return 2 * lc * math.sin(0.5 * (a + b))
+    return float("nan")
+
+
+P.md_table(
+    ["L_R [m]", "DP, ec. (12) impresa [m]", "DP, equilibrio corregido [m]", "DynamiT [m]"],
+    [[f(lr, 0), f(printed_eq12(70.0, lr)), f(SH.tijera_balance(FL, FD, RN, 70.0, lr).spread_m),
+      "16,2"] for lr in (20.0, 25.0, 30.0, 35.0)],
+)
+```
+
+Roth informa un acuerdo de 0,6 m con DynamiT para su ejemplo de 22 m (tabla 1), pero no imprime
+$L_C$ ni los datos del portón, así que ese resultado no se pudo reproducir.
+
+**Abertura horizontal.** $AH = DP \cdot L_{Rw} / (L_{Rw} + \text{pie de gallo} + \text{cañas})$: la
+razón de triángulos semejantes del libro (Mec!L225, sin el redondeo) con las cañas cortas en lugar
+de las patentes de 25 m. Se controla $AH/DP$ contra 0,72–0,88, el rango de las simulaciones
+DynamiT del INIDEP con tijera (ITO 043, IAT 85, 104 y 111; derivado de sus tablas). La DPA por
+ángulo de corte y la serie de Fridman salen del promedio.
+
+**Respaldo sin tijera** (gemelo, portones, o si el equilibrio no tiene solución):
+$AH = k \cdot \text{lima}$ con la DP del libro y $k$ por familia:
+
+```{code-cell} ipython3
+fam = {"inidep_dynamit": "Tangonera argentina de baja abertura (DynamiT)",
+       "us_conventional": "Camaronera convencional de EE. UU., sin boyas (medida)",
+       "tongue": "Red de lengüeta, Mongoose, Cobra (medida)"}
+P.md_table(
+    ["Familia", "k", "Rango", "Fuente"],
+    [[fam[h.key], f(h.k, 2), f"{f(h.low, 2)}–{f(h.high, 2)}", h.source]
+     for h in SH.HEADROPE_K.values()],
+)
+```
+
+Las fuentes no coinciden y el motor lo dice en las notas de cada corrida. Las simulaciones DynamiT
+de tangoneras argentinas dan $AH/\text{lima}$ = 0,36–0,50; la separación de portones **medida**
+con sensores Simrad en la red Iberconsa de 25,4 m es 18,8–19,5 m, 0,74–0,77 × la lima
+{cite:p}`roth2024iat094`, y el propio INIDEP considera que su AH simulada queda «muy por debajo del
+valor recomendado (aproximadamente 70 %)» {cite:p}`roth2024iat085`. Las mediciones con buzos de
+Watson et al. {cite:p}`watson1984` y Harrington et al. {cite:p}`harrington1988` dan 0,62–0,78 en
+las camaroneras convencionales de EE. UU. DynamiT puede estar sesgado hacia abajo: la única
+comparación medida/simulada (Iberconsa) no usa los mismos portones (Bison de 400 kg con doble
+tobera en el mar; planos de 500 kg y 4,5 m² en el simulador).
+
+**Abertura vertical.** $AV = 0{,}04 \cdot \text{lima}$ (0,03–0,07) en redes de baja abertura con
+pocas boyas o ninguna: 0,026–0,049 en DynamiT y 0,029–0,080 en las mediciones de Watson et al. y
+Harrington et al. No se corrige por boyas: la tabla 3 de Watson et al. muestra que 10–20 boyas
+multiplican la AV por 1,75–2,9, pero no da una relación continua, y la cantidad de boyas del motor
+es la que calcula el libro, no la de la red. La AV de Suzuki (4/90 de la circunferencia) da 3,2 m
+en la red del INIDEP, 2,5 veces la de DynamiT. El límite de 1,5 m de la Res. CFP 7/2018 se controla
+con esta AV.
+
+**Profundidad de diseño.** La flota langostinera pesca a 71–87 m (IC 68/2022
+{cite:p}`rubio2022ic068`) y a 86–106 m (IAT 94/2024); las simulaciones DynamiT de tangoneras del
+INIDEP usan 100 m. Las redes de langostino cuya fuente no da la profundidad toman 90 m (rango
+70–110 m, `trawlkit.catalog.LANGOSTINO_DEPTH_M`; valor elegido dentro de ese rango); las demás
+redes de fondo siguen con 30 m. Con tijera la profundidad cambia el cable y su tensión, no la DP.
+
+### Validación
+
+El motor completo con las dos redes de ITO 043/2022 del catálogo (antes: promedio del libro;
+después: método camaronero) frente a DynamiT, y el equilibrio aislado con los datos publicados de
+cada simulación del INIDEP ($R$ = tensión − 2·$F_{CD}$; $L_R$ del plano digitalizado o estimado,
+A VERIFICAR):
+
+```{code-cell} ipython3
+rows = []
+for nid, sim in (("inidep_ito043_tangonera_inidep", "ito043_sim3"),
+                 ("inidep_ito043_tangonera_empresa", "ito043_sim2")):
+    case = catalog_case(nid).case
+    before = run(dataclasses.replace(case, opening_method="book"))
+    after = run(case)
+    dc = next(c for c in SH.DYNAMIT_CASES if c.key == sim)
+    rows.append([
+        f"`{nid}` (motor)",
+        f"{f(before.doors.spread_m)} / {f(before.spread.horizontal_opening_m)} / "
+        f"{f(before.spread.vertical_opening_m, 2)}",
+        f"{f(after.doors.spread_m)} / {f(after.spread.horizontal_opening_m)} / "
+        f"{f(after.spread.vertical_opening_m, 2)}",
+        f"{f(dc.dynamit_spread_m)} / {f(dc.dynamit_ah_m)} / "
+        + ("1,3" if sim == "ito043_sim3" else "1,5"),
+        f"{f(100 * (after.doors.spread_m / dc.dynamit_spread_m - 1), 0)} %",
+        "—",
+    ])
+for dc in SH.DYNAMIT_CASES:
+    b = SH.dynamit_case_balance(dc)
+    rows.append([
+        f"{dc.label} (equilibrio, L_R {f(dc.net_leg_m)} m"
+        + (", estimado" if dc.net_leg_kind == "assumed" else "") + ")",
+        "—",
+        f(b.spread_m),
+        f(dc.dynamit_spread_m),
+        f"{f(100 * (b.spread_m / dc.dynamit_spread_m - 1), 0)} %",
+        "18,8–19,5 (IAT 94/2024)" if dc.key == "iat085_iberconsa" else "—",
+    ])
+P.md_table(
+    ["Caso", "Antes: DP / AH / AV [m]", "Método camaronero", "DynamiT", "DP − DynamiT",
+     "DP medida [m]"],
+    rows,
+)
+```
+
+El motor completo queda dentro del 15 % de la DP y del 10 % de la AH de DynamiT en las dos redes;
+antes, la DP salía de 3,6 a 3,9 veces mayor. El equilibrio aislado queda dentro de ±20 % en los
+cuatro casos del informe de la fase (ITO 043 sims. 1 y 3, IAT 85 Iberconsa, IAT 111 Morales), la
+tolerancia que fijan los tests mientras $L_R$ no salga de un plano digitalizado; la sim. 2 con el
+equilibrio aislado (red más liviana, misma $L_R$) da +26 %. La DP medida de la red Iberconsa
+(18,8–19,5 m, otros portones y tijera de 60 m) queda por encima de DynamiT y del equilibrio:
+coherente con el sesgo de DynamiT señalado arriba.
+
 ## Caso argentino: la red tangonera del INIDEP
 
 El INIDEP evaluó en DynamiT una red tangonera propuesta por la empresa Pesquera Deseado y una red
-propia {cite:p}`roth2022ito043`. Su figura 5 (red del INIDEP) está en el catálogo como
-`inidep_ito043_tangonera_inidep`, digitalizada con la procedencia de cada valor. Es un
-**borrador**: el validador marca que el cuerpo trasero de Dyneema (40 mallas de 120 mm en el dorso)
-se une a un copo de 100 mallas de 60 mm, un empalme que el plano dibuja así pero que no cierra en
-largo estirado, y tres rótulos de corte que no dan el cambio de ancho de su paño. Los costados del
-plano no coinciden estación por estación con el dorso: el motor los reparte por largo estirado.
+propia {cite:p}`roth2022ito043`. Sus figuras 5 (red del INIDEP) y 4 (red de la empresa con hilo de
+3 mm) están en el catálogo como `inidep_ito043_tangonera_inidep` y
+`inidep_ito043_tangonera_empresa`, digitalizadas con la procedencia de cada valor, y están
+**publicadas** desde la Fase 19.7c. La relectura de los planos mostró que el copo de dos caras
+(2 × 100 mallas de 60 mm = 12,0 m) coincide con la suma de los bordes de bolsa del dorso y del
+vientre (4,80 + 7,32 = 12,12 m en la fig. 5; 4,80 + 7,42 = 12,22 m en la fig. 4) y que cada
+costado termina antes del copo, fruncido en un cabo de 0,50 m (N en la fig. 5, L en la fig. 4) que
+cierra en las costuras. La columna «Length ratio» de la tabla de cabos de DynamiT lo confirma
+(regla derivada: largo del cabo sobre el borde del paño a la forma de malla de referencia, 0,90 a
+lo largo y 0,436 a lo ancho; para N, 0,50 / (17 × 0,14 × 0,436) = 0,48, lo impreso). El
+validador compara entonces la circunferencia y no cara por cara (aviso `codend_join`): cara por
+cara la unión no es 1:1 y el plano no dice cómo se reparte la diferencia. Quedan como avisos tres
+rótulos de corte que no dan el cambio de ancho de su paño (se transcriben como se leen) y los
+costados, que el motor reparte por largo estirado.
 
 ```{code-cell} ipython3
 spec = load_net("inidep_ito043_tangonera_inidep")
@@ -151,39 +329,43 @@ P.md_table(
 
 La red dice con qué buque y portón se calcula: el **tangonero típico** de la flota (media de
 1998, {doc}`39_flota_argentina`), porque el informe no publica la eslora ni la potencia del
-B/P *Atlántico 1*, y el portón plano genérico del catálogo de peso más cercano a los 540 kg del
-informe (510 kg, 2,5 × 1,25 m; las medidas de los portones no están publicadas). La profundidad
-tampoco está en el informe: 30 m por familia. Todo queda en las notas del caso.
+B/P *Atlántico 1*, y un portón plano de 4,08 m², el área de los portones de 530 kg del mismo
+aparejo de la empresa en IAT 75/2023 {cite:p}`roth2023iat075`, con la proporción del portón plano
+genérico del catálogo (2,86 × 1,43 m; supuesto, ITO 043 no publica las medidas). La profundidad
+tampoco está en el informe: 90 m, la de la flota langostinera. Todo queda en las notas del caso.
 
 ```{code-cell} ipython3
 cc = catalog_case(spec)
 r = run(cc.case)
+r_book = run(dataclasses.replace(cc.case, opening_method="book"))
 mr = r.multirig
 i = r.case.speed_index(3.5)
 P.md_table(
-    ["Resultado a 3,5 nudos", "trawlkit", "DynamiT (INIDEP, sim. 3)"],
+    ["Resultado a 3,5 nudos", "Libro", "Método camaronero", "DynamiT (INIDEP, sim. 3)"],
     [
-        ["Abertura horizontal AH [m]", f(r.spread.horizontal_opening_m), "14,0"],
-        ["Separación de portones de una red [m]", f(r.doors.spread_m), "16,2"],
-        ["Abertura vertical AV [m] (Suzuki)", f(r.spread.vertical.suzuki_m, 2), "1,3"],
-        ["Una red con su aparejo [kgf]", f(mr.per_net.std[i], 0), "3777 (tensión del cable)"],
-        ["Las dos redes y el rozamiento [kgf]", f(mr.demand.std[i], 0), "—"],
-        ["Ancho barrido [m]", f(mr.swept_width_m), "—"],
-        ["Velocidad máxima remolcable [kn]", f(r.performance.design.max_speed_kn, 2), "—"],
+        ["Abertura horizontal AH [m]", f(r_book.spread.horizontal_opening_m),
+         f(r.spread.horizontal_opening_m), "14,0"],
+        ["Separación de portones de una red [m]", f(r_book.doors.spread_m), f(r.doors.spread_m),
+         "16,2"],
+        ["Abertura vertical AV [m]", f(r_book.spread.vertical_opening_m, 2),
+         f(r.spread.vertical_opening_m, 2), "1,3"],
+        ["Una red con su aparejo [kgf]", f(r_book.multirig.per_net.std[i], 0),
+         f(mr.per_net.std[i], 0), "3777 (tensión del cable)"],
+        ["Las dos redes y el rozamiento [kgf]", f(r_book.multirig.demand.std[i], 0),
+         f(mr.demand.std[i], 0), "—"],
+        ["Ancho barrido [m]", f(r_book.multirig.swept_width_m), f(mr.swept_width_m), "—"],
     ],
 )
 ```
 
-La resistencia de una red con su aparejo queda cerca de la tensión del cable que dio DynamiT; las
-aberturas no. Los métodos empíricos de abertura del libro (Fridman, Suzuki) están pensados para
-redes de pescado de mayor abertura y dan, para esta red langostinera de baja abertura, más
-abertura horizontal y vertical que el simulador del INIDEP, y la separación de portones crece con
-las patentes de 25 m que el caso toma del libro porque el plano no las da. El límite de la
-Res. CFP 7/2018 para la abertura vertical (1,5 m) se controla en las notas:
+La resistencia de una red con su aparejo no depende del método de aberturas y queda a menos de un
+20 % de la tensión del cable de DynamiT (el motor la calcula a 90 m, con más cable). Las notas de la corrida
+dicen qué método se usó, con qué datos y en qué rango quedan las aberturas; el límite de la
+Res. CFP 7/2018 para la abertura vertical (1,5 m) se controla con la AV del método:
 
 ```{code-cell} ipython3
 for n in r.notes:
-    if n.startswith(("cfp_res7_2018", "multirig_overlap", "watson_door_area")):
+    if n.startswith(("shrimp_opening", "cfp_res7_2018", "multirig_overlap", "watson_door_area")):
         print(n)
 ```
 
@@ -312,10 +494,13 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 
 ## Límites
 
-* Las aberturas de cada red salen de los métodos del libro, ajustados a redes de pescado; para
-  redes langostineras de baja abertura sobrestiman AH y AV (contraste con DynamiT arriba).
-* Con tangones la geometría de cada red se calcula como la de un arrastre con portones del libro
-  (dos cables desde las pastecas); la tijera sólo suma su arrastre. Las redes se suponen centradas
+* Las aberturas de las redes camaroneras salen del método de la Fase 19.7b, calibrado con
+  simulaciones DynamiT del INIDEP y contrastado con una sola serie medida (separación de portones,
+  IAT 94/2024); no hay una AH medida de una tangonera argentina publicada. Su validez: tijera de
+  55–73 m, portones planos o Bison de 300–600 kg, lima de 11–40 m, 2,5–4 nudos y 30–110 m. El
+  largo $L_R$ y las cañas son derivados o supuestos; la tolerancia es ±20 % en la DP.
+* Con tangones el resto de la geometría de cada red (cable, flecha, bridas del libro) se calcula
+  como la de un arrastre con portones del libro; la tijera suma su arrastre y fija la DP. Las redes se suponen centradas
   detrás de la punta de su tangón; no se modela el desfase a popa.
 * El muerto del gemelo es una regla práctica (1,5 portones) y su arrastre, el de un trineo de las
   medidas de Bullis y Floyd: no hay una fórmula de diseño publicada.
@@ -329,8 +514,8 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 
 | Red | Fuente | Aparejo | Estado |
 |---|---|---|---|
-| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | tangones | borrador |
-| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | tangones | borrador |
+| `inidep_ito043_tangonera_inidep` | INIDEP ITO 043/2022, fig. 5 {cite:p}`roth2022ito043` | tangones | publicada |
+| `inidep_ito043_tangonera_empresa` | INIDEP ITO 043/2022, fig. 4 | tangones | publicada |
 | `seafdec_03_beam_shrimp` | SEAFDEC 2016, plano 03 {cite:p}`seafdec2016thai` | vara | borrador |
 | `seafdec_31_outrigger_shrimp` | SEAFDEC 2016, plano 31 (14 m, 75 hp) | tangones | publicada |
 | `seafdec_33_outrigger_shrimp` | SEAFDEC 2016, plano 33 (20 m, 90 hp) | tangones | publicada |
@@ -339,11 +524,13 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 | `seafdec_35_outrigger_shrimp` | SEAFDEC 2016, plano 35 (15 m, 112 hp) | tangones | borrador |
 | `seafdec_30_beam_shrimp` | SEAFDEC 2016, plano 30 (11 m, 165 hp) | vara | publicada |
 
-Las redes tailandesas de la Fase 19.6 son las primeras redes de tangones y de vara **publicadas** del
-catálogo: sus planos dan la red y el buque, pero no los tangones, los portones ni la vara, así que
+Las redes tailandesas de la Fase 19.6 fueron las primeras redes de tangones y de vara **publicadas**
+del catálogo: sus planos dan la red y el buque, pero no los tangones, los portones ni la vara, así que
 su caso usa los valores por defecto de este capítulo (que no son los de la flota tailandesa).
 
 El plano gemelo de Seafish de 380 × 70 mm {cite:p}`arkley1987ir1310` no se digitalizó: es un
 escaneo con notación británica (filas de media malla, cortes S, SB y SK, conteos de medio paño)
-que no se puede verificar en la imagen con la precisión del resto del catálogo. Las fuentes
-consultadas están en {doc}`catalogo_fuentes`.
+que no se puede verificar en la imagen con la precisión del resto del catálogo. Los planos
+tipeados de IAT 27/2019 (red Solimeno, original y modificada) e IAT 75/2023 (red tradicional de
+Pesquera Deseado, versión legible de la fig. 2 de ITO 043) quedan para una fase siguiente. Las
+fuentes consultadas están en {doc}`catalogo_fuentes`.

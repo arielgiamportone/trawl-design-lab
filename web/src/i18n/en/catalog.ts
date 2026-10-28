@@ -13,6 +13,11 @@ export const catalog: Messages['catalog'] = {
     twin: 'Twin',
     beam: 'Beam trawl',
   },
+  openingMethod: {
+    auto: 'Automatic (shrimp method with outriggers or twin)',
+    book: 'Book average',
+    shrimp: 'Shrimp method (split bridle and short bridles)',
+  } as Record<string, string>,
   rigSelect: {
     label: 'Rig',
     fromNet: (rig: string) => `The net's own (${rig})`,
