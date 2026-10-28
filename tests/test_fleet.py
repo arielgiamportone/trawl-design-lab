@@ -280,9 +280,13 @@ def test_winch_checks() -> None:
 
 
 def test_untabulated_fridman_kf_message() -> None:
+    # Desde la API (Fase 19.7a): sin KF tabulado se calcula como paso fijo y se anota.
     case = _case(propeller=PropellerType.VARIABLE_PITCH)
+    assert case.fridman_kf == 10.0
+    assert any("paso fijo" in a for a in case.assumptions)
+    # El motor directo sigue pidiendo el KF explícito, con un mensaje claro.
     with pytest.raises(service.BadRequestError, match="no se halló una fuente publicada"):
-        service.run_case(case)
+        service.run_case(dataclasses.replace(case, fridman_kf=None))
     ok = service.run_case(dataclasses.replace(case, fridman_kf=12.0))
     assert ok.power.curves.fridman_kgf[0] == pytest.approx(150 * (12.0 - 0.7))
 
@@ -321,8 +325,11 @@ def test_design_inline_vessel_with_propeller() -> None:
         "region": "latam",
     }
     r = client.post("/design", json={"net": "fao_a3_standard", "vessel": vessel})
-    # PF+T: el KF de Fridman no está tabulado y el error lo dice.
-    assert r.status_code == 422 and "fridman_kf" in r.json()["detail"]
+    # PF+T: el KF de Fridman no está tabulado; se calcula como paso fijo (Fase 19.7a).
+    assert r.status_code == 200, r.text
+    assert r.json()["result"]["power"]["curves"]["fridman_kgf"][0] == pytest.approx(
+        180 * (10.0 - 0.7)
+    )
     body = {"net": "fao_a3_standard", "vessel": vessel, "params": {"fridman_kf": 12}}
     r = client.post("/design", json=body)
     assert r.status_code == 200, r.text
