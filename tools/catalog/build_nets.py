@@ -72,8 +72,14 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
     }
     prov: dict[str, dict[str, Any]] = {}
 
-    def mark(path: str, kind: str = "transcribed", note: str | None = None) -> None:
+    def mark(
+        path: str, kind: str = "transcribed", note: str | None = None, doc: str | None = None
+    ) -> None:
         d = dict(base, kind=kind)
+        if doc is not None:
+            # Valor de otro documento de la misma red (Fase 20.2): su clave, sin página ni figura
+            # del plano (la nota cita la página).
+            d.update(document=doc, page=None, figure=None)
         if note:
             d["note"] = note
         prov[path] = {k: v for k, v in d.items() if v is not None}
@@ -154,7 +160,9 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
                 "figure": src.get("figure"),
                 "page": src.get("page"),
             }
-        ],
+        ]
+        # Otros documentos de la misma red (aparejo, mediciones), Fase 20.2.
+        + [{k: v for k, v in x.items() if v is not None} for x in t.get("extra_sources", [])],
         "panels": panels,
     }
     if t.get("species"):
@@ -190,18 +198,20 @@ def build(t: dict[str, Any]) -> dict[str, Any]:
                 f"floats.{k}",
                 f.get("kind", "assumed" if f.get("note") else "transcribed"),
                 f.get("note"),
+                f.get("document"),
             )
     if b := t.get("ballast_kg"):
         spec["ballast_kg"] = b["value"]
-        mark("ballast_kg", b.get("kind", "derived"), b.get("note"))
+        mark("ballast_kg", b.get("kind", "derived"), b.get("note"), b.get("document"))
     if t.get("rigging"):
         spec["rigging"] = t["rigging"]
     if d := t.get("design"):
         # Caso de diseño de la fuente (trawlkit.catalog.catalog_case): profundidad, patentes y
         # portón del plano, cada uno con su procedencia.
         spec["design"] = {k: v[0] for k, v in d.items()}
-        for k, (_, kind, note) in d.items():
-            mark(f"design.{k}", kind, note)
+        for k, (_, kind, note, *doc) in d.items():
+            # Un cuarto elemento es la clave de otro documento de la misma red (Fase 20.2).
+            mark(f"design.{k}", kind, note, doc[0] if doc else None)
     if t.get("measured"):
         # Mediciones del documento (abertura, velocidad, cable): datos de validación.
         spec["measured"] = t["measured"]

@@ -615,3 +615,9 @@ ROUNDDOWN sólo en M42 y en el bloque de 180 HP; el resto de la columna sin redo
 : 'door_area_power_extrapolation: required area per otter board {corr:.2f} m² = {book:.2f} m² from the
   book rule (Port!F215) × (180/{hp:g})^{exp:.2f} = × {f:.3f}. The rule is linear in power and calibrated
   for the 150–180 HP A-3 vessels; the otter-board tables of the Workbook and of Fishbuster grow as hp^{b:.2f}'
+measured_warp_m debe ser positivo: measured_warp_m must be positive
+'CL = {cl:g} y CD = {cd:g} de la fuente': 'CL = {cl:g} and CD = {cd:g} from the source'
+'polar {polar}': '{polar} polar'
+polar del portón plano de la A-3: polar of the A-3's flat otter board
+'portón de la fuente ({area:.2f} m², {length:g} × {height:g} m) con {polar}': 'otter board from the source ({area:.2f} m², {length:g} × {height:g} m) with {polar}'
+'Portón de la fuente de {net}': 'Otter board from the source of {net}'

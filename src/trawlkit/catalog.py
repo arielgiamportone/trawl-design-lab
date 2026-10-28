@@ -187,6 +187,66 @@ def plan_door(length_m: float, height_m: float, weight_air_kg: float | None, nam
     return Door.model_validate(data)
 
 
+#: Ángulos [°] en que se repiten el CL y el CD publicados de un portón (Fase 20.2): la fuente da
+#: un solo par (el del ángulo de trabajo), así que la polar es plana en todo el rango del libro.
+PUBLISHED_POLAR_ANGLES_DEG: tuple[float, ...] = (20.0, 25.0, 30.0, 32.0, 35.0, 40.0, 45.0)
+
+
+def door_from_params(params: dict[str, Any], name: str, door_id: str) -> tuple[Door, str]:
+    """Portón con los datos que publica una fuente y la nota de cómo se armó (Fase 20.2).
+
+    ``params`` usa las claves de ``design``: ``door_length_m`` y ``door_height_m`` (obligatorias),
+    ``door_area_m2`` (si no, largo × alto), ``door_weight_air_kg`` y la polar: ``door_cl`` y
+    ``door_cd`` publicados (constantes con el ángulo, :data:`PUBLISHED_POLAR_ANGLES_DEG`), una hoja
+    de la biblioteca de polares (``door_polar_id``) o, si no, la del portón plano de la A-3.
+    """
+    from trawlkit.io.schema import DoorCoefficients
+    from trawlkit.rigging.polars import get_polar
+
+    ref = _reference_door()
+    data: dict[str, Any] = ref.model_dump()
+    length, height = float(params["door_length_m"]), float(params["door_height_m"])
+    area = float(params.get("door_area_m2") or length * height)
+    weight = params.get("door_weight_air_kg")
+    if params.get("door_cl") is not None and params.get("door_cd") is not None:
+        cl, cd = float(params["door_cl"]), float(params["door_cd"])
+        coefficients = [
+            DoorCoefficients(angle_deg=a, cl=cl, cd=cd) for a in PUBLISHED_POLAR_ANGLES_DEG
+        ]
+        polar_note = t("CL = {cl:g} y CD = {cd:g} de la fuente", cl=cl, cd=cd)
+    elif params.get("door_polar_id"):
+        polar = get_polar(str(params["door_polar_id"]))
+        coefficients = [
+            DoorCoefficients(angle_deg=c.angle_deg, cl=c.cl, cd=c.cd)
+            for c in polar.usable(with_max=True)
+        ]
+        polar_note = t("polar {polar}", polar=polar.name)
+    else:
+        coefficients = list(ref.coefficients)
+        polar_note = t("polar del portón plano de la A-3")
+    data.update(
+        id=door_id,
+        name=name,
+        length_m=length,
+        height_m=height,
+        area_m2=area,
+        aspect_ratio=height / length,
+        weight_air_kg=None if weight is None else float(weight),
+        weight_water_kg=None
+        if weight is None
+        else float(weight) * float(data.get("weight_water_coefficient", 0.6)),
+        coefficients=[c.model_dump() for c in coefficients],
+    )
+    note = t(
+        "portón de la fuente ({area:.2f} m², {length:g} × {height:g} m) con {polar}",
+        area=area,
+        length=length,
+        height=height,
+        polar=polar_note,
+    )
+    return Door.model_validate(data), note
+
+
 def source_door(spec: NetSpec, hp: float, rig: str = "otter") -> tuple[Door, list[str]]:
     """Portón que da la fuente de la red y sus notas (Fase 19.8d).
 
@@ -214,6 +274,14 @@ def source_door(spec: NetSpec, hp: float, rig: str = "otter") -> tuple[Door, lis
                 area=door.area_m2 or 0.0,
             )
         )
+    elif "door_length_m" in design and "door_height_m" in design and (
+        any(k in design for k in ("door_area_m2", "door_cl", "door_polar_id"))
+    ):
+        # Fase 20.2: superficie y polar de la fuente (CL y CD publicados u hoja de la biblioteca).
+        door, note = door_from_params(
+            design, t("Portón de la fuente de {net}", net=spec.id), f"source_{spec.id}"
+        )
+        notes.append(note)
     elif "door_length_m" in design and "door_height_m" in design:
         weight = design.get("door_weight_air_kg")
         door = plan_door(
@@ -379,7 +447,9 @@ __all__ = [
     "SOURCE_WARP_ID",
     "CatalogCase",
     "catalog_case",
+    "PUBLISHED_POLAR_ANGLES_DEG",
     "design_hp",
+    "door_from_params",
     "generic_vessel",
     "plan_door",
     "source_door",

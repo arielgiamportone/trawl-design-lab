@@ -42,6 +42,7 @@ export const PARAM_UNITS: Record<string, string> = {
   adjust_chain_m: 'm',
   warp_nhp_hp: 'HP',
   warp_design_speed_kn: 'kn',
+  measured_warp_m: 'm',
   report_speeds_kn: 'kn',
   clump_frontal_area_m2: 'm²',
   beam_shoe_area_m2: 'm²',

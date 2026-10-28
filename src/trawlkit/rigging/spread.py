@@ -76,6 +76,7 @@ def towing_geometry(
     u2: float = 0.87,
     shallow_factor: float = 0.95,
     deep_factor: float = 0.85,
+    warp_m: float | None = None,
 ) -> TowingGeometry:
     """Cable filado y proyecciones para la DPA de Fridman (Mec!B175:F186).
 
@@ -83,9 +84,17 @@ def towing_geometry(
     * ``F179 = 0.95·Ls`` (Lsh, poca profundidad) y ``F180 = 0.85·Ls`` (mayor profundidad);
     * ``E185 = LR·U2`` (largo de red trabajando) con LR = largo sin bolsa (``Largototal``);
     * ``E186`` = brida superior Lnc (Dim!F68).
+
+    ``warp_m`` (Fase 20.2) reemplaza el cable de la tabla por uno medido (el cable filado de un
+    lance publicado); la relación cable/profundidad pasa a ser ``warp_m / depth_m``. Los métodos
+    no cambian.
     """
-    ratio = warp_depth_ratio(depth_m)
-    warp = depth_m * ratio
+    if warp_m is None:
+        ratio = warp_depth_ratio(depth_m)
+        warp = depth_m * ratio
+    else:
+        warp = float(warp_m)
+        ratio = warp / depth_m
     return TowingGeometry(
         depth_m=depth_m,
         warp_depth_ratio=ratio,

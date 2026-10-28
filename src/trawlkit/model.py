@@ -272,6 +272,7 @@ class DesignCase:
     warp_nhp_hp: float | None = None  # Rem!E78 "180 HP" (None → mayor BHP de la clase)
     warp_safety_factor: float = 4.0  # Rem!D271
     warp_design_speed_kn: float = 3.5  # Rem!E267 = H123 (resistencia total a 3.5 kn)
+    measured_warp_m: float | None = None  # cable filado medido (None → Mec!E177 por profundidad)
     warp_spare_fraction: float = 0.5  # Cab!D12 = 2·Ls + 0.5·Ls
     warp_drag_shares: tuple[float, ...] = (0.05, 0.10)  # Rem!E191:H199
 
@@ -339,6 +340,8 @@ class DesignCase:
             raise ValueError(t("hace falta el puntal (vessel_depth_m o vessel.depth_m)"))
         if not 0.0 < self.rob_share < 1.0:
             raise ValueError(t("rob_share debe estar entre 0 y 1"))
+        if self.measured_warp_m is not None and not self.measured_warp_m > 0:
+            raise ValueError(t("measured_warp_m debe ser positivo"))
         if self.door_spread_rule not in ("excel", "fridman"):
             raise ValueError(t("door_spread_rule debe ser 'excel' o 'fridman'"))
         if self.opening_method not in shrimp.OPENING_METHODS:
@@ -1149,6 +1152,7 @@ def _stage_rigging(case: DesignCase, dimensions: Pair[NetDimensions]) -> Rigging
         u2=case.working_u2,
         shallow_factor=case.warp_shallow_factor,
         deep_factor=case.warp_deep_factor,
+        warp_m=case.measured_warp_m,  # Fase 20.2: cable de un lance publicado
     )
     assert case.door.length_m is not None
     # En la pareja y en la vara no hay portón: el cable se une a las patentes (o a la vara) sin
