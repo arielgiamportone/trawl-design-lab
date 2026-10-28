@@ -128,7 +128,8 @@ P.md_table(
 ```
 
 El caso los acepta como parámetros (`boom_length_m`, `boom_angle_deg`, `outrigger_bridle_m`,
-`clump_weight_kg`, `beam_count`, `beam_length_m`, `beam_ticklers`, `beam_weight_kg`…); en la app,
+`clump_weight_kg`, `beam_count`, `beam_length_m`, `beam_ticklers`, `beam_weight_kg`, `opening_method`,
+`shrimp_bridle_m`…); en la app,
 el selector **Aparejo** del panel del caso y del modo guiado sigue por defecto el de la red y los
 parámetros se editan en «Parámetros avanzados».
 
@@ -297,7 +298,7 @@ El motor completo queda dentro del 15 % de la DP y del 10 % de la AH de DynamiT 
 antes, la DP salía de 3,6 a 3,9 veces mayor. El equilibrio aislado queda dentro de ±20 % en los
 cuatro casos del informe de la fase (ITO 043 sims. 1 y 3, IAT 85 Iberconsa, IAT 111 Morales), la
 tolerancia que fijan los tests mientras $L_R$ no salga de un plano digitalizado; la sim. 2 con el
-equilibrio aislado (red más liviana, misma $L_R$) da +26 %. La DP medida de la red Iberconsa
+equilibrio aislado (menos tensión con casi la misma $L_R$) da +26 %. La DP medida de la red Iberconsa
 (18,8–19,5 m, otros portones y tijera de 60 m) queda por encima de DynamiT y del equilibrio:
 coherente con el sesgo de DynamiT señalado arriba.
 

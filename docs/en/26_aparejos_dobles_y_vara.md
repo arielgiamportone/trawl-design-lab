@@ -127,7 +127,8 @@ P.md_table(
 ```
 
 The case takes them as parameters (`boom_length_m`, `boom_angle_deg`, `outrigger_bridle_m`,
-`clump_weight_kg`, `beam_count`, `beam_length_m`, `beam_ticklers`, `beam_weight_kg`…); in the app,
+`clump_weight_kg`, `beam_count`, `beam_length_m`, `beam_ticklers`, `beam_weight_kg`, `opening_method`,
+`shrimp_bridle_m`…); in the app,
 the **Rig** selector of the case panel and of the guided mode follows the net's rig by default and
 the parameters are edited in "Advanced parameters".
 
@@ -301,7 +302,7 @@ The full engine is within 15 % of DynamiT's door spread and within 10 % of its A
 before, the door spread came out 3.6 to 3.9 times larger. The balance alone is within ±20 % in the
 four cases of the phase report (ITO 043 sims. 1 and 3, IAT 85 Iberconsa, IAT 111 Morales), the
 tolerance the tests fix while $L_R$ does not come from a digitised plan; sim. 2 with the balance
-alone (lighter net, same $L_R$) gives +26 %. The measured door spread of the Iberconsa net
+alone (lower tension with almost the same $L_R$) gives +26 %. The measured door spread of the Iberconsa net
 (18.8–19.5 m, other doors and a 60 m split bridle) lies above DynamiT and the balance: consistent
 with the DynamiT bias noted above.
 
