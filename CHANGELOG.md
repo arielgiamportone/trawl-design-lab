@@ -81,6 +81,24 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro, de la flota y de investigación.
 
 ### Agregado
+- **Portones grandes de fabricante (Fase 20.1)**: tablas de Thyborøn (25 hojas de datos, de fondo,
+  semipelágicos y pelágicos: 645 tamaños de 0,82 a 21,34 m², con largo × alto cuando la hoja lo
+  da), Polar (las 5 tablas distintas de sus 20 folletos, 180 tamaños de 1 a 20 m²) y Poly-Ice
+  (J. Hinriksson: ovales de fondo y de media agua FL y FH, 41 tamaños hasta 14,2 m², con medidas),
+  y cuatro tamaños más del Vónin Tornado (1, 2, 14 y 15 m², tabla reproducida por Fish Focus en
+  2019). Mismo flujo que la 19.3/19.8a (`tools/components/sources.py`, YAML regenerados en
+  `data/components/door/`: `thyboron.yaml`, `polar_doors.yaml` y `poly_ice.yaml`), polar del tipo
+  como supuesta. Pesos con rango (MIN–MAX, «from–to»): valor medio *derivado* con el rango en la
+  nota; NORMAL/HEAVY: el NORMAL; «Minimum weight»: el mínimo; «as requested»: sin peso. Las hojas
+  repetidas se cargan una vez; filas con erratas y portones de alta relación de aspecto con el lado
+  mayor impreso primero, con medidas *supuestas* y la nota. Catálogo de portones: 130 → 1000 ítems
+  (componentes: 596 → 1466); el catálogo se lee con libyaml cuando está. Ahora eligen portón todos
+  los buques de hasta 2600 hp (Holmberg, Oca Balda y el congelador de 2348 hp); el Angelescu
+  (2855 hp) y el congelador de 4159 hp piden 31,5 y 45,9 m² de portón plano, más que cualquier
+  tabla publicada (el mayor, 21,34 m²). La regla de superficie del libro no se cambia: su
+  diagnóstico queda para una fase posterior (capítulo 34). Bibliografía: `thyboron_trawldoor`,
+  `polyice_doors`, `fishfocus2019_tornado`, `netsystems_fishbuster`, `roth2017angelescu`;
+  `polardoors` actualizada.
 - **Ejercicios y laboratorio de langostino (Fase 20.3)**: cinco ejercicios nuevos del banco
   docente para el capítulo 26 (`data/teaching/exercises/26_langostino.yaml`, ES/EN, con datos por
   semilla y la semilla 0 de la red tangonera del INIDEP): abertura horizontal por triángulos

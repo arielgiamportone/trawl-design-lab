@@ -204,6 +204,10 @@ to.
 | `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polars of the Thyborøn 15 VF and the Grilli Fly in the flume tank and the wind tunnel (Phase 19.3) | Tables *transcribed*; the Süberkrüb polar, a *derived* fit |
 | `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, every published size (14, 11 and 8; Phase 19.8a); weight **per door** *derived* from Vónin's Simoon article {cite}`vonin_simoon` (Vónin does not say so; Phase 19.8b); dimensions (area = length × height) and polar *assumed* |
 | `morgere2025` | Morgère, 2025 catalogue | OvalFoil, PolyFoil and PFPE otter boards (Phase 19.3) | Area (and PFPE length) *transcribed*, every catalogue model (21, 19 and 17; Phase 19.8a); no weight («sur demande»); dimensions and polar from the Seafish sheet of the same design, *assumed* |
+| `fishfocus2019_tornado` | Fish Focus, 25 June 2019, «Many Advantages with Tornado» | Size and weight table of the Vónin Tornado (Phase 20.1) | Reprints Vónin's table from 1 to 15 m²; from 3 to 13 m² it matches vonin.com; the 4 new sizes (1, 2, 14 and 15 m²) are loaded, with the same conventions as `vonin_doors` |
+| `thyboron_trawldoor` | Thyborøn Trawldoor, data sheets | Bottom (Types 2, 4, 11, 16, Viking Xstream), semi-pelagic (12, 14, 21, 23, 28, El Cazador Xstream) and pelagic (15, 20, 22, 42) otter boards (Phase 20.1) | Area, weight and dimensions («LxH/mm») *transcribed*, every size of 25 sheets (645, from 0.82 to 21.34 m²); repeated sheets, once; MIN–MAX weight, mean value *derived*; without dimensions, proportions *assumed*; type polar, *assumed* |
+| `polardoors` | Polar Fishing Gear, «Size & Weight» brochures | Hercules, Neptune, Thor, Mercury and Jupiter (and the models with the same table) (Phase 20.1) | Area *transcribed* and «from–to» weight as a *derived* mean value; 5 distinct tables of 20 brochures, 36 sizes each (1–20 m²); dimensions and polar *assumed* |
+| `polyice_doors` | J. Hinriksson, «Poly-Ice - Trawl Doors» page | Oval bottom boards and FL and FH mid-water boards (Phase 20.1) | Area, dimensions and «from–to» weight (mean value *derived*), 20, 11 and 10 sizes up to 14.2 m²; type polar, *assumed* |
 | `giamportone2024` | Excel workbook of the A-3 | Moscuzza ropes, Trawlex chains, Seale 6x19 wire ropes, floats, PA twines and the two otter boards with their polar | *Excel* provenance |
 
 Criteria:
@@ -219,7 +223,7 @@ Criteria:
   breaking load per mm², twine tenacity, buoyancy against the volume of the sphere and otter board
   polar. The app also uses it to review user contributions.
 - **Searched without open data**: Euronete, Vónin (its catalogue is Hampidjan's), Usha Martin, Cotesi, Morgère,
-  Thyborøn, Injector and Ekkó publish ranges or ask for the data sheet by e-mail. Latin American
+  Injector and Ekkó publish ranges or ask for the data sheet by e-mail. Latin American
   suppliers do not publish data sheets online; for them there are the generics and the
   contributions.
 - **Standards**: ISO 1805 (netting), ISO 2307 (ropes) and ISO 2408 / EN 12385-4 (wire ropes) are

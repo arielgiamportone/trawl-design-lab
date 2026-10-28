@@ -10,6 +10,11 @@ sources:
   title: Vónin P/F, Test of Vónin Simoon trawl doors (noticia)
   url: https://www.vonin.com/test-of-vonin-simoon-trawl-doors/
   accessed: '2026-10-28'
+- key: fishfocus2019_tornado
+  accessed: '2026-10-28'
+  title: Fish Focus (25 de junio de 2019), Many Advantages with Tornado (reproduce la tabla de tamaños
+    y pesos del Vónin Tornado)
+  url: https://fishfocus.co.uk/many-advantages-with-tornado/
 - key: sfia1993
   title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
     (contrato CEE FAR TE 1 214)
@@ -862,6 +867,133 @@ items:
         portones multiperfil de Seafish (Bison 3 Slots, Hydrofin, Morgère Polyfoil y Fjørtoft) a los ángulos
         que ensayaron todos (30–45°))'
   generic_of: door_v_800hp
+- id: door_vonin_tornado_1m2
+  name: Vónin Tornado 1 m²
+  brand: Vónin
+  product: Tornado
+  country: FO
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 0.577
+  height_m: 1.732
+  area_m2: 1.0
+  weight_air_kg: 250.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes: &id002
+  - 'Uso: pelágico, cinco perfiles; ángulo de ataque de 21 a 48° según el fabricante.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+    weight_air_kg:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
+    length_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Vónin Tornado: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15 VF (AR
+        2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_1_5m2
+- id: door_vonin_tornado_2m2
+  name: Vónin Tornado 2 m²
+  brand: Vónin
+  product: Tornado
+  country: FO
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 0.816
+  height_m: 2.449
+  area_m2: 2.0
+  weight_air_kg: 650.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes: *id002
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+    weight_air_kg:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
+    length_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Vónin Tornado: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15 VF (AR
+        2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_2m2
 - id: door_vonin_tornado_3m2
   name: Vónin Tornado 3 m²
   brand: Vónin
@@ -891,8 +1023,7 @@ items:
   - angle_deg: 35.0
     cl: 1.863
     cd: 0.597
-  notes: &id002
-  - 'Uso: pelágico, cinco perfiles; ángulo de ataque de 21 a 48° según el fabricante.'
+  notes: *id002
   provenance:
     area_m2:
       kind: transcribed
@@ -1545,6 +1676,132 @@ items:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Vónin Tornado: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15 VF (AR
+        2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_4m2
+- id: door_vonin_tornado_14m2
+  name: Vónin Tornado 14 m²
+  brand: Vónin
+  product: Tornado
+  country: FO
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.16
+  height_m: 6.481
+  area_m2: 14.0
+  weight_air_kg: 5400.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes: *id002
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+    weight_air_kg:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
+    length_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    coefficients:
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Vónin Tornado: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15 VF (AR
+        2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_4m2
+- id: door_vonin_tornado_15m2
+  name: Vónin Tornado 15 m²
+  brand: Vónin
+  product: Tornado
+  country: FO
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.236
+  height_m: 6.708
+  area_m2: 15.0
+  weight_air_kg: 5800.0
+  weight_water_coefficient: 0.87
+  coefficients:
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes: *id002
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+    weight_air_kg:
+      kind: transcribed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
+    length_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
+    height_m:
+      kind: assumed
+      document: fishfocus2019_tornado
+      page: tabla «Size m2 / Weight kg»
       note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
         se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:

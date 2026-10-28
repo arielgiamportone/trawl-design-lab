@@ -77,20 +77,88 @@ def test_manufacturer_data_is_spot_data_not_whole_tables() -> None:
     assert lines and max(lines.values()) <= MAX_PER_PRODUCT, lines
 
 
+MAKERS = ("Vónin", "Morgère", "Thyborøn", "Polar", "Poly-Ice")
+
+
 def test_manufacturer_door_lines_carry_every_published_size() -> None:
     """Fase 19.8a: todos los tamaños publicados de cada línea de portones de fabricante."""
     lines: Counter[tuple[str, str]] = Counter()
     for it in load_components("door"):
-        if it.brand in ("Vónin", "Morgère") and it.product:  # sin línea: el portón del libro
+        if it.brand in MAKERS and it.product:  # sin línea: el portón del libro
             lines[(it.brand, it.product or "")] += 1
     assert lines == {
         ("Vónin", "Storm 2"): 14,
-        ("Vónin", "Tornado"): 11,
+        ("Vónin", "Tornado"): 15,  # 11 de vonin.com y 4 más de Fish Focus 2019 (Fase 20.1)
         ("Vónin", "Twister"): 8,
         ("Morgère", "OvalFoil"): 21,
         ("Morgère", "PolyFoil"): 19,
         ("Morgère", "PFPE"): 17,
+        # Fase 20.1: portones grandes (hojas distintas; las repetidas se cargan una vez)
+        ("Thyborøn", "Type 2 Standard"): 26,
+        ("Thyborøn", "Type 2 Iceland"): 28,
+        ("Thyborøn", "Type 4 Standard"): 32,
+        ("Thyborøn", "Type 11 A Standard"): 32,
+        ("Thyborøn", "Type 11 Iceland"): 27,
+        ("Thyborøn", "Type 12 A Standard"): 22,
+        ("Thyborøn", "Type 12 Iceland"): 24,
+        ("Thyborøn", "Type 14 VF Standard"): 28,
+        ("Thyborøn", "Type 14 VF Iceland"): 21,
+        ("Thyborøn", "Type 28"): 29,
+        ("Thyborøn", "Type 15 VF"): 27,
+        ("Thyborøn", "Type 15 WFS"): 35,
+        ("Thyborøn", "Type 16 Standard"): 35,
+        ("Thyborøn", "Type 16 Iceland"): 39,
+        ("Thyborøn", "Type 20 VF Flipper"): 23,
+        ("Thyborøn", "Type 21 VFA Flipper"): 25,
+        ("Thyborøn", "Type 22 Bluestream"): 33,
+        ("Thyborøn", "Type 42 Bluestream"): 22,
+        ("Thyborøn", "Type 42 Bluestream Full controllable"): 33,
+        ("Thyborøn", "Type 23 Bluestream"): 30,
+        ("Thyborøn", "Type 23 Bluestream Iceland"): 8,  # sólo 16,5–20 m² (el resto repite)
+        ("Thyborøn", "El Cazador Xstream"): 33,
+        ("Thyborøn", "Viking Xstream"): 33,
+        ("Polar", "Hercules 1,2r"): 36,
+        ("Polar", "Neptune"): 36,
+        ("Polar", "Thor"): 36,
+        ("Polar", "Mercury 2,0r"): 36,
+        ("Polar", "Jupiter 2,7r"): 36,
+        ("Poly-Ice", "Trawl doors"): 20,
+        ("Poly-Ice", "Mid-water FL"): 11,
+        ("Poly-Ice", "Mid-water FH"): 10,
     }
+
+
+def test_large_door_tables_follow_the_sheets() -> None:
+    """Fase 20.1: valores de las hojas, convenciones de peso y medidas impresas o supuestas."""
+    big = get_component("door", "door_thyboron_type2_iceland_21_34m2")
+    assert isinstance(big, DoorItem)
+    assert big.weight_air_kg == 6800 and big.provenance["weight_air_kg"].kind == "transcribed"
+    assert big.provenance["length_m"].kind == "assumed"  # la hoja no da medidas
+    oval = get_component("door", "door_thyboron_type16_iceland_18m2")
+    assert isinstance(oval, DoorItem)
+    assert (oval.length_m, oval.height_m, oval.weight_air_kg) == (4.78, 4.09, 7000)
+    assert oval.provenance["length_m"].kind == "transcribed"
+    # MIN/MAX: valor medio, derivado
+    t15 = get_component("door", "door_thyboron_type15vf_18m2")
+    assert t15.weight_air_kg == pytest.approx(0.5 * (4111 + 4428))  # type: ignore[attr-defined]
+    assert t15.provenance["weight_air_kg"].kind == "derived"
+    # lado mayor impreso primero en un portón de alta relación de aspecto: alto
+    t23 = get_component("door", "door_thyboron_type23_16m2")
+    assert (t23.length_m, t23.height_m) == (2.973, 5.391)  # type: ignore[attr-defined]
+    # errata de la hoja: medidas supuestas, superficie y peso tal cual
+    t21 = get_component("door", "door_thyboron_type21_8m2")
+    assert t21.provenance["length_m"].kind == "assumed"
+    assert t21.weight_air_kg == 2170  # type: ignore[attr-defined]
+    thor = get_component("door", "door_polar_thor_20m2")
+    assert thor.weight_air_kg == pytest.approx(7900)  # type: ignore[attr-defined]
+    poly = get_component("door", "door_polyice_trawl_door_14")
+    assert (poly.area_m2, poly.length_m, poly.height_m) == (14.2, 5.3, 3.4)  # type: ignore[attr-defined]
+    tornado = get_component("door", "door_vonin_tornado_15m2")
+    assert tornado.provenance["area_m2"].document == "fishfocus2019_tornado"
+    assert tornado.weight_air_kg == 5800  # type: ignore[attr-defined]
+    for it in load_components("door"):
+        if it.brand in MAKERS:
+            assert not [i for i in check(it) if i.level == "error"], it.id
 
 
 def test_filters_brand_region_generic() -> None:

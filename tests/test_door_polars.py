@@ -228,12 +228,15 @@ def test_select_route(a3: DesignResult) -> None:
 
 
 def test_selection_for_every_vessel_scales_with_power() -> None:
-    """Fase 19.8a: con todas las tallas de fabricante, cada buque del catálogo elige portón.
+    """Fases 19.8a y 20.1: con todas las tallas de fabricante, la flota elige portón.
 
     La superficie requerida crece con la potencia; dentro de cada tipo, el portón más chico que
     alcanza no achica al subir la potencia; un tipo que se queda sin portón no vuelve a tenerlo
     con un buque más potente; y sólo los buques que piden más que el portón más grande del
-    catálogo se quedan sin candidatos (con la nota correspondiente).
+    catálogo se quedan sin candidatos (con la nota correspondiente). Desde la Fase 20.1 (Thyborøn,
+    Polar y Poly-Ice, hasta 21,34 m²) eligen portón todos los buques de hasta 2600 hp; el
+    Angelescu (2855 hp) y el congelador de 4159 hp piden más de 30 m² de portón plano, más que
+    cualquier tabla publicada (ver el diagnóstico de la regla en el capítulo 34).
     """
     from trawlkit.rigging.polars import canonical_type
 
@@ -255,8 +258,14 @@ def test_selection_for_every_vessel_scales_with_power() -> None:
     rows.sort(key=lambda r: r[0])
     required = [r[2] for r in rows]
     assert required == sorted(required)
-    # Todo buque de hasta 1400 hp (fresqueros y tangoneros) encuentra portón.
-    assert all(r[3] for r in rows if r[0] <= 1400), [r[1] for r in rows if not r[3]]
+    # Todo buque de hasta 2600 hp (incluidos Holmberg, Oca Balda y el congelador de 2348 hp)
+    # encuentra portón; sin candidatos quedan sólo los que piden más de 30 m² de portón plano.
+    assert all(r[3] for r in rows if r[0] <= 2600), [r[1] for r in rows if not r[3]]
+    without = {r[1] for r in rows if not r[3]}
+    assert without == {"bipo_victor_angelescu", "ar_congelador_e3"}, without
+    assert all(r[2] > 30.0 for r in rows if r[1] in without)
+    largest = max(d.area_m2 for d in load_components("door") if d.brand)
+    assert largest == pytest.approx(21.34)
     for (_, prev_id, _, prev), (_, vid, _, cur) in zip(rows, rows[1:], strict=False):
         for typ, area in cur.items():
             assert typ in prev, (prev_id, vid, typ)  # un tipo agotado no reaparece

@@ -76,9 +76,14 @@ serie completa):
   Seafish/IFREMER/DIFTA {cite}`sfia1993` para el plano, el oval y la media de los tres en V, y el
   Thyborøn 15 VF de {cite}`mellibovsky2018` para el Süberkrüb; cuatro puertas de la flota
   camaronera del Caribe colombiano {cite}`zuniga2006`; Vónin Storm 2, Tornado y Twister
-  (superficie y peso de los 14, 11 y 8 tamaños publicados, {cite}`vonin_doors`) y Morgère
-  OvalFoil, PolyFoil y PFPE (superficie de los 21, 19 y 17 modelos del catálogo; peso «sur
-  demande», {cite}`morgere2025`), con la polar del tipo como supuesta.
+  (superficie y peso de los 14, 15 y 8 tamaños publicados, {cite}`vonin_doors`; cuatro del
+  Tornado, de 1, 2, 14 y 15 m², de la tabla que reprodujo {cite:t}`fishfocus2019_tornado`) y
+  Morgère OvalFoil, PolyFoil y PFPE (superficie de los 21, 19 y 17 modelos del catálogo; peso
+  «sur demande», {cite}`morgere2025`), con la polar del tipo como supuesta. Desde la Fase 20.1,
+  los portones grandes: 25 hojas de Thyborøn {cite}`thyboron_trawldoor` (645 tamaños de 0,82 a
+  21,34 m², de fondo, semipelágicos y pelágicos), las 5 tablas distintas de los folletos de Polar
+  {cite}`polardoors` (180 tamaños de 1 a 20 m²) y las tres de Poly-Ice {cite}`polyice_doors`
+  (41 tamaños hasta 14,2 m², con medidas).
 * **Boyas y cadenas**: flotación y profundidad máxima por diámetro, peso por metro por eslabón;
   boyas de arrastre de Atlantic Floats y cadenas de eslabón largo Trygg y Trawlex (catálogo de
   Hampidjan) y Gunnebo LLZ de grado 6 galvanizada {cite}`gunnebo_llz`.
@@ -92,6 +97,37 @@ fila se leyó en la imagen de la página, no en el texto. Donde la ficha no da u
 necesita, el ítem lo dice: el paño torcido de Garware (380 D, 500 D, Sapphire torcido y nylon
 210 D) no trae diámetro, así que se cargó como **borrador** con el diámetro estimado por el ajuste
 del *Workbook* y la nota «A VERIFICAR»; los borradores no entran en la selección automática.
+
+### Portones grandes (Fase 20.1)
+
+Hasta la Fase 19.9 el portón más grande del catálogo era el Vónin Storm 2 de 16 m², y los cinco
+buques de la flota de 2100 hp o más no tenían candidato. Ninguna tabla pública de fabricante pasa
+de **21,34 m²** (Thyborøn Type 2 Iceland de 200", 6800 kg); Thyborøn dice que construye hasta
+25 m² y 8000 kg, sin publicar esas filas. Cada hoja distinta se carga entera; las hojas que repiten
+la tabla de otra (Type 20 y 21 Slider, Type 22 VF/VFB, Type 32, Type 42 hidráulico, Type 23 VK,
+Type 26, Type 28 en V, los 15 folletos de Polar que repiten una de las 5 tablas) se cargan una sola
+vez, y cada ítem lo dice en sus notas. Los pesos siguen la hoja: con columnas mínimo–máximo
+(Thyborøn) o «desde–hasta» (Polar, Poly-Ice) se toma el **valor medio**, como en los genéricos del
+*Workbook*, con el rango en la nota y procedencia *derivada*; el Type 2 lleva el peso NORMAL (el
+HEAVY, en la nota); los Xstream, el mínimo publicado; los Bluestream, el «Standard weight»; y el
+Type 23 Iceland, sin peso («as requested»). Las medidas son las impresas («LxH/mm»), salvo tres
+filas con erratas evidentes (Type 16 de 1 m², Type 21 de 6 y 8 m²) y los portones de alta relación
+de aspecto cuya hoja imprime primero el lado mayor (Types 23 y 42, Poly-Ice de media agua), donde
+el lado mayor se toma como alto (*supuesto*). Sin medidas, las proporciones salen de una hoja de
+polar del tipo (la del Thyborøn Type 2 de 125" de Seafish para el Type 2) o del número «r» de
+Polar, tomado como relación de aspecto. La polar es siempre la del tipo, *supuesta*.
+
+Con este catálogo eligen portón todos los buques de hasta 2600 hp, incluidos el Holmberg, el Oca
+Balda y el congelador de 2348 hp. El Angelescu (2855 hp) y el congelador de 4159 hp siguen sin
+candidato: la regla del libro les pide 31,5 y 45,9 m² de portón plano por portón, más que cualquier
+tabla. Esos números están muy lejos de la práctica: el Angelescu se diseñó con portones Morgère
+SPF08 de 4,5 m² y 1200 kg {cite}`roth2017angelescu`, y la única tabla pública indexada por
+potencia, la de los Fishbuster de Net Systems {cite}`netsystems_fishbuster`, pone 7 m²
+para 1800–2200 hp y de 11 a 12,5 m² para 3000–5500 hp. La regla (superficie = 20 % del tiro disponible sobre $C_D\,v^2$, promediada
+entre 2 y 4 nudos) está calibrada para los 150–180 hp de la A-3 y crece en proporción a la
+potencia, mientras que las tablas del *Workbook* y de Fishbuster crecen como la potencia a la
+0,65. La regla no se cambia en esta fase: el diagnóstico y la corrección propuesta quedan para una
+fase posterior, porque tocan los valores dorados del libro.
 
 ```{code-cell} ipython3
 :tags: [remove-input]

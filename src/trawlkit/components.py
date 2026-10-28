@@ -276,13 +276,18 @@ def component_files(kind: str) -> list[Path]:
     return sorted((COMPONENTS_DIR / kind).glob("*.yaml"))
 
 
+#: Cargador de YAML: el de libyaml si está (el catálogo de portones pasa de 1000 ítems desde la
+#: Fase 20.1), si no el de Python puro (Pyodide).
+_YAML_LOADER = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+
+
 @cache
 def _load_kind(kind: str) -> tuple[ComponentBase, ...]:
     out: list[ComponentBase] = []
     seen: set[str] = set()
     for path in component_files(kind):
         with path.open(encoding="utf-8") as fh:
-            raw = yaml.safe_load(fh) or {}
+            raw = yaml.load(fh, Loader=_YAML_LOADER) or {}
         sources = [SourceDocument.model_validate(s) for s in raw.get("sources", [])]
         for rec in raw.get("items", []):
             data = {"kind": kind, **rec}

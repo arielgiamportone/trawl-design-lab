@@ -582,7 +582,10 @@ def vonin_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
         notes = [f"Uso: {d['use']}."]
         if d.get("claim"):
             notes.append(f"Dato del fabricante, no usado en el cálculo: {d['claim']}.")
-        for area, weight in d["points"]:
+        extra = [(a, w, d["extra_doc"]) for a, w in d.get("extra_points", [])]
+        pts = sorted([(a, w, "vonin_doors") for a, w in d["points"]] + extra)
+        for area, weight, doc in pts:
+            src_page = page if doc == "vonin_doors" else "tabla «Size m2 / Weight kg»"
             length = math.sqrt(area / ar_used)
             height = ar_used * length
             item = {
@@ -601,17 +604,17 @@ def vonin_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "coefficients": tp.coefficient_dicts(),
                 "notes": notes,
                 "provenance": {
-                    "area_m2": prov("vonin_doors", page=page),
+                    "area_m2": prov(doc, page=src_page),
                     "weight_air_kg": prov(
-                        "vonin_doors",
-                        page=page,
+                        doc,
+                        page=src_page,
                         note="la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo "
                         "dice); por portón *derivado* de la noticia del Simoon de Vónin (portones "
                         "de 7,5 m² y 3000 kg encargados como un par: ≈ 400 kg/m² por portón, "
                         "coherente con los 350–500 kg/m² del Storm)",
                     ),
-                    "length_m": prov("vonin_doors", "assumed", page, ar_note),
-                    "height_m": prov("vonin_doors", "assumed", page, ar_note),
+                    "length_m": prov(doc, "assumed", src_page, ar_note),
+                    "height_m": prov(doc, "assumed", src_page, ar_note),
                     "coefficients": tp.provenance(applied_to=f"Vónin {product}").model_dump(
                         mode="json", exclude_none=True
                     ),
@@ -685,6 +688,315 @@ def morgere_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
             if gen:
                 item["generic_of"] = gen
             out.append(item)
+    return out
+
+
+# --- Portones grandes (Fase 20.1) -------------------------------------------------------------
+
+THY_URL = "https://thyboron-trawldoor.dk/wp-content/uploads/"
+POLAR_URL = "https://polardoors.com/wp-content/uploads/2019/05/"
+POLYICE_PAGE = "«Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html)"
+
+#: Genérico del Workbook más parecido, por tipo canónico (como Vónin y Morgère).
+GENERIC_TYPES = {"oval": ("oval",), "high_aspect": ("suberkrub",)}
+
+
+def _shape(door_type: str, polar_id: str | None = None) -> tuple[float, float, str]:
+    """Proporciones (alto/largo, superficie/(largo·alto)) de una hoja de polar del tipo."""
+    from trawlkit.rigging.polars import get_polar, polar_for_type
+
+    model = get_polar(polar_id or polar_for_type(door_type).polar_ids[0])
+    m = model.model
+    ar = float(m["aspect_ratio"])
+    ratio = float(m.get("area_ratio") or m["area_m2"] / (m["length_m"] * m["height_m"]))
+    return ar, ratio, model.name
+
+
+def _weight(
+    cols: tuple[str, ...], row: dict[str, Any], doc: str, page: str
+) -> tuple[float | None, dict[str, Any] | None, str | None]:
+    """Peso por portón según las columnas de la hoja (convenciones en ``sources.py``)."""
+    if "w" in cols:
+        return float(row["w"]), prov(doc, page=page), None
+    if "w_normal" in cols:
+        note = f"peso NORMAL; la hoja da {row['w_heavy']:g} kg para la versión HEAVY"
+        return float(row["w_normal"]), prov(doc, page=page, note=note), note
+    if "w_min" in cols:
+        lo, hi = row["w_min"], row["w_max"]
+        note = f"peso publicado {lo:g}–{hi:g} kg (MINIMUM–MAXIMUM): se toma el valor medio"
+        return 0.5 * (lo + hi), prov(doc, "derived", page, note), note
+    if "w_min_only" in cols:
+        note = "peso mínimo publicado; el máximo es «As requested»"
+        return float(row["w_min_only"]), prov(doc, page=page, note=note), note
+    return None, None, None
+
+
+def _maker_item(
+    *,
+    did: str,
+    name: str,
+    brand: str,
+    product: str,
+    country: str,
+    door_type: str,
+    area: float,
+    length: float,
+    height: float,
+    weight: float | None,
+    coefficients: list[dict[str, Any]],
+    notes: list[str],
+    provenance: dict[str, Any],
+    generics: list[dict[str, Any]],
+) -> dict[str, Any]:
+    item: dict[str, Any] = {
+        "id": did,
+        "name": name,
+        "brand": brand,
+        "product": product,
+        "country": country,
+        "regions": ["europe"],
+        "type": door_type,
+        "length_m": round(length, 3),
+        "height_m": round(height, 3),
+        "area_m2": area,
+    }
+    if weight is not None:
+        item["weight_air_kg"] = float(weight)
+        item["weight_water_coefficient"] = STEEL_WATER_COEF
+    item["coefficients"] = coefficients
+    item["notes"] = notes
+    item["provenance"] = provenance
+    gen = _nearest_door(generics, GENERIC_TYPES.get(door_type, ("v",)), area)
+    if gen:
+        item["generic_of"] = gen
+    return item
+
+
+def _id_area(area: float) -> str:
+    return f"{area:g}m2".replace(".", "_")
+
+
+def thyboron_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Thyborøn: superficie y peso transcriptos; medidas de la hoja o supuestas; polar del tipo."""
+    doc = "thyboron_trawldoor"
+    out: list[dict[str, Any]] = []
+    for product, d in src.THYBORON_DOORS.items():
+        page = THY_URL + d["sheet"]
+        cols = d["columns"]
+        tp = _type_polar(d["type"])
+        coefs = tp.coefficient_dicts()
+        polar_prov = tp.provenance(applied_to=f"Thyborøn {product}").model_dump(
+            mode="json", exclude_none=True
+        )
+        ar, ratio, shape_name = _shape(d["type"], d.get("shape_polar"))
+        rows = [dict(zip(cols, p, strict=True)) for p in d["points"]]
+        printed = [r for r in rows if "l" in r and r["area"] not in d.get("misprints", {})]
+        if printed:  # proporciones de la propia línea, para las filas con erratas
+            hs = [max(r["l"], r["h"]) if d.get("long_side_is_height") else r["h"] for r in printed]
+            ls = [min(r["l"], r["h"]) if d.get("long_side_is_height") else r["l"] for r in printed]
+            line_ar = float(np.median([h / x for h, x in zip(hs, ls, strict=True)]))
+            line_ratio = float(
+                np.median(
+                    [r["area"] * 1e6 / (h * x) for r, h, x in zip(printed, hs, ls, strict=True)]
+                )
+            )
+        base_notes = [f"Uso: {d['use']}.", f"Thyborøn: {d['quote']}."]
+        if d.get("type_note"):
+            base_notes.append(f"Tipo {d['type']} supuesto: {d['type_note']} (A VERIFICAR).")
+        if d.get("shared"):
+            base_notes.append(f"Hojas con la misma tabla: {d['shared']}.")
+        for r in rows:
+            area = float(r["area"])
+            notes = list(base_notes)
+            if "l" in r and area not in d.get("misprints", {}):
+                if d.get("long_side_is_height"):
+                    length, height = min(r["l"], r["h"]) / 1000, max(r["l"], r["h"]) / 1000
+                    note = (
+                        f"la hoja imprime «LxH» {r['l']}x{r['h']} mm con el lado mayor primero; "
+                        "en un portón de alta relación de aspecto se toma el lado mayor como alto "
+                        "(A VERIFICAR)"
+                    )
+                    dims = prov(doc, "assumed", page, note)
+                else:
+                    length, height = r["l"] / 1000, r["h"] / 1000
+                    dims = prov(doc, page=page)
+                dims_l = dims_h = dims
+            elif "l" in r:
+                length = math.sqrt(area / (line_ar * line_ratio))
+                height = line_ar * length
+                note = (
+                    f"la hoja imprime {d['misprints'][area]} mm, que no cierra con la serie "
+                    f"(errata); medidas con las proporciones de la línea (alto/largo "
+                    f"{line_ar:.2f}, superficie/(largo·alto) {line_ratio:.2f}), A VERIFICAR"
+                )
+                dims_l = dims_h = prov(doc, "assumed", page, note)
+            else:
+                length = math.sqrt(area / (ar * ratio))
+                height = ar * length
+                note = (
+                    f"la hoja no da medidas: proporciones de la hoja «{shape_name}» (alto/largo "
+                    f"{ar:g}, superficie/(largo·alto) {ratio:.2f}), A VERIFICAR"
+                )
+                dims_l = dims_h = prov(doc, "assumed", page, note)
+            weight, wprov, wnote = _weight(cols, r, doc, page)
+            if wnote:
+                notes.append(f"Peso: {wnote}.")
+            if weight is None:
+                notes.append("Peso «as requested»: sin peso publicado.")
+            size = f'{r["inch"]}" ' if "inch" in r else ""
+            area_prov = prov(doc, page=page, note=f'tamaño {r["inch"]}"' if "inch" in r else None)
+            provenance: dict[str, Any] = {"area_m2": area_prov}
+            if wprov is not None:
+                provenance["weight_air_kg"] = wprov
+            provenance |= {"length_m": dims_l, "height_m": dims_h, "coefficients": polar_prov}
+            out.append(
+                _maker_item(
+                    did=f"door_thyboron_{d['slug']}_{_id_area(area)}",
+                    name=f"Thyborøn {product} {size}({area:g} m²)",
+                    brand="Thyborøn",
+                    product=product,
+                    country="DK",
+                    door_type=d["type"],
+                    area=area,
+                    length=length,
+                    height=height,
+                    weight=weight,
+                    coefficients=coefs,
+                    notes=notes,
+                    provenance=provenance,
+                    generics=generics,
+                )
+            )
+    return out
+
+
+def polar_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Polar Doors: superficie y peso («from–to», valor medio); medidas y polar supuestas."""
+    doc = "polardoors"
+    out: list[dict[str, Any]] = []
+    for product, d in src.POLAR_DOORS.items():
+        page = POLAR_URL + d["brochure"]
+        tp = _type_polar(d["type"])
+        coefs = tp.coefficient_dicts()
+        polar_prov = tp.provenance(applied_to=f"Polar {product}").model_dump(
+            mode="json", exclude_none=True
+        )
+        ar = d["aspect_ratio"]
+        if ar is not None:
+            ratio = 1.0
+            dims_note = (
+                f"Polar no da medidas ni define el «{ar:g}r» del nombre: se supone relación de "
+                f"aspecto alto/largo = {ar:g} y superficie = largo × alto (A VERIFICAR)"
+            )
+        else:
+            ar, ratio, shape_name = _shape(d["type"])
+            dims_note = (
+                f"Polar no da medidas: proporciones de la hoja «{shape_name}» (alto/largo {ar:g}, "
+                f"superficie/(largo·alto) {ratio:.2f}), A VERIFICAR"
+            )
+        notes = [f"Uso: {d['use']}.", f"Polar: {d['quote']}."]
+        if d["type"] == "cambered":
+            notes.append("Tipo cambered supuesto: Polar no dice la forma del portón (A VERIFICAR).")
+        if d.get("shared"):
+            notes.append(f"Misma tabla en los folletos de {d['shared']}.")
+        dims = prov(doc, "assumed", page, dims_note)
+        for area, lo, hi in d["points"]:
+            length = math.sqrt(area / (ar * ratio))
+            wnote = f"peso publicado {lo:g}–{hi:g} kg («from – to»): se toma el valor medio"
+            out.append(
+                _maker_item(
+                    did=f"door_polar_{d['slug']}_{_id_area(area)}",
+                    name=f"Polar {product} {area:g} m²",
+                    brand="Polar",
+                    product=product,
+                    country="IS",
+                    door_type=d["type"],
+                    area=area,
+                    length=length,
+                    height=ar * length,
+                    weight=0.5 * (lo + hi),
+                    coefficients=coefs,
+                    notes=[*notes, f"Peso: {wnote}."],
+                    provenance={
+                        "area_m2": prov(doc, page=page),
+                        "weight_air_kg": prov(doc, "derived", page, wnote),
+                        "length_m": dims,
+                        "height_m": dims,
+                        "coefficients": polar_prov,
+                    },
+                    generics=generics,
+                )
+            )
+    return out
+
+
+def polyice_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Poly-Ice (J. Hinriksson): superficie, medidas y peso («from–to», valor medio)."""
+    doc = "polyice_doors"
+    out: list[dict[str, Any]] = []
+    lines = {
+        "bottom": (
+            "Trawl doors",
+            "oval",
+            "trawl_door",
+            "fondo; «oval doors with a trough flow slot»",
+        ),
+        "fl": ("Mid-water FL", "high_aspect", "fl", "media agua, «Low aspect ratio»"),
+        "fh": ("Mid-water FH", "high_aspect", "fh", "media agua, «High aspect ratio»"),
+    }
+    for key, (product, door_type, slug, use) in lines.items():
+        page = f"{POLYICE_PAGE}, tabla «{product}»"
+        tp = _type_polar(door_type)
+        coefs = tp.coefficient_dicts()
+        polar_prov = tp.provenance(applied_to=f"Poly-Ice {product}").model_dump(
+            mode="json", exclude_none=True
+        )
+        for row in src.POLYICE_DOORS[key]:
+            notes = [f"Uso: {use}."]
+            if key == "bottom":
+                area, code, a, b, lo, hi = row
+                length, height = a / 1000, b / 1000
+                dims = prov(doc, page=page, note=f"tipo {code}")
+                name = f"Poly-Ice {product} {code} ({area:g} m²)"
+                did = f"door_polyice_{slug}_{str(code).replace('/', '_').lower()}"
+            else:
+                area, area_sp, a, b, lo, hi = row
+                length, height = min(a, b) / 1000, max(a, b) / 1000
+                dims = prov(
+                    doc,
+                    "assumed",
+                    page,
+                    f"la página imprime {a}x{b} mm (sin spoiler) con el lado mayor primero; se "
+                    "toma el lado mayor como alto (A VERIFICAR)",
+                )
+                notes.append(f"Superficie con spoiler: {area_sp:g} m² (se usa la sin spoiler).")
+                name = f"Poly-Ice {product} {area:g} m²"
+                did = f"door_polyice_{slug}_{_id_area(area)}"
+            wnote = f"peso publicado {lo:g}–{hi:g} kg («from - to»): se toma el valor medio"
+            out.append(
+                _maker_item(
+                    did=did,
+                    name=name,
+                    brand="Poly-Ice",
+                    product=product,
+                    country="IS",
+                    door_type=door_type,
+                    area=area,
+                    length=length,
+                    height=height,
+                    weight=0.5 * (lo + hi),
+                    coefficients=coefs,
+                    notes=[*notes, f"Peso: {wnote}."],
+                    provenance={
+                        "area_m2": prov(doc, page=page),
+                        "weight_air_kg": prov(doc, "derived", page, wnote),
+                        "length_m": dims,
+                        "height_m": dims,
+                        "coefficients": polar_prov,
+                    },
+                    generics=generics,
+                )
+            )
     return out
 
 
@@ -1581,9 +1893,20 @@ def main() -> int:
     write("door", "generic_workbook", [WB, "sfia1993", "mellibovsky2018"], dg)
     write("door", "rebyc_colombia", ["zuniga2006", "sfia1993"], door_rebyc())
     write("door", "noaa_ff9", ["gutherz1974", "sfia1993"], door_noaa_ff9())
-    vonin_docs = ["vonin_doors", "vonin_simoon", "sfia1993", "mellibovsky2018"]
+    vonin_docs = [
+        "vonin_doors",
+        "vonin_simoon",
+        "fishfocus2019_tornado",
+        "sfia1993",
+        "mellibovsky2018",
+    ]
     write("door", "vonin", vonin_docs, vonin_doors(dg))
     write("door", "morgere_2025", ["morgere2025", "sfia1993"], morgere_doors(dg))
+    thy_docs = ["thyboron_trawldoor", "sfia1993", "mellibovsky2018"]
+    write("door", "thyboron", thy_docs, thyboron_doors(dg))
+    polar_docs = ["polardoors", "sfia1993", "mellibovsky2018"]
+    write("door", "polar_doors", polar_docs, polar_doors(dg))
+    write("door", "poly_ice", ["polyice_doors", "sfia1993", "mellibovsky2018"], polyice_doors(dg))
     write("door", "excel_a3", ["giamportone2024", "sfia1993"], excel_items("door"))
 
     from trawlkit import components as comp

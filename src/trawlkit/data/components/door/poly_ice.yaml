@@ -1,0 +1,1560 @@
+# Generado por tools/components/build_components.py. No editar a mano: corregir las fuentes
+# (tools/components/sources.py) y regenerar.
+kind: door
+sources:
+- key: polyice_doors
+  accessed: '2026-10-28'
+  title: J. Hinriksson ehf., Poly-Ice Trawl doors y Mid-water doors (página de producto, sin fecha)
+  url: https://seafood.media/polyice/doors.html
+- key: sfia1993
+  title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
+    (contrato CEE FAR TE 1 214)
+  url: https://www.seafish.org/media/1peahnrq/otterboard_performance_and_behaviour.pdf
+  accessed: '2026-10-27'
+- key: mellibovsky2018
+  title: Mellibovsky, Prat-Farran, Notti y Sala (2018). Otterboard hydrodynamic performance testing in
+    flume tank and wind tunnel facilities. Ocean Eng. 149:238–244
+  url: https://hdl.handle.net/2117/116734
+  accessed: '2026-10-27'
+items:
+- id: door_polyice_trawl_door_01
+  name: Poly-Ice Trawl doors 01 (1.3 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 1.62
+  height_m: 0.98
+  area_m2: 1.3
+  weight_air_kg: 130.0
+  weight_water_coefficient: 0.87
+  coefficients: &id002
+  - angle_deg: 27.0
+    cl: 1.22
+    cd: 0.75
+  - angle_deg: 30.0
+    cl: 1.2
+    cd: 0.77
+  - angle_deg: 35.0
+    cl: 1.04
+    cd: 0.79
+  - angle_deg: 40.0
+    cl: 0.95
+    cd: 0.84
+  - angle_deg: 45.0
+    cl: 0.88
+    cd: 0.92
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 100–160 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 100–160 kg («from - to»): se toma el valor medio'
+    length_m: &id001
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 01
+    height_m: *id001
+    coefficients: &id004
+      kind: assumed
+      document: sfia1993
+      page: Appendix IV-17 (PDF p. 148)
+      note: 'Poly-Ice Trawl doors: el fabricante no publica la polar; se usa la del tipo (hoja «Morgère
+        Polyvalent Ovale» de Seafish (1993), la del libro Excel de la A-3)'
+  generic_of: door_oval_200hp
+- id: door_polyice_trawl_door_05
+  name: Poly-Ice Trawl doors 05 (1.5 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 1.76
+  height_m: 1.08
+  area_m2: 1.5
+  weight_air_kg: 150.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 120–180 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 120–180 kg («from - to»): se toma el valor medio'
+    length_m: &id003
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 05
+    height_m: *id003
+    coefficients: *id004
+  generic_of: door_oval_200hp
+- id: door_polyice_trawl_door_1
+  name: Poly-Ice Trawl doors 1 (1.8 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 1.95
+  height_m: 1.2
+  area_m2: 1.8
+  weight_air_kg: 170.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 140–200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 140–200 kg («from - to»): se toma el valor medio'
+    length_m: &id005
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 1
+    height_m: *id005
+    coefficients: *id004
+  generic_of: door_oval_300hp
+- id: door_polyice_trawl_door_2a
+  name: Poly-Ice Trawl doors 2A (2.2 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.12
+  height_m: 1.3
+  area_m2: 2.2
+  weight_air_kg: 350.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 250–450 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 250–450 kg («from - to»): se toma el valor medio'
+    length_m: &id006
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 2A
+    height_m: *id006
+    coefficients: *id004
+  generic_of: door_oval_400hp
+- id: door_polyice_trawl_door_2b
+  name: Poly-Ice Trawl doors 2B (2.5 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.26
+  height_m: 1.4
+  area_m2: 2.5
+  weight_air_kg: 425.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 350–500 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 350–500 kg («from - to»): se toma el valor medio'
+    length_m: &id007
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 2B
+    height_m: *id007
+    coefficients: *id004
+  generic_of: door_oval_500hp
+- id: door_polyice_trawl_door_3
+  name: Poly-Ice Trawl doors 3 (2.7 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.35
+  height_m: 1.45
+  area_m2: 2.7
+  weight_air_kg: 450.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 350–550 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 350–550 kg («from - to»): se toma el valor medio'
+    length_m: &id008
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 3
+    height_m: *id008
+    coefficients: *id004
+  generic_of: door_oval_500hp
+- id: door_polyice_trawl_door_4a
+  name: Poly-Ice Trawl doors 4A (3 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.46
+  height_m: 1.54
+  area_m2: 3.0
+  weight_air_kg: 550.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 450–650 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 450–650 kg («from - to»): se toma el valor medio'
+    length_m: &id009
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 4A
+    height_m: *id009
+    coefficients: *id004
+  generic_of: door_oval_600hp
+- id: door_polyice_trawl_door_4b
+  name: Poly-Ice Trawl doors 4B (3.2 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.62
+  height_m: 1.54
+  area_m2: 3.2
+  weight_air_kg: 775.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 650–900 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 650–900 kg («from - to»): se toma el valor medio'
+    length_m: &id010
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 4B
+    height_m: *id010
+    coefficients: *id004
+  generic_of: door_oval_600hp
+- id: door_polyice_trawl_door_5a
+  name: Poly-Ice Trawl doors 5A (3.8 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.8
+  height_m: 1.74
+  area_m2: 3.8
+  weight_air_kg: 1000.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 800–1200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 800–1200 kg («from - to»): se toma el valor medio'
+    length_m: &id011
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 5A
+    height_m: *id011
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_5b
+  name: Poly-Ice Trawl doors 5B (4.1 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 2.9
+  height_m: 1.8
+  area_m2: 4.1
+  weight_air_kg: 1250.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 1000–1500 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 1000–1500 kg («from - to»): se toma el valor medio'
+    length_m: &id012
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 5B
+    height_m: *id012
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_6
+  name: Poly-Ice Trawl doors 6 (4.7 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 3.1
+  height_m: 1.92
+  area_m2: 4.7
+  weight_air_kg: 1400.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 1100–1700 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 1100–1700 kg («from - to»): se toma el valor medio'
+    length_m: &id013
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 6
+    height_m: *id013
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_61_2
+  name: Poly-Ice Trawl doors 61/2 (5.3 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 3.25
+  height_m: 2.08
+  area_m2: 5.3
+  weight_air_kg: 1550.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 1300–1800 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 1300–1800 kg («from - to»): se toma el valor medio'
+    length_m: &id014
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 61/2
+    height_m: *id014
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_7
+  name: Poly-Ice Trawl doors 7 (6 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 3.4
+  height_m: 2.25
+  area_m2: 6.0
+  weight_air_kg: 1750.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 1400–2100 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 1400–2100 kg («from - to»): se toma el valor medio'
+    length_m: &id015
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 7
+    height_m: *id015
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_8
+  name: Poly-Ice Trawl doors 8 (6.8 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 3.75
+  height_m: 2.3
+  area_m2: 6.8
+  weight_air_kg: 2200.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 1800–2600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 1800–2600 kg («from - to»): se toma el valor medio'
+    length_m: &id016
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 8
+    height_m: *id016
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_9
+  name: Poly-Ice Trawl doors 9 (8 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 4.0
+  height_m: 2.52
+  area_m2: 8.0
+  weight_air_kg: 2600.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 2200–3000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 2200–3000 kg («from - to»): se toma el valor medio'
+    length_m: &id017
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 9
+    height_m: *id017
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_10
+  name: Poly-Ice Trawl doors 10 (9 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 4.25
+  height_m: 2.68
+  area_m2: 9.0
+  weight_air_kg: 3200.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 2800–3600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 2800–3600 kg («from - to»): se toma el valor medio'
+    length_m: &id018
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 10
+    height_m: *id018
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_11
+  name: Poly-Ice Trawl doors 11 (10 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 4.6
+  height_m: 2.77
+  area_m2: 10.0
+  weight_air_kg: 3500.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 3200–3800 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 3200–3800 kg («from - to»): se toma el valor medio'
+    length_m: &id019
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 11
+    height_m: *id019
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_12
+  name: Poly-Ice Trawl doors 12 (11.7 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 4.8
+  height_m: 3.1
+  area_m2: 11.7
+  weight_air_kg: 3800.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 3400–4200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 3400–4200 kg («from - to»): se toma el valor medio'
+    length_m: &id020
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 12
+    height_m: *id020
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_13
+  name: Poly-Ice Trawl doors 13 (13 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 5.0
+  height_m: 3.3
+  area_m2: 13.0
+  weight_air_kg: 4400.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 4000–4800 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 4000–4800 kg («from - to»): se toma el valor medio'
+    length_m: &id021
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 13
+    height_m: *id021
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_trawl_door_14
+  name: Poly-Ice Trawl doors 14 (14.2 m²)
+  brand: Poly-Ice
+  product: Trawl doors
+  country: IS
+  regions:
+  - europe
+  type: oval
+  length_m: 5.3
+  height_m: 3.4
+  area_m2: 14.2
+  weight_air_kg: 4750.0
+  weight_water_coefficient: 0.87
+  coefficients: *id002
+  notes:
+  - 'Uso: fondo; «oval doors with a trough flow slot».'
+  - 'Peso: peso publicado 4500–5000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: 'peso publicado 4500–5000 kg («from - to»): se toma el valor medio'
+    length_m: &id022
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Trawl doors»
+      note: tipo 14
+    height_m: *id022
+    coefficients: *id004
+  generic_of: door_oval_800hp
+- id: door_polyice_fl_2m2
+  name: Poly-Ice Mid-water FL 2 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 0.95
+  height_m: 2.1
+  area_m2: 2.0
+  weight_air_kg: 300.0
+  weight_water_coefficient: 0.87
+  coefficients: &id024
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 2.2 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 250–350 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 250–350 kg («from - to»): se toma el valor medio'
+    length_m: &id023
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 2100x950 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id023
+    coefficients: &id026
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Poly-Ice Mid-water FL: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15
+        VF (AR 2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_2m2
+- id: door_polyice_fl_3m2
+  name: Poly-Ice Mid-water FL 3 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.18
+  height_m: 2.6
+  area_m2: 3.0
+  weight_air_kg: 500.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 3.4 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 400–600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 400–600 kg («from - to»): se toma el valor medio'
+    length_m: &id025
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 2600x1180 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id025
+    coefficients: *id026
+  generic_of: door_suberkrub_3m2
+- id: door_polyice_fl_4m2
+  name: Poly-Ice Mid-water FL 4 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.4
+  height_m: 2.9
+  area_m2: 4.0
+  weight_air_kg: 600.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 4.5 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 500–700 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 500–700 kg («from - to»): se toma el valor medio'
+    length_m: &id027
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 2900x1400 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id027
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_5m2
+  name: Poly-Ice Mid-water FL 5 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.5
+  height_m: 3.4
+  area_m2: 5.0
+  weight_air_kg: 800.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 5.7 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 600–1000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 600–1000 kg («from - to»): se toma el valor medio'
+    length_m: &id028
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 3400x1500 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id028
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_6m2
+  name: Poly-Ice Mid-water FL 6 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.65
+  height_m: 3.7
+  area_m2: 6.0
+  weight_air_kg: 1150.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 6.8 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 800–1500 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 800–1500 kg («from - to»): se toma el valor medio'
+    length_m: &id029
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 3700x1650 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id029
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_8m2
+  name: Poly-Ice Mid-water FL 8 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.92
+  height_m: 4.2
+  area_m2: 8.0
+  weight_air_kg: 1800.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 9 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 1400–2200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 1400–2200 kg («from - to»): se toma el valor medio'
+    length_m: &id030
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 4200x1920 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id030
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_9m2
+  name: Poly-Ice Mid-water FL 9 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.2
+  height_m: 4.09
+  area_m2: 9.0
+  weight_air_kg: 2500.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 10.1 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2000–3000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 2000–3000 kg («from - to»): se toma el valor medio'
+    length_m: &id031
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 4090x2200 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id031
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_10m2
+  name: Poly-Ice Mid-water FL 10 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.2
+  height_m: 4.55
+  area_m2: 10.0
+  weight_air_kg: 2800.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 11.2 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2400–3200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 2400–3200 kg («from - to»): se toma el valor medio'
+    length_m: &id032
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 4550x2200 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id032
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_11m2
+  name: Poly-Ice Mid-water FL 11 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.35
+  height_m: 4.68
+  area_m2: 11.0
+  weight_air_kg: 3000.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 12.3 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2600–3400 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 2600–3400 kg («from - to»): se toma el valor medio'
+    length_m: &id033
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 4680x2350 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id033
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_12m2
+  name: Poly-Ice Mid-water FL 12 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.35
+  height_m: 5.1
+  area_m2: 12.0
+  weight_air_kg: 3200.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 13.4 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2800–3600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 2800–3600 kg («from - to»): se toma el valor medio'
+    length_m: &id034
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 5100x2350 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id034
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fl_13m2
+  name: Poly-Ice Mid-water FL 13 m²
+  brand: Poly-Ice
+  product: Mid-water FL
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.35
+  height_m: 5.45
+  area_m2: 13.0
+  weight_air_kg: 3600.0
+  weight_water_coefficient: 0.87
+  coefficients: *id024
+  notes:
+  - 'Uso: media agua, «Low aspect ratio».'
+  - 'Superficie con spoiler: 14.3 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 3200–4000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: 'peso publicado 3200–4000 kg («from - to»): se toma el valor medio'
+    length_m: &id035
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FL»
+      note: la página imprime 5450x2350 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id035
+    coefficients: *id026
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_4m2
+  name: Poly-Ice Mid-water FH 4 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.17
+  height_m: 3.46
+  area_m2: 4.0
+  weight_air_kg: 650.0
+  weight_water_coefficient: 0.87
+  coefficients: &id037
+  - angle_deg: 15.0
+    cl: 0.921
+    cd: 0.283
+  - angle_deg: 20.0
+    cl: 1.156
+    cd: 0.342
+  - angle_deg: 25.0
+    cl: 1.392
+    cd: 0.414
+  - angle_deg: 30.0
+    cl: 1.628
+    cd: 0.499
+  - angle_deg: 35.0
+    cl: 1.863
+    cd: 0.597
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 4.5 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 500–800 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 500–800 kg («from - to»): se toma el valor medio'
+    length_m: &id036
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 3460x1170 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id036
+    coefficients: &id039
+      kind: assumed
+      document: mellibovsky2018
+      page: Table 2 (p. 16); Table 1 (p. 15)
+      note: 'Poly-Ice Mid-water FH: el fabricante no publica la polar; se usa la del tipo (Thyborøn 15
+        VF (AR 2,5) en tanque de flujo (Mellibovsky et al. 2018, Tabla 2): CL lineal y CD cuadrático ajustados
+        a los 11 puntos medidos (13,6–35,6°). El túnel de viento da 20–30 % más; los autores lo atribuyen
+        a un error de la velocidad del tanque)'
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_5m2
+  name: Poly-Ice Mid-water FH 5 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.3
+  height_m: 3.89
+  area_m2: 5.0
+  weight_air_kg: 1000.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 5.7 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 800–1200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 800–1200 kg («from - to»): se toma el valor medio'
+    length_m: &id038
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 3890x1300 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id038
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_6m2
+  name: Poly-Ice Mid-water FH 6 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.43
+  height_m: 4.25
+  area_m2: 6.0
+  weight_air_kg: 1500.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 6.8 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 1200–1800 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 1200–1800 kg («from - to»): se toma el valor medio'
+    length_m: &id040
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 4250x1430 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id040
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_7m2
+  name: Poly-Ice Mid-water FH 7 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.55
+  height_m: 4.6
+  area_m2: 7.0
+  weight_air_kg: 2000.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 8 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 1600–2400 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 1600–2400 kg («from - to»): se toma el valor medio'
+    length_m: &id041
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 4600x1550 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id041
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_8m2
+  name: Poly-Ice Mid-water FH 8 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.65
+  height_m: 5.02
+  area_m2: 8.0
+  weight_air_kg: 2200.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 9.2 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 1800–2600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 1800–2600 kg («from - to»): se toma el valor medio'
+    length_m: &id042
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 5020x1650 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id042
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_9m2
+  name: Poly-Ice Mid-water FH 9 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.76
+  height_m: 5.32
+  area_m2: 9.0
+  weight_air_kg: 2800.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 10.5 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2600–3000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 2600–3000 kg («from - to»): se toma el valor medio'
+    length_m: &id043
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 5320x1760 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id043
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_10m2
+  name: Poly-Ice Mid-water FH 10 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.85
+  height_m: 5.61
+  area_m2: 10.0
+  weight_air_kg: 3000.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 11.6 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2800–3200 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 2800–3200 kg («from - to»): se toma el valor medio'
+    length_m: &id044
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 5610x1850 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id044
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_11m2
+  name: Poly-Ice Mid-water FH 11 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 1.94
+  height_m: 5.76
+  area_m2: 11.0
+  weight_air_kg: 3100.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 12.5 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 2800–3400 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 2800–3400 kg («from - to»): se toma el valor medio'
+    length_m: &id045
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 5760x1940 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id045
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_12m2
+  name: Poly-Ice Mid-water FH 12 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.0
+  height_m: 6.05
+  area_m2: 12.0
+  weight_air_kg: 3300.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 13.5 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 3000–3600 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 3000–3600 kg («from - to»): se toma el valor medio'
+    length_m: &id046
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 6050x2000 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id046
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2
+- id: door_polyice_fh_13m2
+  name: Poly-Ice Mid-water FH 13 m²
+  brand: Poly-Ice
+  product: Mid-water FH
+  country: IS
+  regions:
+  - europe
+  type: high_aspect
+  length_m: 2.085
+  height_m: 6.3
+  area_m2: 13.0
+  weight_air_kg: 3600.0
+  weight_water_coefficient: 0.87
+  coefficients: *id037
+  notes:
+  - 'Uso: media agua, «High aspect ratio».'
+  - 'Superficie con spoiler: 14.7 m² (se usa la sin spoiler).'
+  - 'Peso: peso publicado 3200–4000 kg («from - to»): se toma el valor medio.'
+  provenance:
+    area_m2:
+      kind: transcribed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+    weight_air_kg:
+      kind: derived
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: 'peso publicado 3200–4000 kg («from - to»): se toma el valor medio'
+    length_m: &id047
+      kind: assumed
+      document: polyice_doors
+      page: «Poly-Ice - Trawl Doors» (https://seafood.media/polyice/doors.html), tabla «Mid-water FH»
+      note: la página imprime 6300x2085 mm (sin spoiler) con el lado mayor primero; se toma el lado mayor
+        como alto (A VERIFICAR)
+    height_m: *id047
+    coefficients: *id039
+  generic_of: door_suberkrub_4m2

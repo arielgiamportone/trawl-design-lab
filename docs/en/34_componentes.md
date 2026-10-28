@@ -77,9 +77,14 @@ Phase 19.8a, because door selection needs the whole series):
   Seafish/IFREMER/DIFTA sheets {cite}`sfia1993` for the flat, the oval and the mean of the three V
   boards, and the Thyborøn 15 VF of {cite}`mellibovsky2018` for the Süberkrüb; four boards from the
   shrimp fleet of the Colombian Caribbean {cite}`zuniga2006`; Vónin Storm 2, Tornado and Twister
-  (area and weight of the 14, 11 and 8 published sizes, {cite}`vonin_doors`) and Morgère OvalFoil,
-  PolyFoil and PFPE (area of the 21, 19 and 17 catalogue models; weight «sur demande»,
-  {cite}`morgere2025`), with the type polar as assumed.
+  (area and weight of the 14, 15 and 8 published sizes, {cite}`vonin_doors`; four Tornado sizes,
+  1, 2, 14 and 15 m², from the table reprinted by {cite:t}`fishfocus2019_tornado`) and Morgère
+  OvalFoil, PolyFoil and PFPE (area of the 21, 19 and 17 catalogue models; weight «sur demande»,
+  {cite}`morgere2025`), with the type polar as assumed. Since Phase 20.1, the large boards: 25
+  Thyborøn data sheets {cite}`thyboron_trawldoor` (645 sizes from 0.82 to 21.34 m², bottom,
+  semi-pelagic and pelagic), the 5 distinct tables of the Polar brochures {cite}`polardoors` (180
+  sizes from 1 to 20 m²) and the three Poly-Ice tables {cite}`polyice_doors` (41 sizes up to
+  14.2 m², with dimensions).
 * **Floats and chains**: buoyancy and maximum depth by diameter, weight per metre by link;
   Atlantic Floats trawl floats and Trygg and Trawlex long-link chains (Hampidjan catalogue) and
   Gunnebo LLZ grade 6 galvanised chain {cite}`gunnebo_llz`.
@@ -94,6 +99,38 @@ engine needs, the item says so: the Garware twisted netting (380 D, 500 D, Sapph
 210 D nylon) has no diameter, so it was loaded as a **draft** with the diameter estimated by the
 *Workbook* fit and the note “A VERIFICAR” (to be verified); drafts do not enter the automatic
 selection.
+
+### Large otter boards (Phase 20.1)
+
+Up to Phase 19.9 the largest board in the catalogue was the 16 m² Vónin Storm 2, and the five
+fleet vessels of 2100 hp or more had no candidate. No public manufacturer table goes beyond
+**21.34 m²** (Thyborøn Type 2 Iceland 200", 6800 kg); Thyborøn says it builds up to 25 m² and
+8000 kg, without publishing those rows. Each distinct data sheet is loaded whole; sheets that repeat
+another one's table (Type 20 and 21 Slider, Type 22 VF/VFB, Type 32, Type 42 hydraulic, Type 23 VK,
+Type 26, Type 28 V-construction, the 15 Polar brochures that repeat one of the 5 tables) are loaded
+once, and every item says so in its notes. Weights follow the sheet: with minimum–maximum columns
+(Thyborøn) or «from–to» (Polar, Poly-Ice) the **mean value** is taken, as in the *Workbook*
+generics, with the range in the note and *derived* provenance; the Type 2 carries the NORMAL weight
+(the HEAVY one in the note); the Xstream doors, the published minimum; the Bluestream doors, the
+«Standard weight»; and the Type 23 Iceland, no weight («as requested»). Dimensions are the printed
+ones («LxH/mm»), except for three rows with obvious misprints (Type 16 at 1 m², Type 21 at 6 and
+8 m²) and the high-aspect boards whose sheet prints the long side first (Types 23 and 42, Poly-Ice
+mid-water), where the long side is taken as the height (*assumed*). Without dimensions, the
+proportions come from a polar sheet of the type (the Seafish Thyborøn Type 2 125" for the Type 2)
+or from the Polar «r» number, taken as the aspect ratio. The polar is always the type polar,
+*assumed*.
+
+With this catalogue every vessel up to 2600 hp gets a board, including the Holmberg, the Oca Balda
+and the 2348 hp freezer trawler. The Angelescu (2855 hp) and the 4159 hp freezer trawler still have
+no candidate: the book rule asks them for 31.5 and 45.9 m² of flat board per door, more than any
+table. Those numbers are far from practice: the Angelescu was designed with Morgère SPF08 boards of
+4.5 m² and 1200 kg {cite}`roth2017angelescu`, and the only public table indexed by power, the Net
+Systems Fishbuster one {cite}`netsystems_fishbuster`, gives 7 m² for 1800–2200 hp and 11 to 12.5 m² for
+3000–5500 hp. The rule
+(area = 20 % of the available thrust over $C_D\,v^2$, averaged between 2 and 4 knots) is calibrated
+for the 150–180 hp of the A-3 and grows in proportion to power, while the *Workbook* and Fishbuster
+tables grow as power to the 0.65. The rule is not changed in this phase: the diagnosis and the
+proposed correction are left for a later phase, because they touch the book's golden values.
 
 ```{code-cell} ipython3
 :tags: [remove-input]

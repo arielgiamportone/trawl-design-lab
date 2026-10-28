@@ -205,6 +205,10 @@ valor, y los de marca dicen a qué **genérico** equivalen.
 | `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polares del Thyborøn 15 VF y del Grilli Fly en tanque de flujo y túnel de viento (Fase 19.3) | Tablas *transcriptas*; la polar del Süberkrüb, ajuste *derivado* |
 | `vonin_doors` | Vónin, páginas de producto | Portones Storm 2, Tornado y Twister (Fase 19.3) | Superficie y peso *transcriptos*, todos los tamaños publicados (14, 11 y 8; Fase 19.8a); peso **por portón** *derivado* de la nota Simoon de Vónin {cite}`vonin_simoon` (Vónin no lo dice; Fase 19.8b); medidas (área = largo × alto) y polar *supuestas* |
 | `morgere2025` | Morgère, catálogo 2025 | Portones OvalFoil, PolyFoil y PFPE (Fase 19.3) | Superficie (y largo del PFPE) *transcriptos*, todos los modelos del catálogo (21, 19 y 17; Fase 19.8a); sin peso («sur demande»); medidas y polar de la hoja de Seafish del mismo diseño, *supuestas* |
+| `fishfocus2019_tornado` | Fish Focus, 25 de junio de 2019, «Many Advantages with Tornado» | Tabla de tamaños y pesos del Vónin Tornado (Fase 20.1) | Reproduce la tabla de Vónin de 1 a 15 m²; de 3 a 13 m² coincide con vonin.com; se cargan los 4 tamaños nuevos (1, 2, 14 y 15 m²), con las mismas convenciones que `vonin_doors` |
+| `thyboron_trawldoor` | Thyborøn Trawldoor, hojas de datos | Portones de fondo (Types 2, 4, 11, 16, Viking Xstream), semipelágicos (12, 14, 21, 23, 28, El Cazador Xstream) y pelágicos (15, 20, 22, 42) (Fase 20.1) | Superficie, peso y medidas («LxH/mm») *transcriptos*, todos los tamaños de 25 hojas (645, de 0,82 a 21,34 m²); hojas repetidas, una vez; peso MIN–MAX, valor medio *derivado*; sin medidas, proporciones *supuestas*; polar del tipo, *supuesta* |
+| `polardoors` | Polar Fishing Gear, folletos «Size & Weight» | Hercules, Neptune, Thor, Mercury y Jupiter (y los modelos con la misma tabla) (Fase 20.1) | Superficie *transcripta* y peso «from–to» como valor medio *derivado*; 5 tablas distintas de 20 folletos, 36 tamaños cada una (1–20 m²); medidas y polar *supuestas* |
+| `polyice_doors` | J. Hinriksson, página «Poly-Ice - Trawl Doors» | Portones ovales de fondo y de media agua FL y FH (Fase 20.1) | Superficie, medidas y peso «from–to» (valor medio *derivado*), 20, 11 y 10 tamaños hasta 14,2 m²; polar del tipo, *supuesta* |
 | `giamportone2024` | Libro Excel de la A-3 | Cabos Moscuzza, cadenas Trawlex, cables 6x19 Seale, boyas, hilos PA y los dos portones con su polar | Procedencia *Excel* |
 
 Criterios:
@@ -220,7 +224,7 @@ Criterios:
   rotura por mm², tenacidad del hilo, flotación frente al volumen de la esfera y polar del
   portón. Lo usa también la app para revisar los aportes de los usuarios.
 - **Buscadas sin datos abiertos**: Euronete, Vónin (su catálogo es el de Hampidjan), Usha Martin, Cotesi, Morgère,
-  Thyborøn, Injector y Ekkó publican rangos o piden la ficha por correo. Los proveedores
+  Injector y Ekkó publican rangos o piden la ficha por correo. Los proveedores
   latinoamericanos no publican fichas en línea; para ellos están los genéricos y los aportes.
 - **Normas**: ISO 1805 (paño), ISO 2307 (cabos) e ISO 2408 / EN 12385-4 (cables) se citan como
   método de ensayo. Son pagas y sus tablas no se reproducen.
