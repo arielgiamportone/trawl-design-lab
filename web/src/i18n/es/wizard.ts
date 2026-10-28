@@ -21,7 +21,7 @@ export const wizard = {
     maxNoneWhy: 'En ninguna de las velocidades calculadas el tiro supera a la resistencia.',
     maxWhy: 'Es la velocidad a la que el tiro disponible iguala a la resistencia total',
     maxRange: (from: string, to: string) => `; se puede arrastrar entre ${from} y ${to}.`,
-    maxMod: (v: string) => ` Con la red modificada: ${v}.`,
+    maxMod: (v: string) => ` Con la red de comparación: ${v}.`,
     warpTitle: 'Cable de arrastre',
     warpNone: 'No se pudo seleccionar un cable del catálogo.',
     warpOk: (v: string) =>
@@ -29,11 +29,23 @@ export const wizard = {
     warpFail:
       'Su carga de rotura no cubre la requerida con el factor de seguridad: elija un cable más grueso.',
     openingTitle: 'Boca de la red',
-    openingWhy: 'Ancho entre puntas de ala × altura de la boca, estimados para la red trabajando.',
+    openingTitleEach: (n: number) => `Boca de cada red (${n} redes)`,
+    openingValue: (ah: string, av: string) => `AH ${ah} × AV ${av}`,
+    openingWhy:
+      'Abertura horizontal (AH, entre puntas de ala) × abertura vertical (AV, altura de la boca), estimadas para la red trabajando.',
+    openingDoors: (v: string) => ` Separación de portones de cada red (DP): ${v}.`,
+    cfpTitle: 'Abertura vertical: límite legal',
+    cfpOk: (av: string, limit: string) => `AV ${av} ≤ ${limit}`,
+    cfpOver: (av: string, limit: string) => `AV ${av}: supera ${limit}`,
+    cfpWhy: (limit: string) =>
+      `La Res. CFP 7/2018 (art. 4) limita a ${limit} la abertura vertical de la boca en la flota langostinera con tangones.`,
+    cfpWhyOver: ' Baje la altura de la boca (menos flotación o una red de menor abertura).',
     sweptTitle: 'Área barrida por hora',
     swept: (thousands: string, unit: string) => `${thousands} mil ${unit}/h`,
     sweptWhy: (width: string, speed: string) =>
       `Ancho de la boca (${width}) × distancia recorrida en una hora a ${speed}. Es un indicador del rendimiento de pesca.`,
+    sweptWhyNets: (n: number, width: string, speed: string) =>
+      `Ancho de las ${n} bocas (${n} × ${width}) × distancia recorrida en una hora a ${speed}. Es un indicador del rendimiento de pesca.`,
   },
   steps: {
     buque: { title: 'Buque', sub: 'Potencia disponible' },

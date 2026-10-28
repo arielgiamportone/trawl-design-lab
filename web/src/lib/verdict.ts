@@ -5,7 +5,7 @@
 import type { DesignData, PerformanceWindow } from '../api/result';
 import { msg } from '../i18n';
 import { fmt, fmtFixed } from './format';
-import { toDisplay, unitLabel } from './units';
+import { fmtU, toDisplay, unitLabel } from './units';
 import { designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
 
 export type Tone = 'ok' | 'warn' | 'crit' | 'info';
@@ -118,7 +118,7 @@ export function assess(d: DesignData, targetSpeed: number): Check[] {
     tone: meets === null ? 'info' : meets ? 'ok' : 'crit',
     title: V.warpTitle,
     value: sel
-      ? `Ø ${fmt(toDisplay(sel.diameter_mm, 'mm'))} ${unitLabel('mm')}`
+      ? `Ø ${fmtU(sel.diameter_mm, 'mm', { digits: 2 })}`
       : String(d.summary.warp_selected ?? '—'),
     why:
       meets === null
@@ -132,21 +132,39 @@ export function assess(d: DesignData, targetSpeed: number): Check[] {
   const av = d.summary.vertical_opening_m;
   const ah = d.summary.horizontal_opening_m;
   if (typeof av === 'number' && typeof ah === 'number') {
+    // Tangones y gemelo (Fase 19.5): las aberturas son las de cada red; barren todas las bocas.
+    const nets = typeof d.summary.n_nets === 'number' ? d.summary.n_nets : 1;
+    const dp = d.summary.door_spread_m;
     checks.push({
       key: 'opening',
       tone: 'info',
-      title: V.openingTitle,
-      value: `${len(ah, 1)} × ${len(av, 2)}`,
-      why: V.openingWhy,
+      title: nets > 1 ? V.openingTitleEach(nets) : V.openingTitle,
+      value: V.openingValue(len(ah, 1), len(av, 2)),
+      why: V.openingWhy + (typeof dp === 'number' ? V.openingDoors(len(dp, 1)) : ''),
       chapter: '16_aberturas',
     });
-    const area = ah * targetSpeed * NM_M;
+    const limit = d.summary.cfp_av_limit_m;
+    if (typeof limit === 'number') {
+      const over = av > limit;
+      checks.push({
+        key: 'cfp_av',
+        tone: over ? 'crit' : 'ok',
+        title: V.cfpTitle,
+        value: over ? V.cfpOver(len(av, 2), len(limit, 2)) : V.cfpOk(len(av, 2), len(limit, 2)),
+        why: V.cfpWhy(len(limit, 2)) + (over ? V.cfpWhyOver : ''),
+        chapter: '16_aberturas',
+      });
+    }
+    const area = nets * ah * targetSpeed * NM_M;
     checks.push({
       key: 'swept',
       tone: 'info',
       title: V.sweptTitle,
       value: V.swept(fmt(Math.round(toDisplay(area, 'm²') / 1000)), unitLabel('m²')),
-      why: V.sweptWhy(len(ah, 1), kn(targetSpeed)),
+      why:
+        nets > 1
+          ? V.sweptWhyNets(nets, len(ah, 1), kn(targetSpeed))
+          : V.sweptWhy(len(ah, 1), kn(targetSpeed)),
       chapter: '20_optimizacion',
     });
   }

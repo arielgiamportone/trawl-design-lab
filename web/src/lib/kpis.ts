@@ -32,20 +32,33 @@ export function tiles(d: DesignData): Tile[] {
   const m2 = (v: number | null) => fmtFixed(v === null ? null : toDisplay(v, 'm'), 2);
   const kgf = (v: number) => `${fmt(Math.round(toDisplay(v, 'kgf')))} ${unitLabel('kgf')}`;
   const ss = num(d, 'solid_surface_m2');
+  const av = num(d, 'vertical_opening_m');
+  // Método camaronero (Fase 19.7b): la AV no es la de Suzuki y la separación de portones (DP)
+  // sale del equilibrio de la tijera; con tangones rige el límite de AV de la Res. CFP 7/2018.
+  const shrimp = typeof d.summary.opening_method === 'string';
+  const dp = num(d, 'door_spread_m');
+  const limit = num(d, 'cfp_av_limit_m');
+  const lim = limit === null ? '' : `${fmtFixed(toDisplay(limit, 'm'), 2)} ${unitLabel('m')}`;
   return [
     {
       key: 'vertical_opening_m',
       label: K.vertical_opening_m,
-      value: m2(num(d, 'vertical_opening_m')),
+      value: m2(av),
       unit: unitLabel('m'),
-      sub: K.avSub,
+      sub: shrimp ? K.avSubShrimp : K.avSub,
+      badge:
+        limit === null || av === null
+          ? undefined
+          : av <= limit
+            ? { tone: 'good', text: K.cfpOk(lim) }
+            : { tone: 'crit', text: K.cfpOver(lim) },
     },
     {
       key: 'horizontal_opening_m',
       label: K.horizontal_opening_m,
       value: m2(num(d, 'horizontal_opening_m')),
       unit: unitLabel('m'),
-      sub: K.ahSub,
+      sub: dp === null ? K.ahSub : K.ahSubDoors(`${m2(dp)} ${unitLabel('m')}`),
     },
     {
       key: 'rn_std_3kn_kgf',
@@ -65,7 +78,7 @@ export function tiles(d: DesignData): Tile[] {
       key: 'warp_selected',
       label: K.warp_selected,
       value: sel
-        ? `Ø ${fmtU(sel.diameter_mm, 'mm')} · ${fmtU(sel.breaking_load_t, 't')}`
+        ? `Ø ${fmtU(sel.diameter_mm, 'mm', { digits: 2 })} · ${fmtU(sel.breaking_load_t, 't')}`
         : String(d.summary.warp_selected ?? '—'),
       text: true,
       sub: req != null ? K.warpReq(kgf(req)) : undefined,

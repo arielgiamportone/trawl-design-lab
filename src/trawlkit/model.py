@@ -1014,6 +1014,8 @@ class DesignResult:
         if op is not None:  # Fase 19.7b: método camaronero de aberturas
             out["opening_method"] = op.method
             out["door_spread_m"] = op.door_spread_m
+        if _cfp_applies(case):  # Fase 19.8d: límite de AV de la Res. CFP 7/2018 (art. 4)
+            out["cfp_av_limit_m"] = shrimp.CFP_AV_LIMIT_M
         mr = self.multirig
         if mr is not None:  # Fase 19.5: tangones, gemelo o vara
             out["rig"] = mr.kind
@@ -2434,15 +2436,10 @@ _SHRIMP_FAMILY = {
 }
 
 
-def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
-    """Límites de la Res. CFP 7/2018 para la flota langostinera con tangones (Fase 19.5).
-
-    Art. 3 c: tangoneros nuevos de hasta 40 m de eslora y 2000 hp; art. 4: portones y abertura
-    vertical de la boca de la red de hasta 150 cm. Sólo con tangones y un buque tangonero o una
-    red de langostino.
-    """
+def _cfp_applies(case: DesignCase) -> bool:
+    """¿Rige la Res. CFP 7/2018? Tangones con un buque tangonero o una red de langostino."""
     if case.rig_kind != "outrigger":
-        return []
+        return False
     sp = case.net.species
     texts = (
         case.net.target_species,
@@ -2453,10 +2450,20 @@ def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
     tangonero = case.vessel.vessel_type is not None and case.vessel.vessel_type.value == (
         "tangonero"
     )
-    if not (tangonero or "langostino" in hay or "pleoticus" in hay):
+    return tangonero or "langostino" in hay or "pleoticus" in hay
+
+
+def _cfp_checks(case: DesignCase, result: DesignResult) -> list[str]:
+    """Límites de la Res. CFP 7/2018 para la flota langostinera con tangones (Fase 19.5).
+
+    Art. 3 c: tangoneros nuevos de hasta 40 m de eslora y 2000 hp; art. 4: portones y abertura
+    vertical de la boca de la red de hasta 150 cm. Sólo con tangones y un buque tangonero o una
+    red de langostino.
+    """
+    if not _cfp_applies(case):
         return []
     out: list[str] = []
-    limit = 1.5
+    limit = shrimp.CFP_AV_LIMIT_M
     h = case.door.height_m
     if h is not None:
         ok = h <= limit

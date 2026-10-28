@@ -11,8 +11,13 @@ import { ChoiceCards } from './ChoiceCards';
 export function StepNet() {
   const { state, update, catalogs } = useCase();
   const ids = useId();
-  const T = useT().wizard.net;
-  const door = state.door ?? catalogs.doors[0]?.id ?? '';
+  const M = useT();
+  const T = M.wizard.net;
+  const net = catalogs.nets.find((n) => n.id === state.net);
+  // Red del catálogo sin portón elegido: el motor usa el de su fuente (plano o componentes) o el
+  // de la A-3 escalado a la potencia del buque (Fase 19.8d), como en el modo experto.
+  const fromPlan = !!net?.vessel_hp;
+  const door = state.door ?? (fromPlan ? '' : (catalogs.doors[0]?.id ?? ''));
   const others = catalogs.nets.filter((n) => n.id !== state.net);
   const [all, setAll] = useState(false);
   const vessel = catalogs.vessels.find((v) => v.id === state.vessel) ?? catalogs.vessels[0];
@@ -102,7 +107,12 @@ export function StepNet() {
         <label htmlFor={`${ids}-door`}>
           {T.doors} <HelpTip topic="door" label={T.doors} />
         </label>
-        <select id={`${ids}-door`} value={door} onChange={(e) => update({ door: e.target.value })}>
+        <select
+          id={`${ids}-door`}
+          value={door}
+          onChange={(e) => update({ door: e.target.value || null })}
+        >
+          {fromPlan && <option value="">{M.expert.case.doorFromPlan}</option>}
           {catalogs.doors.map((d) => (
             <option key={d.id} value={d.id}>
               {d.name}

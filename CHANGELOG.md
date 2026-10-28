@@ -21,6 +21,17 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Tangoneras en la app (Fase 19.8d)**: (1) con un buque elegido y sin portón, una red del
+  catálogo usaba el portón de la A-3 (1,8 m²) aunque la app decía «Del plano»: las tangoneras del
+  INIDEP abrían a la mitad (AH 6,8 m en lugar de 14,4 m). Ahora la API usa el portón y los
+  parámetros del aparejo de la fuente (`catalog.source_door`/`source_params`, como el caso propio
+  de la red) y el modo guiado ofrece «Del plano». (2) El resumen trae `cfp_av_limit_m` cuando rige
+  la Res. CFP 7/2018; el modo guiado lo muestra como semáforo («Abertura vertical: límite legal»)
+  y la tarjeta de AV con una insignia. (3) El modo guiado rotula AH, AV y la DP de cada red y el
+  área barrida suma las bocas de las dos redes. (4) Rótulos del resumen para `opening_method`,
+  `door_spread_m` y el aparejo traducido; la tarjeta de AV ya no dice «Suzuki» con el método
+  camaronero. (5) La simulación compara con las aberturas del método camaronero, no con las de
+  Fridman. (6) Las descripciones de las erratas del libro se traducen al inglés.
 - **Diámetro de las boyas de la spec (Fase 19.8)**: cuando la red del catálogo trae sus boyas
   (`floats.count` y `floats.diameter_mm`), el motor tomaba la cantidad pero elegía el diámetro del
   catálogo de flotadores (p. ej. 300 mm en lugar de los 200 mm de la IAT 27/2019). Ahora usa el

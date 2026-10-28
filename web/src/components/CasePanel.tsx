@@ -36,7 +36,8 @@ export function CasePanel() {
   // Red del catálogo FAO sin buque ni portón elegidos: la API arma su propio caso.
   const fromPlan = !!net?.vessel_hp && !state.netModified;
   const vesselValue = state.vessel ?? (fromPlan ? '' : (catalogs.vessels[0]?.id ?? ''));
-  const doorValue = state.door ?? (fromPlan ? '' : (catalogs.doors[0]?.id ?? ''));
+  // Sin portón elegido, una red del catálogo usa el de su fuente también con un buque elegido.
+  const doorValue = state.door ?? (net?.vessel_hp ? '' : (catalogs.doors[0]?.id ?? ''));
   const groups = netGroups(catalogs.nets);
   const vessel = catalogs.vessels.find((v) => v.id === vesselValue);
   const door = catalogs.doors.find((d) => d.id === doorValue);
@@ -212,7 +213,7 @@ export function CasePanel() {
             }))
           }
         >
-          {fromPlan && <option value="">{C.doorFromPlan}</option>}
+          {!!net?.vessel_hp && <option value="">{C.doorFromPlan}</option>}
           {catalogs.doors.map((d) => (
             <option key={d.id} value={d.id}>
               {d.name}

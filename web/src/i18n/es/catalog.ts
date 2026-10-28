@@ -18,6 +18,11 @@ export const catalog = {
     book: 'Promedio del libro',
     shrimp: 'Método camaronero (tijera y cañas cortas)',
   } as Record<string, string>,
+  /** Método camaronero que usó el motor (``summary.opening_method``, Fase 19.7b). */
+  openingMethodUsed: {
+    tijera: 'Camaronero: equilibrio portón–tijera–red',
+    headrope_k: 'Camaronero: AH = k × lima',
+  } as Record<string, string>,
   /** Selector de aparejo del caso (Fase 19.5). */
   rigSelect: {
     label: 'Aparejo',

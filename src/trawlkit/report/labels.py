@@ -51,6 +51,10 @@ SUMMARY_LABELS: dict[str, tuple[str, str]] = {
     "boom_tip_offset_m": (N_("Punta del tangón desde la crujía"), "m"),
     "nets_gap_m": (N_("Huelgo entre las redes"), "m"),
     "clump_weight_kg": (N_("Peso del muerto central"), "kg"),
+    # Fase 19.7b: método camaronero de aberturas; Fase 19.8d: límite de la Res. CFP 7/2018.
+    "opening_method": (N_("Método de aberturas"), ""),
+    "door_spread_m": (N_("Separación de portones de cada red (DP)"), "m"),
+    "cfp_av_limit_m": (N_("Límite de abertura vertical (Res. CFP 7/2018)"), "m"),
 }
 
 

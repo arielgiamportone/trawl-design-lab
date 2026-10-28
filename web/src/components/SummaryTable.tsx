@@ -1,4 +1,4 @@
-import { useT, type Messages } from '../i18n';
+import { msg, useT, type Messages } from '../i18n';
 import { fmt } from '../lib/format';
 import { label } from '../lib/labels';
 import { fmtU, unitLabel } from '../lib/units';
@@ -20,7 +20,9 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
         'working_surface_m2',
         'net_weight_kg',
         'vertical_opening_m',
+        'cfp_av_limit_m',
         'horizontal_opening_m',
+        'opening_method',
         'working_depth_m',
       ].includes(k),
   },
@@ -45,6 +47,7 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
         'lower_bridle_m',
         'rig',
         'n_nets',
+        'door_spread_m',
         'net_spread_m',
         'door_spread_total_m',
         'swept_width_m',
@@ -67,6 +70,16 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
   },
   { title: 'warp', match: (k) => k.startsWith('warp_') },
 ];
+
+/** Valor de una celda: los textos del motor (modo, aparejo, método) en el idioma activo. */
+function cellText(key: string, v: string | number | null | undefined, unit: string): string {
+  const M = msg();
+  if (key === 'compat') return v === 'excel' ? M.labels.compatExcel : M.labels.compatCorrected;
+  if (key === 'rig' && typeof v === 'string')
+    return (M.catalog.rig as Record<string, string>)[v] ?? v;
+  if (key === 'opening_method' && typeof v === 'string') return M.catalog.openingMethodUsed[v] ?? v;
+  return typeof v === 'number' ? fmtU(v, unit, { unit: false }) : fmt(v);
+}
 
 export function SummaryTable() {
   const { design } = useCase();
@@ -106,20 +119,22 @@ export function SummaryTable() {
                   {g.keys.map((k) => {
                     const [name, unit] = label(k);
                     const v = d.summary[k];
+                    const text = cellText(k, v, unit);
+                    // Los ids largos se cortan donde sea; los textos con espacios, entre palabras.
+                    const cls =
+                      typeof v !== 'string'
+                        ? 'num'
+                        : text.includes(' ')
+                          ? 'num words'
+                          : text.length > 16
+                            ? 'num wrap'
+                            : 'num';
                     return (
                       <tr key={k} data-key={k}>
                         <th scope="row" style={{ fontWeight: 500 }}>
                           {name}
                         </th>
-                        <td className={typeof v === 'string' ? 'num wrap' : 'num'}>
-                          {k === 'compat'
-                            ? v === 'excel'
-                              ? T.labels.compatExcel
-                              : T.labels.compatCorrected
-                            : typeof v === 'number'
-                              ? fmtU(v, unit, { unit: false })
-                              : fmt(v)}
-                        </td>
+                        <td className={cls}>{text}</td>
                         <td className="unit">{unit ? unitLabel(unit) : ''}</td>
                       </tr>
                     );

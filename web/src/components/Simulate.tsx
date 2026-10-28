@@ -59,7 +59,8 @@ function pctCell(v: number | null) {
 
 function CompareTable({ r }: { r: SimulateResponse }) {
   const T = useT().simulate.table;
-  const rows = compareRows(r);
+  const { design } = useCase();
+  const rows = compareRows(r, typeof design.data?.summary.opening_method === 'string');
   const hasDyn = rows.some((x) => x.dynamit !== null);
   return (
     <div className="table-wrap">

@@ -79,6 +79,9 @@ export const SUMMARY_UNITS: Record<string, string> = {
   boom_tip_offset_m: 'm',
   nets_gap_m: 'm',
   clump_weight_kg: 'kg',
+  opening_method: '',
+  door_spread_m: 'm',
+  cfp_av_limit_m: 'm',
 };
 
 /** Etiqueta (idioma activo) y unidad métrica de cada clave fija del resumen. */

@@ -7,6 +7,8 @@ export const simulate = {
     av_m: { label: 'Abertura vertical AV', engine: 'AV de Fridman' },
     drag_kgf: { label: 'Resistencia de la red', engine: 'RN Aberdeen' },
   },
+  /** Aberturas del motor con el método camaronero (Fase 19.7b), en lugar de las de Fridman. */
+  shrimpEngine: 'método camaronero, a la velocidad de diseño',
   // Textos compartidos por las vistas de simulación
   speed: 'Velocidad',
   resolution: 'Resolución',

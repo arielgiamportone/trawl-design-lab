@@ -669,7 +669,7 @@ def errata_table(result: DesignResult) -> Table:
             status, how = N_("reproducida"), N_("Reproducida (EXCEL).")
         else:
             status, how = N_("corregida"), N_("Corregida (CORRECTED).")
-        rows.append((e.key, e.sheet, e.cell, e.description, t(status), t(how)))
+        rows.append((e.key, e.sheet, e.cell, t(e.description), t(status), t(how)))
     return Table(
         key="erratas",
         title=t("Erratas del libro original (modo {mode})", mode=result.case.compat.value),

@@ -22,7 +22,7 @@ export const wizard: Messages['wizard'] = {
     maxNoneWhy: 'At none of the computed speeds does the pull exceed the drag.',
     maxWhy: 'It is the speed at which the available pull equals the total drag',
     maxRange: (from: string, to: string) => `; the gear can be towed between ${from} and ${to}.`,
-    maxMod: (v: string) => ` With the modified net: ${v}.`,
+    maxMod: (v: string) => ` With the comparison net: ${v}.`,
     warpTitle: 'Warp',
     warpNone: 'No warp could be selected from the catalogue.',
     warpOk: (v: string) =>
@@ -30,12 +30,23 @@ export const wizard: Messages['wizard'] = {
     warpFail:
       'Its breaking load does not cover the required one with the safety factor: choose a thicker warp.',
     openingTitle: 'Net mouth',
+    openingTitleEach: (n: number) => `Mouth of each net (${n} nets)`,
+    openingValue: (ah: string, av: string) => `AH ${ah} × AV ${av}`,
     openingWhy:
-      'Width between wingtips × height of the mouth, estimated for the net while fishing.',
+      'Horizontal opening (AH, between wingtips) × vertical opening (AV, height of the mouth), estimated for the net while fishing.',
+    openingDoors: (v: string) => ` Otter board spread of each net (DS): ${v}.`,
+    cfpTitle: 'Vertical opening: legal limit',
+    cfpOk: (av: string, limit: string) => `AV ${av} ≤ ${limit}`,
+    cfpOver: (av: string, limit: string) => `AV ${av}: over ${limit}`,
+    cfpWhy: (limit: string) =>
+      `CFP Resolution 7/2018 (art. 4) limits the vertical opening of the mouth to ${limit} in the Argentine outrigger shrimp fleet.`,
+    cfpWhyOver: ' Lower the mouth height (less flotation or a lower-opening net).',
     sweptTitle: 'Area swept per hour',
     swept: (thousands: string, unit: string) => `${thousands} thousand ${unit}/h`,
     sweptWhy: (width: string, speed: string) =>
       `Mouth width (${width}) × distance covered in one hour at ${speed}. It is an indicator of fishing performance.`,
+    sweptWhyNets: (n: number, width: string, speed: string) =>
+      `Width of the ${n} mouths (${n} × ${width}) × distance covered in one hour at ${speed}. It is an indicator of fishing performance.`,
   },
   steps: {
     buque: { title: 'Vessel', sub: 'Available power' },

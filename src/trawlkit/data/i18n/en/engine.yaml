@@ -573,3 +573,32 @@ moneda: currency
 unidad: unit
 fecha: date
 fuente: source
+# Erratas del libro Excel (trawlkit.compat.ERRATA, Fase 19.8d)
+Todos los paneles usan la razón de corte del primero ($G$273).: All panels use the cut ratio of the first one ($G$273).
+Densidad del hilo dimensionalmente incorrecta (A[mm²]·runnage).: Twine density is dimensionally wrong (A[mm²]·runnage).
+SUM(J16,J6:J12,J16) cuenta J16 dos veces.: SUM(J16,J6:J12,J16) counts J16 twice.
+SIN(DEGREES(x)) en lugar de SIN(RADIANS(x)).: SIN(DEGREES(x)) instead of SIN(RADIANS(x)).
+La variante modificada usa el índice de filtración de la estándar.: The modified variant uses the filtration index of the standard net.
+Denominador fijo $B$154 (1 nudo) para todas las velocidades.: Fixed denominator $B$154 (1 knot) for every speed.
+El promedio incluye la columna de velocidad y el tiro de Nomura.: The average includes the speed column and the Nomura pull.
+Mezcla SIN(RADIANS(x)) y SIN(x) con x en grados.: Mixes SIN(RADIANS(x)) and SIN(x) with x in degrees.
+Reynolds calculado como π·D²·v/ν en lugar de v·D/ν.: Reynolds number computed as π·D²·v/ν instead of v·D/ν.
+La resistencia total omite la de los portones (ROB).: The total drag leaves out the otter boards (ROB).
+? El CD del cable se toma con la divergencia en planta δ2 = 4.3° (→ 0.02) en vez del ángulo de ataque del cable al flujo, y por la fila más cercana de la tabla, sin interpolar.
+: The warp CD is taken with the plan-view divergence δ2 = 4.3° (→ 0.02) instead of the angle of attack of the warp to the flow, and from the nearest row of the table, without interpolating.
+Cable de 12 mm (8.55 t) seleccionado con carga mínima requerida de 8.8 t.: 12 mm warp (8.55 t) selected with a required minimum breaking load of 8.8 t.
+Largo de la red modificada suma filas del plano inferior en vez de la bolsa.: The length of the modified net adds rows of the bottom plan instead of the codend.
+MID() sobre números trunca el burlón a 33.3 m (el valor completo es 33.389 m).: MID() on numbers truncates the footrope to 33.3 m (the full value is 33.389 m).
+La DPA de Fridman de la red estándar usa el coeficiente Edy de la modificada.: Fridman's DPA of the standard net uses the Edy coefficient of the modified one.
+La columna 'Nomura' de los resúmenes enlaza a los resultados de Hamuro.: The 'Nomura' column of the summaries links to the Hamuro results.
+DEGREES(SIN(20)) con el ángulo en grados y error de precedencia.: DEGREES(SIN(20)) with the angle in degrees and an operator-precedence error.
+Proporción 10.6 donde el resto de la tabla sugiere 1.06.: Ratio 10.6 where the rest of the table suggests 1.06.
+'VLOOKUP/MATCH de la razón de corte del panel F devuelve #N/A.': 'VLOOKUP/MATCH of the cut ratio of panel F returns #N/A.'
+? Lado menor de las bolsas I/J = Paños!H224 (N = 200) en vez de H223 (T2 = 113); infla Ss de 38.75 a 40.90 m² y St de 308.6 a 315.6 m².
+: Minor side of codends I/J = Paños!H224 (N = 200) instead of H223 (T2 = 113); it inflates Ss from 38.75 to 40.90 m² and St from 308.6 to 315.6 m².
+La razón de corte del paño B usa P55 (coeficiente de plano 0.5) en vez de T56 (N).: The cut ratio of panel B uses P55 (plan coefficient 0.5) instead of T56 (N).
+El código de corte del paño B se busca con la razón del paño A (H63).: The cut code of panel B is looked up with the ratio of panel A (H63).
+El peso total suma las filas sin multiplicar por la cantidad de paneles iguales.: The total weight adds the rows without multiplying by the number of identical panels.
+fL/L = 0.216 fijo (corresponde a DPA/L = 0.87); el DPA/L del modelo (0.45) queda fuera de la tabla de catenaria.: fL/L = 0.216 fixed (it corresponds to DPA/L = 0.87); the model's DPA/L (0.45) falls outside the catenary table.
+LOOKUP del diámetro de boya sobre el vector 'cincuenta' sin ordenar.: LOOKUP of the float diameter over the unsorted 'cincuenta' vector.
+ROUNDDOWN sólo en M42 y en el bloque de 180 HP; el resto de la columna sin redondear.: ROUNDDOWN only in M42 and in the 180 HP block; the rest of the column is not rounded.

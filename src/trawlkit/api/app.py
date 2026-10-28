@@ -295,7 +295,8 @@ def list_params() -> list[dict[str, Any]]:
 def list_errata() -> list[ErratumOut]:
     """Erratas del libro Excel original."""
     return [
-        ErratumOut(key=e.key, sheet=e.sheet, cell=e.cell, description=e.description) for e in ERRATA
+        ErratumOut(key=e.key, sheet=e.sheet, cell=e.cell, description=t(e.description))
+        for e in ERRATA
     ]
 
 

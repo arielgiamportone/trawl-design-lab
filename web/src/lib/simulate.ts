@@ -120,8 +120,12 @@ export interface CompareRow {
   engineVsDynamit: number | null;
 }
 
-/** Filas de la tabla simulación / motor / DynamiT, por velocidad y magnitud. */
-export function compareRows(r: SimulateResponse): CompareRow[] {
+/**
+ * Filas de la tabla simulación / motor / DynamiT, por velocidad y magnitud. Con ``shrimp`` (el
+ * caso usa el método camaronero de aberturas) el motor da las aberturas de la tijera, no las de
+ * Fridman.
+ */
+export function compareRows(r: SimulateResponse, shrimp = false): CompareRow[] {
   const rows: CompareRow[] = [];
   r.results.forEach((res, i) => {
     const speed = Number(res.speed_kn);
@@ -136,7 +140,7 @@ export function compareRows(r: SimulateResponse): CompareRow[] {
         key: q.key,
         label: q.label,
         unit: q.unit,
-        engineName: q.engine,
+        engineName: shrimp && q.key !== 'drag_kgf' ? msg().simulate.shrimpEngine : q.engine,
         sim,
         engine,
         simVsEngine: pctDiff(sim, engine),

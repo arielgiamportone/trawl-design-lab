@@ -1207,6 +1207,9 @@ table.data td.num.wrap {
   white-space: normal;
   overflow-wrap: anywhere;
 }
+table.data td.num.words {
+  white-space: normal;
+}
 .plan-stage img {
   background: transparent;
 }

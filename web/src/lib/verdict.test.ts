@@ -39,6 +39,32 @@ describe('diagnóstico del modo guiado', () => {
     const ah = d.summary.horizontal_opening_m as number;
     const expected = Math.round((ah * 2 * NM_M) / 1000);
     expect(byKey(2).swept?.value).toBe(`${expected} mil m²/h`);
-    expect(byKey(2).opening?.value).toBe('13,1 m × 1,98 m');
+    expect(byKey(2).opening?.value).toBe('AH 13,1 m × AV 1,98 m');
+    expect(byKey(2).cfp_av).toBeUndefined();
+  });
+
+  it('tangones: aberturas de cada red, DP, límite de AV de la Res. CFP 7/2018 y dos bocas', () => {
+    const shrimp = (av: number) => ({
+      ...d,
+      summary: {
+        ...d.summary,
+        vertical_opening_m: av,
+        horizontal_opening_m: 14.4,
+        door_spread_m: 17.5,
+        n_nets: 2,
+        cfp_av_limit_m: 1.5,
+      },
+    });
+    const c = Object.fromEntries(assess(shrimp(1.42), 2).map((x) => [x.key, x]));
+    expect(c.opening?.title).toBe('Boca de cada red (2 redes)');
+    expect(c.opening?.value).toBe('AH 14,4 m × AV 1,42 m');
+    expect(c.opening?.why).toContain('(DP): 17,5 m');
+    expect(c.cfp_av?.tone).toBe('ok');
+    expect(c.cfp_av?.value).toBe('AV 1,42 m ≤ 1,5 m');
+    expect(c.swept?.value).toBe(`${Math.round((2 * 14.4 * 2 * NM_M) / 1000)} mil m²/h`);
+    const over = assess(shrimp(1.58), 2);
+    expect(over.find((x) => x.key === 'cfp_av')?.tone).toBe('crit');
+    expect(over.find((x) => x.key === 'cfp_av')?.value).toBe('AV 1,58 m: supera 1,5 m');
+    expect(overall(over)).toBe('crit');
   });
 });

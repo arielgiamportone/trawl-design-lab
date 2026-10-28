@@ -47,8 +47,10 @@ def version() -> None:
 @app.command()
 def errata() -> None:
     """Lista las erratas documentadas del modelo Excel original."""
+    from trawlkit.i18n import t
+
     for e in ERRATA:
-        typer.echo(f"[{e.key}] {e.sheet}!{e.cell}: {e.description}")
+        typer.echo(f"[{e.key}] {e.sheet}!{e.cell}: {t(e.description)}")
 
 
 # Opciones comunes a run/report/plan.

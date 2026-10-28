@@ -68,9 +68,12 @@ def test_design_catalog_net_uses_its_own_case() -> None:
     # Los parámetros del usuario mandan sobre los de la fuente.
     r2 = client.post("/design", json={"net": "bobp_wp13_pair_ho80", "params": {"depth_m": 25}})
     assert r2.json()["summary"]["working_depth_m"] == 25.0
-    # Con buque elegido, se usa el caso del libro (con portones).
+    # Con buque elegido, se usa ese buque; sin portón elegido, el de la fuente o el de la A-3
+    # escalado a la potencia del buque (Fase 19.8d): aquí, el del plano.
     r3 = client.post("/design", json={"net": "fao_wb_bt2p_60hp", "vessel": "fao_a3_150hp"})
-    assert not any(n.startswith("catalog:") for n in r3.json()["notes"])
+    notes3 = r3.json()["notes"]
+    assert not any(n.startswith("catalog: buque") for n in notes3)
+    assert any(n.startswith("catalog: portón del plano") for n in notes3)
 
 
 def test_design_excel_mode_reproduces_summary() -> None:

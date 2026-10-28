@@ -8,6 +8,7 @@ export const simulate: Messages['simulate'] = {
     av_m: { label: 'Vertical opening AV', engine: 'Fridman AV' },
     drag_kgf: { label: 'Net drag', engine: 'Aberdeen RN' },
   },
+  shrimpEngine: 'shrimp method, at the design speed',
   speed: 'Speed',
   resolution: 'Resolution',
   seabed: 'Seabed',

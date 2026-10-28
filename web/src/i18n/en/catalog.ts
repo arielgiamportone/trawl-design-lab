@@ -18,6 +18,10 @@ export const catalog: Messages['catalog'] = {
     book: 'Book average',
     shrimp: 'Shrimp method (split bridle and short bridles)',
   } as Record<string, string>,
+  openingMethodUsed: {
+    tijera: 'Shrimp: door–bridle–net balance',
+    headrope_k: 'Shrimp: AH = k × headrope',
+  } as Record<string, string>,
   rigSelect: {
     label: 'Rig',
     fromNet: (rig: string) => `The net's own (${rig})`,

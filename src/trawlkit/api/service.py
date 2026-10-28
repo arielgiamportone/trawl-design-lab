@@ -486,7 +486,8 @@ def build_case(
     Una red del catálogo FAO (con potencia de diseño) sin buque ni red modificada se calcula con
     su propio caso (:func:`trawlkit.catalog.catalog_case`: buque de su potencia, portón y
     profundidad del plano; ``door`` reemplaza el portón); ``params`` sobrescribe lo que sale de
-    la fuente.
+    la fuente. Con un buque elegido y sin ``door``, una red del catálogo también usa el portón y
+    los parámetros del aparejo de su fuente (:func:`trawlkit.catalog.source_door`).
     """
     main = _net(net)
     assert main is not None
@@ -500,18 +501,28 @@ def build_case(
             return case if door is None else dataclasses.replace(case, door=_pick_door(door))
         except (TypeError, ValueError) as exc:
             raise BadRequestError(str(exc)) from exc
-    from trawlkit.catalog import complete_vessel
+    from trawlkit.catalog import complete_vessel, source_door, source_params
 
     vessels = vessel_presets()
     v: Vessel = _pick(vessel, vessels, "buque")
     v, filled = complete_vessel(v)
-    d: Door = _pick_door(door)
+    kwargs = _coerce_params(params or {})
+    d: Door
+    if main.vessel_hp is not None and door is None:
+        # Red del catálogo con buque elegido y sin portón: el de la fuente (componentes o plano)
+        # o el de la A-3 escalado a la potencia del buque, como en catalog_case (Fase 19.8d); el
+        # de la A-3 sin escalar abría las tangoneras a la mitad.
+        rig = str(kwargs.get("rig") or main.rig or "otter")
+        d, door_notes = source_door(main, float(v.bhp), rig)
+        filled = [*filled, *door_notes]
+        kwargs = {**source_params(main), **kwargs}
+    else:
+        d = _pick_door(door)
     if class_vessels is None:
         # La clase por defecto es la del libro (A-3), no toda la flota del catálogo.
         others = tuple(o for o in book_vessels().values() if o.id != v.id)
     else:
         others = tuple(complete_vessel(_pick(c, vessels, "buque"))[0] for c in class_vessels)
-    kwargs = _coerce_params(params or {})
     if "depth_m" not in kwargs and main.vessel_hp is not None:
         # Red del catálogo con buque elegido: la profundidad sale de la fuente o, si no la da,
         # del valor por familia (anotado en las suposiciones del caso).
@@ -922,6 +933,16 @@ def simulate_case(
         }
         for v in speeds_kn
     ]
+    op = eng.spread.shrimp
+    if op is not None:
+        # Método camaronero (Fase 19.7b): el motor no adopta la DPA ni la AV de Fridman sino las
+        # aberturas de la tijera a la velocidad de diseño (Fase 19.8d: se comparan ésas).
+        for row in engine_rows:
+            row.update(
+                ah_m=float(op.horizontal_opening_m),
+                av_m=float(op.vertical_opening_m),
+                door_spread_m=float(op.door_spread_m),
+            )
 
     projections = {
         f"{float(v):g}": projections_svg(r) for v, r in zip(speeds_kn, sims_req, strict=True)

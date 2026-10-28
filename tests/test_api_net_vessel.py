@@ -58,3 +58,27 @@ def test_sin_conexion_igual() -> None:
     body = json.dumps({"net": "inidep_ito043_tangonera_inidep", "vessel": "ar_tangonero_1998"})
     status, _ = offline.handle("POST", "/design", body)
     assert status == 200
+
+
+def test_tangonera_con_buque_usa_el_porton_y_la_tijera_del_plano() -> None:
+    """Fase 19.8d: con el buque elegido (como manda la app) y sin portón, la tangonera usa el
+    portón y la tijera de su plano, igual que su propio caso; con el de la A-3 abría a la mitad."""
+    for net in ("inidep_ito043_tangonera_inidep", "inidep_iat027_tangonera_modificada"):
+        own = client.post("/design", json={"net": net}).json()["summary"]
+        res = client.post("/design", json={"net": net, "vessel": "ar_tangonero_1998"}).json()
+        s = res["summary"]
+        assert s["door_id"] == own["door_id"] and s["door_id"].startswith("plan_")
+        assert s["horizontal_opening_m"] == pytest.approx(own["horizontal_opening_m"])
+        assert s["door_spread_m"] == pytest.approx(own["door_spread_m"])
+        assert s["cfp_av_limit_m"] == 1.5
+        assert any(n.startswith("catalog: portón del plano") for n in res["notes"])
+    # Un portón elegido manda.
+    s = client.post(
+        "/design",
+        json={
+            "net": "inidep_ito043_tangonera_inidep",
+            "vessel": "ar_tangonero_1998",
+            "door": "fao_flat_wood_a3",
+        },
+    ).json()["summary"]
+    assert s["door_id"] == "fao_flat_wood_a3"

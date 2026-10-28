@@ -178,7 +178,7 @@ def _params(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
 
 def _errata(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
     return [
-        {"key": e.key, "sheet": e.sheet, "cell": e.cell, "description": e.description}
+        {"key": e.key, "sheet": e.sheet, "cell": e.cell, "description": t(e.description)}
         for e in ERRATA
     ]
 

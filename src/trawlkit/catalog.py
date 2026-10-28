@@ -187,51 +187,18 @@ def plan_door(length_m: float, height_m: float, weight_air_kg: float | None, nam
     return Door.model_validate(data)
 
 
-def catalog_case(
-    net: str | NetSpec,
-    speeds_kn: Sequence[float] = DEFAULT_SPEEDS_KN,
-    **overrides: Any,
-) -> CatalogCase:
-    """Caso de diseño de la red ``net`` (id del catálogo o spec) con su buque, portón y fondo.
+def source_door(spec: NetSpec, hp: float, rig: str = "otter") -> tuple[Door, list[str]]:
+    """Portón que da la fuente de la red y sus notas (Fase 19.8d).
 
-    ``overrides`` se pasan a :class:`~trawlkit.model.DesignCase` (p. ej. ``depth_m``,
-    ``pair_wing_spread_m``, ``seabed``) y tienen prioridad sobre lo que sale de la fuente.
+    El del catálogo de componentes que nombra ``design.door_id``; si no, el del plano (largo,
+    alto y peso en ``design``) con la polar del portón plano de la A-3; si no, el de la A-3
+    escalado por área a ``hp`` caballos. Lo usan :func:`catalog_case` (con la potencia de diseño
+    de la red) y la API cuando se elige un buque pero no un portón (con la de ese buque).
     """
-    spec = load_net(net) if isinstance(net, str) else net
-    design = _design(spec)
-    notes: list[str] = []
-    hp = design_hp(spec)
-    length = design.get("vessel_length_m")
-    fleet = {v.id: v for v in load_fleet().vessels}
-    if design.get("vessel_id") in fleet:
-        vessel, filled = complete_vessel(fleet[str(design["vessel_id"])])
-        notes.append(
-            t(
-                "buque {name} de la flota ({hp:g} hp), el que indica la red",
-                name=vessel.name or vessel.id,
-                hp=vessel.bhp,
-            )
-        )
-        notes.extend(filled)
-    else:
-        vessel = generic_vessel(hp, None if length is None else float(length))
-        if spec.vessel_hp is None:
-            notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
-        rule = t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
-        notes.append(
-            t(
-                "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "
-                "puntal {depth} m escalados del de 150 hp de la A-3 ({rule})",
-                hp=hp,
-                length=vessel.length_m,
-                beam=vessel.beam_m,
-                depth=vessel.depth_m,
-                rule=rule,
-            )
-        )
-    rig = overrides.get("rig") or spec.rig or "otter"
     from trawlkit.components import DoorItem, get_component
 
+    design = _design(spec)
+    notes: list[str] = []
     door_item = None
     if design.get("door_id"):
         try:
@@ -276,21 +243,73 @@ def catalog_case(
                     area=door.area_m2,
                 )
             )
-    if rig == "pair":
-        notes.append(t("arrastre de pareja: el portón del caso no se usa"))
-    if rig == "beam":
-        notes.append(t("arrastre de vara: el portón del caso no se usa"))
+    return door, notes
+
+
+def source_params(spec: NetSpec) -> dict[str, Any]:
+    """Patentes y parámetros del aparejo (tangón, tijera, muerto, vara) que da ``design``."""
+    design = _design(spec)
+    out: dict[str, Any] = {}
+    if design.get("sweeps_m") is not None:
+        out["sweeps_m"] = float(design["sweeps_m"])
+    for key in RIG_DESIGN_KEYS:
+        if design.get(key) is not None:
+            out[key] = int(design[key]) if key == "beam_count" else float(design[key])
+    return out
+
+
+def catalog_case(
+    net: str | NetSpec,
+    speeds_kn: Sequence[float] = DEFAULT_SPEEDS_KN,
+    **overrides: Any,
+) -> CatalogCase:
+    """Caso de diseño de la red ``net`` (id del catálogo o spec) con su buque, portón y fondo.
+
+    ``overrides`` se pasan a :class:`~trawlkit.model.DesignCase` (p. ej. ``depth_m``,
+    ``pair_wing_spread_m``, ``seabed``) y tienen prioridad sobre lo que sale de la fuente.
+    """
+    spec = load_net(net) if isinstance(net, str) else net
+    design = _design(spec)
+    notes: list[str] = []
+    hp = design_hp(spec)
+    length = design.get("vessel_length_m")
+    fleet = {v.id: v for v in load_fleet().vessels}
+    if design.get("vessel_id") in fleet:
+        vessel, filled = complete_vessel(fleet[str(design["vessel_id"])])
+        notes.append(
+            t(
+                "buque {name} de la flota ({hp:g} hp), el que indica la red",
+                name=vessel.name or vessel.id,
+                hp=vessel.bhp,
+            )
+        )
+        notes.extend(filled)
+    else:
+        vessel = generic_vessel(hp, None if length is None else float(length))
+        if spec.vessel_hp is None:
+            notes.append(t("la red no da potencia de diseño: buque genérico de 150 hp"))
+        rule = t("eslora del documento") if length is not None else t("raíz cúbica de la potencia")
+        notes.append(
+            t(
+                "buque genérico de {hp:g} hp: eslora {length} m, manga {beam} m y "
+                "puntal {depth} m escalados del de 150 hp de la A-3 ({rule})",
+                hp=hp,
+                length=vessel.length_m,
+                beam=vessel.beam_m,
+                depth=vessel.depth_m,
+                rule=rule,
+            )
+        )
+    rig = overrides.get("rig") or spec.rig or "otter"
+    door, door_notes = source_door(spec, hp, rig)
+    notes.extend(door_notes)
     depth, depth_note = default_depth(spec)
     if depth_note:
         notes.append(depth_note)
     # La regla «al metro» del libro (Port!E13) está calibrada para las pastecas de la A-3: con
     # otro buque la separación sale de la DPA de Fridman con el portón del caso.
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}
-    if design.get("sweeps_m") is not None:
-        kwargs["sweeps_m"] = float(design["sweeps_m"])
-    for key in RIG_DESIGN_KEYS:
-        if design.get(key) is not None:
-            kwargs[key] = int(design[key]) if key == "beam_count" else float(design[key])
+    kwargs.update(source_params(spec))
     kwargs.update(overrides)
     case = DesignCase(
         net=spec,
@@ -313,4 +332,6 @@ __all__ = [
     "design_hp",
     "generic_vessel",
     "plan_door",
+    "source_door",
+    "source_params",
 ]
