@@ -201,6 +201,16 @@ ERRATA: tuple[Erratum, ...] = (
         "M43:M50",
         N_("ROUNDDOWN sólo en M42 y en el bloque de 180 HP; el resto de la columna sin redondear."),
     ),
+    Erratum(
+        "door_area_power_extrapolation",
+        "Portones y aparejamiento",
+        "F212,F215",
+        N_(
+            "La superficie requerida (20 % de FT sobre (ρ/g)·CD·v²) es lineal en la potencia y "
+            "está calibrada para 150–180 HP; extrapolada a buques más potentes sobredimensiona "
+            "el portón (las tablas reales crecen como hp^0,65)."
+        ),
+    ),
 )
 
 ERRATA_BY_KEY: dict[str, Erratum] = {e.key: e for e in ERRATA}

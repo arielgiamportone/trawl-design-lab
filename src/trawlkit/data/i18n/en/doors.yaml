@@ -82,3 +82,7 @@ Oval cambado: Cambered oval
 Cambado (con ranura): Cambered (slotted)
 Multiperfil: Multi-foil
 Pelágico de alta relación de aspecto (Süberkrüb): High-aspect pelagic (Süberkrüb)
+# Fase 20.1b: superficie del portón por encima de la potencia del libro
+? superficie de la regla del libro {book:.2f} m² escalada × {f:.3f} por la potencia del buque ({hp:g}
+  BHP > 180 HP; errata door_area_power_extrapolation)
+: book-rule area {book:.2f} m² scaled × {f:.3f} for the vessel's power ({hp:g} BHP > 180 HP; erratum door_area_power_extrapolation)

@@ -45,6 +45,7 @@ direcciones (`tests/test_corrected_mode.py` lo hace a nivel del caso completo, `
 | catenary_ratio_hardcoded | Mecánica de la Red | O266 | fL/L = 0.216 fijo, fuera del rango de la tabla | `DesignCase.catenary_ratio` (0.216 en ambos modos; `rigging.spread.catenary_ratio` da el valor de tabla y `run` lo anota en `notes`) · `test_rigging_spread.py` |
 | float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP sobre vector sin ordenar | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / boya de número más cercano en `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
 | flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Redondeo aplicado sólo a parte de la columna | `rigging.floats.flotation_fridman(rounddown=…)`, máscara en `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
+| door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Superficie requerida lineal en la potencia, calibrada para 150–180 HP y extrapolada a buques más potentes | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
 
 Además, varias tablas resumen contienen valores pegados a mano en lugar de fórmulas (marcados con
 `"static": true` en `tests/golden/*.json`), y los coeficientes leídos con `MID()` desde etiquetas de
@@ -127,7 +128,8 @@ V.md_table(["Errata", "Salida afectada", "Excel", "Corregido", "Cambio [%]", "Ar
 assert E.dimensions.std.footrope_m == golden("dimensiones_de_la_red", "footrope_m")
 ```
 
-Otras tres erratas conmutables **no cambian** este caso porque la red FAO A-3 no las activa:
+Otras cuatro erratas conmutables **no cambian** este caso porque la red FAO A-3 y su buque de
+150 HP no las activan:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -138,6 +140,8 @@ nulls = [
      lambda r: r.dimensions.mod.body_length_no_bag_m, "los dos planos miden 32,68 m sin la bolsa"),
     ("float_lookup_unsorted", "Diámetro de boya [mm]", lambda r: r.floats.diameter_mm,
      "el LOOKUP desordenado cae en la boya de 200 mm, la más cercana"),
+    ("door_area_power_extrapolation", "Superficie requerida por portón [m²]",
+     lambda r: r.doors.required_area.per_door_m2, "150 HP no pasa de la potencia de diseño (180 HP)"),
 ]
 rows = []
 for key, label, f, why in nulls:
@@ -168,3 +172,40 @@ Tres órdenes de magnitud:
 La velocidad máxima, que resume el diseño, se mueve poco (−7 %, −0,17 kn): las correcciones que
 aumentan la demanda (portones, cables) y las que la reducen (superficie sólida) se compensan en
 parte.
+
+## Superficie del portón por encima de la potencia del libro
+
+La errata `door_area_power_extrapolation` no es una fórmula mal escrita: es una regla usada fuera de
+su rango. La superficie requerida del libro (`Port!F212`, `F215`; {doc}`15_portones_aparejo`) toma
+el 20 % del tiro disponible y lo divide por $(\rho/g)\,C_D\,v^2$, así que crece en proporción a la
+potencia. Calibrada para los buques A-3 de 150 y 180 HP, extrapolada a la flota argentina pide
+portones de 23 a 46 m² (2100–4159 BHP): más que el portón más grande publicado (21,34 m²), y de 4 a
+7 veces los portones reales de los buques de investigación. Las tablas de portones crecen como la
+potencia a la 0,65: el ajuste de la del *Workbook* {cite:p}`prado1990` da 0,646, y el de la de
+Fishbuster {cite:p}`netsystems_fishbuster`, 0,656. En modo corregido, por encima de 180 BHP, la
+superficie se multiplica por $(180/\mathrm{BHP})^{0{,}35}$; en modo `EXCEL` y hasta 180 BHP el
+factor es 1, de modo que el caso del libro y sus valores dorados no cambian.
+
+La tabla siguiente es el caso por defecto de cada buque de la flota ({doc}`39_flota_argentina`;
+red A-3 y portón plano de la A-3 a 32°), con la superficie por portón según la regla del libro y la
+corregida. La columna *Fishbuster* da las tallas de esa tabla cuyo rango de potencia cruza la del
+buque (±5 %). Los portones reales son los que documenta el INIDEP: 5,58 m² en el Holmberg
+{cite:p}`tringali2012eh0612`, el mismo equipo en el Oca Balda {cite:p}`dato2013global`, y el
+Morgère SPF08 de 4,5 m² en el Angelescu {cite:p}`roth2017angelescu` (hoy un SPF 08,5 de 4,8 m²,
+{cite:p}`rubio2024calibracion`). Un congelador comercial de la flota, el «Beagle I», usa portones
+Polar Mercury de 2300 kg; por la tabla de Polar serían de unos 7–8 m², pero el informe no da la
+superficie.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+sys.path.insert(0, str(pathlib.Path.cwd()))
+import _door_area as DA
+
+V.md_table(DA.TABLE_HEADERS, DA.table_rows())
+```
+
+La superficie corregida queda dentro del rango Fishbuster o hasta un 33 % por encima (el test
+`test_door_area_power.py` admite hasta un 35 %). Con la regla del libro, los buques de más de
+1300 BHP quedaban de 2,6 a 3,7 veces por encima del máximo de la tabla. Para los buques de
+investigación la corregida sigue siendo una cota superior: remolcan una red de campaña estándar muy
+por debajo de su tiro total.

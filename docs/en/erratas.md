@@ -46,6 +46,7 @@ both directions (`tests/test_corrected_mode.py` does so at the level of the comp
 | catenary_ratio_hardcoded | Mecánica de la Red | O266 | fL/L = 0.216 fixed, outside the range of the table | `DesignCase.catenary_ratio` (0.216 in both modes; `rigging.spread.catenary_ratio` gives the table value and `run` records it in `notes`) · `test_rigging_spread.py` |
 | float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP over an unsorted vector | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / float with the nearest number in `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
 | flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Rounding applied to only part of the column | `rigging.floats.flotation_fridman(rounddown=…)`, mask in `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
+| door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Required area linear in power, calibrated for 150–180 HP and extrapolated to more powerful vessels | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
 
 In addition, several summary tables contain values pasted by hand instead of formulas (marked
 with `"static": true` in `tests/golden/*.json`), and the coefficients read with `MID()` from text
@@ -130,8 +131,8 @@ V.md_table(["Erratum", "Affected output", "Excel", "Corrected", "Change [%]", "C
 assert E.dimensions.std.footrope_m == golden("dimensiones_de_la_red", "footrope_m")
 ```
 
-Three other switchable errata **do not change** this case because the FAO A-3 net does not
-trigger them:
+Four other switchable errata **do not change** this case because the FAO A-3 net and its 150 HP
+vessel do not trigger them:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -142,6 +143,8 @@ nulls = [
      lambda r: r.dimensions.mod.body_length_no_bag_m, "both plans measure 32.68 m without the codend"),
     ("float_lookup_unsorted", "Float diameter [mm]", lambda r: r.floats.diameter_mm,
      "the unsorted LOOKUP lands on the 200 mm float, the nearest one"),
+    ("door_area_power_extrapolation", "Required area per otter board [m²]",
+     lambda r: r.doors.required_area.per_door_m2, "150 HP does not exceed the design power (180 HP)"),
 ]
 rows = []
 for key, label, f, why in nulls:
@@ -172,3 +175,39 @@ Three orders of magnitude:
 The maximum speed, which sums up the design, moves little (−7 %, −0.17 kn): the corrections that
 increase the demand (otter boards, warps) and those that reduce it (solid area) partly offset
 each other.
+
+## Otter-board area above the book's power
+
+The erratum `door_area_power_extrapolation` is not a mistyped formula: it is a rule used outside
+its range. The book's required area (`Port!F212`, `F215`; {doc}`15_portones_aparejo`) takes 20 % of
+the available pull and divides it by $(\rho/g)\,C_D\,v^2$, so it grows in proportion to power.
+Calibrated for the 150 and 180 HP A-3 vessels and extrapolated to the Argentine fleet, it asks for
+otter boards of 23 to 46 m² (2100–4159 BHP): more than the largest published board (21.34 m²), and
+4 to 7 times the real boards of the research vessels. Otter-board tables grow as power to the 0.65:
+the fit of the *Workbook* table {cite:p}`prado1990` gives 0.646, and that of the Fishbuster table
+{cite:p}`netsystems_fishbuster`, 0.656. In corrected mode, above 180 BHP, the area is multiplied by
+$(180/\mathrm{BHP})^{0.35}$; in `EXCEL` mode and up to 180 BHP the factor is 1, so the book's case
+and its golden values do not change.
+
+The table below is the default case of every fleet vessel ({doc}`39_flota_argentina`; A-3 net and
+A-3 flat board at 32°), with the area per otter board by the book rule and by the corrected one.
+The *Fishbuster* column gives the sizes of that table whose power range overlaps the vessel's
+(±5 %). The real boards are those documented by INIDEP: 5.58 m² on the Holmberg
+{cite:p}`tringali2012eh0612`, the same gear on the Oca Balda {cite:p}`dato2013global`, and the
+4.5 m² Morgère SPF08 on the Angelescu {cite:p}`roth2017angelescu` (now a 4.8 m² SPF 08,5,
+{cite:p}`rubio2024calibracion`). A commercial freezer trawler of the fleet, the «Beagle I», uses
+2300 kg Polar Mercury boards; by Polar's table they would be about 7–8 m², but the report does not
+give the area.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import _door_area as DA
+
+V.md_table(DA.TABLE_HEADERS, DA.table_rows())
+```
+
+The corrected area falls inside the Fishbuster range or up to 33 % above it (the test
+`test_door_area_power.py` allows up to 35 %). With the book rule, the vessels above 1300 BHP were
+2.6 to 3.7 times the top of the table. For the research vessels the corrected area is still an
+upper bound: they tow a standard survey net well below their full pull.
+

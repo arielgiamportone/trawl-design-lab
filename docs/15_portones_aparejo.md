@@ -95,6 +95,50 @@ Como $F_T$ disminuye con la velocidad y $v^2$ aumenta, $S_{req}$ cae muy rápido
 decenas de m². El libro promedia $S_{req}$ entre 2 y 4 kn, lo divide por dos portones y promedia
 los buques de 150 y 180 HP.
 
+### Por encima de la potencia del libro (Fase 20.1b)
+
+La regla {eq}`eq-15-sreq` es **lineal en la potencia**: $S_{req} \propto R_{OB} \propto F_T
+\propto \mathrm{BHP}$. El libro la calibra para los buques A-3 de 150 y 180 HP, pero el motor la
+aplica a cualquier buque, y extrapolada a la flota argentina pide portones enormes: 23 m² de portón
+plano por portón para el Holmberg (2100 BHP), 31,5 m² para el Angelescu (2855 BHP) y 46 m² para el
+congelador de 4159 BHP, más que el portón más grande de cualquier fabricante (21,34 m²). Las tablas
+reales crecen bastante más despacio. Un ajuste log–log de la tabla de portones planos del
+*Workbook* {cite:p}`prado1990` (50–800 hp) da $S \propto hp^{0{,}646}$, y el de la tabla de los
+Fishbuster de Net Systems {cite:p}`netsystems_fishbuster` (250–5500 hp, la única tabla pública de
+portones indexada por potencia) da $S \propto hp^{0{,}656}$. En modo corregido, el motor conserva
+la regla del libro hasta su potencia de diseño y, por encima, la lleva al crecimiento de las tablas:
+
+$$
+S_{corr} = S_{libro}\cdot\min\!\left[1,\ \left(\frac{180}{\mathrm{BHP}}\right)^{1-b}\right],
+\qquad b = 0{,}65
+$$ (eq-15-sreq-corr)
+
+- **$b = 0{,}65$** (`rigging.DOOR_AREA_POWER_EXPONENT`) es el valor central de los dos ajustes.
+- **180 HP** (`rigging.DOOR_AREA_DESIGN_POWER_HP`) es el techo de diseño del libro: el mayor de los
+  dos buques A-3.
+- **La potencia es la BHP**, la misma que entra en la regla a través del tiro de Fridman
+  $F_T = K_F\cdot\mathrm{BHP}$ (`PotOK!L11:O19`). También es la potencia del motor con la que el
+  *Workbook* y Fishbuster indexan sus tablas. No se usa la potencia de remolque ni el tiro por la
+  hélice: el factor corrige la extrapolación de la regla en su propia variable.
+
+El factor vale 1 hasta 180 HP y en modo `EXCEL`, así que el caso del libro y sus valores dorados no
+cambian. Para el Holmberg vale 0,42 y para el congelador de 4159 BHP, 0,33. La superficie corregida
+es la única que usa el resto del programa: la etapa de portones (`result.doors.required_area`,
+que guarda también el valor del libro y el factor), la elección del portón, el optimizador, el
+informe, la API y la app. Cuando el factor es menor que 1, el resultado lleva la nota
+`door_area_power_extrapolation` (errata del mismo nombre, {doc}`erratas`).
+
+La {numref}`fig-15-superficie-potencia` y la tabla que la sigue, al final del ejemplo ejecutable,
+comparan la regla del libro y la corregida con Fishbuster, el *Workbook* y los portones reales de
+los buques de investigación argentinos. La superficie corregida queda dentro de la tabla Fishbuster
+o hasta un 33 % por encima, una diferencia que explican el error del propio ajuste (33 %) y el
+portón de referencia: el plano de madera de la A-3 frente a un portón en V de «lift-to-drag ratio
+in excess of 2 to 1». Los buques de investigación usan portones todavía más chicos: 5,58 m² el
+Holmberg y el Oca Balda {cite:p}`tringali2012eh0612,dato2013global`, y 4,5–4,8 m² el Angelescu
+{cite:p}`roth2017angelescu,rubio2024calibracion`. Esos buques remolcan una red de campaña estándar
+muy por debajo de su tiro total, así que una regla que sale de tablas comerciales es una cota
+superior.
+
 ### Fuerza sobre el portón, centro de presión y equilibrio de momentos
 
 Para verificar el reglaje (la posición de los puntos de enganche del pie de gallo) el libro calcula
@@ -229,6 +273,8 @@ filtrado y además:
 | margen de superficie equivalente | 10 | % | {cite:t}`sfia1993`, sección 3-16 | — |
 | patas de gallo / largo del portón | 1–1,5 | — | {cite:t}`sfia1993`, §2.2.3 | — |
 | $S$ portón FAO | 1,805 | m² | catálogo | `Port!D122` |
+| $b$ (superficie ∝ hp^b, modo corregido) | 0,65 | — | {cite:t}`prado1990`; {cite:t}`netsystems_fishbuster` | — |
+| potencia de diseño de la regla | 180 | HP | buques A-3 | `Port!E160:F229` |
 | $p$ (ROB / FT) | 0,15–0,30 (0,20) | — | {cite:t}`fridman1986` | `Port!E146:H146`, `D210` |
 | $\alpha_b$ entre bridas | 4,8 | ° | {cite:t}`martini` | `Port!F39` |
 | cadena de reglaje | 0,095·$V_s$ | m | — | `Port!D46` |
@@ -247,6 +293,7 @@ filtrado y además:
 | `Port!E146:H168` | ROB como % de FT | `rigging.door_drag_share_kgf` |
 | `Port!D190:E198` | ROB y $F_y$ | `rigging.door_forces_kgf` |
 | `Port!E210:F229` | superficie requerida | `rigging.required_area_m2`, `rigging.required_area_summary` |
+| — (Fase 20.1b) | factor de potencia por encima de 180 HP | `rigging.door_area_power_factor` (errata `door_area_power_extrapolation`) |
 | `Port!D252:D260` | $P_\varphi$ | `rigging.door_force_kgf` (errata `door_force_mixed_angles`) |
 | `Port!C266:C270` | centro de presión | `rigging.centre_of_pressure_m` |
 | `Port!G281:H289` | momentos | `rigging.moment_balance` |
@@ -272,6 +319,9 @@ filtrado y además:
   $R_{OB}^{par} = 2\cdot\tfrac12(\rho/g)C_D S v^2$. La superficie requerida por portón
   (≈ 1,82 m² promediando 150 y 180 HP) queda casi igual a la del portón elegido, pero ese promedio
   entre 2 y 4 kn está dominado por el extremo lento, donde $S_{req}$ es grande.
+- **Errata `door_area_power_extrapolation`** (`Port!F212`, `F215`). La regla del libro es lineal
+  en la potencia y está calibrada para 150–180 HP. `Compat.EXCEL` la usa tal cual a cualquier
+  potencia; `Compat.CORRECTED` aplica {eq}`eq-15-sreq-corr` por encima de 180 HP ({doc}`erratas`).
 - **Regla al metro.** {eq}`eq-15-ds` es empírica: no depende de la velocidad ni de la fuerza de
   abertura. La DPA de Fridman ({doc}`16_aberturas`) sí resuelve el equilibrio de fuerzas.
 - **Errata `door_force_mixed_angles`** (`Port!D252`). La celda escribe
@@ -501,6 +551,37 @@ for c in sel.candidates[:6]:
     extra = " (+10 %)" if c.margin_applied else ""
     print(f"{c.name[:44]:44s} {c.area_m2:5.2f} m² ≥ {c.required_m2:4.2f}{extra:8s} "
           f"margen {100 * c.area_margin:4.1f} %  {peso}")
+```
+
+Por encima de 180 HP rige {eq}`eq-15-sreq-corr` ({numref}`fig-15-superficie-potencia`). Cada
+punto es el caso por defecto de un buque de la flota ({doc}`39_flota_argentina`): red A-3 y
+portón plano de la A-3 a 32°, en modo corregido.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+mystnb:
+  figure:
+    caption: |
+      Superficie requerida por portón contra la potencia del buque (ejes logarítmicos). La regla
+      del libro (círculos vacíos) crece en proporción a la potencia; la corregida (círculos llenos)
+      crece como la potencia a la 0,65 por encima de 180 HP. Las barras grises son las tallas de la
+      tabla Fishbuster con su rango de potencia; los cuadrados, los portones planos del
+      *Workbook*; las estrellas, los portones de los buques de investigación del INIDEP.
+    name: fig-15-superficie-potencia
+---
+import _door_area as DA
+
+fig, ax = P.plt.subplots(figsize=(7, 5))
+DA.plot(ax, P)
+P.finish(fig)
+```
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import _plots_t1 as T1
+
+T1.md_table(DA.TABLE_HEADERS, DA.table_rows())
 ```
 
 ## Ejercicios

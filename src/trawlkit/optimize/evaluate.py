@@ -352,9 +352,22 @@ class Evaluator:
         self.runs += 1
         req = result.doors.required_area_m2
         lo, hi = case.required_area_speed_range_kn
-        idx = [int(np.argmin(np.abs(self.speeds - v))) for v in self.book_speeds if lo <= v <= hi]
-        # Port!F215: promedio de la superficie requerida en las velocidades del libro (2–4 kn).
-        door_req = float(np.mean(req[idx])) / 2.0 if idx else result.doors.required_area.per_door_m2
+        book_v = [v for v in self.book_speeds if lo <= v <= hi]
+        idx = [int(np.argmin(np.abs(self.speeds - v))) for v in book_v]
+        # Port!F215: promedio de la superficie requerida en las velocidades del libro (2–4 kn),
+        # con la misma función (y el mismo factor de potencia, Fase 20.1b) que el motor.
+        door_req = (
+            rigging.required_area_summary(
+                req[idx],
+                np.asarray(book_v, dtype=float),
+                lo,
+                hi,
+                bhp=result.power.fridman.bhp,
+                compat=case.compat,
+            ).per_door_m2
+            if idx
+            else result.doors.required_area.per_door_m2
+        )
         dims = result.dimensions.std
         curves = Curves(
             s=s,

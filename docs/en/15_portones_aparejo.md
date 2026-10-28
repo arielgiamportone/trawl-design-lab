@@ -95,6 +95,49 @@ Since $F_T$ decreases with speed and $v^2$ increases, $S_{req}$ falls very fast:
 come out at tens of m². The book averages $S_{req}$ between 2 and 4 kn, divides it by two otter
 boards and averages the 150 and 180 HP vessels.
 
+### Above the book's power (Phase 20.1b)
+
+The rule {eq}`eq-15-sreq` is **linear in power**: $S_{req} \propto R_{OB} \propto F_T \propto
+\mathrm{BHP}$. The book calibrates it for the 150 and 180 HP A-3 vessels, but the engine applies it
+to any vessel, and extrapolated to the Argentine fleet it asks for huge otter boards: 23 m² of flat
+board per door for the Holmberg (2100 BHP), 31.5 m² for the Angelescu (2855 BHP) and 46 m² for the
+4159 BHP freezer trawler, more than the largest board of any manufacturer (21.34 m²). Real tables
+grow much more slowly. A log–log fit of the *Workbook* flat-board table {cite:p}`prado1990`
+(50–800 hp) gives $S \propto hp^{0.646}$, and a fit of the Net Systems Fishbuster table
+{cite:p}`netsystems_fishbuster` (250–5500 hp, the only public otter-board table indexed by power)
+gives $S \propto hp^{0.656}$. In corrected mode the engine keeps the book rule up to its design
+power and, above it, brings it to the growth of the tables:
+
+$$
+S_{corr} = S_{book}\cdot\min\!\left[1,\ \left(\frac{180}{\mathrm{BHP}}\right)^{1-b}\right],
+\qquad b = 0.65
+$$ (eq-15-sreq-corr)
+
+- **$b = 0.65$** (`rigging.DOOR_AREA_POWER_EXPONENT`) is the central value of the two fits.
+- **180 HP** (`rigging.DOOR_AREA_DESIGN_POWER_HP`) is the book's design ceiling: the larger of the
+  two A-3 vessels.
+- **The power is the BHP**, the same one that enters the rule through Fridman's pull
+  $F_T = K_F\cdot\mathrm{BHP}$ (`PotOK!L11:O19`). It is also the engine power with which the
+  *Workbook* and Fishbuster index their tables. Neither the towing power nor the propeller pull is
+  used: the factor corrects the extrapolation of the rule in its own variable.
+
+The factor is 1 up to 180 HP and in `EXCEL` mode, so the book's case and its golden values do not
+change. For the Holmberg it is 0.42 and for the 4159 BHP freezer trawler, 0.33. The corrected area
+is the only one the rest of the program uses: the otter-board stage (`result.doors.required_area`,
+which also keeps the book value and the factor), the otter-board selection, the optimiser, the
+report, the API and the app. When the factor is below 1, the result carries the note
+`door_area_power_extrapolation` (erratum of the same name, {doc}`erratas`).
+
+{numref}`fig-15-superficie-potencia` and the table after it, at the end of the executable example,
+compare the book rule and the corrected one with Fishbuster, the *Workbook* and the real otter
+boards of the Argentine research vessels. The corrected area falls inside the Fishbuster table or
+up to 33 % above it, a difference explained by the error of the fit itself (33 %) and by the
+reference board: the A-3 flat wooden board against a V board with a «lift-to-drag ratio in excess
+of 2 to 1». The research vessels use even smaller boards: 5.58 m² on the Holmberg and the Oca Balda
+{cite:p}`tringali2012eh0612,dato2013global`, and 4.5–4.8 m² on the Angelescu
+{cite:p}`roth2017angelescu,rubio2024calibracion`. Those vessels tow a standard survey net well
+below their full pull, so a rule taken from commercial tables is an upper bound.
+
 ### Force on the otter board, centre of pressure and moment balance
 
 To check the adjustment (the position of the attachment points of the crowfoot) the book calculates
@@ -230,6 +273,8 @@ components catalogue and also:
 | equivalent-area margin | 10 | % | {cite:t}`sfia1993`, section 3-16 | — |
 | backstrops / board length | 1–1.5 | — | {cite:t}`sfia1993`, §2.2.3 | — |
 | $S$ FAO otter board | 1.805 | m² | catalogue | `Port!D122` |
+| $b$ (area ∝ hp^b, corrected mode) | 0.65 | — | {cite:t}`prado1990`; {cite:t}`netsystems_fishbuster` | — |
+| design power of the rule | 180 | HP | A-3 vessels | `Port!E160:F229` |
 | $p$ (ROB / FT) | 0.15–0.30 (0.20) | — | {cite:t}`fridman1986` | `Port!E146:H146`, `D210` |
 | $\alpha_b$ between bridles | 4.8 | ° | {cite:t}`martini` | `Port!F39` |
 | adjusting chain | 0.095·$V_s$ | m | — | `Port!D46` |
@@ -248,6 +293,7 @@ components catalogue and also:
 | `Port!E146:H168` | ROB as % of FT | `rigging.door_drag_share_kgf` |
 | `Port!D190:E198` | ROB and $F_y$ | `rigging.door_forces_kgf` |
 | `Port!E210:F229` | required area | `rigging.required_area_m2`, `rigging.required_area_summary` |
+| — (Phase 20.1b) | power factor above 180 HP | `rigging.door_area_power_factor` (erratum `door_area_power_extrapolation`) |
 | `Port!D252:D260` | $P_\varphi$ | `rigging.door_force_kgf` (erratum `door_force_mixed_angles`) |
 | `Port!C266:C270` | centre of pressure | `rigging.centre_of_pressure_m` |
 | `Port!G281:H289` | moments | `rigging.moment_balance` |
@@ -273,6 +319,9 @@ components catalogue and also:
   $R_{OB}^{par} = 2\cdot\tfrac12(\rho/g)C_D S v^2$. The required area per otter board (≈ 1.82 m²
   averaging 150 and 180 HP) is almost equal to that of the chosen otter board, but that average
   between 2 and 4 kn is dominated by the slow end, where $S_{req}$ is large.
+- **Erratum `door_area_power_extrapolation`** (`Port!F212`, `F215`). The book rule is linear in
+  power and calibrated for 150–180 HP. `Compat.EXCEL` uses it as is at any power;
+  `Compat.CORRECTED` applies {eq}`eq-15-sreq-corr` above 180 HP ({doc}`erratas`).
 - **Per metre rule.** {eq}`eq-15-ds` is empirical: it depends neither on the speed nor on the
   spreading force. Fridman's DPA ({doc}`16_aberturas`) does solve the force balance.
 - **Erratum `door_force_mixed_angles`** (`Port!D252`). The cell writes `SIN(RADIANS($E$240))` in
@@ -501,6 +550,37 @@ for c in sel.candidates[:6]:
     extra = " (+10 %)" if c.margin_applied else ""
     print(f"{c.name[:44]:44s} {c.area_m2:5.2f} m² ≥ {c.required_m2:4.2f}{extra:8s} "
           f"margin {100 * c.area_margin:4.1f} %  {weight}")
+```
+
+Above 180 HP {eq}`eq-15-sreq-corr` applies ({numref}`fig-15-superficie-potencia`). Each point is
+the default case of a fleet vessel ({doc}`39_flota_argentina`): A-3 net and A-3 flat board at 32°,
+in corrected mode.
+
+```{code-cell} ipython3
+---
+tags: [hide-input]
+mystnb:
+  figure:
+    caption: |
+      Required area per otter board against vessel power (logarithmic axes). The book rule (open
+      circles) grows in proportion to power; the corrected one (filled circles) grows as power to
+      the 0.65 above 180 HP. The grey bars are the Fishbuster sizes with their power range; the
+      squares, the *Workbook* flat boards; the stars, the otter boards of the INIDEP research
+      vessels.
+    name: fig-15-superficie-potencia
+---
+import _door_area as DA
+
+fig, ax = P.plt.subplots(figsize=(7, 5))
+DA.plot(ax, P)
+P.finish(fig)
+```
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import _plots_t1 as T1
+
+T1.md_table(DA.TABLE_HEADERS, DA.table_rows())
 ```
 
 ## Exercises

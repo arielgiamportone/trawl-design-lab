@@ -117,17 +117,18 @@ el lado mayor se toma como alto (*supuesto*). Sin medidas, las proporciones sale
 polar del tipo (la del Thyborøn Type 2 de 125" de Seafish para el Type 2) o del número «r» de
 Polar, tomado como relación de aspecto. La polar es siempre la del tipo, *supuesta*.
 
-Con este catálogo eligen portón todos los buques de hasta 2600 hp, incluidos el Holmberg, el Oca
-Balda y el congelador de 2348 hp. El Angelescu (2855 hp) y el congelador de 4159 hp siguen sin
-candidato: la regla del libro les pide 31,5 y 45,9 m² de portón plano por portón, más que cualquier
-tabla. Esos números están muy lejos de la práctica: el Angelescu se diseñó con portones Morgère
-SPF08 de 4,5 m² y 1200 kg {cite}`roth2017angelescu`, y la única tabla pública indexada por
-potencia, la de los Fishbuster de Net Systems {cite}`netsystems_fishbuster`, pone 7 m²
-para 1800–2200 hp y de 11 a 12,5 m² para 3000–5500 hp. La regla (superficie = 20 % del tiro disponible sobre $C_D\,v^2$, promediada
-entre 2 y 4 nudos) está calibrada para los 150–180 hp de la A-3 y crece en proporción a la
-potencia, mientras que las tablas del *Workbook* y de Fishbuster crecen como la potencia a la
-0,65. La regla no se cambia en esta fase: el diagnóstico y la corrección propuesta quedan para una
-fase posterior, porque tocan los valores dorados del libro.
+Con este catálogo y la regla del libro elegían portón todos los buques de hasta 2600 hp, incluidos
+el Holmberg, el Oca Balda y el congelador de 2348 hp. El Angelescu (2855 hp) y el congelador de
+4159 hp no: la regla del libro les pedía 31,5 y 45,9 m² de portón plano por portón, más que
+cualquier tabla y muy lejos de la práctica: el Angelescu se diseñó con portones Morgère SPF08 de
+4,5 m² y 1200 kg {cite}`roth2017angelescu`, y la única tabla pública indexada por potencia, la de
+los Fishbuster de Net Systems {cite}`netsystems_fishbuster`, pone 7 m² para 1800–2200 hp y de 11 a
+12,5 m² para 3000–5500 hp. La regla (superficie = 20 % del tiro disponible sobre $C_D\,v^2$,
+promediada entre 2 y 4 nudos) está calibrada para los 150–180 hp de la A-3 y crece en proporción a
+la potencia, mientras que las tablas del *Workbook* y de Fishbuster crecen como la potencia a la
+0,65. Desde la Fase 20.1b el modo corregido la escala por $(180/\mathrm{BHP})^{0{,}35}$ por encima
+de 180 hp (errata `door_area_power_extrapolation`, {doc}`15_portones_aparejo`): el Angelescu pide
+ahora 12,0 m² y el congelador de 4159 hp 15,3 m² de portón plano, y toda la flota tiene candidatos.
 
 ```{code-cell} ipython3
 :tags: [remove-input]

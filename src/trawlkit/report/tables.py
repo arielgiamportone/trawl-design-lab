@@ -404,6 +404,23 @@ def rigging_table(result: DesignResult) -> Table:
             "m²",
         ),
         _kv(t("Portones"), t("Superficie requerida por portón"), d.required_area.per_door_m2, "m²"),
+    ]
+    if d.required_area.power_factor < 1.0:  # Fase 20.1b: sólo por encima de 180 BHP
+        rows += [
+            _kv(
+                t("Portones"),
+                t("Superficie requerida por portón (regla del libro)"),
+                d.required_area.book_per_door_m2,
+                "m²",
+            ),
+            _kv(
+                t("Portones"),
+                t("Factor de potencia de la superficie, (180 HP/BHP)^0,35"),
+                d.required_area.power_factor,
+                "",
+            ),
+        ]
+    rows += [
         _kv(
             t("Portones"),
             t("Superficie requerida por portón (clase)"),

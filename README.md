@@ -137,12 +137,12 @@ encadena semejanza, refinado y armado:
 | Redes en el catálogo | 30 (20 publicadas, 10 borradores), con procedencia valor por valor |
 | Componentes | 1466 en 7 tipos (244 genéricos y datos puntuales de 18 marcas) |
 | Métodos de resistencia de la red | 13 |
-| Erratas del Excel documentadas y corregidas | 26 |
+| Erratas del Excel documentadas y corregidas | 27 |
 | Valores de referencia del Excel | 697, reproducidos con rtol 1e-6 en modo `excel` |
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 79 |
-| Capítulos del libro | 40 · 159 referencias |
+| Capítulos del libro | 40 · 162 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->

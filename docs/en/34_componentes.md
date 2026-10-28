@@ -120,17 +120,18 @@ proportions come from a polar sheet of the type (the Seafish Thyborøn Type 2 12
 or from the Polar «r» number, taken as the aspect ratio. The polar is always the type polar,
 *assumed*.
 
-With this catalogue every vessel up to 2600 hp gets a board, including the Holmberg, the Oca Balda
-and the 2348 hp freezer trawler. The Angelescu (2855 hp) and the 4159 hp freezer trawler still have
-no candidate: the book rule asks them for 31.5 and 45.9 m² of flat board per door, more than any
-table. Those numbers are far from practice: the Angelescu was designed with Morgère SPF08 boards of
+With this catalogue every vessel up to 2600 hp got a board under the book rule, including the
+Holmberg, the Oca Balda and the 2348 hp freezer trawler. The Angelescu (2855 hp) and the 4159 hp
+freezer trawler did not: the book rule asked them for 31.5 and 45.9 m² of flat board per door, more
+than any table, and far from practice: the Angelescu was designed with Morgère SPF08 boards of
 4.5 m² and 1200 kg {cite}`roth2017angelescu`, and the only public table indexed by power, the Net
-Systems Fishbuster one {cite}`netsystems_fishbuster`, gives 7 m² for 1800–2200 hp and 11 to 12.5 m² for
-3000–5500 hp. The rule
-(area = 20 % of the available thrust over $C_D\,v^2$, averaged between 2 and 4 knots) is calibrated
-for the 150–180 hp of the A-3 and grows in proportion to power, while the *Workbook* and Fishbuster
-tables grow as power to the 0.65. The rule is not changed in this phase: the diagnosis and the
-proposed correction are left for a later phase, because they touch the book's golden values.
+Systems Fishbuster one {cite}`netsystems_fishbuster`, gives 7 m² for 1800–2200 hp and 11 to
+12.5 m² for 3000–5500 hp. The rule (area = 20 % of the available thrust over $C_D\,v^2$, averaged
+between 2 and 4 knots) is calibrated for the 150–180 hp of the A-3 and grows in proportion to
+power, while the *Workbook* and Fishbuster tables grow as power to the 0.65. Since Phase 20.1b the
+corrected mode scales it by $(180/\mathrm{BHP})^{0.35}$ above 180 hp (erratum
+`door_area_power_extrapolation`, {doc}`15_portones_aparejo`): the Angelescu now asks for 12.0 m²
+and the 4159 hp freezer trawler for 15.3 m² of flat board, and the whole fleet gets candidates.
 
 ```{code-cell} ipython3
 :tags: [remove-input]

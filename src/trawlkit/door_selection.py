@@ -327,7 +327,10 @@ def select_doors(
     case = result.case
     if case.is_pair:
         raise ValueError(t("el aparejo en pareja no lleva portones"))
-    a1 = float(result.doors.required_area.per_door_m2)
+    # Superficie requerida del motor (rigging.required_area_summary, con el factor de potencia de
+    # la Fase 20.1b): la misma que muestran el informe, la API y el optimizador.
+    req = result.doors.required_area
+    a1 = float(req.per_door_m2)
     cl1 = float(result.doors.polar.cl)
     weights = _workbook_weights()
     want = {canonical_type(x) or x for x in types} if types else None
@@ -391,6 +394,16 @@ def select_doors(
             angle=case.door_attack_angle_deg,
         )
     )
+    if req.power_factor < 1.0:
+        notes.append(
+            t(
+                "superficie de la regla del libro {book:.2f} m² escalada × {f:.3f} por la "
+                "potencia del buque ({hp:g} BHP > 180 HP; errata door_area_power_extrapolation)",
+                book=req.book_per_door_m2,
+                f=req.power_factor,
+                hp=result.power.fridman.bhp,
+            )
+        )
     return DoorSelection(
         required_m2=a1,
         case_door={

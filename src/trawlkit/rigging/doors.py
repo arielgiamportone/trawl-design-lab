@@ -100,12 +100,98 @@ def required_area_m2(
     return ret(2.0 * rob / ((rho_kg_m3 / g_m_s2) * cd * v**2), v_ms if np.ndim(v_ms) else rob_kgf)
 
 
+#: Exponente b de las tablas reales de superficie de portón contra potencia, S ∝ hp^b (Fase 20.1b).
+#: Ajuste por mínimos cuadrados en log–log: tabla de portones planos del *Workbook* (Prado y
+#: Dremière 1990, «Otter boards … choice depending on power», 50–800 hp) → 0,646; tabla de los
+#: Fishbuster de Net Systems (2014, catálogo pp. C.10–C.11, «Estimated Range hp», 250–5500 hp,
+#: punto medio geométrico de cada rango) → 0,656. Se toma el valor central 0,65. Fuentes:
+#: ``prado1990`` y ``netsystems_fishbuster`` en ``docs/referencias.bib``.
+DOOR_AREA_POWER_EXPONENT: float = 0.65
+
+#: Potencia de diseño del libro [BHP]: el mayor de los dos buques de la clase A-3 (150 y 180 HP,
+#: bloques Port!E146:H168 y E160:F229). Hasta esta potencia la regla del libro no se toca.
+DOOR_AREA_DESIGN_POWER_HP: float = 180.0
+
+
+#: Tabla de los portones Fishbuster de Net Systems (2014, catálogo pp. C.10–C.11; portón en V,
+#: «Lift-to-drag ratio in excess of 2 to 1»): superficie por portón [m²] y «Estimated Range hp»
+#: (mínimo, máximo; «6000 UP» → sin máximo). Referencia ``netsystems_fishbuster``; es la única
+#: tabla pública de portones indexada por potencia (comparación de la Fase 20.1b).
+FISHBUSTER_AREA_HP: tuple[tuple[float, float, float], ...] = (
+    (1.5, 250, 300),
+    (2.0, 300, 400),
+    (3.0, 300, 500),
+    (3.5, 400, 650),
+    (4.0, 600, 800),
+    (4.5, 700, 900),
+    (5.0, 900, 1200),
+    (5.5, 1000, 1300),
+    (6.0, 1400, 1800),
+    (6.5, 1600, 2200),
+    (7.0, 1800, 2200),
+    (7.5, 1800, 2200),
+    (8.5, 2250, 3200),
+    (10.0, 2800, 4000),
+    (11.0, 3000, 4500),
+    (12.5, 4000, 5500),
+    (14.0, 6000, float("inf")),
+    (15.0, 6000, float("inf")),
+)
+
+
+def fishbuster_area_range_m2(hp: float, band: float = 0.05) -> tuple[float, float] | None:
+    """Rango de superficie por portón de la tabla Fishbuster para la potencia ``hp`` [m²].
+
+    Toma las filas cuyo «Estimated Range hp» se cruza con ``hp·(1 ± band)`` (los rangos del
+    catálogo están redondeados a 50–100 hp); si ninguna lo hace (un hueco de la tabla, p. ej.
+    1311 hp entre 1000–1300 y 1400–1800), las dos filas vecinas. ``None`` por debajo de la tabla
+    (< 250 hp).
+    """
+    lo_hp, hi_hp = hp * (1.0 - band), hp * (1.0 + band)
+    if hi_hp < FISHBUSTER_AREA_HP[0][1]:
+        return None
+    rows = [a for a, lo, hi in FISHBUSTER_AREA_HP if lo <= hi_hp and hi >= lo_hp]
+    if not rows:
+        below = max(a for a, _, hi in FISHBUSTER_AREA_HP if hi < lo_hp)
+        above = min(a for a, lo, _ in FISHBUSTER_AREA_HP if lo > hi_hp)
+        rows = [below, above]
+    return min(rows), max(rows)
+
+
+def door_area_power_factor(
+    bhp: float,
+    compat: Compat = Compat.CORRECTED,
+    *,
+    exponent: float = DOOR_AREA_POWER_EXPONENT,
+    design_power_hp: float = DOOR_AREA_DESIGN_POWER_HP,
+) -> float:
+    """Factor de la superficie requerida por encima de la potencia de diseño del libro (Fase 20.1b).
+
+    ``min(1, (design_power_hp/bhp)^(1 − exponent))``: la regla del libro (Port!F212/F215) es
+    lineal en la potencia (``S ∝ FT ∝ BHP``), las tablas reales crecen como ``hp^0,65``; por
+    encima de 180 HP el factor lleva el crecimiento de la regla al de las tablas (errata
+    ``door_area_power_extrapolation``). ``bhp`` es la potencia al freno del buque, la misma que
+    alimenta el tiro de Fridman ``FT = KF·BHP`` de la regla (PotOK!L11:O19). En
+    :attr:`Compat.EXCEL` (y para ``bhp ≤ 180``) el factor es exactamente 1.
+    """
+    if compat is Compat.EXCEL or not bhp > design_power_hp:
+        return 1.0
+    return float((design_power_hp / bhp) ** (1.0 - exponent))
+
+
 @dataclass(frozen=True)
 class RequiredArea:
-    """Resumen de la superficie requerida (Port!F212/F215 y F225/F229)."""
+    """Resumen de la superficie requerida (Port!F212/F215 y F225/F229).
+
+    ``average_total_m2`` y ``per_door_m2`` son los valores de diseño (con el factor de potencia de
+    la Fase 20.1b aplicado); ``book_per_door_m2`` es Port!F215 tal cual lo da la regla del libro y
+    ``power_factor`` el factor aplicado (1 hasta 180 HP y en modo EXCEL).
+    """
 
     average_total_m2: float
     per_door_m2: float
+    book_per_door_m2: float
+    power_factor: float = 1.0
 
     def to_dict(self) -> dict[str, Any]:
         """Representación serializable."""
@@ -117,16 +203,29 @@ def required_area_summary(
     speeds_kn: FloatOrArray,
     v_min_kn: float = 2.0,
     v_max_kn: float = 4.0,
+    *,
+    bhp: float | None = None,
+    compat: Compat = Compat.CORRECTED,
 ) -> RequiredArea:
     """Superficie requerida promedio entre 2 y 4 nudos y por portón (Port!F212/F215).
 
-    ``F212 = AVERAGE(E212:E216)`` (filas de 2.0 a 4.0 kn) y ``F215 = F212/2``.
+    ``F212 = AVERAGE(E212:E216)`` (filas de 2.0 a 4.0 kn) y ``F215 = F212/2``. Con ``bhp`` se
+    aplica :func:`door_area_power_factor` (Fase 20.1b). Es la única función que da la superficie
+    requerida: la usan la etapa de portones del motor, la selección de portones, el optimizador,
+    el informe y la API.
     """
     a = as_array(areas_m2)
     s = as_array(speeds_kn)
     mask = (s >= v_min_kn) & (s <= v_max_kn)
-    avg = float(np.mean(a[mask]))
-    return RequiredArea(average_total_m2=avg, per_door_m2=avg / 2.0)
+    book = float(np.mean(a[mask]))
+    factor = 1.0 if bhp is None else door_area_power_factor(bhp, compat)
+    avg = book * factor
+    return RequiredArea(
+        average_total_m2=avg,
+        per_door_m2=avg / 2.0,
+        book_per_door_m2=book / 2.0,
+        power_factor=factor,
+    )
 
 
 def required_area_overall_m2(per_door_150_m2: float, per_door_180_m2: float) -> float:

@@ -709,3 +709,6 @@ Modo de cálculo: Calculation mode
 Refuerzo de puntas de ala {length} m: Wing-tip reinforcement {length} m
 Costados (×2): Side panels (×2)
 '{power} frente a {demand}': '{power} vs {demand}'
+# Fase 20.1b: superficie del portón por encima de la potencia del libro
+Superficie requerida por portón (regla del libro): Required area per otter board (book rule)
+Factor de potencia de la superficie, (180 HP/BHP)^0,35: Power factor of the area, (180 HP/BHP)^0.35

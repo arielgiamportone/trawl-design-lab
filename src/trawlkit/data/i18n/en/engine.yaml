@@ -602,3 +602,16 @@ El peso total suma las filas sin multiplicar por la cantidad de paneles iguales.
 fL/L = 0.216 fijo (corresponde a DPA/L = 0.87); el DPA/L del modelo (0.45) queda fuera de la tabla de catenaria.: fL/L = 0.216 fixed (it corresponds to DPA/L = 0.87); the model's DPA/L (0.45) falls outside the catenary table.
 LOOKUP del diámetro de boya sobre el vector 'cincuenta' sin ordenar.: LOOKUP of the float diameter over the unsorted 'cincuenta' vector.
 ROUNDDOWN sólo en M42 y en el bloque de 180 HP; el resto de la columna sin redondear.: ROUNDDOWN only in M42 and in the 180 HP block; the rest of the column is not rounded.
+# Fase 20.1b: superficie del portón por encima de la potencia del libro
+? La superficie requerida (20 % de FT sobre (ρ/g)·CD·v²) es lineal en la potencia y está calibrada para
+  150–180 HP; extrapolada a buques más potentes sobredimensiona el portón (las tablas reales crecen como
+  hp^0,65).
+: The required area (20 % of FT over (ρ/g)·CD·v²) is linear in power and calibrated for 150–180 HP; extrapolated
+  to more powerful vessels it oversizes the otter board (real tables grow as hp^0.65).
+? 'door_area_power_extrapolation: superficie requerida por portón {corr:.2f} m² = {book:.2f} m² de la
+  regla del libro (Port!F215) × (180/{hp:g})^{exp:.2f} = × {f:.3f}. La regla es lineal en la potencia
+  y está calibrada para los buques A-3 de 150–180 HP; las tablas de portones del Workbook y de Fishbuster
+  crecen como hp^{b:.2f}'
+: 'door_area_power_extrapolation: required area per otter board {corr:.2f} m² = {book:.2f} m² from the
+  book rule (Port!F215) × (180/{hp:g})^{exp:.2f} = × {f:.3f}. The rule is linear in power and calibrated
+  for the 150–180 HP A-3 vessels; the otter-board tables of the Workbook and of Fishbuster grow as hp^{b:.2f}'

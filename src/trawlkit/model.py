@@ -1263,14 +1263,20 @@ def _stage_doors(
     forces = rigging.door_forces_kgf(door.area_m2, polar.cd, polar.cl, v_ms)  # D190:E198
     lo, hi = case.required_area_speed_range_kn
 
-    def required(ft: FloatArray) -> tuple[FloatArray, RequiredArea]:
+    def required(ft: FloatArray, bhp: float) -> tuple[FloatArray, RequiredArea]:
         rob = _arr(rigging.door_drag_share_kgf(ft, case.rob_share))
-        areas = _arr(rigging.required_area_m2(rob, polar.cd, v_ms))  # E210:E218
-        return areas, rigging.required_area_summary(areas, case.speeds, lo, hi)  # F212, F215
+        areas = _arr(rigging.required_area_m2(rob, polar.cd, v_ms))  # E210:E218 (regla del libro)
+        # F212, F215; con el factor de potencia por encima de 180 BHP en modo corregido (Fase
+        # 20.1b). La potencia es la BHP que da FT (Fridman), la misma entrada de la regla.
+        summary = rigging.required_area_summary(
+            areas, case.speeds, lo, hi, bhp=bhp, compat=case.compat
+        )
+        return areas, summary
 
-    areas, req = required(power.ft_kgf)
+    areas, req = required(power.ft_kgf, power.fridman.bhp)
     req_class = {
-        vid: required(_ft_of(s, case.ft_propeller))[1] for vid, s in power.class_fridman.items()
+        vid: required(_ft_of(s, case.ft_propeller), s.bhp)[1]
+        for vid, s in power.class_fridman.items()
     }
     per_door_class = float(np.mean([r.per_door_m2 for r in req_class.values()]))  # F220
     force = _arr(
@@ -2590,6 +2596,28 @@ def _propeller_notes(
     return out
 
 
+def _door_area_notes(doors: DoorStage, power: PowerStage) -> list[str]:
+    """Nota de la superficie requerida escalada por encima de la potencia del libro (Fase 20.1b)."""
+    req = doors.required_area
+    if not req.power_factor < 1.0:
+        return []
+    return [
+        t(
+            "door_area_power_extrapolation: superficie requerida por portón {corr:.2f} m² = "
+            "{book:.2f} m² de la regla del libro (Port!F215) × (180/{hp:g})^{exp:.2f} = "
+            "× {f:.3f}. La regla es lineal en la potencia y está calibrada para los buques A-3 "
+            "de 150–180 HP; las tablas de portones del Workbook y de Fishbuster crecen como "
+            "hp^{b:.2f}",
+            corr=req.per_door_m2,
+            book=req.book_per_door_m2,
+            hp=power.fridman.bhp,
+            exp=1.0 - rigging.DOOR_AREA_POWER_EXPONENT,
+            f=req.power_factor,
+            b=rigging.DOOR_AREA_POWER_EXPONENT,
+        )
+    ]
+
+
 def run(case: DesignCase) -> DesignResult:
     """Ejecuta el caso completo en el orden del libro y devuelve :class:`DesignResult`."""
     notes: list[str] = []
@@ -2612,6 +2640,7 @@ def run(case: DesignCase) -> DesignResult:
     drag = _stage_drag(case, geometry, dimensions)  # Aberdeen demersal; Dickson en NaN
     rig = _stage_rigging(case, dimensions)
     doors = _stage_doors(case, power, drag, rig)
+    notes.extend(_door_area_notes(doors, power))
     floats = _stage_floats(case, dimensions, power, drag, rig, notes)
     spread = _stage_spread(case, dimensions, drag, rig, doors, floats, notes)
     notes.extend(_shrimp_notes(case, spread))

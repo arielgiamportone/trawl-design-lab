@@ -21,6 +21,20 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Superficie del portón por encima de la potencia del libro (Fase 20.1b)**: la superficie
+  requerida (`Port!F212`/`F215`, 20 % de FT sobre (ρ/g)·CD·v²) es lineal en la potencia y está
+  calibrada para los buques A-3 de 150–180 HP; extrapolada a la flota pedía 23–46 m² de portón
+  plano a 2100–4159 BHP. En modo corregido, por encima de 180 BHP (la potencia que da FT), se
+  multiplica por (180/BHP)^0,35: exponente 0,65 del ajuste a las tablas de portones del *Workbook*
+  (0,646) y de Fishbuster (0,656), `rigging.DOOR_AREA_POWER_EXPONENT`. Una sola función,
+  `rigging.required_area_summary(bhp=…)`, la usan la etapa de portones (que guarda también el
+  valor del libro y el factor), `select_doors`, el optimizador, el informe, la API y la app; el
+  caso lleva la nota `door_area_power_extrapolation` y la errata nueva del mismo nombre está en
+  `docs/erratas.md` con la tabla de la flota frente a Fishbuster y los portones del INIDEP. El
+  Holmberg pasa de 23,2 a 9,8 m², el Angelescu de 31,5 a 12,0 m² y el congelador de 4159 BHP de
+  45,9 a 15,3 m²; toda la flota tiene portón candidato. El modo `excel`, el caso A-3 y los valores
+  dorados no cambian (factor 1 hasta 180 HP). Capítulos 15 y 34 con la explicación y la figura de
+  superficie contra potencia.
 - **Cable de remolque de la fuente y comparación entre langostineras (Fase 19.9)**: (1) las seis
   tangoneras del INIDEP traen el cable de su fuente (`design.warp_diameter_mm` y `warp_core`,
   transcriptos): 24 mm con alma de acero en ITO 043/2022 e IAT 75/2023 y 22 mm en IAT 27/2019

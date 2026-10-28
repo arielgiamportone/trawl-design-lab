@@ -234,9 +234,10 @@ def test_selection_for_every_vessel_scales_with_power() -> None:
     alcanza no achica al subir la potencia; un tipo que se queda sin portón no vuelve a tenerlo
     con un buque más potente; y sólo los buques que piden más que el portón más grande del
     catálogo se quedan sin candidatos (con la nota correspondiente). Desde la Fase 20.1 (Thyborøn,
-    Polar y Poly-Ice, hasta 21,34 m²) eligen portón todos los buques de hasta 2600 hp; el
-    Angelescu (2855 hp) y el congelador de 4159 hp piden más de 30 m² de portón plano, más que
-    cualquier tabla publicada (ver el diagnóstico de la regla en el capítulo 34).
+    Polar y Poly-Ice, hasta 21,34 m²) y la Fase 20.1b (superficie requerida escalada por
+    (180/BHP)^0,35 por encima de la potencia del libro, errata door_area_power_extrapolation)
+    eligen portón todos los buques de la flota, incluidos el Angelescu (2855 hp) y el congelador
+    de 4159 hp, que con la regla del libro pedían más de 30 m² de portón plano.
     """
     from trawlkit.rigging.polars import canonical_type
 
@@ -258,12 +259,9 @@ def test_selection_for_every_vessel_scales_with_power() -> None:
     rows.sort(key=lambda r: r[0])
     required = [r[2] for r in rows]
     assert required == sorted(required)
-    # Todo buque de hasta 2600 hp (incluidos Holmberg, Oca Balda y el congelador de 2348 hp)
-    # encuentra portón; sin candidatos quedan sólo los que piden más de 30 m² de portón plano.
-    assert all(r[3] for r in rows if r[0] <= 2600), [r[1] for r in rows if not r[3]]
-    without = {r[1] for r in rows if not r[3]}
-    assert without == {"bipo_victor_angelescu", "ar_congelador_e3"}, without
-    assert all(r[2] > 30.0 for r in rows if r[1] in without)
+    # Toda la flota encuentra portón (Fase 20.1b): ningún buque pide más de 16 m² de portón plano.
+    assert all(r[3] for r in rows), [r[1] for r in rows if not r[3]]
+    assert max(required) < 16.0
     largest = max(d.area_m2 for d in load_components("door") if d.brand)
     assert largest == pytest.approx(21.34)
     for (_, prev_id, _, prev), (_, vid, _, cur) in zip(rows, rows[1:], strict=False):
