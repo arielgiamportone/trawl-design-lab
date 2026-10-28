@@ -789,23 +789,26 @@ provenance:
     document: roth2022ito043
     page: '8'
     figure: Figura 4
-    note: 'ITO 043/2022 no da las medidas de los portones de 540 kg (pp. 1 y 5): área de 4,08 m² de los
-      portones planos de 530 kg del mismo aparejo de Pesquera Deseado (Roth y Rubio 2023, IAT 75/2023,
-      p. 3) con la proporción alto/largo 0,5 del portón plano genérico del catálogo (2,5 × 1,25 m): √(4,08/0,5)
-      = 2,86 m. A VERIFICAR'
+    note: 'ITO 043/2022 no da las medidas ni el fabricante de los portones de 540 kg (PDF pp. 2 y 6):
+      área de 4,08 m² (transcrita) de los portones planos del mismo aparejo de Pesquera Deseado (Roth
+      y Rubio 2023, IAT 75/2023, PDF p. 3) con la proporción alto/largo 0,5 del portón plano genérico
+      del catálogo (2,5 × 1,25 m): √(4,08/0,5) = 2,86 m. La Res. CFP 7/2018, art. 4, limita el alto de
+      los portones a 1,50 m, así que el largo es ≥ 4,08/1,50 = 2,72 m (derivado). A VERIFICAR'
   design.door_height_m:
     kind: assumed
     document: roth2022ito043
     page: '8'
     figure: Figura 4
-    note: 0,5 × 2,86 m (ver door_length_m); por debajo del alto máximo de 1,5 m de la Res. CFP 7/2018,
-      art. 4. A VERIFICAR
+    note: 0,5 × 2,86 m (ver door_length_m); cumple el alto máximo de los portones de la Res. CFP 7/2018,
+      art. 4 («no deberá superar los CIENTO CINCUENTA (150) centímetros»). A VERIFICAR
   design.door_weight_air_kg:
     kind: transcribed
     document: roth2022ito043
     page: '8'
     figure: Figura 4
-    note: portones de madera de 540 kg cada uno
+    note: «portones rectangulares planos de madera con refuerzos de acero y 540 kg de peso cada uno» (ITO
+      043/2022, PDF pp. 2 y 6); IAT 75/2023 (PDF pp. 2 y 3) da 530 kg para los portones de 4,08 m² del
+      mismo aparejo
   design.depth_m:
     kind: assumed
     document: roth2022ito043

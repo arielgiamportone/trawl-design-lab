@@ -21,6 +21,22 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
+- **Fuentes de datos «A VERIFICAR» (Fase 19.8b)**: (1) la regla del tiro a punto fijo
+  `BHP·0,9·{1,10; 1,20; 1,25; 1,40}/100` [t] que el libro Excel atribuye a Prado es la regla
+  práctica de remolcadores del Cap. P. Zahalka (Association of Hanseatic Marine Underwriters,
+  «Bollard Pull», «rough estimates»; `zahalkabollard`): se reatribuye en el motor, la nota del tiro
+  por la hélice (con su traducción) y los capítulos 10 y 39. La constante 150 de `BPF = 150·P/v`
+  se confirma en el Workbook (PDF p. 102, «Pulling power of trawlers») con `p` = potencia
+  disponible para el arrastre (`0,75·k·(BHP o APN)`); el motor ya le pasa `P = 0,75·K·APN`, no el
+  BHP, así que no cambia ningún número (sólo se anota que el Excel usa la APN también con hélice
+  fija). (2) Portones de las redes de ITO 043/2022: 540 kg cada uno transcripto (PDF pp. 2 y 6;
+  IAT 75/2023 da 530 kg), 4,08 m² de IAT 75/2023 p. 3, medidas 2,86 × 1,43 m supuestas dentro del
+  alto máximo de 1,50 m de la Res. CFP 7/2018, art. 4 (largo ≥ 2,72 m, derivado). (3) Tangones:
+  no hay fuente argentina del largo ni del ángulo; se mantienen los de EE. UU. (Knake et al. 1958)
+  como supuestos y se agrega el rango de 20–30° de Gillett 2008 (FAO FTP 475, p. 19, citando a
+  Vendeville 1990; `gillett2008`). (4) Portones Vónin: el peso por portón queda *derivado* de la
+  noticia del Simoon (7,5 m² y 3000 kg por portón, encargados como un par; `vonin_simoon`); el
+  área = largo × alto sigue supuesta. Tres entradas nuevas en `referencias.bib`.
 - **Redes tangoneras del INIDEP publicadas (Fase 19.7c)**: una nueva lectura de las figs. 4 y 5
   de ITO 043/2022 mostró que el copo de dos caras (2 × 100 mallas de 60 mm = 12,0 m) se une al
   dorso más el vientre (12,12 y 12,22 m) y que los costados terminan antes del copo en un cabo de

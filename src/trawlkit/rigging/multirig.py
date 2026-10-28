@@ -49,10 +49,16 @@ MULTI_RIGS: tuple[str, ...] = ("outrigger", "twin", "beam")
 # Tangones
 # ---------------------------------------------------------------------------------------------
 
+# Tangones (Fase 19.8b): no hay fuente argentina publicada del largo, el ángulo ni la posición del
+# pie del tangón del tangonero langostinero (búsqueda en informes del INIDEP, Res. CFP 7/2018,
+# manual de la MAGyP y prensa de astilleros). Los tres valores son de la flota de EE. UU. (Knake et
+# al. 1958) y se usan por analogía (supuestos). Fuente secundaria del rango del ángulo: Gillett 2008
+# (FAO Fish. Tech. Pap. 475, p. 19), citando a Vendeville 1990: «the outrigger booms are at an angle
+# of 20 to 30 degrees from the horizontal»; los 20° de FL 470 están en el extremo bajo.
 #: Largo del tangón: «usually 24-feet long» (Knake, Murdock y Cating 1958, FL 470, p. 3).
 BOOM_LENGTH_M = 24.0 * FT_M
 #: Ángulo de pesca del tangón sobre la horizontal: «an angle of 20° above horizontal»
-#: (FL 470, p. 5).
+#: (FL 470, p. 5); dentro de los 20-30° de Gillett 2008, p. 19 (ver arriba).
 BOOM_ANGLE_DEG = 20.0
 #: Distancia del pie del tangón a la crujía: «mounted on the mast pad eyes or ... fitted to a
 #: gooseneck» (FL 470, p. 3): al pie del palo, sobre la crujía.

@@ -6,6 +6,10 @@ sources:
   title: 'Vónin P/F, portones Storm 2, Tornado y Twister: tamaños y pesos (páginas de producto)'
   url: https://www.vonin.com/fishing/trawl-doors/
   accessed: '2026-10-27'
+- key: vonin_simoon
+  title: Vónin P/F, Test of Vónin Simoon trawl doors (noticia)
+  url: https://www.vonin.com/test-of-vonin-simoon-trawl-doors/
+  accessed: '2026-10-28'
 - key: sfia1993
   title: Sea Fish Industry Authority, IFREMER y DIFTA (1993, rev. 1995). Otterboard Performance and Behaviour
     (contrato CEE FAR TE 1 214)
@@ -54,19 +58,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -112,19 +118,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -170,19 +178,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -228,19 +238,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -286,19 +298,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -344,19 +358,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -402,19 +418,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -460,19 +478,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -518,19 +538,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -576,19 +598,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -634,19 +658,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -692,19 +718,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -750,19 +778,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -808,19 +838,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-storm/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 1.2; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 1.2 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: sfia1993
@@ -870,19 +902,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -931,19 +965,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -992,19 +1028,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1053,19 +1091,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1114,19 +1154,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1175,19 +1217,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1236,19 +1280,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1297,19 +1343,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1358,19 +1406,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1419,19 +1469,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1480,19 +1532,21 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     height_m:
       kind: assumed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-tornado/ («SIZES AND WEIGHTS»)
-      note: el fabricante da sólo la superficie y la relación de aspecto 3; se supone superficie = largo
-        × alto (A VERIFICAR)
+      note: el fabricante da sólo la superficie y la relación de aspecto 3 y no define la superficie;
+        se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)
     coefficients:
       kind: assumed
       document: mellibovsky2018
@@ -1544,7 +1598,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1605,7 +1661,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1666,7 +1724,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1727,7 +1787,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1788,7 +1850,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1849,7 +1913,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1910,7 +1976,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors
@@ -1971,7 +2039,9 @@ items:
       kind: transcribed
       document: vonin_doors
       page: https://www.vonin.com/product/vonin-twister/ («SIZES AND WEIGHTS»)
-      note: la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)
+      note: 'la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo dice); por portón *derivado*
+        de la noticia del Simoon de Vónin (portones de 7,5 m² y 3000 kg encargados como un par: ≈ 400
+        kg/m² por portón, coherente con los 350–500 kg/m² del Storm)'
     length_m:
       kind: assumed
       document: vonin_doors

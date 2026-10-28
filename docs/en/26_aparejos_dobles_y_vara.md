@@ -59,7 +59,11 @@ the towing blocks 10–12 feet above the water; each trawl has "but a single war
 both doors, and one net is set about 25 fathoms further astern than the other so they do not foul
 {cite:p}`knake1958`. On the Argentine outrigger trawler the bridle is the **tijera**: in the INIDEP
 simulations, 70 m of 22 mm steel wire, with a 24 mm warp and 540 kg flat wooden doors at 3.5 knots
-{cite:p}`roth2022ito043`.
+{cite:p}`roth2022ito043`. The length and angle of the Argentine booms **are not published**: neither
+the INIDEP reports, Res. CFP 7/2018 nor the shipyard press give them. The engine uses the Gulf of
+Mexico's 24 ft and 20° by analogy (assumed); an FAO review, citing Vendeville (1990), gives for
+tropical shrimp outriggers "an angle of 20 to 30 degrees from the horizontal" {cite:p}`gillett2008`
+(p. 19), and Knake et al.'s 20° sits at the low end of that range.
 
 **Twin** (`rig: twin`). Two nets side by side towed by two warps: the doors are outside and the
 inner wingends join a **clump** or sled in the middle, which has no lift
@@ -109,7 +113,7 @@ P.md_table(
     [
         ["Boom length", f"{f(M.BOOM_LENGTH_M, 2)} m (24 ft)", "Knake et al. 1958, p. 3"],
         ["Boom angle", f"{f(M.BOOM_ANGLE_DEG, 0)}° (beam: {f(M.BEAM_BOOM_ANGLE_DEG, 0)}°)",
-         "Knake et al. 1958, p. 5; Verhoest and Maton 1964"],
+         "Knake et al. 1958, p. 5 (20–30°: Gillett 2008, p. 19); Verhoest and Maton 1964"],
         ["Bridle", f"{f(M.OUTRIGGER_BRIDLE_M, 0)} m of Ø{f(M.OUTRIGGER_BRIDLE_DIAMETER_MM, 0)} mm",
          "Roth and Rubio 2022 (INIDEP)"],
         ["Twin clump", f"{f(M.CLUMP_DOOR_RATIO, 1)} × one door (rule of thumb)", "Seafish"],
@@ -334,9 +338,12 @@ P.md_table(
 
 The net names the vessel and door it is computed with: the fleet's **typical outrigger trawler**
 (1998 average, {doc}`39_flota_argentina`), because the report does not publish the length or power
-of the F/V *Atlántico 1*, and a 4.08 m² flat door, the area of the 530 kg doors of the same company
-rig in IAT 75/2023 {cite:p}`roth2023iat075`, with the proportions of the catalogue's generic flat
-door (2.86 × 1.43 m; assumed, ITO 043 does not publish the dimensions). The depth is not in the
+of the F/V *Atlántico 1*, and a 4.08 m² flat door, the area of the doors of the same company rig in
+IAT 75/2023 {cite:p}`roth2023iat075` (p. 3), with the proportions of the catalogue's generic flat
+door (2.86 × 1.43 m; assumed, ITO 043 publishes neither the dimensions nor the maker). Res. CFP
+7/2018, art. 4, caps the door height at 1.50 m {cite:p}`cfp2018res7`: with 4.08 m² the length is at
+least 2.72 m (*derived*), and the assumption meets it. The weight, 540 kg per door, is ITO 043's
+(pp. 2 and 6); IAT 75/2023 gives 530 kg for the same doors. The depth is not in the
 report either: 90 m, that of the red shrimp fleet. All of it is in the case notes.
 
 ```{code-cell} ipython3
@@ -511,8 +518,9 @@ print(f"simulated beam trawl: converged {sim.converged}, AH {f(sim.ah_m, 2)} m, 
 * The beam trawl takes the ground gear and chains per metre of the Dutch fleet (C056/20); there are
   no data for Thai or Argentine beams. Without the beam weight (`beam_weight_kg`) there is no shoe
   friction.
-* The length and angle of the Argentine booms and the power of the F/V *Atlántico 1* were not found
-  published.
+* The length and angle of the Argentine booms (and the position of their heel) and the power of the
+  F/V *Atlántico 1* were not found published. The defaults are US values {cite:p}`knake1958`, with
+  {cite:t}`gillett2008`'s 20–30° range as a second source.
 
 ## Digitised nets
 

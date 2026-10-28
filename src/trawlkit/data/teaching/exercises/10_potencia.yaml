@@ -49,11 +49,12 @@ exercises:
     chapter: 10_potencia
     topic: potencia
     level: basico
-    title: Tiro a punto fijo de Prado y Dremière
+    title: Tiro a punto fijo del libro (regla de Zahalka)
     statement: >
       Estime el tiro a punto fijo (bollard pull) de un buque de {bhp} HP con hélice {helice} con la
-      regla de Prado y Dremière: BP = BHP·0,9·(pct/100)·1000 kgf, con pct = 1,10 (PF), 1,20 (PF+T),
-      1,25 (PV) y 1,40 (PV+T).
+      regla del libro, que éste atribuye a Prado y Dremière pero es una regla práctica de
+      remolcadores de Zahalka (estimación gruesa): BP = BHP·0,9·(pct/100)·1000 kgf, con pct = 1,10
+      (PF), 1,20 (PF+T), 1,25 (PV) y 1,40 (PV+T).
     vars:
       bhp: {label: Potencia al freno, unit: HP, choices: [100, 150, 180, 250, 400], default: 150}
       helice: {label: Hélice, choices: [PF, PF+T, PV, PV+T], default: PF}
@@ -62,12 +63,13 @@ exercises:
       - {key: bp_kgf, label: Tiro a punto fijo, unit: kgf, decimals: 0}
     explanation: "pct = {pct}; BP = {bhp}·0,9·({pct}/100)·1000 = {bp_kgf} kgf ({bp_t} t)."
     formats: {pct: 2, bp_t: 3}
-    refs: [prado1990]
+    refs: [zahalkabollard, prado1990]
     en:
-      title: Prado and Dremière's bollard pull
+      title: The workbook's bollard pull (Zahalka's rule)
       statement: >
-        Estimate the bollard pull of a {bhp} HP vessel with propeller type {helice} using Prado and
-        Dremière's rule: BP = BHP·0.9·(pct/100)·1000 kgf, with pct = 1.10 (FP, fixed pitch), 1.20
+        Estimate the bollard pull of a {bhp} HP vessel with propeller type {helice} using the
+        workbook's rule, which it ascribes to Prado and Dremière but is a tug rule of thumb by
+        Zahalka (rough estimate): BP = BHP·0.9·(pct/100)·1000 kgf, with pct = 1.10 (FP, fixed pitch), 1.20
         (FP+N, fixed pitch in a nozzle), 1.25 (CP, controllable pitch) and 1.40 (CP+N, controllable
         pitch in a nozzle).
       choices:

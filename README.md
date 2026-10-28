@@ -142,7 +142,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 79 |
-| Capítulos del libro | 40 · 151 referencias |
+| Capítulos del libro | 40 · 154 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->

@@ -2558,7 +2558,8 @@ def _propeller_notes(
         t(
             "propeller_pull: tiro a punto fijo {bp:.2f} t por la hélice de {d:g} m "
             "({method}; Wärtsilä {w:.2f} t, ideal {ideal:.2f} t) frente a {prado:.2f} t de "
-            "BHP·0,9·f/100 (A VERIFICAR); velocidad máxima con ese tiro: {vmax}",
+            "BHP·0,9·f/100 (regla de remolcadores de Zahalka, estimación gruesa); "
+            "velocidad máxima con ese tiro: {vmax}",
             bp=pp.bollard_pull_t,
             d=pp.diameter_m,
             method=pp.method,

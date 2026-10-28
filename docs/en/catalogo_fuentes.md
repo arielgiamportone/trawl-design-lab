@@ -28,12 +28,12 @@ and Rtex of the twine, cuts (`AB`, `1N2B`…) and rope lengths in metres.
 | Pajot and Crockett (1981), *Trials of two-boat bottom trawling in Bangladesh*, BOBP/WP/13 | `bobpwp13` | https://www.fao.org/4/ad953e/ad953e00.pdf | App. 3: pair, 464 × 80 mm; app. 4: pair, 368 × 120 mm | Pair rigging |
 | Pajot, Crockett, Pandurangan and Ramamoorthy (1982), *Further trials of mechanised trawling for food fish in Tamil Nadu*, BOBP/WP/20 | `bobpwp20` | https://www.fao.org/4/ad960e/ad960e00.pdf | App. 1: fish and shrimp, one boat; app. 2: high-opening, one boat; app. 3: high-opening, pair | Otter boards and rigging of apps. 1 and 2 |
 | Schärfe (1983), *Midwater trawling trials for lantern fish… Gulf of Oman*, FI:DP/GLO/82/001 | `scharfe1983` | https://www.fao.org/4/x6567e/x6567e00.htm | Apps. 5 to 8: 4-panel pelagic trawls (krill 1420 × 200 mm; Harstad 1436 × 200 mm; krill with 800 and 1600 mm front) | Rigging |
-| Roth and Rubio (2022), *Evaluación de la red presentada por la empresa Pesquera Deseado SAU*, INIDEP ITO 043/22 | `roth2022ito043` | https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf | Figs. 4 and 5: shrimp outrigger nets exported from DynamiT (top, bottom and side; Phase 19.5) | Outrigger rigging (70 m bridle, 540 kg doors) and DynamiT results |
+| Roth and Rubio (2022), *Evaluación de la red presentada por la empresa Pesquera Deseado SAU*, INIDEP ITO 043/22 | `roth2022ito043` | https://fisheryprogress.org/sites/default/files/documents_actions/ITO_043_2022_LIB_Roth_Pesquera_Deseado.pdf | Figs. 4 and 5: shrimp outrigger nets exported from DynamiT (top, bottom and side; Phase 19.5) | Outrigger rigging (70 m bridle, 540 kg doors, PDF pp. 2 and 6; no dimensions or maker) and DynamiT results |
 | SEAFDEC (2016), *The Catalogue Bottom Trawl Net Designs of Thailand*, TD/RES/141 | `seafdec2016thai` | https://repository.seafdec.or.th/handle/20.500.12067/1826 | 102 redrawn plans (embedded 96 dpi image); plan 03: shrimp beam trawl (Phase 19.5); plans 21, 22, 30, 31, 33, 35, 38 and 39 (Phase 19.6) | Vessel length and power; no floats, ballast, doors, outriggers, beam or shoes |
 | Bullis (1951), *Gulf of Mexico Shrimp Trawl Designs*, Fishery Leaflet 394 | `bullis1951` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/leaflet394.pdf | Figs. 7, 9 and 10: 40 ft and 100 ft flat trawls and 74 ft balloon trawl (not digitized, Phase 19.6) | Doors of 5, 8 and 12 ft (length only) |
 | Gutherz, Serra and Klima (1974), *Design and Materials Used in Construction of a 16-Foot Shrimp Trawl*, Fishery Facts 9 | `gutherz1974` | https://spo.nmfs.noaa.gov/sites/default/files/legacy-pdfs/fishfact09.pdf | 16 ft flat try-net (not digitized, Phase 19.6) | 30 × 15 in door, in the component catalogue |
 | Arkley (1987), *Fishing gear handling trials of a twin-rig trawling system…*, Seafish IR 1310 | `arkley1987ir1310` | https://www.seafish.org/media/xlcdrq2k/ir1310.pdf | Fig. 5: 380 × 70 mm twin net (scan; not digitized) | 125 kg centre sledge and bridles |
-| Roth and Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: traditional and proposed Pesquera Deseado nets (vector; not digitised) | 530 kg, 4.08 m² doors (door area of the ITO 043 nets; Phase 19.7c); DynamiT AH at 2.5–4 knots |
+| Roth and Rubio (2023), INIDEP IAT 75/23 | `roth2023iat075` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d3517485-a2a7-4f70-9674-b6e22ffd433f/content | Figs. 1–2: traditional and proposed Pesquera Deseado nets (vector; not digitised) | 530 kg (ITO 043 gives 540 kg), 4.08 m² doors (p. 3; door area of the ITO 043 nets; Phase 19.7c); DynamiT AH at 2.5–4 knots |
 | Roth, Pisano and Di Leva (2024), INIDEP IAT 94/24 | `roth2024iat094` | https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/ff36a0e8-9939-4318-9c57-3b3fdd287e04/content | Fig. 1: Iberconsa net 25.4/31.0 m (raster; not digitised) | Measured door spread (18.8–19.5 m) and fishing depths (Phase 19.7b) |
 
 Documents reviewed that do **not** carry complete net plans:
@@ -149,7 +149,10 @@ component catalogue (`door_noaa_ff9_30x15in`, flat wooden type): *transcribed* d
   (`aft_rope_m`, `codend_join` warning); both nets close and are published. Panel by panel the
   join is not 1:1 and the plan does not say how the difference is taken up. The door (4.08 m², from
   IAT 75/2023 {cite}`roth2023iat075`) and the depth (90 m, red shrimp fleet) stay as sourced
-  assumptions.
+  assumptions. Phase 19.8b: the weight is transcribed from ITO 043 (540 kg each, pp. 2 and 6;
+  IAT 75/2023 gives 530 kg); the 2.86 × 1.43 m dimensions stay assumed, within the 1.50 m maximum
+  height of Res. CFP 7/2018, art. 4 {cite}`cfp2018res7` (length ≥ 2.72 m, derived). No report gives
+  the maker of these doors.
 - **INIDEP, other outrigger net plans** (Phase 19.7b): IAT 27/2019 {cite}`roth2019iat027`
   (Solimeno net, original and modified, figs. 2–3, vector text), IAT 75/2023 (traditional Pesquera
   Deseado net, typed version of ITO 043 fig. 2, and the 2023 proposal), IAT 85/2024
@@ -184,7 +187,7 @@ to.
 | `lange1993` | Lange (ICES 1993) | Maximum lift of the flat otter board (0.95) and V-board (0.70–0.85) | Up to Phase 19.2, the *assumed* V-board polar (that of the flat board with the CL scaled); since 19.3 only a reference |
 | `sfia1993` | Seafish/IFREMER/DIFTA (1993), *Otterboard Performance and Behaviour* | 26 polar sheets of flume tank models (Phase 19.3); primary source of the flat and oval polars of the Excel workbook | Polars *transcribed* from the image of each page; per type, the sheet as it is or a mean (*derived*) |
 | `mellibovsky2018` | Mellibovsky et al. (2018), *Ocean Eng.* 149 | Polars of the Thyborøn 15 VF and the Grilli Fly in the flume tank and the wind tunnel (Phase 19.3) | Tables *transcribed*; the Süberkrüb polar, a *derived* fit |
-| `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, every published size (14, 11 and 8; Phase 19.8a); dimensions and polar *assumed* |
+| `vonin_doors` | Vónin, product pages | Storm 2, Tornado and Twister otter boards (Phase 19.3) | Area and weight *transcribed*, every published size (14, 11 and 8; Phase 19.8a); weight **per door** *derived* from Vónin's Simoon article {cite}`vonin_simoon` (Vónin does not say so; Phase 19.8b); dimensions (area = length × height) and polar *assumed* |
 | `morgere2025` | Morgère, 2025 catalogue | OvalFoil, PolyFoil and PFPE otter boards (Phase 19.3) | Area (and PFPE length) *transcribed*, every catalogue model (21, 19 and 17; Phase 19.8a); no weight («sur demande»); dimensions and polar from the Seafish sheet of the same design, *assumed* |
 | `giamportone2024` | Excel workbook of the A-3 | Moscuzza ropes, Trawlex chains, Seale 6x19 wire ropes, floats, PA twines and the two otter boards with their polar | *Excel* provenance |
 

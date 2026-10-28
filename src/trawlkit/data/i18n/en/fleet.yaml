@@ -14,11 +14,11 @@ Hélice (Wärtsilä): Propeller (Wärtsilä)
   source was found for FP+N or CP; set fridman_kf (or the propeller diameter to see the propeller-based
   pull)'
 ? 'propeller_pull: tiro a punto fijo {bp:.2f} t por la hélice de {d:g} m ({method}; Wärtsilä {w:.2f} t,
-  ideal {ideal:.2f} t) frente a {prado:.2f} t de BHP·0,9·f/100 (A VERIFICAR); velocidad máxima con ese
-  tiro: {vmax}'
+  ideal {ideal:.2f} t) frente a {prado:.2f} t de BHP·0,9·f/100 (regla de remolcadores de Zahalka, estimación
+  gruesa); velocidad máxima con ese tiro: {vmax}'
 : 'propeller_pull: bollard pull {bp:.2f} t from the {d:g} m propeller ({method}; Wärtsilä {w:.2f} t, ideal
-  {ideal:.2f} t) against {prado:.2f} t from BHP·0.9·f/100 (TO BE VERIFIED); maximum speed with that pull:
-  {vmax}'
+  {ideal:.2f} t) against {prado:.2f} t from BHP·0.9·f/100 (Zahalka''s tug rule of thumb, rough estimate);
+  maximum speed with that pull: {vmax}'
 tiro a punto fijo medido {bp:.2f} t (Wärtsilä estima {w:.2f} t): measured bollard pull {bp:.2f} t (Wärtsilä
   estimates {w:.2f} t)
 'tobera: k2 = {k2:g}, punto medio del rango 1,2-1,4 de Wärtsilä (derivado)': 'nozzle: k2 = {k2:g}, midpoint

@@ -290,7 +290,7 @@ the nets ready for a 4-sided simulator with real bridles and front weights, as a
 | Generic vessel scaled from the A-3 | `catalog.generic_vessel` | Choose a vessel in the app |
 | Side wings not modelled | Schärfe and INIDEP nets | — |
 | Side panels shared out by stretched length | INIDEP nets | `trawlkit.topology` |
-| Vessel and door of the outrigger net | `design.vessel_id`; 4.08 m² door (IAT 75/2023) | Choose a vessel or a door in the app |
+| Vessel and door of the outrigger net | `design.vessel_id`; 4.08 m² door (IAT 75/2023) of 540 kg (ITO 043); 2.86 × 1.43 m assumed, height ≤ 1.50 m (Res. CFP 7/2018, art. 4) | Choose a vessel or a door in the app |
 | Depth of the red shrimp nets: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | the case's `depth_m` |
 | Codend joined around the circumference | INIDEP nets (`aft_rope_m`) | — |
 

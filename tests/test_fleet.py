@@ -236,7 +236,7 @@ def test_case_with_propeller_diameter() -> None:
     assert r.performance.design_key == "fixed_pitch_std"
     s = r.summary()
     assert s["propeller_bollard_pull_t"] == pytest.approx(pp.bollard_pull_t)
-    assert any(n.startswith("propeller_pull:") and "A VERIFICAR" in n for n in r.notes)
+    assert any(n.startswith("propeller_pull:") and "Zahalka" in n for n in r.notes)
     base = run(_case())
     # El resto del diseño no cambia (el tiro por la hélice no reemplaza a Fridman).
     assert s["max_speed_kn"] == base.summary()["max_speed_kn"]

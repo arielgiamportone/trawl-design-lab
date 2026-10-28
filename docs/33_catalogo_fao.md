@@ -288,7 +288,7 @@ listas para un simulador de 4 caras con malletas y pesos delanteros reales, como
 | Buque genérico escalado de la A-3 | `catalog.generic_vessel` | Elegir un buque en la app |
 | Alas de los costados no modeladas | redes de Schärfe y del INIDEP | — |
 | Costados repartidos por largo estirado | redes del INIDEP | `trawlkit.topology` |
-| Buque y portón de la red tangonera | `design.vessel_id`; portón de 4,08 m² (IAT 75/2023) | Elegir un buque o un portón en la app |
+| Buque y portón de la red tangonera | `design.vessel_id`; portón de 4,08 m² (IAT 75/2023) y 540 kg (ITO 043); 2,86 × 1,43 m supuestos, alto ≤ 1,50 m (Res. CFP 7/2018, art. 4) | Elegir un buque o un portón en la app |
 | Profundidad de las redes de langostino: 90 m | `catalog.LANGOSTINO_DEPTH_M`, `design.depth_m` | `depth_m` del caso |
 | Unión al copo por la circunferencia | redes del INIDEP (`aft_rope_m`) | — |
 

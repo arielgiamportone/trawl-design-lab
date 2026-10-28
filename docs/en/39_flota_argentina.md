@@ -170,7 +170,7 @@ for v in VESSELS:
         f"{P.fmt(d10, 2)}–{P.fmt(d12, 2)}",
     ])
 P.md_table(
-    ["Type", "BHP", "P_D [kW]", "Workbook BP [t]", "Workbook-rule BP (A VERIFICAR) [t]",
+    ["Type", "BHP", "P_D [kW]", "Workbook BP [t]", "Workbook-rule BP (Zahalka) [t]",
      "Equivalent D [m]"],
     rows,
 )
@@ -190,7 +190,7 @@ ax.axhspan(10, 12, color=P.MUTED, alpha=0.18, zorder=1)
 ax.annotate("Workbook, fixed propeller: 10–12 kgf/BHP", xy=(4.0, 11), ha="right", va="center",
             fontsize=8, color=P.INK_2)
 ax.axhline(9.9, color=P.MUTED, lw=1, ls="--", zorder=2)
-ax.annotate("workbook rule: BHP·0.9·1.10/100 (A VERIFICAR)", xy=(4.0, 9.9), xytext=(0, -10),
+ax.annotate("workbook rule: BHP·0.9·1.10/100 (Zahalka, tugs)", xy=(4.0, 9.9), xytext=(0, -10),
             textcoords="offset points", ha="right", fontsize=8, color=P.INK_2)
 ax.set_xlabel("Propeller diameter D [m]")
 ax.set_ylabel("Bollard pull per BHP [kgf/BHP]")

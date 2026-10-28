@@ -572,8 +572,8 @@ def vonin_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
         ar = d["aspect_ratio"]
         ar_used = ar if ar is not None else src.VONIN_DOORS["Tornado"]["aspect_ratio"]
         ar_note = (
-            f"el fabricante da sólo la superficie y la relación de aspecto {ar:g}; se supone "
-            "superficie = largo × alto (A VERIFICAR)"
+            f"el fabricante da sólo la superficie y la relación de aspecto {ar:g} y no define la "
+            "superficie; se supone superficie = largo × alto y relación = alto/largo (A VERIFICAR)"
             if ar is not None
             else f"el fabricante no da medidas ni relación de aspecto; se supone la del Tornado "
             f"({ar_used:g}) y superficie = largo × alto (A VERIFICAR)"
@@ -605,7 +605,10 @@ def vonin_doors(generics: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     "weight_air_kg": prov(
                         "vonin_doors",
                         page=page,
-                        note="la tabla dice «WEIGHT» sin aclarar; se toma por portón (A VERIFICAR)",
+                        note="la tabla dice «WEIGHT» sin unidad ni «por portón» (Vónin no lo "
+                        "dice); por portón *derivado* de la noticia del Simoon de Vónin (portones "
+                        "de 7,5 m² y 3000 kg encargados como un par: ≈ 400 kg/m² por portón, "
+                        "coherente con los 350–500 kg/m² del Storm)",
                     ),
                     "length_m": prov("vonin_doors", "assumed", page, ar_note),
                     "height_m": prov("vonin_doors", "assumed", page, ar_note),
@@ -1578,7 +1581,8 @@ def main() -> int:
     write("door", "generic_workbook", [WB, "sfia1993", "mellibovsky2018"], dg)
     write("door", "rebyc_colombia", ["zuniga2006", "sfia1993"], door_rebyc())
     write("door", "noaa_ff9", ["gutherz1974", "sfia1993"], door_noaa_ff9())
-    write("door", "vonin", ["vonin_doors", "sfia1993", "mellibovsky2018"], vonin_doors(dg))
+    vonin_docs = ["vonin_doors", "vonin_simoon", "sfia1993", "mellibovsky2018"]
+    write("door", "vonin", vonin_docs, vonin_doors(dg))
     write("door", "morgere_2025", ["morgere2025", "sfia1993"], morgere_doors(dg))
     write("door", "excel_a3", ["giamportone2024", "sfia1993"], excel_items("door"))
 

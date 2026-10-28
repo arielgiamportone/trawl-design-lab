@@ -81,7 +81,9 @@ one of the five formulas with a **finite bollard pull** ($F_T(0) = K_F P$): for 
 
 ### Prado and Dremière (FAO)
 
-The *Fisherman's Workbook* {cite:p}`prado1990` chains four rules of thumb. The bollard pull is
+The workbook block that follows the *Fisherman's Workbook* {cite:p}`prado1990` chains four rules of
+thumb. The bollard pull, which the workbook ascribes to Prado but is a tug rule of thumb by Zahalka
+(see the note below), is
 
 $$
 BP = \mathrm{BHP}\cdot 0.9\cdot \frac{p}{100}\ \ [\mathrm{t}],
@@ -105,18 +107,26 @@ $$ (eq-prado-bpf)
 
 where 150 is a conversion constant ($\approx 75/0.5144$ kgf·kn per HP), **not** the BHP.
 
-```{admonition} TO BE VERIFIED: origin of Prado's factors
-:class: warning
-The factors $0.9\cdot\{1.10;\ 1.20;\ 1.25;\ 1.40\}/100$ of {eq}`eq-prado-bp` and the constant 150
-of {eq}`eq-prado-bpf` come from the Excel workbook {cite:p}`giamportone2024`. **A VERIFICAR (origin:
-Excel workbook; not found in the text of the Workbook).** The *Fisherman's Workbook*
-{cite:p}`prado1990` (PDF pp. 98–99) instead gives a bollard pull of 10 to 12 kgf per BHP with a fixed
-propeller and 13 to 16 kgf per HP of APN with a controllable-pitch propeller or a nozzle, and its
-«BP when fishing» formulas are images that could not be checked. The rule
-$\mathrm{BHP}\cdot 0.9\cdot f/100$ circulates as a tug-industry rule of thumb attributed to
-Germanischer Lloyd {cite:p}`anker2022bollard` (secondary source). The workbook's values
-(9.9–12.6 kgf/BHP and the factor $K$ of 11.2–13.7) fall inside the Workbook's ranges, so `trawlkit`
-keeps them unchanged to reproduce the Excel.
+```{admonition} Origin of the factors: Zahalka, not Prado
+:class: note
+The factors $0.9\cdot\{1.10;\ 1.20;\ 1.25;\ 1.40\}/100$ of {eq}`eq-prado-bp` are not in the
+*Fisherman's Workbook*: the Excel workbook {cite:p}`giamportone2024` ascribes them to Prado, but they
+are transcribed, figure by figure, from the tug rule of thumb of Capt. P. Zahalka (Association of
+Hanseatic Marine Underwriters) {cite:p}`zahalkabollard`: «Fixed pitch propeller (freewheeling): BHP x
+0,9 x 1,10 / 100 = (t)» through «Controllable pitch propeller and kort-nozzle: BHP x 0,9 x 1,40 / 100
+= (t)». The author himself warns that «the resulting values have to be regarded as rough estimates»:
+it is a rough estimate meant for tugs, not for fishing vessels. {cite:t}`anker2022bollard` reproduces
+it as a secondary source.
+
+The constant 150 of {eq}`eq-prado-bpf` is in the Workbook {cite:p}`prado1990` (PDF p. 102,
+«Pulling power of trawlers»): «BP (kg) = 150 × p (HP) / trawling speed (knots)», where $p$ is the
+power available for towing, $p = 0.75\,k\,(\mathrm{BHP}\ \text{or}\ \mathrm{ANP})$, not the BHP.
+The Excel workbook feeds it $P_a = 0.75\,K\,\mathrm{APN}$ {eq}`eq-prado-apn`, which is that $p$; it
+uses the APN for fixed propellers too, where the Workbook allows the BHP (for 150 HP with fixed pitch
+the workbook's APN is ≈ 143 HP, *derived*). On the same page the Workbook gives, as a cross-check, a
+bollard pull of 10 to 12 kg per BHP with a fixed propeller and 13 to 16 kg per HP of APN with a
+controllable-pitch propeller or a nozzle. The workbook's values (9.9–12.6 kgf/BHP and the factor $K$
+of 11.2–13.7) fall inside those ranges, so `trawlkit` keeps them unchanged to reproduce the Excel.
 ```
 
 ### Koyama, Nomura and Hamuro: constant power
@@ -185,7 +195,7 @@ source was found (Fridman's 1986 book is not online), so those propellers requir
 | Fridman slope | 0.7 | kgf/(HP·kn) | Fridman | `PotOK!E10` |
 | Fractions of BHP (nominal, pull) | 0.33 / 0.33 | — | Fridman | `Pot!C24`, `C26` |
 | Losses (propeller, waves, friction, wake, air) | 0.35 / 0.27 / 0.18 / 0.17 / 0.03 | — | Fridman | `Pot!C27:C31` |
-| Bollard pull $p$ (FP, FP+N, CP, CP+N) | 1.10 / 1.20 / 1.25 / 1.40 | % | Prado | `PotOK!A49:A55` |
+| Bollard pull $p$ (FP, FP+N, CP, CP+N) | 1.10 / 1.20 / 1.25 / 1.40 | % | Zahalka (workbook: Prado) | `PotOK!A49:A55` |
 | Bollard pull $K$ (150 HP, FP) | 11.23 | t/1000 HP | Prado | `PotOK!K52:L55` |
 | APN / available fraction | 0.09 / 0.75 | — | Prado | `PotOK!B73`, `K68` |
 | Trawling $K$ | 0.20–0.30 | — | Prado | `PotOK!K68:L77` |

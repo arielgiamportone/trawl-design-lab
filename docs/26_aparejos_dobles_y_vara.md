@@ -58,7 +58,12 @@ las pastecas a 10–12 pies sobre el agua; cada red lleva «un solo cable con un
 portones y una red se cala unas 25 brazas más a popa que la otra para que no se enreden
 {cite:p}`knake1958`. En el tangonero argentino la brida es la **tijera**: en las simulaciones del
 INIDEP, 70 m de cable de acero de 22 mm, con cable de remolque de 24 mm y portones planos de
-madera de 540 kg a 3,5 nudos {cite:p}`roth2022ito043`.
+madera de 540 kg a 3,5 nudos {cite:p}`roth2022ito043`. El largo y el ángulo de los tangones
+argentinos **no están publicados**: no los dan los informes del INIDEP, la Res. CFP 7/2018 ni la
+prensa de astilleros. El motor usa los 24 pies y 20° del golfo de México por analogía (supuestos);
+una revisión de la FAO, citando a Vendeville (1990), da para los tangones de arrastre camaronero
+tropical «an angle of 20 to 30 degrees from the horizontal» {cite:p}`gillett2008` (p. 19), y los
+20° de Knake et al. quedan en el extremo bajo de ese rango.
 
 **Gemelo** (`rig: twin`). Dos redes lado a lado remolcadas por dos cables: los portones van por
 fuera y las puntas de ala interiores se unen a un **muerto** o trineo central sin sustentación
@@ -109,7 +114,7 @@ P.md_table(
     [
         ["Largo del tangón", f"{f(M.BOOM_LENGTH_M, 2)} m (24 pies)", "Knake et al. 1958, p. 3"],
         ["Ángulo del tangón", f"{f(M.BOOM_ANGLE_DEG, 0)}° (vara: {f(M.BEAM_BOOM_ANGLE_DEG, 0)}°)",
-         "Knake et al. 1958, p. 5; Verhoest y Maton 1964"],
+         "Knake et al. 1958, p. 5 (20–30°: Gillett 2008, p. 19); Verhoest y Maton 1964"],
         ["Tijera", f"{f(M.OUTRIGGER_BRIDLE_M, 0)} m de Ø{f(M.OUTRIGGER_BRIDLE_DIAMETER_MM, 0)} mm",
          "Roth y Rubio 2022 (INIDEP)"],
         ["Muerto del gemelo", f"{f(M.CLUMP_DOOR_RATIO, 1)} × un portón (regla práctica)",
@@ -330,9 +335,12 @@ P.md_table(
 
 La red dice con qué buque y portón se calcula: el **tangonero típico** de la flota (media de
 1998, {doc}`39_flota_argentina`), porque el informe no publica la eslora ni la potencia del
-B/P *Atlántico 1*, y un portón plano de 4,08 m², el área de los portones de 530 kg del mismo
-aparejo de la empresa en IAT 75/2023 {cite:p}`roth2023iat075`, con la proporción del portón plano
-genérico del catálogo (2,86 × 1,43 m; supuesto, ITO 043 no publica las medidas). La profundidad
+B/P *Atlántico 1*, y un portón plano de 4,08 m², el área de los portones del mismo aparejo de la
+empresa en IAT 75/2023 {cite:p}`roth2023iat075` (p. 3), con la proporción del portón plano
+genérico del catálogo (2,86 × 1,43 m; supuesto, ITO 043 no publica las medidas ni el fabricante).
+La Res. CFP 7/2018, art. 4, limita el alto de los portones a 1,50 m {cite:p}`cfp2018res7`: con
+4,08 m² el largo es de al menos 2,72 m (*derivado*), y el supuesto lo cumple. El peso, 540 kg por
+portón, es el de ITO 043 (pp. 2 y 6); IAT 75/2023 da 530 kg para los mismos portones. La profundidad
 tampoco está en el informe: 90 m, la de la flota langostinera. Todo queda en las notas del caso.
 
 ```{code-cell} ipython3
@@ -508,8 +516,9 @@ print(f"vara simulada: converge {sim.converged}, AH {f(sim.ah_m, 2)} m, "
 * La vara toma el tren y las cadenas por metro de la flota holandesa (C056/20); no hay datos de las
   varas tailandesas ni argentinas. Sin el peso de la vara (`beam_weight_kg`) no hay rozamiento de
   los patines.
-* No se encontraron publicados el largo ni el ángulo de los tangones argentinos, ni la potencia del
-  B/P *Atlántico 1*.
+* No se encontraron publicados el largo ni el ángulo de los tangones argentinos (ni la posición de
+  su pie), ni la potencia del B/P *Atlántico 1*. Los valores por defecto son de EE. UU.
+  {cite:p}`knake1958`, con el rango de 20–30° de {cite:t}`gillett2008` como segunda fuente.
 
 ## Redes digitalizadas
 

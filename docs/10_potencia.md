@@ -80,8 +80,9 @@ punto fijo finito** ($F_T(0) = K_F P$): para 150 BHP y PF, 1500 kgf.
 
 ### Prado y Dremière (FAO)
 
-El *Fisherman's Workbook* {cite:p}`prado1990` encadena cuatro reglas prácticas. El tiro a punto fijo
-(*bollard pull*) es
+El bloque del libro Excel que sigue al *Fisherman's Workbook* {cite:p}`prado1990` encadena cuatro
+reglas prácticas. El tiro a punto fijo (*bollard pull*), que el libro atribuye a Prado pero es una
+regla de remolcadores de Zahalka (ver la nota más abajo), es
 
 $$
 BP = \mathrm{BHP}\cdot 0{,}9\cdot \frac{p}{100}\ \ [\mathrm{t}],
@@ -105,17 +106,26 @@ $$ (eq-prado-bpf)
 
 donde 150 es una constante de conversión ($\approx 75/0{,}5144$ kgf·kn por HP), **no** el BHP.
 
-```{admonition} A VERIFICAR: origen de los factores de Prado
-:class: warning
-Los factores $0{,}9\cdot\{1{,}10;\ 1{,}20;\ 1{,}25;\ 1{,}40\}/100$ de {eq}`eq-prado-bp` y la
-constante 150 de {eq}`eq-prado-bpf` vienen del libro Excel {cite:p}`giamportone2024`. **A VERIFICAR
-(origen: libro Excel; no se halló en el texto del Workbook).** El *Fisherman's Workbook*
-{cite:p}`prado1990` (PDF pp. 98–99) da en cambio un *bollard pull* de 10 a 12 kgf por BHP con hélice
-fija y de 13 a 16 kgf por HP de APN con paso variable o tobera, y sus fórmulas de «BP when fishing»
-son imágenes que no se pudieron cotejar. La regla $\mathrm{BHP}\cdot 0{,}9\cdot f/100$ circula como
-regla práctica de remolcadores atribuida a Germanischer Lloyd {cite:p}`anker2022bollard` (fuente
-secundaria). Los valores del libro (9,9–12,6 kgf/BHP y el factor $K$ de 11,2–13,7) caen dentro de
-los rangos del Workbook, así que `trawlkit` los conserva sin cambios para reproducir el Excel.
+```{admonition} Origen de los factores: Zahalka, no Prado
+:class: note
+Los factores $0{,}9\cdot\{1{,}10;\ 1{,}20;\ 1{,}25;\ 1{,}40\}/100$ de {eq}`eq-prado-bp` no están en
+el *Fisherman's Workbook*: el libro Excel {cite:p}`giamportone2024` los atribuye a Prado, pero están
+transcritos, cifra por cifra, de la regla práctica para remolcadores del Cap. P. Zahalka
+(Association of Hanseatic Marine Underwriters) {cite:p}`zahalkabollard`: «Fixed pitch propeller
+(freewheeling): BHP x 0,9 x 1,10 / 100 = (t)» hasta «Controllable pitch propeller and kort-nozzle:
+BHP x 0,9 x 1,40 / 100 = (t)». El propio autor advierte que «the resulting values have to be regarded
+as rough estimates»: es una estimación gruesa pensada para remolcadores, no para pesqueros.
+{cite:t}`anker2022bollard` la reproduce como fuente secundaria.
+
+La constante 150 de {eq}`eq-prado-bpf` sí está en el Workbook {cite:p}`prado1990` (PDF p. 102,
+«Pulling power of trawlers»): «BP (kg) = 150 × p (HP) / trawling speed (knots)», donde $p$ es la
+potencia disponible para el arrastre, $p = 0{,}75\,k\,(\mathrm{BHP}\ \text{o}\ \mathrm{ANP})$, no
+el BHP. El libro Excel le pasa $P_a = 0{,}75\,K\,\mathrm{APN}$ {eq}`eq-prado-apn`, que es esa $p$;
+usa la APN también con hélice fija, donde el Workbook admite el BHP (para 150 HP de paso fijo la APN
+del libro es ≈ 143 HP, *derivado*). En la misma página el Workbook da como control cruzado un tiro a
+punto fijo de 10 a 12 kg por BHP con hélice fija y de 13 a 16 kg por HP de APN con paso variable o
+tobera. Los valores del libro (9,9–12,6 kgf/BHP y el factor $K$ de 11,2–13,7) caen dentro de esos
+rangos, así que `trawlkit` los conserva sin cambios para reproducir el Excel.
 ```
 
 ### Koyama, Nomura y Hamuro: potencia constante
@@ -184,7 +194,7 @@ publicada (el libro de Fridman de 1986 no está en línea), así que esas hélic
 | Pendiente de Fridman | 0,7 | kgf/(HP·kn) | Fridman | `PotOK!E10` |
 | Fracciones del BHP (nominal, tiro) | 0,33 / 0,33 | — | Fridman | `Pot!C24`, `C26` |
 | Pérdidas (hélice, olas, rozamiento, estela, aire) | 0,35 / 0,27 / 0,18 / 0,17 / 0,03 | — | Fridman | `Pot!C27:C31` |
-| $p$ del *bollard pull* (PF, PF+T, PV, PV+T) | 1,10 / 1,20 / 1,25 / 1,40 | % | Prado | `PotOK!A49:A55` |
+| $p$ del *bollard pull* (PF, PF+T, PV, PV+T) | 1,10 / 1,20 / 1,25 / 1,40 | % | Zahalka (el libro: Prado) | `PotOK!A49:A55` |
 | $K$ del *bollard pull* (150 HP, PF) | 11,23 | t/1000 HP | Prado | `PotOK!K52:L55` |
 | APN / fracción disponible | 0,09 / 0,75 | — | Prado | `PotOK!B73`, `K68` |
 | $K$ de arrastre | 0,20–0,30 | — | Prado | `PotOK!K68:L77` |

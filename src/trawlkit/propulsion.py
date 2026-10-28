@@ -218,7 +218,8 @@ class PropellerPull:
 
     ``bollard_pull_t`` es la base de la curva: el medido si el buque lo trae (``method =
     "measured"``) o el de Wärtsilä (``method = "wartsila"``). ``bollard_pull_prado_t`` es la regla
-    del libro ``BHP·0,9·f/100`` (A VERIFICAR) para comparar.
+    del libro ``BHP·0,9·f/100`` (regla práctica de remolcadores de Zahalka, estimación gruesa; el
+    Excel la atribuye a Prado) para comparar.
     """
 
     method: str

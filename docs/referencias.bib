@@ -61,7 +61,7 @@
   isbn      = {0-85238-163-8},
   url       = {https://www.fao.org/4/ah827e/AH827E00.htm},
   language  = {english},
-  note      = {verificado: https://www.fao.org/4/ah827e/AH827E00.htm (portada: compilado por J. Prado, División de Industrias Pesqueras, FAO, en colaboración con P. Y. Dremière, IFREMER, Sète; © FAO 1990). El texto contiene la potencia nominal aparente (ANP = tiro a punto fijo × 0,09) y el tiro a punto fijo que usa el Excel.}
+  note      = {verificado: https://www.fao.org/4/ah827e/AH827E00.htm (portada: compilado por J. Prado, División de Industrias Pesqueras, FAO, en colaboración con P. Y. Dremière, IFREMER, Sète; © FAO 1990). El texto contiene la potencia nominal aparente (ANP = tiro a punto fijo × 0,09), el tiro a punto fijo BP0 = 10-12 kg/BHP (hélice fija) y 13-16 kg/HP de ANP (paso variable o tobera) y BP = 150·p/v con p = 0,75·k·(BHP o ANP) (PDF p. 102, «Pulling power of trawlers»). La regla BHP·0,9·f/100 del Excel no está: es de Zahalka (zahalkabollard).}
 }
 
 @book{prado1988es,
@@ -1120,7 +1120,38 @@
   howpublished = {Marine-Pilots.com},
   year   = {2022}, month = nov,
   url    = {https://www.marine-pilots.com/articles/687253-what-is-tugs-bollard-pull-and-how-it-is-calculated},
-  note   = {consultado 2026-10-27: fuente secundaria de BHP·0,9·{1,10;1,20;1,25;1,40}/100 [t]; sin fuente primaria identificada (circula atribuida a GL).}
+  note   = {consultado 2026-10-27: fuente secundaria de BHP·0,9·{1,10;1,20;1,25;1,40}/100 [t]; fuente primaria: zahalkabollard (Fase 19.8b).}
+}
+
+@misc{zahalkabollard,
+  author = {Zahalka, P.},
+  title  = {Bollard Pull},
+  howpublished = {Association of Hanseatic Marine Underwriters (guía para remolcadores, una página)},
+  url    = {https://www.dieselduck.info/machine/02%20propulsion/2010%20GL%20on%20Bullard%20Pull.pdf},
+  language = {english},
+  note   = {consultado el 28 de octubre de 2026 (acceso directo 403; texto leído en la copia https://pdf4pro.com/view/bollard-pull-dieselduck-4c0874.html): «Fixed pitch propeller (freewheeling): BHP x 0,9 x 1,10 / 100 = (t)»; 1,20 con kort-nozzle, 1,25 paso controlable, 1,40 paso controlable y kort-nozzle. «The resulting values have to be regarded as rough estimates». Sin número de página ni año.}
+}
+
+@techreport{gillett2008,
+  author      = {Gillett, Robert},
+  title       = {Global Study of Shrimp Fisheries},
+  institution = {FAO},
+  type        = {FAO Fisheries Technical Paper},
+  number      = {475},
+  address     = {Roma},
+  year        = {2008},
+  url         = {https://www.fao.org/4/i0300e/i0300e01a.pdf},
+  language    = {english},
+  note        = {consultado el 28 de octubre de 2026. Parte 1, p. 19 impresa (PDF p. 12), citando a Vendeville (1990): «the outrigger booms are at an angle of 20 to 30 degrees from the horizontal».}
+}
+
+@misc{vonin_simoon,
+  author       = {{Vónin P/F}},
+  title        = {Test of Vónin Simoon trawl doors},
+  howpublished = {Noticia en vonin.com},
+  url          = {https://www.vonin.com/test-of-vonin-simoon-trawl-doors/},
+  language     = {english},
+  note         = {consultado el 28 de octubre de 2026. «these 7.5 square metre, 3000kg doors», encargados como «a pair»: ≈ 400 kg/m² por portón (derivado).}
 }
 
 @misc{wikipediaocabalda,

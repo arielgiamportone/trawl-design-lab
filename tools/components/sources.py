@@ -109,6 +109,12 @@ DOCS: dict[str, dict[str, Any]] = {
         "url": "https://www.vonin.com/fishing/trawl-doors/",
         "accessed": "2026-10-27",
     },
+    "vonin_simoon": {
+        "key": "vonin_simoon",
+        "title": "Vónin P/F, Test of Vónin Simoon trawl doors (noticia)",
+        "url": "https://www.vonin.com/test-of-vonin-simoon-trawl-doors/",
+        "accessed": "2026-10-28",
+    },
     "morgere2025": {
         "key": "morgere2025",
         "title": "Morgère S.A., Catalogue 2025: Imaginer la pêche de demain",
@@ -505,7 +511,12 @@ DOOR_NOAA_FF9: list[tuple[str, float, float]] = [
 # línea (Fase 19.8a; hasta la 19.3 se tomaban a lo sumo 10). Relectura del 2026-10-28.
 
 #: Vónin (páginas de producto, «SIZES AND WEIGHTS»): superficie [m²] → peso [kg]. La columna dice
-#: sólo «WEIGHT»; se toma por portón (A VERIFICAR). Storm 2: portón de fondo de cuatro perfiles,
+#: sólo «WEIGHT», sin unidad ni «por portón». Fase 19.8b: se toma por portón, *derivado* de la
+#: noticia de Vónin sobre el Simoon (vonin_simoon): «these 7.5 square metre, 3000kg doors»,
+#: encargados como «a pair» → ≈ 400 kg/m² por portón, coherente con los 350–500 kg/m² de la tabla
+#: del Storm (por par serían 175–250 kg/m² por portón, la mitad). Vónin no lo dice en ningún texto.
+#: Vónin tampoco define la superficie ni da largo o alto: superficie = largo × alto y relación de
+#: aspecto = alto/largo son supuestos. Storm 2: portón de fondo de cuatro perfiles,
 #: «ASPECT RATIO 1,2 (STANDARD)»; Tornado: pelágico de cinco perfiles, «ASPECT RATIO 3,0
 #: (STANDARD)», ángulo de ataque de 21 a 48°; Twister: pelágico regulable (no da la relación de
 #: aspecto; dice «With a CL value of 4.39» y «The CL/CD ratio varies between 3.16 and 3.60»).

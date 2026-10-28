@@ -19,7 +19,12 @@ Convenciones del Excel que se reproducen tal cual (ver docstrings):
 * El "NHP" de Nomura y Hamuro es ``MID("150 HP",1,3)`` = el BHP del buque (150/180), no los HP
   nominales (199.5/239.4) de ``'Potenc disponible'!C24``.
 * El 150 de ``BPF = 150·P/v`` es una constante de conversión (≈ 75/0.5144 kgf·kn por HP) y se usa
-  también para el buque de 180 HP (``D88 = 150·L68/A88``).
+  también para el buque de 180 HP (``D88 = 150·L68/A88``). Está en el Workbook (Prado y Dremière
+  1990, «Pulling power of trawlers», PDF p. 102) con ``p`` = potencia disponible para el arrastre,
+  que es lo que el Excel le pasa (``K68 = 0.75·K·APN``), no el BHP.
+* La regla ``BP = BHP·0.9·pct/100`` no es del Workbook: es la regla práctica de remolcadores de
+  Zahalka («Bollard Pull», Association of Hanseatic Marine Underwriters), que el libro Excel
+  atribuye a Prado.
 * Las tablas resumen de ``A295:I370`` son números pegados (estáticos) salvo la columna "Nomura",
   que en tres de las cuatro tablas enlaza a Hamuro (errata ``nomura_column_links_hamuro``).
 """
@@ -68,14 +73,19 @@ FRIDMAN_KF: dict[PropellerType, float] = {
 #: Fridman: pendiente de la caída de FT con la velocidad (``0.7·v``).
 FRIDMAN_SPEED_SLOPE: float = 0.7
 
-# A VERIFICAR (Fase 19.4): la regla BP = BHP·0.9·{1.10, 1.20, 1.25, 1.40}/100 [t] viene del libro
-# Excel (giamportone2024); no se halló en el texto del Fisherman's Workbook (Prado y Dremière 1990,
-# PDF pp. 98-99), que da BP0 = 10-12 kgf/BHP con hélice fija y 13-16 kgf por HP de APN con paso
-# variable o tobera. Circula como regla práctica de remolcadores atribuida a Germanischer Lloyd
-# (anker2022bollard, fuente secundaria). Los números no se cambian: reproducen el libro Excel.
-#: Prado: factor base del bollard pull (``BHP·0.9``).
+# Fuente (Fase 19.8b): la regla BP = BHP·0.9·{1.10, 1.20, 1.25, 1.40}/100 [t] está transcrita de
+# Capt. P. Zahalka (Association of Hanseatic Marine Underwriters), «Bollard Pull» (zahalkabollard):
+# «Fixed pitch propeller (freewheeling): BHP x 0,9 x 1,10 / 100 = (t)» … «Controllable pitch
+# propeller and kort-nozzle: BHP x 0,9 x 1,40 / 100 = (t)». Es una regla práctica de
+# remolcadores, «rough estimates» según el propio autor; el libro Excel (giamportone2024) la
+# atribuye a Prado, pero no está en el Fisherman's Workbook (Prado y Dremière 1990, PDF p. 102,
+# «Pulling power of trawlers»), que da BP0 = 10-12 kg por BHP con hélice fija y 13-16 kg por HP de
+# APN con paso variable o tobera (control cruzado: la regla da 9.9-12.6 kgf/BHP).
+# anker2022bollard queda como fuente secundaria. Los números no se cambian: reproducen el libro
+# Excel.
+#: Regla de Zahalka (atribuida a Prado en el Excel): factor base del bollard pull (``BHP·0.9``).
 PRADO_BASE_FACTOR: float = 0.9
-#: Prado: porcentaje por tipo de hélice (``A49:A55``: 1.10/1.20/1.25/1.40). A VERIFICAR (arriba).
+#: Zahalka: porcentaje por tipo de hélice (``A49:A55``: 1.10/1.20/1.25/1.40); ver arriba.
 PRADO_PROPELLER_PERCENT: dict[PropellerType, float] = {
     PropellerType.FIXED_PITCH: 1.10,
     PropellerType.FIXED_PITCH_NOZZLE: 1.20,
@@ -95,8 +105,9 @@ PRADO_T_TO_HP: float = 100.0 / 1.36
 PRADO_APN_FACTOR: float = 0.09
 #: Prado: fracción de la APN disponible para el arrastre (``K68 = 0.75·K·APN``).
 PRADO_AVAILABLE_FRACTION: float = 0.75
-#: Prado: constante HP → kgf·kn de ``BPF = 150·P/v`` (``C88``). A VERIFICAR (Fase 19.4): en el
-#: Workbook las fórmulas de «BP when fishing» son imágenes y no se pudo cotejar; viene del Excel.
+#: Prado: constante HP → kgf·kn de ``BPF = 150·P/v`` (``C88``). Transcrita del Workbook (Prado y
+#: Dremière 1990, PDF p. 102, imagen AH827E183): «BP (kg) = 150 × p (HP) / trawling speed (knots)»
+#: con ``p`` la potencia disponible para el arrastre, ``p = 0.75·k·(BHP o ANP)``.
 PRADO_BPF_CONVERSION: float = 150.0
 
 
@@ -288,12 +299,12 @@ def prado_k_factor(propeller: PropellerType, bhp: float) -> float:
 def bollard_pull_kgf(
     bhp: float, propeller: PropellerType | float, base_factor: float = PRADO_BASE_FACTOR
 ) -> float:
-    """Bollard pull (tiro a punto fijo) de Prado & Dremiere según el libro Excel.
+    """Bollard pull (tiro a punto fijo) del libro Excel (bloque «Prado & Dremiere»).
 
     ``BP = BHP·0.9·(pct/100)·1000`` con ``pct`` = 1.10 (PF), 1.20 (PF+T), 1.25 (PV), 1.40 (PV+T).
-    A VERIFICAR: la regla no está en el texto del Workbook (ver :data:`PRADO_BASE_FACTOR`).
-    ``propeller`` admite el tipo de hélice o el porcentaje directamente. Unidades: kgf. Autor:
-    Prado & Dremiere (FAO). Celda ``B60 = (C10*(0.9)*(1.1/100)*1000)`` (150 HP);
+    La regla es de Zahalka («Bollard Pull», regla práctica de remolcadores, estimación gruesa), no
+    del Workbook (ver :data:`PRADO_BASE_FACTOR`). ``propeller`` admite el tipo de hélice o el
+    porcentaje directamente. Unidades: kgf. Celda ``B60 = (C10*(0.9)*(1.1/100)*1000)`` (150 HP);
     ``D60 = C22*0.9*(1.1/100)*1000`` (180 HP).
     """
     pct = prado_propeller_percent(propeller) if isinstance(propeller, PropellerType) else propeller
@@ -353,6 +364,12 @@ def bollard_pull_fishing_kgf(
     constante de conversión HP → kgf·kn (≈ 75 kgf·m/s / 0.5144 m/s por nudo ≈ 145.8, redondeado):
     **no** es el BHP del buque; el Excel usa el mismo 150 para el buque de 180 HP
     (``D88 = 150*L68/A88``). Unidades: kgf. Celda ``C88 = (150*K68)/A88``.
+
+    Fuente: Workbook (Prado y Dremière 1990, PDF p. 102), «BP (kg) = 150 × p (HP) / trawling speed
+    (knots)», con ``p = 0.75·k·(BHP o ANP)`` la potencia disponible para el arrastre. El Excel le
+    pasa ``P = 0.75·K·APN`` (:func:`trawling_power_hp`), es decir la ``p`` del Workbook y no el BHP;
+    usa la APN también en las filas de paso fijo, donde el Workbook admite el BHP (con la regla del
+    Excel la APN del buque de 150 HP de paso fijo es ≈ 143 HP, *derivado*).
     """
     v = np.asarray(v_kn, dtype=float)
     _check_positive("v_kn", v)
