@@ -315,6 +315,7 @@ publican la separación de portones de DynamiT: se comparan la AH, la AV y la re
 al avance» en IAT 27, «tensión» en IAT 75), leídas del campo `simulated` de cada red:
 
 ```{code-cell} ipython3
+status = {"published": "publicada", "draft": "borrador"}
 rows = []
 for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
                ("inidep_iat027_tangonera_modificada", 4.0),
@@ -327,7 +328,7 @@ for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
     ah, av = r.spread.horizontal_opening_m, r.spread.vertical_opening_m
     ref = sim.get("drag_kgf", sim.get("warp_tension_kgf"))
     rows.append([
-        f"`{nid}` ({"published": "publicada", "draft": "borrador"}[spec.status])",
+        f"`{nid}` ({status[spec.status]})",
         f(v),
         f"{f(r.doors.spread_m)} / {f(ah)} / {f(av, 2)}",
         f"— / {f(sim['horizontal_opening_m'])} / {f(sim['vertical_opening_m'])}",

@@ -318,6 +318,7 @@ spread: the AH, the AV and the resistance ("resistencia al avance" in IAT 27, "t
 are compared, read from the `simulated` field of each net:
 
 ```{code-cell} ipython3
+status = {"published": "published", "draft": "draft"}
 rows = []
 for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
                ("inidep_iat027_tangonera_modificada", 4.0),
@@ -330,7 +331,7 @@ for nid, v in (("inidep_iat027_tangonera_solimeno", 4.0),
     ah, av = r.spread.horizontal_opening_m, r.spread.vertical_opening_m
     ref = sim.get("drag_kgf", sim.get("warp_tension_kgf"))
     rows.append([
-        f"`{nid}` ({"published": "published", "draft": "draft"}[spec.status])",
+        f"`{nid}` ({status[spec.status]})",
         f(v),
         f"{f(r.doors.spread_m)} / {f(ah)} / {f(av, 2)}",
         f"— / {f(sim['horizontal_opening_m'])} / {f(sim['vertical_opening_m'])}",
