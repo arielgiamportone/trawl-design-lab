@@ -162,6 +162,16 @@ Para la **tecnicatura** conviene quedarse en los niveles básico e intermedio y 
 laboratorios y a la guía de construcción; para el **grado**, sumar los avanzados, la simulación
 ({doc}`21_simulacion`) y la incertidumbre ({doc}`25_incertidumbre_calibracion`).
 
+**Unidad optativa: langostino con tangones** ({doc}`26_aparejos_dobles_y_vara`, Fase 20.3). Para
+una cátedra patagónica, una o dos semanas después de cables y ventana de velocidad. El banco suma
+cinco ejercicios sobre la red tangonera del INIDEP: la abertura horizontal por triángulos
+semejantes con las cañas cortas, la separación de portones por el equilibrio de la tijera de Roth
+(2016) con la proyección corregida (sen α en lugar de sen 2α), la abertura vertical contra el
+límite de 1,5 m de la Res. CFP 7/2018, el largo del tangón que evita que las redes se superpongan y
+el cable de remolque según la carga de rotura requerida. El laboratorio «Red langostinera de
+tangones» calcula la red del INIDEP con el tangonero típico, cambia la velocidad y la profundidad y
+compara la separación de portones y las aberturas con las de DynamiT.
+
 ## Ejemplos de evaluación
 
 **Parcial con datos por alumno.** Una tarea con 6 a 8 ejercicios de los capítulos evaluados, un

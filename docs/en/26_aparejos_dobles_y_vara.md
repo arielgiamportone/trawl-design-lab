@@ -601,3 +601,17 @@ nets) were digitised in Phase 19.8c: the net modified by INIDEP closes and is pu
 original does not join the body to the codend (the "excess material" the report itself points out)
 and both IAT 75 nets have the lower-panel aft edge labelled "26", which their cut does not give.
 The sources consulted are in {doc}`catalogo_fuentes`.
+
+## Exercises
+
+From the bank of the teaching mode, with the data of the book (the INIDEP outrigger net and the
+typical outrigger trawler). In the app, the “UTN Classroom” mode generates them with other data and
+marks them ({doc}`38_docentes`).
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd().parent))
+import _exercises
+_exercises.section("26_aparejos_dobles_y_vara")
+```

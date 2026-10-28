@@ -81,6 +81,28 @@ describe('Aula UTN', () => {
   );
 
   it(
+    'la práctica lista los ejercicios y el laboratorio de langostino del capítulo 26',
+    async () => {
+      mockApi();
+      renderApp();
+      await screen.findByTestId('practice', {}, { timeout: 5000 });
+      expect(chapterLabel('26_aparejos_dobles_y_vara')).toBe('26 · Aparejos dobles y de vara');
+      await screen.findByRole('option', { name: '26 · Aparejos dobles y de vara' });
+      await userEvent.selectOptions(screen.getByLabelText('Capítulo'), '26_aparejos_dobles_y_vara');
+      expect(
+        await screen.findByText('Separación de portones por el equilibrio de la tijera'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('Abertura vertical y el límite de la Res. CFP 7/2018'),
+      ).toBeInTheDocument();
+      const labs = screen.getByRole('list', { name: /Laboratorios/ });
+      expect(within(labs).getAllByRole('listitem')).toHaveLength(1);
+      expect(within(labs).getByText('Red langostinera de tangones')).toBeInTheDocument();
+    },
+    SLOW,
+  );
+
+  it(
     'empezar un laboratorio abre el modo experto con el panel y comprueba el paso',
     async () => {
       const { calls } = mockApi();

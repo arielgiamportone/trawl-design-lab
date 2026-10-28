@@ -23,6 +23,7 @@ export const classroom = {
     '23': 'Mar real',
     '24': 'Malla y selectividad',
     '25': 'Incertidumbre',
+    '26': 'Aparejos dobles y de vara',
     '36': 'Construcción',
     '37': 'Economía',
   } as Record<string, string>,

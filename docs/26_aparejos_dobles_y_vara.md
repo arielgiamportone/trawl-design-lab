@@ -600,3 +600,17 @@ tradicional de Pesquera Deseado) se digitalizaron en la Fase 19.8c: la red modif
 cierra y se publica; la original no empalma el cuerpo con el copo (el «exceso de material» que
 señala el propio informe) y las dos de IAT 75 tienen el borde de bolsa del vientre rotulado «26»,
 que su corte no da. Las fuentes consultadas están en {doc}`catalogo_fuentes`.
+
+## Ejercicios
+
+Del banco del modo docente, con los datos del libro (la red tangonera del INIDEP y el tangonero
+típico). En la app, el modo «Aula UTN» los genera con otros datos y los corrige
+({doc}`38_docentes`).
+
+```{code-cell} ipython3
+:tags: [remove-input]
+import pathlib as _pl, sys as _sys
+_sys.path.insert(0, str(_pl.Path.cwd()))
+import _exercises
+_exercises.section("26_aparejos_dobles_y_vara")
+```

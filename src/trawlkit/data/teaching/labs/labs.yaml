@@ -321,3 +321,152 @@ labs:
         questions:
           - {id: uniones, kind: number, prompt: "¿Cuántas uniones tiene el armado?", fact: construction.joins, tol_rel: 0, en: {prompt: "How many joins does the assembly have?"}}
           - {id: pano, kind: number, prompt: "¿Cuántos kg de paño hay que comprar?", unit: kg, fact: construction.stock_kg, tol_rel: 0.05, en: {prompt: "How many kg of netting have to be bought?"}}
+
+  # Fase 20.3: la red langostinera de tangones del INIDEP (ITO 043/2022, fig. 5) con el tangonero
+  # típico de la flota, contra los valores de DynamiT que cita el capítulo 26 (sim. 3: DP 16,2 m,
+  # AH 14,0 m, AV 1,3 m a 3,5 nudos).
+  - id: lab.langostino_tangones
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: intermedio
+    title: Red langostinera de tangones
+    summary: >
+      Calcular la red tangonera del INIDEP con el tangonero típico, cambiar la velocidad y la
+      profundidad, leer la separación de portones y las aberturas y compararlas con DynamiT.
+    en:
+      title: Outrigger shrimp trawl
+      summary: >
+        Calculate the INIDEP outrigger net with the typical outrigger trawler, change the speed and
+        the depth, read the door spread and the openings and compare them with DynamiT.
+      closing: >
+        With a split bridle the door spread comes from the balance of the otter board, the bridle
+        leg and the net: it changes with the speed, not with the warp paid out. The method stays
+        close to DynamiT, but it is a model calibrated with simulations: no measured horizontal
+        opening of an Argentine outrigger net has been published.
+    start: {net: inidep_ito043_tangonera_inidep, vessel: ar_tangonero_1998}
+    steps:
+      - id: base
+        title: La red del INIDEP a 3,5 nudos
+        instruction: >
+          Abra la pestaña «Resumen» con la red tangonera del INIDEP (ITO 043/2022) y el tangonero
+          típico de la flota. Anote la separación de portones de una red, la abertura horizontal y
+          la abertura vertical. DynamiT da 16,2 m, 14,0 m y 1,3 m a 3,5 nudos (capítulo 26).
+        en:
+          title: The INIDEP net at 3.5 knots
+          instruction: >
+            Open the "Summary" tab with the INIDEP outrigger net (ITO 043/2022) and the typical
+            outrigger trawler of the fleet. Write down the door spread of one net, the horizontal
+            opening and the vertical opening. DynamiT gives 16.2 m, 14.0 m and 1.3 m at 3.5 knots
+            (chapter 26).
+        target: {tab: resumen}
+        checks:
+          - {fact: net.id, op: "==", value: inidep_ito043_tangonera_inidep, label: La red es la tangonera del INIDEP, en: {label: "The net is the INIDEP outrigger net"}}
+          - {fact: summary.rig, op: "==", value: outrigger, label: Aparejo de tangones, en: {label: "Outrigger rig"}}
+          - {fact: summary.opening_method, op: "==", value: tijera, label: "Aberturas por el equilibrio de la tijera", en: {label: "Openings from the split-bridle balance"}}
+        questions:
+          - {id: dp, kind: number, prompt: "Separación de portones de una red", unit: m, fact: summary.door_spread_m, en: {prompt: "Door spread of one net"}}
+          - {id: ah, kind: number, prompt: "Abertura horizontal", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening"}}
+          - {id: av, kind: number, prompt: "Abertura vertical", unit: m, fact: summary.vertical_opening_m, tol_abs: 0.02, tol_rel: 0, en: {prompt: "Vertical opening"}}
+          - id: dynamit
+            kind: choice
+            prompt: "¿Cómo quedan la separación de portones y la abertura horizontal frente a DynamiT?"
+            en: {prompt: "How do the door spread and the horizontal opening compare with DynamiT?"}
+            options:
+              - {id: dentro_20, es: "Dentro del ±20 % del método", en: "Within the ±20 % of the method"}
+              - {id: doble, es: "Cerca del doble", en: "About twice as large"}
+              - {id: mitad, es: "Cerca de la mitad", en: "About half"}
+            answer: dentro_20
+          - id: cfp
+            kind: choice
+            prompt: "¿La abertura vertical cumple el límite de 1,5 m de la Res. CFP 7/2018?"
+            en: {prompt: "Does the vertical opening meet the 1.5 m limit of CFP Res. 7/2018?"}
+            options:
+              - {id: si, es: "Sí", en: "Yes"}
+              - {id: "no", es: "No", en: "No"}
+            answer: si
+      - id: velocidad
+        title: Más despacio
+        instruction: >
+          En los parámetros del caso, baje la velocidad de diseño (warp_design_speed_kn, la del
+          equilibrio de la tijera) de 3,5 a 3,0 nudos y vuelva a calcular.
+        en:
+          title: Slower
+          instruction: >
+            In the case parameters, lower the design speed (warp_design_speed_kn, the one used by
+            the split-bridle balance) from 3.5 to 3.0 knots and calculate again.
+        target: {tab: diseno, hint: Parámetro «warp_design_speed_kn», en: {hint: '"warp_design_speed_kn" parameter'}}
+        checks:
+          - {fact: case.warp_design_speed_kn, op: "<=", value: 3.0, label: Velocidad de diseño de 3 nudos o menos, en: {label: "Design speed of 3 knots or less"}}
+          - {fact: summary.door_spread_m, op: "<", baseline_factor: 1.0, label: La separación de portones bajó, en: {label: "The door spread went down"}}
+        questions:
+          - {id: dp, kind: number, prompt: "Separación de portones a 3 nudos", unit: m, fact: summary.door_spread_m, en: {prompt: "Door spread at 3 knots"}}
+          - {id: ah, kind: number, prompt: "Abertura horizontal a 3 nudos", unit: m, fact: summary.horizontal_opening_m, en: {prompt: "Horizontal opening at 3 knots"}}
+          - id: porque
+            kind: choice
+            prompt: "¿Por qué se cierra la boca al bajar la velocidad?"
+            en: {prompt: "Why does the mouth close when the speed goes down?"}
+            options:
+              - id: sustentacion
+                es: "La sustentación del portón cae con v² y la resistencia de la red cae menos"
+                en: "The lift of the otter board falls with v² and the drag of the net falls less"
+              - id: cable
+                es: "Con menos velocidad se fila menos cable"
+                en: "At a lower speed less warp is paid out"
+              - id: av
+                es: "La abertura vertical crece y le quita ancho a la boca"
+                en: "The vertical opening grows and takes width away from the mouth"
+            answer: sustentacion
+      - id: profundidad
+        title: Otra profundidad, la misma boca
+        instruction: >
+          Vuelva a 3,5 nudos y cambie la profundidad de trabajo (depth_m) de 90 a 60 m. Compare el
+          cable filado y la separación de portones con los del caso de partida.
+        en:
+          title: Another depth, the same mouth
+          instruction: >
+            Go back to 3.5 knots and change the fishing depth (depth_m) from 90 to 60 m. Compare
+            the warp paid out and the door spread with those of the starting case.
+        target: {tab: diseno, hint: Parámetros «warp_design_speed_kn» y «depth_m», en: {hint: '"warp_design_speed_kn" and "depth_m" parameters'}}
+        checks:
+          - {fact: case.warp_design_speed_kn, op: "==", value: 3.5, label: "Velocidad de diseño de 3,5 nudos", en: {label: "Design speed of 3.5 knots"}}
+          - {fact: case.depth_m, op: "<=", value: 60, label: Profundidad de 60 m o menos, en: {label: "Depth of 60 m or less"}}
+          - {fact: summary.warp_length_m, op: "<", baseline_factor: 1.0, label: Se fila menos cable, en: {label: "Less warp is paid out"}}
+        questions:
+          - {id: cable, kind: number, prompt: "Cable filado a 60 m", unit: m, fact: summary.warp_length_m, en: {prompt: "Warp paid out at 60 m"}}
+          - {id: dp, kind: number, prompt: "Separación de portones", unit: m, fact: summary.door_spread_m, en: {prompt: "Door spread"}}
+          - id: tijera
+            kind: choice
+            prompt: "¿Qué pasó con la separación de portones?"
+            en: {prompt: "What happened to the door spread?"}
+            options:
+              - {id: igual, es: "No cambió: con tijera no depende del cable filado", en: "It did not change: with a split bridle it does not depend on the warp paid out"}
+              - {id: bajo, es: "Bajó, porque hay menos cable", en: "It went down, because there is less warp"}
+              - {id: subio, es: "Subió, porque el cable tira más abierto", en: "It went up, because the warp pulls at a wider angle"}
+            answer: igual
+      - id: tangones
+        title: Tangones que no superpongan las redes
+        instruction: >
+          Con los tangones de 24 pies (7,3 m) de la fuente norteamericana las dos redes se
+          superponen. Alargue los tangones (boom_length_m) hasta que el huelgo entre redes deje de
+          ser negativo.
+        en:
+          title: Booms that keep the nets apart
+          instruction: >
+            With the 24 ft (7.3 m) booms of the North American source the two nets overlap.
+            Lengthen the booms (boom_length_m) until the gap between the nets is no longer
+            negative.
+        target: {tab: diseno, hint: Parámetro «boom_length_m», en: {hint: '"boom_length_m" parameter'}}
+        checks:
+          - {fact: summary.nets_gap_m, op: ">=", value: 0, label: Las redes no se superponen, en: {label: "The nets do not overlap"}}
+        questions:
+          - {id: punta, kind: number, prompt: "Distancia de la punta del tangón a la crujía", unit: m, fact: summary.boom_tip_offset_m, en: {prompt: "Distance from the boom tip to the centreline"}}
+          - {id: ancho, kind: number, prompt: "Ancho barrido por las dos redes", unit: m, fact: summary.swept_width_m, en: {prompt: "Width swept by the two nets"}}
+          - id: limites
+            kind: text
+            prompt: "¿Qué datos de este caso son supuestos (tangones, portones, cañas) y cómo podrían cambiar la comparación con DynamiT?"
+            en: {prompt: "Which data of this case are assumptions (booms, otter boards, bridles) and how could they change the comparison with DynamiT?"}
+    closing: >
+      Con tijera la separación de portones sale del equilibrio entre el portón, la rama de la
+      tijera y la red: cambia con la velocidad, no con el cable filado. El método queda cerca de
+      DynamiT, pero es un modelo calibrado con simulaciones: no hay publicada una abertura
+      horizontal medida de una tangonera argentina.

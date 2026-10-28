@@ -1,0 +1,285 @@
+# Ejercicios del capítulo 26 «Aparejos dobles y de vara»: la red langostinera de tangones
+# (Fase 20.3). Las respuestas salen de trawlkit.rigging.shrimp, trawlkit.rigging.multirig y
+# trawlkit.rigging.warps. Los datos de la semilla 0 son los de la red tangonera del INIDEP
+# (ITO 043/2022, fig. 5) con el tangonero típico de la flota, como en el capítulo.
+exercises:
+  - id: langostino.abertura_horizontal
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: basico
+    title: Abertura horizontal de una red langostinera
+    statement: >
+      En un tangonero cada red cuelga de una tijera y los portones van unidos a las alas con cañas
+      cortas. Los portones de una red van a DP = {dp} m uno de otro; la red mide {lrw} m de largo
+      trabajando, el pie de gallo {pie} m y las cañas {canas} m. Por triángulos semejantes,
+      AH = DP·L/(L + pie de gallo + cañas). Calcule la abertura horizontal, AH/DP y AH/lima con una
+      lima de {lima} m.
+    vars:
+      dp: {label: Separación de portones de una red, unit: m, choices: [17.5, 18.4, 17.9, 16.2, 15.0], default: 17.5, decimals: 1}
+      lrw: {label: Largo de la red trabajando, unit: m, choices: [29.9, 30.1, 26.3, 23.5], default: 29.9, decimals: 1}
+      pie: {label: Pie de gallo, unit: m, choices: [3.4, 5.0], default: 3.4, decimals: 1}
+      canas: {label: Cañas portón–ala, unit: m, choices: [3.0, 2.5, 4.0], default: 3.0, decimals: 1}
+      lima: {label: Lima, unit: m, choices: [35.5, 34.8, 39.4, 26.3], default: 35.5, decimals: 1}
+    solver: abertura_langostinera
+    answers:
+      - {key: ah_m, label: Abertura horizontal, unit: m, decimals: 2}
+      - {key: ah_dp, label: AH/DP, decimals: 2, tol_abs: 0.01, tol_rel: 0}
+      - {key: ah_lima, label: AH/lima, decimals: 2, tol_abs: 0.01, tol_rel: 0}
+    hints:
+      - "Con tijera no hay patentes largas: entre el portón y la punta de ala sólo van el pie de gallo y las cañas."
+    explanation: >
+      AH = {dp}·{lrw}/({lrw} + {aparejo_m}) = {ah_m} m y AH/DP = {ah_dp}; las simulaciones DynamiT
+      del INIDEP con tijera dan {rango_dp_lo}–{rango_dp_hi}. AH/lima = {ah_lima}: DynamiT da
+      {rango_lima_lo}–{rango_lima_hi} en las tangoneras argentinas, menos que las camaroneras
+      medidas en EE. UU. (0,62–0,78).
+    formats: {aparejo_m: 1, rango_dp_lo: 2, rango_dp_hi: 2, rango_lima_lo: 2, rango_lima_hi: 2}
+    refs: [roth2022ito043, roth2024iat085]
+    en:
+      title: Horizontal opening of a shrimp trawl
+      statement: >
+        On an outrigger trawler each net hangs from a split bridle and the otter boards are joined
+        to the wings by short bridles. The otter boards of one net are DS = {dp} m apart; the net
+        is {lrw} m long when working, the crowfoot {pie} m and the short bridles {canas} m. By
+        similar triangles, HO = DS·L/(L + crowfoot + bridles). Calculate the horizontal opening,
+        HO/DS and HO/headrope with a {lima} m headrope.
+      vars:
+        dp: Door spread of one net
+        lrw: Working length of the net
+        pie: Crowfoot
+        canas: Door–wing bridles
+        lima: Headrope
+      answers:
+        ah_m: Horizontal opening
+        ah_dp: HO/DS
+        ah_lima: HO/headrope
+      hints:
+        - 'With a split bridle there are no long sweeps: only the crowfoot and the short bridles go between the otter board and the wing end.'
+      explanation: >
+        HO = {dp}·{lrw}/({lrw} + {aparejo_m}) = {ah_m} m and HO/DS = {ah_dp}; INIDEP's DynamiT
+        simulations with a split bridle give {rango_dp_lo}–{rango_dp_hi}. HO/headrope = {ah_lima}: DynamiT gives {rango_lima_lo}–{rango_lima_hi} for the
+        Argentine outrigger nets, less than the shrimp trawls measured in the USA (0.62–0.78).
+
+  - id: langostino.equilibrio_roth
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: avanzado
+    title: Separación de portones por el equilibrio de la tijera
+    statement: >
+      Un portón de {area} m² (C_L = {cl}, C_D = {cd}) cuelga de una rama de la tijera de
+      L_C = {lc} m; del portón al punto donde converge la red hay L_R = {lr} m. A {v} kn la red
+      resiste R = {r} kgf (la mitad por banda). Con F = ½·(ρ/g)·C·S·v² (ρ/g = 104,4 kgf·s²/m⁴)
+      y el equilibrio plano de Roth (2016) corregido: β = asin((L_C/L_R)·sen α),
+      T·cos α = F_CD + (R/2)·cos β, F_CL = T·sen α + (R/2)·sen β y DP = 2·L_C·sen α. Calcule la
+      sustentación del portón, el ángulo α de la rama y la separación de portones.
+    vars:
+      area: {label: Superficie del portón, unit: m², choices: [4.08, 4.5, 3.0], default: 4.08, decimals: 2}
+      cl: {label: C_L, value: 0.93, decimals: 2}
+      cd: {label: C_D, value: 0.71, decimals: 2}
+      v: {label: Velocidad, unit: kn, choices: [3.5, 3.0, 4.0], default: 3.5, decimals: 1}
+      r: {label: Resistencia de la red, unit: kgf, choices: [2797, 2000, 2400, 3200], default: 2797}
+      lc: {label: Rama de la tijera L_C, unit: m, choices: [70, 55, 60, 73], default: 70}
+      lr: {label: Cañas y red L_R, unit: m, choices: [33.9, 25.0, 30.0, 35.0], default: 33.9, decimals: 1}
+    solver: equilibrio_tijera
+    answers:
+      - {key: fcl_kgf, label: Sustentación de un portón, unit: kgf, decimals: 0}
+      - {key: alpha_deg, label: Ángulo α de la rama, unit: °, decimals: 2, tol_abs: 0.2, tol_rel: 0}
+      - {key: dp_m, label: Separación de portones, unit: m, decimals: 1, tol_rel: 0.03}
+    hints:
+      - "Busque α por tanteo: con α chico la sustentación sobra; con α grande falta. Empiece cerca de 8°."
+      - "La rama y la red llegan al portón con la misma separación lateral: L_C·sen α = L_R·sen β."
+    explanation: >
+      F_CL = {fcl_kgf} kgf y F_CD = {fcd_kgf} kgf. El equilibrio cierra con α = {alpha_deg}°,
+      β = {beta_deg}° y una tensión de la rama T = {t_kgf} kgf: DP = 2·{lc}·sen α = {dp_m} m.
+      La ec. (12) impresa de Roth proyecta dos veces las fuerzas y usa sen 2α = 2·sen α·cos α
+      donde va sen α; con ella la DP de la red del INIDEP sale de 40 a 65 m, separaciones que
+      ningún tangonero tiene. La forma corregida da 13–22 m y encierra los 16,2 m de DynamiT.
+    formats: {fcd_kgf: 0, beta_deg: 2, t_kgf: 0}
+    refs: [roth2016iat072, roth2022ito043]
+    en:
+      title: Door spread from the split-bridle balance
+      statement: >
+        An otter board of {area} m² (C_L = {cl}, C_D = {cd}) hangs from one leg of a split bridle
+        L_C = {lc} m long; from the otter board to the point where the net converges there are
+        L_R = {lr} m. At {v} kn the net has a drag R = {r} kgf (half on each side). With F =
+        ½·(ρ/g)·C·S·v² (ρ/g = 104.4 kgf·s²/m⁴) and Roth's (2016) corrected plane balance: β =
+        asin((L_C/L_R)·sin α), T·cos α = F_CD + (R/2)·cos β, F_CL = T·sin α + (R/2)·sin β and DS =
+        2·L_C·sin α. Calculate the lift of the otter board, the angle α of the leg and the door
+        spread.
+      vars:
+        area: Otter board area
+        cl: C_L
+        cd: C_D
+        v: Speed
+        r: Net drag
+        lc: Split-bridle leg L_C
+        lr: Bridles and net L_R
+      answers:
+        fcl_kgf: Lift of one otter board
+        alpha_deg: Leg angle α
+        dp_m: Door spread
+      hints:
+        - 'Find α by trial and error: with a small α there is too much lift; with a large α, too little. Start near 8°.'
+        - 'The leg and the net reach the otter board with the same lateral offset: L_C·sin α = L_R·sin β.'
+      explanation: >
+        F_CL = {fcl_kgf} kgf and F_CD = {fcd_kgf} kgf. The balance closes with α = {alpha_deg}°,
+        β = {beta_deg}° and a leg tension T = {t_kgf} kgf: DS = 2·{lc}·sin α = {dp_m} m. Roth's
+        printed eq. (12) projects the forces twice and uses sin 2α = 2·sin α·cos α where sin α
+        belongs; with it the door spread of the INIDEP net comes out at 40 to 65 m, spreads no
+        outrigger trawler has. The corrected form gives 13–22 m and brackets DynamiT's 16.2 m.
+
+  - id: langostino.abertura_vertical
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: basico
+    title: Abertura vertical y el límite de la Res. CFP 7/2018
+    statement: >
+      La Res. CFP 7/2018 (art. 4) limita a 1,5 m la abertura vertical de las redes de la flota
+      langostinera. En una red de baja abertura con pocas boyas o ninguna, AV ≈ 0,04·lima (0,03 a
+      0,07). Para una red de {lima} m de lima calcule la AV, diga si cumple el límite y cuál es la
+      lima más larga que lo cumple con esta regla.
+    vars:
+      lima: {label: Lima, unit: m, choices: [35.5, 25.4, 26.3, 39.4, 34.8, 40.0], default: 35.5, decimals: 1}
+    solver: av_cfp
+    answers:
+      - {key: av_m, label: Abertura vertical, unit: m, decimals: 2, tol_abs: 0.02, tol_rel: 0}
+      - {key: cumple, label: "¿Cumple el límite?", kind: choice, options: ["Sí", "No"]}
+      - {key: lima_max_m, label: Lima máxima, unit: m, decimals: 1}
+    explanation: >
+      AV = 0,04·{lima} = {av_m} m (entre {av_lo_m} y {av_hi_m} m con 0,03–0,07): {cumple} cumple
+      el límite de {limite_m} m. La lima más larga que lo cumple es {limite_m}/0,04 = {lima_max_m}
+      m. La regla no corrige por boyas: con 10 a 20 boyas Watson et al. midieron AV 1,75 a 2,9
+      veces mayores.
+    formats: {av_lo_m: 2, av_hi_m: 2, limite_m: 1}
+    refs: [cfp2018res7, watson1984]
+    en:
+      title: Vertical opening and the limit of CFP Res. 7/2018
+      statement: >
+        CFP Resolution 7/2018 (art. 4) limits the vertical opening of the nets of the Argentine
+        red shrimp fleet to 1.5 m. In a low-opening net with few or no floats, VO ≈ 0.04·headrope
+        (0.03 to 0.07). For a net with a {lima} m headrope calculate the VO, say whether it meets
+        the limit and what is the longest headrope that meets it with this rule.
+      vars:
+        lima: Headrope
+      answers:
+        av_m: Vertical opening
+        cumple: Does it meet the limit?
+        lima_max_m: Longest headrope
+      options:
+        cumple: ["Yes", "No"]
+      explanation: >
+        VO = 0.04·{lima} = {av_m} m (between {av_lo_m} and {av_hi_m} m with 0.03–0.07): meets
+        the {limite_m} m limit? {cumple}. The longest headrope that meets it is {limite_m}/0.04 =
+        {lima_max_m} m. The rule does not correct for floats: with 10 to 20 floats Watson et al.
+        measured vertical openings 1.75 to 2.9 times larger.
+
+  - id: langostino.tangon
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: intermedio
+    title: Largo del tangón y superposición de las redes
+    statement: >
+      Un tangonero remolca dos redes, cada una centrada detrás de la punta de su tangón. Cada red
+      abre DP = {dp} m entre portones. El tangón mide {tangon} m, baja {angulo}° sobre la horizontal
+      y su pie está a {pie_tangon} m de la crujía. Calcule la distancia de la punta a la crujía
+      (pie + L·cos θ), el huelgo entre las dos redes (2·punta − DP; negativo si se superponen), si
+      se superponen y el largo mínimo del tangón para que no lo hagan.
+    vars:
+      dp: {label: Separación de portones de una red, unit: m, choices: [17.5, 14.0, 16.2, 12.0, 20.0], default: 17.5, decimals: 1}
+      tangon: {label: Largo del tangón, unit: m, choices: [7.3, 9.0, 10.0, 11.0], default: 7.3, decimals: 1}
+      angulo: {label: Ángulo del tangón, unit: °, choices: [20, 25, 30], default: 20}
+      pie_tangon: {label: Pie del tangón a la crujía, unit: m, choices: [0.0, 0.5, 1.0], default: 0.0, decimals: 1}
+    solver: tangon_superposicion
+    answers:
+      - {key: tip_m, label: Punta a la crujía, unit: m, decimals: 2}
+      - {key: gap_m, label: Huelgo entre redes, unit: m, decimals: 2, tol_abs: 0.1, tol_rel: 0.02}
+      - {key: superponen, label: "¿Se superponen?", kind: choice, options: ["Sí", "No"]}
+      - {key: l_min_m, label: Largo mínimo del tangón, unit: m, decimals: 2}
+    hints:
+      - "Cada red ocupa DP/2 a cada lado de la punta de su tangón."
+    explanation: >
+      Punta = {pie_tangon} + {tangon}·cos {angulo}° = {tip_m} m; huelgo = 2·{tip_m} − {dp} = {gap_m}
+      m ({superponen} se superponen) y ancho barrido {ancho_m} m. Sin superposición hace falta
+      L = ({dp}/2 − {pie_tangon})/cos {angulo}° = {l_min_m} m. Los tangones de 24 pies (7,3 m) de
+      la fuente norteamericana no alcanzan para las redes argentinas: en el golfo de México se
+      desfasan las redes a popa.
+    formats: {ancho_m: 1}
+    refs: [knake1958, gillett2008]
+    en:
+      title: Boom length and net overlap
+      statement: >
+        An outrigger trawler tows two nets, each centred behind the tip of its boom. Each net has
+        a door spread DS = {dp} m. The boom is {tangon} m long, lowered {angulo}° above the
+        horizontal, and its heel is {pie_tangon} m from the centreline. Calculate the distance from
+        the tip to the centreline (heel + L·cos θ), the gap between the two nets (2·tip − DS;
+        negative if they overlap), whether they overlap and the shortest boom that avoids it.
+      vars:
+        dp: Door spread of one net
+        tangon: Boom length
+        angulo: Boom angle
+        pie_tangon: Boom heel to centreline
+      answers:
+        tip_m: Tip to centreline
+        gap_m: Gap between nets
+        superponen: Do they overlap?
+        l_min_m: Shortest boom
+      options:
+        superponen: ["Yes", "No"]
+      hints:
+        - Each net takes DS/2 on each side of the tip of its boom.
+      explanation: >
+        Tip = {pie_tangon} + {tangon}·cos {angulo}° = {tip_m} m; gap = 2·{tip_m} − {dp} = {gap_m} m
+        (overlap? {superponen}) and swept width {ancho_m} m. Without overlap the boom needs L =
+        ({dp}/2 − {pie_tangon})/cos {angulo}° = {l_min_m} m. The 24 ft (7.3 m) booms of the North
+        American source are not long enough for the Argentine nets: in the Gulf of Mexico the nets
+        are staggered astern.
+
+  - id: langostino.cable
+    chapter: 26_aparejos_dobles_y_vara
+    topic: langostino
+    level: intermedio
+    title: Cable de remolque de una red langostinera
+    statement: >
+      Una red langostinera con su aparejo resiste {carga} kgf a 3,5 kn, la velocidad de diseño del
+      cable. Con un factor de seguridad de {fs}, calcule la carga mínima de rotura y elija el cable
+      de acero 6x19 (9/9/1) más fino que la cumple (catálogo de componentes: {tabla}). ¿Qué factor
+      de seguridad tiene el cable de {fuente} mm que usan las tangoneras de los informes del INIDEP?
+    vars:
+      carga: {label: Resistencia de una red con su aparejo, unit: kgf, choices: [4510, 3777, 4138, 3341, 2218], default: 4510}
+      fs: {label: Factor de seguridad, choices: [4.0, 5.0], default: 4.0, decimals: 0}
+      fuente: {label: Cable de la fuente, unit: mm, choices: [24, 22], default: 24}
+    solver: cable_tangonera
+    answers:
+      - {key: rotura_t, label: Carga mínima de rotura, unit: t, decimals: 2}
+      - {key: dw_mm, label: Diámetro elegido, unit: mm, decimals: 0, tol_rel: 0}
+      - {key: fs_fuente, label: Factor de seguridad del cable de la fuente, decimals: 2}
+    hints:
+      - "Carga de rotura = resistencia × factor de seguridad; pásela a toneladas antes de buscar en la tabla."
+    explanation: >
+      Rotura mínima = {carga}·{fs} = {rotura_kgf} kgf = {rotura_t} t: alcanza el cable de
+      {dw_mm} mm ({dw_rotura_t} t). El de {fuente} mm rompe a {fuente_rotura_t} t, un factor de
+      {fs_fuente}: las tangoneras llevan cables más gruesos de lo que pide la red sola, porque el
+      mismo cable remolca la tijera y debe aguantar enganches con el fondo.
+    formats: {rotura_kgf: 0, dw_rotura_t: 1, fuente_rotura_t: 1}
+    refs: [roth2022ito043, roth2019iat027, prado1990]
+    en:
+      title: Towing warp of a shrimp trawl
+      statement: >
+        A shrimp trawl with its rigging has a drag of {carga} kgf at 3.5 kn, the design speed of
+        the warp. With a safety factor of {fs}, calculate the minimum breaking load and choose the
+        thinnest 6x19 (9/9/1) steel wire that meets it (component catalogue: {tabla}). What is the
+        safety factor of the {fuente} mm warp used by the outrigger nets in the INIDEP reports?
+      vars:
+        carga: Drag of one net with its rigging
+        fs: Safety factor
+        fuente: Warp in the source
+      answers:
+        rotura_t: Minimum breaking load
+        dw_mm: Chosen diameter
+        fs_fuente: Safety factor of the source warp
+      hints:
+        - Breaking load = drag × safety factor; convert it to tonnes before looking it up in the table.
+      explanation: >
+        Minimum breaking load = {carga}·{fs} = {rotura_kgf} kgf = {rotura_t} t: the {dw_mm} mm wire
+        ({dw_rotura_t} t) is enough. The {fuente} mm warp breaks at {fuente_rotura_t} t, a factor
+        of {fs_fuente}: outrigger trawlers carry thicker warps than the net alone requires,
+        because the same warp tows the split bridle and must withstand snags on the seabed.

@@ -165,6 +165,15 @@ For the **technician programme** it is best to stay at the basic and intermediat
 give more weight to the labs and to the construction guide; for the **degree**, add the advanced
 ones, simulation ({doc}`21_simulacion`) and uncertainty ({doc}`25_incertidumbre_calibracion`).
 
+**Optional unit: outrigger shrimp trawling** ({doc}`26_aparejos_dobles_y_vara`, Phase 20.3). For a
+Patagonian course, one or two weeks after warps and the speed window. The bank adds five exercises
+on the INIDEP outrigger net: the horizontal opening by similar triangles with the short bridles,
+the door spread from Roth's (2016) split-bridle balance with the corrected projection (sin α
+instead of sin 2α), the vertical opening against the 1.5 m limit of CFP Res. 7/2018, the boom length
+that keeps the nets from overlapping and the towing warp from the required breaking load. The
+lab “Outrigger shrimp trawl” calculates the INIDEP net with the typical outrigger trawler, changes
+the speed and the depth and compares the door spread and the openings with those of DynamiT.
+
 ## Assessment examples
 
 **Midterm exam with data per student.** An assignment with 6 to 8 exercises from the chapters

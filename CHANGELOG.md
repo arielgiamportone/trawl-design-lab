@@ -81,6 +81,21 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro, de la flota y de investigación.
 
 ### Agregado
+- **Ejercicios y laboratorio de langostino (Fase 20.3)**: cinco ejercicios nuevos del banco
+  docente para el capítulo 26 (`data/teaching/exercises/26_langostino.yaml`, ES/EN, con datos por
+  semilla y la semilla 0 de la red tangonera del INIDEP): abertura horizontal por triángulos
+  semejantes con pie de gallo y cañas (`shrimp.wing_spread_m`), separación de portones por el
+  equilibrio de la tijera de Roth (2016) corregido (`shrimp.tijera_balance`; la explicación dice
+  por qué va sen α y no sen 2α), abertura vertical contra el límite de 1,5 m de la Res. CFP
+  7/2018, largo del tangón y superposición de las redes (`multirig.outrigger_layout` y
+  `boom_length_without_overlap_m`) y cable de remolque por la carga de rotura requerida
+  (`warps.select_warp` sobre los cables 6x19 (9/9/1) del catálogo de componentes, con el factor
+  de seguridad de los cables de 22 y 24 mm de los informes). Los corrige el motor con cinco
+  solvers nuevos. Laboratorio guiado «Red langostinera de tangones» (`lab.langostino_tangones`):
+  red `inidep_ito043_tangonera_inidep` con `ar_tangonero_1998`, velocidad de diseño, profundidad
+  y tangones; compara DP, AH y AV con DynamiT (16,2 / 14,0 / 1,3 m). Sección «Ejercicios» en el
+  capítulo 26 y unidad optativa en el capítulo 38 (ES/EN). Banco: 41 → 46 ejercicios; 6 → 7
+  laboratorios. La prueba de hechos de los laboratorios usa el caso de partida de cada uno.
 - **Tangoneras de IAT 27/2019 e IAT 75/2023 (Fase 19.8c)**: cuatro redes de langostino del INIDEP
   digitalizadas de planos vectoriales (`tools/catalog/transcriptions_198.py`), con su aparejo,
   portón y resultados de DynamiT: red Solimeno original (fig. 2) y modificada por el INIDEP

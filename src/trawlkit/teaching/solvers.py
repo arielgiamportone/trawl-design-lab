@@ -7,7 +7,8 @@ paño a partir de la razón de corte elegida), para que los números del enuncia
 
 No hay fórmulas copiadas: todo sale de :mod:`trawlkit.power`, :mod:`trawlkit.drag`,
 :mod:`trawlkit.netting`, :mod:`trawlkit.net`, :mod:`trawlkit.dimensions`,
-:mod:`trawlkit.rigging`, :mod:`trawlkit.construction` y :mod:`trawlkit.economics`.
+:mod:`trawlkit.rigging` (con :mod:`~trawlkit.rigging.shrimp` y :mod:`~trawlkit.rigging.multirig`),
+:mod:`trawlkit.components`, :mod:`trawlkit.construction` y :mod:`trawlkit.economics`.
 """
 
 from __future__ import annotations
@@ -26,7 +27,7 @@ from trawlkit.economics import G as G_ECON
 from trawlkit.i18n import N_
 from trawlkit.io import PropellerType
 from trawlkit.performance import speed_window
-from trawlkit.rigging import ballast, doors, floats, spread, warps
+from trawlkit.rigging import ballast, doors, floats, multirig, shrimp, spread, warps
 from trawlkit.sim.core import DIESEL_KG_L, SFC_KG_KWH, TOWING_EFFICIENCY
 from trawlkit.units import KNOT_TO_MS
 
@@ -578,6 +579,124 @@ def _toma_union(v: Values) -> Values:
         "b": float(frac.denominator),
         "tomas": float(extra),
         "cada": small / extra if extra else 0.0,
+    }
+
+
+# =============================================================================================
+# 26 · Aparejos dobles: langostino con tangones (Fase 20.3)
+# =============================================================================================
+
+
+@solver("abertura_langostinera")
+def _abertura_langostinera(v: Values) -> Values:
+    dp, lrw, head = _f(v, "dp"), _f(v, "lrw"), _f(v, "lima")
+    rigging_m = _f(v, "pie") + _f(v, "canas")
+    ah = shrimp.wing_spread_m(dp, lrw, rigging_m)
+    lo, hi = shrimp.AH_OVER_DP_RANGE
+    klo, khi = shrimp.DYNAMIT_AH_RANGE
+    return {
+        "ah_m": ah,
+        "ah_dp": ah / dp,
+        "ah_lima": ah / head,
+        "aparejo_m": rigging_m,
+        "rango_dp_lo": lo,
+        "rango_dp_hi": hi,
+        "rango_lima_lo": klo,
+        "rango_lima_hi": khi,
+    }
+
+
+@solver("equilibrio_tijera")
+def _equilibrio_tijera(v: Values) -> Values:
+    forces = doors.door_forces_kgf(_f(v, "area"), _f(v, "cd"), _f(v, "cl"), _f(v, "v") * KNOT_TO_MS)
+    lift, drag_ = float(forces.lift_kgf), float(forces.drag_kgf)
+    b = shrimp.tijera_balance(lift, drag_, _f(v, "r"), _f(v, "lc"), _f(v, "lr"))
+    if not b.converged:
+        raise RuntimeError("equilibrio_tijera: el equilibrio no tiene solución con estos datos")
+    return {
+        "fcl_kgf": lift,
+        "fcd_kgf": drag_,
+        "alpha_deg": b.alpha_deg,
+        "beta_deg": b.beta_deg,
+        "t_kgf": b.tension_kgf,
+        "dp_m": b.spread_m,
+    }
+
+
+#: Opciones de las respuestas «sí o no» (en español: la corrección compara con ellas).
+SI, NO = "Sí", "No"
+
+
+@solver("av_cfp")
+def _av_cfp(v: Values) -> Values:
+    head = _f(v, "lima")
+    av = shrimp.vertical_opening_m(head)
+    lo, hi = shrimp.AV_HEADROPE_RANGE
+    return {
+        "av_m": av,
+        "av_lo_m": lo * head,
+        "av_hi_m": hi * head,
+        "limite_m": shrimp.CFP_AV_LIMIT_M,
+        "lima_max_m": shrimp.CFP_AV_LIMIT_M / shrimp.AV_HEADROPE_RATIO,
+        "cumple": SI if av <= shrimp.CFP_AV_LIMIT_M else NO,
+    }
+
+
+@solver("tangon_superposicion")
+def _tangon_superposicion(v: Values) -> Values:
+    dp, length, angle, heel = (_f(v, k) for k in ("dp", "tangon", "angulo", "pie_tangon"))
+    lay = multirig.outrigger_layout(dp, length, angle, heel)
+    return {
+        "tip_m": lay.tip_offset_m,
+        "gap_m": lay.gap_m,
+        "ancho_m": lay.swept_width_m,
+        "l_min_m": multirig.boom_length_without_overlap_m(dp, angle, heel),
+        "superponen": SI if lay.overlap else NO,
+    }
+
+
+#: Construcción de los cables de acero de las tangoneras del INIDEP (22 y 24 mm, 6x19).
+WARP_CONSTRUCTION = "6x19 (9/9/1)"
+
+
+@cache
+def _tangonera_wires() -> tuple[dict[str, Any], ...]:
+    """Cables genéricos 6x19 (9/9/1) del catálogo de componentes, del más fino al más grueso."""
+    from trawlkit.components import load_components
+
+    items = [
+        w.model_dump()
+        for w in load_components("wire", generic_only=True)
+        if getattr(w, "construction", None) == WARP_CONSTRUCTION
+    ]
+    return tuple(sorted(items, key=lambda it: float(it["diameter_mm"])))
+
+
+def _derive_cable_tabla(v: Values) -> Values:
+    from trawlkit.teaching.bank import fmt
+
+    rows = [
+        f"{fmt(float(w['diameter_mm']), 0)} mm → {fmt(float(w['breaking_load_t']), 1)} t"
+        for w in _tangonera_wires()
+    ]
+    return {"tabla": "; ".join(rows)}
+
+
+@solver("cable_tangonera", derive=_derive_cable_tabla)
+def _cable_tangonera(v: Values) -> Values:
+    load, sf = _f(v, "carga"), _f(v, "fs")
+    loads = warps.working_load_and_breaking_load(load, safety_factor=sf)
+    wires = list(_tangonera_wires())
+    sel = warps.select_warp(0.0, loads.min_breaking_load_kgf, items=wires)
+    source = next(w for w in wires if float(w["diameter_mm"]) == _f(v, "fuente"))
+    source_bl = float(source["breaking_load_t"])
+    return {
+        "rotura_kgf": loads.min_breaking_load_kgf,
+        "rotura_t": loads.min_breaking_load_kgf / 1000.0,
+        "dw_mm": sel.diameter_mm,
+        "dw_rotura_t": sel.breaking_load_t,
+        "fuente_rotura_t": source_bl,
+        "fs_fuente": source_bl * 1000.0 / load,
     }
 
 

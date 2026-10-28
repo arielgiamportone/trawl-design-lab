@@ -52,5 +52,14 @@
   "title": "Del plano al taller",
   "summary": "Recorrer la guía de construcción de la A-3 y entender la hoja de corte y el armado.",
   "steps": 2
+ },
+ {
+  "id": "lab.langostino_tangones",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "intermedio",
+  "title": "Red langostinera de tangones",
+  "summary": "Calcular la red tangonera del INIDEP con el tangonero típico, cambiar la velocidad y la profundidad, leer la separación de portones y las aberturas y compararlas con DynamiT.\n",
+  "steps": 4
  }
 ]

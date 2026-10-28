@@ -117,9 +117,10 @@ BASE = {"net": "fao_a3_standard", "vessel": "fao_a3_150hp"}
 
 def test_labs_load_and_reference_real_facts() -> None:
     labs = load_labs()
-    assert len(labs) >= 6
-    known = set(facts(BASE, construction=True))
+    assert len(labs) >= 7
     for x in labs.values():
+        # Los hechos del caso de partida de cada laboratorio (los de tangones tienen más).
+        known = set(facts(x.start, construction=True))
         for s in x.steps:
             for c in s.checks:
                 assert c.fact in known, (x.id, c.fact)

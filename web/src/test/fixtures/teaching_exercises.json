@@ -326,5 +326,45 @@
   "level": "basico",
   "title": "Cuánto cuesta la red por hora de arrastre",
   "answers": 3
+ },
+ {
+  "id": "langostino.abertura_horizontal",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "basico",
+  "title": "Abertura horizontal de una red langostinera",
+  "answers": 3
+ },
+ {
+  "id": "langostino.equilibrio_roth",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "avanzado",
+  "title": "Separación de portones por el equilibrio de la tijera",
+  "answers": 3
+ },
+ {
+  "id": "langostino.abertura_vertical",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "basico",
+  "title": "Abertura vertical y el límite de la Res. CFP 7/2018",
+  "answers": 3
+ },
+ {
+  "id": "langostino.tangon",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "intermedio",
+  "title": "Largo del tangón y superposición de las redes",
+  "answers": 4
+ },
+ {
+  "id": "langostino.cable",
+  "chapter": "26_aparejos_dobles_y_vara",
+  "topic": "langostino",
+  "level": "intermedio",
+  "title": "Cable de remolque de una red langostinera",
+  "answers": 3
  }
 ]

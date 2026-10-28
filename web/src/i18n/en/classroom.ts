@@ -23,6 +23,7 @@ export const classroom: Messages['classroom'] = {
     '23': 'Real sea',
     '24': 'Mesh and selectivity',
     '25': 'Uncertainty',
+    '26': 'Outrigger, twin and beam trawls',
     '36': 'Construction',
     '37': 'Economics',
   },
