@@ -137,7 +137,7 @@ encadena semejanza, refinado y armado:
 | Redes en el catálogo | 35 (22 publicadas, 13 borradores), con procedencia valor por valor |
 | Componentes | 1466 en 7 tipos (244 genéricos y datos puntuales de 18 marcas) |
 | Métodos de resistencia de la red | 13 |
-| Erratas del Excel documentadas y corregidas | 27 |
+| Erratas del Excel documentadas y corregidas | 28 |
 | Valores de referencia del Excel | 697, reproducidos con rtol 1e-6 en modo `excel` |
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |

@@ -26,6 +26,7 @@ from trawlkit.io import load_net
 from trawlkit.netcheck import check
 V.setup_style()
 PTS = H.points()  # runs the engine for every haul and every simulation (≈ 30 s)
+BA = H.before_after()  # and again without calibration (Phase 20.5; ≈ 30 s)
 ```
 
 ## Purpose
@@ -38,10 +39,12 @@ plan, the rigging, DynamiT simulations and hauls measured with telemetry sensors
 PX, Scanmar): door spread (DS), vertical opening (VO) and sometimes wing-end spread (WS), with
 the depth, warp length and speed of each haul.
 
-This chapter digitises five nets from those sources and compares the engine, **without changing
-its methods**, with 114 measured hauls, one survey mean and six DynamiT simulations. Systematic
-deviations are described with numbers and a calibration is proposed that is **not applied**: it is
-left for a decision.
+This chapter digitises five nets from those sources and compares the engine with 114 measured
+hauls, one survey mean and six DynamiT simulations. Systematic deviations are described with
+numbers and two of them, those of the door spread, are **calibrated in corrected mode** (Phase
+20.5, {ref}`calibration-hake`): the response of DS to warp length and the effective CL of the
+polyvalent doors without a published polar. `EXCEL` mode, the golden values, the A-3 and every
+case with the book's table warp do not change.
 
 ## The nets
 
@@ -101,11 +104,12 @@ conditions of each haul or simulation (`trawlkit.fieldcheck.engine_point`):
   not a new method: with `None` the engine gives the same as before;
 - the **door of the series**, with its published area and weight and the published polar (CL and
   CD from IAT 101/2017 and IAT 026/25) or, for the polyvalent doors, the Seafish «Morgère
-  Polyvalent Ovale» sheet (assumed);
+  Polyvalent Ovale» sheet (assumed) with the calibrated effective CL;
 - the series' **sweeps** when given.
 
-The quantities are the book's for fish trawls, unchanged: **DS** from Fridman's wing spread
-averaged between 2 and 4 kn and carried to the doors (the rule of every catalogue case); the
+The quantities are the book's for fish trawls: **DS** from Fridman's wing spread (with the
+calibrated warp factor when the warp is not the table's) averaged between 2 and 4 kn and carried
+to the doors (the rule of every catalogue case); the
 book's **WS** (`Dim!F61`, mean of four rules); Suzuki's **VO** (`Mec!D255`, fixed); and the **total
 drag** (`Rem!H118` + two doors) at the haul's speed, interpolated between the calculation speeds.
 The declared **tolerances** are:
@@ -124,32 +128,35 @@ have no published polar. Cases outside the tolerance are **in bold** in the tabl
 
 ## Against DynamiT
 
-Each cell is «engine / DynamiT (deviation)»:
+Each cell is «calibrated engine / DynamiT (deviation)»:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 V.md_table(["Net", "Depth, warp, v", "DS [m]", "WS [m]", "VO [m]", "R [kgf]"], H.simulated_rows())
 ```
 
-- **VA-35.5/45 at 100 m**: WS (+3 %) and VO (+7 %) fall within tolerance; DS is 24 % lower and the
-  total drag 26 % higher (the net alone, Aberdeen, gives 6072 kgf: −3 %; the difference is the
-  doors and warps the book adds, and DynamiT does not say what its «total drag» includes).
+- **VA-35.5/45 at 100 m**: WS (+5 %) and VO (+7 %) fall within tolerance; DS is 22 % lower (24 %
+  uncalibrated: 500 m of warp against the table's 380 m) and the total drag 26 % higher (the net
+  alone, Aberdeen, gives 6072 kgf: −3 %; the difference is the doors and warps the book adds, and
+  DynamiT does not say what its «total drag» includes).
 - **VA-35.5/45 at 400 m and 1200 m of warp** (SPF 08.5 doors): the drag matches (−2 %) and WS is
-  within (−14 %), but DS is 42 % lower and Suzuki's VO, fixed at 4.21 m, does not drop to the
+  within (−14 %), but DS is 41 % lower and Suzuki's VO, fixed at 4.21 m, does not drop to the
   simulated 2.4 m. The report shows that with those doors the net over-spreads at depth (WS = 80 %
-  of the headrope): exactly the regime where the engine moves least.
-- **Baldino 46.4 m**: the engine's DS is 36–39 % lower than DynamiT, but the report does not
+  of the headrope): exactly the regime where the engine moves least. The warp is almost the
+  table's (1130 m), so the warp calibration does not act.
+- **Baldino 46.4 m**: the engine's DS is 35–37 % lower than DynamiT, but the report does not
   publish the sweeps and the case uses the book's 25 m (`Dim!F65`). The engine's DS is proportional
-  to the rigging (wing spread · (LRw + rigging)/LRw): with 100 m of sweeps it would give 194 m,
-  DynamiT's. Without the figure it cannot be decided. The book's WS (43 m, 0.93 of the headrope)
-  exceeds DynamiT's by 50–63 %: Fridman's wing spread with a 7.5 m² door exceeds the headrope
+  to the rigging (wing spread · (LRw + rigging)/LRw): with 100 m of sweeps it would give
+  DynamiT's. Without the figure it cannot be decided. The book's WS (42–45 m, over 0.9 of the
+  headrope) exceeds DynamiT's by 54–65 %: Fridman's wing spread with a 7.5 m² door exceeds the headrope
   (54 m at 4 kn), which the net's geometry does not allow and which {doc}`32_validacion_dynamit`
   already showed above 4 kn. The total drag is 12–13 % lower.
 
 ## Against measurements
 
-Per series: mean engine deviation [minimum; maximum] and share of hauls within tolerance. An
-asterisk on the warp means the source does not publish it and the engine uses its table:
+Per series: mean deviation of the calibrated engine [minimum; maximum] and share of hauls within
+tolerance. An asterisk on the warp means the source does not publish it and the engine uses its
+table (the comparison with the uncalibrated engine is in {ref}`calibration-hake`):
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -164,8 +171,8 @@ mystnb:
     caption: |
       Door spread of the VA-35.5/45 against warp length. Dots: measured hauls (IAT 151/18 with
       polyvalent doors; IC 029/18 and IC 012/21 with SPF08) and the DynamiT simulation of IAT
-      026/25 (diamond). Crosses: the engine in the same conditions (depth, warp, speed and door of
-      each haul).
+      026/25 (diamond). Crosses: the calibrated engine in the same conditions (depth, warp, speed
+      and door of each haul).
     name: fig-32m-dp-cable
 ---
 fig, ax = plt.subplots(figsize=(8.6, 5.0))
@@ -192,7 +199,7 @@ plt.show()
 
 Hauls 17–28 of the VA-05/2024 cruise {cite:p}`rubio2024calibracion` are the only ones with WS
 measured by wing-end sensors, at 21–24 m and at 105–117 m, with SPF 08.5 doors of 4.8 m² (each
-cell: engine / measured):
+cell: calibrated engine / measured):
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -203,23 +210,25 @@ V.md_table(["Haul", "Depth [m]", "Warp [m]", "v [kn]", "DS [m]", "WS [m]", "VO [
 The book's WS stays within ±20 % in eight of the nine hauls with wing sensors (−5 % to +13 %).
 Haul 18 gives +20 %: it is the haul for which the report notes that «the wing-end spread averaged
 15 m and by the plan it should be 21 m» and changes the door shackling (p. 12). DS shows the same pattern as
-the VA net: the engine overestimates it with little warp (+23 % to +47 % with 104–160 m, although
-in hauls 17–19 the door was shackled for the «lowest spreading force», pp. 11–12) and
-underestimates it with 351–403 m (−12 % to −16 %).
+the VA net: the engine overestimates it with little warp (+18 % to +43 % in hauls 17–21, with
+104–160 m, although in hauls 17–19 the door was shackled for the «lowest spreading force», pp.
+11–12) and underestimates it with 351–403 m (−13 % to −16 %).
 
 ## Systematic deviations
 
 **1. Door spread grows with warp about half as fast as measured.** With each haul's depth, warp
-and door, the slope of the engine's DS against warp is a fraction of the measured one in the three
-series with published warp:
+and door, the slope of the (uncalibrated) engine's DS against warp is a fraction of the measured
+one in the three series with published warp; the «n calibrated» column is the engine's with the
+Phase 20.5 calibration:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 V.md_table(["Net", "Series", "Hauls", "dDS/dwarp measured", "dDS/dwarp engine",
-            "n measured (DS ∝ warpⁿ)", "n engine", "measured / engine"], H.warp_fit_rows())
+            "n measured (DS ∝ warpⁿ)", "n engine", "n calibrated", "measured / engine"],
+           H.warp_fit_rows())
 FITS = H.warp_fits()
 DN = float(np.mean([f["exp_measured"] - f["exp_engine"] for f in FITS]))
-print(f"mean Δn = {DN:.2f}")
+print(f"Mean difference of exponents (measured − engine) = {DN:.2f}")
 ```
 
 In Fridman's wing spread the warp enters above and below the fraction
@@ -232,9 +241,10 @@ warps (−33 % in IC 029/18, −42 % against IAT 026/25) and overshoots with sho
 **2. The level of DS depends on the door, and the polar of the polyvalent doors is not
 published.** With the SPF08 doors of published area (IC 012/21, 240–470 m of warp) the mean
 deviation is nil and all 40 hauls fall within ±20 %. With the 1200–1260 kg polyvalent doors (area
-of 5.58 m² and Morgère Polyvalent Ovale polar assumed) the engine overestimates: +26 % in IAT
-151/18, +39 % in Tech. Rep. 66 and +51 % against the mean of IC 041/25 (the last two without
-published warp). A CL of 1.18 at 32° is more than those doors seem to give at sea.
+of 5.58 m² and Morgère Polyvalent Ovale polar assumed) the uncalibrated engine overestimates:
++26 % in IAT 151/18, +39 % in Tech. Rep. 66 and +51 % against the mean of IC 041/25 (the last two
+without published warp). A CL of 1.14 at 32° is more than those doors seem to give at sea; the
+calibration lowers it ({ref}`calibration-hake`).
 
 **3. Suzuki's vertical opening is fixed.** It is a fraction of the net's circumference: 4.21 m on
 the as-built VA and 3.76 m on the Engel, with no speed, floats or depth. What is measured on the VA
@@ -245,30 +255,111 @@ The book's Fridman VO, which does depend on speed, gives 7–10 m and is no alte
 
 **4. The book's WS is right on the Engel with sensors and overshoots on the large net.** +5 % on
 average in IC 016/24 (eight of nine hauls within ±20 %) and +3 % against DynamiT on the VA at
-100 m; +61 % against the sonar of Tech. Rep. 66, where DS is also +39 % because of the assumed
-door; +50 to +63 % on the 46.4 m net, where Fridman's wing spread exceeds the headrope.
+100 m; +35 % against the sonar of Tech. Rep. 66 (+61 % uncalibrated, when DS was +39 % because
+of the assumed door); +54 to +65 % on the 46.4 m net, where Fridman's wing spread exceeds the
+headrope.
 
 **5. Drag.** There are only simulations: +26 % (VA, 100 m), −2 % (VA, 400 m) and −12 to −13 %
 (Baldino). No measured warp tension was published for these nets.
 
-## Proposed calibration (not applied)
+(calibration-hake)=
+## Calibration (Phase 20.5)
 
-The engine was not changed: the book's methods and the golden values stay as they are. For the user
-to decide, the calibration these data suggest is:
+The calibration acts **only in corrected mode** and only on the door spread of rigs with otter
+boards (not on pair trawls, beam trawls or the shrimp-net method, which does not use the warp). It
+has two parts, each with *calibrated* provenance (`ProvenanceKind.CALIBRATED`):
 
-1. **Sensitivity of DS to warp**, only in corrected mode and for fish trawls:
-   $DS_{cal} = DS_{engine} \cdot (L_s / L_{s,ref})^{\Delta n}$, with $L_{s,ref}$ the book's warp for
-   the case depth and $\Delta n$ the difference of exponents in the table above (0.10 to 0.37
-   depending on the series; the mean is printed above). With the table's warp the factor is 1 and
-   the design case does not change; only the response to a different warp changes.
-2. **Polyvalent doors**: an effective CL lower than the Seafish sheet's at 32°, fitted to the 52
-   hauls of IAT 151/18 (with the sheet, the measured value is 0.80 times the engine's), or
-   publishing the polar INIDEP uses. Meanwhile the area (5.58 m²) and the polar remain assumptions.
-3. **VO**: no rule of the book reproduces the drop with depth; a correction for floatation (the
-   floats of the Engel and the VA) needs more series than this chapter's.
+1. **Warp factor of Fridman's wing spread** (erratum `fridman_dp_warp_saturation`,
+   {doc}`erratas`): $DPA_{cal} = DPA \cdot (L_s / L_{s,table})^{\Delta n}$, with $L_{s,table}$ the
+   warp the book tabulates for the depth (`Mec!E177`). It is 1 with the table's warp, that is, in
+   every design case; it only acts when the case has a measured warp
+   (`DesignCase.measured_warp_m`). Since it multiplies the wing spread, it moves DS, the book's WS
+   and the drag that depend on it in the same proportion.
+2. **Effective CL of the polyvalent door without a published polar**: the CL of the type's data
+   sheet is multiplied by a factor (`door_type: polyvalent` in the net, with no `door_cl`/`door_cd`
+   from the source). Doors with a published polar (this chapter's SPF08 and SPF 08.5, the book's
+   oval door) do not change.
+
+**Fitting Δn.** By least squares in logarithms,
+$\log(DS_{measured}/DS_{engine}) = a_{series} + \Delta n \cdot \log(L_s/L_{s,table})$, over the
+hauls of the three series with published warp and measured slope (IAT 151/18, IC 012/21 and
+IC 016/24; `trawlkit.fieldcheck.warp_exponent_fit`). Each series' level $a_{series}$ absorbs what
+does not depend on the warp (the door's CL), so Δn comes from the variation within each series.
+Cross-validation fits Δn with two series and tests it on the third: the table gives the slope of
+each series alone, Δn without it and the scatter of its hauls (in log, around its level) without
+the correction and with the Δn of the other two.
+
+```{code-cell} ipython3
+:tags: [remove-input]
+from trawlkit import rigging
+FIT = H.warp_fit()
+lo, hi = FIT.ci95
+print(f"Δn = {FIT.delta_n:.3f} ± {FIT.se:.3f} (standard error), 95 % interval: "
+      f"[{lo:.2f}; {hi:.2f}], {FIT.n} hauls; constant "
+      f"DP_WARP_EXPONENT_CORRECTION = {rigging.DP_WARP_EXPONENT_CORRECTION:.2f}")
+V.md_table(["Series left out", "Hauls", "Slope of the series alone", "Δn without it",
+            "Scatter without correction", "Scatter with Δn"], H.warp_fit_table())
+```
+
+The result is modest and must be read as such: **the 95 % interval includes zero** and the three
+series disagree. IC 012/21 and IC 016/24 ask for Δn ≈ 0.2, but in IAT 151/18, the largest series,
+depth and warp grow together and $L_s/L_{s,table}$ explains almost nothing (own slope ≈ −0.05).
+The difference of exponents in the table above (≈ 0.2) measures the response to *absolute* warp;
+the correction, so as not to change any design case, can only use the warp *relative to the
+table's*, and in these data the relative warp varies little. With the declared cross-validation
+tolerance (the scatter of the series left out may not grow by more than 0.01 in log, ≈ 1 % of DS)
+the three tests pass, but none improves by more than one point. The factor stays between 0.97 and
+1.03 in the measured hauls; that is why DS with long warp (IC 029/18, DynamiT at 400 m) is still
+27–41 % low.
+
+**Effective CL of the polyvalent door.** With the warp factor applied, the CL factor is sought
+that makes the engine's mean DS equal to the measured one over the 52 hauls of IAT 151/18
+(92.2 m; `trawlkit.fieldcheck.polyvalent_cl_fit`), and it is checked against the two Engel series
+with the same doors (Tech. Rep. 66 and IC 041/25), which do not enter the fit:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+f = rigging.POLYVALENT_CL_EFFECTIVE_FACTOR
+door = F.validation_door("inidep_iat151_va355_construida", "polivalente_1200")
+cl = rigging.door_polar(door, 32.0, interpolate=True).cl
+print(f"POLYVALENT_CL_EFFECTIVE_FACTOR = {f:.2f}: effective CL at 32° = {f:.2f} × {cl:.2f} = "
+      f"{f * cl:.2f}")
+```
+
+The effective CL ends up close to that of the SPF doors with a published polar (0.92–1.00), which
+gives some confidence that the fit corrects the assumed polar and not something else.
+
+**Before and after.** DS of each measured series and each simulation, uncalibrated and
+calibrated: mean deviation · mean absolute deviation · share within ±20 %, with the warp factor
+(range in the series) and the CL factor:
+
+```{code-cell} ipython3
+:tags: [remove-input]
+V.md_table(["Net", "Series", "n", "Warp factor", "CL factor", "Before", "Calibrated"],
+           H.calibration_rows())
+TOT = H.totals()
+(mb, wb, n), (ma, wa, _) = TOT["before"], TOT["after"]
+print(f"The {n:.0f} measured hauls: mean absolute deviation {mb:.1f} % → {ma:.1f} %; within ±20 %: "
+      f"{100 * wb:.0f} % → {100 * wa:.0f} %")
+```
+
+Almost all the improvement comes from the polyvalent door's CL: IAT 151/18 falls within tolerance
+(by construction, since the factor is fitted to its mean) and, what matters, so do the two Engel
+check series. The series with SPF doors of published polar stay as they were. The tests
+(`tests/test_calibration_20_5.py`) set the thresholds: the mean absolute deviation of the measured
+hauls must drop by at least 5 points and the share within ±20 % rise by at least 25; in the SPF
+series the deviation may not worsen by more than half a point.
+
+**What is not calibrated.** Suzuki's VO (fixed) and the book's WS are not touched: no rule of the
+book reproduces the drop of VO with depth, and a correction for floatation needs more series than
+this chapter's.
 
 ## Limitations
 
+- The calibration comes from **few series** (three for Δn, one for the polyvalent CL, with two
+  check series) and from **a single type of net** (INIDEP hake trawls of 35.5–46 m headrope);
+  outside that range (other nets, other doors, very long warps) it is an extrapolation. VO is not
+  calibrated.
 - The measurements do not give each haul's speed in IAT 151/18 (the 3.8 kn mean is used), nor the
   warp in Tech. Rep. 66 and IC 041/25 (the book's table is used), nor warp tension in any case.
 - INIDEP's polyvalent doors have no published area or polar for every cruise; the SPF doors have

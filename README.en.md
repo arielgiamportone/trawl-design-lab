@@ -148,7 +148,7 @@ similarity, refinement and rigging:
 | Nets in the catalogue | 35 (22 published, 13 drafts), with value-by-value provenance |
 | Components | 1466 in 7 kinds (244 generic, spot data from 18 brands) |
 | Net drag methods | 13 |
-| Excel errata documented and fixed | 27 |
+| Excel errata documented and fixed | 28 |
 | Excel reference values | 697, reproduced at rtol 1e-6 in `excel` mode |
 | Offline engine (Pyodide) | parity with CPython, rtol 1e-9 |
 | Species and seabed types | 8 species · 5 seabeds |
