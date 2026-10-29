@@ -319,7 +319,8 @@ export const labels = {
     float_diameter_mm: 'Diámetro de las boyas (vacío = automático).',
     warp_safety_factor: 'Factor de seguridad del cable de arrastre sobre la carga de trabajo.',
     warp_design_speed_kn: 'Velocidad con la que se dimensiona el cable.',
-    measured_warp_m: 'Cable filado en un lance medido (vacío = por la profundidad, tabla del libro).',
+    measured_warp_m:
+      'Cable filado en un lance medido (vacío = por la profundidad, tabla del libro).',
     rob_share:
       'Fracción del tiro que absorben los cables y el aparejo (resistencia de otros elementos).',
     ballast_min_speed_kn: 'Velocidad del lastre mínimo.',
