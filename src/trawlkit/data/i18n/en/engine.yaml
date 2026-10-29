@@ -634,20 +634,25 @@ polar del portón plano de la A-3: polar of the A-3's flat otter board
 : 'door_cl_calibrated: otter board {door} of polyvalent type without a published polar: effective CL =
   {f:.2f} × CL of the type''s data sheet = {cl:.3f} (provenance calibrated with the IAT 151/18 hauls)'
 ? 'La DPA de Fridman tiene el cable horizontal arriba y abajo de la fracción y se satura: con un cable
-  distinto del de la tabla la separación de portones cambia menos que lo medido. En modo corregido se
-  multiplica por (Ls/Ls_tabla)^Δn, calibrado con lances medidos (1 con el cable de la tabla).'
+  distinto del de la tabla la separación de portones cambia menos que lo medido. Desvío documentado, no
+  corregido: el ajuste de (Ls/Ls_tabla)^Δn a los lances medidos no es significativo y el exponente queda
+  en 0.'
 : 'Fridman''s wing spread has the horizontal warp above and below the fraction and saturates: with a warp
-  other than the table''s the door spread changes less than measured. In corrected mode it is multiplied
-  by (Ls/Ls_table)^Δn, calibrated with measured hauls (1 with the table warp).'
+  other than the table''s the door spread changes less than measured. Documented deviation, not corrected:
+  the fit of (Ls/Ls_table)^Δn to the measured hauls is not significant and the exponent stays at 0.'
 ? CL efectivo de los portones polivalentes de 5,58 m² del INIDEP ajustado a la DP media medida de IAT
-  151/18, con el factor de cable aplicado; verificado con el Inf. Téc. 66 (casarsa2007inftec66) e IC 041/25
-  (alvarezcolombo2025ic041)
+  151/18 (sin corrección de cable); verificado con el Inf. Téc. 66 (casarsa2007inftec66) e IC 041/25 (alvarezcolombo2025ic041)
 : Effective CL of INIDEP's 5.58 m² polyvalent otter boards fitted to the mean door spread measured in
-  IAT 151/18, with the warp factor applied; checked against Tech. Rep. 66 (casarsa2007inftec66) and IC
-  041/25 (alvarezcolombo2025ic041)
-? Δn ajustado por mínimos cuadrados en log(DP medida / DP del motor) contra log(cable / cable de la tabla),
+  IAT 151/18 (without warp correction); checked against Tech. Rep. 66 (casarsa2007inftec66) and IC 041/25
+  (alvarezcolombo2025ic041)
+? 'Δn ajustado por mínimos cuadrados en log(DP medida / DP del motor) contra log(cable / cable de la tabla),
   con un nivel por serie, a IAT 151/18 (bartozzetti2018iat151), IC 012/21 (roth2021ic012) e IC 016/24
-  (rubio2024calibracion); validación cruzada dejando una serie afuera
-: Δn fitted by least squares of log(measured door spread / engine door spread) against log(warp / table
+  (rubio2024calibracion); validación cruzada dejando una serie afuera. No significativo (intervalo del
+  95 % con el 0): no se aplica'
+: 'Δn fitted by least squares of log(measured door spread / engine door spread) against log(warp / table
   warp), with one level per series, to IAT 151/18 (bartozzetti2018iat151), IC 012/21 (roth2021ic012) and
-  IC 016/24 (rubio2024calibracion); leave-one-series-out cross-validation
+  IC 016/24 (rubio2024calibracion); leave-one-series-out cross-validation. Not significant (95 % interval
+  includes 0): not applied'
+'Sin corrección en ambos modos: el ajuste del exponente de cable a los lances medidos no es significativo (Fase 20.5).': 'Not
+  corrected in either mode: the fit of the warp exponent to the measured hauls is not significant (Phase
+  20.5).'

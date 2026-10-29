@@ -46,12 +46,24 @@ AV_IZZO_SHARES: tuple[float, ...] = (0.0435, 0.05, 0.06, 0.07)
 #: Relación flecha/largo de la catenaria usada por la hoja (Mec!O266, valor fijo).
 CATENARY_RATIO_EXCEL: float = 0.216
 
-#: Corrección del exponente del cable en la DPA de Fridman (Fase 20.5, sólo modo corregido):
-#: ``DPA_cal = DPA · (Ls / Ls_tabla)^Δn`` con ``Ls_tabla`` el cable que el libro tabula para la
-#: profundidad (Mec!E177). Ajuste por mínimos cuadrados en logaritmos, con un nivel por serie, a
-#: los 103 lances con cable publicado de IAT 151/18, IC 012/21 e IC 016/24
-#: (:func:`trawlkit.fieldcheck.warp_exponent_fit`); errata ``fridman_dp_warp_saturation``.
-DP_WARP_EXPONENT_CORRECTION: float = 0.10
+#: Corrección del exponente del cable en la DPA de Fridman (Fase 20.5): ``DPA_cal = DPA ·
+#: (Ls / Ls_tabla)^Δn``, con ``Ls_tabla`` el cable que el libro tabula para la profundidad
+#: (Mec!E177). **No se aplica: vale 0** (factor 1 en todo caso; errata
+#: ``fridman_dp_warp_saturation`` documentada y no corregida).
+#:
+#: Ajuste (:func:`trawlkit.fieldcheck.warp_exponent_fit`, mínimos cuadrados en log con un nivel
+#: por serie, 103 lances con cable publicado de IAT 151/18, IC 012/21 e IC 016/24):
+#: Δn = 0,105 ± 0,091 (error estándar), intervalo del 95 % [−0,08; 0,29]. Pendiente de cada serie
+#: sola: −0,05 (IAT 151/18), 0,22 (IC 012/21) y 0,24 (IC 016/24). Validación cruzada dejando una
+#: serie afuera: Δn = 0,23 / 0,08 / 0,03, sin mejorar la dispersión de la serie dejada afuera más
+#: de un punto.
+#:
+#: Por qué no se aplica: el ajuste no es significativo (el intervalo incluye el 0) y las series no
+#: coinciden; en IAT 151/18, la más numerosa, la profundidad y el cable crecen juntos y
+#: ``Ls / Ls_tabla`` casi no varía. Lo resolverían lances a varios cables filados **a la misma
+#: profundidad** (con el mismo aparejo). La maquinaria (:func:`dp_warp_factor`,
+#: :func:`table_warp_m`, el ajuste y la validación cruzada) queda lista para esos datos.
+DP_WARP_EXPONENT_CORRECTION: float = 0.0
 
 #: Procedencia de :data:`DP_WARP_EXPONENT_CORRECTION`.
 DP_WARP_EXPONENT_PROVENANCE = Provenance(
@@ -62,7 +74,8 @@ DP_WARP_EXPONENT_PROVENANCE = Provenance(
         "Δn ajustado por mínimos cuadrados en log(DP medida / DP del motor) contra "
         "log(cable / cable de la tabla), con un nivel por serie, a IAT 151/18 "
         "(bartozzetti2018iat151), IC 012/21 (roth2021ic012) e IC 016/24 "
-        "(rubio2024calibracion); validación cruzada dejando una serie afuera"
+        "(rubio2024calibracion); validación cruzada dejando una serie afuera. No significativo "
+        "(intervalo del 95 % con el 0): no se aplica"
     ),
 )
 
@@ -146,10 +159,11 @@ def dp_warp_factor(
     En la DPA de Fridman (:func:`dpa_fridman_m`) el cable horizontal Lsh está arriba y abajo de
     la fracción y la DPA se satura con el cable; en el mar sigue creciendo (errata
     ``fridman_dp_warp_saturation``). Vale 1 en modo :attr:`Compat.EXCEL` y con el cable de la
-    tabla del libro (:func:`table_warp_m`), es decir, en todo caso de diseño; sólo actúa con un
-    cable distinto (``DesignCase.measured_warp_m``).
+    tabla del libro (:func:`table_warp_m`), es decir, en todo caso de diseño; sólo actuaría con un
+    cable distinto (``DesignCase.measured_warp_m``). Con el exponente vigente
+    (:data:`DP_WARP_EXPONENT_CORRECTION` = 0, no aplicado) vale 1 siempre.
     """
-    if compat is Compat.EXCEL:
+    if compat is Compat.EXCEL or exponent == 0.0:
         return 1.0
     return float((warp_m / table_warp_m(depth_m)) ** exponent)
 

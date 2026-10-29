@@ -304,9 +304,9 @@ CALIBRATED_DOOR_TYPE = "polyvalent"
 
 #: Factor de CL efectivo del portón polivalente sin polar publicada (Fase 20.5, sólo modo
 #: corregido): ``CL_ef = factor · CL`` de la hoja del tipo. Ajustado para que la DP media de los
-#: 52 lances de IAT 151/18 (92,2 m) coincida con la del motor, ya aplicado el factor de cable
-#: (:func:`trawlkit.fieldcheck.polyvalent_cl_fit`).
-POLYVALENT_CL_EFFECTIVE_FACTOR: float = 0.79
+#: 52 lances de IAT 151/18 (92,2 m) coincida con la del motor, con el factor de cable vigente
+#: (1: la corrección de cable no se aplica; :func:`trawlkit.fieldcheck.polyvalent_cl_fit`).
+POLYVALENT_CL_EFFECTIVE_FACTOR: float = 0.80
 
 #: Procedencia de :data:`POLYVALENT_CL_EFFECTIVE_FACTOR`.
 POLYVALENT_CL_PROVENANCE = Provenance(
@@ -315,7 +315,7 @@ POLYVALENT_CL_PROVENANCE = Provenance(
     page="tabla 1 (52 lances)",
     note=N_(
         "CL efectivo de los portones polivalentes de 5,58 m² del INIDEP ajustado a la DP media "
-        "medida de IAT 151/18, con el factor de cable aplicado; verificado con el Inf. Téc. 66 "
+        "medida de IAT 151/18 (sin corrección de cable); verificado con el Inf. Téc. 66 "
         "(casarsa2007inftec66) e IC 041/25 (alvarezcolombo2025ic041)"
     ),
 )

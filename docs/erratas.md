@@ -46,7 +46,7 @@ direcciones (`tests/test_corrected_mode.py` lo hace a nivel del caso completo, `
 | float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP sobre vector sin ordenar | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / boya de número más cercano en `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
 | flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Redondeo aplicado sólo a parte de la columna | `rigging.floats.flotation_fridman(rounddown=…)`, máscara en `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
 | door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Superficie requerida lineal en la potencia, calibrada para 150–180 HP y extrapolada a buques más potentes | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
-| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | La DPA de Fridman se satura con el cable: con un cable distinto del de la tabla la DP cambia menos que lo medido | `rigging.dp_warp_factor` (factor $(L_s/L_{s,tabla})^{\Delta n}$, 1 con el cable de la tabla) en `rigging.fridman_spread(warp_factor=…)` (→ `model.fridman_door_spread_m`, `model._stage_spread`) · `test_calibration_20_5.py` |
+| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | La DPA de Fridman se satura con el cable: con un cable distinto del de la tabla la DP cambia menos que lo medido | sin corrección (desvío documentado): `rigging.dp_warp_factor` con `DP_WARP_EXPONENT_CORRECTION = 0` (el Δn ajustado no es significativo) · `test_calibration_20_5.py` |
 
 Además, varias tablas resumen contienen valores pegados a mano en lugar de fórmulas (marcados con
 `"static": true` en `tests/golden/*.json`), y los coeficientes leídos con `MID()` desde etiquetas de
@@ -216,31 +216,31 @@ por debajo de su tiro total.
 
 ## Saturación de la DPA de Fridman con el cable
 
-La errata `fridman_dp_warp_saturation` tampoco es una fórmula mal escrita: en la DPA de Fridman
-(`Mec!P164`, {doc}`16_aberturas`) el cable horizontal $L_{sh}$ está arriba y abajo de la fracción,
-$2 L_{sh} L_{Rw} E_{dy} / (L_{sh} + L_{nc}(1 + E_{dx}))$, así que con cable largo la separación de
-portones casi no cambia. En el mar sigue creciendo ({doc}`32_validacion_merluza`). En modo
-corregido la DPA se multiplica por $(L_s/L_{s,tabla})^{\Delta n}$, con $L_{s,tabla}$ el cable de
-la tabla del libro para la profundidad y $\Delta n$ ajustado a 103 lances medidos con cable
-publicado (procedencia *calibrada*). Con el cable de la tabla el factor vale 1: el caso del libro,
-sus valores dorados y todo caso de diseño no cambian; sólo actúa con un cable medido
-(`DesignCase.measured_warp_m`).
+La errata `fridman_dp_warp_saturation` no es una fórmula mal escrita ni se corrige: es un **desvío
+documentado**. En la DPA de Fridman (`Mec!P164`, {doc}`16_aberturas`) el cable horizontal
+$L_{sh}$ está arriba y abajo de la fracción, $2 L_{sh} L_{Rw} E_{dy} / (L_{sh} + L_{nc}(1 + E_{dx}))$,
+así que con cable largo la separación de portones casi no cambia; en el mar sigue creciendo
+({doc}`32_validacion_merluza`: −33 % con 500–930 m en IC 029/18, −42 % frente a DynamiT con 1200 m).
+La Fase 20.5 ajustó una corrección $(L_s/L_{s,tabla})^{\Delta n}$, que vale 1 con el cable de la
+tabla del libro, a 103 lances con cable publicado. El ajuste no es significativo (el intervalo del
+95 % incluye el 0), así que el exponente vigente es 0 y el factor vale 1 en los dos modos. La tabla
+compara ese factor con el que daría el Δn ajustado:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 from trawlkit import rigging
-from trawlkit.compat import Compat
 
 DN = rigging.DP_WARP_EXPONENT_CORRECTION
+DN_FIT = 0.105  # trawlkit.fieldcheck.warp_exponent_fit() (32_validacion_merluza)
 rows = []
 for depth in (40.0, 100.0, 400.0):
     tab = rigging.table_warp_m(depth)
-    for k in (0.5, 1.0, 1.5, 2.0):
+    for k in (0.5, 1.0, 2.0):
         w = k * tab
         rows.append([V.fmt(depth, 0), V.fmt(w, 0), V.fmt(k, 1),
                      V.fmt(rigging.dp_warp_factor(w, depth), 3),
-                     V.fmt(rigging.dp_warp_factor(w, depth, Compat.EXCEL), 3)])
-print(f"Δn = {DN:.2f}".replace(".", ","))
-V.md_table(["Profundidad [m]", "Cable [m]", "Cable / tabla", "Factor (corregido)", "Factor (Excel)"],
-           rows)
+                     V.fmt(rigging.dp_warp_factor(w, depth, exponent=DN_FIT), 3)])
+print(f"Δn vigente = {DN:.2f}; ajustado = {DN_FIT:.3f} (no significativo)".replace(".", ","))
+V.md_table(["Profundidad [m]", "Cable [m]", "Cable / tabla", "Factor vigente",
+            "Factor con el Δn ajustado"], rows)
 ```

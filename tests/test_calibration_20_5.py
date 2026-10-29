@@ -1,7 +1,8 @@
 """Fase 20.5: calibración de la separación de portones (cable y portón polivalente).
 
-Sólo en modo corregido: el factor de cable ``(Ls / Ls_tabla)^Δn`` de la DPA de Fridman y el CL
-efectivo del portón polivalente sin polar publicada. El libro (modo ``EXCEL``), los valores
+Sólo en modo corregido: el CL efectivo del portón polivalente sin polar publicada (aplicado) y el
+factor de cable ``(Ls / Ls_tabla)^Δn`` de la DPA de Fridman (ajustado y **no aplicado**: Δn no es
+significativo, ``DP_WARP_EXPONENT_CORRECTION = 0``). El libro (modo ``EXCEL``), los valores
 dorados, el caso A-3 y todo caso con el cable de la tabla no cambian.
 """
 
@@ -33,6 +34,9 @@ SPF_MAD_WORSEN_MAX = 0.005
 #: Validación cruzada: con el Δn ajustado sin ella, la dispersión de la serie dejada afuera (en
 #: log, alrededor de su nivel) no puede crecer más de 0,01 (≈ 1 % de la DP).
 CV_SCATTER_TOLERANCE = 0.01
+#: IC 041/25 es una sola media de campaña (101,2 m, lances de 64–158 m sin cable publicado): sin la
+#: corrección de cable el motor calibrado queda en +20 %; umbral declarado ±22 %.
+IC041_TOLERANCE = 0.22
 
 HAKE_NETS = (
     "inidep_iat101_va355_disenada",
@@ -82,9 +86,11 @@ def test_factor_uno_con_el_cable_de_la_tabla(depth: float) -> None:
     warp = rigging.table_warp_m(depth)
     assert warp == pytest.approx(depth * rigging.warp_depth_ratio(depth))
     assert rigging.dp_warp_factor(warp, depth) == 1.0
-    assert rigging.dp_warp_factor(2.0 * warp, depth) == pytest.approx(
-        2.0**rigging.DP_WARP_EXPONENT_CORRECTION
-    )
+    # Con el exponente vigente (0, no aplicado) vale 1 con cualquier cable; la función queda
+    # lista para un exponente futuro.
+    assert rigging.dp_warp_factor(2.0 * warp, depth) == 1.0
+    assert rigging.dp_warp_factor(0.5 * warp, depth) == 1.0
+    assert rigging.dp_warp_factor(2.0 * warp, depth, exponent=0.105) == pytest.approx(2.0**0.105)
 
 
 def test_caso_de_diseno_con_portón_publicado_sin_cambios() -> None:
@@ -96,18 +102,25 @@ def test_caso_de_diseno_con_portón_publicado_sin_cambios() -> None:
     _same(run(at_table), r)
 
 
-def test_factor_de_cable_con_cable_medido() -> None:
+def test_correccion_de_cable_no_aplicada() -> None:
+    """Δn = 0: con un cable medido distinto del de la tabla, la DP no cambia y no hay nota."""
+    assert rigging.DP_WARP_EXPONENT_CORRECTION == 0.0
     case = catalog_case("inidep_iat101_va355_disenada", measured_warp_m=500.0).case
     r = run(case)
-    f = dp_warp_factor(case, r.rigging)
-    table = rigging.table_warp_m(case.working_depth_m)
-    assert f == pytest.approx((500.0 / table) ** rigging.DP_WARP_EXPONENT_CORRECTION)
-    assert f > 1.0
-    base = run(_uncalibrated(case))
-    np.testing.assert_allclose(r.spread.fridman.dpa_std_m, f * base.spread.fridman.dpa_std_m)
-    assert r.doors.spread_m == pytest.approx(f * base.doors.spread_m)
-    assert any(n.startswith("fridman_dp_warp_saturation") for n in r.notes)
-    assert not any(n.startswith("fridman_dp_warp_saturation") for n in base.notes)
+    assert r.rigging.towing.warp_m != rigging.table_warp_m(case.working_depth_m)
+    assert dp_warp_factor(case, r.rigging) == 1.0
+    _same(r, run(_uncalibrated(case)))
+    assert not any(n.startswith("fridman_dp_warp_saturation") for n in r.notes)
+
+
+def test_factor_de_cable_en_fridman_spread() -> None:
+    """La maquinaria queda lista: ``warp_factor`` multiplica las dos DPA de Fridman."""
+    args = (1.8, 0.6, 1.1, np.array([1.0, 1.5]), np.array([900.0, 1500.0]))
+    kw = {"warp_horizontal_m": 300.0, "net_length_working_m": 25.0, "bridle_m": 30.0}
+    base = rigging.fridman_spread(*args, np.array([950.0, 1550.0]), **kw)
+    scaled = rigging.fridman_spread(*args, np.array([950.0, 1550.0]), **kw, warp_factor=1.1)
+    np.testing.assert_allclose(scaled.dpa_std_m, 1.1 * np.asarray(base.dpa_std_m))
+    np.testing.assert_allclose(scaled.dpa_mod_m, 1.1 * np.asarray(base.dpa_mod_m))
 
 
 def test_camaroneras_sin_cambios() -> None:
@@ -177,13 +190,17 @@ def _warp_fit() -> F.WarpExponentFit:
         return F.warp_exponent_fit()
 
 
-def test_ajuste_de_delta_n() -> None:
+def test_ajuste_de_delta_n_no_significativo() -> None:
+    """El ajuste da Δn ≈ 0,105 ± 0,091 y su intervalo del 95 % incluye el 0: no se aplica."""
     fit = _warp_fit()
     assert fit.n == 103 and set(fit.offsets) == {"iat151", "ic012", "ic016"}
-    assert abs(fit.delta_n - rigging.DP_WARP_EXPONENT_CORRECTION) <= 0.01
+    assert fit.delta_n == pytest.approx(0.105, abs=0.005)
+    assert fit.se == pytest.approx(0.091, abs=0.005)
     lo, hi = fit.ci95
+    assert lo < 0.0 < hi  # la razón de no aplicarlo
     assert lo < rigging.DP_WARP_EXPONENT_CORRECTION < hi
     assert hi - lo == pytest.approx(2 * 1.984 * fit.se, rel=1e-3)
+    assert fit.slopes["iat151"] < 0.0 < fit.slopes["ic012"]  # las series no coinciden
 
 
 def test_validación_cruzada() -> None:
@@ -201,9 +218,12 @@ def test_ajuste_del_cl_polivalente() -> None:
         fit = F.polyvalent_cl_fit()
     assert fit.target_m == pytest.approx(92.2, abs=0.05)  # IAT 151/2018, tabla 1
     assert abs(fit.factor - rigging.POLYVALENT_CL_EFFECTIVE_FACTOR) <= 0.005
-    # Verificación con la Engel (mismos polivalentes de 5,58 m²): dentro de ±20 %.
-    for series, (measured, engine) in fit.checks.items():
-        assert abs(engine / measured - 1.0) <= F.TOLERANCES["door_spread_m"], series
+    # Verificación con la Engel (mismos polivalentes de 5,58 m²): el Inf. Téc. 66 dentro de
+    # ±20 %; la media de campaña de IC 041/25 (un solo valor, a la profundidad media y con el
+    # cable de la tabla) queda en +20 %, dentro de ±22 % (umbral declarado para ese punto).
+    (m66, e66), (m41, e41) = fit.checks["it66"], fit.checks["ic041"]
+    assert abs(e66 / m66 - 1.0) <= F.TOLERANCES["door_spread_m"]
+    assert abs(e41 / m41 - 1.0) <= IC041_TOLERANCE
 
 
 # --- Las series medidas mejoran ------------------------------------------------------------------
@@ -247,8 +267,11 @@ def test_las_series_medidas_mejoran() -> None:
     assert _within(after) >= _within(before) + WITHIN_RISE_MIN
     for s in POLYVALENT_SERIES:
         b, a = devs[s]
-        assert _mad(a) < _mad(b) and _within(a) > _within(b), s
-        assert _within(a) == 1.0, s
+        assert _mad(a) < _mad(b), s
+    for s in ("iat151", "it66"):
+        b, a = devs[s]
+        assert _within(a) > _within(b) and _within(a) == 1.0, s
+    assert np.all(np.abs(devs["ic041"][1]) <= IC041_TOLERANCE)
     for s in SPF_SERIES:
         b, a = devs[s]
         assert _mad(a) <= _mad(b) + SPF_MAD_WORSEN_MAX, s

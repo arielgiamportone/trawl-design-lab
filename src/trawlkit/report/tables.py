@@ -153,6 +153,13 @@ ERRATA_FIXED_TREATMENT: dict[str, tuple[str, str]] = {
         N_("reproducida"),
         N_("fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas."),
     ),
+    "fridman_dp_warp_saturation": (
+        N_("documentada"),
+        N_(
+            "Sin corrección en ambos modos: el ajuste del exponente de cable a los lances medidos "
+            "no es significativo (Fase 20.5)."
+        ),
+    ),
 }
 
 

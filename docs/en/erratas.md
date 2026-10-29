@@ -47,7 +47,7 @@ both directions (`tests/test_corrected_mode.py` does so at the level of the comp
 | float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP over an unsorted vector | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / float with the nearest number in `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
 | flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Rounding applied to only part of the column | `rigging.floats.flotation_fridman(rounddown=…)`, mask in `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
 | door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Required area linear in power, calibrated for 150–180 HP and extrapolated to more powerful vessels | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
-| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | Fridman's wing spread saturates with the warp: with a warp other than the table's, DS changes less than measured | `rigging.dp_warp_factor` (factor $(L_s/L_{s,table})^{\Delta n}$, 1 with the table warp) in `rigging.fridman_spread(warp_factor=…)` (→ `model.fridman_door_spread_m`, `model._stage_spread`) · `test_calibration_20_5.py` |
+| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | Fridman's wing spread saturates with the warp: with a warp other than the table's, DS changes less than measured | not corrected (documented deviation): `rigging.dp_warp_factor` with `DP_WARP_EXPONENT_CORRECTION = 0` (the fitted Δn is not significant) · `test_calibration_20_5.py` |
 
 In addition, several summary tables contain values pasted by hand instead of formulas (marked
 with `"static": true` in `tests/golden/*.json`), and the coefficients read with `MID()` from text
@@ -217,30 +217,31 @@ upper bound: they tow a standard survey net well below their full pull.
 
 ## Saturation of Fridman's wing spread with the warp
 
-The erratum `fridman_dp_warp_saturation` is not a mistyped formula either: in Fridman's wing
-spread (`Mec!P164`, {doc}`16_aberturas`) the horizontal warp $L_{sh}$ is above and below the
-fraction, $2 L_{sh} L_{Rw} E_{dy} / (L_{sh} + L_{nc}(1 + E_{dx}))$, so with a long warp the door
-spread hardly changes. At sea it keeps growing ({doc}`32_validacion_merluza`). In corrected mode the
-wing spread is multiplied by $(L_s/L_{s,table})^{\Delta n}$, with $L_{s,table}$ the book's table
-warp for the depth and $\Delta n$ fitted to 103 measured hauls with published warp (*calibrated*
-provenance). With the table's warp the factor is 1: the book's case, its golden values and every
-design case do not change; it only acts with a measured warp (`DesignCase.measured_warp_m`).
+The erratum `fridman_dp_warp_saturation` is not a mistyped formula and is not corrected: it is a
+**documented deviation**. In Fridman's wing spread (`Mec!P164`, {doc}`16_aberturas`) the horizontal
+warp $L_{sh}$ is above and below the fraction, $2 L_{sh} L_{Rw} E_{dy} / (L_{sh} + L_{nc}(1 + E_{dx}))$,
+so with a long warp the door spread hardly changes; at sea it keeps growing
+({doc}`32_validacion_merluza`: −33 % with 500–930 m in IC 029/18, −42 % against DynamiT with
+1200 m). Phase 20.5 fitted a correction $(L_s/L_{s,table})^{\Delta n}$, which is 1 with the book's
+table warp, to 103 hauls with published warp. The fit is not significant (the 95 % interval
+includes 0), so the current exponent is 0 and the factor is 1 in both modes. The table compares
+that factor with the one the fitted Δn would give:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 from trawlkit import rigging
-from trawlkit.compat import Compat
 
 DN = rigging.DP_WARP_EXPONENT_CORRECTION
+DN_FIT = 0.105  # trawlkit.fieldcheck.warp_exponent_fit() (32_validacion_merluza)
 rows = []
 for depth in (40.0, 100.0, 400.0):
     tab = rigging.table_warp_m(depth)
-    for k in (0.5, 1.0, 1.5, 2.0):
+    for k in (0.5, 1.0, 2.0):
         w = k * tab
         rows.append([V.fmt(depth, 0), V.fmt(w, 0), V.fmt(k, 1),
                      V.fmt(rigging.dp_warp_factor(w, depth), 3),
-                     V.fmt(rigging.dp_warp_factor(w, depth, Compat.EXCEL), 3)])
-print(f"Δn = {DN:.2f}")
-V.md_table(["Depth [m]", "Warp [m]", "Warp / table", "Factor (corrected)", "Factor (Excel)"],
+                     V.fmt(rigging.dp_warp_factor(w, depth, exponent=DN_FIT), 3)])
+print(f"current Δn = {DN:.2f}; fitted = {DN_FIT:.3f} (not significant)")
+V.md_table(["Depth [m]", "Warp [m]", "Warp / table", "Current factor", "Factor with the fitted Δn"],
            rows)
 ```

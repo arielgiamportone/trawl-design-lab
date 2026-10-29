@@ -218,8 +218,8 @@ ERRATA: tuple[Erratum, ...] = (
         N_(
             "La DPA de Fridman tiene el cable horizontal arriba y abajo de la fracción y se "
             "satura: con un cable distinto del de la tabla la separación de portones cambia menos "
-            "que lo medido. En modo corregido se multiplica por (Ls/Ls_tabla)^Δn, calibrado con "
-            "lances medidos (1 con el cable de la tabla)."
+            "que lo medido. Desvío documentado, no corregido: el ajuste de (Ls/Ls_tabla)^Δn a los "
+            "lances medidos no es significativo y el exponente queda en 0."
         ),
     ),
 )

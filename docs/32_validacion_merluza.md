@@ -40,10 +40,10 @@ velocidad de cada lance.
 
 Este capítulo digitaliza cinco redes de esas fuentes y compara el motor con 114 lances medidos,
 una media de campaña y seis simulaciones DynamiT. Los desvíos sistemáticos se describen con
-números y dos de ellos, los de la separación de portones, se **calibran en modo corregido** (Fase
-20.5, {ref}`calibracion-merluza`): la respuesta de la DP al cable filado y el CL efectivo de los
-portones polivalentes sin polar publicada. El modo `EXCEL`, los valores dorados, la A-3 y todo caso
-con el cable de la tabla del libro no cambian.
+números. En la Fase 20.5 ({ref}`calibracion-merluza`) se ajustaron dos correcciones de la
+separación de portones: el **CL efectivo de los portones polivalentes** sin polar publicada, que se
+**aplica** en modo corregido, y la respuesta de la DP al cable filado, que **no se aplica** porque
+el ajuste no es significativo. El modo `EXCEL`, los valores dorados y la A-3 no cambian.
 
 ## Las redes
 
@@ -104,9 +104,8 @@ condiciones de cada lance o simulación (`trawlkit.fieldcheck.engine_point`):
   Seafish (supuesta) con el CL efectivo calibrado;
 - las **patentes** de la serie cuando las da.
 
-Las magnitudes son las del libro para redes de pescado: **DP** de la DPA de Fridman (con el factor
-de cable calibrado cuando el cable no es el de la tabla) promediada entre 2 y 4 kn y llevada a los
-portones (la regla de todo caso del catálogo); **AH**
+Las magnitudes son las del libro para redes de pescado: **DP** de la DPA de Fridman promediada
+entre 2 y 4 kn y llevada a los portones (la regla de todo caso del catálogo); **AH**
 del libro (`Dim!F61`, promedio de cuatro reglas); **AV** de Suzuki (`Mec!D255`, fija); y la
 **resistencia total** (`Rem!H118` + dos portones) a la velocidad del lance, interpolada entre las
 velocidades de cálculo. Las **tolerancias** declaradas son:
@@ -132,20 +131,18 @@ Cada celda es «motor calibrado / DynamiT (desvío)»:
 V.md_table(["Red", "Prof., cable, v", "DP [m]", "AH [m]", "AV [m]", "R [kgf]"], H.simulated_rows())
 ```
 
-- **VA-35,5/45 a 100 m**: la AH (+5 %) y la AV (+7 %) caen dentro de la tolerancia; la DP queda un
-  22 % por debajo (24 % sin calibrar: 500 m de cable frente a los 380 m de la tabla) y la
-  resistencia total un 26 % por encima (la de la red sola, Aberdeen, da 6072 kgf: −3 %; la
+- **VA-35,5/45 a 100 m**: la AH (+3 %) y la AV (+7 %) caen dentro de la tolerancia; la DP queda un
+  24 % por debajo y la resistencia total un 26 % por encima (la de la red sola, Aberdeen, da 6072 kgf: −3 %; la
   diferencia son los portones y los cables que suma el libro, y DynamiT no aclara qué incluye su
   «resistencia total al avance»).
 - **VA-35,5/45 a 400 m y 1200 m de cable** (portones SPF 08,5): la resistencia coincide (−2 %) y la
-  AH queda dentro (−14 %), pero la DP es un 41 % menor y la AV de Suzuki, fija en 4,21 m, no baja a
+  AH queda dentro (−14 %), pero la DP es un 42 % menor y la AV de Suzuki, fija en 4,21 m, no baja a
   los 2,4 m de la simulación. El informe muestra que con esos portones la red se abre de más a
-  gran profundidad (AH = 80 % de la lima): justo el régimen donde el motor menos se mueve. El cable
-  es casi el de la tabla (1130 m), así que la calibración del cable no actúa.
-- **Baldino 46,4 m**: el motor da una DP un 35–37 % menor que DynamiT, pero el informe no publica las
+  gran profundidad (AH = 80 % de la lima): justo el régimen donde el motor menos se mueve.
+- **Baldino 46,4 m**: el motor da una DP un 36–39 % menor que DynamiT, pero el informe no publica las
   malletas y el caso usa las 25 m del libro (`Dim!F65`). La DP del motor es proporcional al aparejo
   (DPA · (LRw + aparejo)/LRw): con 100 m de malletas daría la de DynamiT. Sin el dato, no se puede
-  decidir. La AH del libro (42–45 m, más de 0,9 de la lima) supera en 54–65 % a la de DynamiT: la
+  decidir. La AH del libro (41–43 m, casi 0,9 de la lima) supera en 50–63 % a la de DynamiT: la
   DPA de Fridman con un portón de 7,5 m² supera a la lima (54 m a 4 kn), algo que la geometría de
   la red no permite y que ya se vio en {doc}`32_validacion_dynamit` por encima de 4 kn. La
   resistencia total queda 12–13 % por debajo.
@@ -209,21 +206,21 @@ La AH del libro queda dentro de ±20 % en ocho de los nueve lances con sensores 
 +13 %). El lance 18 da +20 %: es aquel en que el informe anota que «la distancia entre puntas de
 alas, promedió los 15 m de abertura horizontal y por plano debería ser de 21 m» y cambia el
 enganche de los portones (p. 12). La DP muestra el
-mismo patrón que la VA: el motor la sobrestima con poco cable (+18 % a +43 % en los lances 17–21,
+mismo patrón que la VA: el motor la sobrestima con poco cable (+16 % a +47 % en los lances 17–21,
 con 104–160 m, aunque en los lances 17–19 el portón estaba enganchado para la «menor fuerza de
-expansión», pp. 11–12) y la subestima con 351–403 m (−13 % a −16 %).
+expansión», pp. 11–12) y la subestima con 351–403 m (−12 % a −16 %).
 
 ## Desvíos sistemáticos
 
 **1. La separación de portones crece con el cable la mitad de rápido que la medida.** Con la
-profundidad, el cable y el portón de cada lance, la pendiente de la DP del motor (sin calibrar)
-contra el cable es una fracción de la medida en las tres series con cable publicado; la columna
-«n calibrado» es la del motor con la calibración de la Fase 20.5:
+profundidad, el cable y el portón de cada lance, la pendiente de la DP del motor contra el cable
+es una fracción de la medida en las tres series con cable publicado (el CL del polivalente cambia
+el nivel de la DP, no su pendiente):
 
 ```{code-cell} ipython3
 :tags: [remove-input]
 V.md_table(["Red", "Serie", "Lances", "dDP/dcable medida", "dDP/dcable motor",
-            "n medido (DP ∝ cableⁿ)", "n motor", "n calibrado", "medido / motor"],
+            "n medido (DP ∝ cableⁿ)", "n motor", "medido / motor sin calibrar"],
            H.warp_fit_rows())
 FITS = H.warp_fits()
 DN = float(np.mean([f["exp_measured"] - f["exp_engine"] for f in FITS]))
@@ -255,8 +252,8 @@ no sirve de alternativa.
 
 **4. La AH del libro acierta en la Engel con sensores y se pasa en la red grande.** +5 % de
 promedio en IC 016/24 (ocho de nueve lances dentro de ±20 %) y +3 % frente a DynamiT en la VA a
-100 m; +35 % frente al sonar del Inf. Téc. 66 (+61 % sin calibrar, cuando la DP salía +39 % por
-el portón supuesto); +54 a +65 % en la red de 46,4 m, donde la DPA de Fridman supera la lima.
+100 m; +37 % frente al sonar del Inf. Téc. 66 (+61 % sin calibrar, cuando la DP salía +39 % por
+el portón supuesto); +50 a +63 % en la red de 46,4 m, donde la DPA de Fridman supera la lima.
 
 **5. Resistencia.** Sólo hay simulaciones: +26 % (VA, 100 m), −2 % (VA, 400 m) y −12 a −13 %
 (Baldino). No se publicó ninguna tensión de cable medida para estas redes.
@@ -264,20 +261,19 @@ el portón supuesto); +54 a +65 % en la red de 46,4 m, donde la DPA de Fridman s
 (calibracion-merluza)=
 ## Calibración (Fase 20.5)
 
-La calibración actúa **sólo en modo corregido** y sólo sobre la separación de portones de las
-redes con portones (no en la pareja, la vara ni el método de las camaroneras, que no usa el
-cable). Tiene dos partes, cada una con procedencia *calibrada* (`ProvenanceKind.CALIBRATED`):
+Se ajustaron dos correcciones de la separación de portones, sólo para el modo corregido y para
+redes con portones (no la pareja, la vara ni el método de las camaroneras):
 
-1. **Factor de cable de la DPA de Fridman** (errata `fridman_dp_warp_saturation`,
-   {doc}`erratas`): $DPA_{cal} = DPA \cdot (L_s / L_{s,tabla})^{\Delta n}$, con $L_{s,tabla}$ el
-   cable que el libro tabula para la profundidad (`Mec!E177`). Vale 1 con el cable de la tabla,
-   es decir, en todo caso de diseño; sólo actúa cuando el caso trae un cable medido
-   (`DesignCase.measured_warp_m`). Como multiplica la DPA, mueve la DP, la AH del libro y la
-   resistencia que dependen de ella, en la misma proporción.
-2. **CL efectivo del portón polivalente sin polar publicada**: el CL de la hoja del tipo se
-   multiplica por un factor (`door_type: polyvalent` en la red, sin `door_cl`/`door_cd` de la
-   fuente). Los portones con polar publicada (los SPF08 y SPF 08,5 de este capítulo, el oval del
-   libro) no cambian.
+1. **CL efectivo del portón polivalente sin polar publicada (aplicado).** El CL de la hoja del
+   tipo se multiplica por un factor (`door_type: polyvalent` en la red, sin `door_cl`/`door_cd` de
+   la fuente), con procedencia *calibrada* (`ProvenanceKind.CALIBRATED`). Los portones con polar
+   publicada (los SPF08 y SPF 08,5 de este capítulo, el oval del libro) no cambian.
+2. **Factor de cable de la DPA de Fridman (ajustado, no aplicado).**
+   $DPA_{cal} = DPA \cdot (L_s / L_{s,tabla})^{\Delta n}$, con $L_{s,tabla}$ el cable que el
+   libro tabula para la profundidad (`Mec!E177`): vale 1 con el cable de la tabla, así que sólo
+   actuaría con un cable medido. El ajuste no es significativo y el exponente queda en 0
+   (`rigging.DP_WARP_EXPONENT_CORRECTION`); la saturación queda como desvío documentado (errata
+   `fridman_dp_warp_saturation`, {doc}`erratas`).
 
 **Ajuste de Δn.** Por mínimos cuadrados en logaritmos,
 $\log(DP_{medida}/DP_{motor}) = a_{serie} + \Delta n \cdot \log(L_s/L_{s,tabla})$, sobre los
@@ -294,27 +290,26 @@ from trawlkit import rigging
 FIT = H.warp_fit()
 lo, hi = FIT.ci95
 print(f"Δn = {FIT.delta_n:.3f} ± {FIT.se:.3f} (error estándar), intervalo del 95 %: "
-      f"[{lo:.2f}; {hi:.2f}], {FIT.n} lances; constante "
+      f"[{lo:.2f}; {hi:.2f}], {FIT.n} lances; aplicado: "
       f"DP_WARP_EXPONENT_CORRECTION = {rigging.DP_WARP_EXPONENT_CORRECTION:.2f}".replace(".", ","))
 V.md_table(["Serie dejada afuera", "Lances", "Pendiente de la serie sola", "Δn sin ella",
             "Dispersión sin corrección", "Dispersión con Δn"], H.warp_fit_table())
 ```
 
-El resultado es modesto y hay que leerlo así: **el intervalo del 95 % incluye el cero** y las tres
-series no coinciden. IC 012/21 e IC 016/24 piden Δn ≈ 0,2, pero en IAT 151/18, la serie más
-numerosa, la profundidad y el cable crecen juntos y $L_s/L_{s,tabla}$ casi no explica nada
-(pendiente propia ≈ −0,05). La diferencia de exponentes de la tabla de arriba (≈ 0,2) mide la
-respuesta al cable *absoluto*; la corrección, para no cambiar ningún caso de diseño, sólo puede
-usar el cable *relativo al de la tabla*, y en estos datos el cable relativo varía poco. Con la
-tolerancia declarada de la validación cruzada (la dispersión de la serie dejada afuera no puede
-crecer más de 0,01 en log, ≈ 1 % de la DP) las tres pruebas pasan, pero ninguna mejora más de un
-punto. El factor queda entre 0,97 y 1,03 en los lances medidos; por eso la DP con cable largo
-(IC 029/18, DynamiT a 400 m) sigue un 27–41 % por debajo.
+**Por qué no se aplica.** El intervalo del 95 % incluye el cero y las tres series no coinciden.
+IC 012/21 e IC 016/24 piden Δn ≈ 0,2, pero en IAT 151/18, la serie más numerosa, la profundidad y
+el cable crecen juntos y $L_s/L_{s,tabla}$ casi no explica nada (pendiente propia ≈ −0,05). La
+diferencia de exponentes de la tabla de arriba (≈ 0,2) mide la respuesta al cable *absoluto*; la
+corrección, para no cambiar ningún caso de diseño, sólo puede usar el cable *relativo al de la
+tabla*, y en estos datos el cable relativo varía poco. En la validación cruzada ninguna serie
+dejada afuera mejora más de un punto. Aplicado, el factor quedaría entre 0,97 y 1,03 en los lances
+medidos: no resolvería la DP con cable largo y agregaría un parámetro sin respaldo. La función, el
+ajuste y la validación cruzada quedan en el motor para cuando haya datos.
 
-**CL efectivo del polivalente.** Con el factor de cable aplicado, se busca el factor de CL que
-iguala la DP media del motor y la medida en los 52 lances de IAT 151/18 (92,2 m;
-`trawlkit.fieldcheck.polyvalent_cl_fit`), y se verifica con las dos series de la Engel con los
-mismos portones (Inf. Téc. 66 e IC 041/25), que no entran en el ajuste:
+**CL efectivo del polivalente.** Se busca el factor de CL que iguala la DP media del motor y la
+medida en los 52 lances de IAT 151/18 (92,2 m; `trawlkit.fieldcheck.polyvalent_cl_fit`), y se
+verifica con las dos series de la Engel con los mismos portones (Inf. Téc. 66 e IC 041/25), que no
+entran en el ajuste:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
@@ -329,36 +324,43 @@ El CL efectivo queda cerca del de los SPF de polar publicada (0,92–1,00), lo q
 confianza en que el ajuste corrige la polar supuesta y no otra cosa.
 
 **Antes y después.** DP de cada serie medida y de cada simulación, sin calibrar y calibrada: desvío
-medio · desvío medio absoluto · fracción dentro de ±20 %, con el factor de cable (rango en la
-serie) y el de CL:
+medio · desvío medio absoluto · fracción dentro de ±20 %, con el factor de CL:
 
 ```{code-cell} ipython3
 :tags: [remove-input]
-V.md_table(["Red", "Serie", "n", "Factor de cable", "Factor de CL", "Antes", "Calibrado"],
-           H.calibration_rows())
+V.md_table(["Red", "Serie", "n", "Factor de CL", "Antes", "Calibrado"], H.calibration_rows())
 TOT = H.totals()
 (mb, wb, n), (ma, wa, _) = TOT["before"], TOT["after"]
 print(f"Los {n:.0f} lances medidos: desvío medio absoluto {mb:.1f} % → {ma:.1f} %; dentro de ±20 %: "
       f"{100 * wb:.0f} % → {100 * wa:.0f} %".replace(".", ","))
 ```
 
-La mejora viene casi toda del CL del polivalente: IAT 151/18 entra en tolerancia (por construcción,
-porque el factor se ajusta a su media) y, lo que importa, también las dos series de verificación de
-la Engel. Las series con SPF de polar publicada quedan como estaban. Las pruebas
-(`tests/test_calibration_20_5.py`) fijan los umbrales: el desvío medio absoluto de los lances
-medidos tiene que bajar al menos 5 puntos y la fracción dentro de ±20 % subir al menos 25; en las
-series SPF el desvío no puede empeorar más de medio punto.
+IAT 151/18 entra en tolerancia (por construcción, porque el factor se ajusta a su media) y también
+el Inf. Téc. 66, que no entra en el ajuste; la media de campaña de IC 041/25 baja de +51 % a +21 %,
+justo fuera de ±20 % (es un solo valor, a la profundidad media y con el cable de la tabla). Las
+series con SPF de polar publicada no cambian. Las pruebas (`tests/test_calibration_20_5.py`) fijan
+los umbrales: el desvío medio absoluto de los lances medidos tiene que bajar al menos 5 puntos y la
+fracción dentro de ±20 % subir al menos 25; IC 041/25 tiene que quedar dentro de ±22 %.
 
-**Lo que no se calibra.** La AV de Suzuki (fija) y la AH del libro no se tocan: ninguna regla del
-libro reproduce la caída de la AV con la profundidad, y una corrección por la flotación necesita más
-series que las de este capítulo.
+### Trabajo futuro
+
+- **Corrección de cable.** Hacen falta lances con el mismo aparejo a **varios cables filados a la
+  misma profundidad** (o una serie donde la relación cable/profundidad varíe de verdad), con la DP
+  medida y el cable publicado. Con ellos `trawlkit.fieldcheck.warp_exponent_fit` vuelve a ajustar Δn
+  y, si resulta significativo, basta con cambiar `rigging.DP_WARP_EXPONENT_CORRECTION`.
+- **Saturación de Fridman con cable largo**, desvío conocido: la DP queda −33 % con 500–930 m
+  (IC 029/18) y −42 % frente a DynamiT con 1200 m a 400 m (IAT 026/25).
+- **AV sin calibrar**: la AV de Suzuki es fija y ninguna regla del libro reproduce su caída con la
+  profundidad; una corrección por la flotación necesita más series.
+- **AH mayor que la lima en las redes grandes**: en la Baldino de 46,4 m la DPA de Fridman supera
+  la lima y la AH del libro queda 50–63 % por encima de DynamiT.
 
 ## Limitaciones
 
-- La calibración sale de **pocas series** (tres para Δn, una para el CL del polivalente, con dos de
-  verificación) y de **un solo tipo de red** (redes de merluza de 35,5–46 m de lima del INIDEP);
-  fuera de ese rango (otras redes, otros portones, cables muy largos) es una extrapolación. La AV
-  no se calibra.
+- La calibración del CL del polivalente sale de **pocas series** (una de ajuste y dos de
+  verificación) y de **un solo tipo de red** (redes de merluza de 35,5 m de lima del INIDEP); fuera
+  de ese rango (otras redes, otros portones) es una extrapolación. La corrección de cable no se
+  aplica y la AV no se calibra.
 - Las mediciones no traen la velocidad de cada lance en IAT 151/18 (se usa la media de 3,8 kn), ni
   el cable en el Inf. Téc. 66 y en IC 041/25 (se usa la tabla del libro), ni la tensión de los
   cables en ningún caso.

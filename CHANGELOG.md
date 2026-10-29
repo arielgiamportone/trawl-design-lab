@@ -21,24 +21,24 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro); en español siguen PF, PF+T, PV y PV+T.
 
 ### Corregido
-- **Separación de portones calibrada con lances medidos (Fase 20.5)**: sólo en modo corregido y
-  con dos factores de procedencia nueva *calibrada* (`ProvenanceKind.CALIBRATED`, rótulo
-  «Calibrado»/«Calibrated» en la app). (1) Errata `fridman_dp_warp_saturation`: la DPA de Fridman
-  se satura con el cable; se multiplica por (Ls/Ls_tabla)^Δn (`rigging.dp_warp_factor`,
-  `fridman_spread(warp_factor=…)`), con Δn = `rigging.DP_WARP_EXPONENT_CORRECTION` = 0,10
-  ajustado por mínimos cuadrados en log a los 103 lances con cable publicado de IAT 151/18,
-  IC 012/21 e IC 016/24 (0,105 ± 0,091; intervalo del 95 % [−0,08; 0,29]) y validación cruzada
-  dejando una serie afuera (`fieldcheck.warp_exponent_fit`). Vale 1 con el cable de la tabla del
-  libro, o sea en todo caso de diseño; sólo actúa con `measured_warp_m` (nota del caso). No se
-  aplica en la pareja, la vara ni el método de las camaroneras. (2) CL efectivo del portón
-  polivalente sin polar publicada (`door_type: polyvalent`, `catalog.door_from_params` marca
-  `polar_published`): × `rigging.POLYVALENT_CL_EFFECTIVE_FACTOR` = 0,79, ajustado a la DP media de
-  los 52 lances de IAT 151/18 y verificado con el Inf. Téc. 66 (+39 → +10 %) e IC 041/25 (+51 →
-  +19 %) (`fieldcheck.polyvalent_cl_fit`); también en la polar dinámica del simulador. En los 115
-  lances medidos el desvío medio absoluto de la DP baja de 19,5 a 7,0 % y la fracción dentro de
-  ±20 % sube de 48 a 94 %; las series con SPF de polar publicada no cambian. `DesignCase.calibrated`
-  (por defecto `True`) apaga las dos. El capítulo «Validación con redes de merluza» compara antes y
-  calibrado, con el ajuste, la validación cruzada y sus límites; `docs/erratas.md` registra la
+- **Separación de portones calibrada con lances medidos (Fase 20.5)**: sólo en modo corregido.
+  (1) **CL efectivo del portón polivalente sin polar publicada** (aplicado; `door_type:
+  polyvalent`, `catalog.door_from_params` marca `polar_published`): ×
+  `rigging.POLYVALENT_CL_EFFECTIVE_FACTOR` = 0,80, ajustado a la DP media de los 52 lances de
+  IAT 151/18 (`fieldcheck.polyvalent_cl_fit`, 0,796) y verificado con el Inf. Téc. 66 (+39 → +11 %)
+  e IC 041/25 (+51 → +21 %); también en la polar dinámica del simulador. Procedencia nueva
+  *calibrada* (`ProvenanceKind.CALIBRATED`, rótulo «Calibrado»/«Calibrated» en la app). En los 115
+  lances medidos el desvío medio absoluto de la DP baja de 19,5 a 7,1 % y la fracción dentro de
+  ±20 % sube de 48 a 93 %; las series con SPF de polar publicada no cambian. (2) **Corrección de
+  cable de la DPA de Fridman, ajustada y no aplicada**: (Ls/Ls_tabla)^Δn (`rigging.dp_warp_factor`,
+  `fridman_spread(warp_factor=…)`, 1 con el cable de la tabla) ajustada por mínimos cuadrados en
+  log a los 103 lances con cable publicado de IAT 151/18, IC 012/21 e IC 016/24 con validación
+  cruzada dejando una serie afuera (`fieldcheck.warp_exponent_fit`): Δn = 0,105 ± 0,091, intervalo
+  del 95 % [−0,08; 0,29], no significativo, así que `rigging.DP_WARP_EXPONENT_CORRECTION` = 0 y la
+  saturación queda como desvío documentado (errata `fridman_dp_warp_saturation`, «documentada» en
+  ambos modos). `DesignCase.calibrated` (por defecto `True`) apaga la calibración. El capítulo
+  «Validación con redes de merluza» compara antes y calibrado, con el ajuste, la validación cruzada,
+  por qué no se aplica la corrección de cable y el trabajo futuro; `docs/erratas.md` registra la
   errata. El modo `excel`, la A-3 y los valores dorados no cambian.
 - **Superficie del portón por encima de la potencia del libro (Fase 20.1b)**: la superficie
   requerida (`Port!F212`/`F215`, 20 % de FT sobre (ρ/g)·CD·v²) es lineal en la potencia y está

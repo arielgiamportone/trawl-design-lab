@@ -158,15 +158,13 @@ def calibration_rows() -> list[list[str]]:
         wf.append(a.dp_warp_factor)
         cf.append(a.door_cl_factor)
     rows = []
-    for (nid, ser), (bb, aa, wf, cf) in acc.items():
+    for (nid, ser), (bb, aa, _wf, cf) in acc.items():
         label = SERIES[ser][0] if ser in SERIES else f"DynamiT ({ser})" if ser != "DynamiT" else ser
-        factors = f"{fmt(min(wf), 3)}–{fmt(max(wf), 3)}" if min(wf) != max(wf) else fmt(wf[0], 3)
         rows.append(
             [
                 SHORT[nid],
                 label,
                 str(len(bb)),
-                factors,
                 fmt(cf[0], 2),
                 _triple(*_stats(bb)),
                 _triple(*_stats(aa)),
@@ -334,7 +332,6 @@ def warp_fit_rows() -> list[list[str]]:
             fmt(f["slope_engine"], 3),
             fmt(f["exp_measured"], 2),
             fmt(f["exp_engine"], 2),
-            fmt(f["exp_calibrated"], 2),
             fmt(f["ratio_mean"], 2),
         ]
         for f in warp_fits()
