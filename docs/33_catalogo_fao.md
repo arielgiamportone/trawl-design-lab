@@ -108,6 +108,13 @@ Las fuentes y los criterios están en {doc}`catalogo_fuentes`. En resumen:
 - **Fase 19.9**: cada red del INIDEP lleva el cable de remolque de su fuente
   (`design.warp_diameter_mm`, transcripto): 24 mm con alma de acero en ITO 043/2022 e IAT 75/2023,
   22 mm en IAT 27/2019; un cable elegido en la app manda.
+- **Fase 20.2**: cinco redes de merluza, de planos vectoriales: la VA-35,5/45 del INIDEP diseñada
+  (IAT 101/2017, fig. 2) {cite}`roth2017angelescu` y construida (IAT 151/2018, fig. 1)
+  {cite}`bartozzetti2018iat151`, la Engel de 35,5 m de las campañas de evaluación (IAT 101/2017,
+  fig. 1) y la red comercial de 46,4 m del Beagle I, original y modificada (IAT 045/2019, figs. 2 y
+  3) {cite}`roth2019iat045`. Traen sus lances medidos y sus simulaciones DynamiT, con el portón de
+  cada serie; la comparación está en {doc}`32_validacion_merluza`. Las dos VA se publican; la
+  Engel y las de Baldino quedan como borrador (ver abajo).
 - **Lectura**: cada figura se rasterizó a 300 ppp (o se tomó la imagen embebida del PDF) y se
   leyó número por número. Ninguna figura se guarda en el repositorio (© FAO): sólo los datos.
 - **Procedencia por valor**: cada número es *transcripto* (leído en la figura), *derivado*
@@ -183,6 +190,14 @@ El validador se escribió para atrapar errores de lectura, y los atrapó:
   modela con los dos flotadores de 200 mm que recomienda el informe (la flotación de la red no está
   publicada) y con ellos el simulador ({doc}`21_simulacion`) no converge a 2,5 nudos: queda fuera de la
   prueba de simulación del catálogo hasta revisarla.
+- **Merluza (Fase 20.2)**: la VA-35,5/45 cierra por largo estirado en los dos planos (102 × 300 =
+  154 × 200 mm…); quedan avisos honestos de la red construida (el dorso de 120 mm pasa de 134 a 79
+  mallas en 47 filas y el costado de 41 a 2, más de lo que dan sus cortes) y la columna de
+  malleros del vientre no impresa. La **Engel** es borrador porque el plano conserva la cantidad de
+  mallas al cambiar de mallero (194 de 200 mm sobre 194 de 160 mm: 20–25 %), además de no dar hilo
+  ni copo. Las dos de **Baldino** son borrador: la original por las secciones que no empalman que
+  señala el propio informe (134 × 140 mm sobre 100 × 120 mm, 36 %), la modificada por un costado
+  que pasa de 30 a 45 mallas de 200 mm (33 %).
 - La red pelágica de 4 paneles del *Workbook* (figura de 450 px) **no se digitalizó**. El cuerpo
   se lee y cierra (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), pero el frente de 800 mm no se
   lee lo suficiente para armar una red sin inventar números.
@@ -269,6 +284,8 @@ simulador en las mismas condiciones:
 rows = []
 for i in IDS:
     for m in SPECS[i].model_extra.get("measured", []):
+        if "height_m" not in m:  # las de las redes de merluza están en 32_validacion_merluza
+            continue
         cc = catalog_case(i)
         r = run(cc.case)
         sim = simulate(r, m["speed_kn"], resolution=2, coarse_resolution=None)

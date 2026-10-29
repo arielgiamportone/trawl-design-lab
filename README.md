@@ -130,11 +130,11 @@ encadena semejanza, refinado y armado:
 ## Indicadores
 
 <!-- indicadores:inicio -->
-![redes: 30](https://img.shields.io/badge/redes-30-1c5cab) ![componentes: 1466](https://img.shields.io/badge/componentes-1466-1c5cab) ![rutas API: 79](https://img.shields.io/badge/rutas%20API-79-1c5cab) ![capítulos: 40](https://img.shields.io/badge/cap%C3%ADtulos-40-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
+![redes: 35](https://img.shields.io/badge/redes-35-1c5cab) ![componentes: 1466](https://img.shields.io/badge/componentes-1466-1c5cab) ![rutas API: 79](https://img.shields.io/badge/rutas%20API-79-1c5cab) ![capítulos: 41](https://img.shields.io/badge/cap%C3%ADtulos-41-c35a1b) ![Excel rtol: 1e-6](https://img.shields.io/badge/Excel%20rtol-1e--6-2e7d32)
 
 | Indicador | Valor |
 |---|---|
-| Redes en el catálogo | 30 (20 publicadas, 10 borradores), con procedencia valor por valor |
+| Redes en el catálogo | 35 (22 publicadas, 13 borradores), con procedencia valor por valor |
 | Componentes | 1466 en 7 tipos (244 genéricos y datos puntuales de 18 marcas) |
 | Métodos de resistencia de la red | 13 |
 | Erratas del Excel documentadas y corregidas | 27 |
@@ -142,7 +142,7 @@ encadena semejanza, refinado y armado:
 | Motor sin conexión (Pyodide) | paridad con CPython, rtol 1e-9 |
 | Especies y tipos de fondo | 8 especies · 5 fondos |
 | Rutas de la API | 79 |
-| Capítulos del libro | 40 · 162 referencias |
+| Capítulos del libro | 41 · 170 referencias |
 
 <sub>Generado por `tools/readme_stats.py`; `tests/test_readme.py` verifica que esté al día.</sub>
 <!-- indicadores:fin -->

@@ -1,0 +1,1460 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: inidep_iat101_engel355
+name: Red Engel de 35,5 m de las campañas de merluza del INIDEP (IAT 101/2017, fig. 1)
+description: 'Red de arrastre de fondo de dos caras usada en las campañas de evaluación de merluza del
+  INIDEP desde 1993 (BIP Holmberg, Oca Balda y Angelescu): alas y cuerpo delantero de 200 mm, 160, 120
+  y 110 mm hacia atrás; lima de 35,5 m (Roth y García 2017, fig. 1). El plano no da el hilo ni el copo
+  (supuestos) y empalma malla a malla al cambiar de mallero.'
+source: 'INIDEP IAT 101/17 (Roth y García 2017), fig. 1: plano de la red Engel de 35,5 m de relinga superior
+  (https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/c4ca20ad-6497-4eba-8fbb-72b565bed12f/content)'
+family: bottom
+rig: otter
+vessel_hp:
+- 2100.0
+- 2100.0
+target_species: merluza común (Merluccius hubbsi)
+status: draft
+sources:
+- key: roth2017angelescu
+  title: 'INIDEP IAT 101/17 (Roth y García 2017), fig. 1: plano de la red Engel de 35,5 m de relinga superior'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/c4ca20ad-6497-4eba-8fbb-72b565bed12f/content
+  accessed: '2026-10-28'
+  figure: Figura 1
+  page: '8'
+- key: tringali2012eh0612
+  title: 'INIDEP, campaña EH 06/12 (Tringali et al. 2012): red Engel y portones del BIP Holmberg'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/84042f69-aa0c-4417-8ce0-578443812725/content
+  accessed: '2026-10-28'
+  page: '6'
+- key: pappi2024ic004
+  title: 'INIDEP IC 004/24 (Pappi et al. 2024, EH-2024/01): características de la red Engel'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/dc0d3fa2-a685-49e3-af8c-99ca566db44d/content
+  accessed: '2026-10-28'
+  page: 2–3
+- key: rubio2024calibracion
+  title: 'INIDEP IC 016/24 (Rubio et al. 2024, VA-05/2024): lances 17–28 con la red Engel'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/e2f4cb3c-a0ef-4c8f-abde-e37ccfe506cb/content
+  accessed: '2026-10-28'
+  page: 11–13, 23, Anexo I (PDF pp. 32–33)
+- key: alvarezcolombo2025ic041
+  title: 'INIDEP IC 041/25 (Álvarez Colombo et al. 2025, VA-2025/06): geometría media de la red Engel'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/9eece631-b43f-42b6-99b0-35b86e47508e/content
+  accessed: '2026-10-28'
+  page: 5–7
+- key: casarsa2007inftec66
+  title: 'Casarsa y Madirolas (2007), INIDEP Inf. Téc. 66: red Engel con sonar de red (Oca Balda)'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/61ee3c64-300a-46a1-9c3b-2c7ba5284ea6/content
+  accessed: '2026-10-28'
+  page: 7 (tablas 1 y 2)
+panels:
+- id: UW1
+  plane: upper
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 4
+  meshes_bottom: 75
+  meshes_depth: 45
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: UW2
+  plane: upper
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 75
+  meshes_bottom: 88
+  meshes_depth: 25
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: 1N2B
+  note: 'Pieza 881 A (45 + 25 filas): el borde de la relinga lleva la lima de 14,60 m y termina en «1T2B
+    X 8» junto al centro de 6,30 m.'
+- id: U1
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 254
+  meshes_bottom: 254
+  meshes_depth: 2
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: AN
+  note: '«2 dobles»: dos filas de mallas dobles al pie de la pieza 881 A («8 mallas dobles» a cada lado
+    del centro).'
+- id: U2
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 254
+  meshes_bottom: 194
+  meshes_depth: 45
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 1N3B
+- id: U3
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 194
+  meshes_bottom: 160
+  meshes_depth: 25
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 1N4B
+- id: U4
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 160
+  meshes_bottom: 110
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 1N2B
+- id: U5
+  plane: upper
+  section: body
+  material: PA
+  mesh_mm: 110.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 110
+  meshes_bottom: 76
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 2N2B
+- id: UC
+  plane: upper
+  section: codend
+  material: PA
+  mesh_mm: 103.0
+  twine_diameter_mm: 4.0
+  rtex: 6349.0
+  meshes_top: 81
+  meshes_bottom: 81
+  meshes_depth: 214
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: AN
+  note: 'El plano termina en 76 mallas de 110 mm: el copo se supone (ver procedencia).'
+- id: LW1
+  plane: lower
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 1
+  meshes_bottom: 30
+  meshes_depth: 15
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: AB
+  cut_code_x2: AB
+  note: Triángulo de la pieza 888 (15 filas AB/AB, de la punta a 30 mallas). La pieza 718 M (paralelogramo
+    de 30 mallas y 15 + 44 + 15 filas en AB, con cabos de nylon de 18, 20 y 24 mm y 11,30 m de burlón)
+    va por delante del ala y no se modela. A VERIFICAR.
+- id: LW2
+  plane: lower
+  section: wing
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 35
+  meshes_bottom: 39
+  meshes_depth: 20
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: 1N7B
+  cut_code_x2: AB
+  note: 30 mallas sobre la línea y 35 debajo (14 %, como se lee).
+- id: L1
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 169
+  meshes_bottom: 169
+  meshes_depth: 2
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: AN
+- id: L2
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 169
+  meshes_bottom: 144
+  meshes_depth: 25
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 1N2B
+- id: L3
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 144
+  meshes_bottom: 110
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 1N1B
+- id: L4
+  plane: lower
+  section: body
+  material: PA
+  mesh_mm: 110.0
+  twine_diameter_mm: 3.0
+  rtex: 3571.0
+  meshes_top: 110
+  meshes_bottom: 76
+  meshes_depth: 50
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: 2N2B
+  note: '«110 Doble»: hilo doble.'
+- id: LC
+  plane: lower
+  section: codend
+  material: PA
+  mesh_mm: 103.0
+  twine_diameter_mm: 4.0
+  rtex: 6349.0
+  meshes_top: 81
+  meshes_bottom: 81
+  meshes_depth: 214
+  hanging_ratio: 0.4
+  count: 1
+  cut_code: AN
+  note: Copo supuesto, como el del dorso.
+species:
+  name: Merluza
+  scientific_name: Merluccius hubbsi
+headrope:
+  name: lima
+  length_m: 35.5
+  diameter_mm: 16
+  wing_m: 14.6
+  bosom_m: 6.3
+  description: «Cable plastificado 16 mm» (fig. 1)
+  construction: rope_combinado_6_16mm
+footrope:
+  name: burlón
+  length_m: 41.5
+  diameter_mm: null
+  wing_m: 17.11
+  bosom_m: 7.28
+  description: «Relinga 41,50 m» (fig. 1); material no publicado
+  construction: null
+floats:
+  count: 77
+  diameter_mm: 200
+ballast_kg: 240.0
+rigging:
+  doors: polivalentes de 1200 kg y 5,58 m² (EH 06/12)
+  bridle: superior de 50 m e inferior de 48,5 m
+  sweeps: 100 m
+design:
+  vessel_id: bip_holmberg
+  depth_m: 100.0
+  sweeps_m: 100.0
+  bridle_upper_m: 50.0
+  bridle_lower_m: 48.5
+  speed_kn: 4.0
+  door_area_m2: 5.58
+  door_weight_air_kg: 1200.0
+  door_length_m: 3.2
+  door_height_m: 2.18
+  door_polar_id: sfia1993_morgere_polyvalent_ovale
+measured:
+- series: ic016
+  source: rubio2024calibracion
+  haul: 17
+  depth_m: 22.55
+  warp_m: 104.0
+  speed_kn: 4.0
+  door: spf085_ic016
+  wing_spread_m: null
+  door_spread_m: 57.0
+  vertical_opening_m: 4.96
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 18
+  depth_m: 24.5
+  warp_m: 106.0
+  speed_kn: 4.1
+  door: spf085_ic016
+  wing_spread_m: 15.95
+  door_spread_m: 57.0
+  vertical_opening_m: 4.95
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 19
+  depth_m: 20.8
+  warp_m: 110.0
+  speed_kn: 4.22
+  door: spf085_ic016
+  wing_spread_m: 17.0
+  door_spread_m: 64.0
+  vertical_opening_m: 4.0
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 20
+  depth_m: 21.2
+  warp_m: 160.0
+  speed_kn: 3.97
+  door: spf085_ic016
+  wing_spread_m: 18.5
+  door_spread_m: 76.0
+  vertical_opening_m: 4.3
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 21
+  depth_m: 21.95
+  warp_m: 149.0
+  speed_kn: 4.06
+  door: spf085_ic016
+  wing_spread_m: 18.9
+  door_spread_m: 79.0
+  vertical_opening_m: 4.0
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 22
+  depth_m: 24.5
+  warp_m: 145.0
+  speed_kn: 3.91
+  door: spf085_ic016
+  wing_spread_m: 19.86
+  door_spread_m: 93.0
+  vertical_opening_m: 4.0
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 23
+  depth_m: 22.17
+  warp_m: 157.0
+  speed_kn: 4.0
+  door: spf085_ic016
+  wing_spread_m: 19.0
+  door_spread_m: 91.0
+  vertical_opening_m: 4.0
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 25
+  depth_m: 106.0
+  warp_m: 351.0
+  speed_kn: 3.6
+  door: spf085_ic016
+  wing_spread_m: null
+  door_spread_m: 120.0
+  vertical_opening_m: 4.57
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 26
+  depth_m: 108.0
+  warp_m: 352.0
+  speed_kn: 3.9
+  door: spf085_ic016
+  wing_spread_m: 23.04
+  door_spread_m: 125.0
+  vertical_opening_m: 4.29
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 27
+  depth_m: 117.0
+  warp_m: 370.0
+  speed_kn: 3.8
+  door: spf085_ic016
+  wing_spread_m: 23.19
+  door_spread_m: 124.0
+  vertical_opening_m: 4.45
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: ic016
+  source: rubio2024calibracion
+  haul: 28
+  depth_m: 105.0
+  warp_m: 403.0
+  speed_kn: 3.9
+  door: spf085_ic016
+  wing_spread_m: 23.8
+  door_spread_m: 128.0
+  vertical_opening_m: 4.23
+  note: anexo I (PDF pp. 32–33), BIPO Angelescu; AH de los sensores de puntas de ala; enganches del portón
+    cambiados entre lances (pp. 11–13)
+- series: it66
+  source: casarsa2007inftec66
+  haul: 1
+  depth_m: 55.0
+  warp_m: null
+  speed_kn: 3.2
+  door: polivalente_1260
+  wing_spread_m: 17.0
+  door_spread_m: 97.0
+  vertical_opening_m: 6.5
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 3
+  depth_m: 64.0
+  warp_m: null
+  speed_kn: 3.7
+  door: polivalente_1260
+  wing_spread_m: 18.5
+  door_spread_m: 106.0
+  vertical_opening_m: 6.5
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 4
+  depth_m: 70.0
+  warp_m: null
+  speed_kn: 3.5
+  door: polivalente_1260
+  wing_spread_m: 18.3
+  door_spread_m: 101.0
+  vertical_opening_m: 7.2
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 5
+  depth_m: 62.0
+  warp_m: null
+  speed_kn: 3.9
+  door: polivalente_1260
+  wing_spread_m: 17.5
+  door_spread_m: 104.0
+  vertical_opening_m: 7.2
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 6
+  depth_m: 74.0
+  warp_m: null
+  speed_kn: 3.8
+  door: polivalente_1260
+  wing_spread_m: 17.0
+  door_spread_m: 105.0
+  vertical_opening_m: 5.6
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 8
+  depth_m: 80.0
+  warp_m: null
+  speed_kn: 3.6
+  door: polivalente_1260
+  wing_spread_m: 18.2
+  door_spread_m: 109.0
+  vertical_opening_m: 6.0
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 9
+  depth_m: 79.0
+  warp_m: null
+  speed_kn: 4.0
+  door: polivalente_1260
+  wing_spread_m: 17.5
+  door_spread_m: 114.0
+  vertical_opening_m: 6.0
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: it66
+  source: casarsa2007inftec66
+  haul: 10
+  depth_m: 86.0
+  warp_m: null
+  speed_kn: 3.7
+  door: polivalente_1260
+  wing_spread_m: 17.0
+  door_spread_m: 107.0
+  vertical_opening_m: 5.8
+  note: 'tabla 2 (BIP Oca Balda, 2000): AH del sonar de red Simrad FS-903; el informe no da el cable filado
+    (el motor usa el de su tabla por profundidad)'
+- series: ic041
+  source: alvarezcolombo2025ic041
+  haul: media
+  depth_m: 111.0
+  warp_m: null
+  speed_kn: 4.0
+  door: polivalente_1200
+  wing_spread_m: null
+  door_spread_m: 101.2
+  vertical_opening_m: 4.4
+  note: «Los promedios de la geometría de la red fueron de 101,2 m para la distancia entre portones, estimándose
+    la distancia entre alas en 20,18 m, y 4,4 m para la abertura vertical» (p. 7; la AH es estimada, no
+    medida); lances de 64 a 158 m (se usa el centro, 111 m) a 4 nudos; BIPO Angelescu, Simrad TV80
+validation_doors:
+  polivalente_1200:
+    label: polivalente, 5,58 m², 1200 kg (EH 06/12), polar Morgère Polyvalent Ovale
+    door_area_m2: 5.58
+    door_length_m: 3.2
+    door_height_m: 2.18
+    door_weight_air_kg: 1200.0
+    door_polar_id: sfia1993_morgere_polyvalent_ovale
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  polivalente_1260:
+    label: polivalente, 1260 kg (Inf. Téc. 66), 5,58 m² supuestos
+    door_area_m2: 5.58
+    door_length_m: 3.2
+    door_height_m: 2.18
+    door_weight_air_kg: 1260.0
+    door_polar_id: sfia1993_morgere_polyvalent_ovale
+    note: '«Polivalentes 1.260 kg» (Inf. Téc. 66, tabla 1); superficie: la de los polivalentes de 1200
+      kg de EH 06/12 (supuesto). Polar: el INIDEP no publica la polar de sus portones polivalentes: hoja
+      «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR'
+  spf085_ic016:
+    label: Morgère SPF 08,5, 4,8 m², 1200 kg, CL 0,92 / CD 0,40 (IC 016/24)
+    door_area_m2: 4.8
+    door_length_m: 3.1
+    door_height_m: 1.55
+    door_weight_air_kg: 1200.0
+    door_cl: 0.92
+    door_cd: 0.4
+    note: '«Morgère SPF 08,5 de 1200 kg de peso y 4,8 m2 de área» (IC 016/24, p. 2). CL y CD: «Con el
+      menor ángulo de ataque de los portones utilizado en la campaña VA-2024/05 […] CD = 0,4 y CL = 0,92»
+      (IAT 026/25, p. 3); los enganches cambiaron entre lances (IC 016/24, pp. 11–13). Largo y alto: la
+      fuente da la superficie pero no las medidas: proporción alto/largo 0,5 del portón plano genérico
+      (como ITO 043/2022). A VERIFICAR'
+notes:
+- 'BORRADOR: al cambiar de mallero el plano conserva la cantidad de mallas (194 de 200 mm sobre 194 de
+  160 mm, 160 de 160 mm sobre 160 de 120 mm, 169 de 200 mm sobre 169 de 160 mm, 144 de 160 mm sobre 144
+  de 120 mm): empalmes malla a malla que no cierran por largo estirado (20–25 %). El plano no da el hilo
+  (supuesto nylon de Ø3 mm) ni el copo (supuesto de 103 mm, 22 m), y la pieza 718 M del ala inferior no
+  se modela.'
+- 'Burlón: el plano da 41,50 m; EH 06/12, IC 004/24 e IC 041/25 dicen 50 m; IC 019/13, 35,3/40,0 m; Inf.
+  Téc. 66, 40,3 m. Se usa el del plano (A VERIFICAR).'
+- 'Mediciones: IC 016/24 (Angelescu, SPF 08,5 de 4,8 m², lances 17–28 a 21–117 m con AH de los sensores
+  de ala), Inf. Téc. 66 (Oca Balda, polivalentes de 1260 kg, sonar de red) e IC 041/25 (media de la campaña).
+  EH 06/12: DP entre 100 y 115 m y AV de unos 4,5 m a 4 nudos, sin profundidad por lance.'
+provenance:
+  panels.UW1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW1.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.UW1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW1.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.UW1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.UW2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW2.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.UW2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UW2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW2.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.UW2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U1.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U2.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U3.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U4.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.U5.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '«Tamaño de malla en la bolsa (mm): 103» (IC 004/24, p. 3; IC 041/25: «Luz de malla en el copo:
+      103 mm»); el plano no dibuja el copo'
+  panels.UC.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 × (4/3)² (nylon de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.UC.meshes_top:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '76 mallas de 110 mm del final del cuerpo (8,36 m) en mallas de 103 mm: 81 (empalme por largo
+      estirado). A VERIFICAR'
+  panels.UC.meshes_bottom:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: copo recto de 81 mallas. A VERIFICAR
+  panels.UC.meshes_depth:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '«Longitud de la bolsa (m): 22» (IC 004/24, p. 3) / 0,103 m = 213,6 → 214 filas. A VERIFICAR'
+  panels.UC.cut_code:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: copo recto (AN)
+  panels.UC.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.UC.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no dibuja el copo: nylon de Ø4 mm supuesto. A VERIFICAR'
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 6,30 m de lima sobre 254 − 2 × 88 = 78 mallas de 200 mm (15,60 m):
+      0,40; se usa en todo el dorso'
+  panels.LW1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW1.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.LW1.meshes_top:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: punta del triángulo (0 mallas) tomada como 1
+  panels.LW1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW1.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.LW1.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.LW2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW2.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.LW2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LW2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW2.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.LW2.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.L1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.L1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L1.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.L1.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L2.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.L2.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L3.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.L3.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.L4.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 m/kg del nylon de Ø3 mm del copo de ITO 043/2022. A VERIFICAR
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.L4.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el hilo; IC 016/24 dice sólo «confeccionada en hilo de Nylon» (p. 23): nylon
+      de Ø3 mm (copo de ITO 043/2022). A VERIFICAR'
+  panels.L4.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  panels.LC.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '«Tamaño de malla en la bolsa (mm): 103» (IC 004/24, p. 3; IC 041/25: «Luz de malla en el copo:
+      103 mm»); el plano no dibuja el copo'
+  panels.LC.rtex:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 280 × (4/3)² (nylon de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.LC.meshes_top:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '76 mallas de 110 mm del final del cuerpo (8,36 m) en mallas de 103 mm: 81 (empalme por largo
+      estirado). A VERIFICAR'
+  panels.LC.meshes_bottom:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: copo recto de 81 mallas. A VERIFICAR
+  panels.LC.meshes_depth:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: '«Longitud de la bolsa (m): 22» (IC 004/24, p. 3) / 0,103 m = 213,6 → 214 filas. A VERIFICAR'
+  panels.LC.cut_code:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: copo recto (AN)
+  panels.LC.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  panels.LC.twine_diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no dibuja el copo: nylon de Ø4 mm supuesto. A VERIFICAR'
+  panels.LC.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: el U1 del dorso. A VERIFICAR'
+  headrope.length_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  headrope.diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: «Cable plastificado 16 mm» (fig. 1); el motor toma el combinado de 16 mm
+  headrope.wing_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: «14,60 m» por ala (fig. 1)
+  headrope.bosom_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: «6,30 m» entre los grilletes de acople (fig. 1)
+  footrope.length_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+  footrope.bosom_m:
+    kind: assumed
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: 'el plano no da el centro del burlón: 91 mallas de 200 mm de la bocana del vientre × U1 0,40
+      (supuesto) = 7,28 m. A VERIFICAR'
+  footrope.wing_m:
+    kind: derived
+    document: roth2017angelescu
+    page: '8'
+    figure: Figura 1
+    note: (41,50 − 7,28) / 2 = 17,11 m por ala. A VERIFICAR
+  floats.count:
+    kind: transcribed
+    document: rubio2024calibracion
+    note: «77 boyas de 200 mm y 3 kg de flotación y 240 kg de peso» (IC 016/24, p. 23)
+  floats.diameter_mm:
+    kind: transcribed
+    document: rubio2024calibracion
+    note: «77 boyas de 200 mm y 3 kg de flotación y 240 kg de peso» (IC 016/24, p. 23)
+  ballast_kg:
+    kind: transcribed
+    document: rubio2024calibracion
+    note: «77 boyas de 200 mm y 3 kg de flotación y 240 kg de peso» (IC 016/24, p. 23)
+  design.vessel_id:
+    kind: transcribed
+    document: tringali2012eh0612
+    note: 'BIP «Dr. E. L. Holmberg», «Potencia (HP): 2100» (EH 06/12, pp. 5–6)'
+  design.depth_m:
+    kind: assumed
+    document: alvarezcolombo2025ic041
+    note: 'profundidad típica de las campañas de merluza: los lances de IC 041/25 van de 64 a 158 m (p.
+      5). A VERIFICAR'
+  design.sweeps_m:
+    kind: transcribed
+    document: alvarezcolombo2025ic041
+    note: '«Largo de patentes: 100 m» (IC 041/25, p. 5)'
+  design.bridle_upper_m:
+    kind: transcribed
+    document: alvarezcolombo2025ic041
+    note: '«Largo de brida superior: 50 m» (IC 041/25, p. 5)'
+  design.bridle_lower_m:
+    kind: transcribed
+    document: alvarezcolombo2025ic041
+    note: '«Largo de brida inferior: 48,5 m» (IC 041/25, p. 5)'
+  design.speed_kn:
+    kind: transcribed
+    document: alvarezcolombo2025ic041
+    note: «La velocidad y duración de los arrastres fue de 4 nudos» (IC 041/25, p. 5)
+  design.door_area_m2:
+    kind: transcribed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_length_m:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_height_m:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_polar_id:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'

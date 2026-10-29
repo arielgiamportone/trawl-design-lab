@@ -621,3 +621,4 @@ measured_warp_m debe ser positivo: measured_warp_m must be positive
 polar del portón plano de la A-3: polar of the A-3's flat otter board
 'portón de la fuente ({area:.2f} m², {length:g} × {height:g} m) con {polar}': 'otter board from the source ({area:.2f} m², {length:g} × {height:g} m) with {polar}'
 'Portón de la fuente de {net}': 'Otter board from the source of {net}'
+'portón de validación desconocido: {key!r}': 'unknown validation otter board: {key!r}'

@@ -298,4 +298,5 @@ forma y las aberturas; la resistencia de diseño sigue siendo la del motor.
 **Limitaciones de esta comparación.** Una sola simulación, de autor y fecha no documentados en el
 repositorio, sin los parámetros de aparejo (cable filado, patentes, portón, ángulo de ataque, tipo
 de fondo) ni la versión de DynamiT; una sola red y una sola profundidad. Ninguno de los dos modelos
-se comparó con mediciones en el mar.
+se comparó aquí con mediciones en el mar: eso lo hace {doc}`32_validacion_merluza`, con redes de
+merluza del INIDEP medidas con sensores.

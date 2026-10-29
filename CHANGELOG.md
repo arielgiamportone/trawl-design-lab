@@ -95,6 +95,22 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
   libro, de la flota y de investigación.
 
 ### Agregado
+- **Validación con redes de merluza (Fase 20.2)**: cinco redes de fondo nuevas de planos
+  vectoriales del INIDEP (`tools/catalog/transcriptions_20.py`), cada valor con su cita: la
+  VA-35,5/45 diseñada (IAT 101/2017, fig. 2) y construida (IAT 151/2018, fig. 1), publicadas; la
+  Engel de 35,5 m de las campañas (IAT 101/2017, fig. 1; hilo y copo supuestos, empalmes malla a
+  malla) y la red de 46,4 m del Beagle I original y modificada (IAT 045/2019, figs. 2 y 3), como
+  borradores con la razón exacta. Traen 114 lances medidos, una media de campaña y seis
+  simulaciones DynamiT (`measured`, `simulated`) con el portón de cada serie (`validation_doors`).
+  Capítulo nuevo «Validación con redes de merluza» (ES y EN) con tablas en vivo del motor (modo
+  corregido, métodos del libro sin cambios) frente a lo medido y a DynamiT, tolerancias declaradas
+  (`fieldcheck.TOLERANCES`) y los casos fuera de rango a la vista; desvíos sistemáticos (la DP
+  crece con el cable la mitad de rápido que la medida; AV de Suzuki fija) y una propuesta de
+  calibración **no aplicada**. Módulo `trawlkit.fieldcheck`; entrada `DesignCase.measured_warp_m`
+  (cable filado de un lance; `None` = tabla del libro, sin cambios); portón de la fuente con
+  superficie y CL/CD publicados u hoja de polar (`catalog.door_from_params`); `catalog_case` calcula
+  como paso fijo las hélices sin KF de Fridman (como la API). Catálogo: 22 redes publicadas y 13
+  borradores; ocho referencias nuevas.
 - **Portones grandes de fabricante (Fase 20.1)**: tablas de Thyborøn (25 hojas de datos, de fondo,
   semipelágicos y pelágicos: 645 tamaños de 0,82 a 21,34 m², con largo × alto cuando la hoja lo
   da), Polar (las 5 tablas distintas de sus 20 folletos, 180 tamaños de 1 a 20 m²) y Poly-Ice

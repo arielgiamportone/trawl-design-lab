@@ -31,6 +31,7 @@ parts:
       - file: 30_caso_beagle
       - file: 31_validacion_excel
       - file: 32_validacion_dynamit
+      - file: 32_validacion_merluza
       - file: 33_catalogo_fao
       - file: 34_componentes
       - file: 35_lotes_proyeccion

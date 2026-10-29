@@ -1,0 +1,1511 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: inidep_iat101_va355_disenada
+name: Red de fondo VA-35,5/45 del INIDEP, diseñada (IAT 101/2017, fig. 2)
+description: 'Red de arrastre de fondo de cuatro caras diseñada por el INIDEP para las campañas de merluza
+  del BIP Víctor Angelescu: alas y cielo de 300 mm, cuerpo de 200 a 120 mm en PE de 3 mm y copo de 110
+  mm en PE de 5 mm; lima de 35,5 m y burlón de 45,0 m (Roth y García 2017). DynamiT: DP 89,2 m, AH 23,0
+  m y AV 3,7 m a 4 nudos, 100 m y 500 m de cable.'
+source: 'INIDEP IAT 101/17 (Roth y García 2017), fig. 2: plano definitivo de la red VA-35,5/45 diseñada
+  para el BIP Víctor Angelescu (https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/c4ca20ad-6497-4eba-8fbb-72b565bed12f/content)'
+family: bottom
+rig: otter
+vessel_hp:
+- 2855.2
+- 2855.2
+target_species: merluza común (Merluccius hubbsi)
+status: published
+sources:
+- key: roth2017angelescu
+  title: 'INIDEP IAT 101/17 (Roth y García 2017), fig. 2: plano definitivo de la red VA-35,5/45 diseñada
+    para el BIP Víctor Angelescu'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/c4ca20ad-6497-4eba-8fbb-72b565bed12f/content
+  accessed: '2026-10-28'
+  figure: Figura 2
+  page: '9'
+panels:
+- id: UW1
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 2
+  meshes_bottom: 20
+  meshes_depth: 36
+  hanging_ratio: 0.42
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: UW2
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 20
+  meshes_bottom: 45
+  meshes_depth: 10
+  hanging_ratio: 0.42
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: 1T1B
+  note: 'Pie del ala: 20 → 45 mallas en 10 filas; el borde de la relinga se corta 1T1B y lleva los 4,75
+    m de lima.'
+- id: U1
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 122
+  meshes_bottom: 102
+  meshes_depth: 20
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 154
+  meshes_bottom: 128
+  meshes_depth: 26
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 160
+  meshes_bottom: 126
+  meshes_depth: 34
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U4
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 144
+  meshes_bottom: 108
+  meshes_depth: 36
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U5
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 126
+  meshes_bottom: 79
+  meshes_depth: 47
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: UC
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 110.0
+  twine_diameter_mm: 5.0
+  rtex: 11819.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 200
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: AN
+- id: LW1
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 2
+  meshes_bottom: 26
+  meshes_depth: 60
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 1N3B
+  cut_code_x2: AB
+- id: LW2
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 39
+  meshes_bottom: 54
+  meshes_depth: 10
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: 1T2B
+  note: El ala inferior cambia de 300 a 200 mm en la línea de 26/39 mallas (7,80 m en las dos).
+- id: L1
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 154
+  meshes_bottom: 128
+  meshes_depth: 26
+  hanging_ratio: 0.43
+  count: 1
+  cut_code: 1N2B
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 160
+  meshes_bottom: 126
+  meshes_depth: 34
+  hanging_ratio: 0.43
+  count: 1
+  cut_code: 1N2B
+- id: L3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 144
+  meshes_bottom: 108
+  meshes_depth: 36
+  hanging_ratio: 0.43
+  count: 1
+  cut_code: 1N2B
+- id: L4
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 126
+  meshes_bottom: 79
+  meshes_depth: 47
+  hanging_ratio: 0.43
+  count: 1
+  cut_code: 1N2B
+- id: LC
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 110.0
+  twine_diameter_mm: 5.0
+  rtex: 11819.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 200
+  hanging_ratio: 0.43
+  count: 1
+  cut_code: AN
+- id: S1
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 38
+  meshes_bottom: 33
+  meshes_depth: 20
+  hanging_ratio: 0.43
+  count: 2
+  note: 'El plano dibuja el costado en dos mitades: se suman las mallas de las dos (boca 18 + 20 + bolsa
+    13 + 20). El corte de la mitad izquierda (18 → 13 mallas en 20 filas) no está rotulado. El tramo delantero
+    del costado, junto a las alas (300 mm, 1 + 3 → 18 + 20 mallas en 25,5 filas y 20 filas rectas), no
+    se modela: su alto iguala el de las alas del dorso (35,5 + 10 filas), como en ITO 043/2022.'
+- id: S2
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 52
+  meshes_bottom: 44
+  meshes_depth: 26
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 2N1B
+  cut_code_x2: 5N2B
+  note: 'El plano dibuja el costado en dos mitades: se suman las mallas de las dos (boca 22 + 30 + bolsa
+    17 + 27).'
+- id: S3
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 55
+  meshes_bottom: 37
+  meshes_depth: 34
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 2N1B
+  cut_code_x2: 1N1B
+  note: 'El plano dibuja el costado en dos mitades: se suman las mallas de las dos (boca 21 + 34 + bolsa
+    14 + 23).'
+- id: S4
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 42
+  meshes_bottom: 23
+  meshes_depth: 36
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 2N1B
+  cut_code_x2: 1N1B
+  note: 'El plano dibuja el costado en dos mitades: se suman las mallas de las dos (boca 16 + 26 + bolsa
+    9 + 14).'
+- id: S5
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 26
+  meshes_bottom: 2
+  meshes_depth: 47
+  hanging_ratio: 0.43
+  count: 2
+  cut_code: 2N1B
+  cut_code_x2: 1N1B
+  note: 'El plano dibuja el costado en dos mitades: se suman las mallas de las dos (boca 10 + 16 + bolsa
+    1 + 1).'
+species:
+  name: Merluza
+  scientific_name: Merluccius hubbsi
+headrope:
+  name: lima
+  length_m: 35.5
+  diameter_mm: null
+  wing_m: 15.75
+  bosom_m: 4.0
+  description: 'lima del plano (material y diámetro no publicados: los del motor)'
+  construction: null
+footrope:
+  name: burlón
+  length_m: 45.0
+  diameter_mm: null
+  wing_m: 20.5
+  bosom_m: 4.0
+  description: 'burlón del plano (material y diámetro no publicados: los del motor)'
+  construction: null
+floats:
+  count: 90
+  diameter_mm: 200
+ballast_kg: 380.0
+rigging:
+  doors: Morgère SPF08 de 4,5 m² y 1200 kg (CL 1,00; CD 0,58)
+  bridle: bridas de 50 m
+  sweeps: patentes de 50 m (simulación); 100 m en la red construida (IAT 151/2018)
+  warp: 500 m (simulación)
+design:
+  vessel_id: bipo_victor_angelescu
+  depth_m: 100.0
+  sweeps_m: 50.0
+  bridle_upper_m: 50.0
+  speed_kn: 4.0
+  warp_m: 500.0
+  door_area_m2: 4.5
+  door_weight_air_kg: 1200.0
+  door_cl: 1.0
+  door_cd: 0.58
+  door_length_m: 3.0
+  door_height_m: 1.5
+validation_doors:
+  spf08_iat101:
+    label: Morgère SPF08, 4,5 m², 1200 kg, CL 1,00 / CD 0,58 (IAT 101/17)
+    door_area_m2: 4.5
+    door_length_m: 3.0
+    door_height_m: 1.5
+    door_weight_air_kg: 1200.0
+    door_cl: 1.0
+    door_cd: 0.58
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+simulated:
+- speed_kn: 4.0
+  depth_m: 100.0
+  warp_m: 500.0
+  sweeps_m: 50.0
+  door: spf08_iat101
+  door_spread_m: 89.2
+  horizontal_opening_m: 23.0
+  vertical_opening_m: 3.7
+  drag_kgf: 6243.47
+  source: roth2017angelescu
+  note: 'resultados de DynamiT del INIDEP (p. 6): «Resistencia total al avance (kg) 6.243,47 / Abertura
+    vertical (m) 3,7 / Abertura horizontal (m) 23,0 / Distancia entre portones (m) 89,2»; modelo, no mediciones'
+notes:
+- 'Aparejo de la simulación DynamiT (p. 4): 4 nudos, 100 m, 500 m de cable, portones Morgère SPF08 de
+  4,5 m² y 1200 kg (CL 1,00; CD 0,58), bridas de 50 m y patentes de 50 m. Buque: BIP Víctor Angelescu,
+  dos motores eléctricos de 1050 kW.'
+- 'Los empalmes cierran por largo estirado (102 × 300 = 154 × 200 mm, etc.): diseño por proporciones de
+  Martini (2006), p. 3.'
+- 'Relingas: el plano no da material ni diámetro; el motor usa los cabos del libro.'
+- 'Flotación y lastre: los de la red construida (IAT 151/2018), A VERIFICAR.'
+provenance:
+  panels.UW1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW1.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.UW1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW1.meshes_depth:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 35,5 filas redondeadas a 36
+  panels.UW1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.UW1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.UW2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW2.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.UW2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UW2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.UW2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U3.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U4.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.U5.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 4255 × (5/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.UC.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 5 en el copo (fig. 2)'
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 122 − 2 × 45 = 32 mallas de 300 mm (9,60 m): 4
+      / 9,60 = 0,42; se usa en todo el dorso'
+  panels.LW1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW1.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.LW1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.LW1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.LW2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW2.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.LW2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LW2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.LW2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.L1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.L1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.L1.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L3.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.L4.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.L4.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.L4.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.LC.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 4255 × (5/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.cut_code:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.LC.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 5 en el copo (fig. 2)'
+  panels.LC.hanging_ratio:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 − 2 × 54 = 46 mallas de 200 mm (9,20 m): 0,43; se
+      usa en todo el vientre'
+  panels.S1.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S1.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S1.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S1.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S1.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S1.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S1.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.S1.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: el del vientre'
+  panels.S2.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S2.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S2.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S2.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S2.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S2.cut_code:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: la mitad derecha rotula su corte (5N2B o 1N1B); el de la mitad izquierda se rotula «2N1B» una
+      vez en todo el costado
+  panels.S2.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S2.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.S2.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: el del vientre'
+  panels.S3.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S3.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S3.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S3.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S3.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S3.cut_code:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: la mitad derecha rotula su corte (5N2B o 1N1B); el de la mitad izquierda se rotula «2N1B» una
+      vez en todo el costado
+  panels.S3.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S3.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.S3.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: el del vientre'
+  panels.S4.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S4.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S4.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S4.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S4.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S4.cut_code:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: la mitad derecha rotula su corte (5N2B o 1N1B); el de la mitad izquierda se rotula «2N1B» una
+      vez en todo el costado
+  panels.S4.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S4.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.S4.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: el del vientre'
+  panels.S5.mesh_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S5.rtex:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S5.meshes_top:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S5.meshes_bottom:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S5.meshes_depth:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  panels.S5.cut_code:
+    kind: derived
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: la mitad derecha rotula su corte (5N2B o 1N1B); el de la mitad izquierda se rotula «2N1B» una
+      vez en todo el costado
+  panels.S5.count:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S5.twine_diameter_mm:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 2)'
+  panels.S5.hanging_ratio:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: el del vientre'
+  headrope.length_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  headrope.wing_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 11 + 4,75 m por ala (fig. 2; «hA = 15,75 m», p. 3)
+  headrope.bosom_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: «un centro de 4 m» (p. 3) y 4 m en la fig. 2
+  footrope.length_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+  footrope.wing_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 18 + 2,5 m por ala (fig. 2)
+  footrope.bosom_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: centro de 4 m (fig. 2)
+  floats.count:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'IAT 101/2017 no da la flotación: la de la red construida, «una flotación de 90 boyas de 200
+      m[m] de diámetro» (IAT 151/2018, p. 2). A VERIFICAR'
+  floats.diameter_mm:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'IAT 101/2017 no da la flotación: la de la red construida, «una flotación de 90 boyas de 200
+      m[m] de diámetro» (IAT 151/2018, p. 2). A VERIFICAR'
+  ballast_kg:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: 'IAT 101/2017 no da el lastre: el de la red construida, «un peso de 380 kg de cadena de alta
+      resistencia» (IAT 151/2018, p. 2). A VERIFICAR'
+  design.vessel_id:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: «red de arrastre de fondo destinada al BIP Dr. Víctor Angelescu» (título, p. 1); «dos motores
+      eléctricos de 1050 kW» (p. 4)
+  design.depth_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Profundidad de pesca: 100 m» (simulación, p. 4)'
+  design.sweeps_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Patentes: 50 m» (simulación, p. 4)'
+  design.bridle_upper_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Bridas: 50 m» (simulación, p. 4)'
+  design.speed_kn:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Velocidad de arrastre: 4 nudos» (p. 4)'
+  design.warp_m:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Cable de arrastre: 500 m» (p. 4)'
+  design.door_area_m2:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+  design.door_cl:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+  design.door_cd:
+    kind: transcribed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+  design.door_length_m:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'
+  design.door_height_m:
+    kind: assumed
+    document: roth2017angelescu
+    page: '9'
+    figure: Figura 2
+    note: '«Portones: Super v Morgere (modelo SPF08) de 4,5 m2 y 1200 kg de peso (CL = 1,00; CD = 0,58)»
+      (IAT 101/2017, p. 4). Largo y alto: la fuente da la superficie pero no las medidas: proporción alto/largo
+      0,5 del portón plano genérico (como ITO 043/2022). A VERIFICAR'

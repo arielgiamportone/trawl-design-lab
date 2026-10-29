@@ -33,11 +33,12 @@ DYNAMIT_198 = {
 def test_cantidades_del_catalogo() -> None:
     presets = service.net_presets()
     assert set(NETS_198) <= set(presets)
-    inidep = {k: v for k, v in presets.items() if k.startswith("inidep_")}
+    # Tangoneras del INIDEP (las redes de merluza de la Fase 20.2 se cuentan en test_catalog_20).
+    inidep = {k: v for k, v in presets.items() if k.startswith("inidep_") and "tangonera" in k}
     assert len(inidep) == 6
     assert sum(s.status == "published" for s in inidep.values()) == 3
-    assert sum(s.status == "published" for s in presets.values()) == 20
-    assert sum(s.status == "draft" for s in presets.values()) == 10
+    assert sum(s.status == "published" for s in presets.values()) == 22
+    assert sum(s.status == "draft" for s in presets.values()) == 13
 
 
 @pytest.mark.parametrize("net_id", sorted(NETS_198))

@@ -386,3 +386,8 @@ NETS += NETS_196
 from tools.catalog.transcriptions_198 import NETS_198  # noqa: E402
 
 NETS += NETS_198
+
+# Fase 20.2: redes de merluza del INIDEP (VA-35,5/45 y Engel) y la red comercial de Baldino.
+from tools.catalog.transcriptions_20 import NETS_20  # noqa: E402
+
+NETS += NETS_20

@@ -107,6 +107,13 @@ The sources and the criteria are in {doc}`catalogo_fuentes`. In summary:
 - **Phase 19.9**: each INIDEP net carries the warp of its source (`design.warp_diameter_mm`,
   transcribed): 24 mm with a steel core in ITO 043/2022 and IAT 75/2023, 22 mm in IAT 27/2019; a
   warp chosen in the app takes precedence.
+- **Phase 20.2**: five hake trawls from vector plans: INIDEP's VA-35.5/45 as designed (IAT
+  101/2017, fig. 2) {cite}`roth2017angelescu` and as built (IAT 151/2018, fig. 1)
+  {cite}`bartozzetti2018iat151`, the 35.5 m Engel survey net (IAT 101/2017, fig. 1) and the 46.4 m
+  commercial net of the Beagle I, original and modified (IAT 045/2019, figs. 2 and 3)
+  {cite}`roth2019iat045`. They carry their measured hauls and DynamiT simulations, with the door of
+  each series; the comparison is in {doc}`32_validacion_merluza`. Both VA nets are published; the
+  Engel and the Baldino nets stay as drafts (see below).
 - **Reading**: each figure was rasterized at 300 dpi (or the image embedded in the PDF was taken)
   and read number by number. No figure is stored in the repository (© FAO): only the data.
 - **Provenance per value**: each number is *transcribed* (read from the figure), *derived*
@@ -183,6 +190,14 @@ The validator was written to catch reading errors, and it caught them:
   the two 200 mm floats the report recommends (the net's flotation is not published) and with them
   the simulator ({doc}`21_simulacion`) does not converge at 2.5 knots: it stays out of the catalogue simulation
   test until it is reviewed.
+- **Hake (Phase 20.2)**: the VA-35.5/45 closes by stretched length on both plans (102 × 300 =
+  154 × 200 mm…); honest warnings remain on the as-built net (the 120 mm upper panel goes from 134
+  to 79 meshes in 47 rows and the side from 41 to 2, more than their cuts give) and the lower
+  panel's mesh-size column is not printed. The **Engel** is a draft because the plan keeps the
+  number of meshes when the mesh size changes (194 of 200 mm onto 194 of 160 mm: 20–25 %), and it
+  gives neither twine nor codend. Both **Baldino** nets are drafts: the original for the sections
+  that do not join, which the report itself points out (134 × 140 mm onto 100 × 120 mm, 36 %), the
+  modified one for a side panel that goes from 30 to 45 meshes of 200 mm (33 %).
 - The 4-panel pelagic net of the *Workbook* (a 450 px figure) **was not digitized**. The body can
   be read and closes (24 × 800 = 48 × 400, 42 × 400 = 84 × 200…), but the 800 mm front cannot be
   read well enough to build a net without inventing numbers.
@@ -271,6 +286,8 @@ simulator under the same conditions:
 rows = []
 for i in IDS:
     for m in SPECS[i].model_extra.get("measured", []):
+        if "height_m" not in m:  # the hake nets' are in 32_validacion_merluza
+            continue
         cc = catalog_case(i)
         r = run(cc.case)
         sim = simulate(r, m["speed_kn"], resolution=2, coarse_resolution=None)

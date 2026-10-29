@@ -1,0 +1,1410 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: inidep_iat045_baldino_original
+name: Red de fondo de 46,4 m de Baldino (Beagle I), original (IAT 045/2019, fig. 2)
+description: 'Red de arrastre de fondo comercial de 46,4 m de lima del pesquero Beagle I tal como la presentó
+  la empresa, redibujada por el INIDEP: «secciones que no coinciden con las siguientes en diversas partes
+  del cuerpo» (Roth 2019, p. 5). DynamiT a 4 nudos, 130 m y 600 m de cable: DP 189,1 m, AH 27,1 m, AV
+  3,2 m y 13 875,6 kg.'
+source: 'INIDEP IAT 045/19 (Roth 2019), fig. 2: plano digital de la red original de 46,4 m presentada
+  por Nietos de Antonio Baldino S.A. (https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d956d3a6-4d30-4eb2-9fa0-de33d3f3d743/content)'
+family: bottom
+rig: otter
+vessel_hp:
+- 1435.0
+- 1435.0
+target_species: merluza común (Merluccius hubbsi)
+status: draft
+sources:
+- key: roth2019iat045
+  title: 'INIDEP IAT 045/19 (Roth 2019), fig. 2: plano digital de la red original de 46,4 m presentada
+    por Nietos de Antonio Baldino S.A.'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/d956d3a6-4d30-4eb2-9fa0-de33d3f3d743/content
+  accessed: '2026-10-28'
+  figure: Figura 2
+  page: '4'
+panels:
+- id: UW1
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 3
+  meshes_bottom: 25
+  meshes_depth: 30
+  hanging_ratio: 0.34
+  count: 2
+  note: 'Triángulo de 9,0 m de 300 mm con «66» mallas al pie: ala (25) y frente del costado (no se modela).
+    La punta (3 mallas) es la de la fig. 3.'
+- id: UW2
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 25
+  meshes_bottom: 63
+  meshes_depth: 26
+  hanging_ratio: 0.34
+  count: 2
+- id: U1
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 277
+  meshes_bottom: 245
+  meshes_depth: 24
+  hanging_ratio: 0.34
+  count: 1
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 234
+  meshes_bottom: 203
+  meshes_depth: 25
+  hanging_ratio: 0.34
+  count: 1
+- id: U3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 250
+  meshes_bottom: 190
+  meshes_depth: 63
+  hanging_ratio: 0.34
+  count: 1
+- id: U4
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 214
+  meshes_bottom: 134
+  meshes_depth: 86
+  hanging_ratio: 0.34
+  count: 1
+- id: U5
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 53
+  hanging_ratio: 0.34
+  count: 1
+  cut_code: AN
+- id: UC
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 4.0
+  rtex: 15128.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 167
+  hanging_ratio: 0.34
+  count: 1
+  cut_code: AN
+- id: LW1
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 40
+  meshes_bottom: 40
+  meshes_depth: 39
+  hanging_ratio: 0.46
+  count: 2
+- id: LW2
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 40
+  meshes_bottom: 60
+  meshes_depth: 24
+  hanging_ratio: 0.46
+  count: 2
+- id: L1
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 185
+  meshes_bottom: 185
+  meshes_depth: 25
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: AN
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 184
+  meshes_bottom: 135
+  meshes_depth: 63
+  hanging_ratio: 0.46
+  count: 1
+- id: L3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 187
+  meshes_bottom: 102
+  meshes_depth: 86
+  hanging_ratio: 0.46
+  count: 1
+- id: L4
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 53
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: AN
+- id: LC
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 4.0
+  rtex: 15128.0
+  meshes_top: 100
+  meshes_bottom: 100
+  meshes_depth: 167
+  hanging_ratio: 0.46
+  count: 1
+  cut_code: AN
+- id: S1
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 46
+  meshes_bottom: 46
+  meshes_depth: 24
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: AN
+  note: 'Primer tramo modelado del costado. El tramo delantero del costado, junto a las alas (46 mallas
+    de 200 mm en 7,8 m), no se modela: su alto iguala el de las alas del dorso (7,8 m de UW2), como en
+    ITO 043/2022.'
+- id: S2
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 46
+  meshes_bottom: 46
+  meshes_depth: 25
+  hanging_ratio: 0.4
+  count: 2
+  cut_code: AN
+- id: S3
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 60
+  meshes_bottom: 40
+  meshes_depth: 71
+  hanging_ratio: 0.4
+  count: 2
+  note: El costado usa malla de 140 mm (◊140) en la franja de 160 mm del cuerpo.
+- id: S4
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 45
+  meshes_bottom: 11
+  meshes_depth: 86
+  hanging_ratio: 0.4
+  count: 2
+- id: S5
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 11
+  meshes_bottom: 5
+  meshes_depth: 53
+  hanging_ratio: 0.4
+  count: 2
+  note: 'La fig. 2 no rotula el ancho de arriba: 11 mallas, las del pie del tramo anterior (A VERIFICAR);
+    termina en 5.'
+species:
+  name: Merluza
+  scientific_name: Merluccius hubbsi
+headrope:
+  name: lima
+  length_m: 46.4
+  diameter_mm: 14
+  wing_m: 20.8
+  bosom_m: 6.0
+  description: «Relinga superior de cable de acero de 14 mm de diámetro» (p. 2)
+  construction: rope_combinado_6_14mm
+footrope:
+  name: burlón
+  length_m: 55.7
+  diameter_mm: 18
+  wing_m: 24.85
+  bosom_m: 6.0
+  description: «Relinga inferior de cable de acero combinado de 18 mm de diámetro con doble forro» (p.
+    2)
+  construction: rope_combinado_6_18mm
+floats:
+  count: 88
+  diameter_mm: 200
+ballast_kg: 172.9
+rigging:
+  doors: Mercury (Polar) con toberas, 2300 kg en el aire
+  bridle: superior de Ø18 mm e inferior de Ø22 mm, 45 m por banda
+  warp: 600 m de acero de 24 mm
+  seabed: arena
+design:
+  vessel_id: ar_congelador_e1
+  depth_m: 130.0
+  speed_kn: 4.0
+  warp_m: 600.0
+  warp_diameter_mm: 24.0
+  bridle_upper_m: 45.0
+  door_id: door_polar_mercury20r_7_5m2
+simulated:
+- speed_kn: 4.0
+  depth_m: 130.0
+  warp_m: 600.0
+  door_spread_m: 189.1
+  horizontal_opening_m: 27.1
+  vertical_opening_m: 3.2
+  drag_kgf: 13875.6
+  variant: original
+  source: roth2019iat045
+  note: 'resultados de DynamiT del INIDEP (p. 6): AV, AH, «Resistencia al avance (kg)», volumen filtrado
+    y DP; 4 nudos, 130 m y 600 m de cable (p. 2); modelo, no mediciones: «Original 3,2 27,1 13.875,6 166,2
+    189,1»'
+notes:
+- 'BORRADOR: secciones que no empalman (lo que señala el INIDEP, p. 5): dorso 245 → 234 mallas de 200
+  mm, 134 de 140 mm (18,76 m) sobre 100 de 120 mm (12,00 m); vientre 185 de 200 mm sobre 184 de 160 mm.
+  La fig. 2 da alturas en metros: las filas se derivan.'
+- 'Aparejo de la simulación (p. 2): bridas de 45 m (superior Ø18 mm, inferior Ø22 mm), portones Mercury
+  de 2300 kg, 600 m de cable de 24 mm, lima de acero de 14 mm, burlón combinado de 18 mm con doble forro,
+  4 nudos, 130 m, arena. El informe no da el largo de las malletas (el motor usa sus 25 m), la superficie
+  del portón ni el buque.'
+- 'Lima: 2 × (11,10 + 9,70) + 6 = 47,6 m en el plano frente a «LIMA 46,4 MTS» del título y del escaneo;
+  se usa 46,4 m. Burlón: 2 × (11,10 + 13,75) + 6 = 55,7 m («BURLÓN 55,7 MTS»).'
+- Hilos y flotación del escaneo manuscrito de la empresa (fig. 1), A VERIFICAR.
+provenance:
+  panels.UW1.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UW1.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.UW1.meshes_top:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'la fig. 2 no rotula la punta: 3 mallas de la fig. 3'
+  panels.UW1.meshes_bottom:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: «25» al pie del ala (fig. 2)
+  panels.UW1.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 9,0 m / 0,30 m = 30 filas (la fig. 2 da alturas en metros)
+  panels.UW1.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW1.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.UW1.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.UW2.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UW2.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.UW2.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UW2.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UW2.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 7,8 m / 0,30 m = 26 filas
+  panels.UW2.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW2.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.UW2.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U1.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U1.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 4,8 m / 0,20 m = 24 filas
+  panels.U1.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U1.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U2.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U2.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 5,0 m / 0,20 m = 25 filas
+  panels.U2.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U2.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U3.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U3.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 10,0 m / 0,16 m = 62,5 → 63 filas
+  panels.U3.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U3.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U4.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U4.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 12,0 m / 0,14 m = 85,7 → 86 filas
+  panels.U4.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U4.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U5.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U5.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 6,4 m / 0,12 m = 53,3 → 53 filas
+  panels.U5.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U5.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.U5.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del dorso en el escaneo del plano de la empresa (fig. 1, p. 3), leído
+      como PE de Ø3 mm (las redes del INIDEP del mismo puerto); el informe no da el hilo. A VERIFICAR
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UC.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'Rtex = 2 × 7564: hilo doble de PE de Ø4 mm (Ø4 escalado con d² del de Ø3 mm de ITO 043/2022).
+      A VERIFICAR'
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UC.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 20,0 m / 0,12 m = 166,7 → 167 filas
+  panels.UC.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UC.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.UC.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«# 4D 120 20 MTS» en el escaneo (fig. 1, p. 3): hilo doble de Ø4 mm en el copo de 120 mm. A
+      VERIFICAR'
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del dorso: 6 m de lima sobre 277 × 0,20 − 2 × 63 × 0,30 = 17,60 m: 0,34; se
+      usa en todo el dorso'
+  panels.LW1.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW1.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.LW1.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW1.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW1.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 7,8 m / 0,20 m = 39 filas
+  panels.LW1.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW1.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.LW1.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.LW2.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW2.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.LW2.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW2.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LW2.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 4,8 m / 0,20 m = 24 filas
+  panels.LW2.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW2.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.LW2.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.L1.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L1.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.L1.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L1.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L1.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 5,0 m / 0,20 m = 25 filas
+  panels.L1.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L1.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L1.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.L1.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.L2.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L2.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L2.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 10,0 m / 0,16 m = 62,5 → 63 filas
+  panels.L2.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L2.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.L3.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L3.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L3.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 12,0 m / 0,14 m = 85,7 → 86 filas
+  panels.L3.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L3.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.L4.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L4.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²). A VERIFICAR
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L4.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 6,4 m / 0,12 m = 53,3 → 53 filas
+  panels.L4.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L4.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.L4.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «4» del vientre en el escaneo (fig. 1, p. 3), leído como PE de Ø4 mm. A VERIFICAR
+  panels.L4.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.LC.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LC.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'Rtex = 2 × 7564: hilo doble de PE de Ø4 mm (Ø4 escalado con d² del de Ø3 mm de ITO 043/2022).
+      A VERIFICAR'
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LC.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 20,0 m / 0,12 m = 166,7 → 167 filas
+  panels.LC.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LC.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.LC.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«# 4D 120 20 MTS» en el escaneo (fig. 1, p. 3): hilo doble de Ø4 mm en el copo de 120 mm. A
+      VERIFICAR'
+  panels.LC.hanging_ratio:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'U1 de la bocana del vientre: 6 m sobre 185 × 0,20 − 2 × 60 × 0,20 = 13,00 m: 0,46; se usa en
+      todo el vientre'
+  panels.S1.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S1.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.S1.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S1.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S1.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 4,8 m / 0,20 m = 24 filas
+  panels.S1.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S1.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S1.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del costado en el escaneo (fig. 1, p. 3), leído como PE de Ø3 mm. A VERIFICAR
+  panels.S1.hanging_ratio:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S2.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S2.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.S2.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S2.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S2.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 5,0 m / 0,20 m = 25 filas
+  panels.S2.cut_code:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S2.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S2.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del costado en el escaneo (fig. 1, p. 3), leído como PE de Ø3 mm. A VERIFICAR
+  panels.S2.hanging_ratio:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S3.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S3.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.S3.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S3.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S3.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 10,0 m / 0,14 m = 71,4 → 71 filas (malla de 140 mm en la franja de 160 mm)
+  panels.S3.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S3.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del costado en el escaneo (fig. 1, p. 3), leído como PE de Ø3 mm. A VERIFICAR
+  panels.S3.hanging_ratio:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S4.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S4.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.S4.meshes_top:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S4.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S4.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 12,0 m / 0,14 m = 85,7 → 86 filas
+  panels.S4.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S4.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del costado en el escaneo (fig. 1, p. 3), leído como PE de Ø3 mm. A VERIFICAR
+  panels.S4.hanging_ratio:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S5.mesh_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S5.rtex:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022. A VERIFICAR
+  panels.S5.meshes_top:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 11 mallas del tramo anterior. A VERIFICAR
+  panels.S5.meshes_bottom:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  panels.S5.meshes_depth:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 6,4 m / 0,12 m = 53,3 → 53 filas
+  panels.S5.count:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S5.twine_diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: rótulo manuscrito «3» del costado en el escaneo (fig. 1, p. 3), leído como PE de Ø3 mm. A VERIFICAR
+  panels.S5.hanging_ratio:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  headrope.length_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  headrope.diameter_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: cable de acero de 14 mm (p. 2); el motor toma el combinado de 14 mm
+  headrope.wing_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 11,10 + 9,70 m por ala (figs. 2 y 3)
+  headrope.bosom_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: centro de 6 m (figs. 2 y 3)
+  footrope.length_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+  footrope.diameter_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: combinado de 18 mm con doble forro (p. 2)
+  footrope.wing_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 11,10 + 13,75 m por ala (figs. 2 y 3)
+  footrope.bosom_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: centro de 6 m (figs. 2 y 3)
+  floats.count:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«Flotacion = 88 de LOT. 200 %» en el escaneo (fig. 1, p. 3): 88 boyas; el diámetro no se lee
+      (200 mm supuestos). A VERIFICAR'
+  floats.diameter_mm:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«Flotacion = 88 de LOT. 200 %» en el escaneo (fig. 1, p. 3): 88 boyas; el diámetro no se lee
+      (200 mm supuestos). A VERIFICAR'
+  ballast_kg:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'escaneo (fig. 1, p. 3): «BOCA = 110 kg. (61 est C/A.) PUNTO = 21,5 kg. MEDIO = 23,4 kg. PUNTO
+      = 18 kg.»: suma 110 + 21,5 + 23,4 + 18 = 172,9 kg; no se sabe si los tramos son por lado (235,8
+      kg) y hay un «270 kg cadena» manuscrito. A VERIFICAR'
+  design.vessel_id:
+    kind: assumed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: 'IAT 045/2019 no da el buque ni su potencia («buque pesquero Beagle I», p. 2): congelador arrastrero
+      típico de la flota, estrato I. A VERIFICAR'
+  design.depth_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«Profundidad de pesca: 130 m» (p. 2)'
+  design.speed_kn:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«Velocidad de arrastre: 4 Ns» (p. 2)'
+  design.warp_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: «Cable de arrastre de acero de 24 mm de diámetro y 600 m de longitud» (p. 2)
+  design.warp_diameter_mm:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: cable de arrastre de acero de 24 mm (p. 2)
+  design.bridle_upper_m:
+    kind: transcribed
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: «Un par de bridas de cable de acero, la superior de 18 mm de diámetro y la inferior de 22 mm
+      de diámetro y 45 m de longitud por banda» (p. 2)
+  design.door_id:
+    kind: derived
+    document: roth2019iat045
+    page: '4'
+    figure: Figura 2
+    note: '«portones con toberas modelo Mercury de 2300 kg de peso en el aire» (IAT 045/19, p. 2); la
+      superficie no se publica: el tamaño de 2300 kg de la tabla «Size & Weight» de Polar es el de 7,5
+      m² (derivado, A VERIFICAR)'

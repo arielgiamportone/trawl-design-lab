@@ -70,10 +70,11 @@ def test_catalogue_net_runs_and_simulates(net_id: str) -> None:
         assert 3.0 < s.av_m < 100.0
     else:
         assert 0.3 < s.av_m < 8.0
-        # Hasta 20 m, o 0,6 de la lima en las redes de fondo grandes (la n.º 22 de la SEAFDEC
-        # tiene 46 m de lima, Fase 19.6).
+        # Hasta 20 m, o 0,65 de la lima en las redes de fondo grandes (la n.º 22 de la SEAFDEC
+        # tiene 46 m de lima, Fase 19.6; DynamiT da 23,0 m de AH a la VA-35,5/45 de 35,5 m de
+        # lima, 0,65, IAT 101/2017, Fase 20.2).
         headrope = result.dimensions.std.headrope_m
-        assert 3.0 < s.ah_m < max(20.0, 0.6 * headrope)
+        assert 3.0 < s.ah_m < max(20.0, 0.65 * headrope)
 
 
 @pytest.mark.parametrize("net_id", CATALOGUE)

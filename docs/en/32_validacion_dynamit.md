@@ -301,5 +301,6 @@ drag is still the engine's.
 
 **Limitations of this comparison.** A single simulation, whose author and date are not documented in
 the repository, without the rigging parameters (warp paid out, sweeps, otter board, angle of attack,
-seabed type) or the DynamiT version; a single net and a single depth. Neither of the two models was
-compared with measurements at sea.
+seabed type) or the DynamiT version; a single net and a single depth. Neither of the two models is
+compared here with measurements at sea: {doc}`32_validacion_merluza` does that, with INIDEP hake
+nets measured with sensors.

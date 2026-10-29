@@ -274,8 +274,10 @@ def source_door(spec: NetSpec, hp: float, rig: str = "otter") -> tuple[Door, lis
                 area=door.area_m2 or 0.0,
             )
         )
-    elif "door_length_m" in design and "door_height_m" in design and (
-        any(k in design for k in ("door_area_m2", "door_cl", "door_polar_id"))
+    elif (
+        "door_length_m" in design
+        and "door_height_m" in design
+        and (any(k in design for k in ("door_area_m2", "door_cl", "door_polar_id")))
     ):
         # Fase 20.2: superficie y polar de la fuente (CL y CD publicados u hoja de la biblioteca).
         door, note = door_from_params(
@@ -422,6 +424,20 @@ def catalog_case(
     # otro buque la separación sale de la DPA de Fridman con el portón del caso.
     kwargs: dict[str, Any] = {"depth_m": float(depth), "door_spread_rule": "fridman"}
     kwargs.update(source_params(spec))
+    from trawlkit.io.schema import PropellerType
+    from trawlkit.power import FRIDMAN_KF
+
+    if overrides.get("fridman_kf") is None and vessel.propeller not in FRIDMAN_KF:
+        # Hélice sin KF de Fridman en el libro (PF+T, PV; p. ej. el BIP Holmberg): se calcula como
+        # paso fijo, lo conservador, igual que la API (trawlkit.api.service.build_case). Fase 20.2.
+        kwargs["fridman_kf"] = FRIDMAN_KF[PropellerType.FIXED_PITCH]
+        notes.append(
+            t(
+                "hélice {prop}: el tiro se calcula como paso fijo (el libro sólo tabula PF y "
+                "PV con tobera)",
+                prop=vessel.propeller.value,
+            )
+        )
     if overrides.get("warp_id") is None:
         warp_id, warp_notes = source_warp(spec)
         if warp_id is not None:

@@ -1,0 +1,2644 @@
+# Generado por tools/catalog/build_nets.py desde tools/catalog/transcriptions.py.
+# No editar a mano: corregir la transcripción y regenerar.
+id: inidep_iat151_va355_construida
+name: Red de fondo VA-35,5/45 del INIDEP, construida (IAT 151/2018, fig. 1)
+description: 'La red VA-35,5/45 tal como se construyó y se midió a bordo del BIP Víctor Angelescu en 2018:
+  alas de 300 mm, dorso y costados en PE de 3 mm, vientre en PE de 4 mm y copo de 110 mm en hilo doble
+  de 4 mm; 90 boyas de 200 mm y 380 kg de cadena (Bartozzetti 2018). Lleva 95 lances medidos con tres
+  juegos de portones y una simulación DynamiT a 400 m.'
+source: 'INIDEP IAT 151/18 (Bartozzetti 2018), fig. 1: plano de la red VA-35,5/45 utilizada en el BIP
+  Víctor Angelescu (https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/95f5dd8e-1983-4b46-a704-e570c0ae738b/content)'
+family: bottom
+rig: otter
+vessel_hp:
+- 2855.2
+- 2855.2
+target_species: merluza común (Merluccius hubbsi)
+status: published
+sources:
+- key: bartozzetti2018iat151
+  title: 'INIDEP IAT 151/18 (Bartozzetti 2018), fig. 1: plano de la red VA-35,5/45 utilizada en el BIP
+    Víctor Angelescu'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/95f5dd8e-1983-4b46-a704-e570c0ae738b/content
+  accessed: '2026-10-28'
+  figure: Figura 1
+  page: '2'
+- key: roth2017angelescu
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/c4ca20ad-6497-4eba-8fbb-72b565bed12f/content
+  accessed: '2026-10-28'
+  title: 'INIDEP IAT 101/17 (Roth y García 2017): diseño de la red'
+  page: '4'
+- key: roth2025iat026
+  title: 'INIDEP IAT 026/25 (Roth y Rubio 2025): portones SPF, simulación DynamiT de la VA-35/45 a 400
+    m'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/e97fb316-932c-47df-b33a-555c14ee26bc/content
+  accessed: '2026-10-28'
+  page: 3, 8
+- key: cabreira2018ic029
+  title: 'INIDEP IC 029/2018 (Cabreira et al. 2018, VA-10/18): portones Morgère SPF08 con la VA-35,5/45'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/5a0b7861-44a1-4070-b18a-5a927add7760/content
+  accessed: '2026-10-28'
+  page: 4–5
+- key: roth2021ic012
+  title: 'INIDEP IC 012/2021 (Roth 2021, VA-02/21): datos de puente de 40 lances con la VA-35/45'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/b93fefeb-ab3f-4d46-8c83-30857c6ef25a/content
+  accessed: '2026-10-28'
+  page: 3, 13–52
+- key: tringali2012eh0612
+  title: 'INIDEP, campaña EH 06/12 (Tringali et al. 2012): red Engel y portones del BIP Holmberg'
+  url: https://marabiertonew.inidep.edu.ar/server/api/core/bitstreams/84042f69-aa0c-4417-8ce0-578443812725/content
+  accessed: '2026-10-28'
+  page: '6'
+panels:
+- id: UW1
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 12
+  meshes_bottom: 32
+  meshes_depth: 36
+  hanging_ratio: 0.42
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: AB
+- id: UW2
+  plane: upper
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 32
+  meshes_bottom: 47
+  meshes_depth: 10
+  hanging_ratio: 0.42
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: 1T2B
+- id: U1
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 126
+  meshes_bottom: 106
+  meshes_depth: 20
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U2
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 159
+  meshes_bottom: 133
+  meshes_depth: 26
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U3
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 166
+  meshes_bottom: 132
+  meshes_depth: 34
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U4
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 151
+  meshes_bottom: 115
+  meshes_depth: 36
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+- id: U5
+  plane: upper
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 134
+  meshes_bottom: 79
+  meshes_depth: 47
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: 1N2B
+  note: 'La fig. 1 da 134 → 79 mallas en 47 filas (55 mallas; 1N2B daría 47). Se transcribe como se lee:
+    A VERIFICAR.'
+- id: UC
+  plane: upper
+  section: codend
+  material: PE
+  mesh_mm: 110.0
+  twine_diameter_mm: 4.0
+  rtex: 15128.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 200
+  hanging_ratio: 0.42
+  count: 1
+  cut_code: AN
+  note: Copo de 110 mm en hilo doble de PE de 4 mm («4D»).
+- id: LW1
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 9
+  meshes_bottom: 31
+  meshes_depth: 56
+  hanging_ratio: 0.59
+  count: 2
+  cut_code: 1N3B
+  cut_code_x2: AB
+- id: LW2
+  plane: lower
+  section: wing
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 31
+  meshes_bottom: 40
+  meshes_depth: 10
+  hanging_ratio: 0.59
+  count: 2
+  cut_code: 1N2B
+  cut_code_x2: 1T4B
+  note: Mismo mallero arriba y abajo de la línea de 55,5 filas (31 / 31 mallas); 31 → 40 mallas en 10
+    filas con el borde de la relinga en 1T4B.
+- id: L1
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 154
+  meshes_bottom: 128
+  meshes_depth: 26
+  hanging_ratio: 0.59
+  count: 1
+  cut_code: 1N2B
+- id: L2
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 160
+  meshes_bottom: 126
+  meshes_depth: 34
+  hanging_ratio: 0.59
+  count: 1
+  cut_code: 1N2B
+- id: L3
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 144
+  meshes_bottom: 108
+  meshes_depth: 36
+  hanging_ratio: 0.59
+  count: 1
+  cut_code: 1N2B
+- id: L4
+  plane: lower
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 4.0
+  rtex: 7564.0
+  meshes_top: 126
+  meshes_bottom: 79
+  meshes_depth: 47
+  hanging_ratio: 0.59
+  count: 1
+  cut_code: 1N2B
+- id: LC
+  plane: lower
+  section: codend
+  material: PE
+  mesh_mm: 110.0
+  twine_diameter_mm: 4.0
+  rtex: 15128.0
+  meshes_top: 86
+  meshes_bottom: 86
+  meshes_depth: 200
+  hanging_ratio: 0.59
+  count: 1
+  cut_code: AN
+- id: S1
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 300.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 46
+  meshes_bottom: 41
+  meshes_depth: 20
+  hanging_ratio: 0.5
+  count: 2
+  note: 'El corte de 46 → 41 mallas en 20 filas no está rotulado. El tramo delantero del costado, junto
+    a las alas (dos cuñas de 6 → 23 mallas de 300 mm en 25,5 filas y 46 mallas en 20 filas), no se modela:
+    su alto iguala el de las alas del dorso (35,5 + 10 filas), como en ITO 043/2022.'
+- id: S2
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 200.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 61
+  meshes_bottom: 53
+  meshes_depth: 26
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 5N2B
+- id: S3
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 160.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 66
+  meshes_bottom: 47
+  meshes_depth: 34
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N1B
+  cut_code_x2: 2N1B
+- id: S4
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 140.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 54
+  meshes_bottom: 35
+  meshes_depth: 36
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N1B
+  cut_code_x2: 2N1B
+- id: S5
+  plane: side
+  section: body
+  material: PE
+  mesh_mm: 120.0
+  twine_diameter_mm: 3.0
+  rtex: 4255.0
+  meshes_top: 41
+  meshes_bottom: 2
+  meshes_depth: 47
+  hanging_ratio: 0.5
+  count: 2
+  cut_code: 1N1B
+  cut_code_x2: 2N1B
+  note: 'La fig. 1 da 41 → 2 mallas en 47 filas (la fig. 2 de IAT 101/2017, 26 → 2): el corte 1N1B/2N1B
+    daría 25 mallas. Se transcribe como se lee: A VERIFICAR.'
+species:
+  name: Merluza
+  scientific_name: Merluccius hubbsi
+headrope:
+  name: lima
+  length_m: 35.5
+  diameter_mm: null
+  wing_m: 15.75
+  bosom_m: 4.0
+  description: 'lima del plano (material y diámetro no publicados: los del motor)'
+  construction: null
+footrope:
+  name: burlón
+  length_m: 45.0
+  diameter_mm: null
+  wing_m: 20.5
+  bosom_m: 4.0
+  description: 'burlón del plano (material y diámetro no publicados: los del motor)'
+  construction: null
+floats:
+  count: 90
+  diameter_mm: 200
+ballast_kg: 380.0
+rigging:
+  doors: polivalentes Morgère de 1200 kg (IAT 151/2018); SPF08 de 1000 kg y 4,68 m² desde agosto de 2018
+    (IC 029/2018, IC 012/2021)
+  bridle: superiores de 50 m (Ø18 mm) e inferiores de 48,5 m (Ø20 mm) con 1,5 m de cadena de reglaje
+  sweeps: 100 m de cable de acero de 20 mm
+design:
+  vessel_id: bipo_victor_angelescu
+  depth_m: 62.7
+  sweeps_m: 100.0
+  bridle_upper_m: 50.0
+  bridle_lower_m: 48.5
+  speed_kn: 3.8
+  door_weight_air_kg: 1200.0
+  door_area_m2: 5.58
+  door_length_m: 3.2
+  door_height_m: 2.18
+  door_polar_id: sfia1993_morgere_polyvalent_ovale
+measured:
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 1
+  depth_m: 90.0
+  warp_m: 400.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 99.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 2
+  depth_m: 93.0
+  warp_m: 450.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 101.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 3
+  depth_m: 92.0
+  warp_m: 450.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 4
+  depth_m: 90.0
+  warp_m: 430.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 100.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 5
+  depth_m: 81.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 93.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 6
+  depth_m: 80.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 7
+  depth_m: 68.0
+  warp_m: 320.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 97.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 8
+  depth_m: 79.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 98.0
+  vertical_opening_m: 3.6
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 9
+  depth_m: 78.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 10
+  depth_m: 90.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 11
+  depth_m: 84.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 94.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 12
+  depth_m: 78.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 93.0
+  vertical_opening_m: 3.6
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 13
+  depth_m: 82.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.6
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 14
+  depth_m: 62.0
+  warp_m: 300.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 90.0
+  vertical_opening_m: 3.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 15
+  depth_m: 85.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 98.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 16
+  depth_m: 79.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 94.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 17
+  depth_m: 82.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 97.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 18
+  depth_m: 60.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 87.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 19
+  depth_m: 35.0
+  warp_m: 180.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 79.0
+  vertical_opening_m: 4.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 20
+  depth_m: 85.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 103.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 21
+  depth_m: 83.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 101.0
+  vertical_opening_m: 3.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 22
+  depth_m: 73.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 97.0
+  vertical_opening_m: 3.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 23
+  depth_m: 40.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 89.0
+  vertical_opening_m: 4.2
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 24
+  depth_m: 39.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 91.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 25
+  depth_m: 70.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 101.0
+  vertical_opening_m: 3.6
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 26
+  depth_m: 78.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 97.0
+  vertical_opening_m: 3.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 27
+  depth_m: 79.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 101.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 28
+  depth_m: 55.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 88.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 29
+  depth_m: 27.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 80.0
+  vertical_opening_m: 4.0
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 30
+  depth_m: 27.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 78.0
+  vertical_opening_m: 4.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 31
+  depth_m: 50.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 89.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 32
+  depth_m: 79.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 102.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 33
+  depth_m: 85.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 101.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 34
+  depth_m: 82.0
+  warp_m: 380.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 95.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 35
+  depth_m: 76.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 96.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 36
+  depth_m: 53.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 88.0
+  vertical_opening_m: 4.1
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 37
+  depth_m: 28.0
+  warp_m: 180.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 75.0
+  vertical_opening_m: 4.1
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 38
+  depth_m: 26.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 81.0
+  vertical_opening_m: 3.7
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 39
+  depth_m: 42.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 89.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 40
+  depth_m: 57.0
+  warp_m: 300.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 93.0
+  vertical_opening_m: 3.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 41
+  depth_m: 74.0
+  warp_m: 350.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 97.0
+  vertical_opening_m: 3.1
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 42
+  depth_m: 60.0
+  warp_m: 300.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 93.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 43
+  depth_m: 52.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 91.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 44
+  depth_m: 30.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 81.0
+  vertical_opening_m: 4.0
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 45
+  depth_m: 32.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 86.0
+  vertical_opening_m: 3.8
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 46
+  depth_m: 50.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 93.0
+  vertical_opening_m: 3.6
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 47
+  depth_m: 30.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 82.0
+  vertical_opening_m: 4.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 48
+  depth_m: 27.0
+  warp_m: 180.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 79.0
+  vertical_opening_m: 4.3
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 49
+  depth_m: 38.0
+  warp_m: 200.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 91.0
+  vertical_opening_m: 3.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 51
+  depth_m: 68.0
+  warp_m: 330.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 102.0
+  vertical_opening_m: 3.5
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 52
+  depth_m: 51.0
+  warp_m: 250.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 94.0
+  vertical_opening_m: 3.4
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: iat151
+  source: bartozzetti2018iat151
+  haul: 54
+  depth_m: 28.0
+  warp_m: 180.0
+  speed_kn: 3.8
+  door: polivalente_1200
+  door_spread_m: 76.0
+  vertical_opening_m: 3.9
+  note: 'tabla 1 (p. 5), Simrad TV-80; velocidad: la media de la campaña («a una velocidad de 3,8 Ns»,
+    p. 1), la tabla no la da por lance'
+- series: ic029
+  source: cabreira2018ic029
+  haul: 5
+  depth_m: 120.0
+  warp_m: 500.0
+  speed_kn: 3.9
+  door: spf08_1000
+  door_spread_m: 129.0
+  vertical_opening_m: 2.73
+  note: tabla 1 (p. 5), sensores Simrad PX / TV80
+- series: ic029
+  source: cabreira2018ic029
+  haul: 6
+  depth_m: 140.0
+  warp_m: 600.0
+  speed_kn: 4.0
+  door: spf08_1000
+  door_spread_m: 142.0
+  vertical_opening_m: 2.65
+  note: tabla 1 (p. 5), sensores Simrad PX / TV80
+- series: ic029
+  source: cabreira2018ic029
+  haul: 7
+  depth_m: 317.0
+  warp_m: 930.0
+  speed_kn: 4.0
+  door: spf08_1000
+  door_spread_m: 158.0
+  vertical_opening_m: 2.45
+  note: tabla 1 (p. 5), sensores Simrad PX / TV80
+- series: ic012
+  source: roth2021ic012
+  haul: 1
+  depth_m: 81.5
+  warp_m: 300.0
+  speed_kn: 4.1
+  door: spf08_1000
+  door_spread_m: 90.0
+  vertical_opening_m: 4.2
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 2
+  depth_m: 83.0
+  warp_m: 300.0
+  speed_kn: 4.0
+  door: spf08_1000
+  door_spread_m: 88.0
+  vertical_opening_m: 4.2
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 3
+  depth_m: 67.5
+  warp_m: 240.0
+  speed_kn: 4.03
+  door: spf08_1000
+  door_spread_m: 78.1
+  vertical_opening_m: 3.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 4
+  depth_m: 63.5
+  warp_m: 300.0
+  speed_kn: 3.84
+  door: spf08_1000
+  door_spread_m: 82.1
+  vertical_opening_m: 2.9
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 5
+  depth_m: 68.0
+  warp_m: 240.0
+  speed_kn: 3.97
+  door: spf08_1000
+  door_spread_m: 80.8
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 6
+  depth_m: 67.5
+  warp_m: 250.0
+  speed_kn: 4.02
+  door: spf08_1000
+  door_spread_m: 75.6
+  vertical_opening_m: 3.6
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 7
+  depth_m: 107.0
+  warp_m: 360.0
+  speed_kn: 3.84
+  door: spf08_1000
+  door_spread_m: 102.4
+  vertical_opening_m: 3.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 8
+  depth_m: 108.5
+  warp_m: 363.0
+  speed_kn: 4.02
+  door: spf08_1000
+  door_spread_m: 89.7
+  vertical_opening_m: 3.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 9
+  depth_m: 128.5
+  warp_m: 400.0
+  speed_kn: 3.93
+  door: spf08_1000
+  door_spread_m: 89.6
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 10
+  depth_m: 130.5
+  warp_m: 435.0
+  speed_kn: 3.86
+  door: spf08_1000
+  door_spread_m: 78.5
+  vertical_opening_m: 2.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 11
+  depth_m: 127.0
+  warp_m: 400.0
+  speed_kn: 3.85
+  door: spf08_1000
+  door_spread_m: 93.6
+  vertical_opening_m: 2.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 12
+  depth_m: 131.5
+  warp_m: 413.0
+  speed_kn: 3.9
+  door: spf08_1000
+  door_spread_m: 91.6
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 13
+  depth_m: 133.5
+  warp_m: 420.0
+  speed_kn: 4.0
+  door: spf08_1000
+  door_spread_m: 96.7
+  vertical_opening_m: 2.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 14
+  depth_m: 135.0
+  warp_m: 420.0
+  speed_kn: 4.0
+  door: spf08_1000
+  door_spread_m: 90.3
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 15
+  depth_m: 134.0
+  warp_m: 440.0
+  speed_kn: 3.69
+  door: spf08_1000
+  door_spread_m: 90.1
+  vertical_opening_m: 3.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 16
+  depth_m: 133.0
+  warp_m: 420.0
+  speed_kn: 3.87
+  door: spf08_1000
+  door_spread_m: 92.7
+  vertical_opening_m: 2.9
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 17
+  depth_m: 147.0
+  warp_m: 445.0
+  speed_kn: 3.91
+  door: spf08_1000
+  door_spread_m: 98.4
+  vertical_opening_m: 2.9
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 18
+  depth_m: 133.0
+  warp_m: 400.0
+  speed_kn: 3.8
+  door: spf08_1000
+  door_spread_m: 93.8
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 19
+  depth_m: 131.5
+  warp_m: 400.0
+  speed_kn: 3.9
+  door: spf08_1000
+  door_spread_m: 91.0
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 20
+  depth_m: 130.0
+  warp_m: 400.0
+  speed_kn: 3.98
+  door: spf08_1000
+  door_spread_m: 87.2
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 21
+  depth_m: 133.0
+  warp_m: 400.0
+  speed_kn: 3.86
+  door: spf08_1000
+  door_spread_m: 87.7
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 22
+  depth_m: 144.0
+  warp_m: 450.0
+  speed_kn: 3.97
+  door: spf08_1000
+  door_spread_m: 94.8
+  vertical_opening_m: 2.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 23
+  depth_m: 140.5
+  warp_m: 456.0
+  speed_kn: 4.03
+  door: spf08_1000
+  door_spread_m: 98.0
+  vertical_opening_m: 3.4
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 24
+  depth_m: 132.0
+  warp_m: 400.0
+  speed_kn: 3.91
+  door: spf08_1000
+  door_spread_m: 88.8
+  vertical_opening_m: 3.2
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 25
+  depth_m: 147.5
+  warp_m: 470.0
+  speed_kn: 3.67
+  door: spf08_1000
+  door_spread_m: 93.3
+  vertical_opening_m: 3.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 26
+  depth_m: 144.0
+  warp_m: 461.0
+  speed_kn: 3.97
+  door: spf08_1000
+  door_spread_m: 96.5
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 27
+  depth_m: 156.5
+  warp_m: 450.0
+  speed_kn: 3.94
+  door: spf08_1000
+  door_spread_m: 97.9
+  vertical_opening_m: 2.9
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 28
+  depth_m: 140.5
+  warp_m: 430.0
+  speed_kn: 3.87
+  door: spf08_1000
+  door_spread_m: 86.6
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 29
+  depth_m: 147.5
+  warp_m: 445.0
+  speed_kn: 4.07
+  door: spf08_1000
+  door_spread_m: 97.0
+  vertical_opening_m: 2.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 30
+  depth_m: 148.0
+  warp_m: 451.0
+  speed_kn: 3.9
+  door: spf08_1000
+  door_spread_m: 102.6
+  vertical_opening_m: 2.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 31
+  depth_m: 108.0
+  warp_m: 340.0
+  speed_kn: 3.91
+  door: spf08_1000
+  door_spread_m: 81.9
+  vertical_opening_m: 3.0
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 32
+  depth_m: 124.0
+  warp_m: 407.0
+  speed_kn: 4.09
+  door: spf08_1000
+  door_spread_m: 99.0
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 33
+  depth_m: 106.5
+  warp_m: 330.0
+  speed_kn: 3.8
+  door: spf08_1000
+  door_spread_m: 84.7
+  vertical_opening_m: 3.2
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 34
+  depth_m: 104.5
+  warp_m: 330.0
+  speed_kn: 3.8
+  door: spf08_1000
+  door_spread_m: 89.2
+  vertical_opening_m: 3.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 35
+  depth_m: 107.5
+  warp_m: 330.0
+  speed_kn: 3.93
+  door: spf08_1000
+  door_spread_m: 86.3
+  vertical_opening_m: 3.3
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 36
+  depth_m: 103.0
+  warp_m: 330.0
+  speed_kn: 3.87
+  door: spf08_1000
+  door_spread_m: 94.3
+  vertical_opening_m: 2.8
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 37
+  depth_m: 118.5
+  warp_m: 365.0
+  speed_kn: 3.7
+  door: spf08_1000
+  door_spread_m: 92.6
+  vertical_opening_m: 2.9
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 38
+  depth_m: 104.0
+  warp_m: 320.0
+  speed_kn: 4.04
+  door: spf08_1000
+  door_spread_m: 84.9
+  vertical_opening_m: 3.6
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 39
+  depth_m: 89.5
+  warp_m: 280.0
+  speed_kn: 3.92
+  door: spf08_1000
+  door_spread_m: 79.7
+  vertical_opening_m: 3.7
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+- series: ic012
+  source: roth2021ic012
+  haul: 40
+  depth_m: 83.0
+  warp_m: 263.0
+  speed_kn: 3.82
+  door: spf08_1000
+  door_spread_m: 76.3
+  vertical_opening_m: 3.1
+  note: 'anexo II: «Vel Arrastre», «Prof INI»/«Prof FIn» (se usa la media), «Abertura Vert», «Dist e/Port»
+    y «Cable Filado»; los lances llevan dispositivos de selectividad (malla cuadrada, T90, grilla), que
+    pueden cambiar algo la resistencia'
+validation_doors:
+  polivalente_1200:
+    label: polivalente, 5,58 m², 1200 kg (EH 06/12), polar Morgère Polyvalent Ovale
+    door_area_m2: 5.58
+    door_length_m: 3.2
+    door_height_m: 2.18
+    door_weight_air_kg: 1200.0
+    door_polar_id: sfia1993_morgere_polyvalent_ovale
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  spf08_1000:
+    label: Morgère SPF08, 4,68 m², 1000 kg (IC 029/18, IC 012/21)
+    door_area_m2: 4.68
+    door_length_m: 3.06
+    door_height_m: 1.53
+    door_weight_air_kg: 1000.0
+    door_cl: 1.0
+    door_cd: 0.58
+    note: '«modelo SPF08, con un peso individual de 1000 kg y un área total de 4.68 m2» (IC 029/2018,
+      p. 4; IC 012/2021, p. 3). CL y CD: los del SPF08 de IAT 101/2017 (supuesto, A VERIFICAR). Largo
+      y alto: la fuente da la superficie pero no las medidas: proporción alto/largo 0,5 del portón plano
+      genérico (como ITO 043/2022). A VERIFICAR'
+  spf085_iat026:
+    label: Morgère SPF 08,5, 4,9 m², 1200 kg, CL 0,92 / CD 0,40 (IAT 026/25)
+    door_area_m2: 4.9
+    door_length_m: 3.13
+    door_height_m: 1.57
+    door_weight_air_kg: 1200.0
+    door_cl: 0.92
+    door_cd: 0.4
+    note: '«portones hidrodinámicos Morgère SPF 08,5 de 1200 kg de peso y 4,9 m2 de área» y «CD = 0,4
+      y CL = 0,92» (IAT 026/25, pp. 2–3; IC 016/24 da 4,8 m²). Largo y alto: la fuente da la superficie
+      pero no las medidas: proporción alto/largo 0,5 del portón plano genérico (como ITO 043/2022). A
+      VERIFICAR'
+simulated:
+- speed_kn: 4.0
+  depth_m: 400.0
+  warp_m: 1200.0
+  sweeps_m: 100.0
+  door: spf085_iat026
+  door_spread_m: 162.3
+  horizontal_opening_m: 28.4
+  vertical_opening_m: 2.4
+  drag_kgf: 9175.828
+  source: roth2025iat026
+  note: 'DynamiT del INIDEP, tabla 1 (p. 8), portones de 1200 kg: «1200 2,4 28,4 162,3 9175,828 105»;
+    4 nudos, 400 m y 1200 m de cable (p. 6). Las patentes de 100 m son las de la red (IAT 151/2018), el
+    informe no las repite (supuesto)'
+notes:
+- 'Red construida (fig. 1): cambian respecto de la diseñada las puntas de ala (12 y 9 mallas), el costado
+  (dos cuñas de 6 mallas), el vientre (alas de 55,5 + 10 filas, Ø4 mm) y el copo (hilo doble de 4 mm).
+  La columna de malleros del vientre no está impresa: se suponen los del dorso (A VERIFICAR).'
+- 'Mediciones: 52 lances de la tabla 1 de IAT 151/2018 (polivalentes de 1200 kg, 26–93 m), 3 de IC 029/2018
+  y 40 de IC 012/2021 (SPF08 de 1000 kg y 4,68 m², 63–161 m). La superficie y la polar de los polivalentes
+  no se publican: 5,58 m² (EH 06/12) y la hoja Morgère Polyvalent Ovale de Seafish, A VERIFICAR.'
+- 'Relingas: el plano no da material ni diámetro; el motor usa los cabos del libro.'
+provenance:
+  panels.UW1.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW1.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.UW1.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW1.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW1.meshes_depth:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 35,5 filas redondeadas a 36
+  panels.UW1.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW1.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW1.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.UW1.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.UW2.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW2.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.UW2.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW2.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW2.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW2.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UW2.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.UW2.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.UW2.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.U1.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U1.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U1.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.U1.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.U2.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U2.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U2.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.U2.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.U3.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U3.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U3.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.U3.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.U4.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U4.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U4.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.U4.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.U5.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.U5.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.U5.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.U5.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.UC.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'Rtex = 2 × 7564: hilo doble de PE de Ø4 mm (Ø4 escalado con d² del de Ø3 mm de ITO 043/2022)'
+  panels.UC.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.UC.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: '«4D» en el copo (fig. 1): hilo doble de Ø4 mm; el motor toma Ø4 mm y el Rtex de los dos hilos'
+  panels.UC.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del dorso: 4 m de lima sobre 126 − 2 × 47 = 32 mallas de 300 mm (el plano rotula
+      «32»; 9,60 m): 0,42; se usa en todo el dorso'
+  panels.LW1.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.LW1.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.LW1.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW1.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW1.meshes_depth:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 55,5 filas redondeadas a 56
+  panels.LW1.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW1.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW1.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.LW1.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.LW2.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.LW2.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.LW2.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW2.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW2.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW2.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LW2.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.LW2.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.LW2.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.L1.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.L1.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.L1.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L1.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L1.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L1.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L1.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L1.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.L1.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.L2.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.L2.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.L2.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L2.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L2.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L2.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L2.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L2.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.L2.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.L3.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.L3.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.L3.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L3.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L3.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L3.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L3.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L3.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.L3.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.L4.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.L4.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 4255 × (4/3)² (PE de Ø3 mm de ITO 043/2022 escalado con d²)
+  panels.L4.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L4.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L4.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L4.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L4.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.L4.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)» del vientre: 4 (fig. 1)'
+  panels.L4.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.LC.mesh_mm:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'la fig. 1 no imprime la columna de malleros del vientre: 300 mm en las alas (55,5 + 10 = 65,5
+      filas, como las 65,5 filas de 300 mm del dorso y del costado, y 31 mallas a los dos lados de la
+      línea de 55,5 filas) y 200–110 mm en el cuerpo como el dorso y la fig. 2 de IAT 101/2017. A VERIFICAR'
+  panels.LC.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'Rtex = 2 × 7564: hilo doble de PE de Ø4 mm (Ø4 escalado con d² del de Ø3 mm de ITO 043/2022)'
+  panels.LC.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LC.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LC.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LC.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LC.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.LC.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: '«4D» en el copo (fig. 1): hilo doble de Ø4 mm; el motor toma Ø4 mm y el Rtex de los dos hilos'
+  panels.LC.hanging_ratio:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'U1 de la bocana del vientre: 4 m sobre 154 × 0,20 − 2 × 40 × 0,30 = 6,80 m (con alas de 300
+      mm, supuestas): 0,59; se usa en todo el vientre. A VERIFICAR'
+  panels.S1.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S1.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S1.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S1.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S1.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S1.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S1.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.S1.hanging_ratio:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S2.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S2.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S2.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S2.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S2.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S2.cut_code:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S2.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S2.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.S2.hanging_ratio:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S3.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S3.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S3.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S3.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S3.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S3.cut_code:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: la fig. 1 rotula 1N1B en un borde; el otro borde (2N1B) es el de la fig. 2 de IAT 101/2017 y
+      da el cambio de ancho del paño
+  panels.S3.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S3.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.S3.hanging_ratio:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S4.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S4.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S4.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S4.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S4.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S4.cut_code:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: la fig. 1 rotula 1N1B en un borde; el otro borde (2N1B) es el de la fig. 2 de IAT 101/2017 y
+      da el cambio de ancho del paño
+  panels.S4.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S4.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.S4.hanging_ratio:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  panels.S5.mesh_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S5.rtex:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: Rtex = 10⁶ / 235 m/kg del hilo de PE de Ø3 mm («3 mm PCU») de ITO 043/2022
+  panels.S5.meshes_top:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S5.meshes_bottom:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S5.meshes_depth:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  panels.S5.cut_code:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: la fig. 1 rotula 1N1B en un borde; el otro borde (2N1B) es el de la fig. 2 de IAT 101/2017 y
+      da el cambio de ancho del paño
+  panels.S5.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: dos paños iguales (alas izquierda y derecha)
+  panels.S5.twine_diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'columna «Material PE (Ø mm)»: 3 (fig. 1)'
+  panels.S5.hanging_ratio:
+    kind: assumed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 'el plano no da U1 del costado: promedio del dorso y el vientre'
+  headrope.length_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  headrope.wing_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 11 + 4,75 m por ala (fig. 1)
+  headrope.bosom_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: centro de 4 m (fig. 1)
+  footrope.length_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+  footrope.wing_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: 17 + 3,5 m por ala (fig. 1)
+  footrope.bosom_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: centro de 4 m (fig. 1)
+  floats.count:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «una flotación de 90 boyas de 200 m[m] de diámetro» (p. 2); a partir del lance 1 se agregaron
+      10 (100 en total, p. 3)
+  floats.diameter_mm:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «una flotación de 90 boyas de 200 m[m] de diámetro» (p. 2); a partir del lance 1 se agregaron
+      10 (100 en total, p. 3)
+  ballast_kg:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «un peso de 380 kg de cadena de alta resistencia» (p. 2)
+  design.vessel_id:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «redes de arrastre de fondo para ser utilizadas en el BIP Víctor Angelescu» (título)
+  design.depth_m:
+    kind: derived
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: media de las profundidades de los 52 lances de la tabla 1 (26–93 m, p. 5)
+  design.sweeps_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «Patentes de 100 m de longitud en cable de acero de 20 mm de diámetro» (p. 3)
+  design.bridle_upper_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «Bridas superiores de 50 m en cable de acero de 18 mm de diámetro» (p. 3); en el lance 6 se
+      alargó a 50,7 m (p. 4)
+  design.bridle_lower_m:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «Bridas inferiores de 48,5 m en cable de acero de 20 mm de diámetro y 1,5 m de cadena de reglaje»
+      (p. 3)
+  design.speed_kn:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «a una velocidad de 3,8 Ns» (media, p. 1)
+  design.door_weight_air_kg:
+    kind: transcribed
+    document: bartozzetti2018iat151
+    page: '2'
+    figure: Figura 1
+    note: «Portones polivalentes (Morgère) de 1200 kg c/u» (p. 3)
+  design.door_area_m2:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_length_m:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_height_m:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_polar_id:
+    kind: assumed
+    document: tringali2012eh0612
+    note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
+      dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
+      hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
+      y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
