@@ -10,6 +10,7 @@ latest one:
 | Version | DOI |
 |---|---|
 | All (concept) | [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981) |
+| 1.2.0 | pending: Zenodo assigns it when the release is published; meanwhile, use the concept DOI |
 | 1.1.0 | [10.5281/zenodo.23657982](https://doi.org/10.5281/zenodo.23657982) |
  The metadata are in
 [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff); on
@@ -20,11 +21,11 @@ GitHub, the **Cite this repository** button gives them in APA and BibTeX.
   author    = {Giamportone, Ariel Luján},
   title     = {Trawl Design Lab (trawlkit): diseño y dimensionamiento de redes de arrastre},
   organization = {Universidad Tecnológica Nacional, Facultad Regional Tierra del Fuego},
-  version   = {1.1.0},
+  version   = {1.2.0},
   year      = {2026},
   publisher = {Zenodo},
   url       = {https://github.com/arielgiamportone/trawl-design-lab},
-  doi       = {10.5281/zenodo.23657982}
+  doi       = {10.5281/zenodo.23657981}
 }
 ```
 

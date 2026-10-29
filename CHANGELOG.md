@@ -5,6 +5,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+## [1.2.0] - 2026-10-29
+
+Catálogos con datos técnicos, flota y aparejos argentinos, langostino y merluza.
+
+- **Fase 19**: inglés completo en los datos; física de materiales en el cálculo y la simulación;
+  563 componentes con fuente; portones con polares medidas, fabricantes y elección automática;
+  flota argentina y tiro por hélice; aparejos de tangones, doble y de vara; redes con plano
+  público (INIDEP, SEAFDEC, Seafish, FAO); abertura calibrada de las redes langostineras.
+- **Fase 20**: 1000 portones (Thyborøn, Polar, Poly-Ice); superficie del portón corregida por
+  encima de la potencia del libro; validación con redes de merluza del INIDEP frente a 115 lances
+  medidos y DynamiT; calibración del portón polivalente; ejercicios y laboratorio de langostino.
+- El modo `excel`, el caso FAO A-3 y los valores dorados del libro original no cambian.
+
 ### Cambiado
 - **Todos los tamaños de los portones de fabricante (Fase 19.8a)**: se quita el tope de 10 tamaños
   por línea de los portones de Vónin y Morgère; relectura del 2026-10-28 de las páginas de
