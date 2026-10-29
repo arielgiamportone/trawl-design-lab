@@ -11609,7 +11609,8 @@
      "excel",
      "transcribed",
      "derived",
-     "assumed"
+     "assumed",
+     "calibrated"
     ],
     "title": "ProvenanceKind",
     "description": "Cómo se obtuvo un valor de una spec."

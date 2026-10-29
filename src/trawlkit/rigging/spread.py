@@ -27,7 +27,9 @@ from trawlkit.excel import (
     excel_roundup,
     ret,
 )
+from trawlkit.i18n import N_
 from trawlkit.io import DATA_DIR
+from trawlkit.io.schema import Provenance, ProvenanceKind
 from trawlkit.rigging.doors import door_forces_kgf
 from trawlkit.rigging.warps import warp_depth_ratio
 from trawlkit.units import RHO_SEAWATER, G
@@ -43,6 +45,26 @@ AV_IZZO_SHARES: tuple[float, ...] = (0.0435, 0.05, 0.06, 0.07)
 
 #: Relación flecha/largo de la catenaria usada por la hoja (Mec!O266, valor fijo).
 CATENARY_RATIO_EXCEL: float = 0.216
+
+#: Corrección del exponente del cable en la DPA de Fridman (Fase 20.5, sólo modo corregido):
+#: ``DPA_cal = DPA · (Ls / Ls_tabla)^Δn`` con ``Ls_tabla`` el cable que el libro tabula para la
+#: profundidad (Mec!E177). Ajuste por mínimos cuadrados en logaritmos, con un nivel por serie, a
+#: los 103 lances con cable publicado de IAT 151/18, IC 012/21 e IC 016/24
+#: (:func:`trawlkit.fieldcheck.warp_exponent_fit`); errata ``fridman_dp_warp_saturation``.
+DP_WARP_EXPONENT_CORRECTION: float = 0.10
+
+#: Procedencia de :data:`DP_WARP_EXPONENT_CORRECTION`.
+DP_WARP_EXPONENT_PROVENANCE = Provenance(
+    kind=ProvenanceKind.CALIBRATED,
+    document="bartozzetti2018iat151",
+    page="IAT 151/2018, tabla 1; IC 012/2021, anexo; IC 016/2024, anexo I",
+    note=N_(
+        "Δn ajustado por mínimos cuadrados en log(DP medida / DP del motor) contra "
+        "log(cable / cable de la tabla), con un nivel por serie, a IAT 151/18 "
+        "(bartozzetti2018iat151), IC 012/21 (roth2021ic012) e IC 016/24 "
+        "(rubio2024calibracion); validación cruzada dejando una serie afuera"
+    ),
+)
 
 
 # ---------------------------------------------------------------------------
@@ -106,6 +128,30 @@ def towing_geometry(
         net_length_working_m=net_length_m * u2,
         bridle_m=bridle_m,
     )
+
+
+def table_warp_m(depth_m: float) -> float:
+    """Cable que el libro tabula para la profundidad, ``d · LOOKUP(d)`` [m] (Mec!E177)."""
+    return depth_m * warp_depth_ratio(depth_m)
+
+
+def dp_warp_factor(
+    warp_m: float,
+    depth_m: float,
+    compat: Compat = Compat.CORRECTED,
+    exponent: float = DP_WARP_EXPONENT_CORRECTION,
+) -> float:
+    """Factor de cable de la DPA de Fridman ``(Ls / Ls_tabla)^Δn`` (Fase 20.5).
+
+    En la DPA de Fridman (:func:`dpa_fridman_m`) el cable horizontal Lsh está arriba y abajo de
+    la fracción y la DPA se satura con el cable; en el mar sigue creciendo (errata
+    ``fridman_dp_warp_saturation``). Vale 1 en modo :attr:`Compat.EXCEL` y con el cable de la
+    tabla del libro (:func:`table_warp_m`), es decir, en todo caso de diseño; sólo actúa con un
+    cable distinto (``DesignCase.measured_warp_m``).
+    """
+    if compat is Compat.EXCEL:
+        return 1.0
+    return float((warp_m / table_warp_m(depth_m)) ** exponent)
 
 
 # ---------------------------------------------------------------------------
@@ -174,6 +220,7 @@ def fridman_spread(
     rho_kg_m3: float = RHO_SEAWATER,
     g_m_s2: float = G,
     compat: Compat = Compat.CORRECTED,
+    warp_factor: float = 1.0,
 ) -> FridmanSpread:
     """Bloque completo "Fuerzas del portón y DPA Fridman" (Mec!B162:Q172).
 
@@ -183,6 +230,9 @@ def fridman_spread(
     Errata ``dpa_std_uses_mod_edy``: ``P164 = 2*($F$179*$E$185*$O164)/(...)`` usa ``$O164``
     (Edy de la red **modificada**) en la columna estándar. :attr:`Compat.EXCEL` reproduce el
     cruce; :attr:`Compat.CORRECTED` usa Edy estándar (``$N164``).
+
+    ``warp_factor`` (Fase 20.5, :func:`dp_warp_factor`) multiplica las dos DPA; vale 1 en el
+    libro.
     """
     forces = door_forces_kgf(door_area_m2, door_cd, door_cl, v_ms, rho_kg_m3, g_m_s2)
     edx_std, edy_std = expansion_coefficients(forces.drag_kgf, forces.lift_kgf, rn_std_kgf)
@@ -195,13 +245,19 @@ def fridman_spread(
         edx_mod=edx_mod,
         edy_std=edy_std,
         edy_mod=edy_mod,
-        dpa_std_m=dpa_fridman_m(
-            warp_horizontal_m, net_length_working_m, edy_for_std, bridle_m, edx_std
+        dpa_std_m=_scaled(
+            dpa_fridman_m(warp_horizontal_m, net_length_working_m, edy_for_std, bridle_m, edx_std),
+            warp_factor,
         ),
-        dpa_mod_m=dpa_fridman_m(
-            warp_horizontal_m, net_length_working_m, edy_mod, bridle_m, edx_mod
+        dpa_mod_m=_scaled(
+            dpa_fridman_m(warp_horizontal_m, net_length_working_m, edy_mod, bridle_m, edx_mod),
+            warp_factor,
         ),
     )
+
+
+def _scaled(value: FloatOrArray, factor: float) -> FloatOrArray:
+    return value if factor == 1.0 else ret(as_array(value) * factor, value)
 
 
 @dataclass(frozen=True)

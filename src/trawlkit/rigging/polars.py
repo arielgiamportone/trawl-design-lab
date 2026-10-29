@@ -26,9 +26,10 @@ from typing import Any, Literal
 import numpy as np
 from pydantic import Field
 
+from trawlkit.compat import Compat
 from trawlkit.i18n import N_, t
 from trawlkit.io import DATA_DIR
-from trawlkit.io.schema import DoorCoefficients, Provenance, ProvenanceKind, _Model
+from trawlkit.io.schema import Door, DoorCoefficients, Provenance, ProvenanceKind, _Model
 
 #: Archivo de la biblioteca.
 POLARS_FILE = DATA_DIR / "door_polars.yaml"
@@ -53,6 +54,7 @@ TYPE_ALIASES: dict[str, str] = {
     "flat_wood_iron_frame": "flat",
     "shrimp": "flat",
     "oval_polyvalent": "oval",
+    "polyvalent": "oval",
     "suberkrub": "high_aspect",
     "pelagic": "high_aspect",
     "slotted": "cambered",
@@ -293,6 +295,52 @@ BACKSTROP_RATIO: tuple[float, float] = (1.0, 1.5)
 EQUIVALENT_AREA_MARGIN = 0.10
 
 
+# --- CL efectivo calibrado (Fase 20.5) --------------------------------------------------------
+
+#: Tipo de portón de las fuentes sin polar publicada al que se aplica el CL efectivo calibrado
+#: (``door_type: polyvalent`` en ``design`` o en ``validation_doors`` de una red). Su polar es la
+#: del tipo (hoja «Morgère Polyvalent Ovale» de Seafish 1993), supuesta.
+CALIBRATED_DOOR_TYPE = "polyvalent"
+
+#: Factor de CL efectivo del portón polivalente sin polar publicada (Fase 20.5, sólo modo
+#: corregido): ``CL_ef = factor · CL`` de la hoja del tipo. Ajustado para que la DP media de los
+#: 52 lances de IAT 151/18 (92,2 m) coincida con la del motor, ya aplicado el factor de cable
+#: (:func:`trawlkit.fieldcheck.polyvalent_cl_fit`).
+POLYVALENT_CL_EFFECTIVE_FACTOR: float = 0.79
+
+#: Procedencia de :data:`POLYVALENT_CL_EFFECTIVE_FACTOR`.
+POLYVALENT_CL_PROVENANCE = Provenance(
+    kind=ProvenanceKind.CALIBRATED,
+    document="bartozzetti2018iat151",
+    page="tabla 1 (52 lances)",
+    note=N_(
+        "CL efectivo de los portones polivalentes de 5,58 m² del INIDEP ajustado a la DP media "
+        "medida de IAT 151/18, con el factor de cable aplicado; verificado con el Inf. Téc. 66 "
+        "(casarsa2007inftec66) e IC 041/25 (alvarezcolombo2025ic041)"
+    ),
+)
+
+
+def polar_published(door: Door) -> bool:
+    """Indica si el portón tiene polar publicada (Fase 20.5); por defecto, sí.
+
+    :func:`trawlkit.catalog.door_from_params` marca ``polar_published`` en el portón: ``True``
+    con CL y CD de la fuente, ``False`` con la hoja de la biblioteca de su tipo.
+    """
+    return bool((door.model_extra or {}).get("polar_published", True))
+
+
+def cl_effective_factor(door: Door, compat: Compat = Compat.CORRECTED) -> float:
+    """Factor de CL efectivo del portón (Fase 20.5): :data:`POLYVALENT_CL_EFFECTIVE_FACTOR`.
+
+    Sólo en modo :attr:`Compat.CORRECTED` y para un portón de tipo
+    :data:`CALIBRATED_DOOR_TYPE` sin polar publicada; si no, 1.
+    """
+    if compat is Compat.EXCEL or door.type != CALIBRATED_DOOR_TYPE or polar_published(door):
+        return 1.0
+    return POLYVALENT_CL_EFFECTIVE_FACTOR
+
+
 def canonical_type(door_type: str | None) -> str | None:
     """Tipo de :data:`DOOR_TYPES` de un tipo del catálogo (``flat_wood`` → ``flat``) o ``None``."""
     if door_type is None:
@@ -441,6 +489,9 @@ def attack_angle_range(door_type: str | None) -> AttackAngleRange | None:
 __all__ = [
     "ATTACK_ANGLES",
     "BACKSTROP_RATIO",
+    "CALIBRATED_DOOR_TYPE",
+    "POLYVALENT_CL_EFFECTIVE_FACTOR",
+    "POLYVALENT_CL_PROVENANCE",
     "DOOR_TYPES",
     "DOOR_TYPE_LABEL",
     "EQUIVALENT_AREA_MARGIN",
@@ -451,7 +502,9 @@ __all__ = [
     "TypePolar",
     "attack_angle_range",
     "canonical_type",
+    "cl_effective_factor",
     "get_polar",
     "load_door_polars",
     "polar_for_type",
+    "polar_published",
 ]

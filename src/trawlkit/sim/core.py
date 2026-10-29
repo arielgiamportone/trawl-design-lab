@@ -13,7 +13,7 @@ import numpy.typing as npt
 
 from trawlkit.i18n import t
 from trawlkit.io.schema import NetSpec
-from trawlkit.model import DesignCase, DesignResult, run
+from trawlkit.model import DesignCase, DesignResult, door_cl_factor, run
 from trawlkit.rigging import door_polar_table
 from trawlkit.sim.mesh import NetModel, Rigging, build_model, interpolate_shape
 from trawlkit.sim.meshstate import MeshState, mesh_state
@@ -237,6 +237,7 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
     else:
         buoy = float(fl.flotation_total_kgf) / max(fl.count, 1)
     bd = r.ballast.distribution_max
+    cl_factor = door_cl_factor(r.case)  # Fase 20.5: CL efectivo calibrado (1 salvo polivalente)
     head = _rope_pieces(r.case.net, "headrope") or (
         float(dims.headrope.wing_corrected_m),
         float(dims.headrope.bosom_corrected_m),
@@ -316,7 +317,7 @@ def rigging_from_result(r: DesignResult, door_spread_m: float | None = None) -> 
         warp_core=warp_core,
         warp_ea_n=warp_ea,
         door_polar=tuple(
-            (float(p.angle_deg), float(p.cl), float(p.cd))
+            (float(p.angle_deg), float(p.cl) * cl_factor, float(p.cd))
             for p in sorted(door_polar_table(r.doors.door), key=lambda q: q.angle_deg)
         ),
         door_attack_angle_deg=float(r.case.door_attack_angle_deg),

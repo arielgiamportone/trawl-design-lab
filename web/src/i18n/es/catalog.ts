@@ -41,6 +41,7 @@ export const catalog = {
     excel: 'Libro Excel',
     transcribed: 'Transcripto',
     derived: 'Derivado',
+    calibrated: 'Calibrado',
     assumed: 'Supuesto',
   },
   /** Campos de una ruta de valor (``panels.C.meshes_top`` → «C · mallas de boca»). */

@@ -128,6 +128,7 @@ class ProvenanceKind(StrEnum):
     TRANSCRIBED = "transcribed"  # leído en una figura o tabla de un documento
     DERIVED = "derived"  # calculado a partir de valores transcriptos (fórmula en ``note``)
     ASSUMED = "assumed"  # el documento no lo da y el motor lo necesita (razón en ``note``)
+    CALIBRATED = "calibrated"  # ajustado a mediciones publicadas (ajuste y series en ``note``)
 
 
 class Provenance(_Model):

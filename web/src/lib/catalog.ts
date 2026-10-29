@@ -5,7 +5,7 @@ import { fmtNum } from './format';
 import { liveRecord } from './liveRecord';
 import { CONVERSIONS, fmtU, getUnits } from './units';
 
-export type ProvenanceKind = 'excel' | 'transcribed' | 'derived' | 'assumed';
+export type ProvenanceKind = 'excel' | 'transcribed' | 'derived' | 'calibrated' | 'assumed';
 
 /** Familias de red en el idioma activo (objeto vivo: se lee al usarlo). */
 export const FAMILY_LABEL: Record<string, string> = liveRecord(() => msg().catalog.family);
@@ -19,7 +19,7 @@ export const RIG_LABEL: Record<string, string> = liveRecord(() => msg().catalog.
 export const KIND_LABEL: Record<ProvenanceKind, string> = liveRecord(() => msg().catalog.kind);
 
 /** Orden de los tipos de procedencia (de más a menos directo). */
-export const KINDS: ProvenanceKind[] = ['excel', 'transcribed', 'derived', 'assumed'];
+export const KINDS: ProvenanceKind[] = ['excel', 'transcribed', 'derived', 'calibrated', 'assumed'];
 
 export interface CatalogFilters {
   text: string;

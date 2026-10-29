@@ -5,6 +5,10 @@ Capítulo «Validación con redes de merluza».
 Corre :func:`trawlkit.fieldcheck.reference_point` para cada lance medido y cada simulación DynamiT
 de las cinco redes de la fase (con la profundidad, el cable, la velocidad y el portón de cada uno)
 y arma las tablas del capítulo. Todo se calcula al compilar el libro.
+
+Fase 20.5: cada punto se corre dos veces, con el motor calibrado (el de siempre en modo corregido)
+y sin calibrar (``calibrated=False``), para las columnas «antes» y «calibrado» y para el ajuste de
+Δn (:func:`trawlkit.fieldcheck.warp_exponent_fit`).
 """
 
 from __future__ import annotations
@@ -74,8 +78,8 @@ def _ref_value(ref: dict[str, Any], key: str) -> float | None:
 
 
 @cache
-def points() -> tuple[tuple[str, str, dict[str, Any], F.EnginePoint], ...]:
-    """(red, tipo, referencia, motor) para cada medición y simulación."""
+def points(calibrated: bool = True) -> tuple[tuple[str, str, dict[str, Any], F.EnginePoint], ...]:
+    """(red, tipo, referencia, motor) para cada medición y simulación (calibrado o no)."""
     out = []
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
@@ -83,8 +87,113 @@ def points() -> tuple[tuple[str, str, dict[str, Any], F.EnginePoint], ...]:
             spec = load_net(nid)
             for kind in ("simulated", "measured"):
                 for ref in F.references(spec, kind):
-                    out.append((nid, kind, ref, F.reference_point(spec, ref)))
+                    p = F.reference_point(spec, ref, calibrated=calibrated)
+                    out.append((nid, kind, ref, p))
     return tuple(out)
+
+
+def before_after() -> list[tuple[str, str, dict[str, Any], F.EnginePoint, F.EnginePoint]]:
+    """(red, tipo, referencia, motor sin calibrar, motor calibrado)."""
+    return [
+        (nid, kind, ref, b, a)
+        for (nid, kind, ref, b), (_, _, _, a) in zip(points(False), points(True), strict=True)
+    ]
+
+
+def fit_rows() -> list[F.WarpFitRow]:
+    """Lances del ajuste de Δn con la DP del motor sin calibrar."""
+    keep = set(F.WARP_FIT_SERIES)
+    return [
+        F.WarpFitRow(
+            ref["series"], b.warp_m, b.warp_table_m, float(ref["door_spread_m"]), b.door_spread_m
+        )
+        for nid, kind, ref, b, _ in before_after()
+        if kind == "measured"
+        and (nid, ref.get("series")) in keep
+        and ref.get("door_spread_m") is not None
+    ]
+
+
+@cache
+def warp_fit() -> F.WarpExponentFit:
+    """:func:`trawlkit.fieldcheck.warp_exponent_fit` con los puntos del capítulo."""
+    return F.warp_exponent_fit(fit_rows())
+
+
+def warp_fit_table() -> list[list[str]]:
+    """Ajuste de Δn: pendiente de cada serie sola y validación cruzada (dejando una afuera)."""
+    fit = warp_fit()
+    rows = []
+    for f in fit.folds:
+        rows.append(
+            [
+                SERIES[f.held_out][0],
+                str(sum(r.series == f.held_out for r in fit_rows())),
+                fmt(fit.slopes[f.held_out], 2),
+                fmt(f.delta_n, 2),
+                fmt(f.scatter_before, 3),
+                fmt(f.scatter_after, 3),
+            ]
+        )
+    return rows
+
+
+def _stats(ds: list[float]) -> tuple[float, float, float]:
+    a = np.asarray(ds)
+    tol = 100 * F.TOLERANCES["door_spread_m"]
+    return float(a.mean()), float(np.mean(np.abs(a))), float(np.mean(np.abs(a) <= tol))
+
+
+def calibration_rows() -> list[list[str]]:
+    """DP por serie y por simulación, antes y calibrada: desvío medio, absoluto y en ±20 %."""
+    acc: dict[tuple[str, str], tuple[list[float], list[float], list[float], list[float]]] = {}
+    for nid, kind, ref, b, a in before_after():
+        m = ref.get("door_spread_m")
+        if m is None:
+            continue
+        key = (nid, ref["series"] if kind == "measured" else (ref.get("variant") or "DynamiT"))
+        bb, aa, wf, cf = acc.setdefault(key, ([], [], [], []))
+        bb.append(100.0 * (b.door_spread_m / float(m) - 1.0))
+        aa.append(100.0 * (a.door_spread_m / float(m) - 1.0))
+        wf.append(a.dp_warp_factor)
+        cf.append(a.door_cl_factor)
+    rows = []
+    for (nid, ser), (bb, aa, wf, cf) in acc.items():
+        label = SERIES[ser][0] if ser in SERIES else f"DynamiT ({ser})" if ser != "DynamiT" else ser
+        factors = f"{fmt(min(wf), 3)}–{fmt(max(wf), 3)}" if min(wf) != max(wf) else fmt(wf[0], 3)
+        rows.append(
+            [
+                SHORT[nid],
+                label,
+                str(len(bb)),
+                factors,
+                fmt(cf[0], 2),
+                _triple(*_stats(bb)),
+                _triple(*_stats(aa)),
+            ]
+        )
+    return rows
+
+
+def _triple(mean: float, mad: float, within: float) -> str:
+    """«desvío medio · medio absoluto · fracción en ±20 %», en negrita fuera de tolerancia."""
+    sign = "+" if mean > 0 else "−"
+    text = f"{sign}{fmt(abs(mean), 0)} % · {fmt(mad, 0)} % · {fmt(100 * within, 0)} %"
+    return f"**{text}**" if abs(mean) > 100 * F.TOLERANCES["door_spread_m"] else text
+
+
+def totals() -> dict[str, tuple[float, float, float]]:
+    """DP de los lances medidos, antes y después: (desvío medio absoluto, fracción en ±20 %, n)."""
+    bb, aa = [], []
+    for _, kind, ref, b, a in before_after():
+        m = ref.get("door_spread_m")
+        if kind == "measured" and m is not None:
+            bb.append(100.0 * (b.door_spread_m / float(m) - 1.0))
+            aa.append(100.0 * (a.door_spread_m / float(m) - 1.0))
+    return {
+        "before": (_stats(bb)[1], _stats(bb)[2], float(len(bb))),
+        "after": (_stats(aa)[1], _stats(aa)[2], float(len(aa))),
+    }
 
 
 def _dev(e: float, r: float | None) -> float | None:
@@ -178,13 +287,16 @@ def series_rows() -> list[list[str]]:
 
 
 def warp_fits() -> list[dict[str, Any]]:
-    """Ajuste DP = a + b·cable de lo medido y del motor en cada serie con cable publicado."""
+    """Ajuste DP = a + b·cable de lo medido y del motor en cada serie con cable publicado.
+
+    ``exp_engine`` es el exponente del motor sin calibrar y ``exp_calibrated`` el calibrado.
+    """
     out = []
-    groups: dict[tuple[str, str], list[tuple[float, float, float]]] = {}
-    for nid, kind, ref, p in points():
+    groups: dict[tuple[str, str], list[tuple[float, float, float, float]]] = {}
+    for nid, kind, ref, b, p in before_after():
         if kind == "measured" and p.warp_from_source and ref.get("door_spread_m") is not None:
             groups.setdefault((nid, ref["series"]), []).append(
-                (p.warp_m, float(ref["door_spread_m"]), p.door_spread_m)
+                (p.warp_m, float(ref["door_spread_m"]), b.door_spread_m, p.door_spread_m)
             )
     for (nid, ser), pts in groups.items():
         if len(pts) < 5:
@@ -194,6 +306,7 @@ def warp_fits() -> list[dict[str, Any]]:
         be, ae = np.polyfit(a[:, 0], a[:, 2], 1)
         nm = np.polyfit(np.log(a[:, 0]), np.log(a[:, 1]), 1)[0]
         ne = np.polyfit(np.log(a[:, 0]), np.log(a[:, 2]), 1)[0]
+        nc = np.polyfit(np.log(a[:, 0]), np.log(a[:, 3]), 1)[0]
         out.append(
             {
                 "net": nid,
@@ -203,6 +316,7 @@ def warp_fits() -> list[dict[str, Any]]:
                 "slope_engine": float(be),
                 "exp_measured": float(nm),
                 "exp_engine": float(ne),
+                "exp_calibrated": float(nc),
                 "ratio_mean": float(np.mean(a[:, 1] / a[:, 2])),
             }
         )
@@ -220,6 +334,7 @@ def warp_fit_rows() -> list[list[str]]:
             fmt(f["slope_engine"], 3),
             fmt(f["exp_measured"], 2),
             fmt(f["exp_engine"], 2),
+            fmt(f["exp_calibrated"], 2),
             fmt(f["ratio_mean"], 2),
         ]
         for f in warp_fits()

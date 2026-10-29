@@ -199,6 +199,11 @@ def door_from_params(params: dict[str, Any], name: str, door_id: str) -> tuple[D
     ``door_area_m2`` (si no, largo × alto), ``door_weight_air_kg`` y la polar: ``door_cl`` y
     ``door_cd`` publicados (constantes con el ángulo, :data:`PUBLISHED_POLAR_ANGLES_DEG`), una hoja
     de la biblioteca de polares (``door_polar_id``) o, si no, la del portón plano de la A-3.
+
+    ``door_type`` (Fase 20.5) es el tipo del portón; el portón queda marcado con
+    ``polar_published`` (``True`` sólo con CL y CD de la fuente). Un ``polyvalent`` sin polar
+    publicada lleva en modo corregido el CL efectivo calibrado
+    (:func:`trawlkit.rigging.polars.cl_effective_factor`).
     """
     from trawlkit.io.schema import DoorCoefficients
     from trawlkit.rigging.polars import get_polar
@@ -208,7 +213,8 @@ def door_from_params(params: dict[str, Any], name: str, door_id: str) -> tuple[D
     length, height = float(params["door_length_m"]), float(params["door_height_m"])
     area = float(params.get("door_area_m2") or length * height)
     weight = params.get("door_weight_air_kg")
-    if params.get("door_cl") is not None and params.get("door_cd") is not None:
+    published = params.get("door_cl") is not None and params.get("door_cd") is not None
+    if published:
         cl, cd = float(params["door_cl"]), float(params["door_cd"])
         coefficients = [
             DoorCoefficients(angle_deg=a, cl=cl, cd=cd) for a in PUBLISHED_POLAR_ANGLES_DEG
@@ -236,7 +242,10 @@ def door_from_params(params: dict[str, Any], name: str, door_id: str) -> tuple[D
         if weight is None
         else float(weight) * float(data.get("weight_water_coefficient", 0.6)),
         coefficients=[c.model_dump() for c in coefficients],
+        polar_published=published,
     )
+    if params.get("door_type"):
+        data["type"] = str(params["door_type"])
     note = t(
         "portón de la fuente ({area:.2f} m², {length:g} × {height:g} m) con {polar}",
         area=area,

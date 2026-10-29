@@ -211,6 +211,17 @@ ERRATA: tuple[Erratum, ...] = (
             "el portón (las tablas reales crecen como hp^0,65)."
         ),
     ),
+    Erratum(
+        "fridman_dp_warp_saturation",
+        "Mecánica de la Red",
+        "P164:Q172",
+        N_(
+            "La DPA de Fridman tiene el cable horizontal arriba y abajo de la fracción y se satura: "
+            "con un cable distinto del de la tabla la separación de portones cambia menos que lo "
+            "medido. En modo corregido se multiplica por (Ls/Ls_tabla)^Δn, calibrado con lances "
+            "medidos (1 con el cable de la tabla)."
+        ),
+    ),
 )
 
 ERRATA_BY_KEY: dict[str, Erratum] = {e.key: e for e in ERRATA}

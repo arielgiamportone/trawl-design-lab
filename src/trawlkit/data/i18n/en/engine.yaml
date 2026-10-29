@@ -622,3 +622,32 @@ polar del portón plano de la A-3: polar of the A-3's flat otter board
 'portón de la fuente ({area:.2f} m², {length:g} × {height:g} m) con {polar}': 'otter board from the source ({area:.2f} m², {length:g} × {height:g} m) with {polar}'
 'Portón de la fuente de {net}': 'Otter board from the source of {net}'
 'portón de validación desconocido: {key!r}': 'unknown validation otter board: {key!r}'
+# Fase 20.5: calibración de la separación de portones (cable y portón polivalente)
+? 'fridman_dp_warp_saturation: DPA de Fridman × (Ls / Ls_tabla)^Δn = ({warp:.0f} / {table:.0f})^{exp:.2f}
+  = × {f:.3f}: el cable filado difiere del de la tabla del libro para {depth:g} m (factor calibrado con
+  lances medidos; vale 1 con el cable de la tabla)'
+: 'fridman_dp_warp_saturation: Fridman wing spread × (Ls / Ls_table)^Δn = ({warp:.0f} / {table:.0f})^{exp:.2f}
+  = × {f:.3f}: the warp paid out differs from the book''s table warp for {depth:g} m (factor calibrated
+  with measured hauls; it is 1 with the table warp)'
+? 'door_cl_calibrated: portón {door} de tipo polivalente sin polar publicada: CL efectivo = {f:.2f} ×
+  CL de la hoja del tipo = {cl:.3f} (procedencia calibrada con los lances de IAT 151/18)'
+: 'door_cl_calibrated: otter board {door} of polyvalent type without a published polar: effective CL =
+  {f:.2f} × CL of the type''s data sheet = {cl:.3f} (provenance calibrated with the IAT 151/18 hauls)'
+? 'La DPA de Fridman tiene el cable horizontal arriba y abajo de la fracción y se satura: con un cable
+  distinto del de la tabla la separación de portones cambia menos que lo medido. En modo corregido se
+  multiplica por (Ls/Ls_tabla)^Δn, calibrado con lances medidos (1 con el cable de la tabla).'
+: 'Fridman''s wing spread has the horizontal warp above and below the fraction and saturates: with a warp
+  other than the table''s the door spread changes less than measured. In corrected mode it is multiplied
+  by (Ls/Ls_table)^Δn, calibrated with measured hauls (1 with the table warp).'
+? CL efectivo de los portones polivalentes de 5,58 m² del INIDEP ajustado a la DP media medida de IAT
+  151/18, con el factor de cable aplicado; verificado con el Inf. Téc. 66 (casarsa2007inftec66) e IC 041/25
+  (alvarezcolombo2025ic041)
+: Effective CL of INIDEP's 5.58 m² polyvalent otter boards fitted to the mean door spread measured in
+  IAT 151/18, with the warp factor applied; checked against Tech. Rep. 66 (casarsa2007inftec66) and IC
+  041/25 (alvarezcolombo2025ic041)
+? Δn ajustado por mínimos cuadrados en log(DP medida / DP del motor) contra log(cable / cable de la tabla),
+  con un nivel por serie, a IAT 151/18 (bartozzetti2018iat151), IC 012/21 (roth2021ic012) e IC 016/24
+  (rubio2024calibracion); validación cruzada dejando una serie afuera
+: Δn fitted by least squares of log(measured door spread / engine door spread) against log(warp / table
+  warp), with one level per series, to IAT 151/18 (bartozzetti2018iat151), IC 012/21 (roth2021ic012) and
+  IC 016/24 (rubio2024calibracion); leave-one-series-out cross-validation

@@ -4491,7 +4491,7 @@ export interface components {
          * @description Cómo se obtuvo un valor de una spec.
          * @enum {string}
          */
-        ProvenanceKind: "excel" | "transcribed" | "derived" | "assumed";
+        ProvenanceKind: "excel" | "transcribed" | "derived" | "assumed" | "calibrated";
         /**
          * ProvenanceRow
          * @description Un valor de la red y su procedencia (``trawlkit.provenance``).

@@ -39,6 +39,7 @@ export const catalog: Messages['catalog'] = {
     excel: 'Excel workbook',
     transcribed: 'Transcribed',
     derived: 'Derived',
+    calibrated: 'Calibrated',
     assumed: 'Assumed',
   },
   field: {

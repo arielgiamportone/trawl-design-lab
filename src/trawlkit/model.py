@@ -200,6 +200,10 @@ class DesignCase:
     class_vessels: tuple[Vessel, ...] = ()
     speeds_kn: tuple[float, ...] = DEFAULT_SPEEDS_KN
     compat: Compat = Compat.CORRECTED
+    #: Calibraciones del modo corregido (Fase 20.5): factor de cable de la DPA de Fridman
+    #: (:func:`dp_warp_factor`) y CL efectivo del portón polivalente sin polar publicada
+    #: (:func:`door_cl_factor`). ``False`` = el motor sin calibrar (para comparar).
+    calibrated: bool = True
 
     # --- entradas de hoja ---------------------------------------------------------------
     depth_m: float | None = None  # Especie Blanco!E5 (None → net.species.depth_m)
@@ -1196,6 +1200,25 @@ def pair_towing_spread_m(case: DesignCase, rig: RiggingGeometry) -> float:
     return pair_wing_spread_m(case) * (lrw + rigging_m) / lrw
 
 
+def dp_warp_factor(case: DesignCase, rig: RiggingGeometry) -> float:
+    """Factor de cable de la DPA de Fridman del caso (Fase 20.5): ``(Ls / Ls_tabla)^Δn``.
+
+    :func:`trawlkit.rigging.dp_warp_factor` en modo corregido con ``calibrated``; 1 en modo
+    ``EXCEL``, sin calibrar, en la pareja y la vara (sin DPA de Fridman) y con el método de
+    aberturas de las camaroneras (tangones y gemelo, Fase 19.7b), que no usa el cable.
+    """
+    if not case.calibrated or case.is_pair or case.is_beam or case.uses_shrimp_opening:
+        return 1.0
+    return rigging.dp_warp_factor(rig.towing.warp_m, rig.towing.depth_m, case.compat)
+
+
+def door_cl_factor(case: DesignCase) -> float:
+    """Factor de CL efectivo del portón del caso (Fase 20.5; 1 salvo polivalente calibrado)."""
+    if not case.calibrated:
+        return 1.0
+    return rigging.cl_effective_factor(case.door, case.compat)
+
+
 def fridman_door_spread_m(
     case: DesignCase, drag: DragStage, rig: RiggingGeometry, polar: DoorPolar
 ) -> float:
@@ -1219,6 +1242,7 @@ def fridman_door_spread_m(
         rig.towing.net_length_working_m,
         rig.towing.bridle_m,
         compat=case.compat,
+        warp_factor=dp_warp_factor(case, rig),
     )
     lo, hi = case.required_area_speed_range_kn
     v = np.asarray(case.speeds)
@@ -1238,6 +1262,10 @@ def _stage_doors(
     polar = rigging.door_polar(
         door, case.door_attack_angle_deg, interpolate=case.compat is Compat.CORRECTED
     )  # Port!C134:F134
+    cl_factor = door_cl_factor(case)
+    if cl_factor != 1.0:  # Fase 20.5: CL efectivo del portón polivalente sin polar publicada
+        cl = polar.cl * cl_factor
+        polar = DoorPolar(angle_deg=polar.angle_deg, cl=cl, cd=polar.cd, cl_cd=cl / polar.cd)
     warp_m = rig.towing.warp_m  # Port!D9 = Mec!E177
     if case.is_pair:
         spread = pair_towing_spread_m(case, rig)
@@ -1607,6 +1635,7 @@ def _stage_spread(
         rig.towing.net_length_working_m,  # E185
         rig.towing.bridle_m,  # E186
         compat=case.compat,
+        warp_factor=dp_warp_factor(case, rig),  # Fase 20.5 (1 con el cable de la tabla)
     )
     parts = {
         "crowfoot_m": rig.crowfoot.length_m,  # E211
@@ -2722,6 +2751,33 @@ def run(case: DesignCase) -> DesignResult:
             + t(
                 ", puntos de remolque a {tow:.1f} m; el tiro disponible es el de dos buques",
                 tow=doors.spread_m,
+            )
+        )
+    warp_factor = dp_warp_factor(case, rig)
+    if warp_factor != 1.0:
+        notes.append(
+            t(
+                "fridman_dp_warp_saturation: DPA de Fridman × (Ls / Ls_tabla)^Δn = "
+                "({warp:.0f} / {table:.0f})^{exp:.2f} = × {f:.3f}: el cable filado difiere del "
+                "de la tabla del libro para {depth:g} m (factor calibrado con lances medidos; "
+                "vale 1 con el cable de la tabla)",
+                warp=rig.towing.warp_m,
+                table=rigging.table_warp_m(rig.towing.depth_m),
+                exp=rigging.DP_WARP_EXPONENT_CORRECTION,
+                f=warp_factor,
+                depth=rig.towing.depth_m,
+            )
+        )
+    cl_factor = door_cl_factor(case)
+    if cl_factor != 1.0 and not case.is_pair and not case.is_beam:
+        notes.append(
+            t(
+                "door_cl_calibrated: portón {door} de tipo polivalente sin polar publicada: "
+                "CL efectivo = {f:.2f} × CL de la hoja del tipo = {cl:.3f} (procedencia "
+                "calibrada con los lances de IAT 151/18)",
+                door=case.door.id,
+                f=cl_factor,
+                cl=doors.polar.cl,
             )
         )
     if case.door_spread_rule == "fridman" and not case.is_pair and not case.is_beam:

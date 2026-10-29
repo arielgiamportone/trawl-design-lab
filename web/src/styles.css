@@ -2467,6 +2467,9 @@ table.data tr.selected td {
 .prov-derived {
   background: var(--accent);
 }
+.prov-calibrated {
+  background: #0f7c80;
+}
 .prov-assumed {
   background: var(--warn);
 }

@@ -209,23 +209,28 @@ def test_av_de_la_va_construida_iat151() -> None:
     assert np.mean(np.abs(d) <= F.TOLERANCES["vertical_opening_m"]) >= 0.95
 
 
+def test_dp_con_polivalentes_iat151() -> None:
+    """Fase 20.5: con el CL efectivo calibrado la DP de IAT 151/18 entra en tolerancia.
+
+    Antes de la calibración el motor daba +26 % de promedio (polar de Seafish supuesta). El CL
+    efectivo se ajusta a la DP media de esta serie, así que el promedio queda en ±1 %; los lances
+    tienen que quedar todos dentro de ±20 % y con un desvío medio absoluto menor que el 6 %.
+    """
+    d = _devs("inidep_iat151_va355_construida", "iat151", "door_spread_m", "door_spread_m")
+    assert len(d) == 52
+    assert abs(d.mean()) <= 0.01
+    assert np.mean(np.abs(d)) <= 0.06
+    assert np.all(np.abs(d) <= F.TOLERANCES["door_spread_m"])
+
+
 # Fuera de tolerancia, documentado en el capítulo «Validación con redes de merluza» (strict: si el
 # motor cambia y el caso entra en tolerancia, la prueba avisa para actualizar el capítulo).
 
 
 @pytest.mark.xfail(
     strict=True,
-    reason="DP +26 % con polivalentes de superficie y polar supuestas (5,58 m², Seafish)",
-)
-def test_dp_con_polivalentes_iat151() -> None:
-    d = _devs("inidep_iat151_va355_construida", "iat151", "door_spread_m", "door_spread_m")
-    assert 0.20 < d.mean() < 0.32  # el desvío documentado
-    assert abs(d.mean()) <= F.TOLERANCES["door_spread_m"]
-
-
-@pytest.mark.xfail(
-    strict=True,
-    reason="la DP del motor crece con el cable la mitad de rápido: −33 % a 500–930 m (IC 029/18)",
+    reason="la DP del motor crece con el cable menos que la medida: −32 % a 500–930 m (IC 029/18); "
+    "el factor de cable calibrado (Δn ≈ 0,10) apenas la mueve",
 )
 def test_dp_con_cable_largo() -> None:
     d = _devs("inidep_iat151_va355_construida", "ic029", "door_spread_m", "door_spread_m")
@@ -235,7 +240,7 @@ def test_dp_con_cable_largo() -> None:
 
 @pytest.mark.xfail(
     strict=True,
-    reason="DP −42 % y AV de Suzuki fija (+76 %) frente a DynamiT a 400 m (IAT 026/25)",
+    reason="DP −41 % y AV de Suzuki fija (+76 %) frente a DynamiT a 400 m (IAT 026/25)",
 )
 def test_va_frente_a_dynamit_a_400_m() -> None:
     ((ref, p),) = _points("inidep_iat151_va355_construida", "simulated")

@@ -366,6 +366,7 @@ design:
   door_length_m: 3.2
   door_height_m: 2.18
   door_polar_id: sfia1993_morgere_polyvalent_ovale
+  door_type: polyvalent
 measured:
 - series: iat151
   source: bartozzetti2018iat151
@@ -1457,6 +1458,7 @@ validation_doors:
     door_height_m: 2.18
     door_weight_air_kg: 1200.0
     door_polar_id: sfia1993_morgere_polyvalent_ovale
+    door_type: polyvalent
     note: '«portones polivalentes de 1200 kg y 5,58 m2 de superficie» (EH 06/12, p. 6; las demás fuentes
       dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
       hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
@@ -2635,6 +2637,12 @@ provenance:
       dan sólo «polivalentes de 1200 kg»). Polar: el INIDEP no publica la polar de sus portones polivalentes:
       hoja «Morgère Polyvalent Ovale» de Seafish/IFREMER/DIFTA (1993), el mismo tipo. A VERIFICAR. Largo
       y alto: L·H·0,80 = 5,58 m² con H/L = 0,68 (proporciones de la hoja de Seafish), supuesto'
+  design.door_type:
+    kind: transcribed
+    document: tringali2012eh0612
+    page: '6'
+    note: '«portones polivalentes» (EH 06/12, p. 6). Sin polar publicada: en modo corregido el CL de la
+      hoja del tipo lleva el factor de CL efectivo calibrado (Fase 20.5, procedencia calibrada)'
   design.door_polar_id:
     kind: assumed
     document: tringali2012eh0612
