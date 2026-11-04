@@ -33,7 +33,9 @@ jobs:
             informe-corregido/
             informe-excel/
   web:
-    runs-on: ubuntu-latest
+    # Ubuntu 24.04 fijo: desde 2026-11 ubuntu-latest es 26.04, donde Playwright 1.56 no instala
+    # Chromium («does not support chromium on ubuntu26.04-x64»).
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: web
