@@ -23,8 +23,10 @@ _NET = "fao_wb_bt2p_60hp"
 #: numpy CPython y Pyodide difieren en ~1e-5, que los porcentajes amplifican y los redondeos a
 #: 0,1 vuelven saltos de una décima. El resto se compara con rtol 1e-9. Desde la polar dinámica
 #: de los portones (Fase 19.3) la forma converge a un punto apenas distinto según el build: en la
-#: CI el conteo de mallas de escape (≈1100) llegó a diferir un 2 %.
-ITERATIVE_TOL = {"/simulate/selectivity": (3e-2, 0.2)}
+#: CI el conteo de mallas de escape (≈1100) llegó a diferir un 2 % y, el 2026-11-04, un 3,9 %
+#: (1110,8 contra 1156,0) sin cambios en el motor: se toma un 6 %, que sigue detectando un error
+#: real del motor sin conexión (las demás magnitudes difieren mucho menos).
+ITERATIVE_TOL = {"/simulate/selectivity": (6e-2, 0.2)}
 #: Claves que no se comparan: la forma intermedia de la red (``frame``: tensiones y posiciones
 #: nodo por nodo) depende del punto exacto de convergencia; se comparan las curvas e indicadores.
 ITERATIVE_IGNORE = {"/simulate/selectivity": ["frame"]}
