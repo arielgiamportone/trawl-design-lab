@@ -24,6 +24,9 @@ identifiers:
     value: 10.5281/zenodo.23657981
     description: DOI concepto (todas las versiones)
   - type: doi
+    value: 10.5281/zenodo.23959629
+    description: DOI de la versión 1.2.0
+  - type: doi
     value: 10.5281/zenodo.23657982
     description: DOI de la versión 1.1.0
 keywords:

@@ -10,7 +10,7 @@ latest one:
 | Version | DOI |
 |---|---|
 | All (concept) | [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981) |
-| 1.2.0 | pending: Zenodo assigns it when the release is published; meanwhile, use the concept DOI |
+| 1.2.0 | [10.5281/zenodo.23959629](https://doi.org/10.5281/zenodo.23959629) |
 | 1.1.0 | [10.5281/zenodo.23657982](https://doi.org/10.5281/zenodo.23657982) |
  The metadata are in
 [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff); on
@@ -25,7 +25,7 @@ GitHub, the **Cite this repository** button gives them in APA and BibTeX.
   year      = {2026},
   publisher = {Zenodo},
   url       = {https://github.com/arielgiamportone/trawl-design-lab},
-  doi       = {10.5281/zenodo.23657981}
+  doi       = {10.5281/zenodo.23959629}
 }
 ```
 

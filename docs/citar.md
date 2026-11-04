@@ -9,7 +9,7 @@ versión publicada tiene un DOI propio en [Zenodo](https://zenodo.org/), y el DO
 | Versión | DOI |
 |---|---|
 | Todas (concepto) | [10.5281/zenodo.23657981](https://doi.org/10.5281/zenodo.23657981) |
-| 1.2.0 | pendiente: Zenodo lo asigna al publicar la versión; mientras tanto, usá el DOI concepto |
+| 1.2.0 | [10.5281/zenodo.23959629](https://doi.org/10.5281/zenodo.23959629) |
 | 1.1.0 | [10.5281/zenodo.23657982](https://doi.org/10.5281/zenodo.23657982) |
  Los metadatos están en
 [`CITATION.cff`](https://github.com/arielgiamportone/trawl-design-lab/blob/main/CITATION.cff); en
@@ -24,7 +24,7 @@ GitHub, el botón **Cite this repository** los da en APA y BibTeX.
   year      = {2026},
   publisher = {Zenodo},
   url       = {https://github.com/arielgiamportone/trawl-design-lab},
-  doi       = {10.5281/zenodo.23657981}
+  doi       = {10.5281/zenodo.23959629}
 }
 ```
 
