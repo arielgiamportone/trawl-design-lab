@@ -157,13 +157,25 @@ class ParamInfo(BaseModel):
     comment: str = ""
 
 
+ErratumStatusName = Literal["corrected", "reproduced", "documented"]
+
+
 class ErratumOut(BaseModel):
-    """Errata del modelo Excel original."""
+    """Errata del modelo Excel original y su estado declarado (``trawlkit.compat.ERRATA``).
+
+    ``treatment`` es ``by_mode`` cuando el estado depende del modo de compatibilidad
+    (reproducida en ``excel``, corregida en ``corrected``); ``status_excel`` y
+    ``status_corrected`` dan el estado en cada modo y ``note`` la nota del tratamiento fijo.
+    """
 
     key: str
     sheet: str
     cell: str
     description: str
+    treatment: Literal["by_mode", "corrected", "reproduced", "documented"]
+    status_excel: ErratumStatusName
+    status_corrected: ErratumStatusName
+    note: str | None
 
 
 class Health(BaseModel):

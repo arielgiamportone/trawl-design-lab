@@ -8186,6 +8186,45 @@
      "description": {
       "type": "string",
       "title": "Description"
+     },
+     "treatment": {
+      "type": "string",
+      "enum": [
+       "by_mode",
+       "corrected",
+       "reproduced",
+       "documented"
+      ],
+      "title": "Treatment"
+     },
+     "status_excel": {
+      "type": "string",
+      "enum": [
+       "corrected",
+       "reproduced",
+       "documented"
+      ],
+      "title": "Status Excel"
+     },
+     "status_corrected": {
+      "type": "string",
+      "enum": [
+       "corrected",
+       "reproduced",
+       "documented"
+      ],
+      "title": "Status Corrected"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
      }
     },
     "type": "object",
@@ -8193,10 +8232,14 @@
      "key",
      "sheet",
      "cell",
-     "description"
+     "description",
+     "treatment",
+     "status_excel",
+     "status_corrected",
+     "note"
     ],
     "title": "ErratumOut",
-    "description": "Errata del modelo Excel original."
+    "description": "Errata del modelo Excel original y su estado declarado (``trawlkit.compat.ERRATA``).\n\n``treatment`` es ``by_mode`` cuando el estado depende del modo de compatibilidad\n(reproducida en ``excel``, corregida en ``corrected``); ``status_excel`` y\n``status_corrected`` dan el estado en cada modo y ``note`` la nota del tratamiento fijo."
    },
    "EvaluationOut": {
     "properties": {

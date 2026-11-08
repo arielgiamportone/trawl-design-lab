@@ -83,7 +83,6 @@ from trawlkit.api.schemas import (
     UncertaintyResponse,
     Variant,
 )
-from trawlkit.compat import ERRATA
 from trawlkit.i18n import normalize_lang, reset_lang, set_lang, t
 from trawlkit.io.schema import Door, NetSpec, Vessel
 from trawlkit.model import DesignResult
@@ -294,10 +293,7 @@ def list_params() -> list[dict[str, Any]]:
 @app.get("/errata", response_model=list[ErratumOut])
 def list_errata() -> list[ErratumOut]:
     """Erratas del libro Excel original."""
-    return [
-        ErratumOut(key=e.key, sheet=e.sheet, cell=e.cell, description=t(e.description))
-        for e in ERRATA
-    ]
+    return [ErratumOut(**e) for e in service.errata_catalogue()]
 
 
 def _run(req: DesignRequest) -> DesignResult:

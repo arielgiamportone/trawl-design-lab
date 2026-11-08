@@ -221,22 +221,11 @@ export const labels = {
     bottom: 'borde hacia la bolsa',
     top: 'borde hacia la boca',
   },
-  /** Tratamiento de cada errata según el modo (espejo de ``report.tables``). */
+  /** Rótulo del estado de cada errata (el estado lo declara la API, ``GET /errata``). */
   errataStatus: {
-    reproducida: 'reproducida',
-    corregida: 'corregida',
-    documentada: 'documentada',
-  },
-  errataFixed: {
-    nomura_column_links_hamuro:
-      'Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta.',
-    nomura_ratio_typo: 'Tabla de referencia copiada tal cual en ambos modos.',
-    panel_f_cut_na: 'El código de corte se calcula en ambos modos.',
-    panel_b_cut_uses_plan_coef: 'La razón de corte usa N en ambos modos.',
-    panel_b_cut_code_lookup_a: 'Cada paño busca con su propia razón.',
-    net_weight_ignores_panel_count: 'Peso por fila del libro en ambos modos (documentado).',
-    catenary_ratio_hardcoded:
-      'fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas.',
+    reproduced: 'reproducida',
+    corrected: 'corregida',
+    documented: 'documentada',
   },
   errataExcel: 'Modo «reproducir Excel»: se replica el valor del libro.',
   errataCorrected: 'Modo «corregido»: se aplica la fórmula correcta.',

@@ -215,20 +215,9 @@ export const labels: Messages['labels'] = {
     top: 'edge towards the mouth',
   },
   errataStatus: {
-    reproducida: 'reproduced',
-    corregida: 'corrected',
-    documentada: 'documented',
-  },
-  errataFixed: {
-    nomura_column_links_hamuro:
-      'No switch: Nomura is actually computed; the workbook link is only documented.',
-    nomura_ratio_typo: 'Reference table copied as-is in both modes.',
-    panel_f_cut_na: 'The cut code is computed in both modes.',
-    panel_b_cut_uses_plan_coef: 'The cut ratio uses N in both modes.',
-    panel_b_cut_code_lookup_a: 'Each panel looks up its own ratio.',
-    net_weight_ignores_panel_count: 'Weight per workbook row in both modes (documented).',
-    catenary_ratio_hardcoded:
-      'fL/L = 0.216 in both modes; the table value is recorded in the notes.',
+    reproduced: 'reproduced',
+    corrected: 'corrected',
+    documented: 'documented',
   },
   errataExcel: '«Reproduce Excel» mode: the workbook value is replicated.',
   errataCorrected: '«Corrected» mode: the correct formula is applied.',

@@ -34,7 +34,6 @@ from pydantic import BaseModel, TypeAdapter, ValidationError
 from trawlkit import __version__
 from trawlkit.api import schemas as sc
 from trawlkit.api import service
-from trawlkit.compat import ERRATA
 from trawlkit.i18n import N_, t, use_lang
 from trawlkit.io.schema import Door, NetSpec, Vessel
 
@@ -177,10 +176,7 @@ def _params(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
 
 
 def _errata(_m: re.Match[str], _q_: Query, _b: Any) -> Any:
-    return [
-        {"key": e.key, "sheet": e.sheet, "cell": e.cell, "description": t(e.description)}
-        for e in ERRATA
-    ]
+    return service.errata_catalogue()
 
 
 def _seabeds(_m: re.Match[str], _q_: Query, _b: Any) -> Any:

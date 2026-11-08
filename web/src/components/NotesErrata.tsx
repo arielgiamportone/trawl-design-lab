@@ -3,9 +3,9 @@ import { errataStatus, errataStatusLabel, type ErrataStatus } from '../lib/errat
 import { useCase } from '../state/useCase';
 
 const TONE: Record<ErrataStatus, string> = {
-  corregida: 'good',
-  reproducida: 'warn',
-  documentada: 'accent',
+  corrected: 'good',
+  reproduced: 'warn',
+  documented: 'accent',
 };
 
 export function NotesErrata() {
@@ -13,9 +13,9 @@ export function NotesErrata() {
   const d = design.data;
   const T = useT().expert.notes;
   const compat = d?.case.compat ?? state.compat;
-  const counts = { corregida: 0, reproducida: 0, documentada: 0 };
+  const counts: Record<ErrataStatus, number> = { corrected: 0, reproduced: 0, documented: 0 };
   const rows = catalogs.errata.map((e) => {
-    const s = errataStatus(e.key, compat);
+    const s = errataStatus(e, compat);
     counts[s.status] += 1;
     return { ...e, ...s };
   });
@@ -46,7 +46,7 @@ export function NotesErrata() {
         </h2>
         <p className="section-sub" style={{ marginBottom: 8 }}>
           {T.mode} <strong>{compat === 'excel' ? T.modeExcel : T.modeCorrected}</strong> ·{' '}
-          {T.counts(counts.corregida, counts.reproducida, counts.documentada)}
+          {T.counts(counts.corrected, counts.reproduced, counts.documented)}
         </p>
         <div className="table-wrap">
           <table className="data">

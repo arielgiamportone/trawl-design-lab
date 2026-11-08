@@ -15,7 +15,7 @@ from typing import Any
 import yaml
 from pydantic import ValidationError
 
-from trawlkit.compat import Compat
+from trawlkit.compat import ERRATA, Compat
 from trawlkit.i18n import N_, t
 from trawlkit.io import load_doors, load_net, load_vessels
 from trawlkit.io.schema import Door, NetSpec, PropellerType, Vessel
@@ -1027,6 +1027,23 @@ def make_scenario(data: dict[str, Any] | None) -> Any:
         return Scenario(**data)
     except (ValueError, KeyError) as exc:
         raise BadRequestError(t("escenario inválido: {exc}", exc=exc)) from exc
+
+
+def errata_catalogue() -> list[dict[str, Any]]:
+    """Erratas del libro con su estado declarado en cada modo (``GET /errata``)."""
+    return [
+        {
+            "key": e.key,
+            "sheet": e.sheet,
+            "cell": e.cell,
+            "description": t(e.description),
+            "treatment": e.treatment.value,
+            "status_excel": e.status(Compat.EXCEL).value,
+            "status_corrected": e.status(Compat.CORRECTED).value,
+            "note": t(e.note) if e.note is not None else None,
+        }
+        for e in ERRATA
+    ]
 
 
 def seabed_catalogue() -> list[dict[str, Any]]:

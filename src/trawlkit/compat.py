@@ -23,6 +23,37 @@ class Compat(StrEnum):
     CORRECTED = "corrected"
 
 
+class ErratumStatus(StrEnum):
+    """Estado de una errata en un modo de compatibilidad dado."""
+
+    CORRECTED = "corrected"  # se aplica la fórmula correcta
+    REPRODUCED = "reproduced"  # se replica el valor del libro
+    DOCUMENTED = "documented"  # desvío documentado, sin conmutador ni corrección
+
+
+class ErratumTreatment(StrEnum):
+    """Tratamiento declarado de una errata: si depende del modo o es fijo."""
+
+    BY_MODE = "by_mode"  # reproducida en EXCEL, corregida en CORRECTED
+    CORRECTED = "corrected"  # corregida en ambos modos
+    REPRODUCED = "reproduced"  # reproducida en ambos modos
+    DOCUMENTED = "documented"  # sólo documentada: ningún modo la corrige
+
+
+#: Rótulo de cada estado (en español, marcado con N_; el informe lo traduce con t()).
+STATUS_LABELS: dict[ErratumStatus, str] = {
+    ErratumStatus.CORRECTED: N_("corregida"),
+    ErratumStatus.REPRODUCED: N_("reproducida"),
+    ErratumStatus.DOCUMENTED: N_("documentada"),
+}
+
+#: Nota del tratamiento de las erratas que dependen del modo.
+MODE_NOTES: dict[Compat, str] = {
+    Compat.EXCEL: N_("Reproducida (EXCEL)."),
+    Compat.CORRECTED: N_("Corregida (CORRECTED)."),
+}
+
+
 @dataclass(frozen=True)
 class Erratum:
     """Errata documentada del modelo Excel original."""
@@ -31,6 +62,20 @@ class Erratum:
     sheet: str
     cell: str
     description: str  # en español, marcado con N_: se traduce con t() al mostrarlo
+    #: Tratamiento declarado; fuera de ``BY_MODE`` no depende del modo de compatibilidad.
+    treatment: ErratumTreatment = ErratumTreatment.BY_MODE
+    #: Nota del tratamiento fijo (marcada con N_); ``None`` en las que dependen del modo.
+    note: str | None = None
+
+    def status(self, compat: Compat) -> ErratumStatus:
+        """Estado de la errata en el modo ``compat`` (única fuente para app, API e informes)."""
+        if self.treatment is ErratumTreatment.BY_MODE:
+            return ErratumStatus.REPRODUCED if compat is Compat.EXCEL else ErratumStatus.CORRECTED
+        return ErratumStatus(self.treatment.value)
+
+    def treatment_note(self, compat: Compat) -> str:
+        """Nota del tratamiento en el modo ``compat`` (en español; se traduce con t())."""
+        return self.note if self.note is not None else MODE_NOTES[compat]
 
 
 #: Registro de erratas conocidas. Cada función que las replica en modo EXCEL referencia su ``key``.
@@ -134,6 +179,8 @@ ERRATA: tuple[Erratum, ...] = (
         "Potencia Disponible Arrastre OK",
         "G319,G342,G362",
         N_("La columna 'Nomura' de los resúmenes enlaza a los resultados de Hamuro."),
+        ErratumTreatment.DOCUMENTED,
+        N_("Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta."),
     ),
     Erratum(
         "sweep_degrees_of_sine",
@@ -146,12 +193,16 @@ ERRATA: tuple[Erratum, ...] = (
         "Tablas de Referencias",
         "G18,G21",
         N_("Proporción 10.6 donde el resto de la tabla sugiere 1.06."),
+        ErratumTreatment.REPRODUCED,
+        N_("Tabla de referencia copiada tal cual en ambos modos."),
     ),
     Erratum(
         "panel_f_cut_na",
         "Paños de red y cortes",
         "T122",
         N_("VLOOKUP/MATCH de la razón de corte del panel F devuelve #N/A."),
+        ErratumTreatment.CORRECTED,
+        N_("El código de corte se calcula en ambos modos."),
     ),
     Erratum(
         "codend_minor_side_uses_depth",
@@ -167,12 +218,16 @@ ERRATA: tuple[Erratum, ...] = (
         "Paños de red y cortes",
         "S62",
         N_("La razón de corte del paño B usa P55 (coeficiente de plano 0.5) en vez de T56 (N)."),
+        ErratumTreatment.CORRECTED,
+        N_("La razón de corte usa N en ambos modos."),
     ),
     Erratum(
         "panel_b_cut_code_lookup_a",
         "Paños de red y cortes",
         "T62",
         N_("El código de corte del paño B se busca con la razón del paño A (H63)."),
+        ErratumTreatment.CORRECTED,
+        N_("Cada paño busca con su propia razón."),
     ),
     Erratum(
         "net_weight_ignores_panel_count",
@@ -188,6 +243,8 @@ ERRATA: tuple[Erratum, ...] = (
             "fL/L = 0.216 fijo (corresponde a DPA/L = 0.87); el DPA/L del modelo (0.45) queda "
             "fuera de la tabla de catenaria."
         ),
+        ErratumTreatment.REPRODUCED,
+        N_("fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas."),
     ),
     Erratum(
         "float_lookup_unsorted",
@@ -220,6 +277,11 @@ ERRATA: tuple[Erratum, ...] = (
             "satura: con un cable distinto del de la tabla la separación de portones cambia menos "
             "que lo medido. Desvío documentado, no corregido: el ajuste de (Ls/Ls_tabla)^Δn a los "
             "lances medidos no es significativo y el exponente queda en 0."
+        ),
+        ErratumTreatment.DOCUMENTED,
+        N_(
+            "Sin corrección en ambos modos: el ajuste del exponente de cable a los lances medidos "
+            "no es significativo (Fase 20.5)."
         ),
     ),
 )

@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
+from trawlkit.compat import ERRATA, STATUS_LABELS, Compat, ErratumTreatment
 from trawlkit.i18n import N_, t
 
 Cell = float | int | str | None
@@ -130,36 +131,11 @@ SECTION_LABELS: dict[str, str] = {
     "codend": N_("bolsa"),
 }
 
-#: Erratas cuyo tratamiento no depende del modo (ver ``docs/erratas.md``).
+#: Erratas cuyo tratamiento no depende del modo (``Erratum.treatment``; ver ``docs/erratas.md``).
 ERRATA_FIXED_TREATMENT: dict[str, tuple[str, str]] = {
-    "nomura_column_links_hamuro": (
-        N_("documentada"),
-        N_("Sin conmutador: Nomura se calcula de verdad; el enlace del libro sólo se documenta."),
-    ),
-    "nomura_ratio_typo": (
-        N_("reproducida"),
-        N_("Tabla de referencia copiada tal cual en ambos modos."),
-    ),
-    "panel_f_cut_na": (
-        N_("corregida"),
-        N_("El código de corte se calcula en ambos modos."),
-    ),
-    "panel_b_cut_uses_plan_coef": (
-        N_("corregida"),
-        N_("La razón de corte usa N en ambos modos."),
-    ),
-    "panel_b_cut_code_lookup_a": (N_("corregida"), N_("Cada paño busca con su propia razón.")),
-    "catenary_ratio_hardcoded": (
-        N_("reproducida"),
-        N_("fL/L = 0.216 en ambos modos; el valor de tabla se anota en las notas."),
-    ),
-    "fridman_dp_warp_saturation": (
-        N_("documentada"),
-        N_(
-            "Sin corrección en ambos modos: el ajuste del exponente de cable a los lances medidos "
-            "no es significativo (Fase 20.5)."
-        ),
-    ),
+    e.key: (STATUS_LABELS[e.status(Compat.CORRECTED)], e.note or "")
+    for e in ERRATA
+    if e.treatment is not ErratumTreatment.BY_MODE
 }
 
 
@@ -682,17 +658,11 @@ def speed_window_table(result: DesignResult) -> Table:
 
 def errata_table(result: DesignResult) -> Table:
     """Erratas del libro original y su tratamiento en el modo de compatibilidad del caso."""
-    from trawlkit.compat import ERRATA, Compat
-
-    excel = result.case.compat is Compat.EXCEL
+    compat = result.case.compat
     rows = []
     for e in ERRATA:
-        if e.key in ERRATA_FIXED_TREATMENT:
-            status, how = ERRATA_FIXED_TREATMENT[e.key]
-        elif excel:
-            status, how = N_("reproducida"), N_("Reproducida (EXCEL).")
-        else:
-            status, how = N_("corregida"), N_("Corregida (CORRECTED).")
+        # Estado declarado en trawlkit.compat (el mismo que muestran la API y la app).
+        status, how = STATUS_LABELS[e.status(compat)], e.treatment_note(compat)
         rows.append((e.key, e.sheet, e.cell, t(e.description), t(status), t(how)))
     return Table(
         key="erratas",

@@ -54,7 +54,7 @@ def _references() -> int:
 def stats() -> dict[str, Any]:
     """Los indicadores, del paquete instalado y de los archivos del repositorio."""
     from trawlkit.api.service import net_presets
-    from trawlkit.compat import ERRATA
+    from trawlkit.compat import ERRATA, Compat
     from trawlkit.components import KINDS, load_components
     from trawlkit.drag import RN_METHODS
     from trawlkit.rigging.seabed import seabeds
@@ -74,6 +74,8 @@ def stats() -> dict[str, Any]:
         "brands": len(brands),
         "drag_methods": len(RN_METHODS),
         "errata": len(ERRATA),
+        # Estado declarado en modo corregido (el mismo que muestran la app y los informes).
+        "errata_status": Counter(e.status(Compat.CORRECTED).value for e in ERRATA),
         "golden": _golden_values(),
         "chapters": _chapters(),
         "references": _references(),
@@ -117,7 +119,12 @@ def block(s: dict[str, Any], lang: str) -> str:
                 f"({s['components_generic']} genéricos y datos puntuales de {s['brands']} marcas)",
             ),
             ("Métodos de resistencia de la red", str(s["drag_methods"])),
-            ("Erratas del Excel documentadas y corregidas", str(s["errata"])),
+            (
+                "Erratas del Excel documentadas",
+                f"{s['errata']}: {s['errata_status']['corrected']} corregidas, "
+                f"{s['errata_status']['reproduced']} reproducidas en ambos modos y "
+                f"{s['errata_status']['documented']} sólo documentadas",
+            ),
             (
                 "Valores de referencia del Excel",
                 f"{s['golden']:,}".replace(",", " ")
@@ -142,7 +149,12 @@ def block(s: dict[str, Any], lang: str) -> str:
                 f"({s['components_generic']} generic, spot data from {s['brands']} brands)",
             ),
             ("Net drag methods", str(s["drag_methods"])),
-            ("Excel errata documented and fixed", str(s["errata"])),
+            (
+                "Excel errata documented",
+                f"{s['errata']}: {s['errata_status']['corrected']} fixed, "
+                f"{s['errata_status']['reproduced']} reproduced in both modes and "
+                f"{s['errata_status']['documented']} documented only",
+            ),
             (
                 "Excel reference values",
                 f"{s['golden']:,}" + f", reproduced at rtol {EXCEL_RTOL} in `excel` mode",

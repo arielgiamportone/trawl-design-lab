@@ -12,42 +12,46 @@ kernelspec:
 # Errata of the original Excel model
 
 During the migration the ~5,500 formulas of the workbook `Calculos_Red_FAO_A3.xlsx` were audited.
-The following errata are reproduced in `Compat.EXCEL` mode (to validate the migration) and
-corrected in `Compat.CORRECTED` mode. The canonical list lives in `trawlkit.compat.ERRATA`; the
-*Implementation* column gives the function that switches with `compat` and the test that checks
+Of the 28 errata below, 21 are reproduced in `Compat.EXCEL` mode (to validate the migration) and
+corrected in `Compat.CORRECTED` mode; the other seven have a fixed treatment, the same in both
+modes: three are always corrected, two are always reproduced and two are only documented, not
+corrected (`nomura_column_links_hamuro` and `fridman_dp_warp_saturation`). In corrected mode that
+leaves 24 corrected, 2 reproduced and 2 documented. The canonical list, with the declared status of
+each one (`Erratum.treatment`), lives in `trawlkit.compat.ERRATA`; the app, the API (`GET /errata`),
+the reports and this table show that same status. The *Implementation* column gives the function that switches with `compat` and the test that checks
 both directions (`tests/test_corrected_mode.py` does so at the level of the complete case,
 `trawlkit.model.run`).
 
-| Key | Sheet | Cell | Description | Implementation (function · test) |
-|---|---|---|---|---|
-| cut_ratio_first_panel | Paños de red y cortes [netting panels and cuts] | H274:I277 | All panels use the cutting ratio of the first one | `netting.mean_cut_angle_deg` · `test_netting.py` |
-| twine_density_units | Paños de red y cortes | L55 | Dimensionally incorrect twine density | `materials.twine_density_kg_m3`, `net.analyse` · `test_net.py`, `test_netting.py` |
-| filtration_double_count | Mecánica de la Red [net mechanics] | J17 | J16 counted twice | `net.filtration_index` · `test_net.py` |
-| hamuro_sin_degrees | Resistencia de la RED [net drag] | D113 | SIN(DEGREES) instead of SIN(RADIANS) | `drag.hamuro_sin_alpha` · `test_drag.py`, `test_corrected_mode.py` |
-| hamuro_mod_uses_std_dl | Resistencia de la RED | E117 | Modified variant uses the d/l of the standard net | `drag.drag_table` · `test_drag.py`, `test_corrected_mode.py` |
-| reid_fixed_denominator | Resistencia de la RED | C154:C162 | Denominator fixed at 1 knot | `drag.reid` · `test_drag.py`, `test_corrected_mode.py` |
-| drag_average_pollution | Resistencia de la RED | R302:R310 | Average includes Nomura's speed and pull | `drag.average` · `test_drag.py`, `test_corrected_mode.py` |
-| door_force_mixed_angles | Portones y aparejamiento [otter boards and rigging] | D252 | Mixes degrees and radians | `rigging.doors.door_force_kgf` · `test_rigging_doors.py`, `test_corrected_mode.py` |
-| float_reynolds | Flotación y Lastre [buoyancy and ballast] | H138 | Re = π·D²·v/ν instead of v·D/ν | `rigging.floats.float_reynolds` · `test_rigging_floats.py`, `test_corrected_mode.py` |
-| warp_total_omits_doors | Cables de Remolque [warps] | H118 | Omits the drag of the otter boards | `rigging.warps.total_drag_kgf` (→ `model._stage_warps`, `_stage_performance`) · `test_rigging_warps.py`, `test_corrected_mode.py` |
-| warp_cd_horizontal_angle | Cables de Remolque | E103:E106 | Warp CD taken with the plan-view divergence δ2 = 4.3° (→ 0.02) instead of the angle of attack to the flow, and nearest row without interpolation | `rigging.warps.warp_attack_angle_deg`, `rigging.warps.warp_cd(interpolate=…)` (→ `model._stage_warps`) · `test_corrected_mode.py` |
-| warp_undersized | Cables de Remolque | E267:E272 | 12 mm warp (8.55 t) < 8.8 t required | `rigging.warps.select_warp` · `test_rigging_warps.py`, `test_corrected_mode.py` |
-| mod_length_wrong_rows | Dimensiones de la Red [net dimensions] | G48 | Length of the modified net adds the wrong rows | `dimensions.body_length_no_bag_m` · `test_dimensions.py` |
-| footrope_mid_truncation | Dimensiones de la Red | F46 | MID() truncates the footrope to 33.3 m (full value 33.389 m) | `dimensions.footrope_length_m` · `test_dimensions.py`, `test_corrected_mode.py` |
-| dpa_std_uses_mod_edy | Mecánica de la Red | P164 | Standard Fridman DPA uses the Edy of the modified net | `rigging.spread.fridman_spread` · `test_rigging_spread.py`, `test_corrected_mode.py` |
-| nomura_column_links_hamuro | Potencia Disponible Arrastre OK [available towing power] | G319, G342, G362 | "Nomura" column links to Hamuro | no switch: `power.power_curves` computes Nomura for real; the link is documented in `test_power.py` |
-| sweep_degrees_of_sine | Portones y aparejamiento | G71 | DEGREES(SIN(20)) and precedence error | `rigging.bridles.sweeps_martini_m` · `test_rigging_bridles.py` |
-| nomura_ratio_typo | Tablas de Referencias [reference tables] | G18, G21 | 10.6 where 1.06 is meant | no switch: the table is copied as is to `src/trawlkit/data/reference/nomura_proportions.csv` (`test_data_reference.py`) |
-| panel_f_cut_na | Paños de red y cortes | T122 | Cutting ratio of panel F returns #N/A | `netting.cut_code` computes the code the workbook could not · `test_netting.py` |
-| codend_minor_side_uses_depth | Mecánica de la Red | K36:K37 | Codends I/J use N (200) as the minor side instead of T2 (113): Ss 40.90 instead of 38.75 m² | `net.apply_excel_codend_quirk` (via `net.analyse`) · `test_net.py`, `test_corrected_mode.py` |
-| panel_b_cut_uses_plan_coef | Paños de red y cortes | S62 | Cutting ratio of panel B with the plan coefficient instead of N | no switch: `netting.cut_ratio` uses N; the workbook's value is kept only in the golden file (`test_netting.py`) |
-| panel_b_cut_code_lookup_a | Paños de red y cortes | T62 | Cut code of panel B looked up with the ratio of panel A | no switch: `netting.cut_code` looks up with the panel's own ratio (`test_netting.py`) |
-| net_weight_ignores_panel_count | Mecánica de la Red | O107, O109 | Total weight not multiplied by the number of panels | `net.analyse` (in CORRECTED each row weighs by its number of panels: air, water and distribution by plane) · `test_net.py`, `test_corrected_mode.py` |
-| catenary_ratio_hardcoded | Mecánica de la Red | O266 | fL/L = 0.216 fixed, outside the range of the table | `DesignCase.catenary_ratio` (0.216 in both modes; `rigging.spread.catenary_ratio` gives the table value and `run` records it in `notes`) · `test_rigging_spread.py` |
-| float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP over an unsorted vector | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / float with the nearest number in `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
-| flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Rounding applied to only part of the column | `rigging.floats.flotation_fridman(rounddown=…)`, mask in `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
-| door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Required area linear in power, calibrated for 150–180 HP and extrapolated to more powerful vessels | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
-| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | Fridman's wing spread saturates with the warp: with a warp other than the table's, DS changes less than measured | not corrected (documented deviation): `rigging.dp_warp_factor` with `DP_WARP_EXPONENT_CORRECTION = 0` (the fitted Δn is not significant) · `test_calibration_20_5.py` |
+| Key | Sheet | Cell | Description | Status (corrected mode) | Implementation (function · test) |
+|---|---|---|---|---|---|
+| cut_ratio_first_panel | Paños de red y cortes [netting panels and cuts] | H274:I277 | All panels use the cutting ratio of the first one | corrected | `netting.mean_cut_angle_deg` · `test_netting.py` |
+| twine_density_units | Paños de red y cortes | L55 | Dimensionally incorrect twine density | corrected | `materials.twine_density_kg_m3`, `net.analyse` · `test_net.py`, `test_netting.py` |
+| filtration_double_count | Mecánica de la Red [net mechanics] | J17 | J16 counted twice | corrected | `net.filtration_index` · `test_net.py` |
+| hamuro_sin_degrees | Resistencia de la RED [net drag] | D113 | SIN(DEGREES) instead of SIN(RADIANS) | corrected | `drag.hamuro_sin_alpha` · `test_drag.py`, `test_corrected_mode.py` |
+| hamuro_mod_uses_std_dl | Resistencia de la RED | E117 | Modified variant uses the d/l of the standard net | corrected | `drag.drag_table` · `test_drag.py`, `test_corrected_mode.py` |
+| reid_fixed_denominator | Resistencia de la RED | C154:C162 | Denominator fixed at 1 knot | corrected | `drag.reid` · `test_drag.py`, `test_corrected_mode.py` |
+| drag_average_pollution | Resistencia de la RED | R302:R310 | Average includes Nomura's speed and pull | corrected | `drag.average` · `test_drag.py`, `test_corrected_mode.py` |
+| door_force_mixed_angles | Portones y aparejamiento [otter boards and rigging] | D252 | Mixes degrees and radians | corrected | `rigging.doors.door_force_kgf` · `test_rigging_doors.py`, `test_corrected_mode.py` |
+| float_reynolds | Flotación y Lastre [buoyancy and ballast] | H138 | Re = π·D²·v/ν instead of v·D/ν | corrected | `rigging.floats.float_reynolds` · `test_rigging_floats.py`, `test_corrected_mode.py` |
+| warp_total_omits_doors | Cables de Remolque [warps] | H118 | Omits the drag of the otter boards | corrected | `rigging.warps.total_drag_kgf` (→ `model._stage_warps`, `_stage_performance`) · `test_rigging_warps.py`, `test_corrected_mode.py` |
+| warp_cd_horizontal_angle | Cables de Remolque | E103:E106 | Warp CD taken with the plan-view divergence δ2 = 4.3° (→ 0.02) instead of the angle of attack to the flow, and nearest row without interpolation | corrected | `rigging.warps.warp_attack_angle_deg`, `rigging.warps.warp_cd(interpolate=…)` (→ `model._stage_warps`) · `test_corrected_mode.py` |
+| warp_undersized | Cables de Remolque | E267:E272 | 12 mm warp (8.55 t) < 8.8 t required | corrected | `rigging.warps.select_warp` · `test_rigging_warps.py`, `test_corrected_mode.py` |
+| mod_length_wrong_rows | Dimensiones de la Red [net dimensions] | G48 | Length of the modified net adds the wrong rows | corrected | `dimensions.body_length_no_bag_m` · `test_dimensions.py` |
+| footrope_mid_truncation | Dimensiones de la Red | F46 | MID() truncates the footrope to 33.3 m (full value 33.389 m) | corrected | `dimensions.footrope_length_m` · `test_dimensions.py`, `test_corrected_mode.py` |
+| dpa_std_uses_mod_edy | Mecánica de la Red | P164 | Standard Fridman DPA uses the Edy of the modified net | corrected | `rigging.spread.fridman_spread` · `test_rigging_spread.py`, `test_corrected_mode.py` |
+| nomura_column_links_hamuro | Potencia Disponible Arrastre OK [available towing power] | G319, G342, G362 | "Nomura" column links to Hamuro | documented | no switch: `power.power_curves` computes Nomura for real; the link is documented in `test_power.py` |
+| sweep_degrees_of_sine | Portones y aparejamiento | G71 | DEGREES(SIN(20)) and precedence error | corrected | `rigging.bridles.sweeps_martini_m` · `test_rigging_bridles.py` |
+| nomura_ratio_typo | Tablas de Referencias [reference tables] | G18, G21 | 10.6 where 1.06 is meant | reproduced | no switch: the table is copied as is to `src/trawlkit/data/reference/nomura_proportions.csv` (`test_data_reference.py`) |
+| panel_f_cut_na | Paños de red y cortes | T122 | Cutting ratio of panel F returns #N/A | corrected | `netting.cut_code` computes the code the workbook could not · `test_netting.py` |
+| codend_minor_side_uses_depth | Mecánica de la Red | K36:K37 | Codends I/J use N (200) as the minor side instead of T2 (113): Ss 40.90 instead of 38.75 m² | corrected | `net.apply_excel_codend_quirk` (via `net.analyse`) · `test_net.py`, `test_corrected_mode.py` |
+| panel_b_cut_uses_plan_coef | Paños de red y cortes | S62 | Cutting ratio of panel B with the plan coefficient instead of N | corrected | no switch: `netting.cut_ratio` uses N; the workbook's value is kept only in the golden file (`test_netting.py`) |
+| panel_b_cut_code_lookup_a | Paños de red y cortes | T62 | Cut code of panel B looked up with the ratio of panel A | corrected | no switch: `netting.cut_code` looks up with the panel's own ratio (`test_netting.py`) |
+| net_weight_ignores_panel_count | Mecánica de la Red | O107, O109 | Total weight not multiplied by the number of panels | corrected | `net.analyse` (in CORRECTED each row weighs by its number of panels: air, water and distribution by plane) · `test_net.py`, `test_corrected_mode.py` |
+| catenary_ratio_hardcoded | Mecánica de la Red | O266 | fL/L = 0.216 fixed, outside the range of the table | reproduced | `DesignCase.catenary_ratio` (0.216 in both modes; `rigging.spread.catenary_ratio` gives the table value and `run` records it in `notes`) · `test_rigging_spread.py` |
+| float_lookup_unsorted | Flotación y Lastre | F92 | LOOKUP over an unsorted vector | corrected | `rigging.floats.float_diameter_for_count_mm` (EXCEL) / float with the nearest number in `model._stage_floats` (CORRECTED) · `test_rigging_floats.py`, `test_case_fao_a3.py` |
+| flotation_rounding_inconsistent | Flotación y Lastre | M43:M50 | Rounding applied to only part of the column | corrected | `rigging.floats.flotation_fridman(rounddown=…)`, mask in `model._stage_floats` · `test_rigging_floats.py`, `test_corrected_mode.py` |
+| door_area_power_extrapolation | Portones y aparejamiento | F212, F215 | Required area linear in power, calibrated for 150–180 HP and extrapolated to more powerful vessels | corrected | `rigging.door_area_power_factor`, `rigging.required_area_summary(bhp=…)` (→ `model._stage_doors`, `door_selection.select_doors`, `optimize.evaluate`) · `test_door_area_power.py`, `test_door_polars.py` |
+| fridman_dp_warp_saturation | Mecánica de la Red | P164:Q172 | Fridman's wing spread saturates with the warp: with a warp other than the table's, DS changes less than measured | documented | not corrected (documented deviation): `rigging.dp_warp_factor` with `DP_WARP_EXPONENT_CORRECTION = 0` (the fitted Δn is not significant) · `test_calibration_20_5.py` |
 
 In addition, several summary tables contain values pasted by hand instead of formulas (marked
 with `"static": true` in `tests/golden/*.json`), and the coefficients read with `MID()` from text

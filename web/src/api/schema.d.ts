@@ -3085,7 +3085,11 @@ export interface components {
         };
         /**
          * ErratumOut
-         * @description Errata del modelo Excel original.
+         * @description Errata del modelo Excel original y su estado declarado (``trawlkit.compat.ERRATA``).
+         *
+         *     ``treatment`` es ``by_mode`` cuando el estado depende del modo de compatibilidad
+         *     (reproducida en ``excel``, corregida en ``corrected``); ``status_excel`` y
+         *     ``status_corrected`` dan el estado en cada modo y ``note`` la nota del tratamiento fijo.
          */
         ErratumOut: {
             /** Key */
@@ -3096,6 +3100,23 @@ export interface components {
             cell: string;
             /** Description */
             description: string;
+            /**
+             * Treatment
+             * @enum {string}
+             */
+            treatment: "by_mode" | "corrected" | "reproduced" | "documented";
+            /**
+             * Status Excel
+             * @enum {string}
+             */
+            status_excel: "corrected" | "reproduced" | "documented";
+            /**
+             * Status Corrected
+             * @enum {string}
+             */
+            status_corrected: "corrected" | "reproduced" | "documented";
+            /** Note */
+            note: string | null;
         };
         /**
          * EvaluationOut
