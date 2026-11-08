@@ -109,7 +109,10 @@ def test_projection_follows_the_power_similarity_law() -> None:
     ratios = [
         _projection("fao_wb_bt2p_60hp", hp).s / math.sqrt(hp / 60) for hp in (40.0, 150.0, 300.0)
     ]
-    assert max(ratios) - min(ratios) < 0.1
+    # La red abierta usa la DPA geométrica redondeada a metro entero (Mec!L211): la factibilidad no
+    # es monótona en s y la escala final salta ±0,05 según la malla (Fase 20.6: 0,83 a 40 hp con la
+    # separación de Fridman promediada en las velocidades del caso, como el motor).
+    assert max(ratios) - min(ratios) < 0.12
     big = _projection("fao_wb_bt2p_60hp", 150.0)
     assert big.s0 == pytest.approx(2.5**0.5)
     assert big.feasible

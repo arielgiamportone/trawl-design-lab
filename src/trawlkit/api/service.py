@@ -31,6 +31,7 @@ _STRUCTURAL = {
     "class_vessels",
     "compat",
     "assumptions",
+    "averaging_speeds_kn",  # interno: lo fija el optimizador (Fase 20.6)
 }
 
 
@@ -916,9 +917,12 @@ def simulate_case(
     by_speed = dict(zip(ordered, sims, strict=True))
     sims_req = [by_speed[float(v)] for v in speeds_kn]
 
-    # Motor a las velocidades pedidas (otra corrida con esas velocidades agregadas a la malla).
+    # Motor a las velocidades pedidas (otra corrida con esas velocidades agregadas a la malla; los
+    # promedios del libro siguen sobre las velocidades del caso, Fase 20.6).
     ref = dataclasses.replace(
-        case, speeds_kn=tuple(sorted({*case.speeds_kn, *(float(v) for v in speeds_kn)}))
+        case,
+        speeds_kn=tuple(sorted({*case.speeds_kn, *(float(v) for v in speeds_kn)})),
+        averaging_speeds_kn=case.averaging_speeds_kn or case.speeds_kn,
     )
     try:
         eng = run(ref)

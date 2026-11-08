@@ -5,6 +5,28 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+### Corregido
+- **Economía y optimizador con los números del motor (Fase 20.6)**: con el tangonero
+  `ar_tangonero_1998` y la red `inidep_ito043_tangonera_inidep` la pestaña Economía decía «A ninguna
+  velocidad del rango el buque tiene tiro con reserva» mientras el resultado del caso daba 128 % de
+  reserva a 2 kn. `optimize.Evaluator` (que usan la economía, el optimizador y los lotes)
+  recalculaba por su cuenta: (1) la demanda era la de una sola red (`warps.total`), sin el resto del
+  arte de tangones, gemelo o vara ni el rozamiento con el fondo, y el tiro el de un solo buque en la
+  pareja; ahora son los de la ventana de velocidad del motor (`performance.design`); (2) el cable se
+  verificaba con los del libro (no el de 24 mm de la fuente) y con la resistencia de una red; ahora
+  con los que elige el motor (`_case_warps`) y la carga de cada cable (`model.warp_load_kgf`); (3)
+  la tijera y el cable se calculaban a 1 kn y la separación de Fridman, la superficie requerida, la
+  flotación y la AH de `Dim!F61` se promediaban sobre la malla fina (DP 7,7 m en lugar de 17,5 m en
+  la tangonera); ahora la velocidad de diseño es la del caso y los promedios usan sus velocidades
+  (`DesignCase.averaging_speeds_kn`, interno); (4) fijaba las boyas de la spec y el motor elegía
+  otro diámetro (+1,5 % de demanda con la A-3 y el `bip_capitan_canepa`); (5) con el método
+  camaronero o la vara la AH era la DPA de Fridman con el tope geométrico del libro (2,7
+  m en la tangonera, 2,8 m en la vara) y ahora es la del motor (`DesignCase.fixed_opening`), con su
+  AV; (6) el área y el volumen barridos por hora y la energía por m² cuentan las bocas de todas las
+  redes, como el modo guiado (Fase 19.8d). Tangonero a 2 kn: demanda 1808 → 3582 kgf (motor 3582),
+  AH 2,7 → 14,4 m, factible de 1,5 a 2,75 kn. La A-3, el modo `excel` y los valores dorados no
+  cambian. Capítulos 20 y 37 actualizados.
+
 ## [1.2.0] - 2026-10-29
 
 Catálogos con datos técnicos, flota y aparejos argentinos, langostino y merluza.

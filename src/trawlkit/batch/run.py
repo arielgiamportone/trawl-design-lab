@@ -164,7 +164,17 @@ def read_input(data: bytes | str, filename: str, mode: Mode) -> BatchInput:
 
 
 def _param_types() -> dict[str, str]:
-    skip = {"net", "net_modified", "vessel", "door", "class_vessels", "compat", "assumptions"}
+    # averaging_speeds_kn es interno: lo fija el optimizador (Fase 20.6).
+    skip = {
+        "net",
+        "net_modified",
+        "vessel",
+        "door",
+        "class_vessels",
+        "compat",
+        "assumptions",
+        "averaging_speeds_kn",
+    }
     return {f.name: str(f.type) for f in dataclasses.fields(DesignCase) if f.name not in skip}
 
 

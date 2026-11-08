@@ -70,9 +70,11 @@ $$
 P = \frac{R_T(v)\, v}{\eta},
 $$
 
-con $R_T(v)$ la resistencia total del motor de cálculo ({doc}`19_ventana_velocidad`) y $\eta$
-un rendimiento de remolque (tiro × velocidad sobre potencia al freno) de 0,5 por defecto (A
-VERIFICAR; incluye hélice, reductor y pérdidas). La potencia se recorta a la del buque. En la
+con $R_T(v)$ la resistencia total del motor de cálculo ({doc}`19_ventana_velocidad`): la misma
+demanda y el mismo tiro de la ventana de velocidad del caso, con el rozamiento con el fondo y,
+con tangones, gemelo o vara, todo el arte (las dos redes, sus portones, cables y tijera;
+{doc}`26_aparejos_dobles_y_vara`), y $\eta$ un rendimiento de remolque (tiro × velocidad sobre
+potencia al freno) de 0,5 por defecto (A VERIFICAR; incluye hélice, reductor y pérdidas). La potencia se recorta a la del buque. En la
 navegación al caladero se usa una fracción de la potencia del motor (0,8 por defecto) y en el
 calado y virado otra (0,2). El combustible es $P \cdot \text{SFC} / \rho$, con un consumo
 específico de 0,22 kg/kWh y gasoil de 0,84 kg/L, y el lubricante una proporción del gasoil
@@ -87,6 +89,9 @@ escala en proporción:
 $$
 C(v) = C_\text{ref}\;\frac{A_H(v)\, v}{A_H(v_\text{ref})\, v_\text{ref}}.
 $$
+
+Con tangones o gemelo el área barrida suma las bocas de las dos redes ($n \cdot A_H \cdot v$, como
+el modo guiado), y con el método camaronero o la vara $A_H$ es la abertura del motor.
 
 Es una hipótesis simple: no tiene en cuenta el escape de los peces a baja velocidad ni el arreo
 de los portones y las bridas, que dependen de la especie. El ingreso es la captura por el precio
@@ -203,7 +208,8 @@ cambiar, y por eso la app no trae precios propios.
   la abundancia en el caladero.
 - El consumo usa un rendimiento de remolque y un consumo específico constantes; un motor viejo o
   una hélice mal adaptada consumen más.
-- La velocidad «posible» es la que deja tiro con reserva y un cable que aguanta; las demás
+- La velocidad «posible» es la que deja tiro con reserva y un cable que aguanta (el del caso,
+  con la carga de cada cable del aparejo); las demás
   restricciones del optimizador (apertura de la red, portón) se avisan pero no la descartan.
 - Los costos sin dato quedan fuera del total: el resultado es incompleto y se avisa.
 

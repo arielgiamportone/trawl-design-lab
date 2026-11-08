@@ -91,6 +91,14 @@ $g_4$, $S_{req}$ es la superficie por portón que pide la regla del libro (ROB =
 promedio 2–4 kn, `Port!F215`): depende del buque y de la hélice, no de $(s, v)$, y funciona como
 una verificación previa del aparejo.
 
+$F_T$, $R_T$ y $S_{req}$ son los del resultado del caso (la ventana de velocidad de
+{doc}`19_ventana_velocidad`): con fondo indicado $R_T$ suma el rozamiento; en la pareja $F_T$ es
+el de los dos buques; con tangones, gemelo o vara $R_T$ es la de todo el arte
+({doc}`26_aparejos_dobles_y_vara`), $g_3$ usa la carga de cada cable y $\dot A$, $\dot V$ y $E$
+cuentan las bocas de todas las redes. Con la pareja, la vara o el método camaronero $A_H$ es la
+abertura del motor, sin el tope geométrico. Los cables de $g_3$ son los que elige el motor (el
+del caso si lo trae).
+
 ## Método
 
 1. **Malla.** Para cada escala $s_i$ se corre el motor **una vez** sobre una malla fina de

@@ -92,6 +92,14 @@ $g_4$, $S_{req}$ is the area per otter board required by the book's rule (ROB = 
 2–4 kn average, `Port!F215`): it depends on the vessel and the propeller, not on $(s, v)$, and works
 as a preliminary check of the rigging.
 
+$F_T$, $R_T$ and $S_{req}$ are those of the case's result (the speed window of
+{doc}`19_ventana_velocidad`): with a seabed given, $R_T$ adds the friction; in pair trawling $F_T$
+is that of both vessels; with outriggers, twin or beam trawl $R_T$ is that of the whole gear
+({doc}`26_aparejos_dobles_y_vara`), $g_3$ uses the load on each warp and $\dot A$, $\dot V$ and
+$E$ count the mouths of all the nets. With pair, beam or the shrimp method $A_H$ is the engine's
+opening, without the geometric cap. The warps of $g_3$ are those the engine chooses (the case's,
+if it has one).
+
 ## Method
 
 1. **Grid.** For each scale $s_i$ the engine is run **once** on a fine speed grid (0.05 kn, from 1

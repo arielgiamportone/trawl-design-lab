@@ -10,11 +10,18 @@ Magnitudes por velocidad (red estándar, modo corregido por defecto):
   con tope en la DPA geométrica (Mec!L211 sin el redondeo a metro entero). Es la única abertura
   horizontal del motor que depende de ``v``: la DPA geométrica y la AH promedio de Dim!F61 son
   constantes y no ven que una red lenta no termina de abrirse; el tope evita que una red chica
-  con el mismo portón "abra" más de lo que permite el aparejo.
+  con el mismo portón "abra" más de lo que permite el aparejo. Con pareja, vara o el método
+  camaronero (:attr:`~trawlkit.model.DesignCase.fixed_opening`) es la AH del motor
+  (``spread.horizontal_opening_m``), sin tope.
 * **AV** = AV de Baranov–Fridman a la velocidad ``v`` (``spread.vertical.fridman.std.av_m``) con
-  tope en el 6,5 % de la circunferencia (Prado y Dremière, "mucha AV").
-* **R_T** = resistencia total (red + boyas + cables + dos portones, ``warps.total.std``).
-* **F_T** = tiro de Fridman del propulsor elegido (``power.ft_kgf``).
+  tope en el 6,5 % de la circunferencia (Prado y Dremière, "mucha AV"); con el método camaronero
+  o la vara, la AV del motor (0,04·lima o el alto del patín).
+* **R_T** y **F_T** = demanda y tiro de la ventana de velocidad del motor
+  (``performance.design``): la resistencia total (red + boyas + cables + dos portones,
+  ``warps.total.std``) más el rozamiento con el fondo, o la de todo el arte con tangones, gemelo
+  o vara (``multirig.demand``); el tiro de Fridman del propulsor elegido (``power.ft_kgf``, el
+  doble en la pareja). Son los mismos números que el resultado del caso (Fase 20.6).
+* Las tasas de área y volumen y la energía por m² cuentan las ``n_nets`` bocas del aparejo.
 """
 
 from __future__ import annotations
@@ -32,7 +39,7 @@ from trawlkit import rigging
 from trawlkit.compat import Compat
 from trawlkit.i18n import t
 from trawlkit.io import Door, PropellerType, load_catalogue, load_doors
-from trawlkit.model import DesignCase, DesignResult, run
+from trawlkit.model import DesignCase, DesignResult, _case_warps, run, warp_load_kgf
 from trawlkit.optimize.scaling import scale_count, scale_net
 from trawlkit.units import KNOT_TO_MS
 
@@ -134,17 +141,17 @@ class Evaluation:
     av_fridman_m: float
     """AV de Baranov–Fridman a ``v`` sin tope [m]."""
     area_rate_m2_h: float
-    """Área barrida por hora AH·v·3600 [m²/h]."""
+    """Área barrida por hora n·AH·v·3600, con las ``n`` redes del aparejo [m²/h]."""
     volume_rate_m3_h: float
-    """Volumen filtrado por hora AH·AV·v·3600 [m³/h]."""
+    """Volumen filtrado por hora n·AH·AV·v·3600 [m³/h]."""
     demand_kgf: float
-    """Resistencia total R_T(v) [kgf]."""
+    """Resistencia total R_T(v) de todo el arte, la del motor (``performance.design``) [kgf]."""
     available_kgf: float
-    """Tiro disponible F_T(v) [kgf]."""
+    """Tiro disponible F_T(v), el del motor (``performance.design``) [kgf]."""
     thrust_margin: float
     """F_T/R_T − 1."""
     energy_kgf_m_per_m2: float
-    """Trabajo de remolque por m² barrido, R_T/AH [kgf·m/m²]."""
+    """Trabajo de remolque por m² barrido, R_T/(n·AH) [kgf·m/m²]."""
     net_drag_kgf: float
     dpa_geometric_m: float
     """DPA geométrica del libro (Mec!L211, redondeada a metro entero) [m]."""
@@ -194,6 +201,10 @@ class Curves:
     footrope_m: float
     door_required_m2: float
     warp_min_diameter_mm: float
+    warp_load_kgf: FloatArray
+    """Resistencia que remolca cada cable (:func:`trawlkit.model.warp_load_kgf`) [kgf]."""
+    n_nets: int
+    """Redes del aparejo (bocas que barren)."""
     result: DesignResult = field(repr=False)
 
 
@@ -294,12 +305,20 @@ class Evaluator:
             self.limits.v_max_kn,
             (*case.speeds_kn, case.ballast_min_speed_kn, case.ballast_max_speed_kn),
         )
-        # El cable se verifica aquí a cada v; el motor lo selecciona a la menor velocidad de la
-        # malla para que una red grande no aborte la corrida (select_warp sin candidatos).
-        self.case = dataclasses.replace(case, speeds_kn=grid, warp_design_speed_kn=grid[0])
+        # La malla fina contiene las velocidades del caso: los promedios del libro (separación de
+        # Fridman, superficie requerida, flotación, AH de Dim!F61) se toman sobre ellas y la
+        # velocidad de diseño del cable (y de la tijera) es la del caso, así la corrida da lo
+        # mismo que model.run(case) en esas velocidades (Fase 20.6).
+        self.case = dataclasses.replace(
+            case,
+            speeds_kn=grid,
+            averaging_speeds_kn=case.averaging_speeds_kn or case.speeds_kn,
+        )
         self.speeds = np.asarray(grid, dtype=float)
         if warps is None:
-            warps = load_catalogue("warps").items
+            # Los mismos cables que elige el motor: el del caso, los del catálogo de componentes
+            # filtrado o los del libro.
+            warps = _case_warps(self.case) or load_catalogue("warps").items
         self._warps = sorted(
             (
                 (str(w["id"]), float(w["diameter_mm"]), float(w["breaking_load_t"]) * 1000.0)
@@ -342,7 +361,14 @@ class Evaluator:
         hit = self._cache.get(key)
         if hit is not None:
             return dataclasses.replace(hit, s=s, net_id=net.id)
-        case = dataclasses.replace(self.case, net=net, net_modified=mod, float_count=count)
+        # Sin float_count en el caso, el motor toma las boyas de la spec (escaladas por scale_net)
+        # con su diámetro (Fase 19.8); fijarlas acá le haría elegir otro diámetro del catálogo.
+        case = dataclasses.replace(
+            self.case,
+            net=net,
+            net_modified=mod,
+            float_count=None if self.case.float_count is None else count,
+        )
         try:
             result = run(case)
         except (ZeroDivisionError, IndexError, FloatingPointError) as exc:
@@ -350,41 +376,42 @@ class Evaluator:
                 t("el motor no puede calcular la red escalada s = {s}: {exc}", s=s, exc=exc)
             ) from exc
         self.runs += 1
-        req = result.doors.required_area_m2
-        lo, hi = case.required_area_speed_range_kn
-        book_v = [v for v in self.book_speeds if lo <= v <= hi]
-        idx = [int(np.argmin(np.abs(self.speeds - v))) for v in book_v]
-        # Port!F215: promedio de la superficie requerida en las velocidades del libro (2–4 kn),
-        # con la misma función (y el mismo factor de potencia, Fase 20.1b) que el motor.
-        door_req = (
-            rigging.required_area_summary(
-                req[idx],
-                np.asarray(book_v, dtype=float),
-                lo,
-                hi,
-                bhp=result.power.fridman.bhp,
-                compat=case.compat,
-            ).per_door_m2
-            if idx
-            else result.doors.required_area.per_door_m2
-        )
         dims = result.dimensions.std
+        spread = result.spread
+        mr = result.multirig
+        ones = np.ones_like(self.speeds)
+        ah = np.asarray(spread.fridman.dpa_std_m, dtype=float)
+        ah_cap = _dpa_geometric_m(result)
+        if case.fixed_opening:
+            # Pareja, vara o método camaronero: la AH del motor (sin tope geométrico del libro).
+            ah_cap = float(spread.horizontal_opening_m)
+            ah = ah_cap * ones
+        av = np.asarray(spread.vertical.fridman.std.av_m, dtype=float)
+        av_max = float(spread.vertical.prado_m["high_opening"])
+        if case.uses_shrimp_opening or case.is_beam:
+            # AV del motor: 0,04·lima (método camaronero) o el alto del patín (vara).
+            av_max = float(spread.vertical_opening_m if mr is None else mr.vertical_opening_m)
+            av = av_max * ones
+        window = result.performance.design
         curves = Curves(
             s=s,
             net_id=net.id,
             speeds_kn=self.speeds,
-            ah_m=np.asarray(result.spread.fridman.dpa_std_m, dtype=float),
-            av_m=np.asarray(result.spread.vertical.fridman.std.av_m, dtype=float),
-            demand_kgf=np.asarray(result.warps.total.std, dtype=float),
-            available_kgf=np.asarray(result.power.ft_kgf, dtype=float),
+            ah_m=ah,
+            av_m=av,
+            demand_kgf=np.asarray(window.demand_kgf, dtype=float),
+            available_kgf=np.asarray(window.available_kgf, dtype=float),
             net_drag_kgf=np.asarray(result.drag.rn.std, dtype=float),
-            dpa_geometric_m=float(result.spread.dpa_geometric_m),
-            dpa_geometric_exact_m=_dpa_geometric_m(result),
-            av_max_m=float(result.spread.vertical.prado_m["high_opening"]),
+            dpa_geometric_m=float(spread.dpa_geometric_m),
+            dpa_geometric_exact_m=ah_cap,
+            av_max_m=av_max,
             headrope_m=float(dims.headrope_m),
             footrope_m=float(dims.footrope_m),
-            door_required_m2=door_req,
+            # Port!F215 del motor: promedio en las velocidades del caso, factor de potencia.
+            door_required_m2=float(result.doors.required_area.per_door_m2),
             warp_min_diameter_mm=float(result.warps.diameter_mm),
+            warp_load_kgf=warp_load_kgf(result),
+            n_nets=case.n_nets,
             result=result,
         )
         self._cache[key] = curves
@@ -432,10 +459,12 @@ class Evaluator:
         av_f = av
         av = min(av_f, c.av_max_m)
         v_ms = v * KNOT_TO_MS
+        swept = c.n_nets * ah  # todas las bocas del aparejo (como el modo guiado, Fase 19.8d)
         safety = (
             case.warp_safety_factor if lim.warp_safety_factor is None else lim.warp_safety_factor
         )
-        warp_id, best_bl = self._warp(c.warp_min_diameter_mm, safety * rt)
+        warp_rt = at(c.warp_load_kgf)
+        warp_id, best_bl = self._warp(c.warp_min_diameter_mm, safety * warp_rt)
         assert case.door.area_m2 is not None
         door_area = float(case.door.area_m2)
         constraints = (
@@ -456,7 +485,7 @@ class Evaluator:
             _constraint(
                 "warp",
                 best_bl,
-                safety * rt,
+                safety * warp_rt,
                 None,
                 t("rotura de algún cable del catálogo ≥ {k:g}·R_T", k=safety),
             ),
@@ -487,12 +516,12 @@ class Evaluator:
             dpa_fridman_m=dpa_f,
             av_m=av,
             av_fridman_m=av_f,
-            area_rate_m2_h=ah * v_ms * 3600.0,
-            volume_rate_m3_h=ah * av * v_ms * 3600.0,
+            area_rate_m2_h=swept * v_ms * 3600.0,
+            volume_rate_m3_h=swept * av * v_ms * 3600.0,
             demand_kgf=rt,
             available_kgf=ft,
             thrust_margin=ft / rt - 1.0,
-            energy_kgf_m_per_m2=rt / ah,
+            energy_kgf_m_per_m2=rt / swept,
             net_drag_kgf=at(c.net_drag_kgf),
             dpa_geometric_m=c.dpa_geometric_m,
             headrope_m=c.headrope_m,

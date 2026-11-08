@@ -291,6 +291,7 @@ pair_wing_spread_m debe ser positivo: pair_wing_spread_m must be positive
 el portón {door!r} necesita area_m2 y length_m: otter board {door!r} needs area_m2 and length_m
 ft_propeller {prop!r} no tiene KF de Fridman tabulado: ft_propeller {prop!r} has no tabulated Fridman KF
 warp_design_speed_kn debe pertenecer a speeds_kn: warp_design_speed_kn must be one of speeds_kn
+averaging_speeds_kn debe ser un subconjunto de speeds_kn: averaging_speeds_kn must be a subset of speeds_kn
 ballast_min/max_speed_kn deben pertenecer a speeds_kn: ballast_min/max_speed_kn must be among speeds_kn
 velocidad {v} kn no está en speeds_kn: speed {v} kn is not in speeds_kn
 ? 'flotation_rounding_inconsistent: la máscara de Flot!M43:M50 se aplica al primer bloque de la hoja ({first}), no al buque de diseño ({vessel})'

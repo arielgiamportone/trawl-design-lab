@@ -199,6 +199,11 @@ class DesignCase:
     net_modified: NetSpec | None = None
     class_vessels: tuple[Vessel, ...] = ()
     speeds_kn: tuple[float, ...] = DEFAULT_SPEEDS_KN
+    #: Velocidades de los promedios del libro (separación de Fridman y superficie requerida entre
+    #: 2 y 4 kn, flotación de 1 a 3 kn); ``None`` → todas las de ``speeds_kn``. El optimizador
+    #: (:class:`~trawlkit.optimize.evaluate.Evaluator`) corre el motor sobre una malla fina y las
+    #: fija en las del caso, así esos promedios dan lo mismo que la corrida del caso (Fase 20.6).
+    averaging_speeds_kn: tuple[float, ...] | None = None
     compat: Compat = Compat.CORRECTED
     #: Calibraciones del modo corregido (Fase 20.5): factor de cable de la DPA de Fridman
     #: (:func:`dp_warp_factor`) y CL efectivo del portón polivalente sin polar publicada
@@ -407,6 +412,11 @@ class DesignCase:
             )
         if self.warp_design_speed_kn not in speeds:
             raise ValueError(t("warp_design_speed_kn debe pertenecer a speeds_kn"))
+        if self.averaging_speeds_kn is not None:
+            avg = tuple(float(v) for v in self.averaging_speeds_kn)
+            if not avg or not all(np.isclose(speeds, v).any() for v in avg):
+                raise ValueError(t("averaging_speeds_kn debe ser un subconjunto de speeds_kn"))
+            object.__setattr__(self, "averaging_speeds_kn", avg)
         for v in (self.ballast_min_speed_kn, self.ballast_max_speed_kn):
             if v not in speeds:
                 raise ValueError(t("ballast_min/max_speed_kn deben pertenecer a speeds_kn"))
@@ -573,6 +583,23 @@ class DesignCase:
     def speeds_ms(self) -> FloatArray:
         """Velocidades en m/s (``0.5144·kn``, PotOK!B272)."""
         return self.speeds * KNOT_TO_MS
+
+    @property
+    def averaging_mask(self) -> NDArray[np.bool_]:
+        """Velocidades de ``speeds_kn`` que entran en los promedios del libro."""
+        if self.averaging_speeds_kn is None:
+            return np.ones(len(self.speeds_kn), dtype=bool)
+        avg = np.asarray(self.averaging_speeds_kn, dtype=float)
+        return np.asarray([np.isclose(avg, v).any() for v in self.speeds_kn], dtype=bool)
+
+    @property
+    def fixed_opening(self) -> bool:
+        """Si la AH del motor no sale de la DPA de Fridman a cada velocidad (Fase 20.6).
+
+        Pareja (separación de los buques), vara (largo de la vara) y método camaronero
+        (tijera o ``k``·lima, Fase 19.7b): la abertura es la de ``spread.horizontal_opening_m``.
+        """
+        return self.is_pair or self.is_beam or self.uses_shrimp_opening
 
     def speed_index(self, speed_kn: float) -> int:
         """Posición de una velocidad en ``speeds_kn``."""
@@ -1207,7 +1234,7 @@ def dp_warp_factor(case: DesignCase, rig: RiggingGeometry) -> float:
     ``EXCEL``, sin calibrar, en la pareja y la vara (sin DPA de Fridman) y con el método de
     aberturas de las camaroneras (tangones y gemelo, Fase 19.7b), que no usa el cable.
     """
-    if not case.calibrated or case.is_pair or case.is_beam or case.uses_shrimp_opening:
+    if not case.calibrated or case.fixed_opening:
         return 1.0
     return rigging.dp_warp_factor(rig.towing.warp_m, rig.towing.depth_m, case.compat)
 
@@ -1246,7 +1273,7 @@ def fridman_door_spread_m(
     )
     lo, hi = case.required_area_speed_range_kn
     v = np.asarray(case.speeds)
-    dpa = float(np.mean(_arr(fr.dpa_std_m)[(v >= lo) & (v <= hi)]))
+    dpa = float(np.mean(_arr(fr.dpa_std_m)[(v >= lo) & (v <= hi) & case.averaging_mask]))
     lrw = rig.towing.net_length_working_m
     rigging_m = rig.crowfoot.length_m + rig.crowfoot.extension_m + case.sweeps_m
     rigging_m += rig.bridles.upper_m
@@ -1300,8 +1327,9 @@ def _stage_doors(
         areas = _arr(rigging.required_area_m2(rob, polar.cd, v_ms))  # E210:E218 (regla del libro)
         # F212, F215; con el factor de potencia por encima de 180 BHP en modo corregido (Fase
         # 20.1b). La potencia es la BHP que da FT (Fridman), la misma entrada de la regla.
+        avg = case.averaging_mask
         summary = rigging.required_area_summary(
-            areas, case.speeds, lo, hi, bhp=bhp, compat=case.compat
+            areas[avg], case.speeds[avg], lo, hi, bhp=bhp, compat=case.compat
         )
         return areas, summary
 
@@ -1324,7 +1352,8 @@ def _stage_doors(
         zero = 0.0 * v_ms
         forces = rigging.door_forces_kgf(door.area_m2, 0.0, 0.0, v_ms)
         areas, force = zero, zero
-        req = rigging.required_area_summary(zero, case.speeds, lo, hi)
+        avg = case.averaging_mask
+        req = rigging.required_area_summary(zero[avg], case.speeds[avg], lo, hi)
         req_class = {vid: req for vid in req_class}
         per_door_class = 0.0
         moments = rigging.moment_balance(zero, drag.rn.std, cop.d_m, case.sweep_lever_m)
@@ -1500,9 +1529,13 @@ def _stage_floats(
         )
 
     class_fridman = {cv.id: fridman_for(cv) for cv in case.vessel_class}
+    avg = case.averaging_mask
     class_avg = {
         vid: rigging.flotation_fridman_average_kgf(
-            _arr(p.std.total_kgf), _arr(p.mod.total_kgf), case.speeds, case.flotation_max_speed_kn
+            _arr(p.std.total_kgf)[avg],
+            _arr(p.mod.total_kgf)[avg],
+            case.speeds[avg],
+            case.flotation_max_speed_kn,
         )
         for vid, p in class_fridman.items()
     }  # N43 / N55
@@ -1653,7 +1686,8 @@ def _stage_spread(
     cut = rigging.dpa_from_cut_angle_m(
         d_std.total_length_m, case.working_u2, d_std.cut_angle_deg
     )  # L233
-    ah = rigging.horizontal_opening_m(cut, working, geometric, _arr(table.dpa_std_m))  # Dim!F61
+    dpa_avg = _arr(table.dpa_std_m)[case.averaging_mask]  # AVERAGE(K193:K201)
+    ah = rigging.horizontal_opening_m(cut, working, geometric, dpa_avg)  # Dim!F61
     if case.is_pair or case.is_beam:
         # Sin portones no hay DPA de Fridman: la abertura la fija la separación de la pareja o el
         # largo de la vara.
@@ -1671,7 +1705,7 @@ def _stage_spread(
                     doors.book_spread_m, rig.towing.net_length_working_m, **parts
                 ),
                 rigging.dpa_geometric_m(d_std.footrope_m, doors.book_spread_m, **parts),
-                _arr(table.dpa_std_m),
+                dpa_avg,
             )
         shrimp_opening = shrimp_opening_of(case, d_std, rig, doors, book_ah)
         ah = shrimp_opening.horizontal_opening_m
@@ -2271,6 +2305,18 @@ def _rig_warps(case: DesignCase, warps: WarpStage, mr: RigStage) -> WarpStage:
         quantity_m=mr.n_warps * warps.warp_m + case.warp_spare_fraction * warps.warp_m,
         stretch=_warp_stretch(warps.angles, loads, selection, warps.warp_m, per_group),
     )
+
+
+def warp_load_kgf(result: DesignResult) -> FloatArray:
+    """Resistencia que remolca cada cable a cada velocidad, red estándar [kgf] (Fase 20.6).
+
+    La que dimensiona el cable (Rem!E267 a ``warp_design_speed_kn``): la total del libro con
+    portones o pareja; con tangones, gemelo o vara, ``RigStage.warp_load`` (una red por cable con
+    tangones y varas, todo el arte en el gemelo). La usa también el optimizador para verificar el
+    cable a cada velocidad.
+    """
+    mr = result.multirig
+    return _arr(result.warps.total.std if mr is None else mr.warp_load.std)
 
 
 def _rig_notes(case: DesignCase, result: RigStage, doors: DoorStage) -> list[str]:

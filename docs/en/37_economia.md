@@ -70,9 +70,11 @@ $$
 P = \frac{R_T(v)\, v}{\eta},
 $$
 
-with $R_T(v)$ the total drag from the calculation engine ({doc}`19_ventana_velocidad`) and
-$\eta$ a towing efficiency (pull × speed over brake power) of 0.5 by default (TO BE VERIFIED;
-it includes propeller, gearbox and losses). The power is capped at that of the vessel. On the
+with $R_T(v)$ the total drag from the calculation engine ({doc}`19_ventana_velocidad`): the same
+demand and pull as the case's speed window, with the seabed friction and, with outriggers, twin
+or beam trawl, the whole gear (both nets, their otter boards, warps and bridles;
+{doc}`26_aparejos_dobles_y_vara`), and $\eta$ a towing efficiency (pull × speed over brake
+power) of 0.5 by default (TO BE VERIFIED; it includes propeller, gearbox and losses). The power is capped at that of the vessel. On the
 steam to the fishing ground a fraction of the engine power is used (0.8 by default) and during
 shooting and hauling another (0.2). The fuel is $P \cdot \text{SFC} / \rho$, with a specific
 fuel consumption of 0.22 kg/kWh and diesel of 0.84 kg/L, and the lubricant a proportion of the
@@ -87,6 +89,9 @@ in proportion:
 $$
 C(v) = C_\text{ref}\;\frac{A_H(v)\, v}{A_H(v_\text{ref})\, v_\text{ref}}.
 $$
+
+With outriggers or a twin rig the swept area adds the mouths of both nets ($n \cdot A_H \cdot v$,
+as in guided mode), and with the shrimp method or the beam trawl $A_H$ is the engine's opening.
 
 It is a simple hypothesis: it does not take into account the escape of fish at low speed or the
 herding by the otter boards and the bridles, which depend on the species. The revenue is the
@@ -203,7 +208,8 @@ change, and that is why the app does not come with prices of its own.
   variation of abundance on the fishing ground.
 - Consumption uses a constant towing efficiency and specific fuel consumption; an old engine or a
   poorly matched propeller consumes more.
-- The “feasible” speed is the one that leaves pull with reserve and a warp that holds; the other
+- The “feasible” speed is the one that leaves pull with reserve and a warp that holds (the case's
+  warp, with the load on each warp of the rig); the other
   constraints of the optimizer (net opening, otter board) are warned about but do not rule it
   out.
 - Costs without a figure are left out of the total: the result is incomplete, with a warning.
