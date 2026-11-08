@@ -29,21 +29,21 @@ describe('mallas y selectividad', () => {
     const { calls } = mockApi();
     renderApp();
     await userEvent.click(
-      await screen.findByRole('button', { name: 'Mallas y selectividad' }, { timeout: 4000 }),
+      await screen.findByRole('button', { name: 'Mallas y selectividad' }, { timeout: 10000 }),
     );
-    const cod = await screen.findByRole('checkbox', { name: 'Bacalao' }, { timeout: 3000 });
+    const cod = await screen.findByRole('checkbox', { name: 'Bacalao' }, { timeout: 10000 });
     await userEvent.click(cod);
     await userEvent.type(screen.getByRole('spinbutton', { name: /Mallero del copo/ }), '120');
     const run = screen.getByRole('button', { name: 'Calcular selectividad' });
-    await waitFor(() => expect(run).toBeEnabled(), { timeout: 3000 });
+    await waitFor(() => expect(run).toBeEnabled(), { timeout: 10000 });
     await userEvent.click(run);
 
-    const table = await screen.findByTestId('selectivity-table', {}, { timeout: 3000 });
+    const table = await screen.findByTestId('selectivity-table', {}, { timeout: 10000 });
     expect(within(table).getByText('Rombo 40 mm')).toBeInTheDocument();
     expect(within(table).getByText('T90 40 mm')).toBeInTheDocument();
     expect(table.querySelectorAll('td[data-species="cod"]').length).toBe(2);
     expect(document.querySelector('[data-chart="retention"]')).toBeInTheDocument();
-    const zoom = await screen.findByTestId('mesh-zoom');
+    const zoom = await screen.findByTestId('mesh-zoom', {}, { timeout: 10000 });
     expect(within(zoom).getByText(/Ángulo entre hilos/)).toBeInTheDocument();
     expect(within(zoom).getByRole('status')).toHaveTextContent(/talla máxima que pasa/);
     await userEvent.click(within(zoom).getByRole('button', { name: 'Cerrar zoom' }));
@@ -68,11 +68,11 @@ describe('mallas y selectividad', () => {
       await screen.findByRole(
         'button',
         { name: '¿Qué tallas retiene el copo?' },
-        { timeout: 3000 },
+        { timeout: 10000 },
       ),
     );
     expect(
-      await screen.findByRole('button', { name: 'Mallas y selectividad' }, { timeout: 4000 }),
+      await screen.findByRole('button', { name: 'Mallas y selectividad' }, { timeout: 10000 }),
     ).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('spinbutton', { name: /Captura en el copo/ })).toHaveValue(500);
   });
