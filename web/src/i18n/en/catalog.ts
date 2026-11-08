@@ -69,7 +69,7 @@ export const catalog: Messages['catalog'] = {
     ballast_kg: 'Ballast',
   },
   intro:
-    'Nets from public FAO documents, digitized with the provenance of every value. When you use a catalogue net, it is computed with its own case: a vessel of its design power, and the otter board and depth from the plan.',
+    'Nets from public technical documents (FAO, BOBP, SEAFDEC and INIDEP), digitized with the provenance of every value. When you use a catalogue net, it is computed with its own case: a vessel of its design power, and the otter board and depth from the plan.',
   filters: 'Catalogue filters',
   search: 'Search nets',
   searchPlaceholder: 'Search (name, species, document)…',

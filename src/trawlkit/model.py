@@ -1482,6 +1482,61 @@ def _case_warps(case: DesignCase) -> list[dict[str, Any]] | None:
     return [w.model_dump() for w in load_components("wire", **flt)]
 
 
+def warp_pools(case: DesignCase) -> list[list[dict[str, Any]]]:
+    """Cables para elegir, en orden de preferencia (Fase 20.7).
+
+    El primero es el de siempre (:func:`_case_warps` o el catálogo del libro). Si es el catálogo
+    del libro (6x19+1 Seale de 9,5 a 18 mm, 18,46 t) y el modo es corregido, el segundo le suma
+    los cables de acero genéricos del catálogo de componentes (hasta 26 mm): se usa sólo si
+    ninguno del libro alcanza la rotura mínima, así la A-3 sigue eligiendo del libro.
+    """
+    from trawlkit.components import load_components
+
+    own = _case_warps(case)
+    book = [dict(it) for it in load_catalogue("warps").items]
+    if own is not None:
+        return [own]
+    if case.compat is Compat.EXCEL:
+        return [book]
+    generic = [w.model_dump() for w in load_components("wire") if not getattr(w, "brand", None)]
+    return [book, [*book, *generic]]
+
+
+def select_case_warp(
+    case: DesignCase, min_diameter_mm: float, min_breaking_load_kgf: float
+) -> rigging.WarpSelection:
+    """Cable del caso (Cab!D11) entre los de :func:`warp_pools`, en orden de preferencia.
+
+    Primero el primero que cumple Ø mínimo y rotura. Si ninguno (sólo con la selección
+    automática en modo corregido, Fase 20.7), el más delgado que cumple la rotura aunque quede
+    por debajo del Ø de Pérez Águila: esa regla (Rem!E80, logarítmica en el NHP) está ajustada a
+    buques chicos y con miles de HP pide más de lo que llevan los buques reales; la rotura es el
+    criterio de seguridad. Si tampoco, el de mayor rotura, con ``satisfies_breaking_load``
+    falso.
+    """
+    pools = warp_pools(case)
+    first = rigging.select_warp(min_diameter_mm, min_breaking_load_kgf, case.compat, pools[0])
+    if first.satisfies_breaking_load or len(pools) == 1:
+        return first
+    for pool in pools[1:]:
+        wider = rigging.select_warp(min_diameter_mm, min_breaking_load_kgf, case.compat, pool)
+        if wider.satisfies_breaking_load:
+            return wider
+    for pool in pools:
+        relaxed = rigging.select_warp(0.0, min_breaking_load_kgf, case.compat, pool)
+        if relaxed.satisfies_breaking_load:
+            return relaxed
+    w = max(pools[-1], key=lambda w: (float(w["breaking_load_t"]), float(w["diameter_mm"])))
+    return rigging.WarpSelection(
+        id=str(w["id"]),
+        construction=str(w["construction"]),
+        diameter_mm=float(w["diameter_mm"]),
+        weight_kg_per_m=float(w["weight_kg_per_m"]),
+        breaking_load_t=float(w["breaking_load_t"]),
+        satisfies_breaking_load=False,
+    )
+
+
 def _float_catalogue() -> tuple[tuple[float, ...], tuple[float, ...]]:
     """Diámetros y flotaciones unitarias del catálogo de boyas (Flot!D72:E82)."""
     items = load_catalogue("floats").items
@@ -1885,6 +1940,16 @@ def _stage_ballast(
         float(fridman.mod[case.speed_index(case.ballast_min_speed_kn)]),
         float(fridman.std[case.speed_index(case.ballast_max_speed_kn)]),
     )  # F225:F226
+    if case.compat is Compat.CORRECTED:
+        # Fase 20.7: el libro toma el mínimo a 1 kn (modificada) y el máximo a 3 kn (estándar)
+        # porque en la A-3 el lastre de Fridman crece con la velocidad. Con un buque de mucho
+        # más tiro que la demanda de la red, F1 = 0,8·FT/4 (que baja con la velocidad) domina y
+        # el lastre a 1 kn supera al de 3 kn (mínimo > máximo). En modo corregido los límites
+        # son la envolvente de las dos redes entre esas velocidades; en la A-3 coincide con el
+        # libro.
+        limits = rigging.ballast_limits_envelope(
+            ballast_window(case, fridman.std), ballast_window(case, fridman.mod)
+        )
     chain = rigging.adjust_chain_weight_kg(limits.min_kg, chain_m=case.adjust_chain_m)  # H224
     return BallastStage(
         koyama_kg=rigging.ballast_koyama_kg(dims.headrope_m),  # G159
@@ -1902,6 +1967,16 @@ def _stage_ballast(
         ),
         chain=_ballast_chain(case, limits, chain),
     )
+
+
+def ballast_window(case: DesignCase, ballast_kg: FloatArray | list[float]) -> FloatArray:
+    """Lastre de Fridman entre ``ballast_min_speed_kn`` y ``ballast_max_speed_kn`` (Fase 20.7)."""
+    lo, hi = sorted((case.ballast_min_speed_kn, case.ballast_max_speed_kn))
+    v = np.asarray(case.speeds_kn, dtype=float)
+    # Sólo las velocidades del libro (averaging_mask): la malla fina del optimizador da lo mismo
+    # que model.run(case).
+    mask = case.averaging_mask & (v >= lo - 1e-9) & (v <= hi + 1e-9)
+    return np.asarray(ballast_kg, dtype=float)[mask]
 
 
 def _ballast_chain(
@@ -1991,9 +2066,7 @@ def _stage_warps(
     loads = rigging.working_load_and_breaking_load(
         total.std, case.speeds, case.warp_design_speed_kn, case.warp_safety_factor
     )  # E267, E272
-    selection = rigging.select_warp(
-        diameter, loads.min_breaking_load_kgf, case.compat, items=_case_warps(case)
-    )  # Cab!D11
+    selection = select_case_warp(case, diameter, loads.min_breaking_load_kgf)  # Cab!D11
     return WarpStage(
         warp_m=warp_m,
         sweeps_plus_bridle_m=rigging_m,
@@ -2294,9 +2367,7 @@ def _rig_warps(case: DesignCase, warps: WarpStage, mr: RigStage) -> WarpStage:
     loads = rigging.working_load_and_breaking_load(
         mr.warp_load.std, case.speeds, case.warp_design_speed_kn, case.warp_safety_factor
     )
-    selection = rigging.select_warp(
-        warps.diameter_mm, loads.min_breaking_load_kgf, case.compat, items=_case_warps(case)
-    )
+    selection = select_case_warp(case, warps.diameter_mm, loads.min_breaking_load_kgf)
     per_group = 2 if mr.kind == "twin" else 1
     return replace(
         warps,
@@ -2655,7 +2726,6 @@ def _propeller_notes(
     if pp is None:
         return []
     win = performance.windows[f"{PROPELLER_MODEL_KEY}_std"]
-    vmax = win.max_speed_kn
     out = [
         t(
             "propeller_pull: tiro a punto fijo {bp:.2f} t por la hélice de {d:g} m "
@@ -2668,11 +2738,37 @@ def _propeller_notes(
             w=pp.bollard_pull_wartsila_t,
             ideal=pp.bollard_pull_momentum_t,
             prado=pp.bollard_pull_prado_t,
-            vmax=t("ninguna") if vmax is None else f"{vmax:.2f} kn",
+            vmax=win.max_speed_label(),
         )
     ]
     out.extend(f"propeller_pull: {n}" for n in pp.notes)
     return out
+
+
+def _ballast_notes(case: DesignCase, ballast: BallastStage) -> list[str]:
+    """Nota de los límites de lastre cuando la regla del libro da mínimo > máximo (Fase 20.7)."""
+    if case.compat is not Compat.CORRECTED:
+        return []
+    book = rigging.ballast_limits(
+        float(ballast.fridman.mod[case.speed_index(case.ballast_min_speed_kn)]),
+        float(ballast.fridman.std[case.speed_index(case.ballast_max_speed_kn)]),
+    )  # Flot!F225:F226
+    if book.min_kg <= book.max_kg:
+        return []
+    return [
+        t(
+            "ballast_limits: el lastre de Fridman no crece con la velocidad (el término "
+            "0,8·FT/4 del tiro del buque domina sobre RN/4); la regla del libro (modificada a "
+            "{v0:g} kn, estándar a {v1:g} kn) daría mínimo {bmin:g} kg > máximo {bmax:g} kg: se "
+            "toma la envolvente de las dos redes entre {v0:g} y {v1:g} kn, {min:g}–{max:g} kg",
+            v0=case.ballast_min_speed_kn,
+            v1=case.ballast_max_speed_kn,
+            bmin=book.min_kg,
+            bmax=book.max_kg,
+            min=ballast.limits.min_kg,
+            max=ballast.limits.max_kg,
+        )
+    ]
 
 
 def _door_area_notes(doors: DoorStage, power: PowerStage) -> list[str]:
@@ -2732,6 +2828,7 @@ def run(case: DesignCase) -> DesignResult:
     )
     bridles = _stage_bridles(case, dimensions, rig, doors, spread)
     ballast = _stage_ballast(case, dimensions, floats)
+    notes.extend(_ballast_notes(case, ballast))
     warps = _stage_warps(case, dimensions, power, drag, rig, doors, bridles, floats)
     multi: RigStage | None = None
     if case.is_multi:  # Fase 19.5: tangones, gemelo o vara
@@ -2744,6 +2841,17 @@ def run(case: DesignCase) -> DesignResult:
         warps = replace(warps, winch=winch)
         notes.extend(winch.warnings)
     notes.extend(_propeller_notes(case, power, performance))
+    if performance.design.beyond_grid:
+        notes.append(
+            t(
+                "max_speed: el tiro disponible supera la resistencia total en toda la grilla de "
+                "velocidades ({v0:g}–{v1:g} kn); la velocidad máxima remolcable es {label}, no "
+                "{v1:g} kn (amplíe speeds_kn para encontrar el cruce FT = R)",
+                v0=float(case.speeds_kn[0]),
+                v1=float(case.speeds_kn[-1]),
+                label=performance.design.max_speed_label(),
+            )
+        )
     if (
         case.compat is Compat.CORRECTED
         and not case.is_pair
@@ -2832,6 +2940,38 @@ def run(case: DesignCase) -> DesignResult:
                 "door_spread_fridman: separación de portones {spread:.1f} m de la DPA de "
                 "Fridman con el portón del caso (la regla al metro de Port!E13 vale para la A-3)",
                 spread=doors.spread_m,
+            )
+        )
+    book_warps = warp_pools(case)[0]
+    sel = warps.selection
+    if sel.id not in {str(w["id"]) for w in book_warps}:
+        biggest = max(book_warps, key=lambda w: float(w["breaking_load_t"]))
+        notes.append(
+            t(
+                "warp_catalogue: ningún cable del catálogo del libro (hasta {bd:g} mm, {bt:g} t) "
+                "alcanza la rotura mínima {need:.2f} t: se elige el de {d:g} mm {construction} "
+                "({mbl:g} t), genérico del catálogo de componentes",
+                bd=float(biggest["diameter_mm"]),
+                bt=float(biggest["breaking_load_t"]),
+                need=warps.loads.min_breaking_load_kgf / 1000,
+                d=sel.diameter_mm,
+                construction=sel.construction,
+                mbl=sel.breaking_load_t,
+            )
+        )
+    if (
+        case.compat is Compat.CORRECTED
+        and sel.satisfies_breaking_load
+        and sel.diameter_mm < warps.diameter_mm - 1e-9
+    ):
+        notes.append(
+            t(
+                "warp_diameter: el cable de {d:g} mm cumple la rotura mínima pero es más delgado "
+                "que el Ø de Pérez Águila ({dmin:.1f} mm para {nhp:g} HP, Rem!E80); esa regla está "
+                "ajustada a buques chicos y se toma como orientativa",
+                d=sel.diameter_mm,
+                dmin=warps.diameter_mm,
+                nhp=case.warp_sizing_nhp_hp,
             )
         )
     if not warps.selection.satisfies_breaking_load:

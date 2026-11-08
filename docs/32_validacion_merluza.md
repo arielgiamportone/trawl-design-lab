@@ -38,8 +38,8 @@ sensores de telemetría (Simrad TV-80, PX, Scanmar): separación de portones (DP
 (AV) y, a veces, abertura entre puntas de ala (AH), con la profundidad, el cable filado y la
 velocidad de cada lance.
 
-Este capítulo digitaliza cinco redes de esas fuentes y compara el motor con 114 lances medidos,
-una media de campaña y seis simulaciones DynamiT. Los desvíos sistemáticos se describen con
+Este capítulo digitaliza cinco redes de esas fuentes y compara el motor con 115 valores medidos
+(114 lances y 1 media de campaña) y seis simulaciones DynamiT. Los desvíos sistemáticos se describen con
 números. En la Fase 20.5 ({ref}`calibracion-merluza`) se ajustaron dos correcciones de la
 separación de portones: el **CL efectivo de los portones polivalentes** sin polar publicada, que se
 **aplica** en modo corregido, y la respuesta de la DP al cable filado, que **no se aplica** porque
@@ -331,7 +331,10 @@ medio · desvío medio absoluto · fracción dentro de ±20 %, con el factor de 
 V.md_table(["Red", "Serie", "n", "Factor de CL", "Antes", "Calibrado"], H.calibration_rows())
 TOT = H.totals()
 (mb, wb, n), (ma, wa, _) = TOT["before"], TOT["after"]
-print(f"Los {n:.0f} lances medidos: desvío medio absoluto {mb:.1f} % → {ma:.1f} %; dentro de ±20 %: "
+HAULS, MEANS = H.measured_counts()
+assert (HAULS, MEANS) == (114, 1) and HAULS + MEANS == n  # el texto de la introducción
+print(f"Los {n:.0f} valores medidos ({HAULS} lances y {MEANS} media de campaña): desvío medio "
+      f"absoluto {mb:.1f} % → {ma:.1f} %; dentro de ±20 %: "
       f"{100 * wb:.0f} % → {100 * wa:.0f} %".replace(".", ","))
 ```
 
@@ -339,7 +342,7 @@ IAT 151/18 entra en tolerancia (por construcción, porque el factor se ajusta a 
 el Inf. Téc. 66, que no entra en el ajuste; la media de campaña de IC 041/25 baja de +51 % a +21 %,
 justo fuera de ±20 % (es un solo valor, a la profundidad media y con el cable de la tabla). Las
 series con SPF de polar publicada no cambian. Las pruebas (`tests/test_calibration_20_5.py`) fijan
-los umbrales: el desvío medio absoluto de los lances medidos tiene que bajar al menos 5 puntos y la
+los umbrales: el desvío medio absoluto de los valores medidos tiene que bajar al menos 5 puntos y la
 fracción dentro de ±20 % subir al menos 25; IC 041/25 tiene que quedar dentro de ±22 %.
 
 ### Trabajo futuro

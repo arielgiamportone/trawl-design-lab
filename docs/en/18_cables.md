@@ -187,6 +187,14 @@ worn ends).
   required by {eq}`eq-18-rotura`. The selected warp is both thinner than the minimum diameter and
   weaker than the minimum load. `Compat.CORRECTED` chooses the smallest warp that meets both
   conditions: **13 mm, 10.3 t** ({doc}`erratas`).
+- **Beyond the workbook catalogue** (Phase 20.7). The workbook catalogue ends at 18 mm (18.46 t).
+  With automatic selection in corrected mode, if none reaches the minimum breaking load the generic
+  steel wires of the component catalogue (up to 26 mm) are also searched, and if none also meets
+  Pérez Águila's diameter the thinnest one that meets the breaking load is chosen: that rule,
+  logarithmic in the NHP, asks for 28 mm for the 2855 BHP of the BIPO Víctor Angelescu, whose
+  winches carry 20 mm warps {cite:p}`rubio2024calibracion`. With the VA-35.5/45 the engine goes
+  from an 18 mm warp that fails (18.46 t against 28.46 t) to a 26 mm one of 32.4 t, and records it
+  (`warp_catalogue`, `warp_diameter`). The A-3 still chooses from the workbook catalogue.
 
 ## Executable example
 

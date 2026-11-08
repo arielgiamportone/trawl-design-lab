@@ -237,6 +237,7 @@ export const labels: Messages['labels'] = {
     modified: (v: string) => `modified: ${v}`,
     rnSub: 'net drag',
     maxSpeedSub: 'available pull = drag',
+    maxSpeedBeyond: 'beyond the grid: the pull exceeds the drag at every speed',
     warpReq: (v: string) => `required minimum breaking load ${v}`,
     meets: '✓ Meets the breaking load',
     fails: '⚠ Does not meet the breaking load',

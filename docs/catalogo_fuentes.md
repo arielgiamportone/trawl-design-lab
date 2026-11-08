@@ -56,8 +56,11 @@ Documentos revisados que **no** traen planos de red completos:
   mallas del borde.
 - **Supuesto**: valor que el plano no da y el motor necesita, por ejemplo el U1 del cuerpo. Va
   marcado y con la razón; nunca sin marca.
-- Las redes cuyas lecturas no cierran con el validador quedan en estado `draft` y no se publican
-  en la aplicación hasta resolverse.
+- Las redes cuyas lecturas no cierran con el validador quedan en estado `draft` (borrador) hasta
+  resolverse. La aplicación las muestra siempre marcadas: la pestaña del catálogo las lista con
+  «Mostrar borradores» y con la etiqueta *borrador*, y el selector de red del modo experto las
+  incluye con «(borrador)» junto al nombre. El modo guiado y la lista de redes de los lotes y la
+  flota sólo ofrecen redes publicadas.
 - **Derechos**: los documentos son © FAO. El catálogo guarda sólo los datos técnicos transcriptos
   con su cita y enlace; no reproduce las figuras.
 

@@ -4,6 +4,7 @@ import { msg, useT } from '../i18n';
 import { fmtFixed, fmtNum } from '../lib/format';
 import { fmtU, toDisplay, unitLabel } from '../lib/units';
 import { countEdits } from '../lib/panels';
+import { comparisonAfterChange } from '../lib/catalog';
 import { useCase } from '../state/useCase';
 import type { Compat } from '../state/model';
 import { ParamsForm } from './ParamsForm';
@@ -67,14 +68,24 @@ export function CasePanel() {
         <select
           id={`${ids}-net`}
           value={state.net}
-          onChange={(e) =>
-            update((s) => ({
-              ...s,
-              net: e.target.value,
-              edits: { ...s.edits, std: {} },
-              scaled: null,
-            }))
-          }
+          onChange={(e) => {
+            const net = e.target.value;
+            update((s) => {
+              // Fase 20.7: como en el modo guiado, una red de comparación de otro aparejo se
+              // reemplaza por una del mismo (o se quita si es la misma red).
+              const netModified = comparisonAfterChange(catalogs.nets, net, s.netModified);
+              return {
+                ...s,
+                net,
+                netModified,
+                edits:
+                  netModified === s.netModified
+                    ? { ...s.edits, std: {} }
+                    : { ...s.edits, std: {}, mod: {} },
+                scaled: null,
+              };
+            });
+          }}
         >
           {catalogs.nets.length === 0 && <option value={state.net}>{state.net}</option>}
           {groups.map(([group, nets]) => (

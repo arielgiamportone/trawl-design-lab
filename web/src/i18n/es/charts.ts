@@ -20,6 +20,8 @@ export const charts = {
     window: 'Ventana remolcable',
     title: 'Tiro disponible vs resistencia total',
     maxSpeed: (v: string) => `Velocidad máxima remolcable (red estándar): ${v} kn`,
+    maxSpeedBeyond: (v: string) =>
+      `Velocidad máxima remolcable (red estándar): > ${v} kn (fuera de la grilla: el tiro supera la resistencia en todas las velocidades)`,
     notEnough: 'El tiro disponible no alcanza en el rango calculado.',
     note: 'Gris: Prado–Dremière, Koyama, Nomura, Hamuro y su promedio (referencia).',
     caption: 'Tiro disponible y resistencia total por velocidad',

@@ -75,7 +75,7 @@ export const simulate = {
     a: 'El arrastre simulado es sólo el de los hilos (Morison con C',
     b: (cn: string) => ` = ${cn} y C`,
     c: (ct: string) =>
-      ` = ${ct}) más el rozamiento con el fondo: en la red FAO A-3 queda ≈ 50 % por debajo de la RA de DynamiT entre 2 y 4 kn, y la RN empírica del motor (Aberdeen) ≈ 20 % por encima. Las aberturas, en cambio, coinciden: AH dentro del 3 % y AV dentro del 10–20 %. La brecha de resistencia apunta a lo que el modelo no tiene —nudos, vibración y ondulación del paño, sombra hidrodinámica entre hilos y coeficientes del hilo calibrados en flujo uniforme— y no se cierra con C`,
+      ` = ${ct}) más el rozamiento con el fondo: en la red FAO A-3 queda ≈ 50 % por debajo de la RA de DynamiT entre 2 y 4 kn, y la RN empírica del motor (Aberdeen) ≈ 20 % por encima. Las aberturas, en cambio, se parecen más: entre 2 y 4 kn la AH queda dentro del 3 %, y la AV entre −8 % y +22 % de DynamiT con la resolución normal (6; +11 % de sesgo medio, tabla del capítulo 21) y hasta +41 % con la rápida (3), porque una malla gruesa sobrestima la AV. La brecha de resistencia apunta a lo que el modelo no tiene —nudos, vibración y ondulación del paño, sombra hidrodinámica entre hilos y coeficientes del hilo calibrados en flujo uniforme— y no se cierra con C`,
     d: '/C',
     e: ' dentro de los rangos de la literatura (ver el capítulo 21 del libro). Use la simulación para la forma y las aberturas, y el motor para la resistencia de diseño.',
   },

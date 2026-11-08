@@ -47,9 +47,8 @@ def version() -> None:
 @app.command()
 def errata() -> None:
     """Lista las erratas documentadas del modelo Excel original."""
-    from trawlkit.i18n import t
-
     from trawlkit.compat import STATUS_LABELS
+    from trawlkit.i18n import t
 
     for e in ERRATA:
         # Estado en modo corregido (el mismo que muestran la API, la app y los informes).

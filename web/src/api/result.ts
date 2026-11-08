@@ -16,6 +16,8 @@ export interface PerformanceWindow {
   feasible: boolean[];
   feasible_speeds_kn: number[];
   max_speed_kn: number | null;
+  /** El tiro supera la resistencia en toda la grilla: el cruce está más allá (Fase 20.7). */
+  beyond_grid?: boolean;
 }
 
 export interface DesignResult {

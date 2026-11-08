@@ -361,7 +361,11 @@ def towing_chart(result: DesignResult) -> str:
         mk = line((xm, plot.y0), (xm, plot.y0 + plot.h), cls="marker")
         mk.add(Element("title", text=t("Velocidad máxima {v} kn", v=fmt(win.max_speed_kn))))
         out.append(Element("g", {"data-marker": "max_speed"}, [mk]))
-        vmax = t("v máx = {v} kn", v=f"{win.max_speed_kn:.2f}")
+        vmax = (
+            t("v máx > {v} kn (fuera de la grilla)", v=f"{win.max_speed_kn:.2f}")
+            if win.beyond_grid
+            else t("v máx = {v} kn", v=f"{win.max_speed_kn:.2f}")
+        )
         out.append(text((xm + 5, plot.y0 + 12), vmax, "direct"))
     desc = t(
         "Tiro disponible (Fridman, Prado–Dremière, Koyama, Nomura, Hamuro) del buque "
@@ -370,7 +374,7 @@ def towing_chart(result: DesignResult) -> str:
         vessel=case.vessel.id,
         v0=f"{v[0]:g}",
         v1=f"{v[-1]:g}",
-        vmax=fmt(win.max_speed_kn),
+        vmax=("> " if win.beyond_grid else "") + fmt(win.max_speed_kn),
     )
     return _chart(t("Tiro disponible frente a resistencia total"), desc, out)
 

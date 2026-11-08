@@ -61,7 +61,10 @@ $$
 v^* = v_k + (v_{k+1} - v_k)\,\frac{m_k}{m_k - m_{k+1}}, \qquad m_k \ge 0 > m_{k+1}
 $$ (eq-19-vmax)
 
-If the whole vector is feasible, $v^*$ is the last speed; if none is, there is no window. Since
+If the whole vector is feasible, $v^*$ is the last speed, but only as a lower bound: the crossing
+lies beyond the grid. The engine flags it (`SpeedWindow.beyond_grid`, note `max_speed`) and the
+application and the report show «> 5 kn (beyond the grid)» instead of 5 kn (Phase 20.7). If no
+speed is feasible, there is no window. Since
 $R_T$ is convex and $F_T$ linear, linear interpolation between nodes slightly overestimates the
 demand within the interval and $v^*$ stays on the safe side.
 

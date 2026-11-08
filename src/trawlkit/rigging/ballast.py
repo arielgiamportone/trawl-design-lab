@@ -67,6 +67,22 @@ def ballast_limits(ballast_mod_1kn_kg: float, ballast_std_3kn_kg: float) -> Ball
     )
 
 
+def ballast_limits_envelope(*ballast_kg: FloatOrArray) -> BallastLimits:
+    """Mínimo = ROUNDDOWN del menor lastre, máximo = ROUNDUP del mayor (Fase 20.7).
+
+    Envolvente de los lastres de Fridman dados (las dos redes en la ventana de velocidades del
+    lastre), para que siempre sea ``min_kg <= max_kg``. Cuando el lastre crece con la velocidad
+    y la modificada pesa menos a baja velocidad (la A-3) da lo mismo que :func:`ballast_limits`.
+    """
+    values = [float(x) for b in ballast_kg for x in as_array(b).ravel()]
+    if not values:
+        raise ValueError("se necesita al menos un valor de lastre")
+    return BallastLimits(
+        min_kg=float(excel_rounddown(min(values))),
+        max_kg=float(excel_roundup(max(values))),
+    )
+
+
 def adjust_chain_weight_kg(ballast_kg: float, share: float = 0.2, chain_m: float = 2.0) -> float:
     """Peso de la cadena de reglaje = ROUNDUP(lastre·0.2, 0)·L_cadena [kg] (Flot!H224)."""
     return float(excel_roundup(ballast_kg * share)) * chain_m

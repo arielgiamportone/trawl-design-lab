@@ -249,6 +249,9 @@ print(f"Exponente de velocidad de la resistencia: simulación v^{N_SIM:.2f}, "
 # Lo que dice el texto.
 assert VAL.errors["AH"].mean_abs_pct_band < 5
 assert VAL.errors["AV"].mean_abs_pct_band < 20
+# Rango de la AV que cita la nota de la simulación en la app (web/src/i18n/*/simulate.ts).
+AV_BAND = 100 * (np.asarray(VAL.sim["AV"])[band] / np.asarray(VAL.dynamit["AV"])[band] - 1)
+assert -10 < AV_BAND.min() < -5 and 20 < AV_BAND.max() < 25
 assert -55 < VAL.errors["RA"].bias_pct_band < -40
 assert 1.6 < N_SIM < 1.85 and 1.4 < N_DYN < 1.55
 ```
@@ -290,7 +293,8 @@ portones fijos a 32,5 m la red queda abierta aunque no haya arrastre que la tens
 sí calcula los portones, los cierra a 28,5 m a 1 kn.
 
 **Abertura vertical.** La tendencia es la de DynamiT —la red se aplasta al acelerar porque la
-resistencia crece más que la flotación— con un sesgo de +10 % en el rango de pesca, comparable al
+resistencia crece más que la flotación— con un sesgo de +10 % en el rango de pesca (de −8 % a
++22 % entre 2 y 4 kn, el máximo a 2,5–3 kn), comparable al
 de la AV de Fridman, y que baja al refinar la malla (sección anterior). Igual que Fridman, la
 simulación no reproduce el **repunte** de DynamiT por encima de 4 kn (1,0 → 1,6 m): en la
 simulación la AV sigue cayendo hasta 0,5 m. Ese repunte necesita algo que el modelo no tiene: un

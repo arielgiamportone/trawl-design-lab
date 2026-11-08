@@ -712,3 +712,7 @@ Costados (×2): Side panels (×2)
 # Fase 20.1b: superficie del portón por encima de la potencia del libro
 Superficie requerida por portón (regla del libro): Required area per otter board (book rule)
 Factor de potencia de la superficie, (180 HP/BHP)^0,35: Power factor of the area, (180 HP/BHP)^0.35
+? 'Velocidad máxima: cruce FT = R interpolado linealmente; si todas las velocidades son viables es la última de la grilla y el cruce está más allá (fuera de la grilla).'
+: 'Maximum speed: FT = R crossing, linearly interpolated; if every speed is feasible it is the last one of the grid and the crossing lies beyond it (beyond the grid).'
+'fuera de la grilla: FT > R en todas las velocidades': 'beyond the grid: FT > R at every speed'
+v máx > {v} kn (fuera de la grilla): v max > {v} kn (beyond the grid)

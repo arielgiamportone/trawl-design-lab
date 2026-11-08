@@ -186,6 +186,14 @@ para recortar los extremos gastados).
   por {eq}`eq-18-rotura`. El cable seleccionado es a la vez más delgado que el diámetro mínimo y
   más débil que la carga mínima. `Compat.CORRECTED` elige el menor cable que cumple ambas
   condiciones: **13 mm, 10,3 t** ({doc}`erratas`).
+- **Más allá del catálogo del libro** (Fase 20.7). El catálogo del libro termina en 18 mm
+  (18,46 t). Con la selección automática en modo corregido, si ninguno alcanza la rotura mínima se
+  buscan también los cables de acero genéricos del catálogo de componentes (hasta 26 mm), y si
+  ninguno cumple además el diámetro de Pérez Águila se elige el más delgado que cumple la rotura:
+  esa regla, logarítmica en el NHP, pide 28 mm para los 2855 BHP del BIPO Víctor Angelescu, cuyos
+  guinches llevan cable de 20 mm {cite:p}`rubio2024calibracion`. Con la VA-35,5/45 el motor pasa
+  de un cable de 18 mm que no cumple (18,46 t frente a 28,46 t) a uno de 26 mm de 32,4 t, y lo anota
+  (`warp_catalogue`, `warp_diameter`). La A-3 sigue eligiendo del catálogo del libro.
 
 ## Ejemplo ejecutable
 

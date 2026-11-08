@@ -657,3 +657,12 @@ polar del portón plano de la A-3: polar of the A-3's flat otter board
 'Sin corrección en ambos modos: el ajuste del exponente de cable a los lances medidos no es significativo (Fase 20.5).': 'Not
   corrected in either mode: the fit of the warp exponent to the measured hauls is not significant (Phase
   20.5).'
+'> {v:g} kn (fuera de la grilla)': '> {v:g} kn (beyond the grid)'
+? 'ballast_limits: el lastre de Fridman no crece con la velocidad (el término 0,8·FT/4 del tiro del buque domina sobre RN/4); la regla del libro (modificada a {v0:g} kn, estándar a {v1:g} kn) daría mínimo {bmin:g} kg > máximo {bmax:g} kg: se toma la envolvente de las dos redes entre {v0:g} y {v1:g} kn, {min:g}–{max:g} kg'
+: 'ballast_limits: Fridman''s ballast does not grow with speed (the term 0.8·FT/4 of the vessel pull dominates over RN/4); the workbook rule (modified net at {v0:g} kn, standard at {v1:g} kn) would give minimum {bmin:g} kg > maximum {bmax:g} kg: the envelope of both nets between {v0:g} and {v1:g} kn is used, {min:g}–{max:g} kg'
+? 'max_speed: el tiro disponible supera la resistencia total en toda la grilla de velocidades ({v0:g}–{v1:g} kn); la velocidad máxima remolcable es {label}, no {v1:g} kn (amplíe speeds_kn para encontrar el cruce FT = R)'
+: 'max_speed: the available pull exceeds the total drag over the whole speed grid ({v0:g}–{v1:g} kn); the maximum towing speed is {label}, not {v1:g} kn (extend speeds_kn to find the FT = R crossing)'
+? 'warp_catalogue: ningún cable del catálogo del libro (hasta {bd:g} mm, {bt:g} t) alcanza la rotura mínima {need:.2f} t: se elige el de {d:g} mm {construction} ({mbl:g} t), genérico del catálogo de componentes'
+: 'warp_catalogue: no warp of the workbook catalogue (up to {bd:g} mm, {bt:g} t) reaches the minimum breaking load {need:.2f} t: the {d:g} mm {construction} ({mbl:g} t), generic from the component catalogue, is chosen'
+? 'warp_diameter: el cable de {d:g} mm cumple la rotura mínima pero es más delgado que el Ø de Pérez Águila ({dmin:.1f} mm para {nhp:g} HP, Rem!E80); esa regla está ajustada a buques chicos y se toma como orientativa'
+: 'warp_diameter: the {d:g} mm warp meets the minimum breaking load but is thinner than Pérez Águila''s diameter ({dmin:.1f} mm for {nhp:g} HP, Rem!E80); that rule is fitted to small vessels and is taken as a guide'

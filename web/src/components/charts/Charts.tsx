@@ -5,6 +5,7 @@ import { fmtFixed } from '../../lib/format';
 import { DRAG_METHODS, PROPELLER_LABELS, PULL_METHODS, dragMethodLabel } from '../../lib/labels';
 import {
   composition,
+  beyondGrid,
   designPropeller,
   displayRows,
   dragRows,
@@ -158,7 +159,13 @@ function PullCard({ d, c, prop }: { d: DesignData; c: ChartColors; prop: string 
     <ChartCard
       id="tiro"
       title={C.title}
-      sub={vmax !== null ? C.maxSpeed(fmtFixed(vmax, 2)) : C.notEnough}
+      sub={
+        vmax === null
+          ? C.notEnough
+          : beyondGrid(w)
+            ? C.maxSpeedBeyond(fmtFixed(vmax, 2))
+            : C.maxSpeed(fmtFixed(vmax, 2))
+      }
       legend={legend}
       note={d.result.power.propeller ? `${C.note} ${T.vessel.propellerModelHelp}` : C.note}
       table={

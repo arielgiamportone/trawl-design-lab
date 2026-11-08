@@ -169,6 +169,14 @@ alas.
   la flotación nominal a la profundidad de trabajo.
 - **Lastre igual a flotación.** Fridman calcula flotación y lastre con las mismas componentes
   $F_1'$ y $F_2'$; la diferencia sólo está en el peso de la relinga, que se suma o se resta.
+- **Mínimo y máximo con buques de mucho tiro.** El libro toma el mínimo con la red modificada a
+  1 kn y el máximo con la estándar a 3 kn porque en la A-3 el lastre crece con la velocidad. $F_1'$
+  sale del tiro disponible del buque, que baja con la velocidad: con un buque de mucho más tiro que
+  la demanda de su red (el BIPO Víctor Angelescu, 2855 BHP, con la VA-35,5/45) ese término domina,
+  el lastre baja de 1 a 2,5 kn y la regla da un mínimo mayor que el máximo (461 y 454 kg). En modo
+  corregido los límites son la envolvente de las dos redes entre esas velocidades
+  (`rigging.ballast_limits_envelope`; 450–462 kg en ese caso) y el motor lo anota
+  (`ballast_limits`); en la A-3 coincide con la regla del libro (Fase 20.7).
 - **Errata `float_reynolds`** (`Flot!H138`): la hoja calcula $Re = \pi D^2 v/\nu$, es decir, usa
   el área $\pi D^2$ (en m²) donde va el diámetro. Con $D$ = 0,2 m el Reynolds del Excel es
   $\pi \cdot 0{,}2 = 0{,}63$ veces el correcto. No cambia el $C_D$, que la hoja escribe a mano, pero oculta

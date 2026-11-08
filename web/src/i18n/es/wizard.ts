@@ -22,6 +22,9 @@ export const wizard = {
     maxWhy: 'Es la velocidad a la que el tiro disponible iguala a la resistencia total',
     maxRange: (from: string, to: string) => `; se puede arrastrar entre ${from} y ${to}.`,
     maxMod: (v: string) => ` Con la red de comparación: ${v}.`,
+    maxBeyond: (v: string) => `> ${v} (fuera de la grilla)`,
+    maxBeyondWhy: (v: string) =>
+      `El tiro disponible supera a la resistencia total en todas las velocidades calculadas, hasta ${v}: el cruce está más allá; amplíe la lista de velocidades en el modo experto para encontrarlo.`,
     warpTitle: 'Cable de arrastre',
     warpNone: 'No se pudo seleccionar un cable del catálogo.',
     warpOk: (v: string) =>

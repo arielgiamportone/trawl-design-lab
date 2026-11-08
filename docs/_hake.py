@@ -194,6 +194,18 @@ def totals() -> dict[str, tuple[float, float, float]]:
     }
 
 
+def measured_counts() -> tuple[int, int]:
+    """Valores medidos de DP del capítulo: (lances, medias de campaña)."""
+    hauls = means = 0
+    for _, kind, ref, _b, _a in before_after():
+        if kind == "measured" and ref.get("door_spread_m") is not None:
+            if ref.get("haul") == "media":
+                means += 1
+            else:
+                hauls += 1
+    return hauls, means
+
+
 def _dev(e: float, r: float | None) -> float | None:
     d = F.deviation(e, r)
     return None if d is None else 100.0 * d

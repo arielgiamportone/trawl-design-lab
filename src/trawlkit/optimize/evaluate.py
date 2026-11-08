@@ -38,8 +38,8 @@ from numpy.typing import NDArray
 from trawlkit import rigging
 from trawlkit.compat import Compat
 from trawlkit.i18n import t
-from trawlkit.io import Door, PropellerType, load_catalogue, load_doors
-from trawlkit.model import DesignCase, DesignResult, _case_warps, run, warp_load_kgf
+from trawlkit.io import Door, PropellerType, load_doors
+from trawlkit.model import DesignCase, DesignResult, run, warp_load_kgf, warp_pools
 from trawlkit.optimize.scaling import scale_count, scale_net
 from trawlkit.units import KNOT_TO_MS
 
@@ -315,17 +315,20 @@ class Evaluator:
             averaging_speeds_kn=case.averaging_speeds_kn or case.speeds_kn,
         )
         self.speeds = np.asarray(grid, dtype=float)
-        if warps is None:
-            # Los mismos cables que elige el motor: el del caso, los del catálogo de componentes
-            # filtrado o los del libro.
-            warps = _case_warps(self.case) or load_catalogue("warps").items
-        self._warps = sorted(
-            (
-                (str(w["id"]), float(w["diameter_mm"]), float(w["breaking_load_t"]) * 1000.0)
-                for w in warps
-            ),
-            key=lambda t: (t[1], t[2]),
-        )
+        # Los mismos cables, y en el mismo orden de preferencia, que elige el motor
+        # (model.warp_pools): el del caso, los del catálogo de componentes filtrado o los del
+        # libro, más los genéricos si ninguno del libro alcanza (Fase 20.7).
+        pools = [list(warps)] if warps is not None else warp_pools(self.case)
+        self._pools = [
+            sorted(
+                (
+                    (str(w["id"]), float(w["diameter_mm"]), float(w["breaking_load_t"]) * 1000.0)
+                    for w in pool
+                ),
+                key=lambda t: (t[1], t[2]),
+            )
+            for pool in pools
+        ]
         self._cache: dict[tuple[int, ...], Curves] = {}
         self.runs = 0
 
@@ -420,11 +423,25 @@ class Evaluator:
     # -- evaluación ---------------------------------------------------------------------------
 
     def _warp(self, min_diameter_mm: float, min_breaking_kgf: float) -> tuple[str | None, float]:
-        """Cable más delgado que cumple Ø y rotura; mayor rotura disponible con Ø suficiente."""
-        ok = [w for w in self._warps if w[1] >= min_diameter_mm - 1e-9]
-        best = max((w[2] for w in ok), default=0.0)
-        chosen = next((w[0] for w in ok if w[2] >= min_breaking_kgf), None)
-        return chosen, best
+        """Cable más delgado que cumple Ø y rotura; mayor rotura disponible con Ø suficiente.
+
+        Como ``model.select_case_warp``: si ningún cable de ningún grupo cumple Ø y rotura y hay
+        más de un grupo (selección automática en modo corregido), se deja de lado el Ø mínimo.
+        """
+        best = 0.0
+        for pool in self._pools:
+            ok = [w for w in pool if w[1] >= min_diameter_mm - 1e-9]
+            best = max((w[2] for w in ok), default=best)
+            chosen = next((w[0] for w in ok if w[2] >= min_breaking_kgf), None)
+            if chosen is not None:
+                return chosen, best
+        if len(self._pools) > 1:
+            for pool in self._pools:
+                chosen = next((w[0] for w in pool if w[2] >= min_breaking_kgf), None)
+                if chosen is not None:
+                    return chosen, max(w[2] for w in pool)
+            return None, max(w[2] for w in self._pools[-1])
+        return None, best
 
     def at(self, s: float, v_kn: float) -> Evaluation:
         """Evalúa el diseño ``(s, v)``."""

@@ -251,6 +251,9 @@ print(f"Speed exponent of the drag: simulation v^{N_SIM:.2f}, "
 # What the text says.
 assert VAL.errors["AH"].mean_abs_pct_band < 5
 assert VAL.errors["AV"].mean_abs_pct_band < 20
+# Range of the AV quoted by the simulation note in the app (web/src/i18n/*/simulate.ts).
+AV_BAND = 100 * (np.asarray(VAL.sim["AV"])[band] / np.asarray(VAL.dynamit["AV"])[band] - 1)
+assert -10 < AV_BAND.min() < -5 and 20 < AV_BAND.max() < 25
 assert -55 < VAL.errors["RA"].bias_pct_band < -40
 assert 1.6 < N_SIM < 1.85 and 1.4 < N_DYN < 1.55
 ```
@@ -292,7 +295,8 @@ overestimates: with the otter boards fixed at 32.5 m the net stays open even whe
 to stretch it, and DynamiT, which does compute the otter boards, closes them to 28.5 m at 1 kn.
 
 **Vertical opening.** The trend is that of DynamiT —the net flattens as it speeds up because the
-drag grows faster than the buoyancy— with a bias of +10 % in the fishing range, comparable to that
+drag grows faster than the buoyancy— with a bias of +10 % in the fishing range (from −8 % to
++22 % between 2 and 4 kn, the maximum at 2.5–3 kn), comparable to that
 of Fridman's AV, and which decreases as the mesh is refined (previous section). Like Fridman, the
 simulation does not reproduce the **upturn** of DynamiT above 4 kn (1.0 → 1.6 m): in the
 simulation the AV keeps falling down to 0.5 m. That upturn needs something the model does not

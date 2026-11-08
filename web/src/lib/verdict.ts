@@ -6,7 +6,14 @@ import type { DesignData, PerformanceWindow } from '../api/result';
 import { msg } from '../i18n';
 import { fmt, fmtFixed } from './format';
 import { fmtU, toDisplay, unitLabel } from './units';
-import { designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
+import {
+  beyondGrid,
+  designPropeller,
+  hasModified,
+  maxSpeedText,
+  perfWindow,
+  warpMeetsBreakingLoad,
+} from './series';
 
 export type Tone = 'ok' | 'warn' | 'crit' | 'info';
 
@@ -96,18 +103,23 @@ export function assess(d: DesignData, targetSpeed: number): Check[] {
 
   const max = w?.max_speed_kn ?? null;
   const minFeasible = w?.feasible_speeds_kn[0];
-  const maxMod = hasModified(d) ? (perfWindow(d, prop, 'mod')?.max_speed_kn ?? null) : null;
+  const wMod = hasModified(d) ? perfWindow(d, prop, 'mod') : undefined;
+  const maxMod = maxSpeedText(wMod);
+  // Fase 20.7: con tiro de sobra en toda la grilla, la última velocidad es sólo una cota.
+  const beyond = beyondGrid(w);
   checks.push({
     key: 'max_speed',
     tone: max === null ? 'crit' : max >= targetSpeed ? 'ok' : 'crit',
     title: V.maxTitle,
-    value: max === null ? V.maxNone : kn(max),
+    value: max === null ? V.maxNone : beyond ? V.maxBeyond(kn(max)) : kn(max),
     why:
       max === null
         ? V.maxNoneWhy
-        : V.maxWhy +
-          (minFeasible !== undefined ? V.maxRange(kn(minFeasible), kn(max)) : '.') +
-          (maxMod !== null ? V.maxMod(kn(maxMod)) : ''),
+        : beyond
+          ? V.maxBeyondWhy(kn(max)) + (maxMod !== null ? V.maxMod(`${maxMod} kn`) : '')
+          : V.maxWhy +
+            (minFeasible !== undefined ? V.maxRange(kn(minFeasible), kn(max)) : '.') +
+            (maxMod !== null ? V.maxMod(`${maxMod} kn`) : ''),
     chapter: '19_ventana_velocidad',
   });
 

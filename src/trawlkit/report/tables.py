@@ -647,7 +647,10 @@ def speed_window_table(result: DesignResult) -> Table:
             Column("design", t("Diseño")),
         ),
         rows=tuple(rows),
-        note=t("Velocidad máxima: cruce FT = R interpolado linealmente."),
+        note=t(
+            "Velocidad máxima: cruce FT = R interpolado linealmente; si todas las velocidades "
+            "son viables es la última de la grilla y el cruce está más allá (fuera de la grilla)."
+        ),
         source=t(
             "{power} frente a {demand}",
             power="'Potencia Disponible Arrastre OK'!L11:O19",

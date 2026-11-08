@@ -23,6 +23,9 @@ export const wizard: Messages['wizard'] = {
     maxWhy: 'It is the speed at which the available pull equals the total drag',
     maxRange: (from: string, to: string) => `; the gear can be towed between ${from} and ${to}.`,
     maxMod: (v: string) => ` With the comparison net: ${v}.`,
+    maxBeyond: (v: string) => `> ${v} (beyond the grid)`,
+    maxBeyondWhy: (v: string) =>
+      `The available pull exceeds the total drag at every computed speed, up to ${v}: the crossing lies beyond; extend the speed list in expert mode to find it.`,
     warpTitle: 'Warp',
     warpNone: 'No warp could be selected from the catalogue.',
     warpOk: (v: string) =>

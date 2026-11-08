@@ -39,8 +39,8 @@ plan, the rigging, DynamiT simulations and hauls measured with telemetry sensors
 PX, Scanmar): door spread (DS), vertical opening (VO) and sometimes wing-end spread (WS), with
 the depth, warp length and speed of each haul.
 
-This chapter digitises five nets from those sources and compares the engine with 114 measured
-hauls, one survey mean and six DynamiT simulations. Systematic deviations are described with
+This chapter digitises five nets from those sources and compares the engine with 115 measured
+values (114 hauls and 1 survey mean) and six DynamiT simulations. Systematic deviations are described with
 numbers. In Phase 20.5 ({ref}`calibration-hake`) two corrections of the door spread were fitted:
 the **effective CL of the polyvalent doors** without a published polar, which is **applied** in
 corrected mode, and the response of DS to warp length, which is **not applied** because the fit is
@@ -332,7 +332,10 @@ calibrated: mean deviation · mean absolute deviation · share within ±20 %, wi
 V.md_table(["Net", "Series", "n", "CL factor", "Before", "Calibrated"], H.calibration_rows())
 TOT = H.totals()
 (mb, wb, n), (ma, wa, _) = TOT["before"], TOT["after"]
-print(f"The {n:.0f} measured hauls: mean absolute deviation {mb:.1f} % → {ma:.1f} %; within ±20 %: "
+HAULS, MEANS = H.measured_counts()
+assert (HAULS, MEANS) == (114, 1) and HAULS + MEANS == n  # the text of the introduction
+print(f"The {n:.0f} measured values ({HAULS} hauls and {MEANS} survey mean): mean absolute "
+      f"deviation {mb:.1f} % → {ma:.1f} %; within ±20 %: "
       f"{100 * wb:.0f} % → {100 * wa:.0f} %")
 ```
 
@@ -340,7 +343,7 @@ IAT 151/18 falls within tolerance (by construction, since the factor is fitted t
 does Tech. Rep. 66, which is not in the fit; the IC 041/25 survey mean drops from +51 % to +21 %,
 just outside ±20 % (a single value, at the mean depth and with the table warp). The series with SPF
 doors of published polar do not change. The tests (`tests/test_calibration_20_5.py`) set the
-thresholds: the mean absolute deviation of the measured hauls must drop by at least 5 points and
+thresholds: the mean absolute deviation of the measured values must drop by at least 5 points and
 the share within ±20 % rise by at least 25; IC 041/25 must stay within ±22 %.
 
 ### Future work

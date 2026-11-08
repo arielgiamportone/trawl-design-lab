@@ -21,6 +21,8 @@ export const charts: Messages['charts'] = {
     window: 'Towable window',
     title: 'Available pull vs total drag',
     maxSpeed: (v: string) => `Maximum towing speed (standard net): ${v} kn`,
+    maxSpeedBeyond: (v: string) =>
+      `Maximum towing speed (standard net): > ${v} kn (beyond the grid: the pull exceeds the drag at every speed)`,
     notEnough: 'The available pull is not enough in the computed range.',
     note: 'Grey: Prado–Dremière, Koyama, Nomura, Hamuro and their average (reference).',
     caption: 'Available pull and total drag by speed',

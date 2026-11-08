@@ -3,7 +3,15 @@ import type { DesignData } from '../api/result';
 import { msg } from '../i18n';
 import { fmt, fmtFixed } from './format';
 import { fmtU, toDisplay, unitLabel } from './units';
-import { at, designPropeller, hasModified, perfWindow, warpMeetsBreakingLoad } from './series';
+import {
+  at,
+  beyondGrid,
+  designPropeller,
+  hasModified,
+  maxSpeedText,
+  perfWindow,
+  warpMeetsBreakingLoad,
+} from './series';
 
 export interface Tile {
   key: string;
@@ -23,7 +31,12 @@ export function num(d: DesignData, key: string): number | null {
 export function tiles(d: DesignData): Tile[] {
   const mod = hasModified(d);
   const prop = designPropeller(d);
-  const maxMod = mod ? perfWindow(d, prop, 'mod')?.max_speed_kn : null;
+  const winMod = mod ? perfWindow(d, prop, 'mod') : undefined;
+  const maxMod = maxSpeedText(winMod);
+  // Fase 20.7: si el tiro supera la resistencia en toda la grilla, la velocidad máxima está más
+  // allá de la última velocidad calculada («> 5 kn», fuera de la grilla).
+  const winDesign = d.result.performance.windows[d.result.performance.design_key];
+  const beyond = beyondGrid(winDesign);
   const meets = warpMeetsBreakingLoad(d);
   const sel = d.result.warps?.selection;
   const req = num(d, 'warp_min_breaking_load_kgf');
@@ -70,9 +83,9 @@ export function tiles(d: DesignData): Tile[] {
     {
       key: 'max_speed_kn',
       label: K.max_speed_kn,
-      value: fmtFixed(num(d, 'max_speed_kn'), 2),
+      value: (beyond ? '> ' : '') + fmtFixed(num(d, 'max_speed_kn'), 2),
       unit: 'kn',
-      sub: maxMod != null ? K.modified(`${fmtFixed(maxMod, 2)} kn`) : K.maxSpeedSub,
+      sub: maxMod !== null ? K.modified(`${maxMod} kn`) : beyond ? K.maxSpeedBeyond : K.maxSpeedSub,
     },
     {
       key: 'warp_selected',

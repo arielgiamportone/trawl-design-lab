@@ -171,6 +171,14 @@ rest on the wings.
   be used.
 - **Ballast equal to buoyancy.** Fridman computes buoyancy and ballast with the same components
   $F_1'$ and $F_2'$; the only difference is the weight of the rope, which is added or subtracted.
+- **Minimum and maximum with high-pull vessels.** The workbook takes the minimum with the modified
+  net at 1 kn and the maximum with the standard one at 3 kn because for the A-3 the ballast grows
+  with speed. $F_1'$ comes from the vessel's available pull, which falls with speed: with a vessel
+  of much more pull than its net's demand (the BIPO Víctor Angelescu, 2855 BHP, with the
+  VA-35.5/45) that term dominates, the ballast falls from 1 to 2.5 kn and the rule gives a minimum
+  above the maximum (461 and 454 kg). In corrected mode the limits are the envelope of both nets
+  between those speeds (`rigging.ballast_limits_envelope`; 450–462 kg in that case) and the engine
+  records it (`ballast_limits`); for the A-3 it equals the workbook rule (Phase 20.7).
 - **Erratum `float_reynolds`** (`Flot!H138`): the sheet computes $Re = \pi D^2 v/\nu$, that is, it
   uses the area $\pi D^2$ (in m²) where the diameter belongs. With $D$ = 0.2 m the Excel Reynolds
   number is $\pi \cdot 0.2 = 0.63$ times the correct one. It does not change $C_D$, which the sheet

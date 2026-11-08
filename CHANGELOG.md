@@ -6,6 +6,40 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 ## [Sin publicar]
 
 ### Corregido
+- **Coherencias de erratas, aparejo y textos (Fase 20.7)**: (1) la errata
+  `fridman_dp_warp_saturation` figuraba en «Notas y erratas» como «corregida — se aplica la
+  fórmula correcta» aunque su descripción, `docs/erratas.md` y la Fase 20.5 dicen que sólo se
+  documenta (Δn = 0, no significativo), y `net_weight_ignores_panel_count` como reproducida aunque
+  el modo corregido la corrige: la app deducía el estado de una lista propia desactualizada. Ahora
+  cada `Erratum` declara su tratamiento (`ErratumTreatment`: según el modo, corregida, reproducida o
+  documentada) y su nota; `Erratum.status(compat)` es la única fuente para la tabla del informe, la
+  CLI, `GET /errata` (campos nuevos `treatment`, `status_excel`, `status_corrected`, `note`), la
+  app y los indicadores del README: en modo corregido 24 corregidas, 2 reproducidas y 2
+  documentadas (antes la app decía 24 · 3 · 1). `docs/erratas.md` gana la columna de estado y
+  `tests/test_errata_status.py` y `NotesErrata.test.tsx` verifican que el estado mostrado sea el
+  declarado. (2) Red `inidep_iat151_va355_construida` con el BIPO Víctor Angelescu (modo
+  corregido, `service.build_case`): el lastre mínimo (461 kg) superaba al máximo (454 kg) porque la
+  regla del libro (modificada a 1 kn, estándar a 3 kn) supone que el lastre de Fridman crece con la
+  velocidad, y con 2855 BHP domina el término 0,8·FT/4, que baja; en modo corregido los límites son
+  la envolvente de las dos redes entre 1 y 3 kn (450–462 kg; en la A-3 igual que el libro) con la
+  nota `ballast_limits`. El cable de 18 mm «no cumplía la rotura» (18,46 t frente a 28,46 t)
+  porque el catálogo del libro termina en 18 mm y el Ø de Pérez Águila pide 28 mm a esa potencia;
+  la selección automática en modo corregido suma los cables genéricos del catálogo de componentes
+  cuando ninguno del libro alcanza y, si ninguno cumple además el Ø, toma el más delgado que cumple
+  la rotura: 26 mm, 32,4 t (notas `warp_catalogue` y `warp_diameter`; el optimizador elige igual).
+  IAT 151/18 no da el diámetro del cable de remolque, así que no se agrega a la red (IC 016/24 da
+  20 mm para los guinches del buque). La velocidad máxima se informaba como 5 kn, el final de la
+  grilla, rotulada «tiro disponible = resistencia»: ahora `SpeedWindow.beyond_grid` la marca y el
+  motor (nota `max_speed`), el informe y la app dicen «> 5 kn (fuera de la grilla)». (3) Libro: el
+  capítulo 32 dice «115 valores medidos (114 lances y 1 media de campaña)» en los dos lugares;
+  `catalogo_fuentes` describe cómo la app muestra los borradores (catálogo con «Mostrar
+  borradores», selector experto con «(borrador)»; el modo guiado y los lotes sólo usan
+  publicadas); la nota de la simulación decía AV «dentro del 10–20 %» de DynamiT y ahora da el
+  rango de la tabla del capítulo 21 (−8 % a +22 % con resolución 6, hasta +41 % con la 3). (4) La
+  introducción del catálogo nombra FAO, BOBP, SEAFDEC e INIDEP, y en el modo experto cambiar la red
+  principal a una de otro aparejo reemplaza la red de comparación por una del mismo aparejo
+  (`comparisonAfterChange`, como el modo guiado) en vez de dejar la A-3 modificada junto a una
+  langostinera. La A-3, el modo `excel` y los valores dorados no cambian.
 - **Economía y optimizador con los números del motor (Fase 20.6)**: con el tangonero
   `ar_tangonero_1998` y la red `inidep_ito043_tangonera_inidep` la pestaña Economía decía «A ninguna
   velocidad del rango el buque tiene tiro con reserva» mientras el resultado del caso daba 128 % de

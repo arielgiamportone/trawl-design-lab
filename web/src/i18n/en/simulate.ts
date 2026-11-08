@@ -73,7 +73,7 @@ export const simulate: Messages['simulate'] = {
     a: 'The simulated drag is only that of the twines (Morison with C',
     b: (cn: string) => ` = ${cn} and C`,
     c: (ct: string) =>
-      ` = ${ct}) plus seabed friction: for the FAO A-3 net it is ≈ 50 % below the DynamiT RA between 2 and 4 kn, and the engine's empirical RN (Aberdeen) ≈ 20 % above. The openings, on the other hand, agree: AH within 3 % and AV within 10–20 %. The drag gap points to what the model lacks —knots, vibration and undulation of the netting, hydrodynamic shading between twines and twine coefficients calibrated in uniform flow— and it does not close with C`,
+      ` = ${ct}) plus seabed friction: for the FAO A-3 net it is ≈ 50 % below the DynamiT RA between 2 and 4 kn, and the engine's empirical RN (Aberdeen) ≈ 20 % above. The openings, on the other hand, are closer: between 2 and 4 kn the AH stays within 3 %, and the AV between −8 % and +22 % of DynamiT with the normal resolution (6; +11 % mean bias, table of chapter 21) and up to +41 % with the fast one (3), because a coarse mesh overestimates the AV. The drag gap points to what the model lacks —knots, vibration and undulation of the netting, hydrodynamic shading between twines and twine coefficients calibrated in uniform flow— and it does not close with C`,
     d: '/C',
     e: ' within the ranges in the literature (see chapter 21 of the book). Use the simulation for the shape and the openings, and the engine for the design drag.',
   },

@@ -56,8 +56,10 @@ Documents reviewed that do **not** carry complete net plans:
   the edge.
 - **Assumed**: value that the plan does not give and the engine needs, for example the U1 of the
   body. It is marked and has its reason; never without a mark.
-- Nets whose readings do not close with the validator stay in `draft` status and are not
-  published in the application until resolved.
+- Nets whose readings do not close with the validator stay in `draft` status until resolved. The
+  application always shows them marked: the catalogue tab lists them with «Show drafts» and the
+  *draft* label, and the net selector of expert mode includes them with «(draft)» after the name.
+  Guided mode and the net list of batches and the fleet only offer published nets.
 - **Rights**: the documents are © FAO. The catalogue keeps only the transcribed technical data
   with their citation and link; it does not reproduce the figures.
 

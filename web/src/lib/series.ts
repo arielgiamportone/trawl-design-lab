@@ -1,6 +1,7 @@
 /** Derivación de series para gráficos y KPI a partir de ``DesignData``. */
 import type { DesignData, PerformanceWindow, Series } from '../api/result';
 import { msg } from '../i18n';
+import { fmtFixed } from './format';
 import { DRAG_METHODS, PULL_METHODS } from './labels';
 import { toDisplay } from './units';
 
@@ -33,6 +34,20 @@ export function perfWindow(
   variant: 'std' | 'mod',
 ): PerformanceWindow | undefined {
   return d.result.performance.windows[`${propeller}_${variant}`];
+}
+
+/** El tiro supera la resistencia en toda la grilla: la velocidad máxima está más allá de la
+ * última velocidad calculada, que es sólo una cota inferior (Fase 20.7). */
+export function beyondGrid(w: PerformanceWindow | null | undefined): boolean {
+  if (!w) return false;
+  return w.beyond_grid ?? (w.feasible.length > 0 && w.feasible.every(Boolean));
+}
+
+/** Velocidad máxima con «> » delante cuando está fuera de la grilla (sin unidad). */
+export function maxSpeedText(w: PerformanceWindow | null | undefined, digits = 2): string | null {
+  const v = w?.max_speed_kn;
+  if (v === null || v === undefined) return null;
+  return `${beyondGrid(w) ? '> ' : ''}${fmtFixed(v, digits)}`;
 }
 
 export interface PullRow {

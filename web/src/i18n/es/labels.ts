@@ -247,6 +247,7 @@ export const labels = {
     modified: (v: string) => `modificada: ${v}`,
     rnSub: 'resistencia de la red',
     maxSpeedSub: 'tiro disponible = resistencia',
+    maxSpeedBeyond: 'fuera de la grilla: el tiro supera la resistencia en todas las velocidades',
     warpReq: (v: string) => `rotura mínima requerida ${v}`,
     meets: '✓ Cumple la rotura',
     fails: '⚠ No cumple la rotura',

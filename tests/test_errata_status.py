@@ -1,7 +1,8 @@
 """Fase 20.7: el estado de cada errata es el declarado en ``trawlkit.compat.ERRATA``.
 
-La app (``GET /errata``; el modo sin conexión lo compara ``test_offline.py``), el informe, ``docs/erratas.md``
-y los indicadores del README muestran el mismo estado; ninguno lo deduce por su cuenta.
+La app (``GET /errata``; el modo sin conexión lo compara ``test_offline.py``), el informe,
+``docs/erratas.md`` y los indicadores del README muestran el mismo estado; ninguno lo deduce por
+su cuenta.
 """
 
 from __future__ import annotations

@@ -14,6 +14,8 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
+from trawlkit.i18n import t
+
 FloatArray = NDArray[np.float64]
 
 
@@ -28,7 +30,21 @@ class SpeedWindow:
     feasible: NDArray[np.bool_] = field(repr=False)
     max_speed_kn: float | None
     """Velocidad máxima remolcable (interpolación lineal del cruce FT = R), o None si no hay cruce
-    y ninguna velocidad es viable."""
+    y ninguna velocidad es viable. Si toda la grilla es viable es la última velocidad, una cota
+    inferior (ver :attr:`beyond_grid`)."""
+
+    @property
+    def beyond_grid(self) -> bool:
+        """El tiro supera la resistencia en toda la grilla: el cruce está más allá (Fase 20.7)."""
+        return bool(self.feasible.size) and bool(self.feasible.all())
+
+    def max_speed_label(self, digits: int = 2) -> str:
+        """Velocidad máxima para mostrar: «> 5 kn (fuera de la grilla)», «3.42 kn» o «ninguna»."""
+        if self.max_speed_kn is None:
+            return t("ninguna")
+        if self.beyond_grid:
+            return t("> {v:g} kn (fuera de la grilla)", v=self.max_speed_kn)
+        return f"{self.max_speed_kn:.{digits}f} kn"
 
     @property
     def feasible_speeds_kn(self) -> list[float]:
@@ -45,6 +61,7 @@ class SpeedWindow:
             "feasible": self.feasible.tolist(),
             "feasible_speeds_kn": self.feasible_speeds_kn,
             "max_speed_kn": self.max_speed_kn,
+            "beyond_grid": self.beyond_grid,
         }
 
 
@@ -57,7 +74,7 @@ def speed_window(
 
     ``max_speed_kn`` es la velocidad del primer cruce de ``FT - R`` de positivo a negativo,
     interpolada linealmente entre los dos puntos del vector; si todo el vector es viable es la
-    última velocidad; si nada es viable es ``None``.
+    última velocidad (cota inferior: ``beyond_grid``); si nada es viable es ``None``.
     """
     v = np.asarray(speeds_kn, dtype=float)
     ft = np.asarray(available_kgf, dtype=float)

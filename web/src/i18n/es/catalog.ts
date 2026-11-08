@@ -72,7 +72,7 @@ export const catalog = {
     ballast_kg: 'Lastre',
   } as Record<string, string>,
   intro:
-    'Redes de documentos públicos de la FAO digitalizadas con la procedencia de cada valor. Al usar una red del catálogo se calcula con su propio caso: un buque de su potencia de diseño, el portón y la profundidad del plano.',
+    'Redes de documentos técnicos públicos (FAO, BOBP, SEAFDEC e INIDEP) digitalizadas con la procedencia de cada valor. Al usar una red del catálogo se calcula con su propio caso: un buque de su potencia de diseño, el portón y la profundidad del plano.',
   filters: 'Filtros del catálogo',
   search: 'Buscar red',
   searchPlaceholder: 'Buscar (nombre, especie, documento)…',

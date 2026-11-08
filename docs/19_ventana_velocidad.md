@@ -63,7 +63,10 @@ $$
 v^* = v_k + (v_{k+1} - v_k)\,\frac{m_k}{m_k - m_{k+1}}, \qquad m_k \ge 0 > m_{k+1}
 $$ (eq-19-vmax)
 
-Si todo el vector es viable, $v^*$ es la última velocidad; si ninguna lo es, no hay ventana. Como
+Si todo el vector es viable, $v^*$ es la última velocidad, pero sólo como cota inferior: el cruce
+está más allá de la grilla. El motor lo marca (`SpeedWindow.beyond_grid`, nota `max_speed`) y la
+aplicación y el informe muestran «> 5 kn (fuera de la grilla)» en lugar de 5 kn (Fase 20.7). Si
+ninguna velocidad es viable, no hay ventana. Como
 $R_T$ es convexa y $F_T$ lineal, la interpolación lineal entre nodos sobreestima levemente la
 demanda en el tramo y $v^*$ queda del lado seguro.
 

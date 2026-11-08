@@ -359,7 +359,11 @@ def _kpis(result: DesignResult) -> str:
         rn3 = float(result.drag.rn.std[case.speed_index(3.0)])
         tiles.append((t("RN a 3 kn"), fmt(round(rn3, 1)), "kgf", t("red estándar, Aberdeen"), ""))
     vmax = "—" if win.max_speed_kn is None else f"{win.max_speed_kn:.2f}"
-    tiles.append((t("Velocidad máxima"), vmax, "kn", t("FT ≥ R, red estándar"), ""))
+    vsub = t("FT ≥ R, red estándar")
+    if win.beyond_grid:
+        # Fase 20.7: el tiro supera la resistencia en toda la grilla; el cruce está más allá.
+        vmax, vsub = f"> {vmax}", t("fuera de la grilla: FT > R en todas las velocidades")
+    tiles.append((t("Velocidad máxima"), vmax, "kn", vsub, ""))
     ok = sel.satisfies_breaking_load
     tiles.append(
         (
