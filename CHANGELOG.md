@@ -5,6 +5,19 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/); e
 
 ## [Sin publicar]
 
+## [1.2.1] - 2026-11-08
+
+Correcciones de coherencia entre el resultado principal, la economía y el optimizador, y en buques
+grandes.
+
+- **Fase 20.6**: la economía, el optimizador y la proyección de flotas usan la demanda, el tiro y
+  el cable del motor; los aparejos de tangones y dobles cuentan las dos redes.
+- **Fase 20.7**: el estado de cada errata sale de una sola fuente; lastre, cable y velocidad máxima
+  coherentes en buques de más de 2000 hp; textos del libro y de la app.
+- Paridad del motor sin conexión con tolerancia de 6 % en la selectividad; la CI web corre en
+  Ubuntu 24.04.
+- El modo `excel`, el caso FAO A-3 y los valores dorados del libro original no cambian.
+
 ### Corregido
 - **Coherencias de erratas, aparejo y textos (Fase 20.7)**: (1) la errata
   `fridman_dp_warp_saturation` figuraba en «Notas y erratas» como «corregida — se aplica la
