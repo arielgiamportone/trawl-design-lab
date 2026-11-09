@@ -1025,6 +1025,9 @@ class DesignResult:
                 "warp_min_breaking_load_kgf": self.warps.loads.min_breaking_load_kgf,
                 "warp_quantity_m": self.warps.quantity_m,
                 "max_speed_kn": self.performance.design.max_speed_kn,
+                # Fase 20.8: el tiro supera la resistencia en toda la grilla; ``max_speed_kn`` es
+                # la última velocidad (cota inferior) y se muestra «> 5 kn».
+                "max_speed_beyond_grid": self.performance.design.beyond_grid,
             }
         )
         st = self.warps.stretch
@@ -1039,9 +1042,9 @@ class DesignResult:
         pp = self.power.propeller
         if pp is not None:  # Fase 19.4: sólo con diámetro de hélice
             out["propeller_bollard_pull_t"] = pp.bollard_pull_t
-            out["propeller_max_speed_kn"] = self.performance.windows[
-                f"{PROPELLER_MODEL_KEY}_std"
-            ].max_speed_kn
+            pw = self.performance.windows[f"{PROPELLER_MODEL_KEY}_std"]
+            out["propeller_max_speed_kn"] = pw.max_speed_kn
+            out["propeller_max_speed_beyond_grid"] = pw.beyond_grid
         if self.warps.winch is not None:
             out["winch_drum_required_m"] = self.warps.winch.drum_required_m
         op = self.spread.shrimp

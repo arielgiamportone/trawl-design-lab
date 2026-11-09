@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+from typing import Any
+
 from trawlkit.i18n import N_, t
 
 #: Etiquetas en español y unidades de las claves de ``DesignResult.summary()``.
@@ -58,6 +61,30 @@ SUMMARY_LABELS: dict[str, tuple[str, str]] = {
 }
 
 
+#: Marcas del resumen (Fase 20.8): clave de la marca → velocidad que califica. Con la marca, el
+#: tiro supera la resistencia en toda la grilla y la velocidad es sólo una cota inferior.
+SUMMARY_FLAGS: dict[str, str] = {
+    "max_speed_beyond_grid": "max_speed_kn",
+    "propeller_max_speed_beyond_grid": "propeller_max_speed_kn",
+}
+
+
+def summary_items(summary: Mapping[str, Any]) -> list[tuple[str, Any]]:
+    """Filas para mostrar del resumen: sin las marcas y con «> 5 (fuera de la grilla)» (Fase 20.8).
+
+    La velocidad máxima marcada como fuera de la grilla pasa a texto; el resto queda igual.
+    """
+    beyond = {v for k, v in SUMMARY_FLAGS.items() if summary.get(k)}
+    out: list[tuple[str, Any]] = []
+    for key, value in summary.items():
+        if key in SUMMARY_FLAGS:
+            continue
+        if key in beyond and isinstance(value, int | float):
+            value = t("> {v} (fuera de la grilla)", v=fmt(value))
+        out.append((key, value))
+    return out
+
+
 def label(key: str) -> tuple[str, str]:
     """Etiqueta (en el idioma activo) y unidad de una clave de ``DesignResult.summary()``."""
     if key in SUMMARY_LABELS:
@@ -90,7 +117,7 @@ def fmt(value: float | str | None) -> str:
 def summary_markdown(summary: dict[str, float | str | None]) -> str:
     """Tabla Markdown (etiquetas en español, unidades) de ``DesignResult.summary()``."""
     lines = [f"| {t('Magnitud')} | {t('Valor')} | {t('Unidad')} |", "|---|---|---|"]
-    for key, value in summary.items():
+    for key, value in summary_items(summary):
         name, unit = label(key)
         lines.append(f"| {name} | {fmt(value)} | {unit} |")
     return "\n".join(lines)

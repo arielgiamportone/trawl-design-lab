@@ -30,6 +30,7 @@ export const expert: Messages['expert'] = {
   summary: {
     calculating: 'Calculating…',
     noResults: 'No results yet.',
+    beyondGrid: (v: string) => `> ${v} (beyond the grid)`,
     groups: {
       case: 'Case',
       net: 'Net',

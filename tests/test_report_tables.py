@@ -11,6 +11,7 @@ from trawlkit.compat import ERRATA, Compat
 from trawlkit.drag import RN_METHODS, SUMMARY_COLUMNS, average
 from trawlkit.io import load_doors, load_net, load_vessels
 from trawlkit.model import DesignCase, DesignResult, run
+from trawlkit.report.labels import SUMMARY_FLAGS
 from trawlkit.report.tables import (
     ERRATA_FIXED_TREATMENT,
     Table,
@@ -59,7 +60,9 @@ def kv(table: Table) -> dict[str, object]:
 def test_summary_table_matches_summary(result: DesignResult) -> None:
     t = summary_table(result)
     summary = result.summary()
-    assert t.column("key") == list(summary)
+    # Las marcas (Fase 20.8) califican a la velocidad máxima y no son filas.
+    assert t.column("key") == [k for k in summary if k not in SUMMARY_FLAGS]
+    assert not summary["max_speed_beyond_grid"]
     for key, value in zip(t.column("key"), t.column("value"), strict=True):
         expected = summary[str(key)]
         if isinstance(expected, str) or expected is None:

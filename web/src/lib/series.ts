@@ -50,6 +50,30 @@ export function maxSpeedText(w: PerformanceWindow | null | undefined, digits = 2
   return `${beyondGrid(w) ? '> ' : ''}${fmtFixed(v, digits)}`;
 }
 
+/** Marcas del resumen (Fase 20.8): clave de la marca → velocidad que califica. */
+export const SUMMARY_FLAGS: Record<string, string> = {
+  max_speed_beyond_grid: 'max_speed_kn',
+  propeller_max_speed_beyond_grid: 'propeller_max_speed_kn',
+};
+
+/** Ventana de la que sale cada velocidad del resumen (para respuestas sin la marca). */
+function summaryWindow(d: DesignData, key: string): PerformanceWindow | undefined {
+  const p = d.result.performance;
+  if (key === 'max_speed_kn') return p.windows[p.design_key];
+  if (key === 'propeller_max_speed_kn') return p.windows['propeller_model_std'];
+  return undefined;
+}
+
+/** La velocidad ``key`` del resumen está fuera de la grilla (Fase 20.8): usa la marca del
+ * resumen y, en una respuesta vieja sin ella, la deduce de la ventana de ``performance``. */
+export function summaryBeyondGrid(d: DesignData, key: string): boolean {
+  const flag = Object.keys(SUMMARY_FLAGS).find((f) => SUMMARY_FLAGS[f] === key);
+  if (!flag) return false;
+  const v = d.summary[flag] as unknown;
+  if (typeof v === 'boolean') return v;
+  return beyondGrid(summaryWindow(d, key));
+}
+
 export interface PullRow {
   speed: number;
   available: number | null;

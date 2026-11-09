@@ -1,6 +1,7 @@
 import { msg, useT, type Messages } from '../i18n';
 import { fmt } from '../lib/format';
 import { label } from '../lib/labels';
+import { SUMMARY_FLAGS, summaryBeyondGrid } from '../lib/series';
 import { fmtU, unitLabel } from '../lib/units';
 import { useCase } from '../state/useCase';
 
@@ -71,9 +72,17 @@ const GROUPS: { title: GroupKey; match: (k: string) => boolean }[] = [
   { title: 'warp', match: (k) => k.startsWith('warp_') },
 ];
 
-/** Valor de una celda: los textos del motor (modo, aparejo, método) en el idioma activo. */
-function cellText(key: string, v: string | number | null | undefined, unit: string): string {
+/** Valor de una celda: los textos del motor (modo, aparejo, método) en el idioma activo; la
+ * velocidad máxima fuera de la grilla, «> 5 (fuera de la grilla)» (Fase 20.8). */
+function cellText(
+  key: string,
+  v: string | number | null | undefined,
+  unit: string,
+  beyond = false,
+): string {
   const M = msg();
+  if (beyond && typeof v === 'number')
+    return M.expert.summary.beyondGrid(fmtU(v, unit, { unit: false }));
   if (key === 'compat') return v === 'excel' ? M.labels.compatExcel : M.labels.compatCorrected;
   if (key === 'rig' && typeof v === 'string')
     return (M.catalog.rig as Record<string, string>)[v] ?? v;
@@ -87,7 +96,8 @@ export function SummaryTable() {
   const T = useT();
   const S = T.expert.summary;
   if (!d) return <p className="empty">{design.isFetching ? S.calculating : S.noResults}</p>;
-  const keys = Object.keys(d.summary);
+  // Las marcas (Fase 20.8) no son filas: califican la velocidad que acompañan.
+  const keys = Object.keys(d.summary).filter((k) => !(k in SUMMARY_FLAGS));
   const used = new Set<string>();
   const groups = GROUPS.map((g) => {
     const ks = keys.filter((k) => !used.has(k) && g.match(k));
@@ -119,10 +129,11 @@ export function SummaryTable() {
                   {g.keys.map((k) => {
                     const [name, unit] = label(k);
                     const v = d.summary[k];
-                    const text = cellText(k, v, unit);
+                    const beyond = summaryBeyondGrid(d, k);
+                    const text = cellText(k, v, unit, beyond);
                     // Los ids largos se cortan donde sea; los textos con espacios, entre palabras.
                     const cls =
-                      typeof v !== 'string'
+                      typeof v !== 'string' && !beyond
                         ? 'num'
                         : text.includes(' ')
                           ? 'num words'

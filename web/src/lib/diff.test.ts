@@ -36,4 +36,8 @@ describe('diffSummaries', () => {
     expect(row('net_id').changed).toBe(true);
     expect(row('net_id').abs).toBeNull();
   });
+  it('omite las marcas del resumen (Fase 20.8)', () => {
+    const flagged = { ...a, max_speed_beyond_grid: 0 };
+    expect(diffSummaries(flagged, b).some((r) => r.key === 'max_speed_beyond_grid')).toBe(false);
+  });
 });

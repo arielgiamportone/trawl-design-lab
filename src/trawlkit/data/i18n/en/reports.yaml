@@ -716,3 +716,5 @@ Factor de potencia de la superficie, (180 HP/BHP)^0,35: Power factor of the area
 : 'Maximum speed: FT = R crossing, linearly interpolated; if every speed is feasible it is the last one of the grid and the crossing lies beyond it (beyond the grid).'
 'fuera de la grilla: FT > R en todas las velocidades': 'beyond the grid: FT > R at every speed'
 v máx > {v} kn (fuera de la grilla): v max > {v} kn (beyond the grid)
+# Fase 20.8: velocidad máxima fuera de la grilla en las tablas del resumen
+'> {v} (fuera de la grilla)': '> {v} (beyond the grid)'

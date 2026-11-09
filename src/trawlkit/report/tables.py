@@ -177,10 +177,10 @@ def has_modified(result: DesignResult) -> bool:
 
 def summary_table(result: DesignResult) -> Table:
     """Resumen del caso (``DesignResult.summary()``) con etiquetas en español."""
-    from trawlkit.report.labels import label
+    from trawlkit.report.labels import label, summary_items
 
     rows = []
-    for key, value in result.summary().items():
+    for key, value in summary_items(result.summary()):
         name, unit = label(key)
         rows.append(
             (key, name, value if isinstance(value, str) or value is None else _f(value), unit)
@@ -631,7 +631,10 @@ def speed_window_table(result: DesignResult) -> Table:
             (
                 t(PROPELLER_LABELS.get(prop, prop)),
                 t(VARIANT_LABELS.get(variant, variant)),
-                _f(win.max_speed_kn),
+                # Fase 20.8: fuera de la grilla, «> 5» (la última velocidad es una cota inferior).
+                f"> {win.max_speed_kn:g}"
+                if win.beyond_grid and win.max_speed_kn is not None
+                else _f(win.max_speed_kn),
                 ", ".join(f"{v:g}" for v in feas) if feas else t("ninguna"),
                 t("sí") if key == result.performance.design_key else "",
             )

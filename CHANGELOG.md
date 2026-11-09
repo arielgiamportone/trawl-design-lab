@@ -19,6 +19,11 @@ grandes.
 - El modo `excel`, el caso FAO A-3 y los valores dorados del libro original no cambian.
 
 ### Corregido
+- **Velocidad máxima «> 5 kn» en todas las tablas (Fase 20.8)**: el resumen del motor agrega
+  `max_speed_beyond_grid` (y `propeller_max_speed_beyond_grid`) junto a `max_speed_kn`, que sigue
+  numérica; la tabla de ventanas del informe, el resumen del informe (HTML y XLSX), la CLI
+  `trawlkit run` y la tabla «Resistencia y velocidad» de la app dicen «> 5» en lugar de «5» con la
+  red de IAT 151/18 y el Angelescu. La A-3 no cambia.
 - **Coherencias de erratas, aparejo y textos (Fase 20.7)**: (1) la errata
   `fridman_dp_warp_saturation` figuraba en «Notas y erratas» como «corregida — se aplica la
   fórmula correcta» aunque su descripción, `docs/erratas.md` y la Fase 20.5 dicen que sólo se

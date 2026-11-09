@@ -29,6 +29,7 @@ export const expert = {
   summary: {
     calculating: 'Calculando…',
     noResults: 'Sin resultados todavía.',
+    beyondGrid: (v: string) => `> ${v} (fuera de la grilla)`,
     groups: {
       case: 'Caso',
       net: 'Red',
